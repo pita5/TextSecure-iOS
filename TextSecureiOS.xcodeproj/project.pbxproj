@@ -10,19 +10,25 @@
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
-		A53718C016FF95DF00C6FCCF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A53718BE16FF95DF00C6FCCF /* InfoPlist.strings */; };
 		A53718C216FF95DF00C6FCCF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718C116FF95DF00C6FCCF /* main.m */; };
 		A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718C516FF95DF00C6FCCF /* AppDelegate.m */; };
 		A53718C816FF95DF00C6FCCF /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A53718C716FF95DF00C6FCCF /* Default.png */; };
 		A53718CA16FF95DF00C6FCCF /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A53718C916FF95DF00C6FCCF /* Default@2x.png */; };
 		A53718CC16FF95DF00C6FCCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A53718CB16FF95DF00C6FCCF /* Default-568h@2x.png */; };
 		A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
-		A53718D216FF95DF00C6FCCF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718D116FF95DF00C6FCCF /* ViewController.m */; };
+		A53718D216FF95DF00C6FCCF /* SMSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718D116FF95DF00C6FCCF /* SMSViewController.m */; };
 		A53718DA16FF95DF00C6FCCF /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */; };
 		A53718DB16FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718DC16FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718E416FF95DF00C6FCCF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A53718E216FF95DF00C6FCCF /* InfoPlist.strings */; };
 		A53718E716FF95DF00C6FCCF /* TextSecureiOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718E616FF95DF00C6FCCF /* TextSecureiOSTests.m */; };
+		A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718F016FF98C100C6FCCF /* MessageUI.framework */; };
+		A53718FF16FFB6F800C6FCCF /* tutorial_ok_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A53718FD16FFB6F800C6FCCF /* tutorial_ok_button.png */; };
+		A537190016FFB6F800C6FCCF /* tutorial_ok_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A53718FE16FFB6F800C6FCCF /* tutorial_ok_button@2x.png */; };
+		A537190216FFB92C00C6FCCF /* tutorial_tutorial_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190116FFB92C00C6FCCF /* tutorial_tutorial_arrow.png */; };
+		A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A537190416FFBEE300C6FCCF /* VerificationViewController.m */; };
+		A537190816FFC45C00C6FCCF /* textsecure.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190616FFC45B00C6FCCF /* textsecure.png */; };
+		A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190716FFC45B00C6FCCF /* textsecure@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +46,6 @@
 		A53718B516FF95DF00C6FCCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A53718B716FF95DF00C6FCCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		A53718BD16FF95DF00C6FCCF /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
-		A53718BF16FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A53718C116FF95DF00C6FCCF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A53718C316FF95DF00C6FCCF /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
 		A53718C416FF95DF00C6FCCF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -50,14 +54,23 @@
 		A53718C916FF95DF00C6FCCF /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		A53718CB16FF95DF00C6FCCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A53718CE16FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		A53718D016FF95DF00C6FCCF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		A53718D116FF95DF00C6FCCF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A53718D016FF95DF00C6FCCF /* SMSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMSViewController.h; sourceTree = "<group>"; };
+		A53718D116FF95DF00C6FCCF /* SMSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SMSViewController.m; sourceTree = "<group>"; };
 		A53718D816FF95DF00C6FCCF /* TextSecureiOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextSecureiOSTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		A53718E116FF95DF00C6FCCF /* TextSecureiOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSecureiOSTests-Info.plist"; sourceTree = "<group>"; };
 		A53718E316FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A53718E516FF95DF00C6FCCF /* TextSecureiOSTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextSecureiOSTests.h; sourceTree = "<group>"; };
 		A53718E616FF95DF00C6FCCF /* TextSecureiOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextSecureiOSTests.m; sourceTree = "<group>"; };
+		A53718F016FF98C100C6FCCF /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
+		A53718FD16FFB6F800C6FCCF /* tutorial_ok_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tutorial_ok_button.png; path = TextSecureiOSAssets/tutorial_ok_button.png; sourceTree = "<group>"; };
+		A53718FE16FFB6F800C6FCCF /* tutorial_ok_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tutorial_ok_button@2x.png"; path = "TextSecureiOSAssets/tutorial_ok_button@2x.png"; sourceTree = "<group>"; };
+		A537190116FFB92C00C6FCCF /* tutorial_tutorial_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tutorial_tutorial_arrow.png; path = TextSecureiOSAssets/tutorial_tutorial_arrow.png; sourceTree = "<group>"; };
+		A537190316FFBEE200C6FCCF /* VerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerificationViewController.h; sourceTree = "<group>"; };
+		A537190416FFBEE300C6FCCF /* VerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationViewController.m; sourceTree = "<group>"; };
+		A537190616FFC45B00C6FCCF /* textsecure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = textsecure.png; path = TextSecureiOSAssets/MainIcon/textsecure.png; sourceTree = "<group>"; };
+		A537190716FFC45B00C6FCCF /* textsecure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure@2x.png"; path = "TextSecureiOSAssets/MainIcon/textsecure@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */,
 				A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */,
 				A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */,
 				A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */,
@@ -87,6 +101,7 @@
 		A53718A916FF95DF00C6FCCF = {
 			isa = PBXGroup;
 			children = (
+				A53718F016FF98C100C6FCCF /* MessageUI.framework */,
 				A53718BB16FF95DF00C6FCCF /* TextSecureiOS */,
 				A53718DF16FF95DF00C6FCCF /* TextSecureiOSTests */,
 				A53718B416FF95DF00C6FCCF /* Frameworks */,
@@ -120,8 +135,10 @@
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
-				A53718D016FF95DF00C6FCCF /* ViewController.h */,
-				A53718D116FF95DF00C6FCCF /* ViewController.m */,
+				A53718D016FF95DF00C6FCCF /* SMSViewController.h */,
+				A53718D116FF95DF00C6FCCF /* SMSViewController.m */,
+				A537190316FFBEE200C6FCCF /* VerificationViewController.h */,
+				A537190416FFBEE300C6FCCF /* VerificationViewController.m */,
 				A53718BC16FF95DF00C6FCCF /* Supporting Files */,
 			);
 			path = TextSecureiOS;
@@ -130,8 +147,8 @@
 		A53718BC16FF95DF00C6FCCF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A53718BD16FF95DF00C6FCCF /* TextSecureiOS-Info.plist */,
-				A53718BE16FF95DF00C6FCCF /* InfoPlist.strings */,
+				A53718FC16FFB6E600C6FCCF /* Assets */,
+				A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */,
 				A53718C116FF95DF00C6FCCF /* main.m */,
 				A53718C316FF95DF00C6FCCF /* TextSecureiOS-Prefix.pch */,
 				A53718C716FF95DF00C6FCCF /* Default.png */,
@@ -158,6 +175,18 @@
 				A53718E216FF95DF00C6FCCF /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A53718FC16FFB6E600C6FCCF /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				A537190616FFC45B00C6FCCF /* textsecure.png */,
+				A537190716FFC45B00C6FCCF /* textsecure@2x.png */,
+				A537190116FFB92C00C6FCCF /* tutorial_tutorial_arrow.png */,
+				A53718FD16FFB6F800C6FCCF /* tutorial_ok_button.png */,
+				A53718FE16FFB6F800C6FCCF /* tutorial_ok_button@2x.png */,
+			);
+			name = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,11 +260,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A53718C016FF95DF00C6FCCF /* InfoPlist.strings in Resources */,
 				A53718C816FF95DF00C6FCCF /* Default.png in Resources */,
 				A53718CA16FF95DF00C6FCCF /* Default@2x.png in Resources */,
 				A53718CC16FF95DF00C6FCCF /* Default-568h@2x.png in Resources */,
 				A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */,
+				A53718FF16FFB6F800C6FCCF /* tutorial_ok_button.png in Resources */,
+				A537190016FFB6F800C6FCCF /* tutorial_ok_button@2x.png in Resources */,
+				A537190216FFB92C00C6FCCF /* tutorial_tutorial_arrow.png in Resources */,
+				A537190816FFC45C00C6FCCF /* textsecure.png in Resources */,
+				A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +305,8 @@
 			files = (
 				A53718C216FF95DF00C6FCCF /* main.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
-				A53718D216FF95DF00C6FCCF /* ViewController.m in Sources */,
+				A53718D216FF95DF00C6FCCF /* SMSViewController.m in Sources */,
+				A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,14 +329,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A53718BE16FF95DF00C6FCCF /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A53718BF16FF95DF00C6FCCF /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
