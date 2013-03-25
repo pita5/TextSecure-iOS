@@ -7,7 +7,7 @@
 //
 
 #import "SMSViewController.h"
-
+//
 
 @implementation SMSViewController
 @synthesize numItems;
@@ -20,14 +20,7 @@
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
   if(![self hasVerifiedPhone]){
-    if([self hasSentVerification]) {
-      // go to enter code setup slot
-      [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
-    }
-    else {
-      // go to send verification setup
-      [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
-    }
+     [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
   }
 }
 

@@ -29,6 +29,17 @@
 		A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A537190416FFBEE300C6FCCF /* VerificationViewController.m */; };
 		A537190816FFC45C00C6FCCF /* textsecure.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190616FFC45B00C6FCCF /* textsecure.png */; };
 		A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190716FFC45B00C6FCCF /* textsecure@2x.png */; };
+		A537190C1700247600C6FCCF /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = A537190B1700247400C6FCCF /* Server.m */; };
+		A537190F1700284900C6FCCF /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = A537190E1700284800C6FCCF /* Constants.m */; };
+		A537191E17003D1100C6FCCF /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A537191317003D1100C6FCCF /* NSObject+SBJSON.m */; };
+		A537191F17003D1100C6FCCF /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A537191517003D1100C6FCCF /* NSString+SBJSON.m */; };
+		A537192017003D1100C6FCCF /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = A537191717003D1100C6FCCF /* SBJSON.m */; };
+		A537192117003D1100C6FCCF /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = A537191917003D1100C6FCCF /* SBJsonBase.m */; };
+		A537192217003D1100C6FCCF /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A537191B17003D1100C6FCCF /* SBJsonParser.m */; };
+		A537192317003D1100C6FCCF /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A537191D17003D1100C6FCCF /* SBJsonWriter.m */; };
+		A53719251700D71B00C6FCCF /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53719241700D71A00C6FCCF /* CoreTelephony.framework */; };
+		A53719281700DC3300C6FCCF /* CountryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A53719271700DC3100C6FCCF /* CountryViewController.m */; };
+		A537192E1700FAAB00C6FCCF /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = A537192D1700FAA900C6FCCF /* CountryCodes.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +82,27 @@
 		A537190416FFBEE300C6FCCF /* VerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationViewController.m; sourceTree = "<group>"; };
 		A537190616FFC45B00C6FCCF /* textsecure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = textsecure.png; path = TextSecureiOSAssets/MainIcon/textsecure.png; sourceTree = "<group>"; };
 		A537190716FFC45B00C6FCCF /* textsecure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure@2x.png"; path = "TextSecureiOSAssets/MainIcon/textsecure@2x.png"; sourceTree = "<group>"; };
+		A537190A1700247400C6FCCF /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
+		A537190B1700247400C6FCCF /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		A537190D1700284800C6FCCF /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		A537190E1700284800C6FCCF /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		A537191117003D1100C6FCCF /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		A537191217003D1100C6FCCF /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		A537191317003D1100C6FCCF /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
+		A537191417003D1100C6FCCF /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		A537191517003D1100C6FCCF /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
+		A537191617003D1100C6FCCF /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
+		A537191717003D1100C6FCCF /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
+		A537191817003D1100C6FCCF /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		A537191917003D1100C6FCCF /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		A537191A17003D1100C6FCCF /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		A537191B17003D1100C6FCCF /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		A537191C17003D1100C6FCCF /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		A537191D17003D1100C6FCCF /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		A53719241700D71A00C6FCCF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		A53719261700DC2F00C6FCCF /* CountryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryViewController.h; sourceTree = "<group>"; };
+		A53719271700DC3100C6FCCF /* CountryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryViewController.m; sourceTree = "<group>"; };
+		A537192D1700FAA900C6FCCF /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53719251700D71B00C6FCCF /* CoreTelephony.framework in Frameworks */,
 				A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */,
 				A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */,
 				A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */,
@@ -101,7 +134,6 @@
 		A53718A916FF95DF00C6FCCF = {
 			isa = PBXGroup;
 			children = (
-				A53718F016FF98C100C6FCCF /* MessageUI.framework */,
 				A53718BB16FF95DF00C6FCCF /* TextSecureiOS */,
 				A53718DF16FF95DF00C6FCCF /* TextSecureiOSTests */,
 				A53718B416FF95DF00C6FCCF /* Frameworks */,
@@ -121,6 +153,8 @@
 		A53718B416FF95DF00C6FCCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A53719241700D71A00C6FCCF /* CoreTelephony.framework */,
+				A53718F016FF98C100C6FCCF /* MessageUI.framework */,
 				A53718B516FF95DF00C6FCCF /* UIKit.framework */,
 				A53718B716FF95DF00C6FCCF /* Foundation.framework */,
 				A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */,
@@ -132,13 +166,20 @@
 		A53718BB16FF95DF00C6FCCF /* TextSecureiOS */ = {
 			isa = PBXGroup;
 			children = (
+				A537191017003D1000C6FCCF /* JSON */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
 				A53718D016FF95DF00C6FCCF /* SMSViewController.h */,
 				A53718D116FF95DF00C6FCCF /* SMSViewController.m */,
+				A537190A1700247400C6FCCF /* Server.h */,
+				A537190B1700247400C6FCCF /* Server.m */,
+				A537190D1700284800C6FCCF /* Constants.h */,
+				A537190E1700284800C6FCCF /* Constants.m */,
 				A537190316FFBEE200C6FCCF /* VerificationViewController.h */,
 				A537190416FFBEE300C6FCCF /* VerificationViewController.m */,
+				A53719261700DC2F00C6FCCF /* CountryViewController.h */,
+				A53719271700DC3100C6FCCF /* CountryViewController.m */,
 				A53718BC16FF95DF00C6FCCF /* Supporting Files */,
 			);
 			path = TextSecureiOS;
@@ -147,6 +188,7 @@
 		A53718BC16FF95DF00C6FCCF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A537192D1700FAA900C6FCCF /* CountryCodes.plist */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
 				A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */,
 				A53718C116FF95DF00C6FCCF /* main.m */,
@@ -187,6 +229,26 @@
 				A53718FE16FFB6F800C6FCCF /* tutorial_ok_button@2x.png */,
 			);
 			name = Assets;
+			sourceTree = "<group>";
+		};
+		A537191017003D1000C6FCCF /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				A537191117003D1100C6FCCF /* JSON.h */,
+				A537191217003D1100C6FCCF /* NSObject+SBJSON.h */,
+				A537191317003D1100C6FCCF /* NSObject+SBJSON.m */,
+				A537191417003D1100C6FCCF /* NSString+SBJSON.h */,
+				A537191517003D1100C6FCCF /* NSString+SBJSON.m */,
+				A537191617003D1100C6FCCF /* SBJSON.h */,
+				A537191717003D1100C6FCCF /* SBJSON.m */,
+				A537191817003D1100C6FCCF /* SBJsonBase.h */,
+				A537191917003D1100C6FCCF /* SBJsonBase.m */,
+				A537191A17003D1100C6FCCF /* SBJsonParser.h */,
+				A537191B17003D1100C6FCCF /* SBJsonParser.m */,
+				A537191C17003D1100C6FCCF /* SBJsonWriter.h */,
+				A537191D17003D1100C6FCCF /* SBJsonWriter.m */,
+			);
+			path = JSON;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +331,7 @@
 				A537190216FFB92C00C6FCCF /* tutorial_tutorial_arrow.png in Resources */,
 				A537190816FFC45C00C6FCCF /* textsecure.png in Resources */,
 				A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */,
+				A537192E1700FAAB00C6FCCF /* CountryCodes.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +370,15 @@
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				A53718D216FF95DF00C6FCCF /* SMSViewController.m in Sources */,
 				A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */,
+				A537190C1700247600C6FCCF /* Server.m in Sources */,
+				A537190F1700284900C6FCCF /* Constants.m in Sources */,
+				A537191E17003D1100C6FCCF /* NSObject+SBJSON.m in Sources */,
+				A537191F17003D1100C6FCCF /* NSString+SBJSON.m in Sources */,
+				A537192017003D1100C6FCCF /* SBJSON.m in Sources */,
+				A537192117003D1100C6FCCF /* SBJsonBase.m in Sources */,
+				A537192217003D1100C6FCCF /* SBJsonParser.m in Sources */,
+				A537192317003D1100C6FCCF /* SBJsonWriter.m in Sources */,
+				A53719281700DC3300C6FCCF /* CountryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
