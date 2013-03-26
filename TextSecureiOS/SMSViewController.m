@@ -19,13 +19,14 @@
     demoPhones = [[NSArray alloc] initWithObjects:@"+16144868963",@"+41 79 962 44 99",@"+16144858953",@"+14154868963",@"+41 76 922 44 22",@"+12124868963",@"+15224224363",@"+13724224363",@"+14224224363",@"+17224224363",@"+19224224363", nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
-  if(![self hasVerifiedPhone]){
-     [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
-  }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
    self.navigationController.navigationBarHidden = NO;
+  if(![self hasVerifiedPhone]){
+    [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
+  }
+
 }
 
 

@@ -10,14 +10,20 @@
 #import "Server.h"
 @interface VerificationViewController : UIViewController<UITextFieldDelegate>
 @property (nonatomic,strong) Server *verificationServer;
-@property (nonatomic,strong) IBOutlet UITextField *countryCode;
+@property (nonatomic,strong) IBOutlet UILabel *countryCode;
+@property (nonatomic,strong) IBOutlet UIButton *countryName;
+
 @property (nonatomic,strong) IBOutlet UITextField *phoneNumber;
 @property (nonatomic,strong) IBOutlet UITextField *verificationCodePart1;
 @property (nonatomic,strong) IBOutlet UITextField *verificationCodePart2;
+@property (nonatomic,strong) IBOutlet UIImageView  *flag;
+@property (nonatomic,strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,strong) NSString* selectedPhoneNumber;
+
+
 -(IBAction)doVerifyPhone:(id)sender;
 -(IBAction)verifiedPhone:(NSNotification*)notification;
-
+-(void) registerForKeyboardNotifications;
 -(IBAction)sentVerification:(id)sender;
 
 @end
