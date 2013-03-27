@@ -12,6 +12,10 @@
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
+// Now we can use open ssl 
+#include <openssl/md5.h>
+#include <openssl/sha.h>
+#import <openssl/evp.h>
 @implementation Cryptography
 
 +(NSString*) generateAndStoreNewAccountAuthenticationToken {
@@ -58,5 +62,28 @@
   return output;
 }
 
+
++ (void) generateNISTp256ECCKeyPair {
+  // TODO: use openssl
+  SInt32 iKeySize = 256; // experimentally the key size goes up to 521, or symmetric key size effective security 256
+  CFNumberRef keySize = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &iKeySize);
+  //RSA
+  //  const void* values[] = { kSecAttrKeyTypeRSA, keySize };
+  //  const void* keys[] = { kSecAttrKeyType, kSecAttrKeySizeInBits };
+  // EC
+  const void* values[] = {kSecAttrKeyTypeEC, keySize};
+  const void* keys[] = {kSecAttrKeyType, kSecAttrKeySizeInBits};
+
+  CFDictionaryRef parameters = CFDictionaryCreate(kCFAllocatorDefault, keys, values, 2, NULL, NULL);
+  
+  SecKeyRef publicKey, privateKey;
+  OSStatus ret = SecKeyGeneratePair(parameters, &publicKey, &privateKey);
+  if(ret == errSecSuccess ){
+    NSLog(@"Key success!");
+  }
+  else {
+    NSLog(@"Key Failure! %li", ret);
+  }
+}
 
 @end

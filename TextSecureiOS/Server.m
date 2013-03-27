@@ -8,15 +8,6 @@
 
 #import "Server.h"
 #import "Cryptography.h"
-//
-//  Server.m
-//  Kliq
-//
-//  Created by Christine Corbett Moran on 8/31/10.
-//  Copyright 2010 Kliq. All rights reserved.
-//
-
-#import "Server.h"
 #import "NSObject+SBJSON.h"
 @implementation Server
 @synthesize receivedData;
@@ -89,14 +80,12 @@
 
 -(NSData*) createVerifyNSData:(NSString*)verificationCode {
   self.currentRequest = VERIFY_ACCOUNT;
-  // TODO: actually create an authentication token and obtain the user's gcmRegistrationId
-    NSDictionary *verifyAccount = [[NSDictionary alloc] initWithObjects:
+  NSDictionary *verifyAccount = [[NSDictionary alloc] initWithObjects:
                                  [[NSArray alloc] initWithObjects:verificationCode,[Cryptography generateAndStoreNewAccountAuthenticationToken], nil]
                                  forKeys:[[NSArray alloc] initWithObjects:@"verificationCode",@"authenticationToken",nil]
                                     ];
 
   NSString*  jsonRequest = [verifyAccount JSONRepresentation];
-  NSLog(@"JSON Request data %@",jsonRequest);
   return [NSData dataWithBytes:[jsonRequest UTF8String] length:[jsonRequest length]];
 }
 

@@ -14,4 +14,6 @@
 
 + (NSString*) retrieveAuthenticationToken;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
+
++ (void) generateNISTp256ECCKeyPair;
 @end

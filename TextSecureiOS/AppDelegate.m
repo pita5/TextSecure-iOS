@@ -8,9 +8,14 @@
 
 #import "AppDelegate.h"
 #import "Cryptography.h"
+#include <openssl/md5.h>
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+  
+  [Cryptography generateNISTp256ECCKeyPair];
    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
    (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     return YES;
@@ -22,6 +27,14 @@
   // Testing storage
   NSLog(@"testing storage %@",[Cryptography retrieveAuthenticationToken]);
   NSLog(@"testing out HMAC %@", [Cryptography computeSHA1DigestForString:@""]);
+  
+  // testing rn
+//  NSData *data = [@"Data" dataUsingEncoding:NSUTF8StringEncoding];
+//  NSError *error;
+//  NSData *encryptedData = [RNEncryptor encryptData:data
+//                                      withSettings:kRNCryptorAES256Settings
+//                                          password:aPassword
+//                                             error:&error];
  
 }
 							
