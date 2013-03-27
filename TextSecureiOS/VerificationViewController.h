@@ -22,8 +22,11 @@
 
 
 -(IBAction)doVerifyPhone:(id)sender;
--(IBAction)verifiedPhone:(NSNotification*)notification;
+-(void) countryChosen:(NSNotification*)notification;
+- (void)didReceiveMemoryWarning;
 -(void) registerForKeyboardNotifications;
+-(void)finishedVerifiedPhone:(NSNotification*)notification;
+-(void)finishedSendVerification:(NSNotification*)notification;
 -(IBAction)sentVerification:(id)sender;
 
 @end

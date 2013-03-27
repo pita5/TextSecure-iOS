@@ -16,15 +16,15 @@
 @property (nonatomic,strong) NSMutableData *receivedData;
 @property (nonatomic,strong) NSMutableArray *requestQueue;
 @property (nonatomic,strong) NSString *number;
-@property (nonatomic) int *currentRequest;
+@property (nonatomic) int currentRequest;
 #pragma mark -
 #pragma mark server request queue methods
 -(void) doNextRequest;
 -(void) pushSecureRequest:(NSString*) request;
 
--(NSURL*) createRequestURL:(NSString*)requestStr withServer:(NSString*)server;
+-(NSURL*) createRequestURL:(NSString*)requestStr withServer:(NSString*)server withAPI:(NSString*) api;
 -(void) serverPost:(NSURL*)requestUrl;
--(void) serverPut:(NSURL*)requestUrl;
+-(void) serverPut:(NSURL*)requestUrl withData:(NSData*)requestData;
 #pragma mark -
 #pragma mark TextSecure verbs
 -(void) doCreateAccount:(NSString*) phoneNumber;

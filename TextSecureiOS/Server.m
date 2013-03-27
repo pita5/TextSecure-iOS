@@ -7,7 +7,7 @@
 //
 
 #import "Server.h"
-
+#import "Cryptography.h"
 //
 //  Server.m
 //  Kliq
@@ -32,7 +32,7 @@
 -(void) doNextRequest {
 	if([self.requestQueue count] > 0) {
 		id request = [self.requestQueue lastObject];
-		[self serverPut:request];
+		[self serverPost:request];
 	}
 }
 
@@ -53,9 +53,7 @@
 -(void) serverPut:(NSURL*)requestUrl withData:(NSData*)requestData{
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
 	[request setHTTPMethod:@"PUT"];  
-//  [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
- [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-//  [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+  [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
   [request addValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
   [request setHTTPBody:requestData];
   
@@ -67,7 +65,6 @@
 }
 
 -(void) serverPost:(NSURL*)requestUrl {
-  // Experimenting with small timeout todo: increase
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
 	[request setHTTPMethod:@"POST"];
 	self.receivedData = [[NSMutableData alloc] init];
@@ -94,7 +91,7 @@
   self.currentRequest = VERIFY_ACCOUNT;
   // TODO: actually create an authentication token and obtain the user's gcmRegistrationId
     NSDictionary *verifyAccount = [[NSDictionary alloc] initWithObjects:
-                                 [[NSArray alloc] initWithObjects:verificationCode,@"12345", nil]
+                                 [[NSArray alloc] initWithObjects:verificationCode,[Cryptography generateAndStoreNewAccountAuthenticationToken], nil]
                                  forKeys:[[NSArray alloc] initWithObjects:@"verificationCode",@"authenticationToken",nil]
                                     ];
 

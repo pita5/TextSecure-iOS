@@ -380,6 +380,10 @@
 		A5F15A9017014DB400856385 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A8217014DB400856385 /* SBJsonTokeniser.m */; };
 		A5F15A9117014DB400856385 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A8417014DB400856385 /* SBJsonUTF8Stream.m */; };
 		A5F15A9217014DB400856385 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A8617014DB400856385 /* SBJsonWriter.m */; };
+		A5F15A9817027FD000856385 /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9717027FCF00856385 /* Cryptography.m */; };
+		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
+		A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9C1702949100856385 /* NSData+Conversion.m */; };
+		A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9F1702997A00856385 /* KeychainWrapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -790,6 +794,13 @@
 		A5F15A8417014DB400856385 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		A5F15A8517014DB400856385 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		A5F15A8617014DB400856385 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		A5F15A9617027FCF00856385 /* Cryptography.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cryptography.h; sourceTree = "<group>"; };
+		A5F15A9717027FCF00856385 /* Cryptography.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cryptography.m; sourceTree = "<group>"; };
+		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A5F15A9B1702949100856385 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
+		A5F15A9C1702949100856385 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
+		A5F15A9E1702997A00856385 /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainWrapper.h; sourceTree = "<group>"; };
+		A5F15A9F1702997A00856385 /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainWrapper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -797,6 +808,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5F15A9A170280B700856385 /* Security.framework in Frameworks */,
 				A53719251700D71B00C6FCCF /* CoreTelephony.framework in Frameworks */,
 				A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */,
 				A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */,
@@ -840,6 +852,7 @@
 		A53718B416FF95DF00C6FCCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A5F15A99170280B700856385 /* Security.framework */,
 				A53719241700D71A00C6FCCF /* CoreTelephony.framework */,
 				A53718F016FF98C100C6FCCF /* MessageUI.framework */,
 				A53718B516FF95DF00C6FCCF /* UIKit.framework */,
@@ -856,19 +869,11 @@
 				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
-				A53718D016FF95DF00C6FCCF /* SMSViewController.h */,
-				A53718D116FF95DF00C6FCCF /* SMSViewController.m */,
 				A537190A1700247400C6FCCF /* Server.h */,
 				A537190B1700247400C6FCCF /* Server.m */,
-				A537190316FFBEE200C6FCCF /* VerificationViewController.h */,
-				A537190416FFBEE300C6FCCF /* VerificationViewController.m */,
-				A53719261700DC2F00C6FCCF /* CountryViewController.h */,
-				A53719271700DC3100C6FCCF /* CountryViewController.m */,
-				A537192F1701040200C6FCCF /* CountrySegue.h */,
-				A53719301701040400C6FCCF /* CountrySegue.m */,
-				A537190D1700284800C6FCCF /* Constants.h */,
-				A537190E1700284800C6FCCF /* Constants.m */,
-				A5F15A6D17014DB400856385 /* JSON */,
+				A5F15AA217029BCF00856385 /* ViewControllers */,
+				A5F15AA117029BB400856385 /* Security */,
+				A5F15AA317029C5300856385 /* Utility */,
 				A53718BC16FF95DF00C6FCCF /* Supporting Files */,
 			);
 			path = TextSecureiOS;
@@ -1293,6 +1298,44 @@
 			);
 			name = JSON;
 			path = ../JSON;
+			sourceTree = "<group>";
+		};
+		A5F15AA117029BB400856385 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				A5F15A9617027FCF00856385 /* Cryptography.h */,
+				A5F15A9717027FCF00856385 /* Cryptography.m */,
+				A5F15A9E1702997A00856385 /* KeychainWrapper.h */,
+				A5F15A9F1702997A00856385 /* KeychainWrapper.m */,
+			);
+			name = Security;
+			sourceTree = "<group>";
+		};
+		A5F15AA217029BCF00856385 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A53718D016FF95DF00C6FCCF /* SMSViewController.h */,
+				A53718D116FF95DF00C6FCCF /* SMSViewController.m */,
+				A537190316FFBEE200C6FCCF /* VerificationViewController.h */,
+				A537190416FFBEE300C6FCCF /* VerificationViewController.m */,
+				A53719261700DC2F00C6FCCF /* CountryViewController.h */,
+				A53719271700DC3100C6FCCF /* CountryViewController.m */,
+				A537192F1701040200C6FCCF /* CountrySegue.h */,
+				A53719301701040400C6FCCF /* CountrySegue.m */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		A5F15AA317029C5300856385 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				A537190D1700284800C6FCCF /* Constants.h */,
+				A537190E1700284800C6FCCF /* Constants.m */,
+				A5F15A9B1702949100856385 /* NSData+Conversion.h */,
+				A5F15A9C1702949100856385 /* NSData+Conversion.m */,
+				A5F15A6D17014DB400856385 /* JSON */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1763,6 +1806,9 @@
 				A5F15A9017014DB400856385 /* SBJsonTokeniser.m in Sources */,
 				A5F15A9117014DB400856385 /* SBJsonUTF8Stream.m in Sources */,
 				A5F15A9217014DB400856385 /* SBJsonWriter.m in Sources */,
+				A5F15A9817027FD000856385 /* Cryptography.m in Sources */,
+				A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */,
+				A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

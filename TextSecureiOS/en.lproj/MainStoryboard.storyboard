@@ -382,17 +382,14 @@
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="64f-PG-w5g" firstAttribute="centerX" secondItem="2ZQ-5J-MB7" secondAttribute="centerX" type="default" id="2x5-EO-wLi"/>
-                                    <constraint firstItem="jld-fh-leh" firstAttribute="centerY" secondItem="8bR-Eb-9dc" secondAttribute="centerY" type="default" id="6fY-aQ-WqA"/>
                                     <constraint firstItem="jld-fh-leh" firstAttribute="trailing" secondItem="Edx-3j-uej" secondAttribute="trailing" type="default" id="6wv-b8-ww8"/>
                                     <constraint firstAttribute="trailing" secondItem="64f-PG-w5g" secondAttribute="trailing" constant="4" id="9Hz-fU-bpp"/>
                                     <constraint firstItem="8bR-Eb-9dc" firstAttribute="top" secondItem="v2t-Fa-Ycx" secondAttribute="top" type="default" id="JwQ-5G-5Rp"/>
                                     <constraint firstItem="8bR-Eb-9dc" firstAttribute="leading" secondItem="2ZQ-5J-MB7" secondAttribute="leading" constant="39" id="JxX-1W-fyw"/>
                                     <constraint firstItem="v2t-Fa-Ycx" firstAttribute="bottom" secondItem="8bR-Eb-9dc" secondAttribute="bottom" type="default" id="LAn-OD-z8k"/>
                                     <constraint firstItem="m8n-0d-1hR" firstAttribute="trailing" secondItem="jld-fh-leh" secondAttribute="trailing" type="default" id="MlA-JU-bPF"/>
-                                    <constraint firstItem="64f-PG-w5g" firstAttribute="leading" secondItem="2ZQ-5J-MB7" secondAttribute="leading" constant="4" id="TdP-Mc-km0"/>
+                                    <constraint firstItem="64f-PG-w5g" firstAttribute="centerX" secondItem="2ZQ-5J-MB7" secondAttribute="centerX" type="default" id="RQ3-U8-bJh"/>
                                     <constraint firstItem="m8n-0d-1hR" firstAttribute="top" secondItem="2ZQ-5J-MB7" secondAttribute="top" constant="26" id="V9B-KR-psd"/>
-                                    <constraint firstAttribute="bottom" secondItem="Edx-3j-uej" secondAttribute="bottom" constant="203" id="Vfe-HG-BYD"/>
                                     <constraint firstItem="E7l-nD-SGD" firstAttribute="leading" secondItem="2ZQ-5J-MB7" secondAttribute="leading" constant="48" id="aMj-Ia-ylo"/>
                                     <constraint firstItem="64f-PG-w5g" firstAttribute="top" secondItem="2ZQ-5J-MB7" secondAttribute="top" constant="226" id="buG-zl-2Jn"/>
                                     <constraint firstItem="WZb-la-qCp" firstAttribute="centerX" secondItem="7sJ-01-Nbg" secondAttribute="centerX" type="default" id="crE-bc-FQX"/>
@@ -400,11 +397,13 @@
                                     <constraint firstItem="v2t-Fa-Ycx" firstAttribute="leading" secondItem="2ZQ-5J-MB7" secondAttribute="leading" constant="272" id="egO-O5-w2g"/>
                                     <constraint firstItem="7sJ-01-Nbg" firstAttribute="baseline" secondItem="WZb-la-qCp" secondAttribute="baseline" type="default" id="fK3-0p-sVc"/>
                                     <constraint firstItem="7sJ-01-Nbg" firstAttribute="top" secondItem="2ZQ-5J-MB7" secondAttribute="top" constant="262" id="gRS-aa-NbM"/>
+                                    <constraint firstItem="jld-fh-leh" firstAttribute="centerY" secondItem="8bR-Eb-9dc" secondAttribute="centerY" type="default" id="i7X-cu-lLH"/>
                                     <constraint firstItem="m8n-0d-1hR" firstAttribute="leading" secondItem="jld-fh-leh" secondAttribute="leading" type="default" id="jCq-nY-I0O"/>
                                     <constraint firstItem="jld-fh-leh" firstAttribute="centerX" secondItem="64f-PG-w5g" secondAttribute="centerX" type="default" id="jcl-CQ-oNa"/>
                                     <constraint firstItem="zga-yl-WLN" firstAttribute="baseline" secondItem="E7l-nD-SGD" secondAttribute="baseline" type="default" id="nfk-ps-VY8"/>
                                     <constraint firstItem="jld-fh-leh" firstAttribute="top" secondItem="m8n-0d-1hR" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="s1l-3h-2Yl"/>
                                     <constraint firstItem="zga-yl-WLN" firstAttribute="leading" secondItem="2ZQ-5J-MB7" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="sFX-lR-QJL"/>
+                                    <constraint firstAttribute="bottom" secondItem="Edx-3j-uej" secondAttribute="bottom" constant="203" id="t9d-15-tRV"/>
                                     <constraint firstItem="Edx-3j-uej" firstAttribute="top" secondItem="2ZQ-5J-MB7" secondAttribute="top" constant="257" id="uoQ-bD-2sz"/>
                                     <constraint firstItem="WZb-la-qCp" firstAttribute="centerY" secondItem="2ZQ-5J-MB7" secondAttribute="centerY" type="default" id="vsa-vH-MhL"/>
                                     <constraint firstItem="WZb-la-qCp" firstAttribute="centerX" secondItem="64f-PG-w5g" secondAttribute="centerX" type="default" id="xfE-Uj-UNB"/>
@@ -414,6 +413,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2ZQ-5J-MB7" firstAttribute="top" secondItem="3Pi-3f-kKB" secondAttribute="top" type="default" id="Nxl-MB-aDT"/>
+                            <constraint firstAttribute="trailing" secondItem="2ZQ-5J-MB7" secondAttribute="trailing" constant="-8" id="OmW-T0-pna"/>
                             <constraint firstItem="2ZQ-5J-MB7" firstAttribute="leading" secondItem="3Pi-3f-kKB" secondAttribute="leading" type="default" id="evj-K7-c4a"/>
                             <constraint firstItem="2ZQ-5J-MB7" firstAttribute="bottom" secondItem="3Pi-3f-kKB" secondAttribute="bottom" type="default" id="wkB-J6-FLe"/>
                         </constraints>
@@ -487,6 +487,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="BXD-3l-CoB"/>
+        <segue reference="AdJ-39-rRq"/>
     </inferredMetricsTieBreakers>
 </document>

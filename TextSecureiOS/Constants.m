@@ -11,6 +11,7 @@
 
 
 
-
+NSString* const appName = @"TextSecure";
+NSString* const authenticationTokenStorageId = @"TextSecureAuthenticationToken";
 NSString* const textSecureServer = @"https://textsecure-gcm.appspot.com";
 NSString* const textSecureAccountsAPI = @"v1/accounts";

@@ -7,13 +7,22 @@
 //
 
 #import "AppDelegate.h"
-
+#import "Cryptography.h"
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // Override point for customization after application launch.
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+   (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     return YES;
+}
+
+-(void)  cryptoDemo {
+  // demoing generating and storing account authentication token. Just for prototyping
+  [Cryptography generateAndStoreNewAccountAuthenticationToken];
+  // Testing storage
+  NSLog(@"testing storage %@",[Cryptography retrieveAuthenticationToken]);
+  NSLog(@"testing out HMAC %@", [Cryptography computeSHA1DigestForString:@""]);
+ 
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -41,6 +50,17 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
   // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+	NSLog(@"My token is: %@", deviceToken);
+
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+	NSLog(@"Failed to get token, error: %@", error);
 }
 
 @end
