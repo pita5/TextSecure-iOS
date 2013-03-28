@@ -13,7 +13,6 @@
 @end
 
 @implementation VerificationViewController
-@synthesize verificationServer;
 @synthesize phoneNumber;
 @synthesize countryCode;
 @synthesize countryName;
@@ -23,8 +22,7 @@
 @synthesize selectedPhoneNumber;
 @synthesize flag;
 @synthesize scrollView;
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -32,11 +30,9 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
   [super viewDidLoad];
 	// Do any additional setup after loading the view.
-  self.verificationServer = [[Server alloc] init];
   self.verificationCodePart2.delegate = self;
   self.verificationCodePart1.delegate = self;
   self.title = selectedPhoneNumber;
@@ -62,8 +58,7 @@
 
 -(IBAction)doVerifyPhone:(id)sender {
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedVerifiedPhone:) name:@"VerifiedPhone" object:nil];
-  [self.verificationServer doVerifyAccount:selectedPhoneNumber verificationCode:[NSString stringWithFormat:@"%@%@",verificationCodePart1.text,verificationCodePart2.text]];
-
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"VerifyAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@%@",verificationCodePart1.text,verificationCodePart2.text], @"verification_code", nil]];
 }
 
 -(void)finishedVerifiedPhone:(NSNotification*)notification {
@@ -77,8 +72,8 @@
 
 -(IBAction)sentVerification:(id)sender {
   self.selectedPhoneNumber= [NSString stringWithFormat:@"+%@%@",countryCode.text,phoneNumber.text];
-  [self.verificationServer doCreateAccount:self.selectedPhoneNumber];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@%@",verificationCodePart1.text,verificationCodePart2.text], self.selectedPhoneNumber,@"username", nil]];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
 }
 
 

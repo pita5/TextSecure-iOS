@@ -10,8 +10,6 @@
 
 
 
-#import "NSData+Conversion.h"
-
 @implementation NSData (NSData_Conversion)
 
 #pragma mark - String Conversion

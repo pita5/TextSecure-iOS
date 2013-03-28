@@ -27,8 +27,10 @@
 -(void) serverPut:(NSURL*)requestUrl withData:(NSData*)requestData;
 #pragma mark -
 #pragma mark TextSecure verbs
--(void) doCreateAccount:(NSString*) phoneNumber;
--(void) doVerifyAccount:(NSString*) phoneNumber verificationCode:(NSString*) verificationCode;
+- (NSData*) jsonDataFromDict:(NSDictionary*)parameters;
+-(void) doCreateAccount:(NSNotification*) notification;
+-(void) doVerifyAccount:(NSNotification*) notification;
+-(void) doSendAPN:(NSNotification *)notification;
 
 #pragma mark -
 #pragma mark connection delegate methods

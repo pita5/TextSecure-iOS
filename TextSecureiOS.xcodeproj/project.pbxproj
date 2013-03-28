@@ -386,6 +386,15 @@
 		A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9F1702997A00856385 /* KeychainWrapper.m */; };
 		A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA41702DF6E00856385 /* libssl.a */; };
 		A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA51702DF6E00856385 /* libcrypto.a */; };
+		A5F15B2F1703975F00856385 /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B221703975F00856385 /* RNCryptor.m */; };
+		A5F15B301703975F00856385 /* RNCryptorEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B241703975F00856385 /* RNCryptorEngine.m */; };
+		A5F15B311703975F00856385 /* RNDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B261703975F00856385 /* RNDecryptor.m */; };
+		A5F15B321703975F00856385 /* RNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B281703975F00856385 /* RNEncryptor.m */; };
+		A5F15B331703975F00856385 /* RNOpenSSLCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2A1703975F00856385 /* RNOpenSSLCryptor.m */; };
+		A5F15B341703975F00856385 /* RNOpenSSLDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2C1703975F00856385 /* RNOpenSSLDecryptor.m */; };
+		A5F15B351703975F00856385 /* RNOpenSSLEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2E1703975F00856385 /* RNOpenSSLEncryptor.m */; };
+		A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B371703B98F00856385 /* NSString+Conversion.m */; };
+		A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B3A1703D14F00856385 /* UserDefaults.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -880,6 +889,26 @@
 		A5F15AF21702DF9000856385 /* x509.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509.h; sourceTree = "<group>"; };
 		A5F15AF31702DF9000856385 /* x509_vfy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509_vfy.h; sourceTree = "<group>"; };
 		A5F15AF41702DF9000856385 /* x509v3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509v3.h; sourceTree = "<group>"; };
+		A5F15B1F1703975F00856385 /* RNCryptor+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCryptor+Private.h"; sourceTree = "<group>"; };
+		A5F15B201703975F00856385 /* RNCryptor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCryptor-Prefix.pch"; sourceTree = "<group>"; };
+		A5F15B211703975F00856385 /* RNCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptor.h; sourceTree = "<group>"; };
+		A5F15B221703975F00856385 /* RNCryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCryptor.m; sourceTree = "<group>"; };
+		A5F15B231703975F00856385 /* RNCryptorEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCryptorEngine.h; sourceTree = "<group>"; };
+		A5F15B241703975F00856385 /* RNCryptorEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCryptorEngine.m; sourceTree = "<group>"; };
+		A5F15B251703975F00856385 /* RNDecryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNDecryptor.h; sourceTree = "<group>"; };
+		A5F15B261703975F00856385 /* RNDecryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNDecryptor.m; sourceTree = "<group>"; };
+		A5F15B271703975F00856385 /* RNEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNEncryptor.h; sourceTree = "<group>"; };
+		A5F15B281703975F00856385 /* RNEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNEncryptor.m; sourceTree = "<group>"; };
+		A5F15B291703975F00856385 /* RNOpenSSLCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNOpenSSLCryptor.h; sourceTree = "<group>"; };
+		A5F15B2A1703975F00856385 /* RNOpenSSLCryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNOpenSSLCryptor.m; sourceTree = "<group>"; };
+		A5F15B2B1703975F00856385 /* RNOpenSSLDecryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNOpenSSLDecryptor.h; sourceTree = "<group>"; };
+		A5F15B2C1703975F00856385 /* RNOpenSSLDecryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNOpenSSLDecryptor.m; sourceTree = "<group>"; };
+		A5F15B2D1703975F00856385 /* RNOpenSSLEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNOpenSSLEncryptor.h; sourceTree = "<group>"; };
+		A5F15B2E1703975F00856385 /* RNOpenSSLEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNOpenSSLEncryptor.m; sourceTree = "<group>"; };
+		A5F15B361703B98F00856385 /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Conversion.h"; sourceTree = "<group>"; };
+		A5F15B371703B98F00856385 /* NSString+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Conversion.m"; sourceTree = "<group>"; };
+		A5F15B391703D14F00856385 /* UserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaults.h; sourceTree = "<group>"; };
+		A5F15B3A1703D14F00856385 /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaults.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -949,16 +978,14 @@
 		A53718BB16FF95DF00C6FCCF /* TextSecureiOS */ = {
 			isa = PBXGroup;
 			children = (
-				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
-				A537190A1700247400C6FCCF /* Server.h */,
-				A537190B1700247400C6FCCF /* Server.m */,
+				A5F15B1D1703740D00856385 /* View */,
 				A5F15AA217029BCF00856385 /* ViewControllers */,
+				A5F15B1C170373E700856385 /* Server */,
 				A5F15AA117029BB400856385 /* Security */,
 				A5F15AA317029C5300856385 /* Utility */,
 				A53718BC16FF95DF00C6FCCF /* Supporting Files */,
-				A5F15B1B170370A400856385 /* Libraries */,
 			);
 			path = TextSecureiOS;
 			sourceTree = "<group>";
@@ -1391,6 +1418,7 @@
 				A5F15A9717027FCF00856385 /* Cryptography.m */,
 				A5F15A9E1702997A00856385 /* KeychainWrapper.h */,
 				A5F15A9F1702997A00856385 /* KeychainWrapper.m */,
+				A5F15B1B170370A400856385 /* Libraries */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -1415,6 +1443,10 @@
 			children = (
 				A537190D1700284800C6FCCF /* Constants.h */,
 				A537190E1700284800C6FCCF /* Constants.m */,
+				A5F15B391703D14F00856385 /* UserDefaults.h */,
+				A5F15B3A1703D14F00856385 /* UserDefaults.m */,
+				A5F15B361703B98F00856385 /* NSString+Conversion.h */,
+				A5F15B371703B98F00856385 /* NSString+Conversion.m */,
 				A5F15A9B1702949100856385 /* NSData+Conversion.h */,
 				A5F15A9C1702949100856385 /* NSData+Conversion.m */,
 				A5F15A6D17014DB400856385 /* JSON */,
@@ -1516,11 +1548,53 @@
 		A5F15B1B170370A400856385 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				A5F15B1E1703975F00856385 /* RNCryptor */,
 				A5F15AA81702DF9000856385 /* include */,
 			);
 			name = Libraries;
 			path = ../Libraries/include;
 			sourceTree = "<group>";
+		};
+		A5F15B1C170373E700856385 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				A537190A1700247400C6FCCF /* Server.h */,
+				A537190B1700247400C6FCCF /* Server.m */,
+			);
+			name = Server;
+			sourceTree = "<group>";
+		};
+		A5F15B1D1703740D00856385 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		A5F15B1E1703975F00856385 /* RNCryptor */ = {
+			isa = PBXGroup;
+			children = (
+				A5F15B1F1703975F00856385 /* RNCryptor+Private.h */,
+				A5F15B201703975F00856385 /* RNCryptor-Prefix.pch */,
+				A5F15B211703975F00856385 /* RNCryptor.h */,
+				A5F15B221703975F00856385 /* RNCryptor.m */,
+				A5F15B231703975F00856385 /* RNCryptorEngine.h */,
+				A5F15B241703975F00856385 /* RNCryptorEngine.m */,
+				A5F15B251703975F00856385 /* RNDecryptor.h */,
+				A5F15B261703975F00856385 /* RNDecryptor.m */,
+				A5F15B271703975F00856385 /* RNEncryptor.h */,
+				A5F15B281703975F00856385 /* RNEncryptor.m */,
+				A5F15B291703975F00856385 /* RNOpenSSLCryptor.h */,
+				A5F15B2A1703975F00856385 /* RNOpenSSLCryptor.m */,
+				A5F15B2B1703975F00856385 /* RNOpenSSLDecryptor.h */,
+				A5F15B2C1703975F00856385 /* RNOpenSSLDecryptor.m */,
+				A5F15B2D1703975F00856385 /* RNOpenSSLEncryptor.h */,
+				A5F15B2E1703975F00856385 /* RNOpenSSLEncryptor.m */,
+			);
+			name = RNCryptor;
+			path = Libraries/RNCryptor/RNCryptor;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -1993,6 +2067,15 @@
 				A5F15A9817027FD000856385 /* Cryptography.m in Sources */,
 				A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */,
 				A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */,
+				A5F15B2F1703975F00856385 /* RNCryptor.m in Sources */,
+				A5F15B301703975F00856385 /* RNCryptorEngine.m in Sources */,
+				A5F15B311703975F00856385 /* RNDecryptor.m in Sources */,
+				A5F15B321703975F00856385 /* RNEncryptor.m in Sources */,
+				A5F15B331703975F00856385 /* RNOpenSSLCryptor.m in Sources */,
+				A5F15B341703975F00856385 /* RNOpenSSLDecryptor.m in Sources */,
+				A5F15B351703975F00856385 /* RNOpenSSLEncryptor.m in Sources */,
+				A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */,
+				A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

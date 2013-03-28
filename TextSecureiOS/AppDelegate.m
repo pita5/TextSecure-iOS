@@ -8,24 +8,27 @@
 
 #import "AppDelegate.h"
 #import "Cryptography.h"
-#include <openssl/md5.h>
-
+#import "UserDefaults.h"
 @implementation AppDelegate
-
+@synthesize server;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.server = [[Server alloc] init];
+    if([UserDefaults hasVerifiedPhone]) {
+      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+       (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    }
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
 
-  
-  [Cryptography generateNISTp256ECCKeyPair];
-   [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-   (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     return YES;
 }
 
 -(void)  cryptoDemo {
+  [Cryptography testEncryption];
   // demoing generating and storing account authentication token. Just for prototyping
   [Cryptography generateAndStoreNewAccountAuthenticationToken];
   // Testing storage
-  NSLog(@"testing storage %@",[Cryptography retrieveAuthenticationToken]);
+  NSLog(@"testing storage %@",[Cryptography getAuthenticationToken]);
   NSLog(@"testing out HMAC %@", [Cryptography computeSHA1DigestForString:@""]);
   
   // testing rn
@@ -37,6 +40,16 @@
 //                                             error:&error];
  
 }
+
+
+-(void) markVerifiedPhone:(NSNotification*)notification {
+  [UserDefaults markVerifiedPhone];
+}
+
+-(void) markSentVerification:(NSNotification*)notification {
+  [UserDefaults markSentVerification];
+}
+
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -65,8 +78,7 @@
   // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
-{
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
 	NSLog(@"My token is: %@", deviceToken);
 
 }

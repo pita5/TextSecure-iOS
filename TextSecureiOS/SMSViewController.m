@@ -7,6 +7,7 @@
 //
 
 #import "SMSViewController.h"
+#import "UserDefaults.h"
 //
 
 @implementation SMSViewController
@@ -17,13 +18,11 @@
     self.navigationController.navigationBarHidden = NO;
     numItems = 10;
     demoPhones = [[NSArray alloc] initWithObjects:@"+16144868963",@"+41 79 962 44 99",@"+16144858953",@"+14154868963",@"+41 76 922 44 22",@"+12124868963",@"+15224224363",@"+13724224363",@"+14224224363",@"+17224224363",@"+19224224363", nil];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
    self.navigationController.navigationBarHidden = NO;
-  if(![self hasVerifiedPhone]){
+  if(![UserDefaults hasVerifiedPhone]){
     [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
   }
 
@@ -118,23 +117,5 @@
   return self.numItems;
 }
 
--(BOOL) hasVerifiedPhone {
-  return [[NSUserDefaults standardUserDefaults] boolForKey:@"hasVerifiedPhone"];
-}
-
--(void) markVerifiedPhone:(NSNotification*)notification {
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasVerifiedPhone"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-
--(BOOL) hasSentVerification {
-  return [[NSUserDefaults standardUserDefaults] boolForKey:@"hasSentVerification"];
-}
-
--(void) markSentVerification:(NSNotification*)notification {
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSentVerification"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
-}
         
 @end

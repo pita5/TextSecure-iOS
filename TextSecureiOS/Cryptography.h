@@ -11,9 +11,11 @@
 @interface Cryptography : NSObject
 +(NSString*) generateAndStoreNewAccountAuthenticationToken;
 + (BOOL) storeAuthenticationToken:(NSString*)token;
-
-+ (NSString*) retrieveAuthenticationToken;
++ (NSString*) getAuthenticationToken;
++ (BOOL) storeUsernameToken:(NSString*)token;
++ (NSString*) getUsernameToken;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
-
++ (void) generateECKeyPairSecurityFramework; // not used
 + (void) generateNISTp256ECCKeyPair;
++(void) testEncryption;
 @end
