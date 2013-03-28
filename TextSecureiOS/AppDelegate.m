@@ -12,7 +12,9 @@
 @implementation AppDelegate
 @synthesize server;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  // notification details held in the launchOptions dictionary. if the dictionary is nil then the user tapped the application icon as normal.
     self.server = [[Server alloc] init];
+  
     if([UserDefaults hasVerifiedPhone]) {
       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
        (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
@@ -79,7 +81,10 @@
 }
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
-	NSLog(@"My token is: %@", deviceToken);
+  NSString *stringToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+  stringToken = [stringToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SendAPN" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:stringToken,@"apnRegistrationId", nil]];
+
 
 }
 
@@ -88,4 +93,10 @@
 	NSLog(@"Failed to get token, error: %@", error);
 }
 
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+  // TODO: remove
+  NSLog(@"GOT A PUSH!!!!");
+  
+}
 @end

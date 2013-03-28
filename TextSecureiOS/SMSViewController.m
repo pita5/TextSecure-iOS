@@ -30,6 +30,13 @@
 
 
 - (IBAction)composeSMS:(id)sender {
+// TODO: configure
+  // TODO: remove
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"SendMessage" object:self userInfo:nil];
+}
+
+
+- (IBAction)composeSMSToPhone:(id)sender {
   UIDevice *device = [UIDevice currentDevice];
   if ([[device model] isEqualToString:@"iPhone"] ) {
     MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
@@ -44,6 +51,7 @@
     
   }
 }
+
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
   [self.navigationController dismissViewControllerAnimated:YES completion:nil];

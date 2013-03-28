@@ -62,6 +62,9 @@
 }
 
 -(void)finishedVerifiedPhone:(NSNotification*)notification {
+  // register for push notifications
+  [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+   (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
   [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
   
 }
@@ -71,8 +74,8 @@
 }
 
 -(IBAction)sentVerification:(id)sender {
-  self.selectedPhoneNumber= [NSString stringWithFormat:@"+%@%@",countryCode.text,phoneNumber.text];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@%@",verificationCodePart1.text,verificationCodePart2.text], self.selectedPhoneNumber,@"username", nil]];
+  self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCode.text,self.phoneNumber.text];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username", nil]];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
 }
 

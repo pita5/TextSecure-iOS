@@ -15,6 +15,9 @@ NSString* const appName = @"TextSecure";
 NSString* const authenticationTokenStorageId = @"TextSecureAuthenticationToken";
 NSString* const usernameTokenStorageId = @"UsernameAuthenticationToken";
 #ifdef TEST
-NSString* const textSecureServer = @"https://textsecure-gcm-test.herokuapp.com";
+NSString* const textSecureServer = @"http://textsecure-gcm-production.herokuapp.com";
+#else
+NSString* const textSecureServer = @"https://gcm.textsecure.whispersystems.org";
 #endif
 NSString* const textSecureAccountsAPI = @"v1/accounts";
+NSString* const textSecureMessagesAPI = @"v1/messages";

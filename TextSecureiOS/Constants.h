@@ -22,13 +22,16 @@
 
 extern NSString* const textSecureServer;
 extern NSString* const textSecureAccountsAPI;
+extern NSString* const textSecureMessagesAPI;
+
 extern NSString* const appName;
 extern NSString* const authenticationTokenStorageId;
 extern NSString* const usernameTokenStorageId;
 typedef enum {
 	CREATE_ACCOUNT=0,
 	VERIFY_ACCOUNT=1,
-  SEND_APN=2
+  SEND_APN=2,
+  SEND_MESSAGE=3
 } TextSecureRequestType;
 
 

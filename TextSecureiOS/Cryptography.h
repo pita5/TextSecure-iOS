@@ -18,4 +18,5 @@
 + (void) generateECKeyPairSecurityFramework; // not used
 + (void) generateNISTp256ECCKeyPair;
 +(void) testEncryption;
++ (NSString*) getAuthorizationToken;
 @end

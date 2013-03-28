@@ -23,7 +23,8 @@
 -(void) pushSecureRequest:(NSString*) request;
 
 -(NSURL*) createRequestURL:(NSString*)requestStr withServer:(NSString*)server withAPI:(NSString*) api;
--(void) serverPost:(NSURL*)requestUrl;
+-(void) serverAuthenticatedRequest:(NSURL*)requestUrl withData:(NSData*)requestData requestType:(NSString*)method;
+-(void) serverEmptyPost:(NSURL*)requestUrl;
 -(void) serverPut:(NSURL*)requestUrl withData:(NSData*)requestData;
 #pragma mark -
 #pragma mark TextSecure verbs
