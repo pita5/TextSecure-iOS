@@ -9,12 +9,18 @@
 #import "AppDelegate.h"
 #import "Cryptography.h"
 #import "UserDefaults.h"
+#import "NSObject+SBJson.h"
 @implementation AppDelegate
 @synthesize server;
+@synthesize messageDatabase;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   // notification details held in the launchOptions dictionary. if the dictionary is nil then the user tapped the application icon as normal.
     self.server = [[Server alloc] init];
-  
+    self.messageDatabase = [[MessagesDatabase alloc] init];
+    if(launchOptions!=nil) {
+      [self handlePush:launchOptions];
+      
+    }
     if([UserDefaults hasVerifiedPhone]) {
       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
        (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
@@ -95,8 +101,14 @@
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-  // TODO: remove
-  NSLog(@"GOT A PUSH!!!!");
-  
+  // TODO: add new message here!
+  [self handlePush:userInfo];
+}
+
+-(void) handlePush:(NSDictionary *)pushInfo {
+  NSDictionary* fullMessageJson = [[pushInfo objectForKey:@"message_body"] JSONValue];
+  NSLog(@"full message json %@",fullMessageJson);
+  Message *message = [[Message alloc] initWithText:[fullMessageJson objectForKey:@"messageText"] messageSource:[fullMessageJson objectForKey:@"source"] messageDestinations:[fullMessageJson objectForKey:@"destinations"] messageAttachments:[fullMessageJson objectForKey:@"attachments"] messageTimestamp:[NSDate date]];
+  [self.messageDatabase addMessage:message];
 }
 @end

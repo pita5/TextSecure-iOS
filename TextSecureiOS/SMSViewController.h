@@ -11,12 +11,13 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMessageComposeViewController.h>
+#import "MessagesDatabase.h"
 
 
-@interface SMSViewController : UITableViewController<ABPeoplePickerNavigationControllerDelegate,ABPersonViewControllerDelegate,MFMessageComposeViewControllerDelegate>
-@property (nonatomic) int numItems;
-@property (nonatomic, retain) NSArray *demoPhones;
-
-- (IBAction)composeSMS:(id)sender;
+@interface SMSViewController : UITableViewController
+@property (nonatomic, retain) NSArray *messages;
+@property (nonatomic,retain) MessagesDatabase *messagesDB;
+@property (nonatomic,retain) NSString* composingMessagePhoneNumber;
+@property (nonatomic,retain) NSString* composingMessageText;
 - (IBAction) Edit:(id)sender;
 @end

@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Server.h"
+#import "MessagesDatabase.h"
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) Server *server;
+@property (strong,nonatomic) MessagesDatabase *messageDatabase;
+-(void) handlePush:(NSDictionary *)pushInfo;
 @end

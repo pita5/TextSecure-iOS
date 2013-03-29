@@ -8,16 +8,18 @@
 
 #import "SMSViewController.h"
 #import "UserDefaults.h"
-//
-
+#import "Message.h"
+#import "Cryptography.h"
 @implementation SMSViewController
-@synthesize numItems;
-@synthesize demoPhones;
+@synthesize composingMessageText;
+@synthesize messages;
+@synthesize messagesDB;
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    self.navigationController.navigationBarHidden = NO;
-    numItems = 10;
-    demoPhones = [[NSArray alloc] initWithObjects:@"+16144868963",@"+41 79 962 44 99",@"+16144858953",@"+14154868963",@"+41 76 922 44 22",@"+12124868963",@"+15224224363",@"+13724224363",@"+14224224363",@"+17224224363",@"+19224224363", nil];
+  [super viewDidLoad];
+  self.navigationController.navigationBarHidden = NO;
+  self.messagesDB = [[MessagesDatabase alloc] init];
+  self.messages = [self.messagesDB getMessages];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -28,50 +30,63 @@
 
 }
 
+-(void) reloadModel:(NSNotification*)notification {
+  self.messages=[self.messagesDB getMessages];
+  [self.tableView reloadData];
+}
 
 - (IBAction)composeSMS:(id)sender {
-// TODO: configure
-  // TODO: remove
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SendMessage" object:self userInfo:nil];
+  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Phone Number" message:@"Phone" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+  alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+  alert.tag = 0;
+  [alert show];
 }
 
 
-- (IBAction)composeSMSToPhone:(id)sender {
-  UIDevice *device = [UIDevice currentDevice];
-  if ([[device model] isEqualToString:@"iPhone"] ) {
-    MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
-    picker.messageComposeDelegate=self;
-    
-    [self presentViewController:picker animated:YES completion:nil];
-  } else {
-    // TODO: better backup for iPods (just don't support on)
-    UIAlertView *Notpermitted=[[UIAlertView alloc] initWithTitle:@"Alert" message:@"Your device doesn't support this feature. " delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    
-    [Notpermitted show];
-    
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+  NSLog(@"%@", [alertView textFieldAtIndex:0].text);
+  if(alertView.tag == 0) {
+    self.composingMessagePhoneNumber = [alertView textFieldAtIndex:0].text;
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Title" message:@"Message" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    alert.tag = 1;
+    [alert show];
+  }
+  else if(alertView.tag==1) {
+    self.composingMessageText=[alertView textFieldAtIndex:0].text;
+    Message *newMessage = [[Message alloc]
+                           initWithText:self.composingMessageText
+                           messageSource:[Cryptography getUsernameToken]
+                           messageDestinations:[[NSArray alloc] initWithObjects:self.composingMessagePhoneNumber,nil]
+                           messageAttachments:[[NSArray alloc] init]
+                           messageTimestamp:[NSDate date]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SendMessage" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:newMessage, @"message",nil]];
+    [self.messagesDB addMessage:newMessage];
+    self.composingMessageText = nil;
+    self.composingMessagePhoneNumber = nil;
   }
 }
 
 
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-  [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-}
 
-//- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//  // for custom designed cells
-// 	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMS"];
-//  UILabel *phoneNumberLabel = (UILabel *)[cell viewWithTag:0];
-//  UILabel *previewLabel = (UILabel *)[cell viewWithTag:1];
-//  UILabel *dateLabel = (UILabel *)[cell viewWithTag:2];
-//  return cell;
-//}
+/* // for custom designed cells
+- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  // for custom designed cells
+ 	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMS"];
+  UILabel *phoneNumberLabel = (UILabel *)[cell viewWithTag:0];
+  UILabel *previewLabel = (UILabel *)[cell viewWithTag:1];
+  UILabel *dateLabel = (UILabel *)[cell viewWithTag:2];
+  return cell;
+}
+ */
 
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   // for default cells
  	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMSDefault"];
-  cell.textLabel.text = [self.demoPhones objectAtIndex:indexPath.row];
-  cell.detailTextLabel.text = @"preview of sms written with TextSecure app";
+  Message* message = [self.messages objectAtIndex:indexPath.row];
+  cell.textLabel.text = message.source;
+  cell.detailTextLabel.text = message.text;
   return cell;
 }
 
@@ -108,13 +123,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
   if (editingStyle == UITableViewCellEditingStyleDelete) {
-    if(self.numItems >= 1) {
-      self.numItems-=1;
-    }
-		[tableView beginUpdates];
-		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-		[tableView endUpdates];
-
+    // TODO: update with ability to delete
     [self Edit:self];
 	}
 	else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -122,7 +131,7 @@
 	}
 }
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
-  return self.numItems;
+  return [self.messages count];
 }
 
         

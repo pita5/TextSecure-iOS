@@ -22,14 +22,57 @@
 @synthesize selectedPhoneNumber;
 @synthesize flag;
 @synthesize scrollView;
+@synthesize countryCodeInput;
+@synthesize verifyButton;
+
+@synthesize explanationText;
+@synthesize youPhoneNumberText;
+@synthesize youPhoneNumberTextDescription;
+@synthesize findCountryCodeText;
+@synthesize findCountryCodeTextDescription;
+@synthesize verificationTextExplanation;
+@synthesize verificationCompletionExplanation;
+@synthesize countryDict;
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+
     }
     return self;
 }
 
+-(void) configureFonts {
+  /*
+   "OpenSans-Light",
+   "OpenSans-Extrabold",
+   OpenSans,
+   "OpenSans-Italic",
+   "OpenSansLight-Italic",
+   "OpenSans-Semibold",
+   "OpenSans-SemiboldItalic",
+   "OpenSans-Bold",
+   "OpenSans-BoldItalic",
+   "OpenSans-ExtraboldItalic"
+   */
+  [countryCode setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+  [countryCodeInput setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+  [phoneNumber setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+  [verificationCodePart1 setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+  [verificationCodePart2 setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+  [explanationText setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+  [youPhoneNumberText setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+  [youPhoneNumberTextDescription setFont:[UIFont fontWithName:@"OpenSans" size:10]];
+  [findCountryCodeText setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+  [findCountryCodeTextDescription setFont:[UIFont fontWithName:@"OpenSans" size:10]];
+
+  [verificationTextExplanation setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+  [verificationCompletionExplanation setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+
+}
+  
 - (void)viewDidLoad {
   [super viewDidLoad];
 	// Do any additional setup after loading the view.
@@ -39,17 +82,40 @@
   self.flag.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",@"us"]];
    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
   [self registerForKeyboardNotifications];
+  [self configureFonts];
+  [countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
+  self.countryDict = [[NSMutableDictionary alloc]  initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"CountryCodes" ofType:@"plist"]];
+ 
+  // also key by country code
+  for (NSString* key in [self.countryDict allKeys]) {
+    // TODO: save this reoriganization
+    NSDictionary* data =[self.countryDict objectForKey:key];
+    [self.countryDict setObject:data forKey:[data objectForKey:@"country_code"]];
+  }
+
 
 }
 
+-(void)updateCountryCode:(id)sender {
+  if ([self.countryDict objectForKey:self.countryCodeInput.text]) {
+    NSLog(@"country found %@",[self.countryDict objectForKey:self.countryCodeInput.text]);
+    [self updateCountry:[self.countryDict objectForKey:self.countryCodeInput.text]];
+  }
+}
+
+-(void)updateCountry:(NSDictionary*)countryInfo {
+  self.flag.image=[UIImage imageNamed:[NSString stringWithFormat:@"%@.png",[[countryInfo objectForKey:@"code"] lowercaseString]]];
+  self.countryCode.text = [NSString stringWithFormat:@"[+%@]",[countryInfo objectForKey:@"country_code"]];
+  self.countryCodeInput.text = [countryInfo objectForKey:@"country_code"];
+  self.countryName.text=[countryInfo objectForKey:@"name"];
+
+}
 
 -(void) countryChosen:(NSNotification*)notification {
   NSLog(@"country chosen");
-  NSDictionary *countryInfo = [notification userInfo];
-  self.flag.image=[UIImage imageNamed:[NSString stringWithFormat:@"%@.png",[countryInfo objectForKey:@"code"]]];
-  self.countryCode.text = [countryInfo objectForKey:@"country_code"];
-  self.countryName.titleLabel.text=[countryInfo objectForKey:@"name"];
+  [self updateCountry:[notification userInfo]];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -110,26 +176,26 @@
   scrollView.contentInset = contentInsets;
   scrollView.scrollIndicatorInsets = contentInsets;
   
-  // If active text field is hidden by keyboard, scroll it so it's visible
+  // If verify button field is hidden by keyboard, scroll it so it's visible
   // Your application might not need or want this behavior.
   CGRect aRect = self.view.frame;
+  CGPoint aPoint;
   aRect.size.height -= kbSize.height;
-  UITextField *textField;
   if(phoneNumber!=NULL) {
-    textField=phoneNumber;
+    aPoint = self.verifyButton.frame.origin;
   }
   else {
-    textField = verificationCodePart1;
+    aPoint = verificationCodePart1.frame.origin;
   }
-  if (!CGRectContainsPoint(aRect, textField.frame.origin) ) {
+  if (CGRectContainsPoint(aRect, aPoint )) {
     // iPhone 5 hack :( TODO: figure out how to remove
     float offset = 0.0;
     CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
     if (iOSDeviceScreenSize.height == 568)  {
       offset = -68.0;
     }
-    CGPoint scrollPoint = CGPointMake(0.0, textField.frame.origin.y-kbSize.height+offset);
-    NSLog(@"scroll point is %f",textField.frame.origin.y);
+    CGPoint scrollPoint = CGPointMake(0.0, aPoint.y+kbSize.height+offset);
+   
     [scrollView setContentOffset:scrollPoint animated:YES];
   }
 }

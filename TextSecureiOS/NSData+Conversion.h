@@ -13,6 +13,4 @@
 
 #pragma mark - String Conversion
 - (NSString *)hexadecimalString;
-- (NSString *)base64EncodedString;
-+ (NSData *)dataByBase64DecodingString:(NSString *)decode;
 @end

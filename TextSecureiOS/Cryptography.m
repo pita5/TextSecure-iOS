@@ -113,9 +113,9 @@
   EC_KEY_set_group(ecKey, group);
   EC_GROUP_set_point_conversion_form(group, POINT_CONVERSION_COMPRESSED);
   EC_KEY_generate_key(ecKey);
-  const BIGNUM *privateKey = EC_KEY_get0_private_key(ecKey);
-  const EC_POINT *publicKey = EC_KEY_get0_public_key(ecKey);
-//  
+//  const BIGNUM *privateKey = EC_KEY_get0_private_key(ecKey);
+//  const EC_POINT *publicKey = EC_KEY_get0_public_key(ecKey);
+//
 //  int len = i2d_ECPrivateKey(ecKey,NULL);
 //  unsigned char *privateKeyBuf = OPENSSL_malloc(len);
 //  memset(privateKeyBuf, 0, len);

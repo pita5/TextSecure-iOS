@@ -9,6 +9,7 @@
 #import "Server.h"
 #import "Cryptography.h"
 #import "NSObject+SBJSON.h"
+#import "Message.h"
 @implementation Server
 @synthesize receivedData;
 @synthesize requestQueue;
@@ -135,8 +136,9 @@
 
 -(void) doSendMessage:(NSNotification*)notification {
   self.currentRequest = SEND_MESSAGE;
-  // TODO: this is a dummy message
-  NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:[[NSArray alloc] initWithObjects:@"+41799624499", nil],@"destinations",@"hello Christine",@"messageText",[[NSArray alloc] init],@"attachments", nil];
+  Message* message = [[notification userInfo] objectForKey:@"message"];
+  NSDictionary *parameters = [[NSDictionary alloc]
+                              initWithObjectsAndKeys:message.destinations,@"destinations",message.text,@"messageText",message.attachments,@"attachments", nil];
   [self serverPost:[self createRequestURL:@"" withServer:textSecureServer withAPI:textSecureMessagesAPI] withData:[self jsonDataFromDict:parameters]];
 }
 
