@@ -13,6 +13,10 @@
 @end
 
 @implementation VerificationViewController
+// Note there are so many IBOutlets to support easy Localizable.strings localization
+// and customization of fonts. Hopefully this will be made easier in the future iOS dev
+// suite to be done entirely via Storyboards and not via code. If anyone has a cleaner way
+// of doing this, please go ahead. 
 @synthesize phoneNumber;
 @synthesize countryCode;
 @synthesize countryName;
@@ -33,6 +37,7 @@
 @synthesize verificationTextExplanation;
 @synthesize verificationCompletionExplanation;
 @synthesize countryDict;
+@synthesize selectedPhoneNumberLabel;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -70,7 +75,7 @@
 
   [verificationTextExplanation setFont:[UIFont fontWithName:@"OpenSans" size:20]];
   [verificationCompletionExplanation setFont:[UIFont fontWithName:@"OpenSans" size:20]];
-
+  [selectedPhoneNumberLabel setFont:[UIFont fontWithName:@"OpenSans" size:20]];
 }
   
 - (void)viewDidLoad {
@@ -92,14 +97,17 @@
     NSDictionary* data =[self.countryDict objectForKey:key];
     [self.countryDict setObject:data forKey:[data objectForKey:@"country_code"]];
   }
+  if([self.selectedPhoneNumber length]>0) {
+    self.selectedPhoneNumberLabel.text = self.selectedPhoneNumber;
+  }
 
 
 }
 
 -(void)updateCountryCode:(id)sender {
   if ([self.countryDict objectForKey:self.countryCodeInput.text]) {
-    NSLog(@"country found %@",[self.countryDict objectForKey:self.countryCodeInput.text]);
     [self updateCountry:[self.countryDict objectForKey:self.countryCodeInput.text]];
+    [self.phoneNumber becomeFirstResponder];
   }
 }
 
@@ -140,7 +148,7 @@
 }
 
 -(IBAction)sentVerification:(id)sender {
-  self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCode.text,self.phoneNumber.text];
+  self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCodeInput.text,self.phoneNumber.text];
   [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username", nil]];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
 }

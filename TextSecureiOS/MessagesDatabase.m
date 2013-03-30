@@ -19,7 +19,7 @@
       NSLog(@"Could not open message db.");
       return nil;
     }
-    [self.database executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (source TEXT, text TEXT, destination TEXT,timestamp DATETIME DEFAULT current_timestamp)"];
+    [self.database executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (source TEXT, text TEXT, destination TEXT, timestamp DATETIME DEFAULT current_timestamp)"];
     // Later we will need a more complicated schema, including handling of message threads, multiple desintations, attachments, multiple attachments,
 	}
 	return self;

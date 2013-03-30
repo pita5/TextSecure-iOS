@@ -19,5 +19,8 @@ NSString* const textSecureServer = @"http://textsecure-gcm-production.herokuapp.
 #else
 NSString* const textSecureServer = @"https://gcm.textsecure.whispersystems.org";
 #endif
+
+
 NSString* const textSecureAccountsAPI = @"v1/accounts";
 NSString* const textSecureMessagesAPI = @"v1/messages";
+NSString* const textSecureDirectoryAPI= @"v1/directory";

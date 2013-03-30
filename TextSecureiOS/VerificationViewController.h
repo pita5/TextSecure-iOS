@@ -30,6 +30,7 @@
 
 
 @property (nonatomic,strong) NSString* selectedPhoneNumber;
+@property (nonatomic,strong) IBOutlet UILabel* selectedPhoneNumberLabel;
 @property (nonatomic,strong) NSMutableDictionary* countryDict;
 
 -(IBAction)doVerifyPhone:(id)sender;

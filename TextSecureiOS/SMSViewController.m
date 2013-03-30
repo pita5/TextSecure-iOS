@@ -19,7 +19,25 @@
   self.navigationController.navigationBarHidden = NO;
   self.messagesDB = [[MessagesDatabase alloc] init];
   self.messages = [self.messagesDB getMessages];
+  [self customizeMenuBar];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
+}
+
+-(void) customizeMenuBar {
+  [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed: @"TextSecure-Messages-menubar.png"] forBarMetrics:UIBarMetricsDefault];
+
+  UIImage *composeImage = [UIImage imageNamed:@"TextSecure-Messages-composebutton.png"];
+  UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+  [composeButton setImage:composeImage forState:UIControlStateNormal];
+  composeButton.showsTouchWhenHighlighted = YES;
+  composeButton.frame = CGRectMake(0.0,0.0, 50.0, 50.0);
+  
+  [composeButton addTarget:self action:@selector(composeSMS:) forControlEvents:UIControlEventTouchUpInside];
+  
+  UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
+  self.navigationItem.rightBarButtonItem = rightButton;
+
+  
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -69,26 +87,36 @@
 
 
 
-/* // for custom designed cells
+ // for custom designed cells
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   // for custom designed cells
  	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMS"];
-  UILabel *phoneNumberLabel = (UILabel *)[cell viewWithTag:0];
-  UILabel *previewLabel = (UILabel *)[cell viewWithTag:1];
-  UILabel *dateLabel = (UILabel *)[cell viewWithTag:2];
+  UILabel *phoneNumberLabel = (UILabel *)[cell viewWithTag:1];
+  UILabel *previewLabel = (UILabel *)[cell viewWithTag:2];
+  UILabel *dateLabel = (UILabel *)[cell viewWithTag:3];
+  
+  Message* message = [self.messages objectAtIndex:indexPath.row];
+  phoneNumberLabel.text = [message.destinations objectAtIndex:0];
+  previewLabel.text = message.text;
+  NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+  [dateFormatter setDateFormat:@"MM/DD HH:mm"];
+  NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+  dateLabel.text = dateString;
+
   return cell;
 }
- */
 
 
+/* for default cells
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   // for default cells
  	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMSDefault"];
   Message* message = [self.messages objectAtIndex:indexPath.row];
-  cell.textLabel.text = message.source;
+  cell.textLabel.text = [message.destinations objectAtIndex:0];
   cell.detailTextLabel.text = message.text;
   return cell;
 }
+ */
 
 
 - (void )tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

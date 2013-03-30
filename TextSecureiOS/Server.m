@@ -13,7 +13,7 @@
 @implementation Server
 @synthesize receivedData;
 @synthesize requestQueue;
-@synthesize currentRequest;
+@synthesize currentRequestApiType;
 -(id) init {
 	if(self==[super init]) {
 		self.requestQueue = [[NSMutableArray alloc] init];
@@ -23,73 +23,76 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doSendAPN:) name:@"SendAPN" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doSendMessage:) name:@"SendMessage" object:nil];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doGetDirectoryLink:) name:@"GetDirectory" object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doRetrieveDirectory:) name:@"RetrieveDirectory" object:nil];
+
 	}
 	return self;
 }
 
--(void) doNextRequest {
-	if([self.requestQueue count] > 0) {
-		id request = [self.requestQueue lastObject];
-		[self serverEmptyPost:request];
-	}
-}
+
 
 -(NSString*) escapeRequest:(NSString*)request {
 	return [[request stringByReplacingOccurrencesOfString:@" " withString:@"%20"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 
 
--(void) pushSecureRequest:(NSString*) request {
-  NSURL* requestUrl = [self createRequestURL:request withServer:textSecureServer withAPI:textSecureAccountsAPI];
-  [self.requestQueue insertObject:requestUrl atIndex:0];
+-(void) pushSecureRequest:(Request*) request {
+  [self.requestQueue insertObject:request atIndex:0];
   if([self.requestQueue count]==1) {
     [self doNextRequest];
   }
 }
 
+-(void) doNextRequest {
+	if([self.requestQueue count] > 0) {
+    Request* nextRequest=[self.requestQueue lastObject];
+    self.currentRequestApiType=nextRequest.apiRequestType;
+    [self serverAuthenticatedRequest:nextRequest];
+	}
+}
 
--(void) serverAuthenticatedRequest:(NSURL*)requestUrl withData:(NSData*)requestData requestType:(NSString*)method {
-  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
-  NSLog(@"authorization token for put %@",[NSString stringWithFormat:@"Basic %@",[Cryptography getAuthorizationToken]]);
-	[request setHTTPMethod:method];
-  [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-  [request setValue:[NSString stringWithFormat:@"Basic %@",[Cryptography getAuthorizationToken]] forHTTPHeaderField:@"Authorization"];
-  [request addValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];
-  [request setHTTPBody:requestData];
+-(void) serverAuthenticatedRequest:(Request*)request {
+  NSURL* requestUrl=request.httpRequestURL;
+  NSData* requestData=request.httpRequestData;
+  NSString* method;
+  if(request.httpRequestType==POST) {
+    method = @"POST";
+  }
+  else if(request.httpRequestType == PUT) {
+    method = @"PUT";
+  }
+  else if (request.httpRequestType == GET) {
+    method = @"GET";
+  }
+  else {
+    method = @"POST";
+  }
+
+  NSMutableURLRequest *nsRequest = [NSMutableURLRequest requestWithURL:requestUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
+  [nsRequest setHTTPMethod:method];
+  if(request.httpRequestType != EMPTYPOST) {
+    [nsRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [nsRequest setValue:[NSString stringWithFormat:@"Basic %@",[Cryptography getAuthorizationToken]] forHTTPHeaderField:@"Authorization"];
+    [nsRequest addValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];    
+    if(requestData!=NULL) {
+      [nsRequest setHTTPBody:requestData];
+    }
+  }
+  else {
+      [nsRequest setValue:@"0" forHTTPHeaderField:@"Content-Length"];
+  }
 	self.receivedData = [[NSMutableData alloc] init];
-	id urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	id urlConnection = [[NSURLConnection alloc] initWithRequest:nsRequest delegate:self];
   if(urlConnection==nil) {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ServerError" object:self];
   }
   
 }
 
--(void) serverPut:(NSURL*)requestUrl withData:(NSData*)requestData{
-  [self serverAuthenticatedRequest:requestUrl withData:requestData requestType:@"PUT"];
-}
 
--(void) serverPost:(NSURL*)requestUrl withData:(NSData*)requestData{
-  [self serverAuthenticatedRequest:requestUrl withData:requestData requestType:@"POST"];
-}
-
-
-
-
--(void) serverEmptyPost:(NSURL*)requestUrl {
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
-	[request setHTTPMethod:@"POST"];
-  [request setValue:@"0" forHTTPHeaderField:@"Content-Length"];
-	self.receivedData = [[NSMutableData alloc] init];
-	NSURLConnection *urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-//  [urlConnection scheduleInRunLoop:[NSRunLoop mainRunLoop]
-//                        forMode:NSDefaultRunLoopMode];
-//  [urlConnection start];
-
-  if(urlConnection==nil) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ServerError" object:self];
-  }
-}
 
 
 
@@ -108,40 +111,72 @@
 }
 
 -(void) doCreateAccount:(NSNotification*) notification {
-  self.currentRequest = CREATE_ACCOUNT;
   NSString* phoneNumber = [[notification userInfo] objectForKey:@"username"];
   NSLog(@"phone is %@",phoneNumber);
   [Cryptography storeUsernameToken:phoneNumber];
-  [self serverEmptyPost:[self createRequestURL:phoneNumber withServer:textSecureServer withAPI:textSecureAccountsAPI]];
+  Request* request = [[Request alloc] initWithHttpRequestType:EMPTYPOST
+                                               requestUrl:[self createRequestURL:phoneNumber withServer:textSecureServer withAPI:textSecureAccountsAPI]
+                                              requestData:NULL
+                                              apiRequestType:CREATE_ACCOUNT];
+  [self pushSecureRequest:request];
 }
 
 
 -(void) doVerifyAccount:(NSNotification*) notification {
-  self.currentRequest = VERIFY_ACCOUNT;
   NSString* verificationCode = [[notification userInfo] objectForKey:@"verification_code"];
   [Cryptography generateAndStoreNewAccountAuthenticationToken];
   NSDictionary *parameters = [[NSDictionary alloc] initWithObjects:
                                                             [[NSArray alloc] initWithObjects:verificationCode,[Cryptography getAuthenticationToken], nil]
                                                            forKeys:[[NSArray alloc] initWithObjects:@"verificationCode",@"authenticationToken",nil]];
-  [self serverPut:[self createRequestURL:[Cryptography getUsernameToken] withServer:textSecureServer withAPI:textSecureAccountsAPI] withData:[self jsonDataFromDict:parameters]];
+  
+  Request* request = [[Request alloc] initWithHttpRequestType:PUT
+                                               requestUrl:[self createRequestURL:[Cryptography getUsernameToken] withServer:textSecureServer withAPI:textSecureAccountsAPI]
+                                              requestData:[self jsonDataFromDict:parameters]
+                                               apiRequestType:VERIFY_ACCOUNT];
+  [self pushSecureRequest:request];  
 }
 
 
 -(void) doSendAPN:(NSNotification *)notification {
-  self.currentRequest = SEND_APN;
   NSString* apn = [[notification userInfo] objectForKey:@"apnRegistrationId"];
   NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:apn,@"apnRegistrationId", nil];
-  [self serverPut:[self createRequestURL:[NSString stringWithFormat:@"%@/%@",@"apn",[Cryptography getUsernameToken]] withServer:textSecureServer withAPI:textSecureAccountsAPI] withData:[self jsonDataFromDict:parameters]];
+  Request* request = [[Request alloc] initWithHttpRequestType:PUT
+                                               requestUrl:[self createRequestURL:[NSString stringWithFormat:@"%@/%@",@"apn",[Cryptography getUsernameToken]] withServer:textSecureServer withAPI:textSecureAccountsAPI]
+                                              requestData:[self jsonDataFromDict:parameters]
+                                               apiRequestType:SEND_APN];
+  [self pushSecureRequest:request];
 }
 
 -(void) doSendMessage:(NSNotification*)notification {
-  self.currentRequest = SEND_MESSAGE;
   Message* message = [[notification userInfo] objectForKey:@"message"];
   NSDictionary *parameters = [[NSDictionary alloc]
                               initWithObjectsAndKeys:message.destinations,@"destinations",message.text,@"messageText",message.attachments,@"attachments", nil];
-  [self serverPost:[self createRequestURL:@"" withServer:textSecureServer withAPI:textSecureMessagesAPI] withData:[self jsonDataFromDict:parameters]];
+
+  
+  Request* request = [[Request alloc] initWithHttpRequestType:POST
+                                               requestUrl:[self createRequestURL:@"" withServer:textSecureServer withAPI:textSecureMessagesAPI] 
+                                              requestData:[self jsonDataFromDict:parameters]
+                                               apiRequestType:SEND_MESSAGE];
+    [self pushSecureRequest:request];
 }
 
+-(void) doGetDirectoryLink:(NSNotification*)notification {  
+  Request* request = [[Request alloc] initWithHttpRequestType:GET
+                                               requestUrl:[self createRequestURL:@"" withServer:textSecureServer withAPI:textSecureDirectoryAPI]
+                                              requestData:NULL
+                                               apiRequestType:GET_DIRECTORY_LINK];
+  [self pushSecureRequest:request];
+}
+
+
+-(void)doRetrieveDirectory:(NSNotification*)notification {
+  NSString* directoryURL = [[notification userInfo] objectForKey:@"url"];
+  Request* request = [[Request alloc] initWithHttpRequestType:GET
+                                               requestUrl:[NSURL URLWithString:directoryURL]
+                                              requestData:NULL
+                                               apiRequestType:GET_DIRECTORY];
+  [self pushSecureRequest:request];
+}
 
 #pragma mark -
 #pragma mark connection delegate methods
@@ -164,9 +199,18 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
-  NSLog(@"response %@ and len %d",self.receivedData,[self.receivedData length]);
-
+  NSLog(@"response %@ and len %d current request is %d",self.receivedData,[self.receivedData length],self.currentRequestApiType);
   [self.requestQueue removeLastObject];
+  if (self.currentRequestApiType == GET_DIRECTORY_LINK) {
+    NSError *error;
+    NSDictionary* directoryInfo = [NSJSONSerialization JSONObjectWithData:self.receivedData options:kNilOptions error:&error];
+    NSLog(@"bloom filter info %@",directoryInfo);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RetrieveDirectory" object:self userInfo:directoryInfo];
+  }
+  else if (self.currentRequestApiType == GET_DIRECTORY) {
+    
+  }
+  
   [self doNextRequest];
 }
 
@@ -177,29 +221,36 @@
   NSDictionary *dic = [httpResponse allHeaderFields];
   
   NSLog(@"response status code and headers %d %@",[httpResponse statusCode],dic);
-  if(self.currentRequest == CREATE_ACCOUNT) {
+  
+  if(self.currentRequestApiType == CREATE_ACCOUNT) {
     if([httpResponse statusCode] == 200){
       [[NSNotificationCenter defaultCenter] postNotificationName:@"SentVerification" object:self];
     }
   }
-  else if(self.currentRequest == VERIFY_ACCOUNT) {
+  else if(self.currentRequestApiType == VERIFY_ACCOUNT) {
     if([httpResponse statusCode] == 200){
       [[NSNotificationCenter defaultCenter] postNotificationName:@"VerifiedPhone" object:self];
     }
     
   }
-  else  if (self.currentRequest == SEND_APN) {
+  else  if (self.currentRequestApiType == SEND_APN) {
     if([httpResponse statusCode] == 200){
       [[NSNotificationCenter defaultCenter] postNotificationName:@"SentAPN" object:self];
     }
     
   }
-  else  if (self.currentRequest == SEND_MESSAGE) {
+  else  if (self.currentRequestApiType == SEND_MESSAGE) {
     if([httpResponse statusCode] == 200){
       [[NSNotificationCenter defaultCenter] postNotificationName:@"SentMessage" object:self];
     }
     
   }
+  else if (self.currentRequestApiType == GET_DIRECTORY_LINK||self.currentRequestApiType == GET_DIRECTORY) {
+    if([httpResponse statusCode] != 200){
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"DirectoryRetrieveError" object:self];
+    }
+  }
+
 }
 
 

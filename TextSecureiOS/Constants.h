@@ -23,6 +23,7 @@
 extern NSString* const textSecureServer;
 extern NSString* const textSecureAccountsAPI;
 extern NSString* const textSecureMessagesAPI;
+extern NSString* const textSecureDirectoryAPI;
 
 extern NSString* const appName;
 extern NSString* const authenticationTokenStorageId;
@@ -31,7 +32,17 @@ typedef enum {
 	CREATE_ACCOUNT=0,
 	VERIFY_ACCOUNT=1,
   SEND_APN=2,
-  SEND_MESSAGE=3
+  SEND_MESSAGE=3,
+  GET_DIRECTORY=4,
+  GET_DIRECTORY_LINK=5
 } TextSecureRequestType;
+
+
+typedef enum {
+	POST=0,
+  EMPTYPOST=1,
+  GET=2,
+  PUT=3
+} HTTPRequestType;
 
 

@@ -34,6 +34,26 @@
 		A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */; };
 		A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */; };
 		A51B77B917058E6C002B8E53 /* TextSecure-Global-canvas.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B817058E6C002B8E53 /* TextSecure-Global-canvas.png */; };
+		A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77BB170669E2002B8E53 /* BloomFilter.m */; };
+		A51B77BE17069EC0002B8E53 /* DefaultBloomfilter.bin in Resources */ = {isa = PBXBuildFile; fileRef = A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */; };
+		A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */; };
+		A51B77C71706A144002B8E53 /* TextSecure-Messages-avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */; };
+		A51B77C81706A144002B8E53 /* TextSecure-Messages-cellbg.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */; };
+		A51B77CB1706A144002B8E53 /* TextSecure-Messages-search.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C51706A144002B8E53 /* TextSecure-Messages-search.png */; };
+		A51B77CD1706C662002B8E53 /* TextSecure-Messages-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77CC1706C662002B8E53 /* TextSecure-Messages-menubar.png */; };
+		A51B77D71706CA48002B8E53 /* TextSecure-Messages-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77CE1706CA46002B8E53 /* TextSecure-Messages-search@2x.png */; };
+		A51B77D81706CA48002B8E53 /* TextSecure-Messages-menubar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77CF1706CA46002B8E53 /* TextSecure-Messages-menubar@2x.png */; };
+		A51B77DB1706CA48002B8E53 /* TextSecure-Messages-cellbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77D21706CA47002B8E53 /* TextSecure-Messages-cellbg@2x.png */; };
+		A51B77DC1706CA48002B8E53 /* TextSecure-Messages-avatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77D31706CA48002B8E53 /* TextSecure-Messages-avatar@2x.png */; };
+		A51B77DD1706CA48002B8E53 /* TextSecure-Message-composebutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77D41706CA48002B8E53 /* TextSecure-Message-composebutton@2x.png */; };
+		A51B77DE1706CA48002B8E53 /* TextSecure-Message-composebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77D51706CA48002B8E53 /* TextSecure-Message-composebutton.png */; };
+		A51B77DF1706CA48002B8E53 /* TextSecure-Message-avatarmask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77D61706CA48002B8E53 /* TextSecure-Message-avatarmask@2x.png */; };
+		A51B77E51706CA63002B8E53 /* textsecure-verifybutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E01706CA62002B8E53 /* textsecure-verifybutton@2x.png */; };
+		A51B77E61706CA63002B8E53 /* textsecure-selectyourcountry-field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E11706CA62002B8E53 /* textsecure-selectyourcountry-field@2x.png */; };
+		A51B77E71706CA63002B8E53 /* textsecure-phonenumber-field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E21706CA62002B8E53 /* textsecure-phonenumber-field@2x.png */; };
+		A51B77E81706CA63002B8E53 /* textsecure-gettingstarted-menubar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */; };
+		A51B77E91706CA63002B8E53 /* textsecure-countrycode-field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */; };
+		A51B77EC1706E269002B8E53 /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77EB1706E269002B8E53 /* Request.m */; };
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
@@ -304,7 +324,6 @@
 		A5372A3D17011A5300C6FCCF /* qu.png in Resources */ = {isa = PBXBuildFile; fileRef = A53728F017011A5100C6FCCF /* qu.png */; };
 		A5372A3E17011A5300C6FCCF /* qu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A53728F117011A5100C6FCCF /* qu@2x.png */; };
 		A5372A3F17011A5300C6FCCF /* re.png in Resources */ = {isa = PBXBuildFile; fileRef = A53728F217011A5100C6FCCF /* re.png */; };
-		A5372A4017011A5300C6FCCF /* resizeAll.sh in Resources */ = {isa = PBXBuildFile; fileRef = A53728F317011A5100C6FCCF /* resizeAll.sh */; };
 		A5372A4117011A5300C6FCCF /* ro.png in Resources */ = {isa = PBXBuildFile; fileRef = A53728F417011A5100C6FCCF /* ro.png */; };
 		A5372A4217011A5300C6FCCF /* ro@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A53728F517011A5100C6FCCF /* ro@2x.png */; };
 		A5372A4317011A5300C6FCCF /* rs.png in Resources */ = {isa = PBXBuildFile; fileRef = A53728F617011A5100C6FCCF /* rs.png */; };
@@ -481,6 +500,28 @@
 		A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar.png"; sourceTree = "<group>"; };
 		A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field.png"; sourceTree = "<group>"; };
 		A51B77B817058E6C002B8E53 /* TextSecure-Global-canvas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TextSecure-Global-canvas.png"; path = "TextSecureiOSAssets/TextSecure-Global-canvas.png"; sourceTree = "<group>"; };
+		A51B77BA170669E2002B8E53 /* BloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloomFilter.h; sourceTree = "<group>"; };
+		A51B77BB170669E2002B8E53 /* BloomFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilter.m; sourceTree = "<group>"; };
+		A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DefaultBloomfilter.bin; sourceTree = "<group>"; };
+		A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Message-avatarmask.png"; sourceTree = "<group>"; };
+		A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-avatar.png"; sourceTree = "<group>"; };
+		A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-cellbg.png"; sourceTree = "<group>"; };
+		A51B77C51706A144002B8E53 /* TextSecure-Messages-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-search.png"; sourceTree = "<group>"; };
+		A51B77CC1706C662002B8E53 /* TextSecure-Messages-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-menubar.png"; sourceTree = "<group>"; };
+		A51B77CE1706CA46002B8E53 /* TextSecure-Messages-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-search@2x.png"; sourceTree = "<group>"; };
+		A51B77CF1706CA46002B8E53 /* TextSecure-Messages-menubar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-menubar@2x.png"; sourceTree = "<group>"; };
+		A51B77D21706CA47002B8E53 /* TextSecure-Messages-cellbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-cellbg@2x.png"; sourceTree = "<group>"; };
+		A51B77D31706CA48002B8E53 /* TextSecure-Messages-avatar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-avatar@2x.png"; sourceTree = "<group>"; };
+		A51B77D41706CA48002B8E53 /* TextSecure-Message-composebutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Message-composebutton@2x.png"; sourceTree = "<group>"; };
+		A51B77D51706CA48002B8E53 /* TextSecure-Message-composebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Message-composebutton.png"; sourceTree = "<group>"; };
+		A51B77D61706CA48002B8E53 /* TextSecure-Message-avatarmask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Message-avatarmask@2x.png"; sourceTree = "<group>"; };
+		A51B77E01706CA62002B8E53 /* textsecure-verifybutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-verifybutton@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-verifybutton@2x.png"; sourceTree = "<group>"; };
+		A51B77E11706CA62002B8E53 /* textsecure-selectyourcountry-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-selectyourcountry-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-selectyourcountry-field@2x.png"; sourceTree = "<group>"; };
+		A51B77E21706CA62002B8E53 /* textsecure-phonenumber-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-phonenumber-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-phonenumber-field@2x.png"; sourceTree = "<group>"; };
+		A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar@2x.png"; sourceTree = "<group>"; };
+		A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field@2x.png"; sourceTree = "<group>"; };
+		A51B77EA1706E269002B8E53 /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
+		A51B77EB1706E269002B8E53 /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
 		A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextSecureiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718B516FF95DF00C6FCCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A53718B716FF95DF00C6FCCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -762,7 +803,6 @@
 		A53728F017011A5100C6FCCF /* qu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qu.png; sourceTree = "<group>"; };
 		A53728F117011A5100C6FCCF /* qu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qu@2x.png"; sourceTree = "<group>"; };
 		A53728F217011A5100C6FCCF /* re.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = re.png; sourceTree = "<group>"; };
-		A53728F317011A5100C6FCCF /* resizeAll.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = resizeAll.sh; sourceTree = "<group>"; };
 		A53728F417011A5100C6FCCF /* ro.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ro.png; sourceTree = "<group>"; };
 		A53728F517011A5100C6FCCF /* ro@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ro@2x.png"; sourceTree = "<group>"; };
 		A53728F617011A5100C6FCCF /* rs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rs.png; sourceTree = "<group>"; };
@@ -1064,6 +1104,11 @@
 		A51B77AD170561AE002B8E53 /* vc-verification */ = {
 			isa = PBXGroup;
 			children = (
+				A51B77E01706CA62002B8E53 /* textsecure-verifybutton@2x.png */,
+				A51B77E11706CA62002B8E53 /* textsecure-selectyourcountry-field@2x.png */,
+				A51B77E21706CA62002B8E53 /* textsecure-phonenumber-field@2x.png */,
+				A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */,
+				A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */,
 				A51B77B817058E6C002B8E53 /* TextSecure-Global-canvas.png */,
 				A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */,
 				A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */,
@@ -1072,6 +1117,26 @@
 				A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */,
 			);
 			name = "vc-verification";
+			sourceTree = "<group>";
+		};
+		A51B77BF1706A144002B8E53 /* vc-messages */ = {
+			isa = PBXGroup;
+			children = (
+				A51B77CE1706CA46002B8E53 /* TextSecure-Messages-search@2x.png */,
+				A51B77CF1706CA46002B8E53 /* TextSecure-Messages-menubar@2x.png */,
+				A51B77D21706CA47002B8E53 /* TextSecure-Messages-cellbg@2x.png */,
+				A51B77D31706CA48002B8E53 /* TextSecure-Messages-avatar@2x.png */,
+				A51B77D41706CA48002B8E53 /* TextSecure-Message-composebutton@2x.png */,
+				A51B77D51706CA48002B8E53 /* TextSecure-Message-composebutton.png */,
+				A51B77D61706CA48002B8E53 /* TextSecure-Message-avatarmask@2x.png */,
+				A51B77CC1706C662002B8E53 /* TextSecure-Messages-menubar.png */,
+				A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */,
+				A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */,
+				A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */,
+				A51B77C51706A144002B8E53 /* TextSecure-Messages-search.png */,
+			);
+			name = "vc-messages";
+			path = "TextSecureiOSAssets/vc-messages";
 			sourceTree = "<group>";
 		};
 		A53718A916FF95DF00C6FCCF = {
@@ -1129,6 +1194,7 @@
 		A53718BC16FF95DF00C6FCCF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */,
 				A537192D1700FAA900C6FCCF /* CountryCodes.plist */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
 				A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */,
@@ -1163,6 +1229,7 @@
 		A53718FC16FFB6E600C6FCCF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A51B77BF1706A144002B8E53 /* vc-messages */,
 				A51B77AD170561AE002B8E53 /* vc-verification */,
 				A5F15B4A1703F1B000856385 /* Fonts */,
 				A53727FD17011A4E00C6FCCF /* flags */,
@@ -1423,7 +1490,6 @@
 				A53728F017011A5100C6FCCF /* qu.png */,
 				A53728F117011A5100C6FCCF /* qu@2x.png */,
 				A53728F217011A5100C6FCCF /* re.png */,
-				A53728F317011A5100C6FCCF /* resizeAll.sh */,
 				A53728F417011A5100C6FCCF /* ro.png */,
 				A53728F517011A5100C6FCCF /* ro@2x.png */,
 				A53728F617011A5100C6FCCF /* rs.png */,
@@ -1524,6 +1590,8 @@
 				A5F15A9E1702997A00856385 /* KeychainWrapper.h */,
 				A5F15A9F1702997A00856385 /* KeychainWrapper.m */,
 				A5F15B1B170370A400856385 /* Libraries */,
+				A51B77BA170669E2002B8E53 /* BloomFilter.h */,
+				A51B77BB170669E2002B8E53 /* BloomFilter.m */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -1668,6 +1736,8 @@
 			children = (
 				A537190A1700247400C6FCCF /* Server.h */,
 				A537190B1700247400C6FCCF /* Server.m */,
+				A51B77EA1706E269002B8E53 /* Request.h */,
+				A51B77EB1706E269002B8E53 /* Request.m */,
 			);
 			name = Server;
 			sourceTree = "<group>";
@@ -2044,7 +2114,6 @@
 				A5372A3D17011A5300C6FCCF /* qu.png in Resources */,
 				A5372A3E17011A5300C6FCCF /* qu@2x.png in Resources */,
 				A5372A3F17011A5300C6FCCF /* re.png in Resources */,
-				A5372A4017011A5300C6FCCF /* resizeAll.sh in Resources */,
 				A5372A4117011A5300C6FCCF /* ro.png in Resources */,
 				A5372A4217011A5300C6FCCF /* ro@2x.png in Resources */,
 				A5372A4317011A5300C6FCCF /* rs.png in Resources */,
@@ -2151,6 +2220,24 @@
 				A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */,
 				A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */,
 				A51B77B917058E6C002B8E53 /* TextSecure-Global-canvas.png in Resources */,
+				A51B77BE17069EC0002B8E53 /* DefaultBloomfilter.bin in Resources */,
+				A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */,
+				A51B77C71706A144002B8E53 /* TextSecure-Messages-avatar.png in Resources */,
+				A51B77C81706A144002B8E53 /* TextSecure-Messages-cellbg.png in Resources */,
+				A51B77CB1706A144002B8E53 /* TextSecure-Messages-search.png in Resources */,
+				A51B77CD1706C662002B8E53 /* TextSecure-Messages-menubar.png in Resources */,
+				A51B77D71706CA48002B8E53 /* TextSecure-Messages-search@2x.png in Resources */,
+				A51B77D81706CA48002B8E53 /* TextSecure-Messages-menubar@2x.png in Resources */,
+				A51B77DB1706CA48002B8E53 /* TextSecure-Messages-cellbg@2x.png in Resources */,
+				A51B77DC1706CA48002B8E53 /* TextSecure-Messages-avatar@2x.png in Resources */,
+				A51B77DD1706CA48002B8E53 /* TextSecure-Message-composebutton@2x.png in Resources */,
+				A51B77DE1706CA48002B8E53 /* TextSecure-Message-composebutton.png in Resources */,
+				A51B77DF1706CA48002B8E53 /* TextSecure-Message-avatarmask@2x.png in Resources */,
+				A51B77E51706CA63002B8E53 /* textsecure-verifybutton@2x.png in Resources */,
+				A51B77E61706CA63002B8E53 /* textsecure-selectyourcountry-field@2x.png in Resources */,
+				A51B77E71706CA63002B8E53 /* textsecure-phonenumber-field@2x.png in Resources */,
+				A51B77E81706CA63002B8E53 /* textsecure-gettingstarted-menubar@2x.png in Resources */,
+				A51B77E91706CA63002B8E53 /* textsecure-countrycode-field@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2225,6 +2312,8 @@
 				A51B77A117050F8C002B8E53 /* MessagesDatabase.m in Sources */,
 				A51B77A617051417002B8E53 /* Message.m in Sources */,
 				A51B77AC17052C5C002B8E53 /* FilePath.m in Sources */,
+				A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */,
+				A51B77EC1706E269002B8E53 /* Request.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

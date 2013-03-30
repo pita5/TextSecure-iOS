@@ -19,5 +19,7 @@
 @property (nonatomic,retain) MessagesDatabase *messagesDB;
 @property (nonatomic,retain) NSString* composingMessagePhoneNumber;
 @property (nonatomic,retain) NSString* composingMessageText;
+-(void) customizeMenuBar;
+- (IBAction)composeSMS:(id)sender;
 - (IBAction) Edit:(id)sender;
 @end

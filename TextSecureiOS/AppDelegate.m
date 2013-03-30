@@ -13,10 +13,12 @@
 @implementation AppDelegate
 @synthesize server;
 @synthesize messageDatabase;
+@synthesize bloomFilter;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   // notification details held in the launchOptions dictionary. if the dictionary is nil then the user tapped the application icon as normal.
     self.server = [[Server alloc] init];
     self.messageDatabase = [[MessagesDatabase alloc] init];
+    self.bloomFilter = [[BloomFilter alloc] init];
     if(launchOptions!=nil) {
       [self handlePush:launchOptions];
       
@@ -24,6 +26,7 @@
     if([UserDefaults hasVerifiedPhone]) {
       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
        (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+      //[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
     }
    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
