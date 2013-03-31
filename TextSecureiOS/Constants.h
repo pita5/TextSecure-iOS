@@ -42,7 +42,8 @@ typedef enum {
 	POST=0,
   EMPTYPOST=1,
   GET=2,
-  PUT=3
+  PUT=3,
+  DOWNLOAD=4
 } HTTPRequestType;
 
 

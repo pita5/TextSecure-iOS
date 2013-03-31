@@ -19,4 +19,5 @@
 + (void) generateNISTp256ECCKeyPair;
 +(void) testEncryption;
 + (NSString*) getAuthorizationToken;
++ (NSData*)computeMACDigestForString:(NSString*)input withSeed:(NSString*)seed;
 @end

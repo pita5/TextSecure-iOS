@@ -13,4 +13,5 @@
 
 - (NSString *)base64Encoded;
 -(NSString *) rot13String;
+- (NSString *)unformattedPhoneNumber;
 @end

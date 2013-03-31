@@ -57,32 +57,34 @@
 -(void) serverAuthenticatedRequest:(Request*)request {
   NSURL* requestUrl=request.httpRequestURL;
   NSData* requestData=request.httpRequestData;
-  NSString* method;
-  if(request.httpRequestType==POST) {
-    method = @"POST";
-  }
-  else if(request.httpRequestType == PUT) {
-    method = @"PUT";
-  }
-  else if (request.httpRequestType == GET) {
-    method = @"GET";
-  }
-  else {
-    method = @"POST";
-  }
-
+ 
   NSMutableURLRequest *nsRequest = [NSMutableURLRequest requestWithURL:requestUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
-  [nsRequest setHTTPMethod:method];
-  if(request.httpRequestType != EMPTYPOST) {
-    [nsRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [nsRequest setValue:[NSString stringWithFormat:@"Basic %@",[Cryptography getAuthorizationToken]] forHTTPHeaderField:@"Authorization"];
-    [nsRequest addValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];    
-    if(requestData!=NULL) {
-      [nsRequest setHTTPBody:requestData];
+  if(request.httpRequestType!=DOWNLOAD) {
+    NSString* method;
+    if(request.httpRequestType==POST) {
+      method = @"POST";
     }
-  }
-  else {
-      [nsRequest setValue:@"0" forHTTPHeaderField:@"Content-Length"];
+    else if(request.httpRequestType == PUT) {
+      method = @"PUT";
+    }
+    else if (request.httpRequestType == GET) {
+      method = @"GET";
+    }
+    else {
+      method = @"POST";
+    }
+    [nsRequest setHTTPMethod:method];
+    if(request.httpRequestType != EMPTYPOST) {
+      [nsRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+      [nsRequest setValue:[NSString stringWithFormat:@"Basic %@",[Cryptography getAuthorizationToken]] forHTTPHeaderField:@"Authorization"];
+      [nsRequest addValue:[NSString stringWithFormat:@"%d", [requestData length]] forHTTPHeaderField:@"Content-Length"];    
+      if(requestData!=NULL) {
+        [nsRequest setHTTPBody:requestData];
+      }
+    }
+    else {
+        [nsRequest setValue:@"0" forHTTPHeaderField:@"Content-Length"];
+    }
   }
 	self.receivedData = [[NSMutableData alloc] init];
 	id urlConnection = [[NSURLConnection alloc] initWithRequest:nsRequest delegate:self];
@@ -171,7 +173,7 @@
 
 -(void)doRetrieveDirectory:(NSNotification*)notification {
   NSString* directoryURL = [[notification userInfo] objectForKey:@"url"];
-  Request* request = [[Request alloc] initWithHttpRequestType:GET
+  Request* request = [[Request alloc] initWithHttpRequestType:DOWNLOAD
                                                requestUrl:[NSURL URLWithString:directoryURL]
                                               requestData:NULL
                                                apiRequestType:GET_DIRECTORY];
@@ -199,16 +201,23 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
-  NSLog(@"response %@ and len %d current request is %d",self.receivedData,[self.receivedData length],self.currentRequestApiType);
   [self.requestQueue removeLastObject];
-  if (self.currentRequestApiType == GET_DIRECTORY_LINK) {
+  if (self.currentRequestApiType == GET_DIRECTORY_LINK||self.currentRequestApiType == GET_DIRECTORY) {
+    NSLog(@"response %@ and len %d current request is %d",self.receivedData,[self.receivedData length],self.currentRequestApiType);
+
     NSError *error;
-    NSDictionary* directoryInfo = [NSJSONSerialization JSONObjectWithData:self.receivedData options:kNilOptions error:&error];
-    NSLog(@"bloom filter info %@",directoryInfo);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"RetrieveDirectory" object:self userInfo:directoryInfo];
-  }
-  else if (self.currentRequestApiType == GET_DIRECTORY) {
+   
+    if(self.currentRequestApiType==GET_DIRECTORY_LINK) {
+      NSDictionary* directoryInfo = [NSJSONSerialization JSONObjectWithData:self.receivedData options:kNilOptions error:&error];
+      NSLog(@"bloom filter info %@",directoryInfo);
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDirectoryInfo" object:self userInfo:directoryInfo];
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"RetrieveDirectory" object:self userInfo:directoryInfo];
+    }
+    else {
+      NSDictionary* directoryInfo = [NSDictionary dictionaryWithObjectsAndKeys:self.receivedData,@"directory",nil];
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateDirectory" object:self userInfo:directoryInfo];
     
+    }
   }
   
   [self doNextRequest];
@@ -220,7 +229,7 @@
   NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
   NSDictionary *dic = [httpResponse allHeaderFields];
   
-  NSLog(@"response status code and headers %d %@",[httpResponse statusCode],dic);
+  NSLog(@"response status code and headers %d %@ for request type %d",[httpResponse statusCode],dic,self.currentRequestApiType);
   
   if(self.currentRequestApiType == CREATE_ACCOUNT) {
     if([httpResponse statusCode] == 200){

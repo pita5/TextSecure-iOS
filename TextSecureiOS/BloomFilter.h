@@ -15,8 +15,10 @@
 @property (nonatomic,strong) NSString* url;
 @property (nonatomic,strong) id version;
 @property (nonatomic,strong) id directory;
-
+@property (nonatomic) Byte* byteDirectory;
 -(void) createDirectoryForData:(NSData*)data;
 -(void)updateDirectory:(NSNotification*)notification;
 -(void)updateDirectoryInfo:(NSNotification*)notification;
+-(BOOL) containsUser:(NSString*)username;
+-(BOOL) isBitSet:(long) bitIndex;
 @end

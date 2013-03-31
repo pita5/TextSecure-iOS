@@ -33,7 +33,6 @@
 		A51B77B5170561C3002B8E53 /* textsecure-phonenumber-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */; };
 		A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */; };
 		A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */; };
-		A51B77B917058E6C002B8E53 /* TextSecure-Global-canvas.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B817058E6C002B8E53 /* TextSecure-Global-canvas.png */; };
 		A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77BB170669E2002B8E53 /* BloomFilter.m */; };
 		A51B77BE17069EC0002B8E53 /* DefaultBloomfilter.bin in Resources */ = {isa = PBXBuildFile; fileRef = A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */; };
 		A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */; };
@@ -411,6 +410,28 @@
 		A5372A9517011A5300C6FCCF /* zh.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294817011A5200C6FCCF /* zh.png */; };
 		A5372A9617011A5300C6FCCF /* zm.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294917011A5200C6FCCF /* zm.png */; };
 		A5372A9717011A5300C6FCCF /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294A17011A5200C6FCCF /* zw.png */; };
+		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
+		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
+		A5DE19D71707B24800ACAFDD /* ThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DE19D61707B24800ACAFDD /* ThreadViewController.m */; };
+		A5DE19DB1707B75E00ACAFDD /* TextSecure-Global-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */; };
+		A5DE19DC1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19DA1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png */; };
+		A5DE19EA1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19DE1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png */; };
+		A5DE19EB1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19DF1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom@2x.png */; };
+		A5DE19EC1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E01707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas.png */; };
+		A5DE19ED1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E11707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas@2x.png */; };
+		A5DE19EE1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E21707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top.png */; };
+		A5DE19EF1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E31707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top@2x.png */; };
+		A5DE19F01707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E41707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom.png */; };
+		A5DE19F11707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E51707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom@2x.png */; };
+		A5DE19F21707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E61707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas.png */; };
+		A5DE19F31707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E71707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png */; };
+		A5DE19F41707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E81707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png */; };
+		A5DE19F51707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E91707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png */; };
+		A5DE19F81707B81500ACAFDD /* TextSecureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DE19F71707B81500ACAFDD /* TextSecureViewController.m */; };
+		A5DE19FD1707C9DB00ACAFDD /* TextSecure-Global-canvas.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19F91707C9DB00ACAFDD /* TextSecure-Global-canvas.png */; };
+		A5DE19FE1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19FA1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png */; };
+		A5DE19FF1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19FB1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png */; };
+		A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19FC1707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png */; };
 		A5F15A9817027FD000856385 /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9717027FCF00856385 /* Cryptography.m */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9C1702949100856385 /* NSData+Conversion.m */; };
@@ -499,7 +520,6 @@
 		A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-phonenumber-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-phonenumber-field.png"; sourceTree = "<group>"; };
 		A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar.png"; sourceTree = "<group>"; };
 		A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field.png"; sourceTree = "<group>"; };
-		A51B77B817058E6C002B8E53 /* TextSecure-Global-canvas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TextSecure-Global-canvas.png"; path = "TextSecureiOSAssets/TextSecure-Global-canvas.png"; sourceTree = "<group>"; };
 		A51B77BA170669E2002B8E53 /* BloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloomFilter.h; sourceTree = "<group>"; };
 		A51B77BB170669E2002B8E53 /* BloomFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilter.m; sourceTree = "<group>"; };
 		A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DefaultBloomfilter.bin; sourceTree = "<group>"; };
@@ -890,6 +910,30 @@
 		A537294817011A5200C6FCCF /* zh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zh.png; sourceTree = "<group>"; };
 		A537294917011A5200C6FCCF /* zm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zm.png; sourceTree = "<group>"; };
 		A537294A17011A5200C6FCCF /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zw.png; sourceTree = "<group>"; };
+		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		A5DE19D51707B24800ACAFDD /* ThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadViewController.h; sourceTree = "<group>"; };
+		A5DE19D61707B24800ACAFDD /* ThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadViewController.m; sourceTree = "<group>"; };
+		A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-menubar.png"; sourceTree = "<group>"; };
+		A5DE19DA1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-menubar@2x.png"; sourceTree = "<group>"; };
+		A5DE19DE1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-receivedcard-bottom.png"; sourceTree = "<group>"; };
+		A5DE19DF1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-receivedcard-bottom@2x.png"; sourceTree = "<group>"; };
+		A5DE19E01707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-receivedcard-canvas.png"; sourceTree = "<group>"; };
+		A5DE19E11707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-receivedcard-canvas@2x.png"; sourceTree = "<group>"; };
+		A5DE19E21707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-receivedcard-top.png"; sourceTree = "<group>"; };
+		A5DE19E31707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-receivedcard-top@2x.png"; sourceTree = "<group>"; };
+		A5DE19E41707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-bottom.png"; sourceTree = "<group>"; };
+		A5DE19E51707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-bottom@2x.png"; sourceTree = "<group>"; };
+		A5DE19E61707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-canvas.png"; sourceTree = "<group>"; };
+		A5DE19E71707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-canvas@2x.png"; sourceTree = "<group>"; };
+		A5DE19E81707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-top.png"; sourceTree = "<group>"; };
+		A5DE19E91707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-top@2x.png"; sourceTree = "<group>"; };
+		A5DE19F61707B81500ACAFDD /* TextSecureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSecureViewController.h; sourceTree = "<group>"; };
+		A5DE19F71707B81500ACAFDD /* TextSecureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSecureViewController.m; sourceTree = "<group>"; };
+		A5DE19F91707C9DB00ACAFDD /* TextSecure-Global-canvas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-canvas.png"; sourceTree = "<group>"; };
+		A5DE19FA1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-loadscreen.png"; sourceTree = "<group>"; };
+		A5DE19FB1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-loadscreen@2x.png"; sourceTree = "<group>"; };
+		A5DE19FC1707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-canvas@2x.png"; sourceTree = "<group>"; };
 		A5F15A9617027FCF00856385 /* Cryptography.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cryptography.h; sourceTree = "<group>"; };
 		A5F15A9717027FCF00856385 /* Cryptography.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cryptography.m; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -1014,6 +1058,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */,
+				A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */,
 				A5F15A9A170280B700856385 /* Security.framework in Frameworks */,
 				A53719251700D71B00C6FCCF /* CoreTelephony.framework in Frameworks */,
 				A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */,
@@ -1109,7 +1155,6 @@
 				A51B77E21706CA62002B8E53 /* textsecure-phonenumber-field@2x.png */,
 				A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */,
 				A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */,
-				A51B77B817058E6C002B8E53 /* TextSecure-Global-canvas.png */,
 				A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */,
 				A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */,
 				A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */,
@@ -1164,6 +1209,8 @@
 				A51B77A217051096002B8E53 /* libsqlite3.dylib */,
 				A5F15AA41702DF6E00856385 /* libssl.a */,
 				A5F15AA51702DF6E00856385 /* libcrypto.a */,
+				A5DE19D3170702ED00ACAFDD /* AddressBook.framework */,
+				A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */,
 				A5F15A99170280B700856385 /* Security.framework */,
 				A53719241700D71A00C6FCCF /* CoreTelephony.framework */,
 				A53718F016FF98C100C6FCCF /* MessageUI.framework */,
@@ -1229,6 +1276,8 @@
 		A53718FC16FFB6E600C6FCCF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A5DE19DD1707B76A00ACAFDD /* vc-conversation */,
+				A5DE19D81707B75E00ACAFDD /* ui-global */,
 				A51B77BF1706A144002B8E53 /* vc-messages */,
 				A51B77AD170561AE002B8E53 /* vc-verification */,
 				A5F15B4A1703F1B000856385 /* Fonts */,
@@ -1582,6 +1631,40 @@
 			path = TextSecureiOSAssets/flags;
 			sourceTree = "<group>";
 		};
+		A5DE19D81707B75E00ACAFDD /* ui-global */ = {
+			isa = PBXGroup;
+			children = (
+				A5DE19F91707C9DB00ACAFDD /* TextSecure-Global-canvas.png */,
+				A5DE19FA1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png */,
+				A5DE19FB1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png */,
+				A5DE19FC1707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png */,
+				A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */,
+				A5DE19DA1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png */,
+			);
+			name = "ui-global";
+			path = "TextSecureiOSAssets/ui-global";
+			sourceTree = "<group>";
+		};
+		A5DE19DD1707B76A00ACAFDD /* vc-conversation */ = {
+			isa = PBXGroup;
+			children = (
+				A5DE19DE1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png */,
+				A5DE19DF1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom@2x.png */,
+				A5DE19E01707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas.png */,
+				A5DE19E11707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas@2x.png */,
+				A5DE19E21707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top.png */,
+				A5DE19E31707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top@2x.png */,
+				A5DE19E41707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom.png */,
+				A5DE19E51707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom@2x.png */,
+				A5DE19E61707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas.png */,
+				A5DE19E71707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png */,
+				A5DE19E81707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png */,
+				A5DE19E91707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png */,
+			);
+			name = "vc-conversation";
+			path = "TextSecureiOSAssets/vc-conversation";
+			sourceTree = "<group>";
+		};
 		A5F15AA117029BB400856385 /* Security */ = {
 			isa = PBXGroup;
 			children = (
@@ -1599,8 +1682,12 @@
 		A5F15AA217029BCF00856385 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A5DE19F61707B81500ACAFDD /* TextSecureViewController.h */,
+				A5DE19F71707B81500ACAFDD /* TextSecureViewController.m */,
 				A53718D016FF95DF00C6FCCF /* SMSViewController.h */,
 				A53718D116FF95DF00C6FCCF /* SMSViewController.m */,
+				A5DE19D51707B24800ACAFDD /* ThreadViewController.h */,
+				A5DE19D61707B24800ACAFDD /* ThreadViewController.m */,
 				A537190316FFBEE200C6FCCF /* VerificationViewController.h */,
 				A537190416FFBEE300C6FCCF /* VerificationViewController.m */,
 				A53719261700DC2F00C6FCCF /* CountryViewController.h */,
@@ -2219,7 +2306,6 @@
 				A51B77B5170561C3002B8E53 /* textsecure-phonenumber-field.png in Resources */,
 				A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */,
 				A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */,
-				A51B77B917058E6C002B8E53 /* TextSecure-Global-canvas.png in Resources */,
 				A51B77BE17069EC0002B8E53 /* DefaultBloomfilter.bin in Resources */,
 				A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */,
 				A51B77C71706A144002B8E53 /* TextSecure-Messages-avatar.png in Resources */,
@@ -2238,6 +2324,24 @@
 				A51B77E71706CA63002B8E53 /* textsecure-phonenumber-field@2x.png in Resources */,
 				A51B77E81706CA63002B8E53 /* textsecure-gettingstarted-menubar@2x.png in Resources */,
 				A51B77E91706CA63002B8E53 /* textsecure-countrycode-field@2x.png in Resources */,
+				A5DE19DB1707B75E00ACAFDD /* TextSecure-Global-menubar.png in Resources */,
+				A5DE19DC1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png in Resources */,
+				A5DE19EA1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png in Resources */,
+				A5DE19EB1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom@2x.png in Resources */,
+				A5DE19EC1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas.png in Resources */,
+				A5DE19ED1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-canvas@2x.png in Resources */,
+				A5DE19EE1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top.png in Resources */,
+				A5DE19EF1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-top@2x.png in Resources */,
+				A5DE19F01707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom.png in Resources */,
+				A5DE19F11707B76A00ACAFDD /* TextSecure-Conversation-sentcard-bottom@2x.png in Resources */,
+				A5DE19F21707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas.png in Resources */,
+				A5DE19F31707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png in Resources */,
+				A5DE19F41707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png in Resources */,
+				A5DE19F51707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png in Resources */,
+				A5DE19FD1707C9DB00ACAFDD /* TextSecure-Global-canvas.png in Resources */,
+				A5DE19FE1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png in Resources */,
+				A5DE19FF1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png in Resources */,
+				A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2314,6 +2418,8 @@
 				A51B77AC17052C5C002B8E53 /* FilePath.m in Sources */,
 				A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */,
 				A51B77EC1706E269002B8E53 /* Request.m in Sources */,
+				A5DE19D71707B24800ACAFDD /* ThreadViewController.m in Sources */,
+				A5DE19F81707B81500ACAFDD /* TextSecureViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

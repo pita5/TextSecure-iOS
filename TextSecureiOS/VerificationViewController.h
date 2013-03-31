@@ -32,6 +32,7 @@
 @property (nonatomic,strong) NSString* selectedPhoneNumber;
 @property (nonatomic,strong) IBOutlet UILabel* selectedPhoneNumberLabel;
 @property (nonatomic,strong) NSMutableDictionary* countryDict;
+@property (nonatomic,strong) UITextField *activeField;
 
 -(IBAction)doVerifyPhone:(id)sender;
 -(void) countryChosen:(NSNotification*)notification;

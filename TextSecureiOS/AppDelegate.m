@@ -26,7 +26,7 @@
     if([UserDefaults hasVerifiedPhone]) {
       [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
        (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-      //[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
     }
    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+// TODO: rename/refactor... apparently can cause conflict with system name
 @interface Message : NSObject
 @property (nonatomic,strong) NSString* source;
 @property (nonatomic,strong) NSArray* destinations;

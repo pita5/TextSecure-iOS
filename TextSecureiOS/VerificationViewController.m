@@ -38,16 +38,9 @@
 @synthesize verificationCompletionExplanation;
 @synthesize countryDict;
 @synthesize selectedPhoneNumberLabel;
+@synthesize activeField;
 
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-
-    }
-    return self;
-}
 
 -(void) configureFonts {
   /*
@@ -62,7 +55,7 @@
    "OpenSans-BoldItalic",
    "OpenSans-ExtraboldItalic"
    */
-  [countryCode setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+  [countryCode setFont:[UIFont fontWithName:@"OpenSans" size:12]];
   [countryCodeInput setFont:[UIFont fontWithName:@"OpenSans" size:20]];
   [phoneNumber setFont:[UIFont fontWithName:@"OpenSans" size:20]];
   [verificationCodePart1 setFont:[UIFont fontWithName:@"OpenSans" size:20]];
@@ -73,8 +66,8 @@
   [findCountryCodeText setFont:[UIFont fontWithName:@"OpenSans" size:14]];
   [findCountryCodeTextDescription setFont:[UIFont fontWithName:@"OpenSans" size:10]];
 
-  [verificationTextExplanation setFont:[UIFont fontWithName:@"OpenSans" size:20]];
-  [verificationCompletionExplanation setFont:[UIFont fontWithName:@"OpenSans" size:20]];
+  [verificationTextExplanation setFont:[UIFont fontWithName:@"OpenSans" size:14]];
+  [verificationCompletionExplanation setFont:[UIFont fontWithName:@"OpenSans" size:14]];
   [selectedPhoneNumberLabel setFont:[UIFont fontWithName:@"OpenSans" size:20]];
 }
   
@@ -100,6 +93,8 @@
   if([self.selectedPhoneNumber length]>0) {
     self.selectedPhoneNumberLabel.text = self.selectedPhoneNumber;
   }
+  CGPoint scrollPoint = CGPointMake(0.0,0.0);
+  [scrollView setContentOffset:scrollPoint animated:NO];
 
 
 }
@@ -176,38 +171,34 @@
   }
 }
 
-// Called when the UIKeyboardDidShowNotification is sent.
+
 - (void)keyboardWasShown:(NSNotification*)aNotification {
   NSDictionary* info = [aNotification userInfo];
   CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+
   UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
   scrollView.contentInset = contentInsets;
   scrollView.scrollIndicatorInsets = contentInsets;
-  
-  // If verify button field is hidden by keyboard, scroll it so it's visible
+
+  // If active text field is hidden by keyboard, scroll it so it's visible
   // Your application might not need or want this behavior.
   CGRect aRect = self.view.frame;
-  CGPoint aPoint;
   aRect.size.height -= kbSize.height;
-  if(phoneNumber!=NULL) {
-    aPoint = self.verifyButton.frame.origin;
-  }
-  else {
-    aPoint = verificationCodePart1.frame.origin;
-  }
-  if (CGRectContainsPoint(aRect, aPoint )) {
-    // iPhone 5 hack :( TODO: figure out how to remove
-    float offset = 0.0;
-    CGSize iOSDeviceScreenSize = [[UIScreen mainScreen] bounds].size;
-    if (iOSDeviceScreenSize.height == 568)  {
-      offset = -68.0;
-    }
-    CGPoint scrollPoint = CGPointMake(0.0, aPoint.y+kbSize.height+offset);
-   
+  if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+    CGPoint scrollPoint = CGPointMake(0.0, verifyButton.frame.origin.y-kbSize.height);
     [scrollView setContentOffset:scrollPoint animated:YES];
   }
 }
 
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+  self.activeField = textField;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+  self.activeField = nil;
+}
 
 - (void)registerForKeyboardNotifications {
   [[NSNotificationCenter defaultCenter] addObserver:self

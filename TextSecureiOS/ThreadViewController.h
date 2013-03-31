@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TextSecureViewController.h"
 
-@interface SMSViewController : TextSecureViewController
+
+
+@interface ThreadViewController : TextSecureViewController
 @end
