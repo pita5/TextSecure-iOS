@@ -7,6 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5169CF7170FEA3700A2CE9E /* MessagesDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CF6170FEA3700A2CE9E /* MessagesDatabase.m */; };
+		A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFA170FEA3E00A2CE9E /* Message.m */; };
+		A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */; };
+		A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */; };
+		A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */; };
+		A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D01170FEA8D00A2CE9E /* SMSViewController.m */; };
+		A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D04170FEA8D00A2CE9E /* CountryViewController.m */; };
+		A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D06170FEA8D00A2CE9E /* CountrySegue.m */; };
+		A5169D12170FEAC100A2CE9E /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D0E170FEAC100A2CE9E /* Server.m */; };
+		A5169D13170FEAC100A2CE9E /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D11170FEAC100A2CE9E /* Request.m */; };
+		A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D15170FEB1900A2CE9E /* FilePath.m */; };
+		A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */; };
+		A5169D20170FEB1900A2CE9E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D19170FEB1900A2CE9E /* Constants.m */; };
+		A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */; };
+		A5169D22170FEB1900A2CE9E /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D1D170FEB1900A2CE9E /* UserDefaults.m */; };
+		A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */; };
+		A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */; };
+		A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D25170FEB8E00A2CE9E /* BloomFilter.m */; };
+		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
+		A5169D31170FEC6600A2CE9E /* DefaultBloomfilter.bin in Resources */ = {isa = PBXBuildFile; fileRef = A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */; };
+		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
+		A5169D3F170FEDC600A2CE9E /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */; };
 		A51B776F17050C42002B8E53 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776517050C42002B8E53 /* FMDatabase.m */; };
 		A51B777017050C42002B8E53 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776717050C42002B8E53 /* FMDatabaseAdditions.m */; };
 		A51B777117050C42002B8E53 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776917050C42002B8E53 /* FMDatabasePool.m */; };
@@ -24,17 +46,12 @@
 		A51B779817050C71002B8E53 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778A17050C71002B8E53 /* SBJsonTokeniser.m */; };
 		A51B779917050C71002B8E53 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778C17050C71002B8E53 /* SBJsonUTF8Stream.m */; };
 		A51B779A17050C71002B8E53 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778E17050C71002B8E53 /* SBJsonWriter.m */; };
-		A51B77A117050F8C002B8E53 /* MessagesDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77A017050F8C002B8E53 /* MessagesDatabase.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
-		A51B77A617051417002B8E53 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77A517051417002B8E53 /* Message.m */; };
-		A51B77AC17052C5C002B8E53 /* FilePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77AB17052C5C002B8E53 /* FilePath.m */; };
 		A51B77B3170561C3002B8E53 /* textsecure-verifybutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */; };
 		A51B77B4170561C3002B8E53 /* textsecure-selectyourcountry-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */; };
 		A51B77B5170561C3002B8E53 /* textsecure-phonenumber-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */; };
 		A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */; };
 		A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */; };
-		A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77BB170669E2002B8E53 /* BloomFilter.m */; };
-		A51B77BE17069EC0002B8E53 /* DefaultBloomfilter.bin in Resources */ = {isa = PBXBuildFile; fileRef = A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */; };
 		A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */; };
 		A51B77C71706A144002B8E53 /* TextSecure-Messages-avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */; };
 		A51B77C81706A144002B8E53 /* TextSecure-Messages-cellbg.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */; };
@@ -52,32 +69,23 @@
 		A51B77E71706CA63002B8E53 /* textsecure-phonenumber-field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E21706CA62002B8E53 /* textsecure-phonenumber-field@2x.png */; };
 		A51B77E81706CA63002B8E53 /* textsecure-gettingstarted-menubar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */; };
 		A51B77E91706CA63002B8E53 /* textsecure-countrycode-field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */; };
-		A51B77EC1706E269002B8E53 /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77EB1706E269002B8E53 /* Request.m */; };
+		A52983901708C68D0063B45A /* TextSecure-Messages-avatar2.png in Resources */ = {isa = PBXBuildFile; fileRef = A529838F1708C68D0063B45A /* TextSecure-Messages-avatar2.png */; };
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
-		A53718C216FF95DF00C6FCCF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718C116FF95DF00C6FCCF /* main.m */; };
 		A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718C516FF95DF00C6FCCF /* AppDelegate.m */; };
 		A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
-		A53718D216FF95DF00C6FCCF /* SMSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718D116FF95DF00C6FCCF /* SMSViewController.m */; };
 		A53718DA16FF95DF00C6FCCF /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */; };
 		A53718DB16FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718DC16FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718E416FF95DF00C6FCCF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A53718E216FF95DF00C6FCCF /* InfoPlist.strings */; };
-		A53718E716FF95DF00C6FCCF /* TextSecureiOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718E616FF95DF00C6FCCF /* TextSecureiOSTests.m */; };
 		A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718F016FF98C100C6FCCF /* MessageUI.framework */; };
 		A53718FF16FFB6F800C6FCCF /* tutorial_ok_button.png in Resources */ = {isa = PBXBuildFile; fileRef = A53718FD16FFB6F800C6FCCF /* tutorial_ok_button.png */; };
 		A537190016FFB6F800C6FCCF /* tutorial_ok_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A53718FE16FFB6F800C6FCCF /* tutorial_ok_button@2x.png */; };
 		A537190216FFB92C00C6FCCF /* tutorial_tutorial_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190116FFB92C00C6FCCF /* tutorial_tutorial_arrow.png */; };
-		A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A537190416FFBEE300C6FCCF /* VerificationViewController.m */; };
 		A537190816FFC45C00C6FCCF /* textsecure.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190616FFC45B00C6FCCF /* textsecure.png */; };
 		A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190716FFC45B00C6FCCF /* textsecure@2x.png */; };
-		A537190C1700247600C6FCCF /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = A537190B1700247400C6FCCF /* Server.m */; };
-		A537190F1700284900C6FCCF /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = A537190E1700284800C6FCCF /* Constants.m */; };
 		A53719251700D71B00C6FCCF /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53719241700D71A00C6FCCF /* CoreTelephony.framework */; };
-		A53719281700DC3300C6FCCF /* CountryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A53719271700DC3100C6FCCF /* CountryViewController.m */; };
-		A537192E1700FAAB00C6FCCF /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = A537192D1700FAA900C6FCCF /* CountryCodes.plist */; };
-		A53719311701040600C6FCCF /* CountrySegue.m in Sources */ = {isa = PBXBuildFile; fileRef = A53719301701040400C6FCCF /* CountrySegue.m */; };
 		A537294B17011A5200C6FCCF /* ad.png in Resources */ = {isa = PBXBuildFile; fileRef = A53727FE17011A4F00C6FCCF /* ad.png */; };
 		A537294C17011A5200C6FCCF /* ae.png in Resources */ = {isa = PBXBuildFile; fileRef = A53727FF17011A4F00C6FCCF /* ae.png */; };
 		A537294D17011A5200C6FCCF /* af.png in Resources */ = {isa = PBXBuildFile; fileRef = A537280017011A4F00C6FCCF /* af.png */; };
@@ -410,9 +418,10 @@
 		A5372A9517011A5300C6FCCF /* zh.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294817011A5200C6FCCF /* zh.png */; };
 		A5372A9617011A5300C6FCCF /* zm.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294917011A5200C6FCCF /* zm.png */; };
 		A5372A9717011A5300C6FCCF /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294A17011A5200C6FCCF /* zw.png */; };
+		A5A1F62F170F765E00A0CDC1 /* BloomFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F62E170F765E00A0CDC1 /* BloomFilterTest.m */; };
+		A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F631170F824700A0CDC1 /* CryptographyTests.m */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
-		A5DE19D71707B24800ACAFDD /* ThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DE19D61707B24800ACAFDD /* ThreadViewController.m */; };
 		A5DE19DB1707B75E00ACAFDD /* TextSecure-Global-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */; };
 		A5DE19DC1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19DA1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png */; };
 		A5DE19EA1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19DE1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png */; };
@@ -427,15 +436,11 @@
 		A5DE19F31707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E71707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png */; };
 		A5DE19F41707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E81707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png */; };
 		A5DE19F51707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19E91707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png */; };
-		A5DE19F81707B81500ACAFDD /* TextSecureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DE19F71707B81500ACAFDD /* TextSecureViewController.m */; };
 		A5DE19FD1707C9DB00ACAFDD /* TextSecure-Global-canvas.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19F91707C9DB00ACAFDD /* TextSecure-Global-canvas.png */; };
 		A5DE19FE1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19FA1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png */; };
 		A5DE19FF1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19FB1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png */; };
 		A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19FC1707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png */; };
-		A5F15A9817027FD000856385 /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9717027FCF00856385 /* Cryptography.m */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
-		A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9C1702949100856385 /* NSData+Conversion.m */; };
-		A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15A9F1702997A00856385 /* KeychainWrapper.m */; };
 		A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA41702DF6E00856385 /* libssl.a */; };
 		A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA51702DF6E00856385 /* libcrypto.a */; };
 		A5F15B2F1703975F00856385 /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B221703975F00856385 /* RNCryptor.m */; };
@@ -445,8 +450,6 @@
 		A5F15B331703975F00856385 /* RNOpenSSLCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2A1703975F00856385 /* RNOpenSSLCryptor.m */; };
 		A5F15B341703975F00856385 /* RNOpenSSLDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2C1703975F00856385 /* RNOpenSSLDecryptor.m */; };
 		A5F15B351703975F00856385 /* RNOpenSSLEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2E1703975F00856385 /* RNOpenSSLEncryptor.m */; };
-		A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B371703B98F00856385 /* NSString+Conversion.m */; };
-		A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B3A1703D14F00856385 /* UserDefaults.m */; };
 		A5F15B3E1703EB9F00856385 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B3C1703EB9F00856385 /* Default@2x.png */; };
 		A5F15B3F1703EB9F00856385 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B3D1703EB9F00856385 /* Default.png */; };
 		A5F15B491703EE2F00856385 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B481703EE2F00856385 /* Default-568h@2x.png */; };
@@ -473,6 +476,49 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A5169CF6170FEA3700A2CE9E /* MessagesDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagesDatabase.m; path = Model/MessagesDatabase.m; sourceTree = "<group>"; };
+		A5169CF8170FEA3E00A2CE9E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = Model/Message.h; sourceTree = "<group>"; };
+		A5169CF9170FEA3E00A2CE9E /* MessagesDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagesDatabase.h; path = Model/MessagesDatabase.h; sourceTree = "<group>"; };
+		A5169CFA170FEA3E00A2CE9E /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = Model/Message.m; sourceTree = "<group>"; };
+		A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationViewController.m; path = ViewControllers/VerificationViewController.m; sourceTree = "<group>"; };
+		A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextSecureViewController.m; path = ViewControllers/TextSecureViewController.m; sourceTree = "<group>"; };
+		A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ThreadViewController.m; path = ViewControllers/ThreadViewController.m; sourceTree = "<group>"; };
+		A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationViewController.h; path = ViewControllers/VerificationViewController.h; sourceTree = "<group>"; };
+		A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSecureViewController.h; path = ViewControllers/TextSecureViewController.h; sourceTree = "<group>"; };
+		A5169D01170FEA8D00A2CE9E /* SMSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMSViewController.m; path = ViewControllers/SMSViewController.m; sourceTree = "<group>"; };
+		A5169D02170FEA8D00A2CE9E /* SMSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSViewController.h; path = ViewControllers/SMSViewController.h; sourceTree = "<group>"; };
+		A5169D03170FEA8D00A2CE9E /* ThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadViewController.h; path = ViewControllers/ThreadViewController.h; sourceTree = "<group>"; };
+		A5169D04170FEA8D00A2CE9E /* CountryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountryViewController.m; path = ViewControllers/CountryViewController.m; sourceTree = "<group>"; };
+		A5169D05170FEA8D00A2CE9E /* CountryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountryViewController.h; path = ViewControllers/CountryViewController.h; sourceTree = "<group>"; };
+		A5169D06170FEA8D00A2CE9E /* CountrySegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountrySegue.m; path = ViewControllers/CountrySegue.m; sourceTree = "<group>"; };
+		A5169D07170FEA8D00A2CE9E /* CountrySegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountrySegue.h; path = ViewControllers/CountrySegue.h; sourceTree = "<group>"; };
+		A5169D0E170FEAC100A2CE9E /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Server.m; path = Server/Server.m; sourceTree = "<group>"; };
+		A5169D0F170FEAC100A2CE9E /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Server.h; path = Server/Server.h; sourceTree = "<group>"; };
+		A5169D10170FEAC100A2CE9E /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Request.h; path = Server/Request.h; sourceTree = "<group>"; };
+		A5169D11170FEAC100A2CE9E /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Request.m; path = Server/Request.m; sourceTree = "<group>"; };
+		A5169D14170FEB1900A2CE9E /* FilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilePath.h; path = Utility/FilePath.h; sourceTree = "<group>"; };
+		A5169D15170FEB1900A2CE9E /* FilePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilePath.m; path = Utility/FilePath.m; sourceTree = "<group>"; };
+		A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Conversion.h"; path = "Utility/NSString+Conversion.h"; sourceTree = "<group>"; };
+		A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Conversion.m"; path = "Utility/NSString+Conversion.m"; sourceTree = "<group>"; };
+		A5169D18170FEB1900A2CE9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Utility/Constants.h; sourceTree = "<group>"; };
+		A5169D19170FEB1900A2CE9E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Utility/Constants.m; sourceTree = "<group>"; };
+		A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Conversion.h"; path = "Utility/NSData+Conversion.h"; sourceTree = "<group>"; };
+		A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Conversion.m"; path = "Utility/NSData+Conversion.m"; sourceTree = "<group>"; };
+		A5169D1C170FEB1900A2CE9E /* UserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserDefaults.h; path = Utility/UserDefaults.h; sourceTree = "<group>"; };
+		A5169D1D170FEB1900A2CE9E /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserDefaults.m; path = Utility/UserDefaults.m; sourceTree = "<group>"; };
+		A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainWrapper.m; path = Security/KeychainWrapper.m; sourceTree = "<group>"; };
+		A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ECKeyPair.m; path = Security/ECKeyPair.m; sourceTree = "<group>"; };
+		A5169D25170FEB8E00A2CE9E /* BloomFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BloomFilter.m; path = Security/BloomFilter.m; sourceTree = "<group>"; };
+		A5169D26170FEB8F00A2CE9E /* Cryptography.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Cryptography.m; path = Security/Cryptography.m; sourceTree = "<group>"; };
+		A5169D27170FEB8F00A2CE9E /* Cryptography.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cryptography.h; path = Security/Cryptography.h; sourceTree = "<group>"; };
+		A5169D28170FEB8F00A2CE9E /* ECKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ECKeyPair.h; path = Security/ECKeyPair.h; sourceTree = "<group>"; };
+		A5169D29170FEB8F00A2CE9E /* BloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BloomFilter.h; path = Security/BloomFilter.h; sourceTree = "<group>"; };
+		A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeychainWrapper.h; path = Security/KeychainWrapper.h; sourceTree = "<group>"; };
+		A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DefaultBloomfilter.bin; sourceTree = "<group>"; };
+		A5169D39170FEDC600A2CE9E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
+		A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
+		A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
 		A51B776417050C42002B8E53 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		A51B776517050C42002B8E53 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		A51B776617050C42002B8E53 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -508,21 +554,12 @@
 		A51B778C17050C71002B8E53 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		A51B778D17050C71002B8E53 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		A51B778E17050C71002B8E53 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
-		A51B779F17050F8C002B8E53 /* MessagesDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesDatabase.h; sourceTree = "<group>"; };
-		A51B77A017050F8C002B8E53 /* MessagesDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesDatabase.m; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		A51B77A417051417002B8E53 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		A51B77A517051417002B8E53 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		A51B77AA17052C5B002B8E53 /* FilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilePath.h; sourceTree = "<group>"; };
-		A51B77AB17052C5C002B8E53 /* FilePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilePath.m; sourceTree = "<group>"; };
 		A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-verifybutton.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-verifybutton.png"; sourceTree = "<group>"; };
 		A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-selectyourcountry-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-selectyourcountry-field.png"; sourceTree = "<group>"; };
 		A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-phonenumber-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-phonenumber-field.png"; sourceTree = "<group>"; };
 		A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar.png"; sourceTree = "<group>"; };
 		A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field.png"; sourceTree = "<group>"; };
-		A51B77BA170669E2002B8E53 /* BloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloomFilter.h; sourceTree = "<group>"; };
-		A51B77BB170669E2002B8E53 /* BloomFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilter.m; sourceTree = "<group>"; };
-		A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DefaultBloomfilter.bin; sourceTree = "<group>"; };
 		A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Message-avatarmask.png"; sourceTree = "<group>"; };
 		A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-avatar.png"; sourceTree = "<group>"; };
 		A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-cellbg.png"; sourceTree = "<group>"; };
@@ -540,44 +577,25 @@
 		A51B77E21706CA62002B8E53 /* textsecure-phonenumber-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-phonenumber-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-phonenumber-field@2x.png"; sourceTree = "<group>"; };
 		A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar@2x.png"; sourceTree = "<group>"; };
 		A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field@2x.png"; sourceTree = "<group>"; };
-		A51B77EA1706E269002B8E53 /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
-		A51B77EB1706E269002B8E53 /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
+		A529838F1708C68D0063B45A /* TextSecure-Messages-avatar2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-avatar2.png"; sourceTree = "<group>"; };
 		A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextSecureiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718B516FF95DF00C6FCCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A53718B716FF95DF00C6FCCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		A53718C116FF95DF00C6FCCF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		A53718C316FF95DF00C6FCCF /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
 		A53718C416FF95DF00C6FCCF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A53718C516FF95DF00C6FCCF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A53718CE16FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		A53718D016FF95DF00C6FCCF /* SMSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMSViewController.h; sourceTree = "<group>"; };
-		A53718D116FF95DF00C6FCCF /* SMSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SMSViewController.m; sourceTree = "<group>"; };
 		A53718D816FF95DF00C6FCCF /* TextSecureiOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextSecureiOSTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		A53718E116FF95DF00C6FCCF /* TextSecureiOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSecureiOSTests-Info.plist"; sourceTree = "<group>"; };
 		A53718E316FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A53718E516FF95DF00C6FCCF /* TextSecureiOSTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextSecureiOSTests.h; sourceTree = "<group>"; };
-		A53718E616FF95DF00C6FCCF /* TextSecureiOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextSecureiOSTests.m; sourceTree = "<group>"; };
 		A53718F016FF98C100C6FCCF /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
 		A53718FD16FFB6F800C6FCCF /* tutorial_ok_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tutorial_ok_button.png; path = TextSecureiOSAssets/tutorial_ok_button.png; sourceTree = "<group>"; };
 		A53718FE16FFB6F800C6FCCF /* tutorial_ok_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tutorial_ok_button@2x.png"; path = "TextSecureiOSAssets/tutorial_ok_button@2x.png"; sourceTree = "<group>"; };
 		A537190116FFB92C00C6FCCF /* tutorial_tutorial_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tutorial_tutorial_arrow.png; path = TextSecureiOSAssets/tutorial_tutorial_arrow.png; sourceTree = "<group>"; };
-		A537190316FFBEE200C6FCCF /* VerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerificationViewController.h; sourceTree = "<group>"; };
-		A537190416FFBEE300C6FCCF /* VerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationViewController.m; sourceTree = "<group>"; };
 		A537190616FFC45B00C6FCCF /* textsecure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = textsecure.png; path = TextSecureiOSAssets/MainIcon/textsecure.png; sourceTree = "<group>"; };
 		A537190716FFC45B00C6FCCF /* textsecure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure@2x.png"; path = "TextSecureiOSAssets/MainIcon/textsecure@2x.png"; sourceTree = "<group>"; };
-		A537190A1700247400C6FCCF /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
-		A537190B1700247400C6FCCF /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
-		A537190D1700284800C6FCCF /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
-		A537190E1700284800C6FCCF /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		A53719241700D71A00C6FCCF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		A53719261700DC2F00C6FCCF /* CountryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryViewController.h; sourceTree = "<group>"; };
-		A53719271700DC3100C6FCCF /* CountryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryViewController.m; sourceTree = "<group>"; };
-		A537192D1700FAA900C6FCCF /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
-		A537192F1701040200C6FCCF /* CountrySegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountrySegue.h; sourceTree = "<group>"; };
-		A53719301701040400C6FCCF /* CountrySegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountrySegue.m; sourceTree = "<group>"; };
 		A53727FE17011A4F00C6FCCF /* ad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ad.png; sourceTree = "<group>"; };
 		A53727FF17011A4F00C6FCCF /* ae.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ae.png; sourceTree = "<group>"; };
 		A537280017011A4F00C6FCCF /* af.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = af.png; sourceTree = "<group>"; };
@@ -910,10 +928,12 @@
 		A537294817011A5200C6FCCF /* zh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zh.png; sourceTree = "<group>"; };
 		A537294917011A5200C6FCCF /* zm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zm.png; sourceTree = "<group>"; };
 		A537294A17011A5200C6FCCF /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zw.png; sourceTree = "<group>"; };
+		A5A1F62D170F765E00A0CDC1 /* BloomFilterTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloomFilterTest.h; sourceTree = "<group>"; };
+		A5A1F62E170F765E00A0CDC1 /* BloomFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilterTest.m; sourceTree = "<group>"; };
+		A5A1F630170F824700A0CDC1 /* CryptographyTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptographyTests.h; sourceTree = "<group>"; };
+		A5A1F631170F824700A0CDC1 /* CryptographyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptographyTests.m; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		A5DE19D51707B24800ACAFDD /* ThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadViewController.h; sourceTree = "<group>"; };
-		A5DE19D61707B24800ACAFDD /* ThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadViewController.m; sourceTree = "<group>"; };
 		A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-menubar.png"; sourceTree = "<group>"; };
 		A5DE19DA1707B75E00ACAFDD /* TextSecure-Global-menubar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-menubar@2x.png"; sourceTree = "<group>"; };
 		A5DE19DE1707B76A00ACAFDD /* TextSecure-Conversation-receivedcard-bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-receivedcard-bottom.png"; sourceTree = "<group>"; };
@@ -928,19 +948,11 @@
 		A5DE19E71707B76A00ACAFDD /* TextSecure-Conversation-sentcard-canvas@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-canvas@2x.png"; sourceTree = "<group>"; };
 		A5DE19E81707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-top.png"; sourceTree = "<group>"; };
 		A5DE19E91707B76A00ACAFDD /* TextSecure-Conversation-sentcard-top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Conversation-sentcard-top@2x.png"; sourceTree = "<group>"; };
-		A5DE19F61707B81500ACAFDD /* TextSecureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSecureViewController.h; sourceTree = "<group>"; };
-		A5DE19F71707B81500ACAFDD /* TextSecureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSecureViewController.m; sourceTree = "<group>"; };
 		A5DE19F91707C9DB00ACAFDD /* TextSecure-Global-canvas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-canvas.png"; sourceTree = "<group>"; };
 		A5DE19FA1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-loadscreen.png"; sourceTree = "<group>"; };
 		A5DE19FB1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-loadscreen@2x.png"; sourceTree = "<group>"; };
 		A5DE19FC1707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-canvas@2x.png"; sourceTree = "<group>"; };
-		A5F15A9617027FCF00856385 /* Cryptography.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cryptography.h; sourceTree = "<group>"; };
-		A5F15A9717027FCF00856385 /* Cryptography.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cryptography.m; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		A5F15A9B1702949100856385 /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Conversion.h"; sourceTree = "<group>"; };
-		A5F15A9C1702949100856385 /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Conversion.m"; sourceTree = "<group>"; };
-		A5F15A9E1702997A00856385 /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainWrapper.h; sourceTree = "<group>"; };
-		A5F15A9F1702997A00856385 /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainWrapper.m; sourceTree = "<group>"; };
 		A5F15AA41702DF6E00856385 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = Libraries/lib/libssl.a; sourceTree = "<group>"; };
 		A5F15AA51702DF6E00856385 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = Libraries/lib/libcrypto.a; sourceTree = "<group>"; };
 		A5F15AAA1702DF9000856385 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -1034,10 +1046,6 @@
 		A5F15B2C1703975F00856385 /* RNOpenSSLDecryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNOpenSSLDecryptor.m; sourceTree = "<group>"; };
 		A5F15B2D1703975F00856385 /* RNOpenSSLEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNOpenSSLEncryptor.h; sourceTree = "<group>"; };
 		A5F15B2E1703975F00856385 /* RNOpenSSLEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNOpenSSLEncryptor.m; sourceTree = "<group>"; };
-		A5F15B361703B98F00856385 /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Conversion.h"; sourceTree = "<group>"; };
-		A5F15B371703B98F00856385 /* NSString+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Conversion.m"; sourceTree = "<group>"; };
-		A5F15B391703D14F00856385 /* UserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaults.h; sourceTree = "<group>"; };
-		A5F15B3A1703D14F00856385 /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaults.m; sourceTree = "<group>"; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1085,6 +1093,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A5169D2F170FEC4F00A2CE9E /* TestData */ = {
+			isa = PBXGroup;
+			children = (
+				A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */,
+			);
+			path = TestData;
+			sourceTree = "<group>";
+		};
 		A51B776317050C42002B8E53 /* fmdb */ = {
 			isa = PBXGroup;
 			children = (
@@ -1139,10 +1155,10 @@
 		A51B779B17050EDB002B8E53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A51B779F17050F8C002B8E53 /* MessagesDatabase.h */,
-				A51B77A017050F8C002B8E53 /* MessagesDatabase.m */,
-				A51B77A417051417002B8E53 /* Message.h */,
-				A51B77A517051417002B8E53 /* Message.m */,
+				A5169CF8170FEA3E00A2CE9E /* Message.h */,
+				A5169CFA170FEA3E00A2CE9E /* Message.m */,
+				A5169CF9170FEA3E00A2CE9E /* MessagesDatabase.h */,
+				A5169CF6170FEA3700A2CE9E /* MessagesDatabase.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1167,6 +1183,7 @@
 		A51B77BF1706A144002B8E53 /* vc-messages */ = {
 			isa = PBXGroup;
 			children = (
+				A529838F1708C68D0063B45A /* TextSecure-Messages-avatar2.png */,
 				A51B77CE1706CA46002B8E53 /* TextSecure-Messages-search@2x.png */,
 				A51B77CF1706CA46002B8E53 /* TextSecure-Messages-menubar@2x.png */,
 				A51B77D21706CA47002B8E53 /* TextSecure-Messages-cellbg@2x.png */,
@@ -1233,6 +1250,8 @@
 				A5F15B1C170373E700856385 /* Server */,
 				A5F15AA117029BB400856385 /* Security */,
 				A5F15AA317029C5300856385 /* Utility */,
+				A5F15B1B170370A400856385 /* Libraries */,
+				A53718FC16FFB6E600C6FCCF /* Assets */,
 				A53718BC16FF95DF00C6FCCF /* Supporting Files */,
 			);
 			path = TextSecureiOS;
@@ -1241,15 +1260,10 @@
 		A53718BC16FF95DF00C6FCCF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A51B77BD17069EC0002B8E53 /* DefaultBloomfilter.bin */,
-				A537192D1700FAA900C6FCCF /* CountryCodes.plist */,
-				A53718FC16FFB6E600C6FCCF /* Assets */,
-				A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */,
-				A53718C116FF95DF00C6FCCF /* main.m */,
-				A53718C316FF95DF00C6FCCF /* TextSecureiOS-Prefix.pch */,
-				A5F15B481703EE2F00856385 /* Default-568h@2x.png */,
-				A5F15B3C1703EB9F00856385 /* Default@2x.png */,
-				A5F15B3D1703EB9F00856385 /* Default.png */,
+				A5169D39170FEDC600A2CE9E /* main.m */,
+				A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */,
+				A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */,
+				A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1257,8 +1271,11 @@
 		A53718DF16FF95DF00C6FCCF /* TextSecureiOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				A53718E516FF95DF00C6FCCF /* TextSecureiOSTests.h */,
-				A53718E616FF95DF00C6FCCF /* TextSecureiOSTests.m */,
+				A5A1F62D170F765E00A0CDC1 /* BloomFilterTest.h */,
+				A5A1F62E170F765E00A0CDC1 /* BloomFilterTest.m */,
+				A5A1F630170F824700A0CDC1 /* CryptographyTests.h */,
+				A5A1F631170F824700A0CDC1 /* CryptographyTests.m */,
+				A5169D2F170FEC4F00A2CE9E /* TestData */,
 				A53718E016FF95DF00C6FCCF /* Supporting Files */,
 			);
 			path = TextSecureiOSTests;
@@ -1287,6 +1304,9 @@
 				A537190116FFB92C00C6FCCF /* tutorial_tutorial_arrow.png */,
 				A53718FD16FFB6F800C6FCCF /* tutorial_ok_button.png */,
 				A53718FE16FFB6F800C6FCCF /* tutorial_ok_button@2x.png */,
+				A5F15B481703EE2F00856385 /* Default-568h@2x.png */,
+				A5F15B3C1703EB9F00856385 /* Default@2x.png */,
+				A5F15B3D1703EB9F00856385 /* Default.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -1668,13 +1688,14 @@
 		A5F15AA117029BB400856385 /* Security */ = {
 			isa = PBXGroup;
 			children = (
-				A5F15A9617027FCF00856385 /* Cryptography.h */,
-				A5F15A9717027FCF00856385 /* Cryptography.m */,
-				A5F15A9E1702997A00856385 /* KeychainWrapper.h */,
-				A5F15A9F1702997A00856385 /* KeychainWrapper.m */,
-				A5F15B1B170370A400856385 /* Libraries */,
-				A51B77BA170669E2002B8E53 /* BloomFilter.h */,
-				A51B77BB170669E2002B8E53 /* BloomFilter.m */,
+				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,
+				A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */,
+				A5169D28170FEB8F00A2CE9E /* ECKeyPair.h */,
+				A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */,
+				A5169D29170FEB8F00A2CE9E /* BloomFilter.h */,
+				A5169D25170FEB8E00A2CE9E /* BloomFilter.m */,
+				A5169D27170FEB8F00A2CE9E /* Cryptography.h */,
+				A5169D26170FEB8F00A2CE9E /* Cryptography.m */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -1682,18 +1703,18 @@
 		A5F15AA217029BCF00856385 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				A5DE19F61707B81500ACAFDD /* TextSecureViewController.h */,
-				A5DE19F71707B81500ACAFDD /* TextSecureViewController.m */,
-				A53718D016FF95DF00C6FCCF /* SMSViewController.h */,
-				A53718D116FF95DF00C6FCCF /* SMSViewController.m */,
-				A5DE19D51707B24800ACAFDD /* ThreadViewController.h */,
-				A5DE19D61707B24800ACAFDD /* ThreadViewController.m */,
-				A537190316FFBEE200C6FCCF /* VerificationViewController.h */,
-				A537190416FFBEE300C6FCCF /* VerificationViewController.m */,
-				A53719261700DC2F00C6FCCF /* CountryViewController.h */,
-				A53719271700DC3100C6FCCF /* CountryViewController.m */,
-				A537192F1701040200C6FCCF /* CountrySegue.h */,
-				A53719301701040400C6FCCF /* CountrySegue.m */,
+				A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */,
+				A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */,
+				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
+				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
+				A5169D03170FEA8D00A2CE9E /* ThreadViewController.h */,
+				A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */,
+				A5169D02170FEA8D00A2CE9E /* SMSViewController.h */,
+				A5169D01170FEA8D00A2CE9E /* SMSViewController.m */,
+				A5169D05170FEA8D00A2CE9E /* CountryViewController.h */,
+				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
+				A5169D06170FEA8D00A2CE9E /* CountrySegue.m */,
+				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1701,18 +1722,16 @@
 		A5F15AA317029C5300856385 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				A537190D1700284800C6FCCF /* Constants.h */,
-				A537190E1700284800C6FCCF /* Constants.m */,
-				A51B77AA17052C5B002B8E53 /* FilePath.h */,
-				A51B77AB17052C5C002B8E53 /* FilePath.m */,
-				A5F15B391703D14F00856385 /* UserDefaults.h */,
-				A5F15B3A1703D14F00856385 /* UserDefaults.m */,
-				A5F15B361703B98F00856385 /* NSString+Conversion.h */,
-				A5F15B371703B98F00856385 /* NSString+Conversion.m */,
-				A5F15A9B1702949100856385 /* NSData+Conversion.h */,
-				A5F15A9C1702949100856385 /* NSData+Conversion.m */,
-				A51B777517050C71002B8E53 /* JSON */,
-				A51B776317050C42002B8E53 /* fmdb */,
+				A5169D14170FEB1900A2CE9E /* FilePath.h */,
+				A5169D15170FEB1900A2CE9E /* FilePath.m */,
+				A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */,
+				A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */,
+				A5169D18170FEB1900A2CE9E /* Constants.h */,
+				A5169D19170FEB1900A2CE9E /* Constants.m */,
+				A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */,
+				A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */,
+				A5169D1C170FEB1900A2CE9E /* UserDefaults.h */,
+				A5169D1D170FEB1900A2CE9E /* UserDefaults.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -1811,6 +1830,8 @@
 		A5F15B1B170370A400856385 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				A51B777517050C71002B8E53 /* JSON */,
+				A51B776317050C42002B8E53 /* fmdb */,
 				A5F15B1E1703975F00856385 /* RNCryptor */,
 				A5F15AA81702DF9000856385 /* include */,
 			);
@@ -1821,10 +1842,10 @@
 		A5F15B1C170373E700856385 /* Server */ = {
 			isa = PBXGroup;
 			children = (
-				A537190A1700247400C6FCCF /* Server.h */,
-				A537190B1700247400C6FCCF /* Server.m */,
-				A51B77EA1706E269002B8E53 /* Request.h */,
-				A51B77EB1706E269002B8E53 /* Request.m */,
+				A5169D0F170FEAC100A2CE9E /* Server.h */,
+				A5169D0E170FEAC100A2CE9E /* Server.m */,
+				A5169D10170FEAC100A2CE9E /* Request.h */,
+				A5169D11170FEAC100A2CE9E /* Request.m */,
 			);
 			name = Server;
 			sourceTree = "<group>";
@@ -1955,7 +1976,6 @@
 				A537190216FFB92C00C6FCCF /* tutorial_tutorial_arrow.png in Resources */,
 				A537190816FFC45C00C6FCCF /* textsecure.png in Resources */,
 				A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */,
-				A537192E1700FAAB00C6FCCF /* CountryCodes.plist in Resources */,
 				A537294B17011A5200C6FCCF /* ad.png in Resources */,
 				A537294C17011A5200C6FCCF /* ae.png in Resources */,
 				A537294D17011A5200C6FCCF /* af.png in Resources */,
@@ -2306,7 +2326,6 @@
 				A51B77B5170561C3002B8E53 /* textsecure-phonenumber-field.png in Resources */,
 				A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */,
 				A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */,
-				A51B77BE17069EC0002B8E53 /* DefaultBloomfilter.bin in Resources */,
 				A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */,
 				A51B77C71706A144002B8E53 /* TextSecure-Messages-avatar.png in Resources */,
 				A51B77C81706A144002B8E53 /* TextSecure-Messages-cellbg.png in Resources */,
@@ -2342,6 +2361,8 @@
 				A5DE19FE1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png in Resources */,
 				A5DE19FF1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png in Resources */,
 				A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */,
+				A52983901708C68D0063B45A /* TextSecure-Messages-avatar2.png in Resources */,
+				A5169D3F170FEDC600A2CE9E /* CountryCodes.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2350,6 +2371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A53718E416FF95DF00C6FCCF /* InfoPlist.strings in Resources */,
+				A5169D31170FEC6600A2CE9E /* DefaultBloomfilter.bin in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2376,17 +2398,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A53718C216FF95DF00C6FCCF /* main.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
-				A53718D216FF95DF00C6FCCF /* SMSViewController.m in Sources */,
-				A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */,
-				A537190C1700247600C6FCCF /* Server.m in Sources */,
-				A537190F1700284900C6FCCF /* Constants.m in Sources */,
-				A53719281700DC3300C6FCCF /* CountryViewController.m in Sources */,
-				A53719311701040600C6FCCF /* CountrySegue.m in Sources */,
-				A5F15A9817027FD000856385 /* Cryptography.m in Sources */,
-				A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */,
-				A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */,
 				A5F15B2F1703975F00856385 /* RNCryptor.m in Sources */,
 				A5F15B301703975F00856385 /* RNCryptorEngine.m in Sources */,
 				A5F15B311703975F00856385 /* RNDecryptor.m in Sources */,
@@ -2394,8 +2406,6 @@
 				A5F15B331703975F00856385 /* RNOpenSSLCryptor.m in Sources */,
 				A5F15B341703975F00856385 /* RNOpenSSLDecryptor.m in Sources */,
 				A5F15B351703975F00856385 /* RNOpenSSLEncryptor.m in Sources */,
-				A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */,
-				A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */,
 				A51B776F17050C42002B8E53 /* FMDatabase.m in Sources */,
 				A51B777017050C42002B8E53 /* FMDatabaseAdditions.m in Sources */,
 				A51B777117050C42002B8E53 /* FMDatabasePool.m in Sources */,
@@ -2413,13 +2423,26 @@
 				A51B779817050C71002B8E53 /* SBJsonTokeniser.m in Sources */,
 				A51B779917050C71002B8E53 /* SBJsonUTF8Stream.m in Sources */,
 				A51B779A17050C71002B8E53 /* SBJsonWriter.m in Sources */,
-				A51B77A117050F8C002B8E53 /* MessagesDatabase.m in Sources */,
-				A51B77A617051417002B8E53 /* Message.m in Sources */,
-				A51B77AC17052C5C002B8E53 /* FilePath.m in Sources */,
-				A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */,
-				A51B77EC1706E269002B8E53 /* Request.m in Sources */,
-				A5DE19D71707B24800ACAFDD /* ThreadViewController.m in Sources */,
-				A5DE19F81707B81500ACAFDD /* TextSecureViewController.m in Sources */,
+				A5169CF7170FEA3700A2CE9E /* MessagesDatabase.m in Sources */,
+				A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */,
+				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
+				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
+				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
+				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
+				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
+				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
+				A5169D12170FEAC100A2CE9E /* Server.m in Sources */,
+				A5169D13170FEAC100A2CE9E /* Request.m in Sources */,
+				A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */,
+				A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */,
+				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
+				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
+				A5169D22170FEB1900A2CE9E /* UserDefaults.m in Sources */,
+				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
+				A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */,
+				A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */,
+				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
+				A5169D3D170FEDC600A2CE9E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2427,7 +2450,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A53718E716FF95DF00C6FCCF /* TextSecureiOSTests.m in Sources */,
+				A5A1F62F170F765E00A0CDC1 /* BloomFilterTest.m in Sources */,
+				A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,6 @@
 @synthesize messageDatabase;
 @synthesize bloomFilter;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  // notification details held in the launchOptions dictionary. if the dictionary is nil then the user tapped the application icon as normal.
     self.server = [[Server alloc] init];
     self.messageDatabase = [[MessagesDatabase alloc] init];
     self.bloomFilter = [[BloomFilter alloc] init];
@@ -34,23 +33,7 @@
     return YES;
 }
 
--(void)  cryptoDemo {
-  [Cryptography testEncryption];
-  // demoing generating and storing account authentication token. Just for prototyping
-  [Cryptography generateAndStoreNewAccountAuthenticationToken];
-  // Testing storage
-  NSLog(@"testing storage %@",[Cryptography getAuthenticationToken]);
-  NSLog(@"testing out HMAC %@", [Cryptography computeSHA1DigestForString:@""]);
-  
-  // testing rn
-//  NSData *data = [@"Data" dataUsingEncoding:NSUTF8StringEncoding];
-//  NSError *error;
-//  NSData *encryptedData = [RNEncryptor encryptData:data
-//                                      withSettings:kRNCryptorAES256Settings
-//                                          password:aPassword
-//                                             error:&error];
- 
-}
+
 
 
 -(void) markVerifiedPhone:(NSNotification*)notification {
