@@ -8,3 +8,4 @@ Libraries/src/*
 .Trashes
 *~.nib
 xcuserdata
+Libraries/lib/*
