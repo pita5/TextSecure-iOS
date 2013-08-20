@@ -72,8 +72,6 @@
 
 
 #pragma mark - Table view delegate
-
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
   if ([[segue identifier] isEqualToString:@"CountrySegue"])  {
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];

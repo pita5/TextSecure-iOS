@@ -1713,8 +1713,8 @@
 				A5169D01170FEA8D00A2CE9E /* SMSViewController.m */,
 				A5169D05170FEA8D00A2CE9E /* CountryViewController.h */,
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
-				A5169D06170FEA8D00A2CE9E /* CountrySegue.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
+				A5169D06170FEA8D00A2CE9E /* CountrySegue.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";

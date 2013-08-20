@@ -84,7 +84,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OQN-EK-1ZQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2260" y="-3627"/>
+            <point key="canvasLocation" x="-2343" y="-3610"/>
         </scene>
         <!--Thread View Controller-->
         <scene sceneID="AG7-tf-k0y">
@@ -347,7 +347,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2fV-5u-0dj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3326" y="-3585"/>
+            <point key="canvasLocation" x="-2932" y="-3339"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Dpj-vH-4bs">
@@ -363,7 +363,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5ow-hb-X0z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4526" y="-3607"/>
+            <point key="canvasLocation" x="-4410" y="-3585"/>
         </scene>
         <!--Verification View Controller-->
         <scene sceneID="m14-Pz-4bb">
@@ -526,7 +526,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wGF-uu-JWs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2741" y="-3617"/>
+            <point key="canvasLocation" x="-2751" y="-4035"/>
         </scene>
     </scenes>
     <resources>
@@ -547,46 +547,6 @@
         <image name="textsecure-selectyourcountry-field.png" width="262" height="43"/>
         <image name="textsecure-verifybutton.png" width="280" height="45"/>
     </resources>
-    <classes>
-        <class className="CountryViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CountryViewController.h"/>
-        </class>
-        <class className="TextSecureViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TextSecureViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="Edit:"/>
-                <relationship kind="action" name="composeSMS:"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="ThreadViewController" superclassName="TextSecureViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ThreadViewController.h"/>
-        </class>
-        <class className="VerificationViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/VerificationViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="doVerifyPhone:"/>
-                <relationship kind="action" name="sentVerification:"/>
-                <relationship kind="outlet" name="countryCode" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="countryCodeInput" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="countryName" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="explanationText" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="findCountryCodeText" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="findCountryCodeTextDescription" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="flag" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="phoneNumber" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="selectedPhoneNumberLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="verificationCodePart1" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="verificationCodePart2" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="verificationCompletionExplanation" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="verificationTextExplanation" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="verifyButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="youPhoneNumberText" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="youPhoneNumberTextDescription" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

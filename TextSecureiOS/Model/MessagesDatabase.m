@@ -13,7 +13,7 @@
 
 -(id) init {
 	if(self==[super init]) {
-		self.database = [FMDatabase databaseWithPath:
+    self.database = [FMDatabase databaseWithPath:
                      [FilePath pathInDocumentsDirectory:@"messages.db"]];
     if (![self.database open]) {
       return nil;
@@ -47,7 +47,6 @@
                                   messageDestinations:[[NSArray alloc] initWithObjects:[rs stringForColumn:@"destination"], nil]
                                   messageAttachments:[[NSArray alloc] init]
                                     messageTimestamp:[rs dateForColumn:@"timestamp"]];
-    ;
     [messages addObject:message];
   }
   return messages;

@@ -11,7 +11,6 @@
 @implementation CountrySegue
 
 - (void) perform {
-  
   UIViewController *src = (UIViewController *) self.sourceViewController;
   [src.navigationController popViewControllerAnimated:YES];
 }
