@@ -29,32 +29,12 @@
 		A5169D31170FEC6600A2CE9E /* DefaultBloomfilter.bin in Resources */ = {isa = PBXBuildFile; fileRef = A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
 		A5169D3F170FEDC600A2CE9E /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */; };
-		A51B776F17050C42002B8E53 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776517050C42002B8E53 /* FMDatabase.m */; };
-		A51B777017050C42002B8E53 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776717050C42002B8E53 /* FMDatabaseAdditions.m */; };
-		A51B777117050C42002B8E53 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776917050C42002B8E53 /* FMDatabasePool.m */; };
-		A51B777217050C42002B8E53 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776B17050C42002B8E53 /* FMDatabaseQueue.m */; };
-		A51B777417050C42002B8E53 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B776E17050C42002B8E53 /* FMResultSet.m */; };
-		A51B778F17050C71002B8E53 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B777717050C71002B8E53 /* NSObject+SBJson.m */; };
-		A51B779017050C71002B8E53 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B777A17050C71002B8E53 /* SBJsonParser.m */; };
-		A51B779117050C71002B8E53 /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B777C17050C71002B8E53 /* SBJsonStreamParser.m */; };
-		A51B779217050C71002B8E53 /* SBJsonStreamParserAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B777E17050C71002B8E53 /* SBJsonStreamParserAccumulator.m */; };
-		A51B779317050C71002B8E53 /* SBJsonStreamParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778017050C71002B8E53 /* SBJsonStreamParserAdapter.m */; };
-		A51B779417050C71002B8E53 /* SBJsonStreamParserState.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778217050C71002B8E53 /* SBJsonStreamParserState.m */; };
-		A51B779517050C71002B8E53 /* SBJsonStreamWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778417050C71002B8E53 /* SBJsonStreamWriter.m */; };
-		A51B779617050C71002B8E53 /* SBJsonStreamWriterAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778617050C71002B8E53 /* SBJsonStreamWriterAccumulator.m */; };
-		A51B779717050C71002B8E53 /* SBJsonStreamWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778817050C71002B8E53 /* SBJsonStreamWriterState.m */; };
-		A51B779817050C71002B8E53 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778A17050C71002B8E53 /* SBJsonTokeniser.m */; };
-		A51B779917050C71002B8E53 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778C17050C71002B8E53 /* SBJsonUTF8Stream.m */; };
-		A51B779A17050C71002B8E53 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778E17050C71002B8E53 /* SBJsonWriter.m */; };
-		A51B77A117050F8C002B8E53 /* MessagesDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77A017050F8C002B8E53 /* MessagesDatabase.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A51B77B3170561C3002B8E53 /* textsecure-verifybutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */; };
 		A51B77B4170561C3002B8E53 /* textsecure-selectyourcountry-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */; };
 		A51B77B5170561C3002B8E53 /* textsecure-phonenumber-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */; };
 		A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */; };
 		A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */; };
-
-		A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77BB170669E2002B8E53 /* BloomFilter.m */; };
 		A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */; };
 		A51B77C71706A144002B8E53 /* TextSecure-Messages-avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */; };
 		A51B77C81706A144002B8E53 /* TextSecure-Messages-cellbg.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */; };
@@ -446,18 +426,6 @@
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA41702DF6E00856385 /* libssl.a */; };
 		A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA51702DF6E00856385 /* libcrypto.a */; };
-		A5F15B2F1703975F00856385 /* RNCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B221703975F00856385 /* RNCryptor.m */; };
-		A5F15B301703975F00856385 /* RNCryptorEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B241703975F00856385 /* RNCryptorEngine.m */; };
-		A5F15B311703975F00856385 /* RNDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B261703975F00856385 /* RNDecryptor.m */; };
-		A5F15B321703975F00856385 /* RNEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B281703975F00856385 /* RNEncryptor.m */; };
-		A5F15B331703975F00856385 /* RNOpenSSLCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2A1703975F00856385 /* RNOpenSSLCryptor.m */; };
-		A5F15B341703975F00856385 /* RNOpenSSLDecryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2C1703975F00856385 /* RNOpenSSLDecryptor.m */; };
-		A5F15B351703975F00856385 /* RNOpenSSLEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B2E1703975F00856385 /* RNOpenSSLEncryptor.m */; };
-		A5F15B3E1703EB9F00856385 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B3C1703EB9F00856385 /* Default@2x.png */; };
-		A5F15B3F1703EB9F00856385 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B3D1703EB9F00856385 /* Default.png */; };
-		A5F15B491703EE2F00856385 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B481703EE2F00856385 /* Default-568h@2x.png */; };
-		A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B371703B98F00856385 /* NSString+Conversion.m */; };
-		A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B3A1703D14F00856385 /* UserDefaults.m */; };
 		A5F15B551703F20D00856385 /* OpenSans-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B4B1703F20D00856385 /* OpenSans-SemiboldItalic.ttf */; };
 		A5F15B561703F20D00856385 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B4C1703F20D00856385 /* OpenSans-Semibold.ttf */; };
 		A5F15B571703F20D00856385 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B4D1703F20D00856385 /* OpenSans-Regular.ttf */; };
@@ -483,6 +451,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		A5169CF6170FEA3700A2CE9E /* MessagesDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagesDatabase.m; path = Model/MessagesDatabase.m; sourceTree = "<group>"; };
 		A5169CF8170FEA3E00A2CE9E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = Model/Message.h; sourceTree = "<group>"; };
 		A5169CF9170FEA3E00A2CE9E /* MessagesDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagesDatabase.h; path = Model/MessagesDatabase.h; sourceTree = "<group>"; };
@@ -561,17 +530,12 @@
 		A51B778C17050C71002B8E53 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		A51B778D17050C71002B8E53 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		A51B778E17050C71002B8E53 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
-		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
-		A51B779F17050F8C002B8E53 /* MessagesDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesDatabase.h; sourceTree = "<group>"; };
-		A51B77A017050F8C002B8E53 /* MessagesDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesDatabase.m; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-verifybutton.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-verifybutton.png"; sourceTree = "<group>"; };
 		A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-selectyourcountry-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-selectyourcountry-field.png"; sourceTree = "<group>"; };
 		A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-phonenumber-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-phonenumber-field.png"; sourceTree = "<group>"; };
 		A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar.png"; sourceTree = "<group>"; };
 		A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field.png"; sourceTree = "<group>"; };
-		A51B77BA170669E2002B8E53 /* BloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloomFilter.h; sourceTree = "<group>"; };
-		A51B77BB170669E2002B8E53 /* BloomFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilter.m; sourceTree = "<group>"; };
 		A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Message-avatarmask.png"; sourceTree = "<group>"; };
 		A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-avatar.png"; sourceTree = "<group>"; };
 		A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-cellbg.png"; sourceTree = "<group>"; };
@@ -1061,10 +1025,6 @@
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
-		A5F15B361703B98F00856385 /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Conversion.h"; sourceTree = "<group>"; };
-		A5F15B371703B98F00856385 /* NSString+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Conversion.m"; sourceTree = "<group>"; };
-		A5F15B391703D14F00856385 /* UserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaults.h; sourceTree = "<group>"; };
-		A5F15B3A1703D14F00856385 /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaults.m; sourceTree = "<group>"; };
 		A5F15B4B1703F20D00856385 /* OpenSans-SemiboldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-SemiboldItalic.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-SemiboldItalic.ttf"; sourceTree = "<group>"; };
 		A5F15B4C1703F20D00856385 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Semibold.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		A5F15B4D1703F20D00856385 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -1286,11 +1246,7 @@
 				A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */,
 				A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */,
 				A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */,
-				A537192D1700FAA900C6FCCF /* CountryCodes.plist */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
-				A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */,
-				A53718C116FF95DF00C6FCCF /* main.m */,
-				A53718C316FF95DF00C6FCCF /* TextSecureiOS-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1759,16 +1715,6 @@
 				A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */,
 				A5169D1C170FEB1900A2CE9E /* UserDefaults.h */,
 				A5169D1D170FEB1900A2CE9E /* UserDefaults.m */,
-				A537190D1700284800C6FCCF /* Constants.h */,
-				A537190E1700284800C6FCCF /* Constants.m */,
-				A51B77AA17052C5B002B8E53 /* FilePath.h */,
-				A51B77AB17052C5C002B8E53 /* FilePath.m */,
-				A5F15B391703D14F00856385 /* UserDefaults.h */,
-				A5F15B3A1703D14F00856385 /* UserDefaults.m */,
-				A5F15B361703B98F00856385 /* NSString+Conversion.h */,
-				A5F15B371703B98F00856385 /* NSString+Conversion.m */,
-				A5F15A9B1702949100856385 /* NSData+Conversion.h */,
-				A5F15A9C1702949100856385 /* NSData+Conversion.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -2464,30 +2410,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
-				A5F15B2F1703975F00856385 /* RNCryptor.m in Sources */,
-				A5F15B301703975F00856385 /* RNCryptorEngine.m in Sources */,
-				A5F15B311703975F00856385 /* RNDecryptor.m in Sources */,
-				A5F15B321703975F00856385 /* RNEncryptor.m in Sources */,
-				A5F15B331703975F00856385 /* RNOpenSSLCryptor.m in Sources */,
-				A5F15B341703975F00856385 /* RNOpenSSLDecryptor.m in Sources */,
-				A5F15B351703975F00856385 /* RNOpenSSLEncryptor.m in Sources */,
-				A51B776F17050C42002B8E53 /* FMDatabase.m in Sources */,
-				A51B777017050C42002B8E53 /* FMDatabaseAdditions.m in Sources */,
-				A51B777117050C42002B8E53 /* FMDatabasePool.m in Sources */,
-				A51B777217050C42002B8E53 /* FMDatabaseQueue.m in Sources */,
-				A51B777417050C42002B8E53 /* FMResultSet.m in Sources */,
-				A51B778F17050C71002B8E53 /* NSObject+SBJson.m in Sources */,
-				A51B779017050C71002B8E53 /* SBJsonParser.m in Sources */,
-				A51B779117050C71002B8E53 /* SBJsonStreamParser.m in Sources */,
-				A51B779217050C71002B8E53 /* SBJsonStreamParserAccumulator.m in Sources */,
-				A51B779317050C71002B8E53 /* SBJsonStreamParserAdapter.m in Sources */,
-				A51B779417050C71002B8E53 /* SBJsonStreamParserState.m in Sources */,
-				A51B779517050C71002B8E53 /* SBJsonStreamWriter.m in Sources */,
-				A51B779617050C71002B8E53 /* SBJsonStreamWriterAccumulator.m in Sources */,
-				A51B779717050C71002B8E53 /* SBJsonStreamWriterState.m in Sources */,
-				A51B779817050C71002B8E53 /* SBJsonTokeniser.m in Sources */,
-				A51B779917050C71002B8E53 /* SBJsonUTF8Stream.m in Sources */,
-				A51B779A17050C71002B8E53 /* SBJsonWriter.m in Sources */,
 				A5169CF7170FEA3700A2CE9E /* MessagesDatabase.m in Sources */,
 				A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
@@ -2508,22 +2430,6 @@
 				A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
 				A5169D3D170FEDC600A2CE9E /* main.m in Sources */,
-				A53718D216FF95DF00C6FCCF /* SMSViewController.m in Sources */,
-				A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */,
-				A537190C1700247600C6FCCF /* Server.m in Sources */,
-				A537190F1700284900C6FCCF /* Constants.m in Sources */,
-				A53719281700DC3300C6FCCF /* CountryViewController.m in Sources */,
-				A53719311701040600C6FCCF /* CountrySegue.m in Sources */,
-				A5F15A9817027FD000856385 /* Cryptography.m in Sources */,
-				A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */,
-				A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */,
-				A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */,
-				A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */,
-				A51B77A117050F8C002B8E53 /* MessagesDatabase.m in Sources */,
-				A51B77A617051417002B8E53 /* Message.m in Sources */,
-				A51B77AC17052C5C002B8E53 /* FilePath.m in Sources */,
-				A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */,
-				A51B77EC1706E269002B8E53 /* Request.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

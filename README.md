@@ -6,7 +6,7 @@ Currently in early development stage.
 
 1) Clone the repo to a working directory
 
-2) [CocoaPods](http://cocoapods.org) is used to manage dependencies. Run the following command to download the dependencies:
+2) [CocoaPods](http://cocoapods.org) is used to manage dependencies. Pods are setup easily and are distributed via a ruby gem. Follow the simple instructions on the website to setup. After setup, run the following command from the toplevel directory of TextSecureiOS to download the dependencies for TextSecure iOS:
 
 ```
 pod install
@@ -15,16 +15,20 @@ pod install
 3) **Temporary** - Building OpenSSL manually. This step should be removed soon. The goal is to make a pod specification that builds OpenSSL during the `pod install` phase.
 
 - Download the [latest sources](www.openssl.org/source/)
-- Copy them in the `Libraries/src/` folder. 
-- Run the bash script called `build-libssl.sh` and you should be ready to go.
+- Decompress and copy them in the `Libraries/src/` folder. 
+- Run the bash script called `build-libssl.sh` from within `Libraries/`. It will build the necessary dependencies (may take a bit but go get a cup of coffee) and you should be ready to go.
 
-4) Open the `TextSecureiOS.xcworkspace` in Xcode. Build and Run!
+4) Open the `TextSecureiOS.xcworkspace` in Xcode. Note that for cocoapods to work well always open the workspace and not the  Build and Run!
 
 ## Documentation
 
 Looking for documentation? Check out the wiki!
 
 https://github.com/WhisperSystems/TextSecure/wiki
+
+## Contribute
+
+At this early stage there are two primary developers of TextSecure iOS and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing. Please contact us.
 
 ## Cryptography Notice
 
