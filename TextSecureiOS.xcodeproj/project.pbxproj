@@ -46,12 +46,15 @@
 		A51B779817050C71002B8E53 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778A17050C71002B8E53 /* SBJsonTokeniser.m */; };
 		A51B779917050C71002B8E53 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778C17050C71002B8E53 /* SBJsonUTF8Stream.m */; };
 		A51B779A17050C71002B8E53 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B778E17050C71002B8E53 /* SBJsonWriter.m */; };
+		A51B77A117050F8C002B8E53 /* MessagesDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77A017050F8C002B8E53 /* MessagesDatabase.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A51B77B3170561C3002B8E53 /* textsecure-verifybutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */; };
 		A51B77B4170561C3002B8E53 /* textsecure-selectyourcountry-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */; };
 		A51B77B5170561C3002B8E53 /* textsecure-phonenumber-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */; };
 		A51B77B6170561C3002B8E53 /* textsecure-gettingstarted-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */; };
 		A51B77B7170561C3002B8E53 /* textsecure-countrycode-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */; };
+
+		A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A51B77BB170669E2002B8E53 /* BloomFilter.m */; };
 		A51B77C61706A144002B8E53 /* TextSecure-Message-avatarmask.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */; };
 		A51B77C71706A144002B8E53 /* TextSecure-Messages-avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */; };
 		A51B77C81706A144002B8E53 /* TextSecure-Messages-cellbg.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */; };
@@ -453,6 +456,8 @@
 		A5F15B3E1703EB9F00856385 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B3C1703EB9F00856385 /* Default@2x.png */; };
 		A5F15B3F1703EB9F00856385 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B3D1703EB9F00856385 /* Default.png */; };
 		A5F15B491703EE2F00856385 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B481703EE2F00856385 /* Default-568h@2x.png */; };
+		A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B371703B98F00856385 /* NSString+Conversion.m */; };
+		A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F15B3A1703D14F00856385 /* UserDefaults.m */; };
 		A5F15B551703F20D00856385 /* OpenSans-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B4B1703F20D00856385 /* OpenSans-SemiboldItalic.ttf */; };
 		A5F15B561703F20D00856385 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B4C1703F20D00856385 /* OpenSans-Semibold.ttf */; };
 		A5F15B571703F20D00856385 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B4D1703F20D00856385 /* OpenSans-Regular.ttf */; };
@@ -463,6 +468,8 @@
 		A5F15B5C1703F20D00856385 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B521703F20D00856385 /* OpenSans-ExtraBold.ttf */; };
 		A5F15B5D1703F20D00856385 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B531703F20D00856385 /* OpenSans-BoldItalic.ttf */; };
 		A5F15B5E1703F20D00856385 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */; };
+		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
+		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -554,12 +561,17 @@
 		A51B778C17050C71002B8E53 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		A51B778D17050C71002B8E53 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		A51B778E17050C71002B8E53 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		A51B779F17050F8C002B8E53 /* MessagesDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesDatabase.h; sourceTree = "<group>"; };
+		A51B77A017050F8C002B8E53 /* MessagesDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesDatabase.m; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-verifybutton.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-verifybutton.png"; sourceTree = "<group>"; };
 		A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-selectyourcountry-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-selectyourcountry-field.png"; sourceTree = "<group>"; };
 		A51B77B0170561C3002B8E53 /* textsecure-phonenumber-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-phonenumber-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-phonenumber-field.png"; sourceTree = "<group>"; };
 		A51B77B1170561C3002B8E53 /* textsecure-gettingstarted-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar.png"; sourceTree = "<group>"; };
 		A51B77B2170561C3002B8E53 /* textsecure-countrycode-field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field.png"; sourceTree = "<group>"; };
+		A51B77BA170669E2002B8E53 /* BloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloomFilter.h; sourceTree = "<group>"; };
+		A51B77BB170669E2002B8E53 /* BloomFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilter.m; sourceTree = "<group>"; };
 		A51B77C01706A144002B8E53 /* TextSecure-Message-avatarmask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Message-avatarmask.png"; sourceTree = "<group>"; };
 		A51B77C11706A144002B8E53 /* TextSecure-Messages-avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-avatar.png"; sourceTree = "<group>"; };
 		A51B77C21706A144002B8E53 /* TextSecure-Messages-cellbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Messages-cellbg.png"; sourceTree = "<group>"; };
@@ -1049,6 +1061,10 @@
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
+		A5F15B361703B98F00856385 /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Conversion.h"; sourceTree = "<group>"; };
+		A5F15B371703B98F00856385 /* NSString+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Conversion.m"; sourceTree = "<group>"; };
+		A5F15B391703D14F00856385 /* UserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaults.h; sourceTree = "<group>"; };
+		A5F15B3A1703D14F00856385 /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaults.m; sourceTree = "<group>"; };
 		A5F15B4B1703F20D00856385 /* OpenSans-SemiboldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-SemiboldItalic.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-SemiboldItalic.ttf"; sourceTree = "<group>"; };
 		A5F15B4C1703F20D00856385 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Semibold.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		A5F15B4D1703F20D00856385 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -1059,6 +1075,8 @@
 		A5F15B521703F20D00856385 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-ExtraBold.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		A5F15B531703F20D00856385 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1077,6 +1095,7 @@
 				A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */,
 				A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */,
 				A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */,
+				A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1204,10 +1223,12 @@
 		A53718A916FF95DF00C6FCCF = {
 			isa = PBXGroup;
 			children = (
+				B6C5AE5717C212330022EA53 /* Default-568h@2x.png */,
 				A53718BB16FF95DF00C6FCCF /* TextSecureiOS */,
 				A53718DF16FF95DF00C6FCCF /* TextSecureiOSTests */,
 				A53718B416FF95DF00C6FCCF /* Frameworks */,
 				A53718B316FF95DF00C6FCCF /* Products */,
+				950A849531204A2EBF7475C2 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1235,6 +1256,7 @@
 				A53718B716FF95DF00C6FCCF /* Foundation.framework */,
 				A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */,
 				A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */,
+				AD77BB98A5B14A3490A31E06 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1264,6 +1286,11 @@
 				A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */,
 				A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */,
 				A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */,
+				A537192D1700FAA900C6FCCF /* CountryCodes.plist */,
+				A53718FC16FFB6E600C6FCCF /* Assets */,
+				A53718FB16FFA12000C6FCCF /* TextSecureiOS-Info.plist */,
+				A53718C116FF95DF00C6FCCF /* main.m */,
+				A53718C316FF95DF00C6FCCF /* TextSecureiOS-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1732,6 +1759,16 @@
 				A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */,
 				A5169D1C170FEB1900A2CE9E /* UserDefaults.h */,
 				A5169D1D170FEB1900A2CE9E /* UserDefaults.m */,
+				A537190D1700284800C6FCCF /* Constants.h */,
+				A537190E1700284800C6FCCF /* Constants.m */,
+				A51B77AA17052C5B002B8E53 /* FilePath.h */,
+				A51B77AB17052C5C002B8E53 /* FilePath.m */,
+				A5F15B391703D14F00856385 /* UserDefaults.h */,
+				A5F15B3A1703D14F00856385 /* UserDefaults.m */,
+				A5F15B361703B98F00856385 /* NSString+Conversion.h */,
+				A5F15B371703B98F00856385 /* NSString+Conversion.m */,
+				A5F15A9B1702949100856385 /* NSData+Conversion.h */,
+				A5F15A9C1702949100856385 /* NSData+Conversion.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -1906,9 +1943,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A53718EA16FF95DF00C6FCCF /* Build configuration list for PBXNativeTarget "TextSecureiOS" */;
 			buildPhases = (
+				DE866B39AA57421C900F2883 /* Check Pods Manifest.lock */,
 				A53718AE16FF95DF00C6FCCF /* Sources */,
 				A53718AF16FF95DF00C6FCCF /* Frameworks */,
 				A53718B016FF95DF00C6FCCF /* Resources */,
+				3CB5212BC54445C68D08CFCC /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2308,9 +2347,6 @@
 				A5372A9517011A5300C6FCCF /* zh.png in Resources */,
 				A5372A9617011A5300C6FCCF /* zm.png in Resources */,
 				A5372A9717011A5300C6FCCF /* zw.png in Resources */,
-				A5F15B3E1703EB9F00856385 /* Default@2x.png in Resources */,
-				A5F15B3F1703EB9F00856385 /* Default.png in Resources */,
-				A5F15B491703EE2F00856385 /* Default-568h@2x.png in Resources */,
 				A5F15B551703F20D00856385 /* OpenSans-SemiboldItalic.ttf in Resources */,
 				A5F15B561703F20D00856385 /* OpenSans-Semibold.ttf in Resources */,
 				A5F15B571703F20D00856385 /* OpenSans-Regular.ttf in Resources */,
@@ -2363,6 +2399,7 @@
 				A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */,
 				A52983901708C68D0063B45A /* TextSecure-Messages-avatar2.png in Resources */,
 				A5169D3F170FEDC600A2CE9E /* CountryCodes.plist in Resources */,
+				B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2378,6 +2415,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3CB5212BC54445C68D08CFCC /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+		};
 		A53718D616FF95DF00C6FCCF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2390,6 +2441,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		DE866B39AA57421C900F2883 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2443,6 +2508,22 @@
 				A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
 				A5169D3D170FEDC600A2CE9E /* main.m in Sources */,
+				A53718D216FF95DF00C6FCCF /* SMSViewController.m in Sources */,
+				A537190516FFBEE300C6FCCF /* VerificationViewController.m in Sources */,
+				A537190C1700247600C6FCCF /* Server.m in Sources */,
+				A537190F1700284900C6FCCF /* Constants.m in Sources */,
+				A53719281700DC3300C6FCCF /* CountryViewController.m in Sources */,
+				A53719311701040600C6FCCF /* CountrySegue.m in Sources */,
+				A5F15A9817027FD000856385 /* Cryptography.m in Sources */,
+				A5F15A9D1702949200856385 /* NSData+Conversion.m in Sources */,
+				A5F15AA01702997A00856385 /* KeychainWrapper.m in Sources */,
+				A5F15B381703B98F00856385 /* NSString+Conversion.m in Sources */,
+				A5F15B3B1703D15000856385 /* UserDefaults.m in Sources */,
+				A51B77A117050F8C002B8E53 /* MessagesDatabase.m in Sources */,
+				A51B77A617051417002B8E53 /* Message.m in Sources */,
+				A51B77AC17052C5C002B8E53 /* FilePath.m in Sources */,
+				A51B77BC170669E2002B8E53 /* BloomFilter.m in Sources */,
+				A51B77EC1706E269002B8E53 /* Request.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2510,7 +2591,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -2539,7 +2620,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -2553,11 +2634,11 @@
 		};
 		A53718EB16FF95DF00C6FCCF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)/**",
@@ -2573,11 +2654,11 @@
 		};
 		A53718EC16FF95DF00C6FCCF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)/**",

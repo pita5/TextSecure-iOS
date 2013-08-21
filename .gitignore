@@ -1,0 +1,10 @@
+Pods/*
+Libraries/bin/*
+Libraries/include/*
+*.lock
+Libraries/src/*
+.DS_Store
+*.swp
+.Trashes
+*~.nib
+xcuserdata
