@@ -18,7 +18,7 @@ pod install
 - Decompress and copy them in the `Libraries/src/` folder. 
 - Run the bash script called `build-libssl.sh` from within `Libraries/`. It will build the necessary dependencies (may take a bit but go get a cup of coffee) and you should be ready to go.
 
-4) Open the `TextSecureiOS.xcworkspace` in Xcode. Note that for cocoapods to work well always open the workspace and not the  Build and Run!
+4) Open the `TextSecureiOS.xcworkspace` in Xcode. Note that for CocoaPods to work properly it is very important to always open the workspace and not the `.xcodeproj` file.  Build and Run and you are ready to go!
 
 ## Documentation
 
