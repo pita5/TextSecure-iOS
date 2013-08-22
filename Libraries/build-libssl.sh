@@ -57,6 +57,9 @@ DEVELOPER=`xcode-select -print-path`
 # mkdir -p "${CURRENTPATH}/lib"
 # 
 # tar zxf openssl-${VERSION}.tar.gz -C "${CURRENTPATH}/src"
+
+mkdir -p "${CURRENTPATH}/lib"
+
 cd "${CURRENTPATH}/src/openssl-${VERSION}"
 
 
