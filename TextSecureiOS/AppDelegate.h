@@ -10,7 +10,13 @@
 #import "Server.h"
 #import "MessagesDatabase.h"
 #import "BloomFilter.h"
+
+#ifdef DEBUG
+@interface AppDelegate : UIResponder <BITHockeyManagerDelegate, BITUpdateManagerDelegate, BITCrashManagerDelegate, UIApplicationDelegate>
+#else
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+#endif
+
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) Server *server;
