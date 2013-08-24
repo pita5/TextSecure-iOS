@@ -25,7 +25,6 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doSendMessage:) name:@"SendMessage" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doGetDirectoryLink:) name:@"GetDirectory" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doRetrieveDirectory:) name:@"RetrieveDirectory" object:nil];
-		
 	}
 	return self;
 }
@@ -33,7 +32,6 @@
 -(NSString*) escapeRequest:(NSString*)request {
 	return [[request stringByReplacingOccurrencesOfString:@" " withString:@"%20"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
-
 
 -(void) pushSecureRequest:(Request*) request {
 	[self.requestQueue insertObject:request atIndex:0];
@@ -86,24 +84,17 @@
 	id urlConnection = [[NSURLConnection alloc] initWithRequest:nsRequest delegate:self];
 	if(urlConnection==nil) {
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"ServerError" object:self];
-	}
-	
+	}	
 }
-
-
-
-
-
 
 -(NSURL*) createRequestURL:(NSString*)requestStr withServer:(NSString*)server withAPI:(NSString*) api{
 	return [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@",server,api,[self escapeRequest:requestStr]]];
 }
 
-
 #pragma mark methods
 - (NSData*) jsonDataFromDict:(NSDictionary*)parameters {
-	NSString*  jsonRequest = [parameters JSONRepresentation];
-	return [NSData dataWithBytes:[jsonRequest UTF8String] length:[jsonRequest length]];
+	#warning To-Do: Implement error-handling.
+	return [NSJSONSerialization dataWithJSONObject:parameters options:nil error:nil];
 }
 
 -(void) doCreateAccount:(NSNotification*) notification {
@@ -115,7 +106,6 @@
 												 apiRequestType:CREATE_ACCOUNT];
 	[self pushSecureRequest:request];
 }
-
 
 -(void) doVerifyAccount:(NSNotification*) notification {
 	NSString* verificationCode = [[notification userInfo] objectForKey:@"verification_code"];
@@ -130,7 +120,6 @@
 												 apiRequestType:VERIFY_ACCOUNT];
 	[self pushSecureRequest:request];
 }
-
 
 -(void) doSendAPN:(NSNotification *)notification {
 	NSString* apn = [[notification userInfo] objectForKey:@"apnRegistrationId"];
@@ -163,7 +152,6 @@
 	[self pushSecureRequest:request];
 }
 
-
 -(void)doRetrieveDirectory:(NSNotification*)notification {
 	NSString* directoryURL = [[notification userInfo] objectForKey:@"url"];
 	Request* request = [[Request alloc] initWithHttpRequestType:DOWNLOAD
@@ -173,8 +161,7 @@
 	[self pushSecureRequest:request];
 }
 
-#pragma mark -
-#pragma mark connection delegate methods
+#pragma mark - Connection delegate methods
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	[self.requestQueue removeAllObjects];
 	[self doNextRequest];
@@ -208,7 +195,6 @@
 	[self doNextRequest];
 }
 
-
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	// how server alerts outside world of success
 	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
@@ -240,8 +226,5 @@
 		}
 	}
 }
-
-
-
 
 @end
