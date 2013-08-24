@@ -93,8 +93,14 @@
 
 #pragma mark methods
 - (NSData*) jsonDataFromDict:(NSDictionary*)parameters {
-	#warning To-Do: Implement error-handling.
-	return [NSJSONSerialization dataWithJSONObject:parameters options:nil error:nil];
+	NSError *error = nil;
+	NSData *data = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error];
+	if (error) {
+		DLog(@"The dictionary, %@, could not be serialized. Finished with error : %@", parameters, error);
+		return nil;
+	} else {
+		return data;
+	}
 }
 
 -(void) doCreateAccount:(NSNotification*) notification {
