@@ -109,9 +109,11 @@
 
 -(void) doCreateAccount:(NSNotification*) notification {
   NSString* phoneNumber = [[notification userInfo] objectForKey:@"username"];
+  NSString* transport = [[notification userInfo] objectForKey:@"transport"];
+
   [Cryptography storeUsernameToken:phoneNumber];
   Request* request = [[Request alloc] initWithHttpRequestType:EMPTYPOST
-                                               requestUrl:[self createRequestURL:phoneNumber withServer:textSecureServer withAPI:textSecureAccountsAPI]
+                                               requestUrl:[self createRequestURL:[NSString stringWithFormat:@"%@/%@",transport,phoneNumber] withServer:textSecureServer withAPI:textSecureAccountsAPI]
                                               requestData:NULL
                                               apiRequestType:CREATE_ACCOUNT];
   [self pushSecureRequest:request];

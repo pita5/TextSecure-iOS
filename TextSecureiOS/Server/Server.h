@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 #import "Request.h"
-//curl -X POST --header "Content-Length: 0" https://textsecure-gcm.appspot.com/v1/accounts/+41799624499
-//curl -X PUT -i -H "Content-Type:application/json" --data "{\"verificationCode\" : \"958525159\", \"authenticationToken\" :\"123456\" , \"gcmRegistrationId\" : \"12345678\"}" https://textsecure-gcm.appspot.com/v1/accounts/+41799624499
+//curl -k -X POST --header "Content-Length: 0" https://gcm.textsecure.whispersystems.org/v1/accounts/sms/+41799624499
+
+//curl -X PUT -i -H "Content-Type:application/json" --data "{\"verificationCode\" : \"958525159\", \"authenticationToken\" :\"123456\" , \"gcmRegistrationId\" : \"12345678\"}"  https://gcm.textsecure.whispersystems.org/v1/accounts/+41799624499
 @interface Server : NSObject {
 	
 }

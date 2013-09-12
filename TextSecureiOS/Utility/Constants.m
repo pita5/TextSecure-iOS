@@ -9,13 +9,13 @@
 #import "Constants.h"
 
 
-#define TEST
+#define TEST 
 
 NSString* const appName = @"TextSecure";
 NSString* const authenticationTokenStorageId = @"TextSecureAuthenticationToken";
 NSString* const usernameTokenStorageId = @"UsernameAuthenticationToken";
 #ifdef TEST
-NSString* const textSecureServer = @"http://textsecure-gcm-production.herokuapp.com";
+NSString* const textSecureServer = @"http://gcm.textsecure.whispersystems.org";
 #else
 NSString* const textSecureServer = @"https://gcm.textsecure.whispersystems.org";
 #endif
