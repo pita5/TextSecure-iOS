@@ -30,6 +30,12 @@ https://github.com/WhisperSystems/TextSecure/wiki
 
 At this early stage there are two primary developers of TextSecure iOS and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing. Please contact us.
 
+## Code Conventions
+
+We are trying to follow the [GitHub code conventions for Objective-C](https://github.com/github/objective-c-conventions) and we would really appreciate that pull requests do conform with those conventions. 
+
+In addition to that, always add curly braces to your `if` conditionals, even if there is no `else`.
+
 ## Cryptography Notice
 
 This distribution includes cryptographic software. The country in which you currently reside may have restrictions on the import, possession, use, and/or re-export to another country, of encryption software. 
