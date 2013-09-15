@@ -158,16 +158,9 @@
 }
 
 -(IBAction)sentVerification:(id)sender {
-<<<<<<< HEAD
   self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCodeInput.text,self.phoneNumber.text];
   [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username",@"sms",@"transport",nil]]; // should be one of sms,voice
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
-=======
-	self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCodeInput.text,self.phoneNumber.text];
-	NSLog(@"Sending verification for number: %@", self.selectedPhoneNumber);
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username", nil]];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
->>>>>>> 2b02f63b10995724cf3a22e0323aa672da6cfdba
 }
 
 

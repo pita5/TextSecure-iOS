@@ -9,3 +9,4 @@ Libraries/src/*
 *~.nib
 xcuserdata
 Libraries/lib/*
+*.xccheckout
