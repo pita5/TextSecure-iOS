@@ -121,8 +121,7 @@
 	[Cryptography generateAndStoreNewAccountAuthenticationToken];
 	NSDictionary *parameters = [[NSDictionary alloc] initWithObjects:
 								[[NSArray alloc] initWithObjects:verificationCode,[Cryptography getAuthenticationToken], nil]
-															 forKeys:[[NSArray alloc] initWithObjects:@"verificationCode",@"authenticationToken",nil]];
-	
+															 forKeys:[[NSArray alloc] initWithObjects:@"verificationCode",@"authenticationToken",nil]];  
 	Request* request = [[Request alloc] initWithHttpRequestType:PUT
 													 requestUrl:[self createRequestURL:[Cryptography getUsernameToken] withServer:textSecureServer withAPI:textSecureAccountsAPI]
 													requestData:[self jsonDataFromDict:parameters]
