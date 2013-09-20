@@ -10,6 +10,8 @@
 @class ECKeyPair;
 @interface Cryptography : NSObject
 +(NSString*) generateAndStoreNewAccountAuthenticationToken;
++(NSString*) generateAndStoreNewSignalingKeyToken;
+
 + (BOOL) storeAuthenticationToken:(NSString*)token;
 + (NSString*) getAuthenticationToken;
 + (BOOL) storeUsernameToken:(NSString*)token;
@@ -17,6 +19,13 @@
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
 + (void) generateECKeyPairSecurityFramework; // not used
 + (ECKeyPair*) generateNISTp256ECCKeyPair;
+/* 
+ Basic auth is username:password base64 encoded where the "username" is the device's phone number in E164 format, and the "password" is a random string you generate at registration time.
+ What we're doing is just using the Authorization header to convey that information, since it's more REST-ish. In subsequent calls, you'll authenticate with the same Authorization header.
+ */
 + (NSString*) getAuthorizationToken;
+/*  The signalingKey is 32 bytes of AES material (256bit AES) and 20 bytes of Hmac key material (HmacSHA1) concatenated into a 52 byte slug that is base64 encoded.
+    See EncryptedOutgoingMessage.java for usage, 52 random bytes generated at init which will be used as key material for AES256 (first 32 bytes) and HmacSHA1 */
++ (NSString*) getSignalingKeyToken;
 + (NSData*)computeMACDigestForString:(NSString*)input withSeed:(NSString*)seed;
 @end

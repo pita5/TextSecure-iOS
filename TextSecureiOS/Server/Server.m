@@ -119,11 +119,12 @@
 -(void) doVerifyAccount:(NSNotification*) notification {
 	NSString* verificationCode = [[notification userInfo] objectForKey:@"verification_code"];
 	[Cryptography generateAndStoreNewAccountAuthenticationToken];
+  [Cryptography generateAndStoreNewSignalingKeyToken];
 	NSDictionary *parameters = [[NSDictionary alloc] initWithObjects:
-								[[NSArray alloc] initWithObjects:verificationCode,[Cryptography getAuthenticationToken], nil]
-															 forKeys:[[NSArray alloc] initWithObjects:@"verificationCode",@"authenticationToken",nil]];  
+								[[NSArray alloc] initWithObjects:[Cryptography getSignalingKeyToken], nil]
+															 forKeys:[[NSArray alloc] initWithObjects:@"signalingKey",nil]];
 	Request* request = [[Request alloc] initWithHttpRequestType:PUT
-													 requestUrl:[self createRequestURL:[Cryptography getUsernameToken] withServer:textSecureServer withAPI:textSecureAccountsAPI]
+                                                   requestUrl:[self createRequestURL:[NSString stringWithFormat:@"code/%@",verificationCode] withServer:textSecureServer withAPI:textSecureAccountsAPI]
 													requestData:[self jsonDataFromDict:parameters]
 												 apiRequestType:VERIFY_ACCOUNT];
 	[self pushSecureRequest:request];

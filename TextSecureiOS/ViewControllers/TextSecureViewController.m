@@ -220,7 +220,6 @@
   ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
   // If the contact has multiple phone numbers, iterate on each of them
   NSString *phoneNumberFromAB = [(__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(phoneNumbers, 0) unformattedPhoneNumber];
-  NSLog(@"phone number selected %@",phoneNumberFromAB);
   self.composingMessagePhoneNumber=phoneNumberFromAB;
   [self dismissViewControllerAnimated:YES completion:NULL];
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Title" message:@"Message" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
@@ -236,7 +235,6 @@
   ABRecordRef phone =ABRecordCopyValue(person, property);
   NSInteger phoneIdx = ABMultiValueGetIndexForIdentifier(phone,identifier);
   NSString* phoneNumber = [(NSString*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(phone,phoneIdx)) unformattedPhoneNumber];
-  NSLog(@"phone number selected %@",phoneNumber);
   [self dismissViewControllerAnimated:YES completion:NULL];
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Title" message:@"Message" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
   alert.alertViewStyle = UIAlertViewStylePlainTextInput;

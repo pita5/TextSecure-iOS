@@ -14,6 +14,8 @@
 NSString* const appName = @"TextSecure";
 NSString* const authenticationTokenStorageId = @"TextSecureAuthenticationToken";
 NSString* const usernameTokenStorageId = @"UsernameAuthenticationToken";
+NSString* const signalingTokenStorageId = @"SignalingTokenStorageId";
+
 #ifdef TEST
 NSString* const textSecureServer = @"http://gcm.textsecure.whispersystems.org";
 #else

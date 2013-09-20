@@ -18,6 +18,7 @@
 #include <openssl/obj_mac.h>
 #include <CommonCrypto/CommonHMAC.h>
 #include "NSString+Conversion.h"
+#include "NSData+Base64.h"
 #include "ECKeyPair.h"
 @implementation Cryptography
 
@@ -31,8 +32,23 @@
   NSString* authTokenPrint = [[NSData dataWithData:authToken] hexadecimalString];
   [Cryptography storeAuthenticationToken:authTokenPrint];
   return authTokenPrint;
+}
+
++(NSString*) generateAndStoreNewSignalingKeyToken {
+   /*The signalingKey is 32 bytes of AES material (256bit AES) and 20 bytes of Hmac key material (HmacSHA1) concatenated into a 52 byte slug that is base64 encoded. */
+  NSMutableData* signalingKeyToken = [NSMutableData dataWithLength:52];
+  int err = 0;
+  err = SecRandomCopyBytes(kSecRandomDefault,52,[signalingKeyToken mutableBytes]);
+  if(err != noErr) {
+    @throw [NSException exceptionWithName:@"signalingKeyToken" reason:@"problem generating the random signaling key token" userInfo:nil];
+  }
+  NSString* signalingKeyTokenPrint = [[NSData dataWithData:signalingKeyToken] base64EncodedString];
+  [Cryptography storeSignalingKeyToken:signalingKeyTokenPrint];
+  return signalingKeyTokenPrint;
+
   
 }
+
 + (BOOL) storeAuthenticationToken:(NSString*)token {
   return [KeychainWrapper createKeychainValue:token forIdentifier:authenticationTokenStorageId];
 }
@@ -47,13 +63,23 @@
   return [KeychainWrapper createKeychainValue:token forIdentifier:usernameTokenStorageId];
 }
 
++ (BOOL) storeSignalingKeyToken:(NSString*)token {
+  return [KeychainWrapper createKeychainValue:token forIdentifier:signalingTokenStorageId];
+}
+
 
 + (NSString*) getUsernameToken {
   return [KeychainWrapper keychainStringFromMatchingIdentifier:usernameTokenStorageId];
 }
 
 + (NSString*) getAuthorizationToken {
+  
   return [[NSString stringWithFormat:@"%@:%@",[Cryptography getUsernameToken],[Cryptography getAuthenticationToken]] base64Encoded];
+}
+
+
++ (NSString*) getSignalingKeyToken {
+  return [KeychainWrapper keychainStringFromMatchingIdentifier:signalingTokenStorageId];
 }
 
 
