@@ -6,22 +6,10 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-//
-//  Constants.h
-//  Kliq
-//
-//  Defines some constants needed by bamboo, the temporary API we are using as an interface to facebook connect
-//
-//  Created by Christine Corbett Moran on 6/11/10.
-//  Copyright 2010 Cannytrophic LLC. All rights reserved.
-//
-
-// We have three server instances running on three ports, two for development one for production
-// This requires we have two FB apps, one for dev one for production.
-// Their use is configured statically in the app here
-
 extern NSString* const textSecureServer;
 extern NSString* const textSecureAccountsAPI;
+extern NSString* const textSecureKeysAPI;
+
 extern NSString* const textSecureMessagesAPI;
 extern NSString* const textSecureDirectoryAPI;
 
@@ -35,7 +23,8 @@ typedef enum {
   SEND_APN=2,
   SEND_MESSAGE=3,
   GET_DIRECTORY=4,
-  GET_DIRECTORY_LINK=5
+  GET_DIRECTORY_LINK=5,
+  REGISTER_PRE_KEYS=6,
 } TextSecureRequestType;
 
 

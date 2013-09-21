@@ -53,6 +53,7 @@
 		A51B77E81706CA63002B8E53 /* textsecure-gettingstarted-menubar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */; };
 		A51B77E91706CA63002B8E53 /* textsecure-countrycode-field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
+		A52ECA8017EDA9C400C80BC7 /* whisperca.crt in Resources */ = {isa = PBXBuildFile; fileRef = A52ECA7F17EDA9C400C80BC7 /* whisperca.crt */; };
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
@@ -524,6 +525,7 @@
 		A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field@2x.png"; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "Utility/NSData+Base64.h"; sourceTree = "<group>"; };
 		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "Utility/NSData+Base64.m"; sourceTree = "<group>"; };
+		A52ECA7F17EDA9C400C80BC7 /* whisperca.crt */ = {isa = PBXFileReference; lastKnownFileType = file; path = whisperca.crt; sourceTree = "<group>"; };
 		A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextSecureiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718B516FF95DF00C6FCCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A53718B716FF95DF00C6FCCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1078,6 +1080,7 @@
 		A53718BC16FF95DF00C6FCCF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A52ECA7F17EDA9C400C80BC7 /* whisperca.crt */,
 				A5169D39170FEDC600A2CE9E /* main.m */,
 				A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */,
 				A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */,
@@ -1781,6 +1784,7 @@
 				A53729A217011A5200C6FCCF /* et@2x.png in Resources */,
 				A53729A317011A5200C6FCCF /* eu.png in Resources */,
 				A53729A417011A5200C6FCCF /* eu@2x.png in Resources */,
+				A52ECA8017EDA9C400C80BC7 /* whisperca.crt in Resources */,
 				A53729A517011A5200C6FCCF /* fa.png in Resources */,
 				A53729A617011A5200C6FCCF /* fam.png in Resources */,
 				A53729A717011A5200C6FCCF /* fi.png in Resources */,

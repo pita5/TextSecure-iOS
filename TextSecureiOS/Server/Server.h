@@ -39,4 +39,8 @@
 #pragma mark connection delegate methods
 -(void) connection:(NSURLConnection*)connection didReceiveData:(NSData*)data;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection;
+
+#pragma mark -
+#pragma mark certificate verification
+- (NSData*)getCertificateData;
 @end

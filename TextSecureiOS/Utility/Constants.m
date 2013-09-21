@@ -8,21 +8,14 @@
 
 #import "Constants.h"
 
-
-#define TEST 
-
 NSString* const appName = @"TextSecure";
 NSString* const authenticationTokenStorageId = @"TextSecureAuthenticationToken";
 NSString* const usernameTokenStorageId = @"UsernameAuthenticationToken";
 NSString* const signalingTokenStorageId = @"SignalingTokenStorageId";
-
-#ifdef TEST
-NSString* const textSecureServer = @"http://gcm.textsecure.whispersystems.org";
-#else
 NSString* const textSecureServer = @"https://gcm.textsecure.whispersystems.org";
-#endif
 
 
 NSString* const textSecureAccountsAPI = @"v1/accounts";
 NSString* const textSecureMessagesAPI = @"v1/messages";
+NSString* const textSecureKeysAPI = @"v1/keys";
 NSString* const textSecureDirectoryAPI= @"v1/directory";

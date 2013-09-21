@@ -15,6 +15,9 @@
 @synthesize requestQueue;
 @synthesize currentRequestApiType;
 
+
+// Evaluate trust: https://developer.apple.com/library/mac/documentation/security/conceptual/CertKeyTrustProgGuide/iPhone_Tasks/iPhone_Tasks.html#//apple_ref/doc/uid/TP40001358-CH208-SW10
+
 -(id) init {
 	if(self==[super init]) {
 		self.requestQueue = [[NSMutableArray alloc] init];
@@ -25,9 +28,11 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doSendMessage:) name:@"SendMessage" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doGetDirectoryLink:) name:@"GetDirectory" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(doRetrieveDirectory:) name:@"RetrieveDirectory" object:nil];
+    [self getCertificateData];
 	}
 	return self;
 }
+
 
 -(NSString*) escapeRequest:(NSString*)request {
 	return [[request stringByReplacingOccurrencesOfString:@" " withString:@"%20"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -90,6 +95,10 @@
 -(NSURL*) createRequestURL:(NSString*)requestStr withServer:(NSString*)server withAPI:(NSString*) api{
 	return [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@",server,api,[self escapeRequest:requestStr]]];
 }
+
+
+
+
 
 #pragma mark methods
 - (NSData*) jsonDataFromDict:(NSDictionary*)parameters {
@@ -170,6 +179,77 @@
 	[self pushSecureRequest:request];
 }
 
+#pragma mark - Connection delegate SSL authentication delegate 
+/* we are using our own trust anchor instead of a CA trust anchor.  So we need to make an SSL connection where we verify against our CA */
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+	return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+}
+
+- (NSData*)getCertificateData {
+  SecCertificateRef whisperCert = nil;
+  NSString *whisperCertPath = [[NSBundle mainBundle]
+                               pathForResource:@"whisperca" ofType:@"crt"]; // in DER format
+  NSData *certData = [[NSData alloc]
+                      initWithContentsOfFile:whisperCertPath];
+#ifdef DEBUG
+  CFDataRef whisperCertData = (__bridge CFDataRef)certData;
+  whisperCert = SecCertificateCreateWithData(NULL, whisperCertData);
+  CFStringRef certSummary = SecCertificateCopySubjectSummary(whisperCert);
+  NSString* summaryString = [[NSString alloc]
+                             initWithString:(__bridge NSString *)certSummary];
+  NSLog(@"whisper cert summary string %@",summaryString);
+#endif
+  return certData;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+  if ([[[challenge protectionSpace] authenticationMethod] isEqualToString: NSURLAuthenticationMethodServerTrust]){
+    do {
+      SecTrustRef serverTrust = [[challenge protectionSpace] serverTrust];
+      if (serverTrust == nil) {
+        break; // failed
+      }
+      
+      OSStatus status = SecTrustEvaluate(serverTrust, NULL);
+      if (!(errSecSuccess == status)) {
+        break; // failed
+      }
+      SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+      if (serverCertificate == nil) {
+        break; // failed
+      }
+      
+      CFDataRef serverCertificateData = SecCertificateCopyData(serverCertificate);
+      if (serverCertificateData == nil) {
+        break; // failed
+      }
+      const UInt8* const data = CFDataGetBytePtr(serverCertificateData);
+      const CFIndex size = CFDataGetLength(serverCertificateData);
+      NSData* server_cert = [NSData dataWithBytes:data length:(NSUInteger)size];
+      CFRelease(serverCertificateData);
+      
+      NSData* my_cert = [self getCertificateData];
+      
+      if (server_cert == nil || my_cert == nil) {
+        break; // failed
+      }
+      
+      const BOOL equal = [server_cert isEqualToData:my_cert];
+      if (!equal) {
+        break; // failed
+      }
+      
+      // Athentication succeeded:
+      return [[challenge sender] useCredential:[NSURLCredential credentialForTrust:serverTrust]
+                    forAuthenticationChallenge:challenge];
+    } while (0);
+    
+    // Authentication failed:
+    // TODOUI: error code
+    return [[challenge sender] cancelAuthenticationChallenge:challenge];
+  }
+}
+
 #pragma mark - Connection delegate methods
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	[self.requestQueue removeAllObjects];
@@ -177,9 +257,6 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"ServerError" object:self];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-	[challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
-}
 
 -(void) connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
 	[self.receivedData appendData:data];
