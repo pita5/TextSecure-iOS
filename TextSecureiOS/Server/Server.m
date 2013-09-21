@@ -134,7 +134,7 @@
 	NSString* apn = [[notification userInfo] objectForKey:@"apnRegistrationId"];
 	NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:apn,@"apnRegistrationId", nil];
 	Request* request = [[Request alloc] initWithHttpRequestType:PUT
-													 requestUrl:[self createRequestURL:[NSString stringWithFormat:@"%@/%@",@"apn",[Cryptography getUsernameToken]] withServer:textSecureServer withAPI:textSecureAccountsAPI]
+													 requestUrl:[self createRequestURL:@"apn" withServer:textSecureServer withAPI:textSecureAccountsAPI]
 													requestData:[self jsonDataFromDict:parameters]
 												 apiRequestType:SEND_APN];
 	[self pushSecureRequest:request];
