@@ -41,7 +41,6 @@
 -(void)finishedVerifiedPhone:(NSNotification*)notification;
 -(void)finishedSendVerification:(NSNotification*)notification;
 -(IBAction)sentVerification:(id)sender;
--(void) configureFonts;
 -(void)updateCountry:(NSDictionary*)countryInfo;
 @end
 

@@ -40,37 +40,6 @@
 @synthesize selectedPhoneNumberLabel;
 @synthesize activeField;
 
-
-
--(void) configureFonts {
-	/*
-	 "OpenSans-Light",
-	 "OpenSans-Extrabold",
-	 OpenSans,
-	 "OpenSans-Italic",
-	 "OpenSansLight-Italic",
-	 "OpenSans-Semibold",
-	 "OpenSans-SemiboldItalic",
-	 "OpenSans-Bold",
-	 "OpenSans-BoldItalic",
-	 "OpenSans-ExtraboldItalic"
-	 */
-	[countryCode setFont:[UIFont fontWithName:@"OpenSans" size:12]];
-	[countryCodeInput setFont:[UIFont fontWithName:@"OpenSans" size:20]];
-	[phoneNumber setFont:[UIFont fontWithName:@"OpenSans" size:20]];
-	[verificationCodePart1 setFont:[UIFont fontWithName:@"OpenSans" size:20]];
-	[verificationCodePart2 setFont:[UIFont fontWithName:@"OpenSans" size:20]];
-	[explanationText setFont:[UIFont fontWithName:@"OpenSans" size:14]];
-	[youPhoneNumberText setFont:[UIFont fontWithName:@"OpenSans" size:14]];
-	[youPhoneNumberTextDescription setFont:[UIFont fontWithName:@"OpenSans" size:10]];
-	[findCountryCodeText setFont:[UIFont fontWithName:@"OpenSans" size:14]];
-	[findCountryCodeTextDescription setFont:[UIFont fontWithName:@"OpenSans" size:10]];
-	
-	[verificationTextExplanation setFont:[UIFont fontWithName:@"OpenSans" size:14]];
-	[verificationCompletionExplanation setFont:[UIFont fontWithName:@"OpenSans" size:14]];
-	[selectedPhoneNumberLabel setFont:[UIFont fontWithName:@"OpenSans" size:20]];
-}
-
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do any additional setup after loading the view.
@@ -80,7 +49,6 @@
 	self.flag.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",@"us"]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[self registerForKeyboardNotifications];
-	[self configureFonts];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
 	self.countryDict = [[NSMutableDictionary alloc]  initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"CountryCodes" ofType:@"plist"]];
     

@@ -406,8 +406,6 @@
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A5A1F62F170F765E00A0CDC1 /* BloomFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F62E170F765E00A0CDC1 /* BloomFilterTest.m */; };
 		A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F631170F824700A0CDC1 /* CryptographyTests.m */; };
-		A5A662AF17E2F17F00B9D99A /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A5A662AC17E2F17F00B9D99A /* HockeySDK.xcconfig */; };
-		A5A662B017E2F17F00B9D99A /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A5A662AD17E2F17F00B9D99A /* HockeySDKResources.bundle */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5DE19DB1707B75E00ACAFDD /* TextSecure-Global-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */; };
@@ -882,9 +880,6 @@
 		A5A1F62E170F765E00A0CDC1 /* BloomFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilterTest.m; sourceTree = "<group>"; };
 		A5A1F630170F824700A0CDC1 /* CryptographyTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptographyTests.h; sourceTree = "<group>"; };
 		A5A1F631170F824700A0CDC1 /* CryptographyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptographyTests.m; sourceTree = "<group>"; };
-		A5A662AA17E2F17F00B9D99A /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
-		A5A662AC17E2F17F00B9D99A /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = "<group>"; };
-		A5A662AD17E2F17F00B9D99A /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HockeySDKResources.bundle; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-menubar.png"; sourceTree = "<group>"; };
@@ -1042,7 +1037,6 @@
 			children = (
 				A568910217E2F37A00C360A1 /* QuartzCore.framework */,
 				A568910017E2F37000C360A1 /* CoreText.framework */,
-				A5A662A917E2F17F00B9D99A /* HockeySDK.embeddedframework */,
 				A51B77A217051096002B8E53 /* libsqlite3.dylib */,
 				A5F15AA41702DF6E00856385 /* libssl.a */,
 				A5F15AA51702DF6E00856385 /* libcrypto.a */,
@@ -1471,25 +1465,6 @@
 			);
 			name = flags;
 			path = TextSecureiOSAssets/flags;
-			sourceTree = "<group>";
-		};
-		A5A662A917E2F17F00B9D99A /* HockeySDK.embeddedframework */ = {
-			isa = PBXGroup;
-			children = (
-				A5A662AA17E2F17F00B9D99A /* HockeySDK.framework */,
-				A5A662AB17E2F17F00B9D99A /* Resources */,
-			);
-			name = HockeySDK.embeddedframework;
-			path = "HockeySDK-iOS-3.0.0/HockeySDK.embeddedframework";
-			sourceTree = "<group>";
-		};
-		A5A662AB17E2F17F00B9D99A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A5A662AC17E2F17F00B9D99A /* HockeySDK.xcconfig */,
-				A5A662AD17E2F17F00B9D99A /* HockeySDKResources.bundle */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		A5DE19D81707B75E00ACAFDD /* ui-global */ = {
@@ -2079,8 +2054,6 @@
 				A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */,
 				A5169D3F170FEDC600A2CE9E /* CountryCodes.plist in Resources */,
 				B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */,
-				A5A662AF17E2F17F00B9D99A /* HockeySDK.xcconfig in Resources */,
-				A5A662B017E2F17F00B9D99A /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
