@@ -18,27 +18,15 @@
 // suite to be done entirely via Storyboards and not via code. If anyone has a cleaner way
 // of doing this, please go ahead.
 @synthesize phoneNumber;
-@synthesize countryCode;
-@synthesize countryName;
 
+@synthesize countryName;
 @synthesize verificationCodePart1;
 @synthesize verificationCodePart2;
-@synthesize selectedPhoneNumber;
-@synthesize flag;
-@synthesize scrollView;
 @synthesize countryCodeInput;
-@synthesize verifyButton;
-
 @synthesize explanationText;
-@synthesize youPhoneNumberText;
-@synthesize youPhoneNumberTextDescription;
-@synthesize findCountryCodeText;
-@synthesize findCountryCodeTextDescription;
 @synthesize verificationTextExplanation;
 @synthesize verificationCompletionExplanation;
-@synthesize countryDict;
-@synthesize selectedPhoneNumberLabel;
-@synthesize activeField;
+
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -46,52 +34,33 @@
     self.navigationController.navigationBarHidden = NO;
 	self.verificationCodePart2.delegate = self;
 	self.verificationCodePart1.delegate = self;
-	self.title = selectedPhoneNumber;
-	self.flag.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",@"us"]];
+    
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
-	[self registerForKeyboardNotifications];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
-	self.countryDict = [[NSMutableDictionary alloc]  initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"CountryCodes" ofType:@"plist"]];
     
-	// Setting accessory toolbars for user input
-	
-	UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonWasPressed:)];
-    UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
-    UIToolbar *phoneNumberToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 44)];
-    [phoneNumberToolbar setItems:[NSArray arrayWithObjects:flexibleItem,doneItem, nil]];
-    self.phoneNumber.inputAccessoryView = phoneNumberToolbar;
-	
-	UIBarButtonItem *nextItem = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(nextButtonWasPressed:)];
-    UIToolbar *countryCodeToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 44)];
-    [countryCodeToolbar setItems:[NSArray arrayWithObjects:nextItem, nil]];
-    self.countryCodeInput.inputAccessoryView = countryCodeToolbar;
-	
-	// also key by country code
-	for (NSString* key in [self.countryDict allKeys]) {
-		// TODO: save this reoriganization
-		NSDictionary* data =[self.countryDict objectForKey:key];
-		[self.countryDict setObject:data forKey:[data objectForKey:@"country_code"]];
-	}
-	if([self.selectedPhoneNumber length]>0) {
-		self.selectedPhoneNumberLabel.text = self.selectedPhoneNumber;
-	}
-	CGPoint scrollPoint = CGPointMake(0.0,0.0);
-	[scrollView setContentOffset:scrollPoint animated:NO];
     
-    [self.countryCodeInput becomeFirstResponder];
+    [self setLocaleCountry];
+    
+    [self.phoneNumber becomeFirstResponder];
+    
+}
+
+// Based on the user's locale we are guessing what his country code would be.
+
+-(void)setLocaleCountry{
+    self.countryCodeInput.text = [NSLocale currentCountryPhonePrefix];
+    [self updateCountryCode:nil];
 }
 
 -(void)updateCountryCode:(id)sender {
-	if ([self.countryDict objectForKey:self.countryCodeInput.text]) {
-		[self updateCountry:[self.countryDict objectForKey:self.countryCodeInput.text]];
-		[self.phoneNumber becomeFirstResponder];
-	}
+    NSString *enteredCountryCode = self.countryCodeInput.text;
+    enteredCountryCode = [enteredCountryCode stringByReplacingOccurrencesOfString:@"+" withString:@""];
+    
+    [self updateCountry:@{@"country_code":enteredCountryCode, @"name":[[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[NSLocale localizedCodeNameForPhonePrefix:enteredCountryCode]]}];
 }
 
 -(void)updateCountry:(NSDictionary*)countryInfo {
-	self.flag.image=[UIImage imageNamed:[NSString stringWithFormat:@"%@.png",[[countryInfo objectForKey:@"code"] lowercaseString]]];
-	self.countryCode.text = [NSString stringWithFormat:@"[+%@]",[countryInfo objectForKey:@"country_code"]];
-	self.countryCodeInput.text = [countryInfo objectForKey:@"country_code"];
+	self.countryCodeInput.text = [@"+" stringByAppendingString:[countryInfo objectForKey:@"country_code"]];
 	self.countryName.text=[countryInfo objectForKey:@"name"];
 }
 
@@ -129,79 +98,57 @@
 }
 
 -(IBAction)sentVerification:(id)sender {
-  self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCodeInput.text,self.phoneNumber.text];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username",@"sms",@"transport",nil]]; // should be one of sms,voice
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
+    //self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCodeInput.text,self.phoneNumber.text];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username",@"sms",@"transport",nil]]; // should be one of sms,voice
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
 }
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-	if([segue.identifier isEqualToString:@"ConfirmVerificationCode"]){
-		VerificationViewController *controller = (VerificationViewController *)segue.destinationViewController;
-		controller.selectedPhoneNumber= self.selectedPhoneNumber;
-	}
-}
-
-#define MAX_LENGTH 3 // Whatever your limit is
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-	//TODO: not called
-	NSUInteger newLength = (textView.text.length - range.length) + text.length;
-	if(newLength <= MAX_LENGTH) {
-		return YES;
-	} else {
-		NSUInteger emptySpace = MAX_LENGTH - (textView.text.length - range.length);
-		textView.text = [[[textView.text substringToIndex:range.location]
-						  stringByAppendingString:[text substringToIndex:emptySpace]]
-						 stringByAppendingString:[textView.text substringFromIndex:(range.location + range.length)]];
-		return NO;
-	}
+    //	if([segue.identifier isEqualToString:@"ConfirmVerificationCode"]){
+    //		VerificationViewController *controller = (VerificationViewController *)segue.destinationViewController;
+    //		controller.selectedPhoneNumber= self.selectedPhoneNumber;
+    //	}
 }
 
 
-- (void)keyboardWasShown:(NSNotification*)aNotification {
-	NSDictionary* info = [aNotification userInfo];
-	CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    
+    if ([textField isEqual:self.countryCodeInput]) {
+        self.countryCodeInput.text = @"+";
+        [self updateCountryCode:nil];
+    } else if ([textField isEqual:self.phoneNumber]){
+        self.numberFormatter = [[NBAsYouTypeFormatter alloc]initWithRegionCode:[NSLocale localizedCodeNameForPhonePrefix:[self.countryCodeInput.text stringByReplacingOccurrencesOfString:@"+" withString:@""]]];
+    }
+    
+    return YES;
+}
+
+
+#define MAX_LENGTH 4 // Whatever your limit is
+- (BOOL)textField:(UITextView *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
 	
-	UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-	scrollView.contentInset = contentInsets;
-	scrollView.scrollIndicatorInsets = contentInsets;
-	
-	// If active text field is hidden by keyboard, scroll it so it's visible
-	// Your application might not need or want this behavior.
-	CGRect aRect = self.view.frame;
-	aRect.size.height -= kbSize.height;
-	if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
-		CGPoint scrollPoint = CGPointMake(0.0, verifyButton.frame.origin.y-kbSize.height);
-		[scrollView setContentOffset:scrollPoint animated:YES];
-	}
+    if ([textField isEqual:self.countryCodeInput]) {
+        NSUInteger newLength = (textField.text.length - range.length) + string.length;
+        if(newLength < MAX_LENGTH) {
+            return YES;
+        } else {
+            NSUInteger emptySpace = MAX_LENGTH - (textField.text.length - range.length);
+            textField.text = [[[textField.text substringToIndex:range.location]
+                               stringByAppendingString:[string substringToIndex:emptySpace]]
+                              stringByAppendingString:[textField.text substringFromIndex:(range.location + range.length)]];
+            [self.phoneNumber becomeFirstResponder];
+            [self updateCountryCode:nil];
+            return NO;
+        }
+        
+    } else if ([textField isEqual:self.phoneNumber]){
+        self.phoneNumber.text = [self.numberFormatter inputDigit:string];
+        return NO;
+        
+    } else {
+        return YES;
+    }
 }
-
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-	self.activeField = textField;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-	self.activeField = nil;
-}
-
-- (void)registerForKeyboardNotifications {
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(keyboardWasShown:)
-												 name:UIKeyboardDidShowNotification object:nil];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(keyboardWillBeHidden:)
-												 name:UIKeyboardWillHideNotification object:nil];
-}
-
-// Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
-	UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-	scrollView.contentInset = contentInsets;
-	scrollView.scrollIndicatorInsets = contentInsets;
-}
-
 
 @end
