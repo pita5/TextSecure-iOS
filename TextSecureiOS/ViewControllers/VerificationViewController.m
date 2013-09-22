@@ -42,6 +42,12 @@
     [self setLocaleCountry];
     
     [self.phoneNumber becomeFirstResponder];
+
+    
+    NSLog(@"%@ %@ %@",    [self cleanPrefixOfString:@"0041 838948932"],
+          [self cleanPrefixOfString:@"0041832982398"],
+          [self cleanPrefixOfString:@"0041-84394839"]);
+    
     
 }
 
@@ -54,13 +60,13 @@
 
 -(void)updateCountryCode:(id)sender {
     NSString *enteredCountryCode = self.countryCodeInput.text;
-    enteredCountryCode = [enteredCountryCode stringByReplacingOccurrencesOfString:@"+" withString:@""];
+    enteredCountryCode = [enteredCountryCode removeAllFormattingButNumbers];
     
     [self updateCountry:@{@"country_code":enteredCountryCode, @"name":[[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[NSLocale localizedCodeNameForPhonePrefix:enteredCountryCode]]}];
 }
 
 -(void)updateCountry:(NSDictionary*)countryInfo {
-	self.countryCodeInput.text = [@"+" stringByAppendingString:[countryInfo objectForKey:@"country_code"]];
+	self.countryCodeInput.text = [[countryInfo objectForKey:@"country_code"] prependPlus];
 	self.countryName.text=[countryInfo objectForKey:@"name"];
 }
 
@@ -118,12 +124,21 @@
         self.countryCodeInput.text = @"+";
         [self updateCountryCode:nil];
     } else if ([textField isEqual:self.phoneNumber]){
-        self.numberFormatter = [[NBAsYouTypeFormatter alloc]initWithRegionCode:[NSLocale localizedCodeNameForPhonePrefix:[self.countryCodeInput.text stringByReplacingOccurrencesOfString:@"+" withString:@""]]];
+        [self initNumberFormatter];
     }
     
     return YES;
 }
 
+-(void) initNumberFormatter{
+    self.numberFormatter = [[NBAsYouTypeFormatter alloc]initWithRegionCode:[NSLocale localizedCodeNameForPhonePrefix:[self.countryCodeInput.text removeAllFormattingButNumbers]]];
+    
+    NSString *charString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
+    
+    for (int i = 0; i < charString.length; i++) {
+        [self.numberFormatter inputDigit:[charString substringWithRange:NSMakeRange(i, 1)]];
+    }
+}
 
 #define MAX_LENGTH 4 // Whatever your limit is
 - (BOOL)textField:(UITextView *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
@@ -143,12 +158,60 @@
         }
         
     } else if ([textField isEqual:self.phoneNumber]){
-        self.phoneNumber.text = [self.numberFormatter inputDigit:string];
+        
+        if ([string isEqualToString:@""]) {
+            // A character is deleted. We rebuild the formatter with one fewer char
+            [self initNumberFormatter];
+            
+            NSString *formattedString;
+            
+            NSString *nonFormattedstring = [self.phoneNumber.text removeAllFormattingButNumbers];
+            
+            for (int i = 0; i < (nonFormattedstring.length - 1) ; i++) {
+                formattedString = [self.numberFormatter inputDigit:[nonFormattedstring substringWithRange:NSMakeRange(i, 1)]];
+            }
+            
+            self.phoneNumber.text = [self cleanPrefixOfString:formattedString];
+            
+        } else{
+            NSString *returnValue =[self.numberFormatter inputDigit:string];
+            self.phoneNumber.text = [self cleanPrefixOfString:returnValue];
+        }
         return NO;
         
     } else {
         return YES;
     }
+}
+
+-(NSString*) cleanPrefixOfString:(NSString*)formattedText{
+    
+    NSMutableArray *prefix = [NSMutableArray array];
+    NSString *prefixString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
+    
+    for (int i = 0; i < prefixString.length; i++) {
+        [prefix addObject:[prefixString substringWithRange:NSMakeRange(i, 1)]];
+    }
+    
+    int lastCharLoc = 0;
+    
+    for (int i = 0; i < formattedText.length; i++) {
+        if ([[formattedText substringWithRange:NSMakeRange(i, 1)] isEqualToString:[prefix firstObject]]) {
+            [prefix removeObject:prefix.firstObject];
+            if (prefix.count == 0) {
+                lastCharLoc = i;
+            }
+        }
+    }
+    
+    
+    if (lastCharLoc < formattedText.length) {
+        if (!isnumber([formattedText characterAtIndex:(lastCharLoc+1)])) {
+            lastCharLoc++;
+        }
+    }
+    
+    return [formattedText substringWithRange:NSMakeRange(lastCharLoc+1, formattedText.length-(lastCharLoc+1))];
 }
 
 @end

@@ -442,6 +442,7 @@
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
 		B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */; };
 		B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6F10B1B17EF61FE00723719 /* CountryCodes.plist */; };
+		B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -921,6 +922,8 @@
 		B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSLocale+phonePrefixes.h"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.h"; sourceTree = "<group>"; };
 		B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSLocale+phonePrefixes.m"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.m"; sourceTree = "<group>"; };
 		B6F10B1B17EF61FE00723719 /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
+		B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+PhoneFormating.h"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.h"; sourceTree = "<group>"; };
+		B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+PhoneFormating.m"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1599,6 +1602,8 @@
 			children = (
 				B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */,
 				B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */,
+				B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */,
+				B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -2131,6 +2136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				A5169CF7170FEA3700A2CE9E /* MessagesDatabase.m in Sources */,
 				A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */,
