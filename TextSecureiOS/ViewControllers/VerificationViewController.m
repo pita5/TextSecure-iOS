@@ -43,6 +43,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.navigationController.navigationBarHidden = NO;
 	self.verificationCodePart2.delegate = self;
 	self.verificationCodePart1.delegate = self;
 	self.title = selectedPhoneNumber;
@@ -76,6 +77,8 @@
 	}
 	CGPoint scrollPoint = CGPointMake(0.0,0.0);
 	[scrollView setContentOffset:scrollPoint animated:NO];
+    
+    [self.countryCodeInput becomeFirstResponder];
 }
 
 -(void)updateCountryCode:(id)sender {
