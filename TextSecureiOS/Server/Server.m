@@ -16,8 +16,6 @@
 @synthesize currentRequestApiType;
 
 
-// Evaluate trust: https://developer.apple.com/library/mac/documentation/security/conceptual/CertKeyTrustProgGuide/iPhone_Tasks/iPhone_Tasks.html#//apple_ref/doc/uid/TP40001358-CH208-SW10
-
 -(id) init {
 	if(self==[super init]) {
 		self.requestQueue = [[NSMutableArray alloc] init];
@@ -202,53 +200,61 @@
   return certData;
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-  if ([[[challenge protectionSpace] authenticationMethod] isEqualToString: NSURLAuthenticationMethodServerTrust]){
-    do {
-      SecTrustRef serverTrust = [[challenge protectionSpace] serverTrust];
-      if (serverTrust == nil) {
-        break; // failed
-      }
-      
-      OSStatus status = SecTrustEvaluate(serverTrust, NULL);
-      if (!(errSecSuccess == status)) {
-        break; // failed
-      }
-      SecCertificateRef serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
-      if (serverCertificate == nil) {
-        break; // failed
-      }
-      
-      CFDataRef serverCertificateData = SecCertificateCopyData(serverCertificate);
-      if (serverCertificateData == nil) {
-        break; // failed
-      }
-      const UInt8* const data = CFDataGetBytePtr(serverCertificateData);
-      const CFIndex size = CFDataGetLength(serverCertificateData);
-      NSData* server_cert = [NSData dataWithBytes:data length:(NSUInteger)size];
-      CFRelease(serverCertificateData);
-      
-      NSData* my_cert = [self getCertificateData];
-      
-      if (server_cert == nil || my_cert == nil) {
-        break; // failed
-      }
-      
-      const BOOL equal = [server_cert isEqualToData:my_cert];
-      if (!equal) {
-        break; // failed
-      }
-      
-      // Athentication succeeded:
-      return [[challenge sender] useCredential:[NSURLCredential credentialForTrust:serverTrust]
-                    forAuthenticationChallenge:challenge];
-    } while (0);
+
+- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+  // code adapted from http://stackoverflow.com/questions/14107280/how-to-verify-and-require-self-signed-certificate-in-ios
+  NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
+  if ([protectionSpace authenticationMethod] == NSURLAuthenticationMethodServerTrust) {
+    // Load anchor cert..
+    NSData *data = [self getCertificateData];
+    SecCertificateRef anchorCert = SecCertificateCreateWithData(kCFAllocatorDefault, (__bridge CFDataRef)data);
+    CFMutableArrayRef anchorCerts = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+    CFArrayAppendValue(anchorCerts, anchorCert);
     
-    // Authentication failed:
-    // TODOUI: error code
-    return [[challenge sender] cancelAuthenticationChallenge:challenge];
+    // Set anchor cert
+    SecTrustRef trust = [protectionSpace serverTrust];
+    SecTrustSetAnchorCertificates(trust, anchorCerts);
+    SecTrustSetAnchorCertificatesOnly(trust, YES); // only use that certificate
+    CFRelease(anchorCert);
+    CFRelease(anchorCerts);
+    
+    // Validate cert
+    SecTrustResultType secresult = kSecTrustResultInvalid;
+    if (SecTrustEvaluate(trust, &secresult) != errSecSuccess) {
+      [challenge.sender cancelAuthenticationChallenge:challenge];
+      return;
+    }
+    
+    switch (secresult) {
+      case kSecTrustResultInvalid:
+      case kSecTrustResultDeny:
+      case kSecTrustResultFatalTrustFailure:
+      case kSecTrustResultOtherError:
+      case kSecTrustResultRecoverableTrustFailure: {
+        [challenge.sender cancelAuthenticationChallenge:challenge];
+        return;
+      }
+        
+      case kSecTrustResultUnspecified: // The OS trusts this certificate implicitly.
+      case kSecTrustResultProceed: { // The user explicitly told the OS to trust it.
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
+        [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+        return;
+      }
+      default: ;
+      // It's somebody else's key. Fall through.
+    }
+    // The server sent a key other than the trusted key.
+    [connection cancel];
+    
+  } else {
+    // TODO: UI error handling
+    NSLog(@"error not handling %@", [protectionSpace authenticationMethod]);
+    [connection cancel];
   }
 }
+
+
 
 #pragma mark - Connection delegate methods
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
