@@ -58,7 +58,7 @@
 	NSMutableURLRequest *nsRequest = [NSMutableURLRequest requestWithURL:requestUrl cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0];
 	if(request.httpRequestType!=DOWNLOAD) {
 		NSString* method;
-		if(request.httpRequestType==POST) {
+		if(request.httpRequestType == POST) {
 			method = @"POST";
 		}
 		else if(request.httpRequestType == PUT) {

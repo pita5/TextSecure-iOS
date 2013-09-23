@@ -156,25 +156,40 @@
         
     } else if ([textField isEqual:self.phoneNumber]){
         
+        // A character is deleted. We rebuild the formatter with one fewer char
+        [self initNumberFormatter];
+        
+        NSString *formattedString;
+        
+        NSString *nonFormattedstring = [self.phoneNumber.text removeAllFormattingButNumbers];
+        
+        DLog(@"%@", nonFormattedstring);
+        
+        // The last added character might not be at the end of the string
+        
+        int loopLength = nonFormattedstring.length+1;
+        
         if ([string isEqualToString:@""]) {
-            // A character is deleted. We rebuild the formatter with one fewer char
-            [self initNumberFormatter];
-            
-            NSString *formattedString;
-            
-            NSString *nonFormattedstring = [self.phoneNumber.text removeAllFormattingButNumbers];
-            
-            for (int i = 0; i < (nonFormattedstring.length - 1) ; i++) {
-                formattedString = [self.numberFormatter inputDigit:[nonFormattedstring substringWithRange:NSMakeRange(i, 1)]];
-            }
-            
-            self.phoneNumber.text = [self cleanPrefixOfString:formattedString];
-            
-        } else{
-            NSString *formattedString =[self.numberFormatter inputDigit:string];
-            DLog(@"Parsed phone number string: %@", formattedString);
-            self.phoneNumber.text = [self cleanPrefixOfString:formattedString];
+            loopLength = nonFormattedstring.length;
         }
+        
+        for (int i = 0; i < loopLength; i++) {
+            if (i != ([self location:range.location ofCleanedStringOf:self.phoneNumber.text])) {
+                formattedString = [self.numberFormatter inputDigit:[nonFormattedstring substringWithRange:NSMakeRange(i, 1)]];
+            } else {
+                // if we are at the replace or add position, we need to evaluate what to do
+                
+                if ([string isEqualToString:@""]) {
+                    // This is the character added to remove chars, there is nothing to do
+                }
+                else{
+                    formattedString = [self.numberFormatter inputDigit:string];
+                }
+            }
+        }
+        
+        self.phoneNumber.text = [self cleanPrefixOfString:formattedString];
+        
         
         // We detect if the number is a valid number. If it is, we show the next button.
         
@@ -227,6 +242,26 @@
     }
     
     return [formattedText substringWithRange:NSMakeRange(lastCharLoc+1, formattedText.length-(lastCharLoc+1))];
+}
+
+-(int) location:(int)loc ofCleanedStringOf:(NSString*)string{
+    NSString *cleanedString = [string removeAllFormattingButNumbers];
+    
+    NSMutableArray *prefix = [NSMutableArray array];
+    
+    for (int i = 0; i < cleanedString.length; i++) {
+        [prefix addObject:[cleanedString substringWithRange:NSMakeRange(i, 1)]];
+    }
+    
+    int cleanedStringIndex = 0;
+    
+    for (int i = 0; i < loc; i++) {
+        if ([[string substringWithRange:NSMakeRange(i, 1)] isEqualToString:[prefix objectAtIndex:cleanedStringIndex]]) {
+            cleanedStringIndex++;
+        }
+    }
+    
+    return cleanedStringIndex;
 }
 
 @end
