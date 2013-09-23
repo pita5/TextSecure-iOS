@@ -191,10 +191,9 @@
     
     for (int i = 0; i < formattedText.length; i++) {
         if ([[formattedText substringWithRange:NSMakeRange(i, 1)] isEqualToString:[prefix firstObject]]) {
-            NSLog(@"Removing prefix char : %@ in string at location : %i out of stack", [prefix firstObject], i);
             [prefix removeObjectAtIndex:0];
+            
             if (prefix.count == 0) {
-                NSLog(@"Removed All Chars");
                 lastCharLoc = i;
             }
         }
