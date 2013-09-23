@@ -232,15 +232,9 @@
 // Return YES if you want default action to be performed.
 // Return NO to do nothing (the delegate is responsible for dismissing the peoplePicker).
 - (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier {
-<<<<<<< HEAD
-//  ABRecordRef phone =ABRecordCopyValue(person, property);
-//  NSInteger phoneIdx = ABMultiValueGetIndexForIdentifier(phone,identifier);
-//  NSString* phoneNumber = [(NSString*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(phone,phoneIdx)) unformattedPhoneNumber];
-=======
   //ABRecordRef phone =ABRecordCopyValue(person, property);
   //NSInteger phoneIdx = ABMultiValueGetIndexForIdentifier(phone,identifier);
   //NSString* phoneNumber = [(NSString*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(phone,phoneIdx)) unformattedPhoneNumber];
->>>>>>> fd3cdcd28645d5bee4cc1274ab191361891ed275
   [self dismissViewControllerAnimated:YES completion:NULL];
   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Title" message:@"Message" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
   alert.alertViewStyle = UIAlertViewStylePlainTextInput;
