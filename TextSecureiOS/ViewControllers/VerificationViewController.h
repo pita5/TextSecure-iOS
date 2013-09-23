@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Server.h"
 #import "NBAsYouTypeFormatter.h"
+#import "NBPhoneNumberUtil.h"
+#import "NBPhoneNumber.h"
 
 
 @interface VerificationViewController : UIViewController<UITextFieldDelegate>
@@ -24,6 +26,7 @@
 @property (nonatomic,strong) IBOutlet UILabel *verificationTextExplanation;
 @property (nonatomic,strong) IBOutlet UILabel *verificationCompletionExplanation;
 
+@property (nonatomic, copy) NSString *selectedPhoneNumber;
 
 -(IBAction)doVerifyPhone:(id)sender;
 -(void) countryChosen:(NSNotification*)notification;

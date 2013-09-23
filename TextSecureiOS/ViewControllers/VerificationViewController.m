@@ -30,14 +30,23 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	// Do any additional setup after loading the view.
-    self.navigationController.navigationBarHidden = NO;
+	// Do any additional setup after loading the views
+    
 	self.verificationCodePart2.delegate = self;
 	self.verificationCodePart1.delegate = self;
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
     
+    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(doVerifyPhone:)];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
+    
+    self.navigationItem.rightBarButtonItem = nextButton;
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
+    
+    self.navigationItem.title = @"Your Phone Number";
     
     [self setLocaleCountry];
     
@@ -70,14 +79,6 @@
 	[self updateCountry:[notification userInfo]];
 }
 
-- (void)nextButtonWasPressed:(id)sender{
-	[self.phoneNumber becomeFirstResponder];
-}
-
-- (void)doneButtonWasPressed:(id)sender {
-    [self.phoneNumber resignFirstResponder];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -100,17 +101,17 @@
 }
 
 -(IBAction)sentVerification:(id)sender {
-    //self.selectedPhoneNumber = [NSString stringWithFormat:@"+%@%@",self.countryCodeInput.text,self.phoneNumber.text];
-    //[[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username",@"sms",@"transport",nil]]; // should be one of sms,voice
+    self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,self.phoneNumber.text];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username",@"sms",@"transport",nil]]; // should be one of sms,voice
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
 }
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    //	if([segue.identifier isEqualToString:@"ConfirmVerificationCode"]){
-    //		VerificationViewController *controller = (VerificationViewController *)segue.destinationViewController;
-    //		controller.selectedPhoneNumber= self.selectedPhoneNumber;
-    //	}
+    if([segue.identifier isEqualToString:@"ConfirmVerificationCode"]){
+    	VerificationViewController *controller = (VerificationViewController *)segue.destinationViewController;
+    	controller.selectedPhoneNumber= self.selectedPhoneNumber;
+    }
 }
 
 
@@ -174,6 +175,19 @@
             DLog(@"Parsed phone number string: %@", formattedString);
             self.phoneNumber.text = [self cleanPrefixOfString:formattedString];
         }
+        
+        // We detect if the number is a valid number. If it is, we show the next button.
+        
+        NSError *error = nil;
+        
+        NBPhoneNumber *number = [[NBPhoneNumberUtil sharedInstance] parse:[self.countryCodeInput.text stringByAppendingString:self.phoneNumber.text] defaultRegion:[NSLocale localizedCodeNameForPhonePrefix:self.countryCodeInput.text] error:&error];
+        
+        if (error == nil && [[NBPhoneNumberUtil sharedInstance] isValidNumber:number]) {
+            self.navigationItem.rightBarButtonItem.enabled = TRUE;
+        } else{
+            self.navigationItem.rightBarButtonItem.enabled = FALSE;
+        }
+        
         return NO;
         
     } else {
@@ -199,7 +213,7 @@
     for (int i = 0; i < formattedText.length; i++) {
         if ([[formattedText substringWithRange:NSMakeRange(i, 1)] isEqualToString:[prefix firstObject]]) {
             [prefix removeObjectAtIndex:0];
-        
+            
             if (prefix.count == 0) {
                 lastCharLoc = i;
             }
