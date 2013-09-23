@@ -48,6 +48,8 @@
 // Based on the user's locale we are guessing what his country code would be.
 
 -(void)setLocaleCountry{
+    DLog(@"Setting Locale to : %@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]);
+    
     self.countryCodeInput.text = [NSLocale currentCountryPhonePrefix];
     [self updateCountryCode:nil];
 }
@@ -168,8 +170,9 @@
             self.phoneNumber.text = [self cleanPrefixOfString:formattedString];
             
         } else{
-            NSString *returnValue =[self.numberFormatter inputDigit:string];
-            self.phoneNumber.text = [self cleanPrefixOfString:returnValue];
+            NSString *formattedString =[self.numberFormatter inputDigit:string];
+            DLog(@"Parsed phone number string: %@", formattedString);
+            self.phoneNumber.text = [self cleanPrefixOfString:formattedString];
         }
         return NO;
         
@@ -177,6 +180,10 @@
         return YES;
     }
 }
+
+
+// The parsing library needs to see the phone number with the prefix, we do show it without it.
+// This ugly method clean the prefix so that phone number fields is parsed but without prefix.
 
 -(NSString*) cleanPrefixOfString:(NSString*)formattedText{
     
@@ -192,7 +199,7 @@
     for (int i = 0; i < formattedText.length; i++) {
         if ([[formattedText substringWithRange:NSMakeRange(i, 1)] isEqualToString:[prefix firstObject]]) {
             [prefix removeObjectAtIndex:0];
-            
+        
             if (prefix.count == 0) {
                 lastCharLoc = i;
             }
