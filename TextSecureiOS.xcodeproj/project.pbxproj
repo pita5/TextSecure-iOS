@@ -28,7 +28,6 @@
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D31170FEC6600A2CE9E /* DefaultBloomfilter.bin in Resources */ = {isa = PBXBuildFile; fileRef = A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
-		A5169D3F170FEDC600A2CE9E /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A51B77B3170561C3002B8E53 /* textsecure-verifybutton.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */; };
 		A51B77B4170561C3002B8E53 /* textsecure-selectyourcountry-field.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77AF170561C3002B8E53 /* textsecure-selectyourcountry-field.png */; };
@@ -406,8 +405,6 @@
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A5A1F62F170F765E00A0CDC1 /* BloomFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F62E170F765E00A0CDC1 /* BloomFilterTest.m */; };
 		A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F631170F824700A0CDC1 /* CryptographyTests.m */; };
-		A5A662AF17E2F17F00B9D99A /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A5A662AC17E2F17F00B9D99A /* HockeySDK.xcconfig */; };
-		A5A662B017E2F17F00B9D99A /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A5A662AD17E2F17F00B9D99A /* HockeySDKResources.bundle */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5DE19DB1707B75E00ACAFDD /* TextSecure-Global-menubar.png in Resources */ = {isa = PBXBuildFile; fileRef = A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */; };
@@ -443,6 +440,9 @@
 		A5F15B5E1703F20D00856385 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
+		B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */; };
+		B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6F10B1B17EF61FE00723719 /* CountryCodes.plist */; };
+		B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -498,7 +498,6 @@
 		A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DefaultBloomfilter.bin; sourceTree = "<group>"; };
 		A5169D39170FEDC600A2CE9E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
-		A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
 		A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A51B77AE170561C3002B8E53 /* textsecure-verifybutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-verifybutton.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-verifybutton.png"; sourceTree = "<group>"; };
@@ -882,9 +881,6 @@
 		A5A1F62E170F765E00A0CDC1 /* BloomFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BloomFilterTest.m; sourceTree = "<group>"; };
 		A5A1F630170F824700A0CDC1 /* CryptographyTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptographyTests.h; sourceTree = "<group>"; };
 		A5A1F631170F824700A0CDC1 /* CryptographyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptographyTests.m; sourceTree = "<group>"; };
-		A5A662AA17E2F17F00B9D99A /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
-		A5A662AC17E2F17F00B9D99A /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = "<group>"; };
-		A5A662AD17E2F17F00B9D99A /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HockeySDKResources.bundle; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5DE19D91707B75E00ACAFDD /* TextSecure-Global-menubar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TextSecure-Global-menubar.png"; sourceTree = "<group>"; };
@@ -923,6 +919,11 @@
 		A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSLocale+phonePrefixes.h"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.h"; sourceTree = "<group>"; };
+		B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSLocale+phonePrefixes.m"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.m"; sourceTree = "<group>"; };
+		B6F10B1B17EF61FE00723719 /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
+		B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+PhoneFormating.h"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.h"; sourceTree = "<group>"; };
+		B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+PhoneFormating.m"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1042,7 +1043,6 @@
 			children = (
 				A568910217E2F37A00C360A1 /* QuartzCore.framework */,
 				A568910017E2F37000C360A1 /* CoreText.framework */,
-				A5A662A917E2F17F00B9D99A /* HockeySDK.embeddedframework */,
 				A51B77A217051096002B8E53 /* libsqlite3.dylib */,
 				A5F15AA41702DF6E00856385 /* libssl.a */,
 				A5F15AA51702DF6E00856385 /* libcrypto.a */,
@@ -1065,6 +1065,7 @@
 			children = (
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
+				B6F10B1417EF49D700723719 /* Categories */,
 				A51B779B17050EDB002B8E53 /* Model */,
 				A5F15B1D1703740D00856385 /* View */,
 				A5F15AA217029BCF00856385 /* ViewControllers */,
@@ -1080,10 +1081,10 @@
 		A53718BC16FF95DF00C6FCCF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B6F10B1B17EF61FE00723719 /* CountryCodes.plist */,
 				A52ECA7F17EDA9C400C80BC7 /* whisperca.crt */,
 				A5169D39170FEDC600A2CE9E /* main.m */,
 				A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */,
-				A5169D3B170FEDC600A2CE9E /* CountryCodes.plist */,
 				A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
 			);
@@ -1473,25 +1474,6 @@
 			path = TextSecureiOSAssets/flags;
 			sourceTree = "<group>";
 		};
-		A5A662A917E2F17F00B9D99A /* HockeySDK.embeddedframework */ = {
-			isa = PBXGroup;
-			children = (
-				A5A662AA17E2F17F00B9D99A /* HockeySDK.framework */,
-				A5A662AB17E2F17F00B9D99A /* Resources */,
-			);
-			name = HockeySDK.embeddedframework;
-			path = "HockeySDK-iOS-3.0.0/HockeySDK.embeddedframework";
-			sourceTree = "<group>";
-		};
-		A5A662AB17E2F17F00B9D99A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A5A662AC17E2F17F00B9D99A /* HockeySDK.xcconfig */,
-				A5A662AD17E2F17F00B9D99A /* HockeySDKResources.bundle */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		A5DE19D81707B75E00ACAFDD /* ui-global */ = {
 			isa = PBXGroup;
 			children = (
@@ -1613,6 +1595,18 @@
 				A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		B6F10B1417EF49D700723719 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */,
+				B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */,
+				B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */,
+				B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */,
+			);
+			name = Categories;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2023,6 +2017,7 @@
 				A5372A9117011A5300C6FCCF /* ws.png in Resources */,
 				A5372A9217011A5300C6FCCF /* ye.png in Resources */,
 				A5372A9317011A5300C6FCCF /* yt.png in Resources */,
+				B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */,
 				A5372A9417011A5300C6FCCF /* za.png in Resources */,
 				A5372A9517011A5300C6FCCF /* zh.png in Resources */,
 				A5372A9617011A5300C6FCCF /* zm.png in Resources */,
@@ -2077,10 +2072,7 @@
 				A5DE19FE1707C9DB00ACAFDD /* TextSecure-Global-loadscreen.png in Resources */,
 				A5DE19FF1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png in Resources */,
 				A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */,
-				A5169D3F170FEDC600A2CE9E /* CountryCodes.plist in Resources */,
 				B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */,
-				A5A662AF17E2F17F00B9D99A /* HockeySDK.xcconfig in Resources */,
-				A5A662B017E2F17F00B9D99A /* HockeySDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2144,6 +2136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				A5169CF7170FEA3700A2CE9E /* MessagesDatabase.m in Sources */,
 				A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */,
@@ -2151,6 +2144,7 @@
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
+				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
@@ -2278,10 +2272,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/HockeySDK-iOS-3.0.0/HockeySDK.embeddedframework\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -2290,7 +2281,6 @@
 					"$(inherited)/**",
 					"\"$(SRCROOT)/Libraries/lib\"/**",
 					"\"$(SRCROOT)\"/**",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/RNCryptor-bpiygwtuyhesovfvrqwqcqnvfsmh/Build/Products/Debug-iphoneos\"/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
@@ -2302,10 +2292,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/HockeySDK-iOS-3.0.0/HockeySDK.embeddedframework\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -2314,7 +2301,6 @@
 					"$(inherited)/**",
 					"\"$(SRCROOT)/Libraries/lib\"/**",
 					"\"$(SRCROOT)\"/**",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/RNCryptor-bpiygwtuyhesovfvrqwqcqnvfsmh/Build/Products/Debug-iphoneos\"/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
