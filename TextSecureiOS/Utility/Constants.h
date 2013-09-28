@@ -36,4 +36,4 @@ typedef enum {
   DOWNLOAD=4
 } HTTPRequestType;
 
-double const timeOutForRequests;
+
