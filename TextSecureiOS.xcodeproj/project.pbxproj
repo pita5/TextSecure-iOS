@@ -439,6 +439,8 @@
 		A5F15B5D1703F20D00856385 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B531703F20D00856385 /* OpenSans-BoldItalic.ttf */; };
 		A5F15B5E1703F20D00856385 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
+		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
+		B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF1017F5AAA300B2244D /* TSRequest.m */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
 		B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */; };
 		B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6F10B1B17EF61FE00723719 /* CountryCodes.plist */; };
@@ -918,6 +920,10 @@
 		A5F15B531703F20D00856385 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B639AF0B17F5A68100B2244D /* TSNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSNetworkManager.h; path = TextSecureiOS/Networking/TSNetworkManager.h; sourceTree = "<group>"; };
+		B639AF0C17F5A68100B2244D /* TSNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSNetworkManager.m; path = TextSecureiOS/Networking/TSNetworkManager.m; sourceTree = "<group>"; };
+		B639AF0F17F5AAA300B2244D /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequest.h; path = TextSecureiOS/Networking/Requests/TSRequest.h; sourceTree = "<group>"; };
+		B639AF1017F5AAA300B2244D /* TSRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequest.m; path = TextSecureiOS/Networking/Requests/TSRequest.m; sourceTree = "<group>"; };
 		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSLocale+phonePrefixes.h"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.h"; sourceTree = "<group>"; };
 		B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSLocale+phonePrefixes.m"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.m"; sourceTree = "<group>"; };
@@ -1067,6 +1073,7 @@
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				B6F10B1417EF49D700723719 /* Categories */,
 				A51B779B17050EDB002B8E53 /* Model */,
+				B639AF0A17F5A53700B2244D /* Networking */,
 				A5F15B1D1703740D00856385 /* View */,
 				A5F15AA217029BCF00856385 /* ViewControllers */,
 				A5F15B1C170373E700856385 /* Server */,
@@ -1595,6 +1602,26 @@
 				A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		B639AF0A17F5A53700B2244D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				B639AF0E17F5AA6000B2244D /* Request Types */,
+				B639AF0B17F5A68100B2244D /* TSNetworkManager.h */,
+				B639AF0C17F5A68100B2244D /* TSNetworkManager.m */,
+			);
+			name = Networking;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		B639AF0E17F5AA6000B2244D /* Request Types */ = {
+			isa = PBXGroup;
+			children = (
+				B639AF0F17F5AAA300B2244D /* TSRequest.h */,
+				B639AF1017F5AAA300B2244D /* TSRequest.m */,
+			);
+			name = "Request Types";
 			sourceTree = "<group>";
 		};
 		B6F10B1417EF49D700723719 /* Categories */ = {
@@ -2143,6 +2170,7 @@
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
+				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
@@ -2155,6 +2183,7 @@
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
 				A5169D22170FEB1900A2CE9E /* UserDefaults.m in Sources */,
+				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
 				A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */,
 				A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */,
