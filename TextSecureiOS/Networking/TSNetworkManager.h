@@ -7,13 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFHTTPRequestOperationManager.h>
+#import "TSRequest.h"
+#import "TSRequestVerificationCodeRequest.h"
 
 @interface TSNetworkManager : NSObject{
-    NSOperationQueue *operationQueue;
-    AFHTTPSessionManager *textSecureSecureHTTPSManager;
+    AFHTTPRequestOperationManager *operationManager;
 }
 
 + (id)sharedManager;
+- (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock;
 
 @end

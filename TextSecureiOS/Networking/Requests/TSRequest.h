@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TSRequest : NSURLRequest
+@interface TSRequest : NSMutableURLRequest
+
+@property (nonatomic,retain) NSDictionary *parameters;
 
 @end

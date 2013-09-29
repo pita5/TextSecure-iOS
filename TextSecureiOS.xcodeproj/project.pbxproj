@@ -442,6 +442,9 @@
 		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
 		B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF1017F5AAA300B2244D /* TSRequest.m */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
+		B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */; };
+		B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB517F794F600200B69 /* NSString+escape.m */; };
+		B6E2CFB917F7A89C00200B69 /* server.cer in Resources */ = {isa = PBXBuildFile; fileRef = B6E2CFB817F7A89C00200B69 /* server.cer */; };
 		B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */; };
 		B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6F10B1B17EF61FE00723719 /* CountryCodes.plist */; };
 		B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */; };
@@ -925,6 +928,11 @@
 		B639AF0F17F5AAA300B2244D /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequest.h; path = TextSecureiOS/Networking/Requests/TSRequest.h; sourceTree = "<group>"; };
 		B639AF1017F5AAA300B2244D /* TSRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequest.m; path = TextSecureiOS/Networking/Requests/TSRequest.m; sourceTree = "<group>"; };
 		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequestVerificationCodeRequest.h; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.h; sourceTree = "<group>"; };
+		B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequestVerificationCodeRequest.m; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.m; sourceTree = "<group>"; };
+		B6E2CFB417F794F600200B69 /* NSString+escape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+escape.h"; path = "TextSecureiOS/Categories/NSString+escape.h"; sourceTree = "<group>"; };
+		B6E2CFB517F794F600200B69 /* NSString+escape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+escape.m"; path = "TextSecureiOS/Categories/NSString+escape.m"; sourceTree = "<group>"; };
+		B6E2CFB817F7A89C00200B69 /* server.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = server.cer; path = TextSecureiOS/Networking/server.cer; sourceTree = "<group>"; };
 		B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSLocale+phonePrefixes.h"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.h"; sourceTree = "<group>"; };
 		B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSLocale+phonePrefixes.m"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.m"; sourceTree = "<group>"; };
 		B6F10B1B17EF61FE00723719 /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
@@ -1607,6 +1615,7 @@
 		B639AF0A17F5A53700B2244D /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				B6E2CFB717F7A89000200B69 /* Certificate */,
 				B639AF0E17F5AA6000B2244D /* Request Types */,
 				B639AF0B17F5A68100B2244D /* TSNetworkManager.h */,
 				B639AF0C17F5A68100B2244D /* TSNetworkManager.m */,
@@ -1620,8 +1629,18 @@
 			children = (
 				B639AF0F17F5AAA300B2244D /* TSRequest.h */,
 				B639AF1017F5AAA300B2244D /* TSRequest.m */,
+				B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */,
+				B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */,
 			);
 			name = "Request Types";
+			sourceTree = "<group>";
+		};
+		B6E2CFB717F7A89000200B69 /* Certificate */ = {
+			isa = PBXGroup;
+			children = (
+				B6E2CFB817F7A89C00200B69 /* server.cer */,
+			);
+			name = Certificate;
 			sourceTree = "<group>";
 		};
 		B6F10B1417EF49D700723719 /* Categories */ = {
@@ -1631,6 +1650,8 @@
 				B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */,
 				B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */,
 				B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */,
+				B6E2CFB417F794F600200B69 /* NSString+escape.h */,
+				B6E2CFB517F794F600200B69 /* NSString+escape.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -1926,6 +1947,7 @@
 				A5372A1A17011A5300C6FCCF /* nds@2x.png in Resources */,
 				A5372A1B17011A5300C6FCCF /* ne.png in Resources */,
 				A5372A1C17011A5300C6FCCF /* new.png in Resources */,
+				B6E2CFB917F7A89C00200B69 /* server.cer in Resources */,
 				A5372A1D17011A5300C6FCCF /* new@2x.png in Resources */,
 				A5372A1E17011A5300C6FCCF /* nf.png in Resources */,
 				A5372A1F17011A5300C6FCCF /* ng.png in Resources */,
@@ -2175,6 +2197,8 @@
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
+				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
+				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
 				A5169D12170FEAC100A2CE9E /* Server.m in Sources */,
 				A5169D13170FEAC100A2CE9E /* Request.m in Sources */,

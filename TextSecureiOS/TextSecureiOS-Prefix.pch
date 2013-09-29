@@ -14,8 +14,9 @@
     #import "NSLocale+phonePrefixes.h"
     #import "NSString+PhoneFormating.h"
     #import "Constants.h"
+    #import "NSString+escape.h"
+    #import "TSNetworkManager.h"
 #endif
-
 
 #ifdef DEBUG
 	#import <HockeySDK/HockeySDK.h>

@@ -101,9 +101,13 @@
 }
 
 -(IBAction)sendVerification:(id)sender {
-    self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,self.phoneNumber.text];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username",@"sms",@"transport",nil]]; // should be one of sms,voice
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];
+    self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
+    NSLog(@"Phone number : %@", self.selectedPhoneNumber);
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        DLog(@"Worked!");
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        DLog(@"Failed! %@", error);
+    }];
 }
 
 
@@ -162,8 +166,6 @@
         NSString *formattedString;
         
         NSString *nonFormattedstring = [self.phoneNumber.text removeAllFormattingButNumbers];
-        
-        DLog(@"%@", nonFormattedstring);
         
         // The last added character might not be at the end of the string
         

@@ -8,6 +8,7 @@
 
 #import "TSNetworkManager.h"
 #import "TSRequest.h"
+#import "Cryptography.h"
 
 @implementation TSNetworkManager
 
@@ -24,37 +25,23 @@
 
 - (id)init {
     if (self = [super init]) {
-        operationQueue = [[NSOperationQueue alloc] init];
-        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        
-        textSecureSecureHTTPSManager = [[AFHTTPSessionManager manager] initWithBaseURL:[NSURL URLWithString:textSecureServer] sessionConfiguration:config];
-        
-        //textSecureSecureHTTPSManager
+        operationManager = [[AFHTTPRequestOperationManager manager] initWithBaseURL:[[NSURL alloc] initWithString:textSecureServer]];
     }
     return self;
 }
 
 #pragma mark Manager Methods
 
-- (void) addRequestToQueue:(TSRequest*) request success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)) successCompletionBlock failure: (void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON)) failureCompletionBlock{
+- (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
     
-    NSURLSessionDataTask *dataTask = [textSecureSecureHTTPSManager GET:@"/hello" parameters:Nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-    }];
+    if ([request.HTTPMethod isEqualToString:@"GET"]) {
+        NSLog(@"GET API Endpoint : %@", request.URL.absoluteString);
+        [operationManager GET:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+    } else if ([request.HTTPMethod isEqualToString:@"POST"]){
+        NSLog(@"POST API Endpoint : %@ with params : %@", request.URL.absoluteString, request.parameters);
+        [operationManager POST:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+    }
     
-    [dataTask resume];
-    
-    AFHTTPRequestOperation *operation = textSecureSecureHTTPSManager ;
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        // Print the response body in text
-        NSLog(@"Response: %@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    
-    [operationQueue addOperation:operation];
 }
 
 
