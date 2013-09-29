@@ -38,7 +38,7 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
     
-    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(doVerifyPhone:)];
+    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(sendVerification:)];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
@@ -100,7 +100,7 @@
 	[self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
 }
 
--(IBAction)sentVerification:(id)sender {
+-(IBAction)sendVerification:(id)sender {
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,self.phoneNumber.text];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:self.self.selectedPhoneNumber, @"username",@"sms",@"transport",nil]]; // should be one of sms,voice
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedSendVerification:) name:@"SentVerification" object:nil];

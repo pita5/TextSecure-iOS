@@ -33,7 +33,7 @@
 - (void)didReceiveMemoryWarning;
 -(void)finishedVerifiedPhone:(NSNotification*)notification;
 -(void)finishedSendVerification:(NSNotification*)notification;
--(IBAction)sentVerification:(id)sender;
+-(IBAction)sendVerification:(id)sender;
 -(void)updateCountry:(NSDictionary*)countryInfo;
 @end
 
