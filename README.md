@@ -14,7 +14,7 @@ pod install
 
 3) **Temporary** - Building OpenSSL manually. This step should be removed soon. The goal is to make a pod specification that builds OpenSSL during the `pod install` phase.
 
-- Download the [latest sources](www.openssl.org/source/)
+- Download the [latest sources](http://www.openssl.org/source/)
 - Decompress and copy them in the `Libraries/src/` folder. 
 - Run the bash script called `build-libssl.sh` from within `Libraries/`. It will build the necessary dependencies (may take a bit but go get a cup of coffee) and you should be ready to go.
 
