@@ -27,7 +27,7 @@
 - (id)init {
     if (self = [super init]) {
         operationManager = [[AFHTTPRequestOperationManager manager] initWithBaseURL:[[NSURL alloc] initWithString:textSecureServer]];
-        operationManager.securityPolicy.allowInvalidCertificates = YES;
+        operationManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
     }
     return self;
 }

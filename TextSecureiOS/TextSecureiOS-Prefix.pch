@@ -16,6 +16,8 @@
     #import "Constants.h"
     #import "NSString+escape.h"
     #import "TSNetworkManager.h"
+    #define _AFNETWORKING_PIN_SSL_CERTIFICATES_
+
 #endif
 
 #ifdef DEBUG
