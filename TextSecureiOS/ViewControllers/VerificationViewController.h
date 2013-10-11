@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Server.h"
 #import "NBAsYouTypeFormatter.h"
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
@@ -31,9 +30,6 @@
 -(IBAction)doVerifyPhone:(id)sender;
 -(void) countryChosen:(NSNotification*)notification;
 - (void)didReceiveMemoryWarning;
--(void)finishedVerifiedPhone:(NSNotification*)notification;
--(void)finishedSendVerification:(NSNotification*)notification;
--(IBAction)sendVerification:(id)sender;
 -(void)updateCountry:(NSDictionary*)countryInfo;
 @end
 

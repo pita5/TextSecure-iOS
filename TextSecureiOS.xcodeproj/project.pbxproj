@@ -15,8 +15,6 @@
 		A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D01170FEA8D00A2CE9E /* SMSViewController.m */; };
 		A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D04170FEA8D00A2CE9E /* CountryViewController.m */; };
 		A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D06170FEA8D00A2CE9E /* CountrySegue.m */; };
-		A5169D12170FEAC100A2CE9E /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D0E170FEAC100A2CE9E /* Server.m */; };
-		A5169D13170FEAC100A2CE9E /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D11170FEAC100A2CE9E /* Request.m */; };
 		A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D15170FEB1900A2CE9E /* FilePath.m */; };
 		A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */; };
 		A5169D20170FEB1900A2CE9E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D19170FEB1900A2CE9E /* Constants.m */; };
@@ -52,7 +50,6 @@
 		A51B77E81706CA63002B8E53 /* textsecure-gettingstarted-menubar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */; };
 		A51B77E91706CA63002B8E53 /* textsecure-countrycode-field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
-		A52ECA8017EDA9C400C80BC7 /* whisperca.crt in Resources */ = {isa = PBXBuildFile; fileRef = A52ECA7F17EDA9C400C80BC7 /* whisperca.crt */; };
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
@@ -439,7 +436,13 @@
 		A5F15B5D1703F20D00856385 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B531703F20D00856385 /* OpenSans-BoldItalic.ttf */; };
 		A5F15B5E1703F20D00856385 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
+		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
+		B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF1017F5AAA300B2244D /* TSRequest.m */; };
+		B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */; };
+		B63A72181808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
+		B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */; };
+		B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB517F794F600200B69 /* NSString+escape.m */; };
 		B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */; };
 		B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6F10B1B17EF61FE00723719 /* CountryCodes.plist */; };
 		B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */; };
@@ -473,10 +476,6 @@
 		A5169D05170FEA8D00A2CE9E /* CountryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountryViewController.h; path = ViewControllers/CountryViewController.h; sourceTree = "<group>"; };
 		A5169D06170FEA8D00A2CE9E /* CountrySegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountrySegue.m; path = ViewControllers/CountrySegue.m; sourceTree = "<group>"; };
 		A5169D07170FEA8D00A2CE9E /* CountrySegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountrySegue.h; path = ViewControllers/CountrySegue.h; sourceTree = "<group>"; };
-		A5169D0E170FEAC100A2CE9E /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Server.m; path = Server/Server.m; sourceTree = "<group>"; };
-		A5169D0F170FEAC100A2CE9E /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Server.h; path = Server/Server.h; sourceTree = "<group>"; };
-		A5169D10170FEAC100A2CE9E /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Request.h; path = Server/Request.h; sourceTree = "<group>"; };
-		A5169D11170FEAC100A2CE9E /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Request.m; path = Server/Request.m; sourceTree = "<group>"; };
 		A5169D14170FEB1900A2CE9E /* FilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilePath.h; path = Utility/FilePath.h; sourceTree = "<group>"; };
 		A5169D15170FEB1900A2CE9E /* FilePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilePath.m; path = Utility/FilePath.m; sourceTree = "<group>"; };
 		A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Conversion.h"; path = "Utility/NSString+Conversion.h"; sourceTree = "<group>"; };
@@ -524,7 +523,6 @@
 		A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field@2x.png"; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "Utility/NSData+Base64.h"; sourceTree = "<group>"; };
 		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "Utility/NSData+Base64.m"; sourceTree = "<group>"; };
-		A52ECA7F17EDA9C400C80BC7 /* whisperca.crt */ = {isa = PBXFileReference; lastKnownFileType = file; path = whisperca.crt; sourceTree = "<group>"; };
 		A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextSecureiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718B516FF95DF00C6FCCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A53718B716FF95DF00C6FCCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -918,7 +916,18 @@
 		A5F15B531703F20D00856385 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		A5F15B541703F20D00856385 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "TextSecureiOSAssets/Fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B639AF0B17F5A68100B2244D /* TSNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSNetworkManager.h; path = TextSecureiOS/Networking/TSNetworkManager.h; sourceTree = "<group>"; };
+		B639AF0C17F5A68100B2244D /* TSNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSNetworkManager.m; path = TextSecureiOS/Networking/TSNetworkManager.m; sourceTree = "<group>"; };
+		B639AF0F17F5AAA300B2244D /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequest.h; path = TextSecureiOS/Networking/Requests/TSRequest.h; sourceTree = "<group>"; };
+		B639AF1017F5AAA300B2244D /* TSRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequest.m; path = TextSecureiOS/Networking/Requests/TSRequest.m; sourceTree = "<group>"; };
+		B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationCodeViewController.h; path = ViewControllers/VerificationCodeViewController.h; sourceTree = "<group>"; };
+		B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationCodeViewController.m; path = ViewControllers/VerificationCodeViewController.m; sourceTree = "<group>"; };
+		B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = gcm.textsecure.whispersystems.org.cer; path = TextSecureiOS/gcm.textsecure.whispersystems.org.cer; sourceTree = "<group>"; };
 		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequestVerificationCodeRequest.h; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.h; sourceTree = "<group>"; };
+		B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequestVerificationCodeRequest.m; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.m; sourceTree = "<group>"; };
+		B6E2CFB417F794F600200B69 /* NSString+escape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+escape.h"; path = "TextSecureiOS/Categories/NSString+escape.h"; sourceTree = "<group>"; };
+		B6E2CFB517F794F600200B69 /* NSString+escape.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+escape.m"; path = "TextSecureiOS/Categories/NSString+escape.m"; sourceTree = "<group>"; };
 		B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSLocale+phonePrefixes.h"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.h"; sourceTree = "<group>"; };
 		B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSLocale+phonePrefixes.m"; path = "TextSecureiOS/Categories/NSLocale+phonePrefixes.m"; sourceTree = "<group>"; };
 		B6F10B1B17EF61FE00723719 /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
@@ -1067,9 +1076,9 @@
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				B6F10B1417EF49D700723719 /* Categories */,
 				A51B779B17050EDB002B8E53 /* Model */,
+				B639AF0A17F5A53700B2244D /* Networking */,
 				A5F15B1D1703740D00856385 /* View */,
 				A5F15AA217029BCF00856385 /* ViewControllers */,
-				A5F15B1C170373E700856385 /* Server */,
 				A5F15AA117029BB400856385 /* Security */,
 				A5F15AA317029C5300856385 /* Utility */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
@@ -1082,7 +1091,6 @@
 			isa = PBXGroup;
 			children = (
 				B6F10B1B17EF61FE00723719 /* CountryCodes.plist */,
-				A52ECA7F17EDA9C400C80BC7 /* whisperca.crt */,
 				A5169D39170FEDC600A2CE9E /* main.m */,
 				A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */,
 				A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */,
@@ -1526,8 +1534,7 @@
 		A5F15AA217029BCF00856385 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */,
-				A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */,
+				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
 				A5169D03170FEA8D00A2CE9E /* ThreadViewController.h */,
@@ -1561,17 +1568,6 @@
 			name = Utility;
 			sourceTree = "<group>";
 		};
-		A5F15B1C170373E700856385 /* Server */ = {
-			isa = PBXGroup;
-			children = (
-				A5169D0F170FEAC100A2CE9E /* Server.h */,
-				A5169D0E170FEAC100A2CE9E /* Server.m */,
-				A5169D10170FEAC100A2CE9E /* Request.h */,
-				A5169D11170FEAC100A2CE9E /* Request.m */,
-			);
-			name = Server;
-			sourceTree = "<group>";
-		};
 		A5F15B1D1703740D00856385 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1597,6 +1593,48 @@
 			name = Fonts;
 			sourceTree = "<group>";
 		};
+		B639AF0A17F5A53700B2244D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				B6E2CFB717F7A89000200B69 /* Certificate */,
+				B639AF0E17F5AA6000B2244D /* Request Types */,
+				B639AF0B17F5A68100B2244D /* TSNetworkManager.h */,
+				B639AF0C17F5A68100B2244D /* TSNetworkManager.m */,
+			);
+			name = Networking;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		B639AF0E17F5AA6000B2244D /* Request Types */ = {
+			isa = PBXGroup;
+			children = (
+				B639AF0F17F5AAA300B2244D /* TSRequest.h */,
+				B639AF1017F5AAA300B2244D /* TSRequest.m */,
+				B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */,
+				B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */,
+			);
+			name = "Request Types";
+			sourceTree = "<group>";
+		};
+		B63A72131808B87700C353F2 /* Sign up */ = {
+			isa = PBXGroup;
+			children = (
+				A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */,
+				A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */,
+				B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */,
+				B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */,
+			);
+			name = "Sign up";
+			sourceTree = "<group>";
+		};
+		B6E2CFB717F7A89000200B69 /* Certificate */ = {
+			isa = PBXGroup;
+			children = (
+				B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */,
+			);
+			name = Certificate;
+			sourceTree = "<group>";
+		};
 		B6F10B1417EF49D700723719 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1604,6 +1642,8 @@
 				B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */,
 				B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */,
 				B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */,
+				B6E2CFB417F794F600200B69 /* NSString+escape.h */,
+				B6E2CFB517F794F600200B69 /* NSString+escape.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -1778,7 +1818,6 @@
 				A53729A217011A5200C6FCCF /* et@2x.png in Resources */,
 				A53729A317011A5200C6FCCF /* eu.png in Resources */,
 				A53729A417011A5200C6FCCF /* eu@2x.png in Resources */,
-				A52ECA8017EDA9C400C80BC7 /* whisperca.crt in Resources */,
 				A53729A517011A5200C6FCCF /* fa.png in Resources */,
 				A53729A617011A5200C6FCCF /* fam.png in Resources */,
 				A53729A717011A5200C6FCCF /* fi.png in Resources */,
@@ -2073,6 +2112,7 @@
 				A5DE19FF1707C9DB00ACAFDD /* TextSecure-Global-loadscreen@2x.png in Resources */,
 				A5DE1A001707C9DB00ACAFDD /* TextSecure-Global-canvas@2x.png in Resources */,
 				B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */,
+				B63A72181808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2143,18 +2183,21 @@
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
+				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
+				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
+				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
+				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
-				A5169D12170FEAC100A2CE9E /* Server.m in Sources */,
-				A5169D13170FEAC100A2CE9E /* Request.m in Sources */,
 				A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */,
 				A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */,
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
 				A5169D22170FEB1900A2CE9E /* UserDefaults.m in Sources */,
+				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
 				A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */,
 				A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */,
