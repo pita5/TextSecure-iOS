@@ -106,7 +106,7 @@
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         DLog(@"Worked!");
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        DLog(@"Failed! %@", error);
+        DLog(@"Failed! %@, %@", error, operation);
     }];
 }
 

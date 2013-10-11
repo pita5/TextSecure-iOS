@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Server.h"
 #import "NBAsYouTypeFormatter.h"
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
