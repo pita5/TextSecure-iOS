@@ -35,10 +35,10 @@
 - (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
     
     if ([request.HTTPMethod isEqualToString:@"GET"]) {
-        NSLog(@"GET API Endpoint : %@", request.URL.absoluteString);
+        DLog(@"GET API Endpoint : %@", request.URL.absoluteString);
         [operationManager GET:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
     } else if ([request.HTTPMethod isEqualToString:@"POST"]){
-        NSLog(@"POST API Endpoint : %@ with params : %@", request.URL.absoluteString, request.parameters);
+        DLog(@"POST API Endpoint : %@ with params : %@", request.URL.absoluteString, request.parameters);
         [operationManager POST:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
     }
     
