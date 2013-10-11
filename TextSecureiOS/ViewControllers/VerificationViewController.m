@@ -96,28 +96,16 @@
 	[self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
 
--(void)finishedSendVerification:(NSNotification*)notification {
-	[self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
-}
-
 -(IBAction)sendVerification:(id)sender {
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
     NSLog(@"Phone number : %@", self.selectedPhoneNumber);
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        DLog(@"Worked!");
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"Succesfully requested verification to the server.");
+        [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        DLog(@"Failed! %@, %@", error, operation);
+        //[[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
     }];
 }
-
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if([segue.identifier isEqualToString:@"ConfirmVerificationCode"]){
-    	VerificationViewController *controller = (VerificationViewController *)segue.destinationViewController;
-    	controller.selectedPhoneNumber= self.selectedPhoneNumber;
-    }
-}
-
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     

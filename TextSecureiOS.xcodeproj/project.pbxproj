@@ -438,6 +438,7 @@
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
 		B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF1017F5AAA300B2244D /* TSRequest.m */; };
+		B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
 		B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */; };
 		B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB517F794F600200B69 /* NSString+escape.m */; };
@@ -918,6 +919,8 @@
 		B639AF0C17F5A68100B2244D /* TSNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSNetworkManager.m; path = TextSecureiOS/Networking/TSNetworkManager.m; sourceTree = "<group>"; };
 		B639AF0F17F5AAA300B2244D /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequest.h; path = TextSecureiOS/Networking/Requests/TSRequest.h; sourceTree = "<group>"; };
 		B639AF1017F5AAA300B2244D /* TSRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequest.m; path = TextSecureiOS/Networking/Requests/TSRequest.m; sourceTree = "<group>"; };
+		B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationCodeViewController.h; path = ViewControllers/VerificationCodeViewController.h; sourceTree = "<group>"; };
+		B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationCodeViewController.m; path = ViewControllers/VerificationCodeViewController.m; sourceTree = "<group>"; };
 		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequestVerificationCodeRequest.h; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.h; sourceTree = "<group>"; };
 		B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequestVerificationCodeRequest.m; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.m; sourceTree = "<group>"; };
@@ -1529,8 +1532,7 @@
 		A5F15AA217029BCF00856385 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */,
-				A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */,
+				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
 				A5169D03170FEA8D00A2CE9E /* ThreadViewController.h */,
@@ -1610,6 +1612,17 @@
 				B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */,
 			);
 			name = "Request Types";
+			sourceTree = "<group>";
+		};
+		B63A72131808B87700C353F2 /* Sign up */ = {
+			isa = PBXGroup;
+			children = (
+				A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */,
+				A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */,
+				B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */,
+				B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */,
+			);
+			name = "Sign up";
 			sourceTree = "<group>";
 		};
 		B6E2CFB717F7A89000200B69 /* Certificate */ = {
@@ -2168,6 +2181,7 @@
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
+				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
