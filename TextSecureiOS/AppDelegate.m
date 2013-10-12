@@ -8,11 +8,12 @@
 
 #import "AppDelegate.h"
 #import "Cryptography.h"
-#import <PonyDebugger/PonyDebugger.h>
+#import "UserDefaults.h"
+#import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
+#import "Message.h"
 @implementation AppDelegate
 @synthesize messageDatabase;
-@synthesize bloomFilter;
 
 #pragma mark - UIApplication delegate methods
 
@@ -42,7 +43,6 @@
 #endif
 	
 	self.messageDatabase = [[MessagesDatabase alloc] init];
-	self.bloomFilter = [[BloomFilter alloc] init];
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
@@ -53,9 +53,10 @@
 	}
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
-	
 	return YES;
 }
+
+
 
 #pragma mark - Push notifications
 
@@ -93,6 +94,7 @@
 	return nil;
 }
 #endif
+
 
 
 @end

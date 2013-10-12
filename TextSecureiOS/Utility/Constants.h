@@ -17,6 +17,7 @@ extern NSString* const appName;
 extern NSString* const authenticationTokenStorageId;
 extern NSString* const usernameTokenStorageId;
 extern NSString* const signalingTokenStorageId;
+extern NSString* const prekeyCounterStorageId;
 typedef enum {
 	CREATE_ACCOUNT=0,
 	VERIFY_ACCOUNT=1,

@@ -9,41 +9,100 @@
 #import "Cryptography.h"
 #import <Security/Security.h>
 #import <CommonCrypto/CommonHMAC.h>
+#include <openssl/ec.h>
+#include <openssl/obj_mac.h>
+#include <CommonCrypto/CommonHMAC.h>
+
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
 #import "RNEncryptor.h"
 #import "RNDecryptor.h"
-#include <openssl/ec.h>
-#include <openssl/obj_mac.h>
-#include <CommonCrypto/CommonHMAC.h>
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
+#import "CryptographyDatabase.h"
+
 @implementation Cryptography
 
+
 +(NSString*) generateNewAccountAuthenticationToken {
-  NSMutableData* authToken = [NSMutableData dataWithLength:16];
-  int err = 0;
-  err = SecRandomCopyBytes(kSecRandomDefault,16,[authToken mutableBytes]);
-  if(err != noErr) {
-    @throw [NSException exceptionWithName:@"authenicationProblem" reason:@"problem generating the random authentication token" userInfo:nil];
-  }
+  NSMutableData* authToken = [Cryptography generateRandomBytes:16];
   NSString* authTokenPrint = [[NSData dataWithData:authToken] hexadecimalString];
   return authTokenPrint;
 }
 
 +(NSString*) generateNewSignalingKeyToken {
    /*The signalingKey is 32 bytes of AES material (256bit AES) and 20 bytes of Hmac key material (HmacSHA1) concatenated into a 52 byte slug that is base64 encoded. */
-  NSMutableData* signalingKeyToken = [NSMutableData dataWithLength:52];
-  int err = 0;
-  err = SecRandomCopyBytes(kSecRandomDefault,52,[signalingKeyToken mutableBytes]);
-  if(err != noErr) {
-    @throw [NSException exceptionWithName:@"signalingKeyToken" reason:@"problem generating the random signaling key token" userInfo:nil];
-  }
+  NSMutableData* signalingKeyToken = [Cryptography generateRandomBytes:52];
   NSString* signalingKeyTokenPrint = [[NSData dataWithData:signalingKeyToken] base64EncodedString];
   return signalingKeyTokenPrint;
+
 }
+
+
++(NSMutableData*) generateRandomBytes:(int)numberBytes {
+  NSMutableData* randomBytes = [NSMutableData dataWithLength:numberBytes];
+  int err = 0;
+  err = SecRandomCopyBytes(kSecRandomDefault,numberBytes,[randomBytes mutableBytes]);
+  if(err != noErr) {
+    @throw [NSException exceptionWithName:@"random problem" reason:@"problem generating the random " userInfo:nil];
+  }
+  return randomBytes;
+}
+
++(void) generateAndStoreIdentityKey {
+  /* 
+   An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
+   
+   In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
+   */
+  ECKeyPair *identityKey = [[ECKeyPair alloc] init];
+  #ifdef DEBUG
+  NSLog(@"testing private key %@",[identityKey getSerializedPrivateKey]);
+  NSLog(@"testing public key %@",[identityKey getSerializedPublicKey]);
+  #endif
+  CryptographyDatabase *cryptoDB = [[CryptographyDatabase alloc] init];
+  [cryptoDB storeIdentityKey:identityKey];
+  [cryptoDB getIdentityKey];
+}
+
++ (NSString*) getMasterSecretyKey {
+  /*
+   this is an AES256 key , encrypted using pbkdf2 of user's password
+   user's password is given and is specific to textsecure
+   */
+  // TODO: actually implement this
+  return @"hello world";
+}
++(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
+  @throw [NSException exceptionWithName:@"not implemented" reason:@"because we need to" userInfo:nil];
+  //  // TODO: Check if there is an old counter, if so, keep up where you left off
+  //  //NSString* prekeyCounter = [Cryptography getPrekeyCounter];
+  //  NSInteger *baseInt = arc4random() % 16777216; //16777216 is 0xFFFFFF
+  //  NSString *hex = [NSString stringWithFormat:@"%06X", baseInt];
+  //
+  //  for (int i=0; i<numberOfPreKeys; i++) {
+  //    // Generate a new prekey here
+  //
+  //  }
+  //
+  //  [Cryptography storePrekeyCounter:hex];
+  
+}
+
+
+
+
++ (BOOL) storePrekeyCounter:(NSString*)token {
+  return [KeychainWrapper createKeychainValue:token forIdentifier:prekeyCounterStorageId];
+}
+
+
++ (NSString*) getPrekeyCounter {
+  return [KeychainWrapper keychainStringFromMatchingIdentifier:prekeyCounterStorageId];
+}
+
 
 #pragma mark Authentication Token
 
@@ -117,27 +176,7 @@
 
 
 
-+ (void) generateECKeyPairSecurityFramework {
-  // This native Security.framework method is unused, as it is not sufficiently documented and we are unable to use point compression. It is included here in case we wish to do comparisons later on. 
-  SInt32 iKeySize = 256; // possible key size goes up to 521.
-  CFNumberRef keySize = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &iKeySize);
-  const void* values[] = {kSecAttrKeyTypeEC, keySize};
-  const void* keys[] = {kSecAttrKeyType, kSecAttrKeySizeInBits};
-  CFDictionaryRef parameters = CFDictionaryCreate(kCFAllocatorDefault, keys, values, 2, NULL, NULL);
-  
-  SecKeyRef publicKey, privateKey;
-  OSStatus ret = SecKeyGeneratePair(parameters, &publicKey, &privateKey);
-  if(ret != errSecSuccess ){
-    @throw [NSException exceptionWithName:@"ECGenerationProblem" reason:@"problem generating the EC key" userInfo:nil];
-  }
-}
-+ (ECKeyPair*) generateNISTp256ECCKeyPair {
-  EC_KEY *ecKey = EC_KEY_new();
-  EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-  EC_KEY_set_group(ecKey, group);
-  EC_GROUP_set_point_conversion_form(group, POINT_CONVERSION_COMPRESSED);
-  EC_KEY_generate_key(ecKey);
-  return [[ECKeyPair alloc] initWithKey:ecKey];
-}
+
+
 
 @end

@@ -12,5 +12,7 @@
 @interface ECKeyPair : NSObject
 @property (nonatomic) EC_KEY* key;
 -(id) initWithKey:(EC_KEY*) ecKey;
-
+-(NSString*) getSerializedPrivateKey;
+-(NSString*)getSerializedPublicKey;
+- (EC_KEY*) generateNISTp256ECCKeyPair;
 @end

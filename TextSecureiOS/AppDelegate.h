@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MessagesDatabase.h"
-#import "BloomFilter.h"
 
 #ifdef DEBUG
 @interface AppDelegate : UIResponder <BITHockeyManagerDelegate, BITUpdateManagerDelegate, BITCrashManagerDelegate, UIApplicationDelegate>
@@ -19,6 +18,5 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) MessagesDatabase *messageDatabase;
-@property (strong,nonatomic) BloomFilter *bloomFilter;
 -(void) handlePush:(NSDictionary *)pushInfo;
 @end

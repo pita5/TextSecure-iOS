@@ -11,7 +11,6 @@
 #import "Message.h"
 #import "Cryptography.h"
 #import <AddressBookUI/AddressBookUI.h>
-#import "BloomFilter.h"
 #import "NSString+Conversion.h"
 #import "TSSettingsViewController.h"
 
@@ -71,57 +70,7 @@
 }
 
 - (IBAction)composeSMS:(id)sender {
-    BloomFilter *sharedBloomFilter = [[[UIApplication sharedApplication] delegate] performSelector:@selector(bloomFilter)];
-    ABAddressBookRef addressBook = ABAddressBookCreate();
-    __block BOOL accessGranted = NO;
-    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-        
-        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-            accessGranted = granted;
-            dispatch_semaphore_signal(sema);
-        });
-        
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    }
-    else { // we're on iOS 5 or older
-        accessGranted = YES;
-    }
-    
-    
-    if (accessGranted) {
-        ABAddressBookRef addressBook = ABAddressBookCreate();
-        // Get all contacts from the address book
-        NSArray *allPeople = (__bridge NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
-        int personId=0;
-        for (id person in allPeople) {
-            // Get all phone numbers of a contact
-            ABMultiValueRef phoneNumbers = ABRecordCopyValue((__bridge ABRecordRef)(person), kABPersonPhoneProperty);
-            
-            // If the contact has multiple phone numbers, iterate on each of them
-            NSInteger phoneNumberCount = ABMultiValueGetCount(phoneNumbers);
-            BOOL isContact=NO;
-            for (int i = 0; i < phoneNumberCount; i++) {
-                NSString *phoneNumberFromAB = [(__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(phoneNumbers, i) unformattedPhoneNumber];
-                isContact =  isContact || [sharedBloomFilter containsUser:phoneNumberFromAB];
-            }
-            if(!isContact) {
-                CFErrorRef err;
-                // todo: causing memory corruption
-                ABAddressBookRemoveRecord(addressBook,(__bridge ABRecordRef)(person), &err);
-            }
-            personId ++;
-        }
-        if(ABAddressBookGetPersonCount(addressBook)> 0) {
-            ABPeoplePickerNavigationController *peoplePicker = [[ABPeoplePickerNavigationController alloc] init];
-            NSNumber* emailProp = [NSNumber numberWithInt:kABPersonEmailProperty];
-            [peoplePicker setAddressBook:addressBook];
-            peoplePicker.displayedProperties = [NSArray arrayWithObject:emailProp];
-            [peoplePicker setPeoplePickerDelegate:self];
-            [peoplePicker.navigationBar setBackgroundImage:[UIImage imageNamed: @"TextSecure-Global-menubar.png"] forBarMetrics:UIBarMetricsDefault];
-            [self presentViewController:peoplePicker animated:YES completion:NULL];
-        }
-    }
+
 }
 
 
