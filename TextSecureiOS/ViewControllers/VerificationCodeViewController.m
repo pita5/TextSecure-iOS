@@ -68,7 +68,7 @@
     NSString *authToken = [Cryptography generateAndStoreNewAccountAuthenticationToken];
     NSString *signalingKey = [Cryptography generateAndStoreNewSignalingKeyToken];
     
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSServerCodeVerificationRequest alloc] initWithVerificationCode:verificationCode] success:^(AFHTTPRequestOperation *operation, id responseObject){
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSServerCodeVerificationRequest alloc] initWithVerificationCode:verificationCode signalingKey:signalingKey authToken:authToken] success:^(AFHTTPRequestOperation *operation, id responseObject){
         // We are all set
         [Cryptography storeSignalingKeyToken:signalingKey];
         [Cryptography storeAuthenticationToken:authToken];

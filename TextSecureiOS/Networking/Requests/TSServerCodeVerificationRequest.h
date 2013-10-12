@@ -10,7 +10,6 @@
 
 @interface TSServerCodeVerificationRequest : TSRequest
 
-- (TSRequest*) initWithVerificationCode:(NSString*)verificationCode;
-
+- (TSRequest*) initWithVerificationCode:(NSString*)verificationCode signalingKey:(NSString*)signalingKey authToken:(NSString*)authToken;
 @end
 
