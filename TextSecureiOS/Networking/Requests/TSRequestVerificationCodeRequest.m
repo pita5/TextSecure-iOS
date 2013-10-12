@@ -12,9 +12,9 @@
 
 - (TSRequest*) initRequestForPhoneNumber:(NSString*)phoneNumber transport:(VerificationTransportType)transport{
     
-    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", textSecureAccountsAPI, (transport == kSMSVerification)? @"sms" : @"voice", [phoneNumber escape]]]];
+    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/code/%@", textSecureAccountsAPI, (transport == kSMSVerification)? @"sms" : @"voice", [phoneNumber escape]]]];
     
-    [self setHTTPMethod:@"POST"];
+    [self setHTTPMethod:@"GET"];
     
     return self;
 }
