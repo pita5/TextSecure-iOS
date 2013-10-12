@@ -438,6 +438,7 @@
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
 		B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF1017F5AAA300B2244D /* TSRequest.m */; };
+		B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B639F69E180955E100B7DF00 /* TSServerCodeVerificationRequest.m */; };
 		B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */; };
 		B63A72181808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
@@ -920,6 +921,8 @@
 		B639AF0C17F5A68100B2244D /* TSNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSNetworkManager.m; path = TextSecureiOS/Networking/TSNetworkManager.m; sourceTree = "<group>"; };
 		B639AF0F17F5AAA300B2244D /* TSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequest.h; path = TextSecureiOS/Networking/Requests/TSRequest.h; sourceTree = "<group>"; };
 		B639AF1017F5AAA300B2244D /* TSRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequest.m; path = TextSecureiOS/Networking/Requests/TSRequest.m; sourceTree = "<group>"; };
+		B639F69D180955E100B7DF00 /* TSServerCodeVerificationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSServerCodeVerificationRequest.h; path = TextSecureiOS/Networking/Requests/TSServerCodeVerificationRequest.h; sourceTree = "<group>"; };
+		B639F69E180955E100B7DF00 /* TSServerCodeVerificationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSServerCodeVerificationRequest.m; path = TextSecureiOS/Networking/Requests/TSServerCodeVerificationRequest.m; sourceTree = "<group>"; };
 		B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationCodeViewController.h; path = ViewControllers/VerificationCodeViewController.h; sourceTree = "<group>"; };
 		B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationCodeViewController.m; path = ViewControllers/VerificationCodeViewController.m; sourceTree = "<group>"; };
 		B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = gcm.textsecure.whispersystems.org.cer; path = TextSecureiOS/gcm.textsecure.whispersystems.org.cer; sourceTree = "<group>"; };
@@ -1612,6 +1615,8 @@
 				B639AF1017F5AAA300B2244D /* TSRequest.m */,
 				B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */,
 				B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */,
+				B639F69D180955E100B7DF00 /* TSServerCodeVerificationRequest.h */,
+				B639F69E180955E100B7DF00 /* TSServerCodeVerificationRequest.m */,
 			);
 			name = "Request Types";
 			sourceTree = "<group>";
@@ -2179,6 +2184,7 @@
 				B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				A5169CF7170FEA3700A2CE9E /* MessagesDatabase.m in Sources */,
+				B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */,
 				A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,

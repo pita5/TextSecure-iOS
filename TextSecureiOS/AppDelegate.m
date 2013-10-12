@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "Cryptography.h"
-#import "UserDefaults.h"
 #import <PonyDebugger/PonyDebugger.h>
 #import "NSObject+SBJson.h"
 @implementation AppDelegate
@@ -36,7 +35,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([UserDefaults hasVerifiedPhone]) {
+	if([UserDefaults hasVerifiedPhoneNumber]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
@@ -70,16 +69,6 @@
 	NSLog(@"full message json %@",fullMessageJson);
 	Message *message = [[Message alloc] initWithText:[fullMessageJson objectForKey:@"messageText"] messageSource:[fullMessageJson objectForKey:@"source"] messageDestinations:[fullMessageJson objectForKey:@"destinations"] messageAttachments:[fullMessageJson objectForKey:@"attachments"] messageTimestamp:[NSDate date]];
 	[self.messageDatabase addMessage:message];
-}
-
-#pragma mark - Phone verification
-
--(void) markVerifiedPhone:(NSNotification*)notification {
-	[UserDefaults markVerifiedPhone];
-}
-
--(void) markSentVerification:(NSNotification*)notification {
-	[UserDefaults markSentVerification];
 }
 
 #pragma mark - HockeyApp Delegate Methods

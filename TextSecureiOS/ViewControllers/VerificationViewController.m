@@ -20,20 +20,15 @@
 @synthesize phoneNumber;
 
 @synthesize countryName;
-@synthesize verificationCodePart1;
-@synthesize verificationCodePart2;
 @synthesize countryCodeInput;
 @synthesize explanationText;
-@synthesize verificationTextExplanation;
-@synthesize verificationCompletionExplanation;
 
+#pragma mark View Controller Methods
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do any additional setup after loading the views
-    
-	self.verificationCodePart2.delegate = self;
-	self.verificationCodePart1.delegate = self;
+    [UserDefaults resetAllUserDefaults];
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
@@ -54,7 +49,19 @@
     
 }
 
+
+#pragma mark Phone number formatting
 // Based on the user's locale we are guessing what his country code would be.
+
+-(void) initNumberFormatter{
+    self.numberFormatter = [[NBAsYouTypeFormatter alloc]initWithRegionCode:[NSLocale localizedCodeNameForPhonePrefix:[self.countryCodeInput.text removeAllFormattingButNumbers]]];
+    
+    NSString *charString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
+    
+    for (int i = 0; i < charString.length; i++) {
+        [self.numberFormatter inputDigit:[charString substringWithRange:NSMakeRange(i, 1)]];
+    }
+}
 
 -(void)setLocaleCountry{
     DLog(@"Setting Locale to : %@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]);
@@ -79,33 +86,27 @@
 	[self updateCountry:[notification userInfo]];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#pragma mark - Verification Action
 
--(IBAction)doVerifyPhone:(id)sender {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedVerifiedPhone:) name:@"VerifiedPhone" object:nil];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"VerifyAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@%@",verificationCodePart1.text,verificationCodePart2.text], @"verification_code", nil]];
-}
-
--(void)finishedVerifiedPhone:(NSNotification*)notification {
-	// register for push notifications
-	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-	 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-	[self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
-}
-
--(IBAction)sendVerification:(id)sender {
+-(void)sendVerification:(id)sender {
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
     NSLog(@"Phone number : %@", self.selectedPhoneNumber);
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
+        
         NSLog(@"Succesfully requested verification to the server.");
+        
+        // Now we store the phone number to which the notification has been sent.
+        
+        [UserDefaults setPhoneNumber:self.selectedPhoneNumber];
+        
         [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        //[[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+        [[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
     }];
 }
+
+#pragma mark Formatted Number String processing
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     
@@ -119,25 +120,14 @@
     return YES;
 }
 
--(void) initNumberFormatter{
-    self.numberFormatter = [[NBAsYouTypeFormatter alloc]initWithRegionCode:[NSLocale localizedCodeNameForPhonePrefix:[self.countryCodeInput.text removeAllFormattingButNumbers]]];
-    
-    NSString *charString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
-    
-    for (int i = 0; i < charString.length; i++) {
-        [self.numberFormatter inputDigit:[charString substringWithRange:NSMakeRange(i, 1)]];
-    }
-}
-
-#define MAX_LENGTH 4 // Whatever your limit is
 - (BOOL)textField:(UITextView *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
 	
     if ([textField isEqual:self.countryCodeInput]) {
         NSUInteger newLength = (textField.text.length - range.length) + string.length;
-        if(newLength < MAX_LENGTH) {
+        if(newLength < 4) {
             return YES;
         } else {
-            NSUInteger emptySpace = MAX_LENGTH - (textField.text.length - range.length);
+            NSUInteger emptySpace = 4 - (textField.text.length - range.length);
             textField.text = [[[textField.text substringToIndex:range.location]
                                stringByAppendingString:[string substringToIndex:emptySpace]]
                               stringByAppendingString:[textField.text substringFromIndex:(range.location + range.length)]];
@@ -200,7 +190,6 @@
     }
 }
 
-
 // The parsing library needs to see the phone number with the prefix, we do show it without it.
 // This ugly method clean the prefix so that phone number fields is parsed but without prefix.
 
@@ -250,8 +239,14 @@
             cleanedStringIndex++;
         }
     }
-    
     return cleanedStringIndex;
+}
+
+#pragma mark Memory allocations
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

@@ -69,7 +69,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
   self.navigationController.navigationBarHidden = NO;
-  if(![UserDefaults hasVerifiedPhone]){
+  if(![UserDefaults hasVerifiedPhoneNumber]){
     [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
   }
   
