@@ -11,16 +11,28 @@ Currently in early development stage.
 ```
 pod install
 ```
+If you are having build issues, first make sure your pods are up to date
+```
+pod update
+pod install
+```
+occasionally, CocoaPods itself will need to be updated. Do this with
+```
+sudo gem update
+```
 
 3) **Temporary** - Building OpenSSL manually. This step should be removed soon. The goal is to make a pod specification that builds OpenSSL during the `pod install` phase.
 
-- Download the [latest sources](www.openssl.org/source/)
+- Download the [latest sources](http://www.openssl.org/source/)
 - Decompress and copy them in the `Libraries/src/` folder. 
 - Run the bash script called `build-libssl.sh` from within `Libraries/`. It will build the necessary dependencies (may take a bit but go get a cup of coffee) and you should be ready to go.
 
-4) Open the `TextSecureiOS.xcworkspace` in Xcode. Note that for CocoaPods to work properly it is very important to always open the workspace and not the `.xcodeproj` file.  Build and Run and you are ready to go!
+4) Open the `TextSecureiOS.xcworkspace` in Xcode. **Note that for CocoaPods to work properly it is very important to always open the workspace and not the `.xcodeproj` file.** Build and Run and you are ready to go!
+
+5) Debugging network calls. If you are contributing networked code, PonyDebugger is integrated in Debug mode of the application. Check out https://github.com/square/PonyDebugger#quick-start and easily debug network code from the iOS simulator
 
 ## Documentation
+
 
 Looking for documentation? Check out the wiki!
 
