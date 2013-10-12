@@ -13,6 +13,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "NSString+Conversion.h"
 #import "TSSettingsViewController.h"
+#import "TSContactManager.h"
 
 @implementation TextSecureViewController
 @synthesize composingMessageText;
@@ -31,6 +32,13 @@
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
     
     self.navigationItem.leftBarButtonItem = settingsButton;
+    
+    UIBarButtonItem *create = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(composeMessage)];
+    self.navigationItem.rightBarButtonItem = create;
+}
+
+- (void) composeMessage{
+    [TSContactManager getAllContacts];
 }
 
 - (void) openSettings{
@@ -68,11 +76,6 @@
     self.messages=[self.messagesDB getMessages];
     [self.tableView reloadData];
 }
-
-- (IBAction)composeSMS:(id)sender {
-
-}
-
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(alertView.tag == 0) {

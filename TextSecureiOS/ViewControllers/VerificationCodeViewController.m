@@ -83,8 +83,13 @@
                 
             case 200:
                 
+                NSLog(@"Saving storageKey: %@", authToken);
+            
                 [Cryptography storeSignalingKeyToken:signalingKey];
                 [Cryptography storeAuthenticationToken:authToken];
+                
+                NSLog(@"Recovering key: %@", [Cryptography getAuthenticationToken]);
+                
                 [self performSegueWithIdentifier:@"setMasterPassword" sender:self];
                 
                 break;

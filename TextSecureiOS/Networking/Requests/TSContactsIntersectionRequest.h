@@ -1,5 +1,5 @@
 //
-//  TSAuthenticatedRequest.h
+//  TSContactsIntersection.h
 //  TextSecureiOS
 //
 //  Created by Frederic Jacobs on 10/12/13.
@@ -8,6 +8,8 @@
 
 #import "TSRequest.h"
 
-@interface TSAuthenticatedRequest : TSRequest
+@interface TSContactsIntersectionRequest : TSRequest
+
+- (id)initWithHashesArray:(NSArray*)hashes;
 
 @end

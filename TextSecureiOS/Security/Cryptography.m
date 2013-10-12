@@ -132,7 +132,8 @@
 }
 
 + (NSString*) getAuthorizationTokenFromAuthToken:(NSString*)authToken{
-    return [[NSString stringWithFormat:@"%@:%@",[Cryptography getUsernameToken],[Cryptography getAuthenticationToken]] base64Encoded];
+    NSLog(@"Username : %@ and AuthToken: %@", [Cryptography getUsernameToken], [Cryptography getAuthenticationToken] );
+    return [NSString stringWithFormat:@"%@:%@",[Cryptography getUsernameToken],[Cryptography getAuthenticationToken]];
 }
 
 #pragma mark SignalingKey
