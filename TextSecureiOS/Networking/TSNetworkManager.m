@@ -40,8 +40,16 @@
     // The only unauthenticated request is the initial request for a verification code
     
     if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
-        [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        [operationManager POST:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
     } else{
+        
+        // For all other equests, we do add an authorization header
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:request.parameters];
+        
+        [params setObject:[Cryptography getAuthorizationToken] forKey:@"Authorization"];
+        
+        request.parameters = params;
         
         if ([request.HTTPMethod isEqualToString:@"GET"]) {
             [operationManager GET:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];

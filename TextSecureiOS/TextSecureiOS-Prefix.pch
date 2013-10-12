@@ -21,6 +21,8 @@
 
 #endif
 
+#define defaultNetworkErrorMessage [[[UIAlertView alloc] initWithTitle:@"Connection issue." message:@"We couldn't reach the TextSecure server." delegate:self cancelButtonTitle:@"Ok." otherButtonTitles:nil, nil]show];
+
 #ifdef DEBUG
 	#import <HockeySDK/HockeySDK.h>
 	#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);

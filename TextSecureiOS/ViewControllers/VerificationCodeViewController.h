@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface VerificationCodeViewController : UIViewController
+@interface VerificationCodeViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic,strong) IBOutlet UITextField *verificationCode_part1;
 @property (nonatomic,strong) IBOutlet UITextField *verificationCode_part2;

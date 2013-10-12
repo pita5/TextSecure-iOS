@@ -30,7 +30,6 @@
     @throw [NSException exceptionWithName:@"authenicationProblem" reason:@"problem generating the random authentication token" userInfo:nil];
   }
   NSString* authTokenPrint = [[NSData dataWithData:authToken] hexadecimalString];
-  [Cryptography storeAuthenticationToken:authTokenPrint];
   return authTokenPrint;
 }
 
@@ -43,11 +42,10 @@
     @throw [NSException exceptionWithName:@"signalingKeyToken" reason:@"problem generating the random signaling key token" userInfo:nil];
   }
   NSString* signalingKeyTokenPrint = [[NSData dataWithData:signalingKeyToken] base64EncodedString];
-  [Cryptography storeSignalingKeyToken:signalingKeyTokenPrint];
   return signalingKeyTokenPrint;
-
-  
 }
+
+#pragma mark Authentication Token
 
 + (BOOL) storeAuthenticationToken:(NSString*)token {
   return [KeychainWrapper createKeychainValue:token forIdentifier:authenticationTokenStorageId];
@@ -58,25 +56,28 @@
   return [KeychainWrapper keychainStringFromMatchingIdentifier:authenticationTokenStorageId];
 }
 
+#pragma mark Username (Phone number)
 
 + (BOOL) storeUsernameToken:(NSString*)token {
   return [KeychainWrapper createKeychainValue:token forIdentifier:usernameTokenStorageId];
 }
 
-+ (BOOL) storeSignalingKeyToken:(NSString*)token {
-  return [KeychainWrapper createKeychainValue:token forIdentifier:signalingTokenStorageId];
-}
-
-
 + (NSString*) getUsernameToken {
   return [KeychainWrapper keychainStringFromMatchingIdentifier:usernameTokenStorageId];
 }
+
+#pragma mark Authorization Token
 
 + (NSString*) getAuthorizationToken {
   
   return [[NSString stringWithFormat:@"%@:%@",[Cryptography getUsernameToken],[Cryptography getAuthenticationToken]] base64Encoded];
 }
 
+#pragma mark SignalingKey
+
++ (BOOL) storeSignalingKeyToken:(NSString*)token {
+    return [KeychainWrapper createKeychainValue:token forIdentifier:signalingTokenStorageId];
+}
 
 + (NSString*) getSignalingKeyToken {
   return [KeychainWrapper keychainStringFromMatchingIdentifier:signalingTokenStorageId];

@@ -7,6 +7,7 @@
 //
 
 #import "VerificationViewController.h"
+#import "Cryptography.h"
 
 @interface VerificationViewController ()
 
@@ -28,7 +29,6 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	// Do any additional setup after loading the views
-    [UserDefaults resetAllUserDefaults];
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
@@ -49,6 +49,10 @@
     
 }
 
+- (void) viewDidAppear:(BOOL)animated{
+    // If user comes back to this page, make him re-enter all data.
+    [UserDefaults resetAllUserDefaults];
+}
 
 #pragma mark Phone number formatting
 // Based on the user's locale we are guessing what his country code would be.
@@ -95,9 +99,12 @@
         
         NSLog(@"Succesfully requested verification to the server.");
         
-        // Now we store the phone number to which the notification has been sent.
+        // Now we store the phone number to which the notification has been sent and generate the appropriate keys
         
-        [UserDefaults setPhoneNumber:self.selectedPhoneNumber];
+        [Cryptography storeUsernameToken:self.selectedPhoneNumber];
+        
+        [Cryptography generateAndStoreNewAccountAuthenticationToken];
+        [Cryptography generateAndStoreNewSignalingKeyToken];
         
         [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
         

@@ -63,8 +63,6 @@
   
   self.tableView.backgroundColor = [UIColor clearColor];
   self.tableView.opaque = NO;
-  
-  
 }
 
 -(void)viewDidAppear:(BOOL)animated {

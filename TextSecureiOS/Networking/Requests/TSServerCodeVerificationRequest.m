@@ -12,11 +12,11 @@
 @implementation TSServerCodeVerificationRequest
 
 - (TSRequest*) initWithVerificationCode:(NSString*)verificationCode{
-    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", textSecureAccountsAPI, @"code", [UserDefaults phoneNumber]]]];
+    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", textSecureAccountsAPI, @"code", [Cryptography getUsernameToken]]]];
     
     self.parameters = [[NSDictionary alloc] initWithObjects:
                        [[NSArray alloc] initWithObjects:[Cryptography getSignalingKeyToken], nil]
-                                                    forKeys:[[NSArray alloc] initWithObjects:@"signalingKey",nil]];
+                            forKeys:[[NSArray alloc] initWithObjects:@"signalingKey",nil]];
     
     [self setHTTPMethod:@"PUT"];
     
