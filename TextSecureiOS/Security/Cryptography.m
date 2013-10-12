@@ -23,12 +23,7 @@
 @implementation Cryptography
 
 +(NSString*) generateAndStoreNewAccountAuthenticationToken {
-  NSMutableData* authToken = [NSMutableData dataWithLength:16];
-  int err = 0;
-  err = SecRandomCopyBytes(kSecRandomDefault,16,[authToken mutableBytes]);
-  if(err != noErr) {
-    @throw [NSException exceptionWithName:@"authenicationProblem" reason:@"problem generating the random authentication token" userInfo:nil];
-  }
+  NSMutableData* authToken = [Cryptography generateRandomBytes:16];
   NSString* authTokenPrint = [[NSData dataWithData:authToken] hexadecimalString];
   [Cryptography storeAuthenticationToken:authTokenPrint];
   return authTokenPrint;
@@ -36,18 +31,53 @@
 
 +(NSString*) generateAndStoreNewSignalingKeyToken {
    /*The signalingKey is 32 bytes of AES material (256bit AES) and 20 bytes of Hmac key material (HmacSHA1) concatenated into a 52 byte slug that is base64 encoded. */
-  NSMutableData* signalingKeyToken = [NSMutableData dataWithLength:52];
-  int err = 0;
-  err = SecRandomCopyBytes(kSecRandomDefault,52,[signalingKeyToken mutableBytes]);
-  if(err != noErr) {
-    @throw [NSException exceptionWithName:@"signalingKeyToken" reason:@"problem generating the random signaling key token" userInfo:nil];
-  }
+  NSMutableData* signalingKeyToken = [Cryptography generateRandomBytes:52];
   NSString* signalingKeyTokenPrint = [[NSData dataWithData:signalingKeyToken] base64EncodedString];
   [Cryptography storeSignalingKeyToken:signalingKeyTokenPrint];
   return signalingKeyTokenPrint;
 
+}
+
+
++(NSMutableData*) generateRandomBytes:(int)numberBytes {
+  NSMutableData* randomBytes = [NSMutableData dataWithLength:numberBytes];
+  int err = 0;
+  err = SecRandomCopyBytes(kSecRandomDefault,numberBytes,[randomBytes mutableBytes]);
+  if(err != noErr) {
+    @throw [NSException exceptionWithName:@"random problem" reason:@"problem generating the random " userInfo:nil];
+  }
+  return randomBytes;
+}
+
++(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
+  
+  
+//  // TODO: Check if there is an old counter, if so, keep up where you left off
+//  //NSString* prekeyCounter = [Cryptography getPrekeyCounter];
+//  NSInteger *baseInt = arc4random() % 16777216; //16777216 is 0xFFFFFF
+//  NSString *hex = [NSString stringWithFormat:@"%06X", baseInt];
+//
+//  for (int i=0; i<numberOfPreKeys; i++) {
+//    // Generate a new prekey here
+//    
+//  }
+//  
+//  [Cryptography storePrekeyCounter:hex];
   
 }
+
+
+
+
++ (BOOL) storePrekeyCounter:(NSString*)token {
+  return [KeychainWrapper createKeychainValue:token forIdentifier:prekeyCounterStorageId];
+}
+
+
++ (NSString*) getPrekeyCounter {
+  return [KeychainWrapper keychainStringFromMatchingIdentifier:prekeyCounterStorageId];
+}
+
 
 + (BOOL) storeAuthenticationToken:(NSString*)token {
   return [KeychainWrapper createKeychainValue:token forIdentifier:authenticationTokenStorageId];

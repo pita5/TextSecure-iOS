@@ -146,6 +146,10 @@
 	[self pushSecureRequest:request];
 }
 
+-(void) doRegisterPrekeys:(NSNotification*) notification {
+  
+}
+
 -(void) doSendMessage:(NSNotification*)notification {
 	Message* message = [[notification userInfo] objectForKey:@"message"];
 	NSDictionary *parameters = [[NSDictionary alloc]
