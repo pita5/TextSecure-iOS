@@ -16,8 +16,17 @@
 
 #pragma mark - UIApplication delegate methods
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+#define firstLaunchKey @"FirstLaunch"
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // If this is the first launch, we want to remove stuff from the Keychain that might be there from a previous install
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:firstLaunchKey]) {
+        [UserDefaults resetAllUserDefaults];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:firstLaunchKey];
+    }
+    
 #ifdef DEBUG
 	[[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
 														 liveIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"

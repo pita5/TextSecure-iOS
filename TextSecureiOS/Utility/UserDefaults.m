@@ -24,7 +24,6 @@
 }
 
 +(BOOL) hasVerifiedPhoneNumber{
-    NSLog(@"Username : %@ and AuthCode %@", [Cryptography getUsernameToken], [Cryptography getAuthenticationToken]);
     return ([Cryptography getUsernameToken] && [Cryptography getAuthenticationToken]);
 }
 
