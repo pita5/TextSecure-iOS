@@ -1088,14 +1088,15 @@
 			children = (
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
+				A53718FC16FFB6E600C6FCCF /* Assets */,
 				B6F10B1417EF49D700723719 /* Categories */,
+				B6B478E01809B9B3005DDE12 /* Contacts */,
+				A5F15AA117029BB400856385 /* Security */,
 				A51B779B17050EDB002B8E53 /* Model */,
 				B639AF0A17F5A53700B2244D /* Networking */,
 				A5F15B1D1703740D00856385 /* View */,
 				A5F15AA217029BCF00856385 /* ViewControllers */,
-				A5F15AA117029BB400856385 /* Security */,
 				A5F15AA317029C5300856385 /* Utility */,
-				A53718FC16FFB6E600C6FCCF /* Assets */,
 				A53718BC16FF95DF00C6FCCF /* Supporting Files */,
 			);
 			path = TextSecureiOS;
@@ -1647,6 +1648,13 @@
 				B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		B6B478E01809B9B3005DDE12 /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Contacts;
 			sourceTree = "<group>";
 		};
 		B6E2CFB717F7A89000200B69 /* Certificate */ = {

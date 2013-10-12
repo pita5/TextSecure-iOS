@@ -42,7 +42,6 @@
     [debugger forwardAllNetworkTraffic];
 #endif
 	
-	self.messageDatabase = [[MessagesDatabase alloc] init];
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}

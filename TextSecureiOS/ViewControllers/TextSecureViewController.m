@@ -21,8 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = NO;
-    self.messagesDB = [[MessagesDatabase alloc] init];
-    self.messages = [self.messagesDB getMessages];
+    //self.messagesDB = [[MessagesDatabase alloc] init];
+    //self.messages = [self.messagesDB getMessages];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
     self.title = @"Messages";
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
