@@ -13,7 +13,6 @@
 #import "NSObject+SBJson.h"
 @implementation AppDelegate
 @synthesize messageDatabase;
-@synthesize bloomFilter;
 
 #pragma mark - UIApplication delegate methods
 
@@ -32,7 +31,6 @@
 #endif
 	
 	self.messageDatabase = [[MessagesDatabase alloc] init];
-	self.bloomFilter = [[BloomFilter alloc] init];
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
@@ -44,8 +42,13 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
 	
+  #ifdef DEBUG
+  [self testCryptography];
+  #endif
 	return YES;
 }
+
+
 
 #pragma mark - Push notifications
 
@@ -93,6 +96,12 @@
 	return nil;
 }
 #endif
+
+#pragma mark - Some Cryptography debugging methods. Should be removed
+-(void) testCryptography {
+  [Cryptography generateAndStoreIdentityKey];
+  [Cryptography generateAndStoreIdentityKey];// called twice to verify different
+}
 
 
 @end

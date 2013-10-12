@@ -12,12 +12,8 @@ NSString* const appName = @"TextSecure";
 NSString* const authenticationTokenStorageId = @"TextSecureAuthenticationToken";
 NSString* const usernameTokenStorageId = @"UsernameAuthenticationToken";
 NSString* const signalingTokenStorageId = @"SignalingTokenStorageId";
-<<<<<<< HEAD
 NSString* const prekeyCounterStorageId = @"PrekeyCounterStorageId";
-NSString* const textSecureServer = @"https://gcm.textsecure.whispersystems.org";
-=======
 NSString* const textSecureServer = @"https://gcm.textsecure.whispersystems.org/";
->>>>>>> 223addd911b7d6a13c35b2e5272068e3b2bfa415
 
 
 // timeout in seconds

@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-@class ECKeyPair;
+
 @interface Cryptography : NSObject
++(BOOL) configureCryptographyDB;
 +(NSString*) generateAndStoreNewAccountAuthenticationToken;
 +(NSString*) generateAndStoreNewSignalingKeyToken;
 
@@ -17,8 +18,7 @@
 + (BOOL) storeUsernameToken:(NSString*)token;
 + (NSString*) getUsernameToken;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
-+ (void) generateECKeyPairSecurityFramework; // not used
-+ (ECKeyPair*) generateNISTp256ECCKeyPair;
++(void) generateAndStoreIdentityKey;
 
 + (BOOL) storePrekeyCounter:(NSString*)token;
 + (NSString*) getPrekeyCounter;

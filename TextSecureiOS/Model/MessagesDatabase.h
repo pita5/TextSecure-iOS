@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FMDatabaseQueue.h"
 #import "FMDatabase.h"
 #import "Message.h"
 
 @interface MessagesDatabase : NSObject
-@property (nonatomic,strong) FMDatabase *database;
--(BOOL) addMessage:(Message*)message;
+@property (nonatomic,strong) FMDatabaseQueue *dbQueue;
+-(void) addMessage:(Message*)message;
 -(NSArray*) getMessages;
 @end

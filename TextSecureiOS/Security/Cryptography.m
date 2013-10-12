@@ -9,18 +9,20 @@
 #import "Cryptography.h"
 #import <Security/Security.h>
 #import <CommonCrypto/CommonHMAC.h>
+#include <openssl/ec.h>
+#include <openssl/obj_mac.h>
+#include <CommonCrypto/CommonHMAC.h>
+
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
 #import "RNEncryptor.h"
 #import "RNDecryptor.h"
-#include <openssl/ec.h>
-#include <openssl/obj_mac.h>
-#include <CommonCrypto/CommonHMAC.h>
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
 @implementation Cryptography
+
 
 +(NSString*) generateAndStoreNewAccountAuthenticationToken {
   NSMutableData* authToken = [Cryptography generateRandomBytes:16];
@@ -49,7 +51,25 @@
   return randomBytes;
 }
 
++(void) generateAndStoreIdentityKey {
+  /* 
+   An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
+   
+   In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
+   */
+  ECKeyPair *identityKey = [[ECKeyPair alloc] init];
+#ifdef DEBUG
+  NSLog(@"testing private key %@",[identityKey getSerializedPrivateKey]);
+  NSLog(@"testing public key %@",[identityKey getSerializedPublicKey]);
+#endif
+  // TODO: store this
+  // TRYING OUT SOME FMDB STUFF
+   @throw [NSException exceptionWithName:@"not stored" reason:@"store this" userInfo:nil];
+  
+}
+
 +(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
+  @throw [NSException exceptionWithName:@"not implemented" reason:@"because we need to" userInfo:nil];
   
   
 //  // TODO: Check if there is an old counter, if so, keep up where you left off
@@ -143,27 +163,7 @@
 
 
 
-+ (void) generateECKeyPairSecurityFramework {
-  // This native Security.framework method is unused, as it is not sufficiently documented and we are unable to use point compression. It is included here in case we wish to do comparisons later on. 
-  SInt32 iKeySize = 256; // possible key size goes up to 521.
-  CFNumberRef keySize = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &iKeySize);
-  const void* values[] = {kSecAttrKeyTypeEC, keySize};
-  const void* keys[] = {kSecAttrKeyType, kSecAttrKeySizeInBits};
-  CFDictionaryRef parameters = CFDictionaryCreate(kCFAllocatorDefault, keys, values, 2, NULL, NULL);
-  
-  SecKeyRef publicKey, privateKey;
-  OSStatus ret = SecKeyGeneratePair(parameters, &publicKey, &privateKey);
-  if(ret != errSecSuccess ){
-    @throw [NSException exceptionWithName:@"ECGenerationProblem" reason:@"problem generating the EC key" userInfo:nil];
-  }
-}
-+ (ECKeyPair*) generateNISTp256ECCKeyPair {
-  EC_KEY *ecKey = EC_KEY_new();
-  EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-  EC_KEY_set_group(ecKey, group);
-  EC_GROUP_set_point_conversion_form(group, POINT_CONVERSION_COMPRESSED);
-  EC_KEY_generate_key(ecKey);
-  return [[ECKeyPair alloc] initWithKey:ecKey];
-}
+
+
 
 @end

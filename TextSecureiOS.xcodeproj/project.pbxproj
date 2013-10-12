@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A515AFDB180966E30084ABA5 /* CryptographyDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A515AFDA180966E30084ABA5 /* CryptographyDatabase.m */; };
 		A5169CF7170FEA3700A2CE9E /* MessagesDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CF6170FEA3700A2CE9E /* MessagesDatabase.m */; };
 		A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFA170FEA3E00A2CE9E /* Message.m */; };
 		A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */; };
@@ -22,7 +23,6 @@
 		A5169D22170FEB1900A2CE9E /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D1D170FEB1900A2CE9E /* UserDefaults.m */; };
 		A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */; };
 		A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */; };
-		A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D25170FEB8E00A2CE9E /* BloomFilter.m */; };
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D31170FEC6600A2CE9E /* DefaultBloomfilter.bin in Resources */ = {isa = PBXBuildFile; fileRef = A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
@@ -460,6 +460,8 @@
 
 /* Begin PBXFileReference section */
 		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		A515AFD9180966E30084ABA5 /* CryptographyDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CryptographyDatabase.h; path = Model/CryptographyDatabase.h; sourceTree = "<group>"; };
+		A515AFDA180966E30084ABA5 /* CryptographyDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CryptographyDatabase.m; path = Model/CryptographyDatabase.m; sourceTree = "<group>"; };
 		A5169CF6170FEA3700A2CE9E /* MessagesDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessagesDatabase.m; path = Model/MessagesDatabase.m; sourceTree = "<group>"; };
 		A5169CF8170FEA3E00A2CE9E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = Model/Message.h; sourceTree = "<group>"; };
 		A5169CF9170FEA3E00A2CE9E /* MessagesDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessagesDatabase.h; path = Model/MessagesDatabase.h; sourceTree = "<group>"; };
@@ -478,21 +480,19 @@
 		A5169D07170FEA8D00A2CE9E /* CountrySegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountrySegue.h; path = ViewControllers/CountrySegue.h; sourceTree = "<group>"; };
 		A5169D14170FEB1900A2CE9E /* FilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilePath.h; path = Utility/FilePath.h; sourceTree = "<group>"; };
 		A5169D15170FEB1900A2CE9E /* FilePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FilePath.m; path = Utility/FilePath.m; sourceTree = "<group>"; };
-		A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Conversion.h"; path = "Utility/NSString+Conversion.h"; sourceTree = "<group>"; };
-		A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Conversion.m"; path = "Utility/NSString+Conversion.m"; sourceTree = "<group>"; };
+		A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Conversion.h"; path = "TextSecureiOS/Utility/NSString+Conversion.h"; sourceTree = "<group>"; };
+		A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Conversion.m"; path = "TextSecureiOS/Utility/NSString+Conversion.m"; sourceTree = "<group>"; };
 		A5169D18170FEB1900A2CE9E /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Utility/Constants.h; sourceTree = "<group>"; };
 		A5169D19170FEB1900A2CE9E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Utility/Constants.m; sourceTree = "<group>"; };
-		A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Conversion.h"; path = "Utility/NSData+Conversion.h"; sourceTree = "<group>"; };
-		A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Conversion.m"; path = "Utility/NSData+Conversion.m"; sourceTree = "<group>"; };
+		A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Conversion.h"; path = "TextSecureiOS/Utility/NSData+Conversion.h"; sourceTree = "<group>"; };
+		A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Conversion.m"; path = "TextSecureiOS/Utility/NSData+Conversion.m"; sourceTree = "<group>"; };
 		A5169D1C170FEB1900A2CE9E /* UserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserDefaults.h; path = Utility/UserDefaults.h; sourceTree = "<group>"; };
 		A5169D1D170FEB1900A2CE9E /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserDefaults.m; path = Utility/UserDefaults.m; sourceTree = "<group>"; };
 		A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainWrapper.m; path = Security/KeychainWrapper.m; sourceTree = "<group>"; };
 		A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ECKeyPair.m; path = Security/ECKeyPair.m; sourceTree = "<group>"; };
-		A5169D25170FEB8E00A2CE9E /* BloomFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BloomFilter.m; path = Security/BloomFilter.m; sourceTree = "<group>"; };
 		A5169D26170FEB8F00A2CE9E /* Cryptography.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Cryptography.m; path = Security/Cryptography.m; sourceTree = "<group>"; };
 		A5169D27170FEB8F00A2CE9E /* Cryptography.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cryptography.h; path = Security/Cryptography.h; sourceTree = "<group>"; };
 		A5169D28170FEB8F00A2CE9E /* ECKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ECKeyPair.h; path = Security/ECKeyPair.h; sourceTree = "<group>"; };
-		A5169D29170FEB8F00A2CE9E /* BloomFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BloomFilter.h; path = Security/BloomFilter.h; sourceTree = "<group>"; };
 		A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeychainWrapper.h; path = Security/KeychainWrapper.h; sourceTree = "<group>"; };
 		A5169D30170FEC6600A2CE9E /* DefaultBloomfilter.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = DefaultBloomfilter.bin; sourceTree = "<group>"; };
 		A5169D39170FEDC600A2CE9E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -521,8 +521,8 @@
 		A51B77E21706CA62002B8E53 /* textsecure-phonenumber-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-phonenumber-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-phonenumber-field@2x.png"; sourceTree = "<group>"; };
 		A51B77E31706CA62002B8E53 /* textsecure-gettingstarted-menubar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-gettingstarted-menubar@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-gettingstarted-menubar@2x.png"; sourceTree = "<group>"; };
 		A51B77E41706CA63002B8E53 /* textsecure-countrycode-field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure-countrycode-field@2x.png"; path = "TextSecureiOSAssets/vc-verification/textsecure-countrycode-field@2x.png"; sourceTree = "<group>"; };
-		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "Utility/NSData+Base64.h"; sourceTree = "<group>"; };
-		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "Utility/NSData+Base64.m"; sourceTree = "<group>"; };
+		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
+		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "TextSecureiOS/Utility/NSData+Base64.m"; sourceTree = "<group>"; };
 		A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextSecureiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718B516FF95DF00C6FCCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A53718B716FF95DF00C6FCCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -985,6 +985,8 @@
 				A5169CFA170FEA3E00A2CE9E /* Message.m */,
 				A5169CF9170FEA3E00A2CE9E /* MessagesDatabase.h */,
 				A5169CF6170FEA3700A2CE9E /* MessagesDatabase.m */,
+				A515AFD9180966E30084ABA5 /* CryptographyDatabase.h */,
+				A515AFDA180966E30084ABA5 /* CryptographyDatabase.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1523,8 +1525,6 @@
 				A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */,
 				A5169D28170FEB8F00A2CE9E /* ECKeyPair.h */,
 				A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */,
-				A5169D29170FEB8F00A2CE9E /* BloomFilter.h */,
-				A5169D25170FEB8E00A2CE9E /* BloomFilter.m */,
 				A5169D27170FEB8F00A2CE9E /* Cryptography.h */,
 				A5169D26170FEB8F00A2CE9E /* Cryptography.m */,
 			);
@@ -1552,16 +1552,10 @@
 		A5F15AA317029C5300856385 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */,
-				A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */,
 				A5169D14170FEB1900A2CE9E /* FilePath.h */,
 				A5169D15170FEB1900A2CE9E /* FilePath.m */,
-				A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */,
-				A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */,
 				A5169D18170FEB1900A2CE9E /* Constants.h */,
 				A5169D19170FEB1900A2CE9E /* Constants.m */,
-				A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */,
-				A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */,
 				A5169D1C170FEB1900A2CE9E /* UserDefaults.h */,
 				A5169D1D170FEB1900A2CE9E /* UserDefaults.m */,
 			);
@@ -1638,12 +1632,18 @@
 		B6F10B1417EF49D700723719 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */,
+				A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */,
+				A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */,
+				A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */,
 				B6F10B1517EF4A3A00723719 /* NSLocale+phonePrefixes.h */,
 				B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */,
 				B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */,
 				B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */,
 				B6E2CFB417F794F600200B69 /* NSString+escape.h */,
 				B6E2CFB517F794F600200B69 /* NSString+escape.m */,
+				A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */,
+				A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -2190,6 +2190,7 @@
 				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
+				A515AFDB180966E30084ABA5 /* CryptographyDatabase.m in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
 				A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */,
@@ -2200,7 +2201,6 @@
 				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
 				A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */,
-				A5169D2D170FEB8F00A2CE9E /* BloomFilter.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
 				A5169D3D170FEDC600A2CE9E /* main.m in Sources */,
 			);

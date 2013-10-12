@@ -11,7 +11,6 @@
 #import "Message.h"
 #import "Cryptography.h"
 #import <AddressBookUI/AddressBookUI.h>
-#import "BloomFilter.h"
 #import "NSString+Conversion.h"
 @implementation TextSecureViewController
 @synthesize composingMessageText;
@@ -81,7 +80,6 @@
 }
 
 - (IBAction)composeSMS:(id)sender {
-  BloomFilter *sharedBloomFilter = [[[UIApplication sharedApplication] delegate] performSelector:@selector(bloomFilter)];
   ABAddressBookRef addressBook = ABAddressBookCreate();
   __block BOOL accessGranted = NO;
   if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
@@ -113,7 +111,9 @@
       BOOL isContact=NO;
       for (int i = 0; i < phoneNumberCount; i++) {
         NSString *phoneNumberFromAB = [(__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(phoneNumbers, i) unformattedPhoneNumber];
-        isContact =  isContact || [sharedBloomFilter containsUser:phoneNumberFromAB];
+        // TODO: check if contact here!
+        
+//        isContact =  isContact || [sharedBloomFilter containsUser:phoneNumberFromAB];
       }
       if(!isContact) {
         CFErrorRef err;
