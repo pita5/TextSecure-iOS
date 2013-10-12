@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 @class ECKeyPair;
 @interface Cryptography : NSObject
-+(NSString*) generateAndStoreNewAccountAuthenticationToken;
-+(NSString*) generateAndStoreNewSignalingKeyToken;
++(NSString*) generateNewAccountAuthenticationToken;
++(NSString*) generateNewSignalingKeyToken;
 
 + (BOOL) storeAuthenticationToken:(NSString*)token;
 + (NSString*) getAuthenticationToken;

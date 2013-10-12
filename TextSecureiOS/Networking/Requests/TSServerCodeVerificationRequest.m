@@ -8,19 +8,18 @@
 
 #import "TSServerCodeVerificationRequest.h"
 #import "Cryptography.h"
+#import "NSString+Conversion.h"
 
 @implementation TSServerCodeVerificationRequest
 
 - (TSRequest*) initWithVerificationCode:(NSString*)verificationCode signalingKey:(NSString*)signalingKey authToken:(NSString*)authToken{
-    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", textSecureAccountsAPI, @"code", [Cryptography getUsernameToken]]]];
+    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", textSecureAccountsAPI, @"code", verificationCode]]];
     
-    self.parameters = [[NSDictionary alloc] initWithObjects:
-                       [[NSArray alloc] initWithObjects:signalingKey, [Cryptography getAuthorizationTokenFromAuthToken:authToken], nil]
-                            forKeys:[[NSArray alloc] initWithObjects:@"signalingKey", @"Authorization", nil]];
+    [self.parameters addEntriesFromDictionary:[[NSDictionary alloc] initWithObjects:
+                       [[NSArray alloc] initWithObjects:signalingKey, [authToken base64Encoded], nil]
+                            forKeys:[[NSArray alloc] initWithObjects:@"signalingKey", @"AuthKey", nil]]];
     
     [self setHTTPMethod:@"PUT"];
-    
-    [self setHTTPBody:[NSData dataWithData:nil]];
     
     return self;
 }

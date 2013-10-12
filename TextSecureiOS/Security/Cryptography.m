@@ -22,7 +22,7 @@
 #include "ECKeyPair.h"
 @implementation Cryptography
 
-+(NSString*) generateAndStoreNewAccountAuthenticationToken {
++(NSString*) generateNewAccountAuthenticationToken {
   NSMutableData* authToken = [NSMutableData dataWithLength:16];
   int err = 0;
   err = SecRandomCopyBytes(kSecRandomDefault,16,[authToken mutableBytes]);
@@ -33,7 +33,7 @@
   return authTokenPrint;
 }
 
-+(NSString*) generateAndStoreNewSignalingKeyToken {
++(NSString*) generateNewSignalingKeyToken {
    /*The signalingKey is 32 bytes of AES material (256bit AES) and 20 bytes of Hmac key material (HmacSHA1) concatenated into a 52 byte slug that is base64 encoded. */
   NSMutableData* signalingKeyToken = [NSMutableData dataWithLength:52];
   int err = 0;

@@ -13,7 +13,7 @@
 
 - (id)initWithURL:(NSURL *)URL{
     self = [super initWithURL:URL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:timeOutForRequests];
-
+    self.parameters = [NSMutableDictionary dictionary];
     return self;
 }
 
@@ -29,11 +29,8 @@
     return nil;
 }
 
-- (void) addHTTPHeaders {
-    self.parameters = @{@"Content-Type": @"application/json",
-             @"Authorization": [NSString stringWithFormat:@"Basic %@",[Cryptography getAuthorizationToken]],
-             @"Content-Length":[NSString stringWithFormat:@"%d", [self.HTTPBody length]]};
+- (void) makeAuthenticatedRequest{
+    [self.parameters addEntriesFromDictionary:@{@"Authorization":[Cryptography getAuthorizationToken]}];
 }
-
 
 @end

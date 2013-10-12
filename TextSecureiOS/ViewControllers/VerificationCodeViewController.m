@@ -47,7 +47,7 @@
 #pragma mark UITextFieldDelegateMethod
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-
+    
     if (textField == self.verificationCode_part1 && ![string isEqualToString:@""] && range.location == 2 && string.length == 1) {
         [self.verificationCode_part2 becomeFirstResponder];
         self.verificationCode_part1.text = [self.verificationCode_part1.text stringByAppendingString:string];
@@ -67,37 +67,36 @@
     
     NSString* verificationCode = [_verificationCode_part1.text stringByAppendingString:_verificationCode_part2.text];
     
-    NSString *authToken = [Cryptography generateAndStoreNewAccountAuthenticationToken];
-    NSString *signalingKey = [Cryptography generateAndStoreNewSignalingKeyToken];
+    NSString *authToken = [Cryptography generateNewAccountAuthenticationToken];
+    NSString *signalingKey = [Cryptography generateNewSignalingKeyToken];
     
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSServerCodeVerificationRequest alloc] initWithVerificationCode:verificationCode signalingKey:signalingKey authToken:authToken] success:^(AFHTTPRequestOperation *operation, id responseObject){
-        // We are all set
-        [Cryptography storeSignalingKeyToken:signalingKey];
-        [Cryptography storeAuthenticationToken:authToken];
-        [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        // Let's see what went wrong
         
         switch (operation.response.statusCode) {
             case 403:
                 
                 //403 is the code that's being sent back by the PendingAccountVerificationFailedException if the verification code is wrong
                 
-                [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"The entered code doesn't appear to match the one on our servers. Try entering it again." delegate:self cancelButtonTitle:@"Try " otherButtonTitles:nil, nil] show];
+                [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"The entered code doesn't appear to match the one on our servers. Try entering it again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+                
+                break;
+                
+            case 200:
+                
+                [Cryptography storeSignalingKeyToken:signalingKey];
+                [Cryptography storeAuthenticationToken:authToken];
+                [self performSegueWithIdentifier:@"setMasterPassword" sender:self];
                 
                 break;
                 
             default:
-                
-                defaultNetworkErrorMessage
-                
+                [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"An unknown error occured. Pleasy try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
                 break;
         }
         
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        defaultNetworkErrorMessage
     }];
-    
 }
 
 -(void)finishedVerifiedPhone:(NSNotification*)notification {

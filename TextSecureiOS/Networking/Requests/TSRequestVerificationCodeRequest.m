@@ -15,17 +15,8 @@
     self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", textSecureAccountsAPI, (transport == kSMSVerification)? @"sms" : @"voice", [phoneNumber escape]]]];
     
     [self setHTTPMethod:@"POST"];
-    [self setHTTPBody:[NSData dataWithData:nil]];
-    
-    [self addHTTPHeaders];
     
     return self;
-    
 }
-
-- (void) addHTTPHeaders{
-    self.parameters = @{@"Content-Length": @0};
-}
-
 
 @end

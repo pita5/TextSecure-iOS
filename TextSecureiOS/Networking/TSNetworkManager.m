@@ -28,6 +28,8 @@
     if (self = [super init]) {
         operationManager = [[AFHTTPRequestOperationManager manager] initWithBaseURL:[[NSURL alloc] initWithString:textSecureServer]];
         operationManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
+        operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
+        
     }
     return self;
 }
@@ -36,25 +38,27 @@
 
 - (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
     
-    DLog(@"%@", [textSecureServer stringByAppendingString:request.URL.absoluteString]);
-    
     // The only unauthenticated request is the initial request for a verification code
     
     if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
+        operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
         [operationManager POST:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
     } else if ([request isKindOfClass:[TSServerCodeVerificationRequest class]]){
         // We plant the Authorization parameter ourselves, no need to double add.
-         [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
+        
+        // Take out the Basic Auth Params
+        
+        [operationManager.requestSerializer setAuthorizationHeaderFieldWithUsername:[Cryptography getUsernameToken] password:[request.parameters objectForKey:@"AuthKey"]];
+        
+        [request.parameters removeObjectForKey:@"AuthKey"];
+        
+        [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
     } else{
-        
         // For all other equests, we do add an authorization header
-        
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:request.parameters];
-        
-        [params setObject:[Cryptography getAuthorizationToken] forKey:@"Authorization"];
-        
-        request.parameters = params;
-        
+        operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
+        [operationManager.requestSerializer setAuthorizationHeaderFieldWithUsername:[Cryptography getUsernameToken] password:[Cryptography getAuthenticationToken]];
+                
         if ([request.HTTPMethod isEqualToString:@"GET"]) {
             [operationManager GET:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
         } else if ([request.HTTPMethod isEqualToString:@"POST"]){
