@@ -10,8 +10,7 @@
 
 @interface UserDefaults : NSObject
 
-+(BOOL) hasVerifiedPhone;
-+(void) markVerifiedPhone;
-+(BOOL) hasSentVerification;
-+(void) markSentVerification;
++(void) resetAllUserDefaults;
++(BOOL) hasVerifiedPhoneNumber;
+
 @end

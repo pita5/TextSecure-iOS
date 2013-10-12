@@ -16,9 +16,12 @@
     #import "Constants.h"
     #import "NSString+escape.h"
     #import "TSNetworkManager.h"
+    #import "UserDefaults.h"
     #define _AFNETWORKING_PIN_SSL_CERTIFICATES_
 
 #endif
+
+#define defaultNetworkErrorMessage [[[UIAlertView alloc] initWithTitle:@"Connection issue." message:@"We couldn't reach the TextSecure server." delegate:self cancelButtonTitle:@"Ok." otherButtonTitles:nil, nil]show];
 
 #ifdef DEBUG
 	#import <HockeySDK/HockeySDK.h>

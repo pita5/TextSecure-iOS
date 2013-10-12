@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface VerificationCodeViewController : UIViewController
+@interface VerificationCodeViewController : UIViewController <UITextFieldDelegate>
+
+@property (nonatomic,strong) IBOutlet UITextField *verificationCode_part1;
+@property (nonatomic,strong) IBOutlet UITextField *verificationCode_part2;
+
+@property (nonatomic, strong) IBOutlet UIButton *sendAuthenticatedRequest;
+
+@property (nonatomic, copy) NSString *phoneNumber;
+@property (nonatomic, copy) NSString *basicAuthCode;
 
 @end
