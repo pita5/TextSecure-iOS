@@ -35,8 +35,14 @@
     self.navigationItem.rightBarButtonItem = nextButton;
 }
 
+- (void) viewDidAppear:(BOOL)animated{
+    [self.pass becomeFirstResponder];
+}
+
 - (void) setupDatabase{
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
+    
+    #warning implement database setup
 }
 
 - (void)didReceiveMemoryWarning
