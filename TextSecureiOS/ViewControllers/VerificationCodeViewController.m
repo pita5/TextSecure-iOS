@@ -34,6 +34,10 @@
     self.verificationCode_part2.delegate = self;
 }
 
+- (void) viewDidAppear:(BOOL)animated{
+    [self.verificationCode_part1 becomeFirstResponder];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -60,8 +64,6 @@
 #pragma mark Code verification
 
 -(IBAction)doVerifyPhone:(id)sender {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishedVerifiedPhone:) name:@"VerifiedPhone" object:nil];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"VerifyAccount" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@%@",_verificationCode_part1.text,_verificationCode_part2.text], @"verification_code", nil]];
     
     NSString* verificationCode = [_verificationCode_part1.text stringByAppendingString:_verificationCode_part2.text];
     

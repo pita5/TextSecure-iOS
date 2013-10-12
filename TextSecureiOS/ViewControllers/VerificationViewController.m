@@ -51,7 +51,7 @@
 
 - (void) viewDidAppear:(BOOL)animated{
     // If user comes back to this page, make him re-enter all data.
-    [UserDefaults resetAllUserDefaults];
+    [UserDefaults removeAllKeychainItems];
 }
 
 #pragma mark Phone number formatting
@@ -94,7 +94,6 @@
 
 -(void)sendVerification:(id)sender {
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
-    NSLog(@"Phone number : %@", self.selectedPhoneNumber);
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
         NSLog(@"Succesfully requested verification to the server.");

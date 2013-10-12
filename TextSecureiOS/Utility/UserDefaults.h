@@ -10,7 +10,7 @@
 
 @interface UserDefaults : NSObject
 
-+(void) resetAllUserDefaults;
++(void) removeAllKeychainItems;
 +(BOOL) hasVerifiedPhoneNumber;
 
 @end

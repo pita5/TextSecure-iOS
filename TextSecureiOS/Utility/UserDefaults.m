@@ -16,14 +16,14 @@
 // If a phone number is present and no basic auth key, this means that a text message with a verification code has been sent but that the user never entered it.
 // If both numbers are present, we are ready to use the app.
 
-+(void) resetAllUserDefaults{
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
++(void) removeAllKeychainItems{
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:signalingTokenStorageId];
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:usernameTokenStorageId];
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:authenticationTokenStorageId];
 }
 
 +(BOOL) hasVerifiedPhoneNumber{
+    NSLog(@"Phone number: %@ and AuthKey: %@", [Cryptography getUsernameToken], [Cryptography getAuthenticationToken]);
     return ([Cryptography getUsernameToken] && [Cryptography getAuthenticationToken]);
 }
 
