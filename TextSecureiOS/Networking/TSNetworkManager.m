@@ -10,13 +10,13 @@
 #import "TSNetworkManager.h"
 #import "TSRequest.h"
 #import "Cryptography.h"
+#import "TSServerCodeVerificationRequest.h"
 
 @implementation TSNetworkManager
 
 #pragma mark Singleton implementation
 
 + (id)sharedManager {
-
     static TSNetworkManager *sharedMyManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -39,12 +39,31 @@
     
     DLog(@"%@", [textSecureServer stringByAppendingString:request.URL.absoluteString]);
     
-    if ([request.HTTPMethod isEqualToString:@"GET"]) {
-        [operationManager GET:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-    } else if ([request.HTTPMethod isEqualToString:@"POST"]){
-        [operationManager POST:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-    }
+    // The only unauthenticated request is the initial request for a verification code
     
+    if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
+        [operationManager POST:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+    } else if ([request isKindOfClass:[TSServerCodeVerificationRequest class]]){
+        // We plant the Authorization parameter ourselves, no need to double add.
+         [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+    } else{
+        
+        // For all other equests, we do add an authorization header
+        
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:request.parameters];
+        
+        [params setObject:[Cryptography getAuthorizationToken] forKey:@"Authorization"];
+        
+        request.parameters = params;
+        
+        if ([request.HTTPMethod isEqualToString:@"GET"]) {
+            [operationManager GET:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        } else if ([request.HTTPMethod isEqualToString:@"POST"]){
+            [operationManager POST:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        } else if ([request.HTTPMethod isEqualToString:@"PUT"]){
+            [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        }
+    }
 }
 
 

@@ -21,12 +21,9 @@
   self.navigationController.navigationBarHidden = NO;
   self.messagesDB = [[MessagesDatabase alloc] init];
   self.messages = [self.messagesDB getMessages];
-  [self customizeUI];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
   self.title = @"Messages";
 }
-
-
 
 // for custom designed cells
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -47,28 +44,9 @@
   return cell;
 }
 
--(void) customizeUI {
-  [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed: @"TextSecure-Global-menubar.png"] forBarMetrics:UIBarMetricsDefault];
-  [[UIBarButtonItem appearance] setTintColor:[UIColor colorWithRed:61.0/255.0 green:232.0/255.0 blue:56.0/255.0 alpha:0.0]];
-  UIImage *composeImage = [UIImage imageNamed:@"TextSecure-Message-composebutton.png"];
-  UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-  [composeButton setImage:composeImage forState:UIControlStateNormal];
-  composeButton.showsTouchWhenHighlighted = YES;
-  composeButton.frame = CGRectMake(0.0,0.0, 50.0, 50.0);
-  [composeButton addTarget:self action:@selector(composeSMS:) forControlEvents:UIControlEventTouchUpInside];
-  
-  UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
-  self.navigationItem.rightBarButtonItem = rightButton;
-  
-  self.tableView.backgroundColor = [UIColor clearColor];
-  self.tableView.opaque = NO;
-  
-  
-}
-
 -(void)viewDidAppear:(BOOL)animated {
   self.navigationController.navigationBarHidden = NO;
-  if(![UserDefaults hasVerifiedPhone]){
+  if(![UserDefaults hasVerifiedPhoneNumber]){
     [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
   }
   

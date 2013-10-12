@@ -29,7 +29,6 @@
 +(NSString*) generateAndStoreNewAccountAuthenticationToken {
   NSMutableData* authToken = [Cryptography generateRandomBytes:16];
   NSString* authTokenPrint = [[NSData dataWithData:authToken] hexadecimalString];
-  [Cryptography storeAuthenticationToken:authTokenPrint];
   return authTokenPrint;
 }
 
@@ -37,7 +36,6 @@
    /*The signalingKey is 32 bytes of AES material (256bit AES) and 20 bytes of Hmac key material (HmacSHA1) concatenated into a 52 byte slug that is base64 encoded. */
   NSMutableData* signalingKeyToken = [Cryptography generateRandomBytes:52];
   NSString* signalingKeyTokenPrint = [[NSData dataWithData:signalingKeyToken] base64EncodedString];
-  [Cryptography storeSignalingKeyToken:signalingKeyTokenPrint];
   return signalingKeyTokenPrint;
 
 }
@@ -106,6 +104,8 @@
 }
 
 
+#pragma mark Authentication Token
+
 + (BOOL) storeAuthenticationToken:(NSString*)token {
   return [KeychainWrapper createKeychainValue:token forIdentifier:authenticationTokenStorageId];
 }
@@ -115,25 +115,31 @@
   return [KeychainWrapper keychainStringFromMatchingIdentifier:authenticationTokenStorageId];
 }
 
+#pragma mark Username (Phone number)
 
 + (BOOL) storeUsernameToken:(NSString*)token {
   return [KeychainWrapper createKeychainValue:token forIdentifier:usernameTokenStorageId];
 }
 
-+ (BOOL) storeSignalingKeyToken:(NSString*)token {
-  return [KeychainWrapper createKeychainValue:token forIdentifier:signalingTokenStorageId];
-}
-
-
 + (NSString*) getUsernameToken {
   return [KeychainWrapper keychainStringFromMatchingIdentifier:usernameTokenStorageId];
 }
 
+#pragma mark Authorization Token
+
 + (NSString*) getAuthorizationToken {
-  
-  return [[NSString stringWithFormat:@"%@:%@",[Cryptography getUsernameToken],[Cryptography getAuthenticationToken]] base64Encoded];
+    return [self getAuthorizationTokenFromAuthToken:[Cryptography getAuthenticationToken]];
 }
 
++ (NSString*) getAuthorizationTokenFromAuthToken:(NSString*)authToken{
+    return [[NSString stringWithFormat:@"%@:%@",[Cryptography getUsernameToken],[Cryptography getAuthenticationToken]] base64Encoded];
+}
+
+#pragma mark SignalingKey
+
++ (BOOL) storeSignalingKeyToken:(NSString*)token {
+    return [KeychainWrapper createKeychainValue:token forIdentifier:signalingTokenStorageId];
+}
 
 + (NSString*) getSignalingKeyToken {
   return [KeychainWrapper keychainStringFromMatchingIdentifier:signalingTokenStorageId];

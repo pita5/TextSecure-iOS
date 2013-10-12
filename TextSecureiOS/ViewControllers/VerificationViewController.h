@@ -16,21 +16,13 @@
 @property (nonatomic,strong) IBOutlet UITextField *countryCodeInput;
 @property (nonatomic,strong) IBOutlet UILabel *countryName;
 @property (nonatomic,strong) IBOutlet UITextField *phoneNumber;
-@property (nonatomic,strong) IBOutlet UITextField *verificationCodePart1;
-@property (nonatomic,strong) IBOutlet UITextField *verificationCodePart2;
 
 @property (nonatomic, strong) IBOutlet UILabel *explanationText;
 @property (nonatomic, retain) NBAsYouTypeFormatter *numberFormatter;
 
-@property (nonatomic,strong) IBOutlet UILabel *verificationTextExplanation;
-@property (nonatomic,strong) IBOutlet UILabel *verificationCompletionExplanation;
-
 @property (nonatomic, copy) NSString *selectedPhoneNumber;
 
--(IBAction)doVerifyPhone:(id)sender;
 -(void) countryChosen:(NSNotification*)notification;
 - (void)didReceiveMemoryWarning;
 -(void)updateCountry:(NSDictionary*)countryInfo;
 @end
-
-

@@ -7,26 +7,25 @@
 //
 
 #import "UserDefaults.h"
+#import "KeychainWrapper.h"
+#import "Cryptography.h"
 
 @implementation UserDefaults
 
-+(BOOL) hasVerifiedPhone {
-  return [[NSUserDefaults standardUserDefaults] boolForKey:@"hasVerifiedPhone"];
+// Detecting if a user has a verified phone number or not can be done by looking if a phone number is stored or not.
+// If a phone number is present and no basic auth key, this means that a text message with a verification code has been sent but that the user never entered it.
+// If both numbers are present, we are ready to use the app.
+
++(void) removeAllKeychainItems{
+    [KeychainWrapper deleteItemFromKeychainWithIdentifier:signalingTokenStorageId];
+    [KeychainWrapper deleteItemFromKeychainWithIdentifier:usernameTokenStorageId];
+    [KeychainWrapper deleteItemFromKeychainWithIdentifier:authenticationTokenStorageId];
 }
 
-+(void) markVerifiedPhone {
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasVerifiedPhone"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
++(BOOL) hasVerifiedPhoneNumber{
+    NSLog(@"Phone number: %@ and AuthKey: %@", [Cryptography getUsernameToken], [Cryptography getAuthenticationToken]);
+    return ([Cryptography getUsernameToken] && [Cryptography getAuthenticationToken]);
 }
 
-
-+(BOOL) hasSentVerification {
-  return [[NSUserDefaults standardUserDefaults] boolForKey:@"hasSentVerification"];
-}
-
-+(void) markSentVerification{
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSentVerification"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
-}
 
 @end

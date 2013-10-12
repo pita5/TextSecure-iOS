@@ -17,30 +17,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="TextSecure-Global-canvas.png" translatesAutoresizingMaskIntoConstraints="NO" id="7Gg-CY-8mK">
-                                <rect key="frame" x="0.0" y="5" width="320" height="499"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="73" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="J2e-4a-z97">
-                                <rect key="frame" x="0.0" y="32" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" id="UIm-1x-b3n">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <color key="tintColor" red="0.23921568627450979" green="0.90980392156862744" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </searchBar>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextSecureSMS" rowHeight="73" id="DYg-hR-gvn">
-                                        <rect key="frame" x="0.0" y="66" width="320" height="73"/>
+                                        <rect key="frame" x="0.0" y="130" width="320" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DYg-hR-gvn" id="G6s-eH-9E8">
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="TextSecure-Messages-cellbg.png" translatesAutoresizingMaskIntoConstraints="NO" id="tGm-Rd-1Wi">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="81"/>
-                                                </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" fixedFrame="YES" text="+41 79 962 44 99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ksp-6S-5wC">
                                                     <rect key="frame" x="80" y="11" width="169" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -61,9 +54,6 @@
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" image="TextSecure-Messages-avatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="NhD-Px-KES">
                                                     <rect key="frame" x="15" y="11" width="44" height="41"/>
-                                                </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="TextSecure-Message-avatarmask.png" translatesAutoresizingMaskIntoConstraints="NO" id="xs7-xu-lkG">
-                                                    <rect key="frame" x="15" y="10" width="44" height="42"/>
                                                 </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -274,33 +264,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="We have sent you an SMS with a code to the following number:" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="210" translatesAutoresizingMaskIntoConstraints="NO" id="3fX-eR-Dco">
-                                <rect key="frame" x="77" y="76" width="210" height="115"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="We have sent you an SMS with a code to the following number:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="272" translatesAutoresizingMaskIntoConstraints="NO" id="3fX-eR-Dco">
+                                <rect key="frame" x="24" y="69" width="272" height="115"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDr-K5-eV8">
-                                <rect key="frame" x="28" y="308" width="280" height="44"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" image="textsecure-verifybutton.png">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" background="textsecure-countrycode-field.png" translatesAutoresizingMaskIntoConstraints="NO" id="qjI-2r-1bD">
-                                <rect key="frame" x="208" y="199" width="67" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="textsecure-countrycode-field.png" translatesAutoresizingMaskIntoConstraints="NO" id="qjI-2r-1bD">
+                                <rect key="frame" x="200" y="199" width="96" height="51"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="phonePad"/>
                                 <connections>
                                     <outlet property="delegate" destination="G9I-Gu-J6D" id="I7b-tr-cZj"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" background="textsecure-countrycode-field.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ju7-xX-Jcu">
-                                <rect key="frame" x="77" y="199" width="66" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="textsecure-countrycode-field.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ju7-xX-Jcu">
+                                <rect key="frame" x="45" y="199" width="93" height="51"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="phonePad"/>
                                 <connections>
@@ -308,15 +287,29 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="–" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Avk-Ij-af6">
-                                <rect key="frame" x="163" y="199" width="21" height="21"/>
+                                <rect key="frame" x="159" y="214" width="21" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UBV-kA-kky">
+                                <rect key="frame" x="83" y="287" width="154" height="71"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                <state key="normal" title="Verify">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="doVerifyPhone:" destination="G9I-Gu-J6D" eventType="touchUpInside" id="BLj-1Q-BjP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="1jZ-8Q-Tnl"/>
                     <connections>
+                        <outlet property="verificationCode_part1" destination="Ju7-xX-Jcu" id="jI2-KS-tfs"/>
+                        <outlet property="verificationCode_part2" destination="qjI-2r-1bD" id="wpx-16-hXh"/>
+                        <outlet property="view" destination="1V4-l6-q0I" id="Wh2-gi-mqL"/>
                         <segue destination="CYX-aS-3RN" kind="modal" identifier="BeginUsingApp" modalTransitionStyle="flipHorizontal" id="MsG-aC-NU2"/>
                     </connections>
                 </viewController>
@@ -461,9 +454,7 @@
         <image name="TextSecure-Message-avatarmask.png" width="50" height="50"/>
         <image name="TextSecure-Messages-avatar.png" width="50" height="50"/>
         <image name="TextSecure-Messages-avatar2.png" width="73" height="73"/>
-        <image name="TextSecure-Messages-cellbg.png" width="320" height="80"/>
         <image name="textsecure-countrycode-field.png" width="62" height="32"/>
-        <image name="textsecure-verifybutton.png" width="280" height="45"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

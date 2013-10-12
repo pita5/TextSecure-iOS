@@ -17,8 +17,19 @@
 
 #pragma mark - UIApplication delegate methods
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+#define firstLaunchKey @"FirstLaunch"
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // If this is the first launch, we want to remove stuff from the Keychain that might be there from a previous install
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:firstLaunchKey]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:firstLaunchKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [UserDefaults removeAllKeychainItems];
+        DLog(@"First Launch");
+    }
+    
 #ifdef DEBUG
 	[[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
 														 liveIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
@@ -35,7 +46,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([UserDefaults hasVerifiedPhone]) {
+	if([UserDefaults hasVerifiedPhoneNumber]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
@@ -70,16 +81,6 @@
 	NSLog(@"full message json %@",fullMessageJson);
 	Message *message = [[Message alloc] initWithText:[fullMessageJson objectForKey:@"messageText"] messageSource:[fullMessageJson objectForKey:@"source"] messageDestinations:[fullMessageJson objectForKey:@"destinations"] messageAttachments:[fullMessageJson objectForKey:@"attachments"] messageTimestamp:[NSDate date]];
 	[self.messageDatabase addMessage:message];
-}
-
-#pragma mark - Phone verification
-
--(void) markVerifiedPhone:(NSNotification*)notification {
-	[UserDefaults markVerifiedPhone];
-}
-
--(void) markSentVerification:(NSNotification*)notification {
-	[UserDefaults markSentVerification];
 }
 
 #pragma mark - HockeyApp Delegate Methods
