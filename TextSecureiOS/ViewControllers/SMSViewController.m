@@ -7,6 +7,7 @@
 //
 
 #import "SMSViewController.h"
+#import "Message.h"
 @implementation SMSViewController
 - (void)viewDidLoad {
   [super viewDidLoad];

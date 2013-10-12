@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface Cryptography : NSObject
-+(BOOL) configureCryptographyDB;
 +(NSString*) generateAndStoreNewAccountAuthenticationToken;
 +(NSString*) generateAndStoreNewSignalingKeyToken;
 
@@ -19,6 +18,7 @@
 + (NSString*) getUsernameToken;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
 +(void) generateAndStoreIdentityKey;
++ (NSString*) getMasterSecretyKey;
 
 + (BOOL) storePrekeyCounter:(NSString*)token;
 + (NSString*) getPrekeyCounter;

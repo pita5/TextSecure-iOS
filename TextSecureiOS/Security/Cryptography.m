@@ -21,6 +21,8 @@
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
+#import "CryptographyDatabase.h"
+
 @implementation Cryptography
 
 
@@ -58,31 +60,36 @@
    In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
    */
   ECKeyPair *identityKey = [[ECKeyPair alloc] init];
-#ifdef DEBUG
+  #ifdef DEBUG
   NSLog(@"testing private key %@",[identityKey getSerializedPrivateKey]);
   NSLog(@"testing public key %@",[identityKey getSerializedPublicKey]);
-#endif
-  // TODO: store this
-  // TRYING OUT SOME FMDB STUFF
-   @throw [NSException exceptionWithName:@"not stored" reason:@"store this" userInfo:nil];
-  
+  #endif
+  CryptographyDatabase *cryptoDB = [[CryptographyDatabase alloc] init];
+  [cryptoDB storeIdentityKey:identityKey];
+  [cryptoDB getIdentityKey];
 }
 
++ (NSString*) getMasterSecretyKey {
+  /*
+   this is an AES256 key , encrypted using pbkdf2 of user's password
+   user's password is given and is specific to textsecure
+   */
+  // TODO: actually implement this
+  return @"hello world";
+}
 +(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
   @throw [NSException exceptionWithName:@"not implemented" reason:@"because we need to" userInfo:nil];
-  
-  
-//  // TODO: Check if there is an old counter, if so, keep up where you left off
-//  //NSString* prekeyCounter = [Cryptography getPrekeyCounter];
-//  NSInteger *baseInt = arc4random() % 16777216; //16777216 is 0xFFFFFF
-//  NSString *hex = [NSString stringWithFormat:@"%06X", baseInt];
-//
-//  for (int i=0; i<numberOfPreKeys; i++) {
-//    // Generate a new prekey here
-//    
-//  }
-//  
-//  [Cryptography storePrekeyCounter:hex];
+  //  // TODO: Check if there is an old counter, if so, keep up where you left off
+  //  //NSString* prekeyCounter = [Cryptography getPrekeyCounter];
+  //  NSInteger *baseInt = arc4random() % 16777216; //16777216 is 0xFFFFFF
+  //  NSString *hex = [NSString stringWithFormat:@"%06X", baseInt];
+  //
+  //  for (int i=0; i<numberOfPreKeys; i++) {
+  //    // Generate a new prekey here
+  //
+  //  }
+  //
+  //  [Cryptography storePrekeyCounter:hex];
   
 }
 

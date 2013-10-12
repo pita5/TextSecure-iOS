@@ -7,6 +7,7 @@
 //
 
 #import "ThreadViewController.h"
+#import "Message.h"
 @implementation ThreadViewController
 
 

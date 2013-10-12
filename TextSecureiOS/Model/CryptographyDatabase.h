@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import "FMDatabase.h"
-
+@class ECKeyPair;
+@class FMDatabaseQueue;
 @interface CryptographyDatabase : NSObject
-@property (nonatomic,strong) FMDatabase *database;
-
+@property (nonatomic,strong) FMDatabaseQueue *dbQueue;
+-(void) storeIdentityKey:(ECKeyPair*) identityKey;
+-(ECKeyPair*) getIdentityKey;
 @end

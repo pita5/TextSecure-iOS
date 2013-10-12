@@ -9,8 +9,9 @@
 #import "AppDelegate.h"
 #import "Cryptography.h"
 #import "UserDefaults.h"
-#import <PonyDebugger/PonyDebugger.h>
+#import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
+#import "Message.h"
 @implementation AppDelegate
 @synthesize messageDatabase;
 
@@ -41,10 +42,6 @@
 	}
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
-	
-  #ifdef DEBUG
-  [self testCryptography];
-  #endif
 	return YES;
 }
 
@@ -97,11 +94,6 @@
 }
 #endif
 
-#pragma mark - Some Cryptography debugging methods. Should be removed
--(void) testCryptography {
-  [Cryptography generateAndStoreIdentityKey];
-  [Cryptography generateAndStoreIdentityKey];// called twice to verify different
-}
 
 
 @end
