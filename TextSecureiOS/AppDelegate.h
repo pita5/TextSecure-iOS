@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Server.h"
 #import "MessagesDatabase.h"
 #import "BloomFilter.h"
 
@@ -19,7 +18,6 @@
 
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong,nonatomic) Server *server;
 @property (strong,nonatomic) MessagesDatabase *messageDatabase;
 @property (strong,nonatomic) BloomFilter *bloomFilter;
 -(void) handlePush:(NSDictionary *)pushInfo;

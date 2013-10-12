@@ -13,8 +13,12 @@
 	#import <Foundation/Foundation.h>
     #import "NSLocale+phonePrefixes.h"
     #import "NSString+PhoneFormating.h"
-#endif
+    #import "Constants.h"
+    #import "NSString+escape.h"
+    #import "TSNetworkManager.h"
+    #define _AFNETWORKING_PIN_SSL_CERTIFICATES_
 
+#endif
 
 #ifdef DEBUG
 	#import <HockeySDK/HockeySDK.h>

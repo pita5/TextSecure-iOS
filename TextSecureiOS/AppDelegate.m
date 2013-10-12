@@ -9,9 +9,9 @@
 #import "AppDelegate.h"
 #import "Cryptography.h"
 #import "UserDefaults.h"
+#import <PonyDebugger/PonyDebugger.h>
 #import "NSObject+SBJson.h"
 @implementation AppDelegate
-@synthesize server;
 @synthesize messageDatabase;
 @synthesize bloomFilter;
 
@@ -24,9 +24,13 @@
 														 liveIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
 															   delegate:self];
 	[[BITHockeyManager sharedHockeyManager] startManager];
+    
+    PDDebugger *debugger = [PDDebugger defaultInstance];
+    [debugger connectToURL:[NSURL URLWithString:@"ws://localhost:9000/device"]];
+    [debugger enableNetworkTrafficDebugging];
+    [debugger forwardAllNetworkTraffic];
 #endif
 	
-	self.server = [[Server alloc] init];
 	self.messageDatabase = [[MessagesDatabase alloc] init];
 	self.bloomFilter = [[BloomFilter alloc] init];
 	if(launchOptions!=nil) {
