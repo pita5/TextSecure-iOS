@@ -10,6 +10,7 @@
 #import <Security/Security.h>
 #import <CommonCrypto/CommonHMAC.h>
 #include <openssl/ec.h>
+#include <openssl/sha.h>
 #include <openssl/obj_mac.h>
 #include <CommonCrypto/CommonHMAC.h>
 
@@ -173,6 +174,15 @@
   }
   
   return output;
+}
+
++(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string{
+    
+    NSMutableData *hashData = [NSMutableData dataWithLength:SHA_DIGEST_LENGTH];
+    SHA1([[string dataUsingEncoding:NSUTF8StringEncoding] bytes], [[string dataUsingEncoding:NSUTF8StringEncoding] length], [hashData mutableBytes]);
+    NSData *truncatedData = [hashData subdataWithRange:NSMakeRange(0, 10)];
+
+    return [[truncatedData base64EncodedString] stringByReplacingOccurrencesOfString:@"=" withString:@""];
 }
 
 

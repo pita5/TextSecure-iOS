@@ -12,6 +12,6 @@
 
 + (id)sharedManager;
 
-+ (NSArray*) getAllContacts;
++ (void) getAllContactsIDs;
 
 @end

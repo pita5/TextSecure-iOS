@@ -10,6 +10,7 @@
 #import <NBPhoneNumberUtil.h>
 #import <NBPhoneNumber.h>
 #import <AddressBook/AddressBook.h>
+#import "NSString+Conversion.h"
 #import "Cryptography.h"
 #import "TSContactsIntersectionRequest.h"
 
@@ -32,16 +33,14 @@
     return self;
 }
 
-+ (NSArray*) getAllContacts{
++ (void) getAllContactsIDs{
     
     // Lookup contacts
     
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
     
     __block BOOL accessGranted = NO;
-    
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    
+
     if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
         dispatch_semaphore_t sema = dispatch_semaphore_create(0);
         
@@ -60,6 +59,8 @@
     if (accessGranted) {
         CFArrayRef all = ABAddressBookCopyArrayOfAllPeople(addressBook);
         CFIndex n = ABAddressBookGetPersonCount(addressBook);
+        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+        NSMutableDictionary *cleanedAB = [NSMutableDictionary dictionary];
         
         for( int i = 0 ; i < n ; i++ )
         {
@@ -68,71 +69,46 @@
             NSNumber *contactReferenceID = [NSNumber numberWithInt:referenceID];
             // We iterate through users
             
-            NSMutableArray *userPhoneNumbers = [NSMutableArray array];
-            
             ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
             for(CFIndex j = 0; j < ABMultiValueGetCount(phones); j++)
             {
                 CFStringRef phoneNumberRef = ABMultiValueCopyValueAtIndex(phones, j);
                 NSString *phoneNumber = (__bridge NSString *)phoneNumberRef;
                 
-                [userPhoneNumbers addObject:phoneNumber];
-        
-            }
-            
-            [dict setObject:[NSArray arrayWithArray:userPhoneNumbers] forKey:contactReferenceID];
-        }
-        
-        // Let's now bring them in standard format
-        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-        
-        NSMutableDictionary *cleanedAB = [NSMutableDictionary dictionary];
-        
-        NSArray *keys = [dict allKeys];
-        
-        for (int i = 0; i < [keys count]; i ++) {
-            NSMutableArray *cleanedPhoneNumbers = [NSMutableArray array];
-            NSMutableArray *personPhoneNumbers = [dict objectForKey:[keys objectAtIndex:i]];
-            
-            for (int j = 0; j < [personPhoneNumbers count]; j++) {
-                NBPhoneNumber *phone = [phoneUtil parse:[personPhoneNumbers objectAtIndex:j] defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
-                NSString *phoneNumber = [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
-                NSString *hashedPhoneNumber = [Cryptography computeSHA1DigestForString:phoneNumber];
-                [cleanedPhoneNumbers addObject:hashedPhoneNumber];
-            }
-            
-            if ([cleanedPhoneNumbers count] > 0) {
-                [cleanedAB setObject:[NSArray arrayWithArray:cleanedPhoneNumbers] forKey:[keys objectAtIndex:i]];
-            }
-            
-        }
-        
-        NSMutableArray *hashes = [NSMutableArray array];
-        
-        for (int i = 0; i < [[cleanedAB allValues] count]; i++) {
-            for (int j = 0; j < [[[cleanedAB allValues] objectAtIndex:i] count]; j++) {
-                [hashes addObject:[[[cleanedAB allValues] objectAtIndex:i] objectAtIndex:j]];
+                NBPhoneNumber *phone = [phoneUtil parse:phoneNumber defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
+                NSString *cleanedNumber = [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
+                NSLog(@"Number : %@", cleanedNumber);
+                NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
+                NSLog(@"Hashed Number: %@", hashedPhoneNumber);
+                [cleanedAB setObject:hashedPhoneNumber forKey:contactReferenceID];
             }
         }
-        
+
         // Send hashes to server
         
-        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:hashes] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[cleanedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            
+            NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
+            
+            // Look up who they are
+            
+            NSMutableArray *contactsIDs = [NSMutableArray array];
+            
+            for (NSString *contactHash in contactsHashes) {
+                [contactsIDs addObjectsFromArray:[cleanedAB allKeysForObject:contactHash]];
+            }
+            
+            NSLog(@"Contact IDs : %@", contactsIDs);
+            
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
+            defaultNetworkErrorMessage
+            
         }];
         
-        // Lookup the names
-        
-        
-        
-        
-        return nil;
-    } else{
-        return nil;
     }
-    
 }
 
 - (void)dealloc {

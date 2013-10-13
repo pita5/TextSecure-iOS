@@ -38,7 +38,7 @@
 }
 
 - (void) composeMessage{
-    [TSContactManager getAllContacts];
+    [TSContactManager getAllContactsIDs];
 }
 
 - (void) openSettings{

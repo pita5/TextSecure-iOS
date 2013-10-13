@@ -42,7 +42,7 @@
 - (void) setupDatabase{
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
     
-    #warning implement database setup
+    #warning implement database setup with pass.text password
 }
 
 - (void)didReceiveMemoryWarning

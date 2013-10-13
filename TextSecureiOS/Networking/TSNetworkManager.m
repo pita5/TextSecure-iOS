@@ -59,8 +59,6 @@
         // For all other equests, we do add an authorization header
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
         
-        NSLog(@"Using keys %@ %@", [Cryptography getUsernameToken], [Cryptography getAuthenticationToken]);
-        
         [operationManager.requestSerializer setAuthorizationHeaderFieldWithUsername:[Cryptography getUsernameToken] password:[Cryptography getAuthenticationToken]];
                 
         if ([request.HTTPMethod isEqualToString:@"GET"]) {

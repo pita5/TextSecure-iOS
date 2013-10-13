@@ -14,7 +14,7 @@
 		<string>textsecure@2x.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.openwhispersystems.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.fredericjacobs.textSecure</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -41,6 +41,10 @@
 		<string>OpenSans-Regular.ttf</string>
 		<string>OpenSans-Semibold.ttf</string>
 		<string>OpenSans-SemiboldItalic.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
 	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>

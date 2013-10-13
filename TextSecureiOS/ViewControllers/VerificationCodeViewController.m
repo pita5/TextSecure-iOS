@@ -83,14 +83,14 @@
                 
             case 200:
                 
-                NSLog(@"Saving storageKey: %@", authToken);
-            
                 [Cryptography storeSignalingKeyToken:signalingKey];
                 [Cryptography storeAuthenticationToken:authToken];
-                
-                NSLog(@"Recovering key: %@", [Cryptography getAuthenticationToken]);
-                
+
                 [self performSegueWithIdentifier:@"setMasterPassword" sender:self];
+                
+                // Perform the APN registration
+                
+                [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
                 
                 break;
                 
@@ -102,13 +102,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         defaultNetworkErrorMessage
     }];
-}
-
--(void)finishedVerifiedPhone:(NSNotification*)notification {
-	// register for push notifications
-	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-	 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-	[self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
 
 @end

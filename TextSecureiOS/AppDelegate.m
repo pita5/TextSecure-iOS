@@ -12,6 +12,7 @@
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
 #import "Message.h"
+#import "TSRegisterForPushRequest.h"
 @implementation AppDelegate
 @synthesize messageDatabase;
 
@@ -45,13 +46,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([UserDefaults hasVerifiedPhoneNumber]) {
-		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
-	}
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
+    
 	return YES;
 }
 
@@ -62,11 +57,31 @@
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
 	NSString *stringToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	stringToken = [stringToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"SendAPN" object:self userInfo:[[NSDictionary alloc] initWithObjectsAndKeys:stringToken,@"apnRegistrationId", nil]];
+	
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterForPushRequest alloc] initWithPushIdentifier:stringToken] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Request : %@", operation.request);
+        NSLog(@"StatusCode : %ld reponse %@", (long)operation.response.statusCode, operation.response);
+        switch (operation.response.statusCode) {
+            case 200:
+                DLog(@"Device registered for push notifications");
+                break;
+                
+            default:
+#warning Add error handling if not able to send the token
+                break;
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning Add error handling if not able to send the token
+    }];
+    
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
-	NSLog(@"Failed to get token, error: %@", error);
+
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [alert show];
+
 }
 
 
@@ -93,7 +108,5 @@
 	return nil;
 }
 #endif
-
-
 
 @end
