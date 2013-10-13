@@ -13,13 +13,24 @@
 #import "ECKeyPair.h"
 #import "FilePath.h"
 
+static CryptographyDatabase *SharedCryptographyDatabase = nil;
+
+
 @implementation CryptographyDatabase
 -(id) init {
   @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"must be initialized with password" userInfo:nil];
   
 }
+
++(id) databaseWithPassword:(NSString*) userPassword {
+  if (!SharedCryptographyDatabase) {
+    SharedCryptographyDatabase = [[[CryptographyDatabase alloc] initWithPassword:userPassword] init];
+  }
+  return SharedCryptographyDatabase;
+}
+
 -(id) initWithPassword:(NSString*) userPassword {
-	if(self=[super init]) {
+  if(self=[super init]) {
     self.dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"cryptography.db"]];
     [self.dbQueue inDatabase:^(FMDatabase *db) {
       //BOOL success = [db setKey:[Cryptography getMasterSecretPassword:userPassword]]; // TODO : testing removing
@@ -34,7 +45,9 @@
 	}
   [self generatePrekeyCounterIfNeeded];
 	return self;
+
 }
+
 
 
 -(void) generatePrekeyCounterIfNeeded {
