@@ -26,11 +26,8 @@ static MessagesDatabase *SharedMessagesDatabase = nil;
 
 +(void) setupDatabaseWithPassword:(NSString*) userPassword{
   if (!SharedMessagesDatabase) {
+    // first in app launch cycle
     SharedMessagesDatabase = [[MessagesDatabase alloc] initWithPassword:userPassword] ;
-  }
-  else {
-    [SharedMessagesDatabase rekeyWithPassword:userPassword];
-    
   }
 }
 
@@ -42,26 +39,21 @@ static MessagesDatabase *SharedMessagesDatabase = nil;
   
 }
 
--(void) rekeyWithPassword:(NSString*) userPassword {
-  [self.dbQueue inDatabase:^(FMDatabase *db) {
-    BOOL success = [db rekey:[Cryptography getMasterSecretPassword:userPassword]];
-    if(!success) {
-      @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
-    }
-  }];
-}
+
 -(id) initWithPassword:(NSString*) password {
 	if(self==[super init]) {
     self.dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"messages.db"]];
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-      BOOL success = [db setKey:[Cryptography getMasterSecretPassword:password]];
-      if(!success) {
-        @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
+      NSData * key = [Cryptography getMasterSecretKey:password];
+      if(key!=nil) {
+        BOOL success = [db setKeyWithData:key];
+        if(!success) {
+          @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
+          
+        }
         
+        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (source TEXT, text TEXT, destination TEXT, timestamp DATETIME DEFAULT current_timestamp)"];
       }
-      
-      [db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (source TEXT, text TEXT, destination TEXT, timestamp DATETIME DEFAULT current_timestamp)"];
-      
     }];
     // TODO: we will need a more complicated schema, including handling of message threads, multiple desintations, attachments, multiple attachments,
     // We also need to encrypt entries, using AES.

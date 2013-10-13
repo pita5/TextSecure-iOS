@@ -13,9 +13,9 @@
 @interface CryptographyDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
 +(void) setupDatabaseWithPassword:(NSString*) userPassword;
-+(id) database;
--(void) rekeyWithPassword:(NSString*) userPassword;
 -(id) initWithPassword:(NSString*) userPassword;
+
++(id) database;
 -(id) init;
 -(void) storeIdentityKey:(ECKeyPair*) identityKey;
 -(ECKeyPair*) getIdentityKey;

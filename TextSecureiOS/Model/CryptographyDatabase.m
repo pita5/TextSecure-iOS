@@ -24,13 +24,11 @@ static CryptographyDatabase *SharedCryptographyDatabase = nil;
 
 +(void) setupDatabaseWithPassword:(NSString*) userPassword {
   if (!SharedCryptographyDatabase) {
+    //first call of this during the app lifecyle
     SharedCryptographyDatabase = [[CryptographyDatabase alloc] initWithPassword:userPassword];
   }
-  else {
-    [SharedCryptographyDatabase rekeyWithPassword:userPassword];
-    
-  }
 }
+
 
 +(id) database {
   if (!SharedCryptographyDatabase) {
@@ -40,25 +38,21 @@ static CryptographyDatabase *SharedCryptographyDatabase = nil;
   
 }
 
--(void) rekeyWithPassword:(NSString*) userPassword {
- [self.dbQueue inDatabase:^(FMDatabase *db) {
-   BOOL success = [db rekey:[Cryptography getMasterSecretPassword:userPassword]];
-   if(!success) {
-     @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
-   }
- }];
-}
+
 
 -(id) initWithPassword:(NSString*) userPassword {
   if(self=[super init]) {
     self.dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"cryptography.db"]];
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-      BOOL success = [db setKey:[Cryptography getMasterSecretPassword:userPassword]];
-      if(!success) {
-        @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
-        
+      NSData * key = [Cryptography getMasterSecretKey:userPassword];
+      if(key!=nil) {
+        BOOL success = [db setKeyWithData:key];
+        if(!success) {
+          @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
+          
+        }
+        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
       }
-      [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
       
     }];
 	}

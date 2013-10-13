@@ -24,6 +24,7 @@
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
 #import "CryptographyDatabase.h"
+#import "FilePath.h"
 
 
 @implementation Cryptography
@@ -65,25 +66,36 @@
   NSLog(@"testing private key %@",[identityKey getSerializedPrivateKey]);
   NSLog(@"testing public key %@",[identityKey getSerializedPublicKey]);
   #endif
-  CryptographyDatabase *cryptoDB = [[CryptographyDatabase alloc] init];
+  CryptographyDatabase *cryptoDB = [CryptographyDatabase database];
   [cryptoDB storeIdentityKey:identityKey];
   [cryptoDB getIdentityKey];
 }
 
-+ (NSString*) getMasterSecretPassword:(NSString*) userPassword {
-   // TODO:  This is wrong strategy we want to PBKDF2 password (key)
++ (NSData*) getMasterSecretKey:(NSString*) userPassword {
+  #warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
+  // PBKDF2 password (key)
   // encrypt  using AES256 of that with
   // IV=16random bytes
   //ciphertext=AES in CBC mode with key from PBKDF2
   // MAC =HMACshaw1(cipertext||IV) with key from PBKDF2
-  /// store IV||ciphertext||mac(IV||ciphertext)
+  // store IV||ciphertext||mac(IV||ciphertext)
   // decryption is AES256-1(ciphertext,IV) after verifying the MAC
-  //[Cryptography AES256Encryption:[Cryptography generateRandomBytes:36] withPassword:userPassword];
-  #warning aesencryption of mastersecret with password not yet in place
-  #warning verification of password not in place. sqlcipher will just silently fail
-//  should either retrieve or generate
-  // if retrieval should verify using mac that the user entered right password, otherwise return null
-    return userPassword;
+
+  NSData* masterSecretPasswordEncrypted = [NSData dataFromBase64String:[Cryptography getEncryptedMasterSecretKey]];
+  NSData* masterSecretPassword = [Cryptography AES256Decryption:masterSecretPasswordEncrypted withPassword:userPassword];
+  if(!masterSecretPassword) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error entering user password" message:@"database will not open" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    [alert show];
+  }
+  return masterSecretPassword;
+}
+      
++ (void) generateAndStoreMasterSecretPassword:(NSString*) userPassword {
+  NSData *masterSecretPassword =[Cryptography generateRandomBytes:36];
+
+  NSData *masterSecretPasswordEncrypted = [Cryptography AES256Encryption:masterSecretPassword withPassword:userPassword];
+ 
+  [Cryptography storeEncryptedMasterSecretKey:[masterSecretPasswordEncrypted base64EncodedString]];
 }
 
 
@@ -147,6 +159,15 @@
   return [KeychainWrapper keychainStringFromMatchingIdentifier:signalingTokenStorageId];
 }
 
+#pragma mark encrypted master secret key
+
++ (BOOL) storeEncryptedMasterSecretKey:(NSString*)token {
+  return [KeychainWrapper createKeychainValue:token forIdentifier:encryptedMasterSecretKeyStorageId];
+}
+
++ (NSString*) getEncryptedMasterSecretKey {
+  return [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
+}
 
 + (NSData*)computeMACDigestForString:(NSString*)input withSeed:(NSString*)seed {
   //  void CCHmac(CCHmacAlgorithm algorithm, const void *key, size_t keyLength, const void *data,
@@ -186,26 +207,30 @@
 }
 
 
-+(NSString*) AES256Encryption:(NSData*) data withPassword:(NSString*)password {
++(NSData*) AES256Encryption:(NSData*) dataToEncrypt withPassword:(NSString*)password {
 
   NSError *error;
-  NSData *encryptedData = [RNEncryptor encryptData:data
+  NSData *encryptedData = [RNEncryptor encryptData:dataToEncrypt
                                       withSettings:kRNCryptorAES256Settings
                                           password:password
                                              error:&error];
-  return [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
+  return encryptedData;
 }
           
 
-+(NSString*) AES256Decryption:(NSString*) stringToDecrypt withPassword:(NSString*)password {
-  NSData *data = [stringToDecrypt dataUsingEncoding:NSUTF8StringEncoding];
++(NSData*) AES256Decryption:(NSData*) dataToDecrypt withPassword:(NSString*)password {
+ 
   NSError *error;
-  NSData *decryptedData  = [RNDecryptor decryptData:data
+  NSData *decryptedData  = [RNDecryptor decryptData:dataToDecrypt
                                        withPassword:password
                                               error:&error];
-  
-  
-  return [[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding];
+  if(!error) {
+    return decryptedData;
+   
+  }
+  else {
+     return nil;
+  }
   
 }
 
