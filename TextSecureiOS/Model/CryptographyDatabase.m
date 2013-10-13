@@ -22,19 +22,38 @@ static CryptographyDatabase *SharedCryptographyDatabase = nil;
   
 }
 
-+(id) databaseWithPassword:(NSString*) userPassword {
++(void) setupDatabaseWithPassword:(NSString*) userPassword {
   if (!SharedCryptographyDatabase) {
-    SharedCryptographyDatabase = [[[CryptographyDatabase alloc] initWithPassword:userPassword] init];
+    SharedCryptographyDatabase = [[CryptographyDatabase alloc] initWithPassword:userPassword];
+  }
+  else {
+    [SharedCryptographyDatabase rekeyWithPassword:userPassword];
+    
+  }
+}
+
++(id) database {
+  if (!SharedCryptographyDatabase) {
+     @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"database must be accessed with password prior to being able to use this method" userInfo:nil];
   }
   return SharedCryptographyDatabase;
+  
+}
+
+-(void) rekeyWithPassword:(NSString*) userPassword {
+ [self.dbQueue inDatabase:^(FMDatabase *db) {
+   BOOL success = [db rekey:[Cryptography getMasterSecretPassword:userPassword]];
+   if(!success) {
+     @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
+   }
+ }];
 }
 
 -(id) initWithPassword:(NSString*) userPassword {
   if(self=[super init]) {
     self.dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"cryptography.db"]];
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-      //BOOL success = [db setKey:[Cryptography getMasterSecretPassword:userPassword]]; // TODO : testing removing
-      BOOL success = YES;
+      BOOL success = [db setKey:[Cryptography getMasterSecretPassword:userPassword]];
       if(!success) {
         @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
         

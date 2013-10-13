@@ -12,6 +12,8 @@
 @class FMDatabase;
 @interface MessagesDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
++(void) setupDatabaseWithPassword:(NSString*) userPassword;
++(id) database;
 -(void) addMessage:(Message*)message;
 -(NSArray*) getMessages;
 @end

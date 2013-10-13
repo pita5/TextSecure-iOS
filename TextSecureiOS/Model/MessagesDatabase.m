@@ -13,8 +13,43 @@
 #import "Message.h"
 #import "Cryptography.h"
 
+
+static MessagesDatabase *SharedMessagesDatabase = nil;
 @implementation MessagesDatabase
 
+
+
+-(id) init {
+  @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"must be initialized with password" userInfo:nil];
+  
+}
+
++(void) setupDatabaseWithPassword:(NSString*) userPassword{
+  if (!SharedMessagesDatabase) {
+    SharedMessagesDatabase = [[MessagesDatabase alloc] initWithPassword:userPassword] ;
+  }
+  else {
+    [SharedMessagesDatabase rekeyWithPassword:userPassword];
+    
+  }
+}
+
++(id) database {
+  if (!SharedMessagesDatabase) {
+    @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"database must be accessed with password first" userInfo:nil];
+  }
+  return SharedMessagesDatabase;
+  
+}
+
+-(void) rekeyWithPassword:(NSString*) userPassword {
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+    BOOL success = [db rekey:[Cryptography getMasterSecretPassword:userPassword]];
+    if(!success) {
+      @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
+    }
+  }];
+}
 -(id) initWithPassword:(NSString*) password {
 	if(self==[super init]) {
     self.dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"messages.db"]];
@@ -24,12 +59,12 @@
         @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
         
       }
-
+      
       [db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (source TEXT, text TEXT, destination TEXT, timestamp DATETIME DEFAULT current_timestamp)"];
       
     }];
     // TODO: we will need a more complicated schema, including handling of message threads, multiple desintations, attachments, multiple attachments,
-    // We also need to encrypt entries, using AES. 
+    // We also need to encrypt entries, using AES.
 	}
 	return self;
 }

@@ -12,6 +12,8 @@
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
 #import "Message.h"
+#import "CryptographyDatabase.h"
+#import "MessagesDatabase.h"
 
 
 @implementation AppDelegate
@@ -51,11 +53,24 @@
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
+    UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    passwordDialogue.alertViewStyle = UIAlertViewStyleSecureTextInput;
+
+    [passwordDialogue show];
 	}
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
   
 	return YES;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+  if(buttonIndex==1) {
+    NSString* password = [[alertView textFieldAtIndex:0] text];
+    [CryptographyDatabase setupDatabaseWithPassword:password];
+    [MessagesDatabase setupDatabaseWithPassword:password];
+    
+  }
 }
 
 

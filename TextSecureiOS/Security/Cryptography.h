@@ -20,7 +20,6 @@
 +(void) generateAndStoreIdentityKey;
 + (NSString*) getMasterSecretPassword:(NSString*) userPassword;
 
-+ (NSString*) getPrekeyCounter;
 +(NSMutableData*) generateRandomBytes:(int)numberBytes;
 /* 
  Basic auth is username:password base64 encoded where the "username" is the device's phone number in E164 format, and the "password" is a random string you generate at registration time.

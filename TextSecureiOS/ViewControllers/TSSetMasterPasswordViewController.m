@@ -7,7 +7,8 @@
 //
 
 #import "TSSetMasterPasswordViewController.h"
-
+#import "CryptographyDatabase.h"
+#import "MessagesDatabase.h"
 @interface TSSetMasterPasswordViewController ()
 
 @end
@@ -41,8 +42,12 @@
 
 - (void) setupDatabase{
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
-    
-    #warning implement database setup
+    [CryptographyDatabase setupDatabaseWithPassword:self.pass.text];
+    [MessagesDatabase setupDatabaseWithPassword:self.pass.text];
+    CryptographyDatabase *testDb = [CryptographyDatabase database];
+    NSLog(@"prekey counter %@",[testDb getPrekeyCounter]);
+    [testDb incrementPrekeyCounter];
+    NSLog(@"prekey counter %@",[testDb getPrekeyCounter]);
 }
 
 - (void)didReceiveMemoryWarning

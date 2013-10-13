@@ -77,16 +77,18 @@
   // MAC =HMACshaw1(cipertext||IV) with key from PBKDF2
   /// store IV||ciphertext||mac(IV||ciphertext)
   // decryption is AES256-1(ciphertext,IV) after verifying the MAC
-   [Cryptography AES256Encryption:[Cryptography generateRandomBytes:36] withPassword:userPassword];
+  //[Cryptography AES256Encryption:[Cryptography generateRandomBytes:36] withPassword:userPassword];
+  #warning aesencryption of mastersecret with password not yet in place
+  #warning verification of password not in place. sqlcipher will just silently fail
+//  should either retrieve or generate
+  // if retrieval should verify using mac that the user entered right password, otherwise return null
+    return userPassword;
 }
 
-+(NSString*) getPrekeyCounter {
-  // 6 byte prekey counter; generated at install time of cryptography db
-}
 
 
 +(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
-  @throw [NSException exceptionWithName:@"not implemented" reason:@"because we need to" userInfo:nil];
+  #warning generateAndStoreNewPreKeys not yet implemented
   //  // TODO: Check if there is an old counter, if so, keep up where you left off
   //  //NSString* prekeyCounter = [Cryptography getPrekeyCounter];
   //  NSInteger *baseInt = arc4random() % 16777216; //16777216 is 0xFFFFFF
