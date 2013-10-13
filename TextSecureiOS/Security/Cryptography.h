@@ -35,4 +35,7 @@
 + (NSData*)computeMACDigestForString:(NSString*)input withSeed:(NSString*)seed;
 +(NSString*) AES256Encryption:(NSData*) dataToEncrypt withPassword:(NSString*)password;
 +(NSString*) AES256Decryption:(NSString*) stringToDecrypt withPassword:(NSString*)password;
+
++(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string;
+
 @end

@@ -41,13 +41,10 @@
 }
 
 - (void) setupDatabase{
-    [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
     [CryptographyDatabase setupDatabaseWithPassword:self.pass.text];
     [MessagesDatabase setupDatabaseWithPassword:self.pass.text];
-    CryptographyDatabase *testDb = [CryptographyDatabase database];
-    NSLog(@"prekey counter %@",[testDb getPrekeyCounter]);
-    [testDb incrementPrekeyCounter];
-    NSLog(@"prekey counter %@",[testDb getPrekeyCounter]);
+    [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
+
 }
 
 - (void)didReceiveMemoryWarning

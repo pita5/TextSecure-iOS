@@ -19,7 +19,6 @@
 @property (nonatomic,strong) MessagesDatabase *messagesDB;
 @property (nonatomic,strong) NSString* composingMessagePhoneNumber;
 @property (nonatomic,strong) NSString* composingMessageText;
-- (IBAction)composeSMS:(id)sender;
 - (IBAction) Edit:(id)sender;
 @end
 

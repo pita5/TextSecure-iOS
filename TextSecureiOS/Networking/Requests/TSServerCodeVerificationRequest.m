@@ -16,7 +16,7 @@
     self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@", textSecureAccountsAPI, @"code", verificationCode]]];
     
     [self.parameters addEntriesFromDictionary:[[NSDictionary alloc] initWithObjects:
-                       [[NSArray alloc] initWithObjects:signalingKey, [authToken base64Encoded], nil]
+                       [[NSArray alloc] initWithObjects:signalingKey, authToken, nil]
                             forKeys:[[NSArray alloc] initWithObjects:@"signalingKey", @"AuthKey", nil]]];
     
     [self setHTTPMethod:@"PUT"];
