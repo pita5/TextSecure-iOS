@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import "CryptographyDatabase.h"
+#import "EncryptedDatabase.h"
 #import "Cryptography.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
 #import "ECKeyPair.h"
 #import "FilePath.h"
 
-static CryptographyDatabase *SharedCryptographyDatabase = nil;
+static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
-@implementation CryptographyDatabase
+@implementation EncryptedDatabase
 -(id) init {
   @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"must be initialized with password" userInfo:nil];
   
@@ -25,7 +25,7 @@ static CryptographyDatabase *SharedCryptographyDatabase = nil;
 +(void) setupDatabaseWithPassword:(NSString*) userPassword {
   if (!SharedCryptographyDatabase) {
     //first call of this during the app lifecyle
-    SharedCryptographyDatabase = [[CryptographyDatabase alloc] initWithPassword:userPassword];
+    SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithPassword:userPassword];
   }
 }
 

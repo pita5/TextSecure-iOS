@@ -10,7 +10,7 @@
 
 @class ECKeyPair;
 @class FMDatabaseQueue;
-@interface CryptographyDatabase : NSObject
+@interface EncryptedDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
 +(void) setupDatabaseWithPassword:(NSString*) userPassword;
 -(id) initWithPassword:(NSString*) userPassword;

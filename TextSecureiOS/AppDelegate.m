@@ -12,11 +12,9 @@
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
 #import "Message.h"
-#import "CryptographyDatabase.h"
-#import "MessagesDatabase.h"
+#import "EncryptedDatabase.h"
 #import "TSRegisterForPushRequest.h"
 @implementation AppDelegate
-@synthesize messageDatabase;
 
 #pragma mark - UIApplication delegate methods
 
@@ -52,7 +50,7 @@
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
-    UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+     UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     passwordDialogue.alertViewStyle = UIAlertViewStyleSecureTextInput;
 
     [passwordDialogue show];
@@ -66,8 +64,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
   if(buttonIndex==1) {
     NSString* password = [[alertView textFieldAtIndex:0] text];
-    [CryptographyDatabase setupDatabaseWithPassword:password];
-    [MessagesDatabase setupDatabaseWithPassword:password];
+    [EncryptedDatabase setupDatabaseWithPassword:password];
     
   }
 }
@@ -116,7 +113,8 @@
 	NSDictionary* fullMessageJson = [[pushInfo objectForKey:@"message_body"] JSONValue];
 	NSLog(@"full message json %@",fullMessageJson);
 	Message *message = [[Message alloc] initWithText:[fullMessageJson objectForKey:@"messageText"] messageSource:[fullMessageJson objectForKey:@"source"] messageDestinations:[fullMessageJson objectForKey:@"destinations"] messageAttachments:[fullMessageJson objectForKey:@"attachments"] messageTimestamp:[NSDate date]];
-	[self.messageDatabase addMessage:message];
+#warning we need to handle this push!
+
 }
 
 #pragma mark - HockeyApp Delegate Methods

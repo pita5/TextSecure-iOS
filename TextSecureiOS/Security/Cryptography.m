@@ -23,7 +23,7 @@
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
-#import "CryptographyDatabase.h"
+#import "EncryptedDatabase.h"
 #import "FilePath.h"
 
 
@@ -66,7 +66,7 @@
   NSLog(@"testing private key %@",[identityKey getSerializedPrivateKey]);
   NSLog(@"testing public key %@",[identityKey getSerializedPublicKey]);
   #endif
-  CryptographyDatabase *cryptoDB = [CryptographyDatabase database];
+  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
   [cryptoDB storeIdentityKey:identityKey];
   [cryptoDB getIdentityKey];
 }

@@ -7,8 +7,7 @@
 //
 
 #import "TSSetMasterPasswordViewController.h"
-#import "CryptographyDatabase.h"
-#import "MessagesDatabase.h"
+#import "EncryptedDatabase.h"
 #import "Cryptography.h"
 @interface TSSetMasterPasswordViewController ()
 
@@ -43,8 +42,7 @@
 
 - (void) setupDatabase{
     [Cryptography generateAndStoreMasterSecretPassword:self.pass.text];
-    [CryptographyDatabase setupDatabaseWithPassword:self.pass.text];
-    [MessagesDatabase setupDatabaseWithPassword:self.pass.text];
+    [EncryptedDatabase setupDatabaseWithPassword:self.pass.text];
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 
 }
