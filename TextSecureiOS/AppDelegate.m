@@ -12,6 +12,8 @@
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
 #import "Message.h"
+
+
 @implementation AppDelegate
 @synthesize messageDatabase;
 
@@ -52,6 +54,7 @@
 	}
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
+  
 	return YES;
 }
 

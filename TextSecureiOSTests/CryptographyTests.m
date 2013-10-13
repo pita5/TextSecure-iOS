@@ -8,8 +8,8 @@
 
 #import "CryptographyTests.h"
 #import "Cryptography.h"
-#import "RNEncryptor.h"
-#import "RNDecryptor.h"
+#import <RNCryptor/RNEncryptor.h>
+#import <RNCryptor/RNDecryptor.h>
 
 @implementation CryptographyTests
 

@@ -18,9 +18,8 @@
 + (NSString*) getUsernameToken;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
 +(void) generateAndStoreIdentityKey;
-+ (NSString*) getMasterSecretyKey;
++ (NSString*) getMasterSecretPassword:(NSString*) userPassword;
 
-+ (BOOL) storePrekeyCounter:(NSString*)token;
 + (NSString*) getPrekeyCounter;
 +(NSMutableData*) generateRandomBytes:(int)numberBytes;
 /* 
@@ -35,4 +34,6 @@
 + (BOOL) storeSignalingKeyToken:(NSString*)token;
 
 + (NSData*)computeMACDigestForString:(NSString*)input withSeed:(NSString*)seed;
++(NSString*) AES256Encryption:(NSData*) dataToEncrypt withPassword:(NSString*)password;
++(NSString*) AES256Decryption:(NSString*) stringToDecrypt withPassword:(NSString*)password;
 @end

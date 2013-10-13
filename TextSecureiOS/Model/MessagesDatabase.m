@@ -15,11 +15,11 @@
 
 @implementation MessagesDatabase
 
--(id) init {
+-(id) initWithPassword:(NSString*) password {
 	if(self==[super init]) {
     self.dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"messages.db"]];
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-      BOOL success = [db setKey:[Cryptography getMasterSecretyKey]];
+      BOOL success = [db setKey:[Cryptography getMasterSecretPassword:password]];
       if(!success) {
         @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
         

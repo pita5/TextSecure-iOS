@@ -16,12 +16,14 @@
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
-#import "RNEncryptor.h"
-#import "RNDecryptor.h"
+#import <RNCryptor/RNEncryptor.h>
+#import <RNCryptor/RNDecryptor.h>
+
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
 #import "CryptographyDatabase.h"
+
 
 @implementation Cryptography
 
@@ -67,14 +69,22 @@
   [cryptoDB getIdentityKey];
 }
 
-+ (NSString*) getMasterSecretyKey {
-  /*
-   this is an AES256 key , encrypted using pbkdf2 of user's password
-   user's password is given and is specific to textsecure
-   */
-  // TODO: actually implement this
-  return @"hello world";
++ (NSString*) getMasterSecretPassword:(NSString*) userPassword {
+   // TODO:  This is wrong strategy we want to PBKDF2 password (key)
+  // encrypt  using AES256 of that with
+  // IV=16random bytes
+  //ciphertext=AES in CBC mode with key from PBKDF2
+  // MAC =HMACshaw1(cipertext||IV) with key from PBKDF2
+  /// store IV||ciphertext||mac(IV||ciphertext)
+  // decryption is AES256-1(ciphertext,IV) after verifying the MAC
+   [Cryptography AES256Encryption:[Cryptography generateRandomBytes:36] withPassword:userPassword];
 }
+
++(NSString*) getPrekeyCounter {
+  // 6 byte prekey counter; generated at install time of cryptography db
+}
+
+
 +(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
   @throw [NSException exceptionWithName:@"not implemented" reason:@"because we need to" userInfo:nil];
   //  // TODO: Check if there is an old counter, if so, keep up where you left off
@@ -89,18 +99,6 @@
   //
   //  [Cryptography storePrekeyCounter:hex];
   
-}
-
-
-
-
-+ (BOOL) storePrekeyCounter:(NSString*)token {
-  return [KeychainWrapper createKeychainValue:token forIdentifier:prekeyCounterStorageId];
-}
-
-
-+ (NSString*) getPrekeyCounter {
-  return [KeychainWrapper keychainStringFromMatchingIdentifier:prekeyCounterStorageId];
 }
 
 
@@ -173,6 +171,33 @@
   
   return output;
 }
+
+
++(NSString*) AES256Encryption:(NSData*) data withPassword:(NSString*)password {
+
+  NSError *error;
+  NSData *encryptedData = [RNEncryptor encryptData:data
+                                      withSettings:kRNCryptorAES256Settings
+                                          password:password
+                                             error:&error];
+  return [[NSString alloc] initWithData:encryptedData encoding:NSUTF8StringEncoding];
+}
+          
+
++(NSString*) AES256Decryption:(NSString*) stringToDecrypt withPassword:(NSString*)password {
+  NSData *data = [stringToDecrypt dataUsingEncoding:NSUTF8StringEncoding];
+  NSError *error;
+  NSData *decryptedData  = [RNDecryptor decryptData:data
+                                       withPassword:password
+                                              error:&error];
+  
+  
+  return [[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding];
+  
+}
+
+
+
 
 
 

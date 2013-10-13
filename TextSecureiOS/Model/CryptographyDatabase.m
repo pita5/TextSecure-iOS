@@ -15,24 +15,81 @@
 
 @implementation CryptographyDatabase
 -(id) init {
-	if(self==[super init]) {
+  @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"must be initialized with password" userInfo:nil];
+  
+}
+-(id) initWithPassword:(NSString*) userPassword {
+	if(self=[super init]) {
     self.dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"cryptography.db"]];
     [self.dbQueue inDatabase:^(FMDatabase *db) {
-      BOOL success = [db setKey:[Cryptography getMasterSecretyKey]];
+      //BOOL success = [db setKey:[Cryptography getMasterSecretPassword:userPassword]]; // TODO : testing removing
+      BOOL success = YES;
       if(!success) {
         @throw [NSException exceptionWithName:@"unable to encrypt" reason:@"this shouldn't happen" userInfo:nil];
         
       }
-      [db executeUpdate:@"CREATE TABLE IF NOT EXISTS identity_key (private_key TEXT, public_key TEXT)"];
+      [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
+      
     }];
 	}
+  [self generatePrekeyCounterIfNeeded];
 	return self;
 }
+
+
+-(void) generatePrekeyCounterIfNeeded {
+  if([self getPrekeyCounter]==nil) {
+    // we generate the prekey counter
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+
+      NSNumber *baseInt = [NSNumber numberWithUnsignedInteger: arc4random() % 16777216]; //16777216 is 0xFFFFFF
+      NSString *prekeyCounter = [NSString stringWithFormat:@"%06X", [baseInt unsignedIntegerValue]];
+      [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?,?)",@"prekey_counter",prekeyCounter];
+    }];
+
+  }
+}
+
+-(void) savePrekeyCounter:(NSString*)prekeyCounter {
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+      [db executeUpdate:@"INSERT OR REPLACE INTO  persistent_settings (setting_name,setting_value) VALUES (?,?)",@"prekey_counter",prekeyCounter];
+  }];
+  
+}
+
+-(void) incrementPrekeyCounter {
+  unsigned int prekeyCounter = [[self getPrekeyCounter] unsignedIntegerValue];
+  prekeyCounter++;
+  [self savePrekeyCounter:[NSString stringWithFormat:@"%06X",prekeyCounter % 16777216]]; //16777216 is 0xFFFFFF
+
+}
+
+-(NSNumber*) getPrekeyCounter {
+  __block NSNumber* counter = nil;
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT setting_value FROM persistent_settings WHERE setting_name=\"prekey_counter\""]];
+    while([rs next]){
+      NSString* prekeyCounter = [rs stringForColumn:@"setting_value"];
+      NSScanner* pScanner = [NSScanner scannerWithString: prekeyCounter];
+      
+      unsigned int iValue;
+      [pScanner scanHexInt: &iValue];
+      counter=[NSNumber numberWithUnsignedInteger:iValue];
+      break;
+    }
+    [rs close];
+    
+  }];
+  return counter;
+  
+}
+
 
 -(void) storeIdentityKey:(ECKeyPair*) identityKey {
   // TODO: actually store ECKey pair
   [self.dbQueue inDatabase:^(FMDatabase *db) {
-    [db executeUpdate:@"INSERT INTO identity_key (private_key,public_key) VALUES (?, ?)",@"hello",@"world"];
+    [db executeUpdate:@"INSERT OR REPLACE INTO persitent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",@"hello"];
+    [db executeUpdate:@"INSERT OR REPLACE INTO persitent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",@"world"];
   }];
   
 }
@@ -41,9 +98,9 @@
 -(ECKeyPair*) getIdentityKey {
   // TODO: actually return ECKey pair
   [self.dbQueue inDatabase:^(FMDatabase *db) {
-    FMResultSet  *rs = [db executeQuery:@"SELECT * FROM identity_key"];
+    FMResultSet  *rs = [db executeQuery:@"SELECT identity_key_public FROM persistent_settings"];
     while([rs next]){
-      NSLog(@"identity key was %@ %@",[rs stringForColumn:@"private_key"],[rs stringForColumn:@"public_key"]);
+      NSLog(@"identity key public %@",[rs stringForColumn:@"setting_value"]);
       break;
 
     }

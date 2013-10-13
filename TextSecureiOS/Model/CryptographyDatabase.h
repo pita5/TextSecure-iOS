@@ -12,6 +12,12 @@
 @class FMDatabaseQueue;
 @interface CryptographyDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
+-(id) initWithPassword:(NSString*) userPassword;
+-(id) init;
 -(void) storeIdentityKey:(ECKeyPair*) identityKey;
 -(ECKeyPair*) getIdentityKey;
+-(void) savePrekeyCounter:(NSString*)prekeyCounter;
+-(NSNumber*) getPrekeyCounter;
+-(void) incrementPrekeyCounter;
+-(void) generatePrekeyCounterIfNeeded;
 @end
