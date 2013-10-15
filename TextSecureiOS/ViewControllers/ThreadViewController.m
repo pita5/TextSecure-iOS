@@ -18,7 +18,7 @@
 
 -(void) reloadModel:(NSNotification*)notification {
   // TODO: make this be threads
-  self.messages=[self.messagesDB getMessages];
+#warning get messages from the message db
   [self.tableView reloadData];
 }
 

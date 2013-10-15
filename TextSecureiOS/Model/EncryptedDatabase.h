@@ -10,8 +10,17 @@
 
 @class ECKeyPair;
 @class FMDatabaseQueue;
-@interface CryptographyDatabase : NSObject
+@interface EncryptedDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
++(void) setupDatabaseWithPassword:(NSString*) userPassword;
+-(id) initWithPassword:(NSString*) userPassword;
+
++(id) database;
+-(id) init;
 -(void) storeIdentityKey:(ECKeyPair*) identityKey;
 -(ECKeyPair*) getIdentityKey;
+-(void) savePrekeyCounter:(NSString*)prekeyCounter;
+-(NSNumber*) getPrekeyCounter;
+-(void) incrementPrekeyCounter;
+-(void) generatePrekeyCounterIfNeeded;
 @end

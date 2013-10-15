@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MessagesDatabase.h"
 
 #ifdef DEBUG
 @interface AppDelegate : UIResponder <BITHockeyManagerDelegate, BITUpdateManagerDelegate, BITCrashManagerDelegate, UIApplicationDelegate>
@@ -17,6 +16,5 @@
 
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong,nonatomic) MessagesDatabase *messageDatabase;
 -(void) handlePush:(NSDictionary *)pushInfo;
 @end

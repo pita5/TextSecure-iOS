@@ -18,12 +18,10 @@
 @implementation TextSecureViewController
 @synthesize composingMessageText;
 @synthesize messages;
-@synthesize messagesDB;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = NO;
-    //self.messagesDB = [[MessagesDatabase alloc] init];
-    //self.messages = [self.messagesDB getMessages];
+#warning we'll want to get messages from the message db here
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
     self.title = @"Messages";
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
@@ -73,7 +71,7 @@
 }
 
 -(void) reloadModel:(NSNotification*)notification {
-    self.messages=[self.messagesDB getMessages];
+#warning get the messages from the database here
     [self.tableView reloadData];
 }
 
@@ -91,7 +89,7 @@
                                messageAttachments:[[NSArray alloc] init]
                                messageTimestamp:[NSDate date]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SendMessage" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:newMessage, @"message",nil]];
-        [self.messagesDB addMessage:newMessage];
+#warning add message to database here
         self.composingMessageText = nil;
         self.composingMessagePhoneNumber = nil;
     }

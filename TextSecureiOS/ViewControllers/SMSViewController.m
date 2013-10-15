@@ -15,7 +15,7 @@
 }
 
 -(void) reloadModel:(NSNotification*)notification {
-  self.messages=[self.messagesDB getMessages];
+#warning get the messages from the database here
   [self.tableView reloadData];
 }
 

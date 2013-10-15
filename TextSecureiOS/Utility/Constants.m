@@ -13,6 +13,7 @@ NSString* const authenticationTokenStorageId = @"TextSecureAuthenticationToken";
 NSString* const usernameTokenStorageId = @"UsernameAuthenticationToken";
 NSString* const signalingTokenStorageId = @"SignalingTokenStorageId";
 NSString* const prekeyCounterStorageId = @"PrekeyCounterStorageId";
+NSString* const encryptedMasterSecretKeyStorageId  = @"EncryptedMasterSecretKeyStorageId";
 NSString* const textSecureServer = @"https://gcm.textsecure.whispersystems.org/";
 
 NSString* const textSecureAccountsAPI = @"v1/accounts";
