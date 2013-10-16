@@ -14,6 +14,7 @@
 #import "Message.h"
 #import "EncryptedDatabase.h"
 #import "TSRegisterForPushRequest.h"
+#import "ECKeyPair.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -29,6 +30,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [UserDefaults removeAllKeychainItems];
         DLog(@"First Launch");
+      
     }
     
 #ifdef DEBUG
@@ -57,15 +59,14 @@
 	}
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
-  
 	return YES;
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+#warning we will want better error handling, including reprompting if user enters password wrong
   if(buttonIndex==1) {
     NSString* password = [[alertView textFieldAtIndex:0] text];
     [EncryptedDatabase setupDatabaseWithPassword:password];
-    
   }
 }
 

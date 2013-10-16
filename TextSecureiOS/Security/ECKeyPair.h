@@ -9,10 +9,16 @@
 #import <Foundation/Foundation.h>
 #include <openssl/ec.h>
 
-@interface ECKeyPair : NSObject
-@property (nonatomic) EC_KEY* key;
--(id) initWithKey:(EC_KEY*) ecKey;
--(NSString*) getSerializedPrivateKey;
--(NSString*)getSerializedPublicKey;
-- (EC_KEY*) generateNISTp256ECCKeyPair;
+@interface ECKeyPair : NSObject {
+  EC_KEY *ecKey;
+  unsigned int curveType;
+}
+
+- (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
+- (id)initWithPublicKey:(NSString *)publicKey;
+- (BOOL)generateKeys;
+- (BOOL)setPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
+- (NSString *)publicKey;
+- (NSString *)privateKey;
++(void) testGenerateKeyPair;
 @end

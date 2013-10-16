@@ -8,58 +8,96 @@
 
 #import "ECKeyPair.h"
 #include <openssl/obj_mac.h>
+#include <openssl/evp.h>
+#include "NSData+Base64.h"
 
 
 @implementation ECKeyPair
 
--(id) init {
-  if(self==[super init]) {
-    self.key=[self generateNISTp256ECCKeyPair];
+- (id)init {
+	if (![super init]) {
+		return nil;
   }
-  return  self;
+	curveType = NID_X9_62_prime256v1;
+	return self;
 }
 
--(id) initWithKey:(EC_KEY*)ecKey{
-  if(self==[super init]) {
-    self.key=ecKey;
+
+- (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey {
+	if (![self init]) {
+		return nil;
   }
-  return  self;
+	if (![self setPublicKey:publicKey privateKey:privateKey]) {
+  	return nil;
+  }
+	return self;
 }
 
--(NSString*) getSerializedPrivateKey{
-  int len = i2d_ECPrivateKey(self.key,NULL);
-  unsigned char *privateKeyBuf = OPENSSL_malloc(len);
-  memset(privateKeyBuf, 0, len);
-  int ret = i2d_ECPrivateKey(self.key,&privateKeyBuf);
-  if (!ret){
-    return nil;
-  }
-  else {
-    return [NSString stringWithFormat:@"%s",privateKeyBuf];
-  }
+- (id)initWithPublicKey:(NSString *)publicKey {
+	return [self initWithPublicKey:publicKey privateKey:nil];
 }
 
--(NSString*)getSerializedPublicKey {
-  int len = i2o_ECPublicKey(self.key,NULL);
-  unsigned char *publicKeyBuf = OPENSSL_malloc(len);
-  memset(publicKeyBuf, 0, len);
-  int ret = i2o_ECPublicKey(self.key,&publicKeyBuf);
-  if (!ret){
-    return nil;
-  }
-  else {
-    return [NSString stringWithFormat:@"%s",publicKeyBuf];
-  }
-}
 
-- (EC_KEY*) generateNISTp256ECCKeyPair {
-  EC_KEY *ecKey = EC_KEY_new();
-  EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
+
+- (BOOL)generateKeys {
+	if (ecKey) {
+		EC_KEY_free(ecKey);
+  }
+  ecKey = EC_KEY_new();
+	if (!ecKey) {
+		return NO;
+  }
+  EC_GROUP *group = EC_GROUP_new_by_curve_name(curveType);
+  if (!group) {
+		return NO;
+  }
   EC_KEY_set_group(ecKey, group);
   EC_GROUP_set_point_conversion_form(group, POINT_CONVERSION_COMPRESSED);
-  EC_KEY_generate_key(ecKey);
-  return ecKey;
+  return EC_KEY_generate_key(ecKey);
+  
 }
+
+- (BOOL)setPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey {
+	if (ecKey) {
+		EC_KEY_free(ecKey);
+  }
+  ecKey = EC_KEY_new_by_curve_name(curveType);
+	if (ecKey == NULL) {
+		return NO;
+  }
+  
+	NSData *publicKeyData = [NSData dataFromBase64String:publicKey];
+	const unsigned char *pubBytes = [publicKeyData bytes];
+	ecKey = o2i_ECPublicKey(&ecKey, &pubBytes, [publicKeyData length]);
+	if (ecKey == NULL) {
+		return NO;
+  }
+	if (privateKey) {
+		NSData *privateKeyData = [NSData dataFromBase64String:privateKey];
+		const unsigned char *privBytes = [privateKeyData bytes];
+		ecKey = d2i_ECPrivateKey(&ecKey, &privBytes, [privateKeyData length]);
+		if (ecKey == NULL) {
+			return NO;
+    }
+	}
+	return (EC_KEY_check_key(ecKey));
+}
+
+
+
+
+- (NSString *)publicKey {
+	unsigned char *bytes = NULL;
+	int length = i2o_ECPublicKey(ecKey, &bytes);
+	return [[NSData dataWithBytesNoCopy:bytes length:length] base64Encoding];
+}
+
+- (NSString *)privateKey {
+	unsigned char *bytes = NULL;
+	int length = i2d_ECPrivateKey(ecKey, &bytes);
+	return [[NSData dataWithBytesNoCopy:bytes length:length] base64Encoding];
+}
+
 
 
 

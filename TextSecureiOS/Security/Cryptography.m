@@ -61,14 +61,11 @@
    
    In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
    */
-  ECKeyPair *identityKey = [[ECKeyPair alloc] init];
-  #ifdef DEBUG
-  NSLog(@"testing private key %@",[identityKey getSerializedPrivateKey]);
-  NSLog(@"testing public key %@",[identityKey getSerializedPublicKey]);
-  #endif
   EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  ECKeyPair *identityKey = [[ECKeyPair alloc] init];
+  [identityKey generateKeys];
   [cryptoDB storeIdentityKey:identityKey];
-  [cryptoDB getIdentityKey];
+
 }
 
 + (NSData*) getMasterSecretKey:(NSString*) userPassword {

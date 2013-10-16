@@ -27,6 +27,10 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     //first call of this during the app lifecyle
     SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithPassword:userPassword];
   }
+  // We also want to generate the identity keys if they haven't been
+  if(![SharedCryptographyDatabase getIdentityKey]) {
+    [Cryptography generateAndStoreIdentityKey];
+  }
 }
 
 
@@ -112,27 +116,36 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 -(void) storeIdentityKey:(ECKeyPair*) identityKey {
-  // TODO: actually store ECKey pair
   [self.dbQueue inDatabase:^(FMDatabase *db) {
-    [db executeUpdate:@"INSERT OR REPLACE INTO persitent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",@"hello"];
-    [db executeUpdate:@"INSERT OR REPLACE INTO persitent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",@"world"];
+    [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]];
+    [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]];
   }];
   
 }
 
 
 -(ECKeyPair*) getIdentityKey {
-  // TODO: actually return ECKey pair
+  __block NSString* identityKeyPrivate = nil;
+  __block NSString* identityKeyPublic = nil;
   [self.dbQueue inDatabase:^(FMDatabase *db) {
-    FMResultSet  *rs = [db executeQuery:@"SELECT identity_key_public FROM persistent_settings"];
-    while([rs next]){
-      NSLog(@"identity key public %@",[rs stringForColumn:@"setting_value"]);
-      break;
+    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT setting_value FROM persistent_settings WHERE setting_name=\"identity_key_public\""]];
+    if([rs next]){
+      identityKeyPublic = [rs stringForColumn:@"setting_value"];
+    }
+    [rs close];
+    rs = [db executeQuery:[NSString stringWithFormat:@"SELECT setting_value FROM persistent_settings WHERE setting_name=\"identity_key_private\""]];
 
+    if([rs next]){
+      identityKeyPrivate = [rs stringForColumn:@"setting_value"];
     }
     [rs close];
   }];
-  return nil;
+  if(identityKeyPrivate==nil || identityKeyPublic==nil) {
+    return nil;
+  }
+  else {
+    return [[ECKeyPair alloc] initWithPublicKey:identityKeyPublic privateKey:identityKeyPrivate];
+  }
 }
 
 @end
