@@ -62,6 +62,7 @@
 	return YES;
 }
 
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 #warning we will want better error handling, including reprompting if user enters password wrong
   if(buttonIndex==1) {
@@ -70,8 +71,6 @@
   }
 }
 
-
-
 #pragma mark - Push notifications
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
@@ -79,8 +78,7 @@
 	stringToken = [stringToken stringByReplacingOccurrencesOfString:@" " withString:@""];
 	
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterForPushRequest alloc] initWithPushIdentifier:stringToken] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Request : %@", operation.request);
-        NSLog(@"StatusCode : %ld reponse %@", (long)operation.response.statusCode, operation.response);
+
         switch (operation.response.statusCode) {
             case 200:
                 DLog(@"Device registered for push notifications");
