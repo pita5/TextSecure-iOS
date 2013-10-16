@@ -22,7 +22,7 @@
 #  Change values here													  #
 #																		  #
 VERSION="1.0.1e"													      #
-SDKVERSION="6.1"														  #
+SDKVERSION="7.0"														  #
 #																		  #
 ###########################################################################
 #																		  #
@@ -79,7 +79,7 @@ do
 	echo "Building openssl-${VERSION} for ${PLATFORM} ${SDKVERSION} ${ARCH}"
 	echo "Please stand by..."
 
-	export CC="${CROSS_TOP}/usr/bin/gcc -arch ${ARCH}"
+	export CC="/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -arch ${ARCH} -miphoneos-version-min=7.0"
 	mkdir -p "${CURRENTPATH}/bin/${PLATFORM}${SDKVERSION}-${ARCH}.sdk"
 	LOG="${CURRENTPATH}/bin/${PLATFORM}${SDKVERSION}-${ARCH}.sdk/build-openssl-${VERSION}.log"
 
