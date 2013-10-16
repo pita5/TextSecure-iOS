@@ -20,5 +20,4 @@
 - (BOOL)setPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
 - (NSString *)publicKey;
 - (NSString *)privateKey;
-+(void) testGenerateKeyPair;
 @end
