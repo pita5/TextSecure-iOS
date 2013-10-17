@@ -12,12 +12,15 @@
 @interface ECKeyPair : NSObject {
   EC_KEY *ecKey;
   unsigned int curveType;
-}
 
+}
+@property (nonatomic) int prekeyId;
+- (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey prekeyId:(int)prekeyId;
 - (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
 - (id)initWithPublicKey:(NSString *)publicKey;
 - (BOOL)generateKeys;
 - (BOOL)setPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
 - (NSString *)publicKey;
 - (NSString *)privateKey;
++(ECKeyPair*) createAndGeneratePublicPrivatePair:(int)prekeyId;
 @end

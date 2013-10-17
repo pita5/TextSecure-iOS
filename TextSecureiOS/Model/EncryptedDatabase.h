@@ -19,8 +19,8 @@
 -(id) init;
 -(void) storeIdentityKey:(ECKeyPair*) identityKey;
 -(ECKeyPair*) getIdentityKey;
--(void) savePrekeyCounter:(NSString*)prekeyCounter;
--(NSNumber*) getPrekeyCounter;
--(void) incrementPrekeyCounter;
--(void) generatePrekeyCounterIfNeeded;
+-(int) getLastPrekeyId;
+-(void) setLastPrekeyId:(int)lastPrekeyId;
+-(void) savePersonalPrekeys:(NSArray*)prekeyArray;
+-(NSArray*) getPersonalPrekeys;
 @end

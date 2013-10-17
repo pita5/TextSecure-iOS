@@ -62,8 +62,7 @@
    In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
    */
   EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
-  ECKeyPair *identityKey = [[ECKeyPair alloc] init];
-  [identityKey generateKeys];
+  ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
   [cryptoDB storeIdentityKey:identityKey];
 
 }
@@ -98,19 +97,21 @@
 
 
 +(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
-  #warning generateAndStoreNewPreKeys not yet implemented
-  //  // TODO: Check if there is an old counter, if so, keep up where you left off
-  //  //NSString* prekeyCounter = [Cryptography getPrekeyCounter];
-  //  NSInteger *baseInt = arc4random() % 16777216; //16777216 is 0xFFFFFF
-  //  NSString *hex = [NSString stringWithFormat:@"%06X", baseInt];
-  //
-  //  for (int i=0; i<numberOfPreKeys; i++) {
-  //    // Generate a new prekey here
-  //
-  //  }
-  //
-  //  [Cryptography storePrekeyCounter:hex];
+  #warning generateAndStoreNewPreKeys not yet tested
+  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  int lastPrekeyCounter = [cryptoDB getLastPrekeyId];
+  NSMutableArray *prekeys = [[NSMutableArray alloc] initWithCapacity:numberOfPreKeys];
+  if(lastPrekeyCounter<0) {
+    // Prekeys have never before been generated
+    lastPrekeyCounter = arc4random() % 16777216; //16777216 is 0xFFFFFF
+    [prekeys addObject:[ECKeyPair createAndGeneratePublicPrivatePair:16777216]]; // Key of last resoort
+  }
+
   
+  for( int i=0; i<numberOfPreKeys; i++) {
+    [prekeys addObject:[ECKeyPair createAndGeneratePublicPrivatePair:++lastPrekeyCounter]];
+  }
+  [cryptoDB savePersonalPrekeys:prekeys];
 }
 
 

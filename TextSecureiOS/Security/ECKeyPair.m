@@ -13,7 +13,6 @@
 
 
 @implementation ECKeyPair
-
 - (id)init {
 	if (![super init]) {
 		return nil;
@@ -22,6 +21,14 @@
 	return self;
 }
 
+
+- (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey prekeyId:(int)prekeyId {
+	if (![self initWithPublicKey:publicKey privateKey:privateKey]) {
+  	return nil;
+  }
+  self.prekeyId=prekeyId;
+	return self;
+}
 
 - (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey {
 	if (![self init]) {
@@ -83,9 +90,6 @@
 	return (EC_KEY_check_key(ecKey));
 }
 
-
-
-
 - (NSString *)publicKey {
 	unsigned char *bytes = NULL;
 	int length = i2o_ECPublicKey(ecKey, &bytes);
@@ -97,6 +101,14 @@
 	int length = i2d_ECPrivateKey(ecKey, &bytes);
 	return [[NSData dataWithBytesNoCopy:bytes length:length] base64Encoding];
 }
+
++(ECKeyPair*) createAndGeneratePublicPrivatePair:(int)prekeyId {
+  ECKeyPair* pair =[[ECKeyPair alloc] init];
+  pair.prekeyId = prekeyId;
+  [pair generateKeys];
+  return pair;
+}
+
 
 
 

@@ -56,62 +56,60 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
           
         }
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
+        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INT)"];
+
       }
       
     }];
 	}
-  [self generatePrekeyCounterIfNeeded];
 	return self;
 
 }
 
 
-
--(void) generatePrekeyCounterIfNeeded {
-  if([self getPrekeyCounter]==nil) {
-    // we generate the prekey counter
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
-
-      NSNumber *baseInt = [NSNumber numberWithUnsignedInteger: arc4random() % 16777216]; //16777216 is 0xFFFFFF
-      NSString *prekeyCounter = [NSString stringWithFormat:@"%06X", [baseInt unsignedIntegerValue]];
-      [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?,?)",@"prekey_counter",prekeyCounter];
-    }];
-
-  }
-}
-
--(void) savePrekeyCounter:(NSString*)prekeyCounter {
+-(void) savePersonalPrekeys:(NSArray*)prekeyArray {
   [self.dbQueue inDatabase:^(FMDatabase *db) {
-      [db executeUpdate:@"INSERT OR REPLACE INTO  persistent_settings (setting_name,setting_value) VALUES (?,?)",@"prekey_counter",prekeyCounter];
+    for(ECKeyPair* keyPair in prekeyArray) {
+      [db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[keyPair prekeyId],[keyPair publicKey],[keyPair privateKey],0];
+    }
   }];
-  
+  //[NSString stringWithFormat:@"%06X",prekeyCounter] to hex format
 }
 
--(void) incrementPrekeyCounter {
-  unsigned int prekeyCounter = [[self getPrekeyCounter] unsignedIntegerValue];
-  prekeyCounter++;
-  [self savePrekeyCounter:[NSString stringWithFormat:@"%06X",prekeyCounter % 16777216]]; //16777216 is 0xFFFFFF
-
-}
-
--(NSNumber*) getPrekeyCounter {
-  __block NSNumber* counter = nil;
+-(NSArray*) getPersonalPrekeys {
+  NSMutableArray *prekeyArray = [[NSMutableArray alloc] init];
   [self.dbQueue inDatabase:^(FMDatabase *db) {
-    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT setting_value FROM persistent_settings WHERE setting_name=\"prekey_counter\""]];
-    while([rs next]){
-      NSString* prekeyCounter = [rs stringForColumn:@"setting_value"];
-      NSScanner* pScanner = [NSScanner scannerWithString: prekeyCounter];
-      
-      unsigned int iValue;
-      [pScanner scanHexInt: &iValue];
-      counter=[NSNumber numberWithUnsignedInteger:iValue];
-      break;
+    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM personal_prekeys"]];
+    while([rs next]) {
+      ECKeyPair *keyPair = [[ECKeyPair alloc] initWithPublicKey:[rs stringForColumn:@"public_key"]
+                                                     privateKey:[rs stringForColumn:@"private_key"]
+                                                       prekeyId:[rs intForColumn:@"prekey_id"]];
+      [prekeyArray addObject:keyPair];
+    }
+  }];
+  return prekeyArray;
+}
+
+
+-(int) getLastPrekeyId {
+  __block int counter = -1;
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT prekey_id FROM personal_prekeys WHERE last_counter=\"1\""]];
+    if([rs next]){
+      counter = [rs intForColumn:@"prekey_id"];
     }
     [rs close];
     
   }];
   return counter;
   
+}
+
+-(void) setLastPrekeyId:(int)lastPrekeyId {
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [db executeUpdate:@"UPDATE personal_prekeys SET last_counter=0"];
+    [db executeUpdate:[NSString stringWithFormat:@"UPDATE personal_prekeys SET last_counter=1 WHERE prekey_id=%d",lastPrekeyId]];
+  }];
 }
 
 
