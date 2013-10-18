@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="CYX-aS-3RN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="13A598" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="CYX-aS-3RN">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
@@ -342,24 +342,8 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="textsecure-countrycode-field.png" translatesAutoresizingMaskIntoConstraints="NO" id="qjI-2r-1bD">
-                                <rect key="frame" x="200" y="199" width="96" height="51"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="phonePad"/>
-                                <connections>
-                                    <outlet property="delegate" destination="G9I-Gu-J6D" id="I7b-tr-cZj"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="textsecure-countrycode-field.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ju7-xX-Jcu">
-                                <rect key="frame" x="45" y="199" width="93" height="51"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="phonePad"/>
-                                <connections>
-                                    <outlet property="delegate" destination="G9I-Gu-J6D" id="rNf-Te-Hkb"/>
-                                </connections>
-                            </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="–" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Avk-Ij-af6">
-                                <rect key="frame" x="159" y="214" width="21" height="21"/>
+                                <rect key="frame" x="150" y="218" width="21" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -374,13 +358,25 @@
                                     <action selector="doVerifyPhone:" destination="G9I-Gu-J6D" eventType="touchUpInside" id="BLj-1Q-BjP"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="center" minimumFontSize="25" translatesAutoresizingMaskIntoConstraints="NO" id="xYP-Td-TeH">
+                                <rect key="frame" x="20" y="199" width="115" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="center" minimumFontSize="25" translatesAutoresizingMaskIntoConstraints="NO" id="IOb-xg-BcN">
+                                <rect key="frame" x="185" y="199" width="115" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="1jZ-8Q-Tnl"/>
                     <connections>
-                        <outlet property="verificationCode_part1" destination="Ju7-xX-Jcu" id="jI2-KS-tfs"/>
-                        <outlet property="verificationCode_part2" destination="qjI-2r-1bD" id="wpx-16-hXh"/>
+                        <outlet property="verificationCode_part1" destination="xYP-Td-TeH" id="2TC-NP-dzs"/>
+                        <outlet property="verificationCode_part2" destination="IOb-xg-BcN" id="ItT-aq-ic5"/>
                         <outlet property="view" destination="1V4-l6-q0I" id="Wh2-gi-mqL"/>
                         <segue destination="UTA-HQ-Ilx" kind="push" identifier="setMasterPassword" id="MKe-cm-wYU"/>
                     </connections>
@@ -526,7 +522,6 @@
         <image name="TextSecure-Message-avatarmask.png" width="50" height="50"/>
         <image name="TextSecure-Messages-avatar.png" width="50" height="50"/>
         <image name="TextSecure-Messages-avatar2.png" width="73" height="73"/>
-        <image name="textsecure-countrycode-field.png" width="62" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
