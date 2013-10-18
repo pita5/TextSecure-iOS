@@ -15,6 +15,7 @@
 #import "EncryptedDatabase.h"
 #import "TSRegisterForPushRequest.h"
 #import "ECKeyPair.h"
+#import "NSString+Conversion.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -99,7 +100,11 @@
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
     [alert show];
-
+#ifdef DEBUG
+#warning registering with dummy ID so that we can proceed in the simulator. You'll want to change this!
+  [self application:application didRegisterForRemoteNotificationsWithDeviceToken:[[NSData alloc] initWithBase64Encoding:[@"christine" base64Encoded]]];
+#endif
+  
 }
 
 
