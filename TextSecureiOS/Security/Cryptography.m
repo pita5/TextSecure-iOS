@@ -24,6 +24,7 @@
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
 #import "EncryptedDatabase.h"
+#import "TSRegisterPrekeys.h"
 #import "FilePath.h"
 
 
@@ -103,8 +104,8 @@
   NSMutableArray *prekeys = [[NSMutableArray alloc] initWithCapacity:numberOfPreKeys];
   if(lastPrekeyCounter<0) {
     // Prekeys have never before been generated
-    lastPrekeyCounter = arc4random() % 16777216; //16777216 is 0xFFFFFF
-    [prekeys addObject:[ECKeyPair createAndGeneratePublicPrivatePair:16777216]]; // Key of last resoort
+    lastPrekeyCounter = arc4random() % 16777215; //16777215 is 0xFFFFFF
+    [prekeys addObject:[ECKeyPair createAndGeneratePublicPrivatePair:16777215]]; // Key of last resoort
   }
 
   
@@ -112,6 +113,28 @@
     [prekeys addObject:[ECKeyPair createAndGeneratePublicPrivatePair:++lastPrekeyCounter]];
   }
   [cryptoDB savePersonalPrekeys:prekeys];
+  // Sending new prekeys to network
+  
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:prekeys identityKey:[cryptoDB getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    switch (operation.response.statusCode) {
+      case 200:
+        DLog(@"Device registered prekeys");
+        break;
+        
+      default:
+        DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
+#warning Add error handling if not able to send the prekeys
+        break;
+    }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning Add error handling if not able to send the token
+ 
+  
+  
+  }];
+
+  
 }
 
 

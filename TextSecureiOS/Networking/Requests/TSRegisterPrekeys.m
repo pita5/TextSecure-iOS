@@ -18,13 +18,16 @@
   NSMutableArray *serializedPrekeyList = [[NSMutableArray alloc] init];
   NSMutableDictionary *serializedKeyRegistrationParameters = [[NSMutableDictionary alloc] init];
   for(ECKeyPair *pk in prekeys) {
-    if([pk prekeyId]==16777216){
+    NSString* serializedPrekeyId= [NSString stringWithFormat:@"0x%06X",[pk prekeyId]];
+    if([pk prekeyId]==16777215){
       [serializedKeyRegistrationParameters addEntriesFromDictionary:
-        [NSDictionary dictionaryWithObjects:@[[NSDictionary dictionaryWithObjects:@[[NSNumber  numberWithInt:[pk prekeyId]],[pk publicKey],publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]]
+        [NSDictionary dictionaryWithObjects:@[[NSDictionary dictionaryWithObjects:@[serializedPrekeyId,[pk publicKey],publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]]
                                     forKeys:@[@"lastResortKey"]]];
     }
     else {
-      [serializedPrekeyList addObject:[NSDictionary dictionaryWithObjects:@[[NSNumber  numberWithInt:[pk prekeyId]],[pk publicKey],publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]];
+      //  //[NSString stringWithFormat:@"%06X",prekeyCounter] to hex format
+
+      [serializedPrekeyList addObject:[NSDictionary dictionaryWithObjects:@[serializedPrekeyId,[pk publicKey],publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]];
     }
   }
   [serializedKeyRegistrationParameters addEntriesFromDictionary:

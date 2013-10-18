@@ -23,7 +23,6 @@
 #define firstLaunchKey @"FirstLaunch"
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
     // If this is the first launch, we want to remove stuff from the Keychain that might be there from a previous install
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:firstLaunchKey]) {
@@ -52,14 +51,12 @@
 	if([UserDefaults hasVerifiedPhoneNumber]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"GetDirectory" object:self];
      UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     passwordDialogue.alertViewStyle = UIAlertViewStyleSecureTextInput;
 
     [passwordDialogue show];
+    
 	}
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markVerifiedPhone:) name:@"VerifiedPhone" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(markSentVerification:) name:@"SentVerification" object:nil];
 	return YES;
 }
 
@@ -69,8 +66,10 @@
   if(buttonIndex==1) {
     NSString* password = [[alertView textFieldAtIndex:0] text];
     [EncryptedDatabase setupDatabaseWithPassword:password];
+    
   }
 }
+
 
 #pragma mark - Push notifications
 

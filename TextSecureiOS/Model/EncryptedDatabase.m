@@ -30,6 +30,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
   // We also want to generate the identity keys if they haven't been
   if(![SharedCryptographyDatabase getIdentityKey]) {
     [Cryptography generateAndStoreIdentityKey];
+    [Cryptography generateAndStoreNewPreKeys:70];
   }
 }
 
@@ -56,7 +57,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
           
         }
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
-        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INT)"];
+        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INTEGER)"];
 
       }
       
@@ -70,10 +71,9 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 -(void) savePersonalPrekeys:(NSArray*)prekeyArray {
   [self.dbQueue inDatabase:^(FMDatabase *db) {
     for(ECKeyPair* keyPair in prekeyArray) {
-      [db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[keyPair prekeyId],[keyPair publicKey],[keyPair privateKey],0];
+      [db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]],[keyPair publicKey],[keyPair privateKey],[NSNumber numberWithInt:0]];
     }
   }];
-  //[NSString stringWithFormat:@"%06X",prekeyCounter] to hex format
 }
 
 -(NSArray*) getPersonalPrekeys {
