@@ -12,6 +12,7 @@
 #import <AddressBook/AddressBook.h>
 #import "NSString+Conversion.h"
 #import "Cryptography.h"
+#import "TSContact.h"
 #import "TSContactsIntersectionRequest.h"
 
 @implementation TSContactManager
@@ -91,16 +92,18 @@
             
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
             
-            // Look up who they are
+            DLog(@"Contact Hashes %@", contactsHashes);
             
-            NSMutableArray *contactsIDs = [NSMutableArray array];
+            NSMutableArray *contacts = [NSMutableArray array];
             
             for (NSString *contactHash in contactsHashes) {
-                [contactsIDs addObjectsFromArray:[cleanedAB allKeysForObject:contactHash]];
+                TSContact *contact = [[TSContact alloc]init];
+                
+                // The case where a phone number would be in two contacts sheets is not managed properly yet.
+                contact.userABID = [[cleanedAB allKeysForObject:contactHash]objectAtIndex:0];
+                
+                [contacts addObject:contact];
             }
-            
-            NSLog(@"Contact IDs : %@", contactsIDs);
-            
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             

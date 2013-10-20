@@ -13,6 +13,8 @@
 #import "ECKeyPair.h"
 #import "FilePath.h"
 
+#define kKeyForInitBool @"DBWasInit"
+
 static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
@@ -58,15 +60,18 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INTEGER)"];
-
+        [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kKeyForInitBool];
+        [[NSUserDefaults standardUserDefaults] synchronize];
       }
-      
     }];
 	}
 	return self;
 
 }
 
++(BOOL) dataBaseWasInitialized{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kKeyForInitBool];
+}
 
 -(void) savePersonalPrekeys:(NSArray*)prekeyArray {
   [self.dbQueue inDatabase:^(FMDatabase *db) {
