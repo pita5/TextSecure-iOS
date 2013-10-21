@@ -17,6 +17,7 @@
 
 +(id) database;
 -(id) init;
++(BOOL) dataBaseWasInitialized;
 -(void) storeIdentityKey:(ECKeyPair*) identityKey;
 -(ECKeyPair*) getIdentityKey;
 -(int) getLastPrekeyId;
