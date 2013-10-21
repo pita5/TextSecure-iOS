@@ -129,7 +129,7 @@
     }
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token
- 
+    DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description); 
   
   
   }];

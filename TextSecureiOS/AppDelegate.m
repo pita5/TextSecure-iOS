@@ -66,6 +66,9 @@
   if(buttonIndex==1) {
     NSString* password = [[alertView textFieldAtIndex:0] text];
     [EncryptedDatabase setupDatabaseWithPassword:password];
+    // TODO: remove
+    [Cryptography generateAndStoreNewPreKeys:70];
+
     
   }
 }
