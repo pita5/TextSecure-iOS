@@ -31,6 +31,7 @@ sudo gem update
 
 5) Debugging network calls. If you are contributing networked code, PonyDebugger is integrated in Debug mode of the application. Check out https://github.com/square/PonyDebugger#quick-start and easily debug network code from the iOS simulator
 
+
 ## Documentation
 
 
@@ -38,6 +39,16 @@ Looking for documentation? Check out the wiki!
 
 https://github.com/WhisperSystems/TextSecure/wiki
 
+## Interoperability 
+The iOS code will be tested to be interoperable with the TextSecure Android push-library branch
+$ git clone https://github.com/WhisperSystems/TextSecure.git
+$ git checkout push-library
+$ gradle build
+$ adb install -r build/apk/TextSecure-debug-unaligned.apk
+
+You'll need gradle > 1.8 installed on your build machine, as well as the
+"Android Support Repository" and "Google Repository" installed from the
+Android SDK manager on your build machine.
 ## Contribute
 
 At this early stage there are two primary developers of TextSecure iOS and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing. Please contact us.
