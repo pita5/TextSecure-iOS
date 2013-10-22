@@ -14,7 +14,7 @@
 		<string>textsecure@2x.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>com.fredericjacobs.textSecure</string>
+	<string>org.whispersystems.whisper</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
