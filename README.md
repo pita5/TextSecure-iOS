@@ -41,11 +41,12 @@ https://github.com/WhisperSystems/TextSecure/wiki
 
 ## Interoperability 
 The iOS code will be tested to be interoperable with the TextSecure Android push-library branch
+```
 $ git clone https://github.com/WhisperSystems/TextSecure.git
 $ git checkout push-library
 $ gradle build
 $ adb install -r build/apk/TextSecure-debug-unaligned.apk
-
+```
 You'll need gradle > 1.8 installed on your build machine, as well as the
 "Android Support Repository" and "Google Repository" installed from the
 Android SDK manager on your build machine.
