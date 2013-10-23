@@ -93,14 +93,11 @@
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
             
             DLog(@"Contact Hashes %@", contactsHashes);
-            
             NSMutableArray *contacts = [NSMutableArray array];
-            
-            for (NSString *contactHash in contactsHashes) {
+            for (NSDictionary *contactHash in contactsHashes) {
                 TSContact *contact = [[TSContact alloc]init];
-                
                 // The case where a phone number would be in two contacts sheets is not managed properly yet.
-                contact.userABID = [[cleanedAB allKeysForObject:contactHash]objectAtIndex:0];
+                contact.userABID = [[cleanedAB allKeysForObject:[contactHash objectForKey:@"token"]] objectAtIndex:0];
                 
                 [contacts addObject:contact];
             }
