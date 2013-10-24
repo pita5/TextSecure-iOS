@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A515AFDB180966E30084ABA5 /* EncryptedDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */; };
-		A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFA170FEA3E00A2CE9E /* Message.m */; };
 		A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */; };
 		A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */; };
 		A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */; };
@@ -375,6 +374,10 @@
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeys.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeys.m */; };
 		A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F631170F824700A0CDC1 /* CryptographyTests.m */; };
+		A5B0B82518198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = A5B0B82118198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc */; };
+		A5B0B82618198C8E00AF41A7 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */; };
+		A5B0B82718198C8E00AF41A7 /* README in Resources */ = {isa = PBXBuildFile; fileRef = A5B0B82418198C8E00AF41A7 /* README */; };
+		A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
@@ -415,8 +418,6 @@
 		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		A515AFD9180966E30084ABA5 /* EncryptedDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncryptedDatabase.h; path = Model/EncryptedDatabase.h; sourceTree = "<group>"; };
 		A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncryptedDatabase.m; path = Model/EncryptedDatabase.m; sourceTree = "<group>"; };
-		A5169CF8170FEA3E00A2CE9E /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = Model/Message.h; sourceTree = "<group>"; };
-		A5169CFA170FEA3E00A2CE9E /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = Model/Message.m; sourceTree = "<group>"; };
 		A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationViewController.m; path = ViewControllers/VerificationViewController.m; sourceTree = "<group>"; };
 		A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextSecureViewController.m; path = ViewControllers/TextSecureViewController.m; sourceTree = "<group>"; };
 		A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ThreadViewController.m; path = ViewControllers/ThreadViewController.m; sourceTree = "<group>"; };
@@ -804,6 +805,12 @@
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeys.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeys.m; sourceTree = "<group>"; };
 		A5A1F630170F824700A0CDC1 /* CryptographyTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptographyTests.h; sourceTree = "<group>"; };
 		A5A1F631170F824700A0CDC1 /* CryptographyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptographyTests.m; sourceTree = "<group>"; };
+		A5B0B82118198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IncomingPushMessageSignal.pb.cc; sourceTree = "<group>"; };
+		A5B0B82218198C8E00AF41A7 /* IncomingPushMessageSignal.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IncomingPushMessageSignal.pb.h; sourceTree = "<group>"; };
+		A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
+		A5B0B82418198C8E00AF41A7 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.hh; sourceTree = "<group>"; };
+		A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.mm; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -886,8 +893,6 @@
 		A51B779B17050EDB002B8E53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A5169CF8170FEA3E00A2CE9E /* Message.h */,
-				A5169CFA170FEA3E00A2CE9E /* Message.m */,
 				A515AFD9180966E30084ABA5 /* EncryptedDatabase.h */,
 				A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */,
 			);
@@ -946,6 +951,7 @@
 				B6F10B1417EF49D700723719 /* Categories */,
 				B6B478E01809B9B3005DDE12 /* Contacts */,
 				A5F15AA117029BB400856385 /* Security */,
+				A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */,
 				A51B779B17050EDB002B8E53 /* Model */,
 				B639AF0A17F5A53700B2244D /* Networking */,
 				A5F15B1D1703740D00856385 /* View */,
@@ -1338,6 +1344,19 @@
 			);
 			name = flags;
 			path = TextSecureiOSAssets/flags;
+			sourceTree = "<group>";
+		};
+		A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */ = {
+			isa = PBXGroup;
+			children = (
+				A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */,
+				A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */,
+				A5B0B82118198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc */,
+				A5B0B82218198C8E00AF41A7 /* IncomingPushMessageSignal.pb.h */,
+				A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */,
+				A5B0B82418198C8E00AF41A7 /* README */,
+			);
+			path = ProtocolBuffers;
 			sourceTree = "<group>";
 		};
 		A5F15AA117029BB400856385 /* Security */ = {
@@ -1837,6 +1856,7 @@
 				A5372A4917011A5300C6FCCF /* scn.png in Resources */,
 				A5372A4A17011A5300C6FCCF /* scn@2x.png in Resources */,
 				A5372A4B17011A5300C6FCCF /* scotland.png in Resources */,
+				A5B0B82618198C8E00AF41A7 /* IncomingPushMessageSignal.proto in Resources */,
 				A5372A4C17011A5300C6FCCF /* sd.png in Resources */,
 				A5372A4D17011A5300C6FCCF /* se.png in Resources */,
 				A5372A4E17011A5300C6FCCF /* sg.png in Resources */,
@@ -1857,6 +1877,7 @@
 				A5372A5D17011A5300C6FCCF /* su.png in Resources */,
 				A5372A5E17011A5300C6FCCF /* sv.png in Resources */,
 				A5372A5F17011A5300C6FCCF /* sw.png in Resources */,
+				A5B0B82718198C8E00AF41A7 /* README in Resources */,
 				A5372A6017011A5300C6FCCF /* sw@2x.png in Resources */,
 				A5372A6117011A5300C6FCCF /* sy.png in Resources */,
 				A5372A6217011A5300C6FCCF /* sz.png in Resources */,
@@ -1982,12 +2003,12 @@
 				B6B478E61809E7F5005DDE12 /* TSContactsIntersectionRequest.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */,
-				A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */,
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B613B4D71815CEF000755184 /* ConversationViewController.m in Sources */,
+				A5B0B82518198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
@@ -2003,6 +2024,7 @@
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
 				A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */,
+				A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */,
 				A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */,
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,

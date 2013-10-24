@@ -1,0 +1,6 @@
+protobuffer format from:
+https://github.com/WhisperSystems/TextSecure/blob/push-library/library/protobuf/IncomingPushMessageSignal.proto
+
+protoc compiler generate from pod
+run with 
+../../Pods/GoogleProtobuf/bin/protoc --cpp_out=. IncomingPushMessageSignal.proto
