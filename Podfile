@@ -7,7 +7,7 @@ pod 'libPhoneNumber-iOS',	'~> 0.5.7.1'
 pod 'AFNetworking', 		'~> 2.0.1'
 pod 'PonyDebugger', 		'~> 0.3.0'
 pod 'SQLCipher', 			'~> 2.1.1'
-
+pod 'GoogleProtobuf', 		'~> 2.5.0'
 post_install do |lib_rep|
   lib_rep.project.targets.each do |target|
     if target.name == 'Pods-FMDB'
