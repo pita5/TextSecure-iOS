@@ -11,7 +11,6 @@
 #import "UserDefaults.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
-#import "Message.h"
 #import "EncryptedDatabase.h"
 #import "TSRegisterForPushRequest.h"
 #import "ECKeyPair.h"
@@ -58,6 +57,7 @@
     
 	}
 	return YES;
+
 }
 
 
@@ -118,7 +118,6 @@
 -(void) handlePush:(NSDictionary *)pushInfo {
 	NSDictionary* fullMessageJson = [[pushInfo objectForKey:@"message_body"] JSONValue];
 	NSLog(@"full message json %@",fullMessageJson);
-	Message *message = [[Message alloc] initWithText:[fullMessageJson objectForKey:@"messageText"] messageSource:[fullMessageJson objectForKey:@"source"] messageDestinations:[fullMessageJson objectForKey:@"destinations"] messageAttachments:[fullMessageJson objectForKey:@"attachments"] messageTimestamp:[NSDate date]];
 #warning we need to handle this push!
 
 }

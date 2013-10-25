@@ -10,7 +10,6 @@
 		A515AFDB180966E30084ABA5 /* EncryptedDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */; };
 		A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */; };
 		A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */; };
-		A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */; };
 		A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D01170FEA8D00A2CE9E /* SMSViewController.m */; };
 		A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D04170FEA8D00A2CE9E /* CountryViewController.m */; };
 		A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D06170FEA8D00A2CE9E /* CountrySegue.m */; };
@@ -24,6 +23,7 @@
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
+		A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
@@ -374,7 +374,6 @@
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeys.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeys.m */; };
 		A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F631170F824700A0CDC1 /* CryptographyTests.m */; };
-		A5B0B82518198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc in Sources */ = {isa = PBXBuildFile; fileRef = A5B0B82118198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc */; };
 		A5B0B82618198C8E00AF41A7 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */; };
 		A5B0B82718198C8E00AF41A7 /* README in Resources */ = {isa = PBXBuildFile; fileRef = A5B0B82418198C8E00AF41A7 /* README */; };
 		A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */; };
@@ -420,12 +419,10 @@
 		A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncryptedDatabase.m; path = Model/EncryptedDatabase.m; sourceTree = "<group>"; };
 		A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationViewController.m; path = ViewControllers/VerificationViewController.m; sourceTree = "<group>"; };
 		A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextSecureViewController.m; path = ViewControllers/TextSecureViewController.m; sourceTree = "<group>"; };
-		A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ThreadViewController.m; path = ViewControllers/ThreadViewController.m; sourceTree = "<group>"; };
 		A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationViewController.h; path = ViewControllers/VerificationViewController.h; sourceTree = "<group>"; };
 		A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSecureViewController.h; path = ViewControllers/TextSecureViewController.h; sourceTree = "<group>"; };
 		A5169D01170FEA8D00A2CE9E /* SMSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMSViewController.m; path = ViewControllers/SMSViewController.m; sourceTree = "<group>"; };
 		A5169D02170FEA8D00A2CE9E /* SMSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSViewController.h; path = ViewControllers/SMSViewController.h; sourceTree = "<group>"; };
-		A5169D03170FEA8D00A2CE9E /* ThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadViewController.h; path = ViewControllers/ThreadViewController.h; sourceTree = "<group>"; };
 		A5169D04170FEA8D00A2CE9E /* CountryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountryViewController.m; path = ViewControllers/CountryViewController.m; sourceTree = "<group>"; };
 		A5169D05170FEA8D00A2CE9E /* CountryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountryViewController.h; path = ViewControllers/CountryViewController.h; sourceTree = "<group>"; };
 		A5169D06170FEA8D00A2CE9E /* CountrySegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountrySegue.m; path = ViewControllers/CountrySegue.m; sourceTree = "<group>"; };
@@ -450,6 +447,8 @@
 		A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
 		A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		A5285069181A64800073CEDD /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
+		A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.pb.mm; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
 		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "TextSecureiOS/Utility/NSData+Base64.m"; sourceTree = "<group>"; };
 		A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextSecureiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -805,8 +804,6 @@
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeys.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeys.m; sourceTree = "<group>"; };
 		A5A1F630170F824700A0CDC1 /* CryptographyTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptographyTests.h; sourceTree = "<group>"; };
 		A5A1F631170F824700A0CDC1 /* CryptographyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptographyTests.m; sourceTree = "<group>"; };
-		A5B0B82118198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IncomingPushMessageSignal.pb.cc; sourceTree = "<group>"; };
-		A5B0B82218198C8E00AF41A7 /* IncomingPushMessageSignal.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IncomingPushMessageSignal.pb.h; sourceTree = "<group>"; };
 		A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
 		A5B0B82418198C8E00AF41A7 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.hh; sourceTree = "<group>"; };
@@ -1349,10 +1346,10 @@
 		A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */ = {
 			isa = PBXGroup;
 			children = (
+				A5285069181A64800073CEDD /* IncomingPushMessageSignal.pb.hh */,
+				A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */,
 				A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */,
 				A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */,
-				A5B0B82118198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc */,
-				A5B0B82218198C8E00AF41A7 /* IncomingPushMessageSignal.pb.h */,
 				A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */,
 				A5B0B82418198C8E00AF41A7 /* README */,
 			);
@@ -1380,8 +1377,6 @@
 				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
-				A5169D03170FEA8D00A2CE9E /* ThreadViewController.h */,
-				A5169CFE170FEA8D00A2CE9E /* ThreadViewController.m */,
 				A5169D02170FEA8D00A2CE9E /* SMSViewController.h */,
 				A5169D01170FEA8D00A2CE9E /* SMSViewController.m */,
 				A5169D05170FEA8D00A2CE9E /* CountryViewController.h */,
@@ -2008,9 +2003,7 @@
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B613B4D71815CEF000755184 /* ConversationViewController.m in Sources */,
-				A5B0B82518198C8E00AF41A7 /* IncomingPushMessageSignal.pb.cc in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
-				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
@@ -2025,6 +2018,7 @@
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
 				A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */,
 				A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */,
+				A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */,
 				A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */,
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
