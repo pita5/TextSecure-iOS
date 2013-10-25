@@ -3,4 +3,4 @@ https://github.com/WhisperSystems/TextSecure/blob/push-library/library/protobuf/
 
 protoc compiler generate from pod
 run with 
-../../Pods/GoogleProtobuf/bin/protoc --cpp_out=. IncomingPushMessageSignal.proto
+../../Pods/GoogleProtobuf/bin/protoc -I=`pwd` --cpp_out=`pwd` `pwd`/IncomingPushMessageSignal.proto 
