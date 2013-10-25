@@ -34,7 +34,7 @@
     // Printing message
     [self prettyPrint:incomingPushMessage];
     // Serializing message
-    NSData* serializedIncomingPushMessage;
+    NSData* serializedIncomingPushMessage = [self getDataForIncomingPushMessageSignal:incomingPushMessage];
     
     // Deserializing message
     textsecure::IncomingPushMessageSignal *deserializedIncomingPushMessage = [self getIncomingPushMessageSignalForData:serializedIncomingPushMessage];
