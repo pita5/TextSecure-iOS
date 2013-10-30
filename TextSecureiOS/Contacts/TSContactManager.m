@@ -34,7 +34,7 @@
     return self;
 }
 
-+ (void) getAllContactsIDs{
++ (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock{
     
     // Lookup contacts
     
@@ -88,11 +88,8 @@
         // Send hashes to server
         
         [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[cleanedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
-            
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
-            
-            DLog(@"Contact Hashes %@", contactsHashes);
+
             NSMutableArray *contacts = [NSMutableArray array];
             for (NSDictionary *contactHash in contactsHashes) {
                 TSContact *contact = [[TSContact alloc]init];
@@ -101,6 +98,8 @@
                 
                 [contacts addObject:contact];
             }
+            
+            contactFetchCompletionBlock(contacts);
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
