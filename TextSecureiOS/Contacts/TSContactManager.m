@@ -78,9 +78,7 @@
                 
                 NBPhoneNumber *phone = [phoneUtil parse:phoneNumber defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
                 NSString *cleanedNumber = [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
-                NSLog(@"Number : %@", cleanedNumber);
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
-                NSLog(@"Hashed Number: %@", hashedPhoneNumber);
                 [cleanedAB setObject:hashedPhoneNumber forKey:contactReferenceID];
             }
         }
@@ -95,7 +93,6 @@
                 TSContact *contact = [[TSContact alloc]init];
                 // The case where a phone number would be in two contacts sheets is not managed properly yet.
                 contact.userABID = [[cleanedAB allKeysForObject:[contactHash objectForKey:@"token"]] objectAtIndex:0];
-                
                 [contacts addObject:contact];
             }
             

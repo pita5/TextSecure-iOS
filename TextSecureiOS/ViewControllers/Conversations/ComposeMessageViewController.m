@@ -8,6 +8,7 @@
 
 #import "ComposeMessageViewController.h"
 #import "TSContactManager.h"
+#import "TSContact.h"
 
 @interface ComposeMessageViewController (Private)
 - (void)resizeViews;
@@ -37,20 +38,25 @@
     
     self = [super initWithNibName:nil bundle:nil];
     
-    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
-        // Process contacts
-    }];
-    
-    
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
         self.edgesForExtendedLayout = UIRectEdgeNone;
     
 	[self.view setBackgroundColor:[UIColor whiteColor]];
 	[self.navigationItem setTitle:@"New Message"];
-	
+    
+    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
+        _tokenFieldView.hidden = FALSE;
+        
+        NSMutableArray *contactNames;
+        for (TSContact *contact in contacts){
+            [contactNames addObject:[contact name]];
+        }
+        
+        [_tokenFieldView setSourceArray:contactNames];
+    }];
+    
 	_tokenFieldView = [[TITokenFieldView alloc] initWithFrame:self.view.bounds];
-	[_tokenFieldView setSourceArray:[NSArray arrayWithObjects:
-                                      @"Samuel Prescott", nil]];
+	[_tokenFieldView setSourceArray:nil];
     
 	[_tokenFieldView.tokenField setDelegate:self];
 	[_tokenFieldView.tokenField addTarget:self action:@selector(tokenFieldFrameDidChange:) forControlEvents:(UIControlEvents) TITokenFieldControlEventFrameDidChange];
@@ -63,7 +69,8 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-	
+	[_tokenFieldView setHidden:TRUE];
+    
     [self.view addSubview:_tokenFieldView];
     
 	// You can call this on either the view on the field.
@@ -88,23 +95,6 @@
     
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
     
-}
-
-- (void)showContactsPicker:(id)sender {
-	
-	// Show some kind of contacts picker in here.
-	// For now, here's how to add and customize tokens.
-	
-	NSArray * names = [NSArray arrayWithObjects:
-                       @"Samuel Prescott", nil];
-	
-	TIToken * token = [_tokenFieldView.tokenField addTokenWithTitle:[names objectAtIndex:(arc4random() % names.count)]];
-	[token setAccessoryType:TITokenAccessoryTypeDisclosureIndicator];
-	// If the size of the token might change, it's a good idea to layout again.
-	[_tokenFieldView.tokenField layoutTokensAnimated:YES]; 
-	
-	NSUInteger tokenCount = _tokenFieldView.tokenField.tokens.count;
-	[token setTintColor:((tokenCount % 3) == 0 ? [TIToken redTintColor] : ((tokenCount % 2) == 0 ? [TIToken greenTintColor] : [TIToken blueTintColor]))];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {

@@ -47,8 +47,6 @@
 
 @end
 
-
-
 @implementation JSMessagesViewController
 
 #pragma mark - Initialization
