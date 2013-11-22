@@ -65,11 +65,7 @@
 #warning we will want better error handling, including reprompting if user enters password wrong
   if(buttonIndex==1) {
     NSString* password = [[alertView textFieldAtIndex:0] text];
-    [EncryptedDatabase setupDatabaseWithPassword:password];
-    // TODO: remove
-    [Cryptography generateAndStoreNewPreKeys:70];
-
-    
+      [EncryptedDatabase databaseUnlockWithPassword:password error:nil];
   }
 }
 

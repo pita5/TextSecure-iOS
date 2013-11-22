@@ -12,16 +12,14 @@
 @class FMDatabaseQueue;
 @interface EncryptedDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
-+(void) setupDatabaseWithPassword:(NSString*) userPassword;
--(id) initWithPassword:(NSString*) userPassword;
 
-+(id) database;
--(id) init;
+// Three ways to get the shared encrypted DB:
++(instancetype) databaseCreateWithPassword:(NSString *)userPassword;
++(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error;
+// The last one can only be called after the DB has been created or unlocked
++(instancetype) database;
+
 +(BOOL) dataBaseWasInitialized;
--(void) storeIdentityKey:(ECKeyPair*) identityKey;
 -(ECKeyPair*) getIdentityKey;
--(int) getLastPrekeyId;
--(void) setLastPrekeyId:(int)lastPrekeyId;
--(void) savePersonalPrekeys:(NSArray*)prekeyArray;
 -(NSArray*) getPersonalPrekeys;
 @end

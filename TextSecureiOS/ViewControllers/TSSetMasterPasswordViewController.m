@@ -41,8 +41,7 @@
 }
 
 - (void) setupDatabase{
-    [Cryptography generateAndStoreMasterSecretPassword:self.pass.text];
-    [EncryptedDatabase setupDatabaseWithPassword:self.pass.text];
+    [EncryptedDatabase databaseCreateWithPassword:self.pass.text];
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 
 }

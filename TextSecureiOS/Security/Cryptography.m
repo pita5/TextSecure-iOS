@@ -56,17 +56,6 @@
   return randomBytes;
 }
 
-+(void) generateAndStoreIdentityKey {
-  /* 
-   An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
-   
-   In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
-   */
-  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
-  ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
-  [cryptoDB storeIdentityKey:identityKey];
-
-}
 
 + (NSData*) getMasterSecretKey:(NSString*) userPassword {
   #warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
@@ -85,56 +74,6 @@
     [alert show];
   }
   return masterSecretPassword;
-}
-      
-+ (void) generateAndStoreMasterSecretPassword:(NSString*) userPassword {
-  NSData *masterSecretPassword =[Cryptography generateRandomBytes:36];
-
-  NSData *masterSecretPasswordEncrypted = [Cryptography AES256Encryption:masterSecretPassword withPassword:userPassword];
- 
-  [Cryptography storeEncryptedMasterSecretKey:[masterSecretPasswordEncrypted base64EncodedString]];
-}
-
-
-
-+(void) generateAndStoreNewPreKeys:(int)numberOfPreKeys{
-  #warning generateAndStoreNewPreKeys not yet tested
-  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
-  int lastPrekeyCounter = [cryptoDB getLastPrekeyId];
-  NSMutableArray *prekeys = [[NSMutableArray alloc] initWithCapacity:numberOfPreKeys];
-  if(lastPrekeyCounter<0) {
-    // Prekeys have never before been generated
-    lastPrekeyCounter = arc4random() % 16777215; //16777215 is 0xFFFFFF
-    [prekeys addObject:[ECKeyPair createAndGeneratePublicPrivatePair:16777215]]; // Key of last resoort
-  }
-
-  
-  for( int i=0; i<numberOfPreKeys; i++) {
-    [prekeys addObject:[ECKeyPair createAndGeneratePublicPrivatePair:++lastPrekeyCounter]];
-  }
-  [cryptoDB savePersonalPrekeys:prekeys];
-  // Sending new prekeys to network
-  
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:prekeys identityKey:[cryptoDB getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    
-    switch (operation.response.statusCode) {
-      case 200:
-        DLog(@"Device registered prekeys");
-        break;
-        
-      default:
-        DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
-#warning Add error handling if not able to send the prekeys
-        break;
-    }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning Add error handling if not able to send the token
-    DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description); 
-  
-  
-  }];
-
-  
 }
 
 
