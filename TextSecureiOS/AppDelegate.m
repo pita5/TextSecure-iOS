@@ -62,10 +62,15 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSError *dbError = nil;
 #warning we will want better error handling, including reprompting if user enters password wrong
-  if(buttonIndex==1) {
-    NSString* password = [[alertView textFieldAtIndex:0] text];
-      [EncryptedDatabase databaseUnlockWithPassword:password error:nil];
+    if(buttonIndex==1) {
+        NSString* password = [[alertView textFieldAtIndex:0] text];
+        if (![EncryptedDatabase databaseUnlockWithPassword:password error:&dbError]) {
+            // Wrong password
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error entering user password" message:@"database will not open" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+            [alert show];
+        }
   }
 }
 

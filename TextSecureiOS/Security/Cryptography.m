@@ -69,10 +69,6 @@
 
   NSData* masterSecretPasswordEncrypted = [NSData dataFromBase64String:[Cryptography getEncryptedMasterSecretKey]];
   NSData* masterSecretPassword = [Cryptography AES256Decryption:masterSecretPasswordEncrypted withPassword:userPassword];
-  if(!masterSecretPassword) {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error entering user password" message:@"database will not open" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-    [alert show];
-  }
   return masterSecretPassword;
 }
 

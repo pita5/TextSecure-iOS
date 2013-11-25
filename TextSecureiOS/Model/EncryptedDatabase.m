@@ -125,7 +125,6 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
-    // TODO: return errors
     
     // DB is already unlocked
     if (SharedCryptographyDatabase) {
@@ -134,7 +133,13 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     
     NSData *key = [Cryptography getMasterSecretKey:userPassword];
     if(key == nil) {
-        @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"Could not recover the master key" userInfo:nil];
+        // Invalid password
+        // TODO: Return a different error if this failed because the encryptedMasterKey was not found in the keychain
+        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+        
+        [errorDetail setValue:@"Wrong password" forKey:NSLocalizedDescriptionKey];
+        *error = [NSError errorWithDomain:@"textSecure" code:100 userInfo:errorDetail];
+        return nil;
     }
     
     // Try to open the DB
@@ -144,24 +149,23 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         
         NSData *key = [Cryptography getMasterSecretKey:userPassword];
         if(key == nil) {
-            @throw [NSException exceptionWithName:@"DB unlock failed" reason:@"could not derive the master key" userInfo:nil];
+            return;
         }
         
         if(![db setKeyWithData:key]) {
-            // Supplied password was invalid
+            // Supplied password was valid but the master key wasn't !?
             return;
         }
         
         // Do a test query to make sure the DB is available
         if (![db executeUpdate:@"SELECT * FROM persistent_settings"]) {
-            // TODO: Figure out when this can happen and return a helpful error message
-            @throw [NSException exceptionWithName:@"DB unlock failed" reason:@"test query failed" userInfo:nil];
+            return;
         }
         initSuccess = YES;
     }
      ];
     if (!initSuccess) {
-        // TODO: error message (+ asking for the password again if pw was wrong)
+        @throw [NSException exceptionWithName:@"DB unlock failed" reason:@"DB was corrupted" userInfo:nil];
         return nil;
     }
     
