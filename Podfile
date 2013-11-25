@@ -1,4 +1,8 @@
 platform :ios, '7.0'
+# ignore all warnings from all pods
+inhibit_all_warnings!
+link_with ['TextSecureiOS', 'TextSecureiOS Tests']
+
 pod 'RNCryptor',			'~> 2.1'
 pod 'FMDB', 				'~> 2.1'
 pod 'SBJson', 				'~> 3.2'

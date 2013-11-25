@@ -78,6 +78,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         
         if (![db executeUpdate:@"CREATE TABLE persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"]) {
+            // Happens when the master key is wrong (ie. wrong (old?) encrypted key in the keychain)
             @throw [NSException exceptionWithName:@"DB creation failed" reason:@"table creation failed" userInfo:nil];
         }
         if (![db executeUpdate:@"CREATE TABLE personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INTEGER)"]){
