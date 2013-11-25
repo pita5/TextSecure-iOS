@@ -61,6 +61,11 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
++(void) databaseLock {
+    SharedCryptographyDatabase = nil;
+}
+
+
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword {
     // Creating a new DB; this should never fail
     // TODO: Error checking and check if a DB is already there
