@@ -18,6 +18,7 @@
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error;
 // The last one can only be called after the DB has been created or unlocked
 +(instancetype) database;
++(void) databaseErase;
 
 +(BOOL) dataBaseWasInitialized;
 -(ECKeyPair*) getIdentityKey;

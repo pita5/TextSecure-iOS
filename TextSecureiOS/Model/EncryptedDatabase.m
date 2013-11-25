@@ -14,8 +14,10 @@
 #import "FilePath.h"
 #include "NSData+Base64.h"
 #import "TSRegisterPrekeys.h"
+#import "KeychainWrapper.h"
 
 #define kKeyForInitBool @"DBWasInit"
+#define databaseFileName @"cryptography.db"
 
 // Reference to the singleton
 static EncryptedDatabase *SharedCryptographyDatabase = nil;
@@ -30,7 +32,6 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 // DB creation helper functions
 -(void) generatePersonalPrekeys;
 -(void) generateIdentityKey;
-+(void) generateAndStoreDatabaseMasterKey:(NSString *)userPassword;
 
 @end
 
@@ -50,30 +51,33 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
++(void) databaseErase {
+    // 1. Erase the DB file
+    [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
+    
+    // 2. Erase the DB encryption key from the Keychain
+    [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
+    
+}
+
+
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword {
     // Creating a new DB; this should never fail
-    // TODO: Error checking
+    // TODO: Error checking and check if a DB is already there
     
-    [EncryptedDatabase generateAndStoreDatabaseMasterKey:userPassword];
-    NSData *key = [Cryptography getMasterSecretKey:userPassword];
-    // TODO: Create the master secret here
-    if(key == nil) {
-        @throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not derive the master key" userInfo:nil];
-    }
+    // 1. Generate and store DB encryption key
+    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
+    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:dbMasterKey withPassword:userPassword];
+    // TODO: Access the keychain from here
+    [Cryptography storeEncryptedMasterSecretKey:[encryptedDbMasterKey base64EncodedString]];
     
-    // TODO: Check if a file is already there and erase it
     
-    // 1. Create the DB and the tables
+    // 2. Create the DB and the tables
     __block BOOL initSuccess = NO;
-    FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"cryptography.db"]];
+    FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
         
-        NSData *key = [Cryptography getMasterSecretKey:userPassword];
-        if(key == nil) {
-            @throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not recover the master key" userInfo:nil];
-        }
-        
-        if(![db setKeyWithData:key]) {
+        if(![db setKeyWithData:dbMasterKey]) {
             @throw [NSException exceptionWithName:@"DB creation failed" reason:@"master key was rejected" userInfo:nil];
         }
         
@@ -91,7 +95,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     // We have now have an empty DB
     EncryptedDatabase *preFinalDb = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
 
-    // 2. Generate and store the identity keys and prekeys
+    // 3. Generate and store the user's identity keys and prekeys
     [preFinalDb generateIdentityKey];
     [preFinalDb generatePersonalPrekeys];
     
@@ -114,7 +118,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }];
     
     
-    // 3. Success
+    // 4. Success
     // Store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kKeyForInitBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -145,7 +149,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     
     // Try to open the DB
     __block BOOL initSuccess = NO;
-    FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:@"cryptography.db"]];
+    FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
         
         NSData *key = [Cryptography getMasterSecretKey:userPassword];
@@ -228,15 +232,6 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
             [db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]], [keyPair publicKey], [keyPair privateKey],[NSNumber numberWithInt:0]];
         }];
     }
-}
-
-
-+(void) generateAndStoreDatabaseMasterKey:(NSString *)userPassword {
-    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
-    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:dbMasterKey withPassword:userPassword];
-    
-    // TODO: Access the keychain from here ?
-    [Cryptography storeEncryptedMasterSecretKey:[encryptedDbMasterKey base64EncodedString]];
 }
 
 
