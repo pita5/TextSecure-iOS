@@ -37,12 +37,9 @@ static NSString *dbPw = @"1234test";
 
 - (void)testDatabaseErase
 {
-    // TODO : Fix error handling in unlock
-    EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw];
+    [EncryptedDatabase databaseCreateWithPassword:dbPw];
     [EncryptedDatabase databaseErase];
-    encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:nil];
-    XCTAssertNil(encDb, @"database was unlocked after being erased");
-
+    XCTAssertThrows([EncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked after being erased");
 }
 
 
