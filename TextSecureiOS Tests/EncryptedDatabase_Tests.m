@@ -10,7 +10,9 @@
 #import "EncryptedDatabase.h"
 
 
+
 static NSString *dbPw = @"1234test";
+
 
 @interface EncryptedDatabase_Tests : XCTestCase
 
@@ -21,7 +23,8 @@ static NSString *dbPw = @"1234test";
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    // Remove any existing DB
+    [EncryptedDatabase databaseErase];
 }
 
 - (void)tearDown
@@ -30,27 +33,53 @@ static NSString *dbPw = @"1234test";
     [super tearDown];
 }
 
+
+
+- (void)testDatabaseErase
+{
+    // TODO : Fix error handling in unlock
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw];
+    [EncryptedDatabase databaseErase];
+    encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:nil];
+    XCTAssertNil(encDb, @"database was unlocked after being erased");
+
+}
+
+
 - (void)testDatabaseCreate
 {
+    // Test DB creation
     EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw];
     XCTAssertNotNil(encDb, @"database creation failed");
 }
 
 
-- (void)testDatabaseUnlock
+- (void)testDatabaseLock
+{
+    [EncryptedDatabase databaseCreateWithPassword:dbPw];
+    [EncryptedDatabase databaseLock];
+    XCTAssertThrows([EncryptedDatabase database], @"database was still available after getting locked");
+    }
 
+
+- (void)testDatabaseUnlock
 {
     NSError *error = nil;
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw];
+    [EncryptedDatabase databaseLock];
+    
     // Wrong password
-    EncryptedDatabase *encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:&error];
+    encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:&error];
     XCTAssertNil(encDb, @"wrong password unlocked the database");
     // TODO: Check the error itself
     XCTAssertNotNil(error, @"wrong password did not return an error");
     
     // Good password
+    error = nil;
     encDb = [EncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
     XCTAssertNotNil(encDb, @"valid password did not unlock the database");
     XCTAssertNil(error, @"valid password returned an error");
 }
+
 
 @end
