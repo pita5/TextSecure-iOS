@@ -168,7 +168,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         
         // Do a test query to make sure the DB is available
-        if (![db executeUpdate:@"SELECT * FROM persistent_settings"]) {
+        if (![db executeQuery:@"SELECT * FROM persistent_settings"]) {
             return;
         }
         initSuccess = YES;
