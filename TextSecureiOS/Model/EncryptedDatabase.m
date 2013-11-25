@@ -21,14 +21,16 @@
 static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
-// Private methods
-@interface EncryptedDatabase()
+#pragma mark Private Methods
+
+@interface EncryptedDatabase(Private)
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
 // DB creation helper functions
 -(void) generatePersonalPrekeys;
 -(void) generateIdentityKey;
++(void) generateAndStoreDatabaseMasterKey:(NSString *)userPassword;
 
 @end
 
@@ -36,15 +38,8 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 @implementation EncryptedDatabase
 
 
-+ (void) generateAndStoreDatabaseMasterKey:(NSString *)userPassword {
-    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
-    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:dbMasterKey withPassword:userPassword];
 
-    // TODO: Access the keychain from here ?
-    [Cryptography storeEncryptedMasterSecretKey:[encryptedDbMasterKey base64EncodedString]];
-}
-
-
+#pragma mark DB Instantiation Methods
 
 +(instancetype) database {
   if (!SharedCryptographyDatabase) {
@@ -53,6 +48,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
   return SharedCryptographyDatabase;
   
 }
+
 
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword {
     // Creating a new DB; this should never fail
@@ -128,15 +124,6 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-// Private constructor
--(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue {
-    if (self = [super init]) {
-        self.dbQueue = queue;
-    }
-    return self;
-}
-
-
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
     // TODO: return errors
     
@@ -188,6 +175,40 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     return [[NSUserDefaults standardUserDefaults] boolForKey:kKeyForInitBool];
 }
 
+
+#pragma mark DB Creation Private Methods
+
+-(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue {
+    if (self = [super init]) {
+        self.dbQueue = queue;
+    }
+    return self;
+}
+
+
+-(void) generateIdentityKey {
+    /*
+     An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
+     
+     In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
+     */
+    ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
+    
+    [self.dbQueue inDatabase:^(FMDatabase *db) {
+        BOOL updateResult = NO;
+        
+        updateResult = [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]];
+        if (updateResult == NO) {
+            NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
+        }
+        updateResult = [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]];
+        if (updateResult == NO) {
+            NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
+        }
+    }];
+}
+
+
 -(void) generatePersonalPrekeys {
     // TODO: Error checking
     
@@ -204,6 +225,18 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }
 }
 
+
++(void) generateAndStoreDatabaseMasterKey:(NSString *)userPassword {
+    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
+    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:dbMasterKey withPassword:userPassword];
+    
+    // TODO: Access the keychain from here ?
+    [Cryptography storeEncryptedMasterSecretKey:[encryptedDbMasterKey base64EncodedString]];
+}
+
+
+#pragma mark Keys Fetching Methods
+
 -(NSArray*) getPersonalPrekeys {
   NSMutableArray *prekeyArray = [[NSMutableArray alloc] init];
   [self.dbQueue inDatabase:^(FMDatabase *db) {
@@ -216,29 +249,6 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }
   }];
   return prekeyArray;
-}
-
-
--(void) generateIdentityKey {
-    /*
-     An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
-     
-     In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
-     */
-    ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
-    
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
-      BOOL updateResult = NO;
-      
-      updateResult = [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]];
-      if (updateResult == NO) {
-          NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
-      }
-      updateResult = [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]];
-      if (updateResult == NO) {
-          NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
-      }
-  }];
 }
 
 
