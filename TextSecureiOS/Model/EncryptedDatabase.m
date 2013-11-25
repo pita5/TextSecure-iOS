@@ -52,16 +52,20 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 +(void) databaseErase {
-    // 1. Erase the DB file
+    
+    // 1. Remove the reference to the DB
+    [EncryptedDatabase databaseLock];
+    
+    // 2. Erase the DB file
     [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
     
-    // 2. Erase the DB encryption key from the Keychain
+    // 3. Erase the DB encryption key from the Keychain
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
-    
 }
 
 
 +(void) databaseLock {
+    [SharedCryptographyDatabase.dbQueue close];
     SharedCryptographyDatabase = nil;
 }
 
