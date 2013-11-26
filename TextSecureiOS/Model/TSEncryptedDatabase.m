@@ -44,7 +44,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(void) databaseErase {
     @synchronized(SharedCryptographyDatabase) {
-        [TSEncryptedDatabase databaseLock];
         
         // Erase the DB file
         [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
@@ -54,13 +53,24 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         
         // Update the preferences
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
+        SharedCryptographyDatabase = nil;
     }
 }
 
 
 +(void) databaseLock {
+    
+    if (!SharedCryptographyDatabase) {
+        @throw [NSException exceptionWithName:@"DB lock failed" reason:@"tried to lock the DB before opening/unlocking it" userInfo:nil];
+    }
+    
+    if ([SharedCryptographyDatabase isLocked]) {
+        return;
+    }
+    
     @synchronized(SharedCryptographyDatabase.dbQueue) {
         // Synchronized in case some other code/thread still has a reference to the DB
+        // TODO: Investigate whether this truly closes the DB (in memory)
         [SharedCryptographyDatabase.dbQueue close];
         SharedCryptographyDatabase.dbQueue = nil;
     }
@@ -192,7 +202,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }];
     if (!initSuccess) {
         @throw [NSException exceptionWithName:@"DB unlock failed" reason:@"DB was corrupted" userInfo:nil];
-        return nil;
     }
     
     // Initialize the DB singleton

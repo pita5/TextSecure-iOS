@@ -90,6 +90,13 @@ static NSString *dbPw = @"1234test";
 }
 
 
+- (void)testDatabaseLockBeforeCreate
+{
+    XCTAssertThrows([TSEncryptedDatabase databaseLock], @"database was locked before getting created");
+}
+
+
+
 - (void)testDatabaseIsLocked
 {
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
