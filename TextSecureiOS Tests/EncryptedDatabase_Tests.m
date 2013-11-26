@@ -76,19 +76,26 @@ static NSString *dbPw = @"1234test";
     NSError *error = nil;
     EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
+
+    encDb = [EncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
+    XCTAssertNotNil(encDb, @"valid password did not unlock the database");
+    XCTAssertNil(error, @"valid password returned an error");
+}
+
+
+- (void)testDatabaseUnlockWithWrongPassword
+{
+    NSError *error = nil;
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    [EncryptedDatabase databaseLock];
     
     // Wrong password
     encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:&error];
     XCTAssertNil(encDb, @"wrong password unlocked the database");
     // TODO: Look at the actual error code
     XCTAssertNotNil(error, @"wrong password did not return an error");
-    
-    // Good password
-    error = nil;
-    encDb = [EncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
-    XCTAssertNotNil(encDb, @"valid password did not unlock the database");
-    XCTAssertNil(error, @"valid password returned an error");
 }
+
 
 
 @end
