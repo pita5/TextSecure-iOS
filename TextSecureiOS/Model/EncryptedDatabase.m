@@ -92,7 +92,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }
 
 
-    // 1. Create the DB encryption, the DB and the tables
+    // 1. Create the DB encryption key, the DB and the tables
     NSData *dbMasterKey = [EncryptedDatabase generateDatabaseMasterKeyWithPassword: userPassword];
     __block BOOL dbInitSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
@@ -195,12 +195,12 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         
         // Do a test query to make sure the DB is available
-        if (![db executeQuery:@"SELECT * FROM persistent_settings"]) {
-            return;
+        FMResultSet *rset = [db executeQuery:@"SELECT * FROM persistent_settings"];
+        if (rset) {
+            [rset close];
+            initSuccess = YES;
         }
-        initSuccess = YES;
-    }
-     ];
+    }];
     if (!initSuccess) {
         @throw [NSException exceptionWithName:@"DB unlock failed" reason:@"DB was corrupted" userInfo:nil];
         return nil;
