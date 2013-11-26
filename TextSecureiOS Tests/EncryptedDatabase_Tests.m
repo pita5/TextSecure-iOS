@@ -1,6 +1,6 @@
 //
-//  TextSecureiOS_Tests.m
-//  TextSecureiOS Tests
+//  EncryptedDatabase_Tests.m
+//  EncryptedDatabase Tests
 //
 //  Created by Alban Diquet on 11/24/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
