@@ -290,34 +290,45 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // No need to the check if the DB is locked as this happens during DB creation
     ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
     
+    __block BOOL updateSuccess = NO;
     [self->dbQueue inDatabase:^(FMDatabase *db) {
-        BOOL updateResult = NO;
         
-        updateResult = [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]];
-        if (updateResult == NO) {
+        if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]]) {
             NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
+            return;
         }
-        updateResult = [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]];
-        if (updateResult == NO) {
+        
+        if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]]) {
             NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
+            return;
         }
+        updateSuccess = YES;
     }];
+    if (!updateSuccess) {
+        @throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write identity key" userInfo:nil];
+    }
 }
 
 
 -(void) generatePersonalPrekeys {
     
     // No need to the check if the DB is locked as this happens during DB creation
-    // TODO: Error checking
     int numberOfPreKeys = 70;
     int prekeyCounter = arc4random() % 16777215; // 16777215 is 0xFFFFFF
     
     // Generate keys
     for(int i=0; i<numberOfPreKeys; i++) {
         ECKeyPair *keyPair = [ECKeyPair createAndGeneratePublicPrivatePair:++prekeyCounter];
+        
+        __block BOOL updateSuccess = NO;
         [self->dbQueue inDatabase:^(FMDatabase *db) {
-            [db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]], [keyPair publicKey], [keyPair privateKey],[NSNumber numberWithInt:0]];
+            if ([db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]], [keyPair publicKey], [keyPair privateKey],[NSNumber numberWithInt:0]]) {
+                updateSuccess = YES;
+            }
         }];
+        if (!updateSuccess) {
+            @throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write prekey" userInfo:nil];
+        }
     }
 }
 
