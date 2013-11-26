@@ -31,8 +31,6 @@
 + (BOOL) storeSignalingKeyToken:(NSString*)token;
 
 + (NSData*)computeMACDigestForString:(NSString*)input withSeed:(NSString*)seed;
-+(NSData*) AES256Encryption:(NSData*) dataToEncrypt withPassword:(NSString*)password;
-+(NSData*) AES256Decryption:(NSData*) dataToDecrypt withPassword:(NSString*)password;
 +(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string;
 
 @end

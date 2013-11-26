@@ -135,39 +135,4 @@
 }
 
 
-+(NSData*) AES256Encryption:(NSData*) dataToEncrypt withPassword:(NSString*)password {
-
-  NSError *error;
-  NSData *encryptedData = [RNEncryptor encryptData:dataToEncrypt
-                                      withSettings:kRNCryptorAES256Settings
-                                          password:password
-                                             error:&error];
-  return encryptedData;
-}
-          
-
-+(NSData*) AES256Decryption:(NSData*) dataToDecrypt withPassword:(NSString*)password {
- 
-  NSError *error;
-  NSData *decryptedData  = [RNDecryptor decryptData:dataToDecrypt
-                                       withPassword:password
-                                              error:&error];
-  if(!error) {
-    return decryptedData;
-   
-  }
-  else {
-     return nil;
-  }
-  
-}
-
-
-
-
-
-
-
-
-
 @end

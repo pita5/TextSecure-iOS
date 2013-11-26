@@ -7,6 +7,8 @@
 //
 
 #import "TSEncryptedDatabase.h"
+#import "RNDecryptor.h"
+#import "RNEncryptor.h"
 #import "Cryptography.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
@@ -80,7 +82,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error {
 
-    // Have we created a DB already ?
+    // Have we created a DB on this device already ?
     if ([TSEncryptedDatabase databaseWasCreated]) {
         if (error) {
             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
@@ -239,7 +241,12 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(NSData*) generateDatabaseMasterKeyWithPassword:(NSString*) userPassword {
     NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
-    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:dbMasterKey withPassword:userPassword];
+    NSData *encryptedDbMasterKey = [RNEncryptor encryptData:dataToEncrypt withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
+    
+    if(!encryptedDbMasterKey) {
+        @throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not generate a master key" userInfo:nil];
+    }
+    
     [KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId];
     return dbMasterKey;
 }
@@ -247,31 +254,12 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 + (NSData*) getDatabaseMasterKeyWithPassword:(NSString*) userPassword error:(NSError**) error {
 #warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
-    // PBKDF2 password (key)
-    // encrypt  using AES256 of that with
-    // IV=16random bytes
-    //ciphertext=AES in CBC mode with key from PBKDF2
-    // MAC =HMACshaw1(cipertext||IV) with key from PBKDF2
-    // store IV||ciphertext||mac(IV||ciphertext)
-    // decryption is AES256-1(ciphertext,IV) after verifying the MAC
-    
     NSString *encryptedDbMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
     if (!encryptedDbMasterKey) {
         @throw [NSException exceptionWithName:@"keychain corrupted" reason:@"could not retrieve DB master key from the keychain" userInfo:nil];
     }
     
-    NSData *dbMasterKey = [Cryptography AES256Decryption:[NSData dataFromBase64String:encryptedDbMasterKey] withPassword:userPassword];
-    if(dbMasterKey == nil) {
-        // Invalid password
-        if (error) {
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            [errorDetail setValue:@"Wrong password" forKey:NSLocalizedDescriptionKey];
-            // TODO: Define error codes
-            *error = [NSError errorWithDomain:@"textSecure" code:100 userInfo:errorDetail];
-        }
-        return nil;
-    }
-    
+    NSData *dbMasterKey = [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedDbMasterKey] withPassword:userPassword error:error];
     return dbMasterKey;
 }
 
