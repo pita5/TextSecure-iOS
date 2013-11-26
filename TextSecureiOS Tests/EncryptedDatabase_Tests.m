@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 #import "EncryptedDatabase.h"
+#import "Cryptography.h"
+#include "NSData+Base64.h"
 
 
 
@@ -106,13 +108,28 @@ static NSString *dbPw = @"1234test";
 - (void)testDatabaseUnlockWithWrongPassword
 {
     NSError *error = nil;
-    EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
     
-    encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:&error];
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:&error];
     XCTAssertNil(encDb, @"wrong password unlocked the database");
     // TODO: Look at the actual error code
     XCTAssertNotNil(error, @"wrong password did not return an error");
+}
+
+
+- (void)testDatabaseUnlockWithCorruptedKeychain
+{
+    NSError *error = nil;
+    [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    [EncryptedDatabase databaseLock];
+    
+    [Cryptography storeEncryptedMasterSecretKey:[[Cryptography generateRandomBytes:36] base64EncodedString]];
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
+    
+    // TODO: Look at the error code
+    XCTAssertNotNil(error, @"database was unlocked with corrupted keychain");
+    XCTAssertNil(encDb, @"database was unlocked with corrupted keychain");
 }
 
 
