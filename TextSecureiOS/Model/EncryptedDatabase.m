@@ -43,7 +43,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 #pragma mark DB Instantiation Methods
 
 +(instancetype) database {
-  if (!SharedCryptographyDatabase.dbQueue) {
+  if (!SharedCryptographyDatabase) {
      @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
   }
   return SharedCryptographyDatabase;
@@ -136,6 +136,11 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     // 3. Generate and store the user's identity keys and prekeys
     [preFinalDb generateIdentityKey];
     [preFinalDb generatePersonalPrekeys];
+
+    
+    // 4. Success
+    // Initialize the DB singleton
+    SharedCryptographyDatabase = preFinalDb;
     
     // Send new prekeys to network
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:[preFinalDb getPersonalPrekeys] identityKey:[preFinalDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -155,15 +160,10 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
     }];
     
-    
-    // 4. Success
-    // Initialize the DB singleton
-    SharedCryptographyDatabase = preFinalDb;
-    
     // Store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kDBWasCreatedBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
-
+    
     return SharedCryptographyDatabase;
 }
 
@@ -171,10 +171,9 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
     
     // DB is already unlocked
-    if ((SharedCryptographyDatabase) && (SharedCryptographyDatabase.dbQueue)) {
+    if ((SharedCryptographyDatabase) && ([SharedCryptographyDatabase isUnlocked])) {
         return SharedCryptographyDatabase;
     }
-    
     
     // Make sure a DB has already been created
     if (![EncryptedDatabase databaseWasCreated]) {
@@ -234,7 +233,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
     }
     else {
-        // DB was just locked
+        // DB had already been instantiated but was locked
         SharedCryptographyDatabase.dbQueue = dbQueue;
     }
     
@@ -244,6 +243,15 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(BOOL) databaseWasCreated {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kDBWasCreatedBool];
+}
+
+
+
+-(BOOL) isUnlocked {
+    if ((!SharedCryptographyDatabase) || (!SharedCryptographyDatabase.dbQueue) ) {
+        return NO;
+    }
+    return YES;
 }
 
 
@@ -263,6 +271,8 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
      
      In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
      */
+    
+    // No need to the check if the DB is locked as this happens during DB creation
     ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
     
     [self.dbQueue inDatabase:^(FMDatabase *db) {
@@ -281,6 +291,8 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 -(void) generatePersonalPrekeys {
+    
+    // No need to the check if the DB is locked as this happens during DB creation
     // TODO: Error checking
     int numberOfPreKeys = 70;
     int prekeyCounter = arc4random() % 16777215; // 16777215 is 0xFFFFFF
@@ -298,6 +310,12 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 #pragma mark Keys Fetching Methods
 
 -(NSArray*) getPersonalPrekeys {
+    
+    // TODO: Error handling
+    if (![SharedCryptographyDatabase isUnlocked]) {
+        @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
+    }
+    
   NSMutableArray *prekeyArray = [[NSMutableArray alloc] init];
   [self.dbQueue inDatabase:^(FMDatabase *db) {
     FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM personal_prekeys"]];
@@ -313,6 +331,12 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 -(ECKeyPair*) getIdentityKey {
+    
+    // TODO: Error handling
+    if (![SharedCryptographyDatabase isUnlocked]) {
+        @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
+    }
+    
   __block NSString* identityKeyPrivate = nil;
   __block NSString* identityKeyPublic = nil;
   [self.dbQueue inDatabase:^(FMDatabase *db) {

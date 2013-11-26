@@ -14,14 +14,22 @@
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
 
 // Three ways to get the shared encrypted DB:
+// Create a new one
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error;
+
+// Open an existing one
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error;
-// The last one can only be called after the DB has been created or unlocked
+
+// Get a reference if it has already been created/opened; it might locked (ie. pw-protected) tho
 +(instancetype) database;
-+(void) databaseLock;  // TODO: Use this to lock the DB after X minutes
+
+
++(void) databaseLock;  // TODO: Use this to lock (ie. pw-protect) the DB after X minutes
 +(void) databaseErase;
 
 +(BOOL) databaseWasCreated;
+
+-(BOOL) isUnlocked;
 -(ECKeyPair*) getIdentityKey;
 -(NSArray*) getPersonalPrekeys;
 @end

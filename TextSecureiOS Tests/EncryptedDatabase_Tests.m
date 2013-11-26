@@ -79,8 +79,17 @@ static NSString *dbPw = @"1234test";
 {
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
-    XCTAssertThrows([EncryptedDatabase database], @"database was still available after getting locked");
-    }
+    XCTAssertThrows([[EncryptedDatabase database] getIdentityKey], @"database was still available after getting locked");
+}
+
+
+- (void)testDatabaseIsLocked
+{
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    XCTAssertTrue([encDb isUnlocked], @"database was in locked state after creation");
+    [EncryptedDatabase databaseLock];
+    XCTAssertFalse([encDb isUnlocked], @"database was in unlocked state after getting locked");
+}
 
 
 - (void)testDatabaseUnlock
@@ -101,7 +110,6 @@ static NSString *dbPw = @"1234test";
     EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
     
-    // Wrong password
     encDb = [EncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:&error];
     XCTAssertNil(encDb, @"wrong password unlocked the database");
     // TODO: Look at the actual error code
@@ -111,6 +119,7 @@ static NSString *dbPw = @"1234test";
 
 - (void)testDatabaseWasCreated
 {
+    XCTAssertFalse([EncryptedDatabase databaseWasCreated], @"preference was not updated after erasing database");
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     XCTAssertTrue([EncryptedDatabase databaseWasCreated], @"preference was not updated after creating database");
 }
