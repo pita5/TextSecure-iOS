@@ -16,7 +16,7 @@
 #import "TSRegisterPrekeys.h"
 #import "KeychainWrapper.h"
 
-#define kKeyForInitBool @"DBWasInit"
+#define kDBWasCreatedBool @"DBWasCreated"
 #define databaseFileName @"cryptography.db"
 
 // Reference to the singleton
@@ -62,7 +62,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
         
         // Update the preferences
-        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kKeyForInitBool];
+        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
     }
 }
 
@@ -79,7 +79,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error {
 
     // Sanity check; is there a DB already ?
-    if ([EncryptedDatabase databaseWasInitialized]) {
+    if ([EncryptedDatabase databaseWasCreated]) {
         if (error) {
             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
             // TODO : define error codes
@@ -161,7 +161,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     SharedCryptographyDatabase = preFinalDb;
     
     // Store in the preferences that the DB has been successfully created
-    [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kKeyForInitBool];
+    [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kDBWasCreatedBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     return SharedCryptographyDatabase;
@@ -177,7 +177,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     
     
     // Make sure a DB has already been created
-    if (![EncryptedDatabase databaseWasInitialized]) {
+    if (![EncryptedDatabase databaseWasCreated]) {
         if (error) {
             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
             [errorDetail setValue:@"no DB available" forKey:NSLocalizedDescriptionKey];
@@ -242,8 +242,8 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-+(BOOL) databaseWasInitialized {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:kKeyForInitBool];
++(BOOL) databaseWasCreated {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kDBWasCreatedBool];
 }
 
 
@@ -282,9 +282,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 -(void) generatePersonalPrekeys {
     // TODO: Error checking
-    
     int numberOfPreKeys = 70;
-    NSMutableArray *prekeys = [[NSMutableArray alloc] initWithCapacity:numberOfPreKeys];
     int prekeyCounter = arc4random() % 16777215; // 16777215 is 0xFFFFFF
     
     // Generate keys

@@ -109,10 +109,10 @@ static NSString *dbPw = @"1234test";
 }
 
 
-- (void)testDatabaseWasInitialized
+- (void)testDatabaseWasCreated
 {
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
-    XCTAssertTrue([EncryptedDatabase databaseWasInitialized], @"preference was not updated after creating database");
+    XCTAssertTrue([EncryptedDatabase databaseWasCreated], @"preference was not updated after creating database");
 }
 
 
@@ -120,7 +120,7 @@ static NSString *dbPw = @"1234test";
 {
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseErase];
-    XCTAssertFalse([EncryptedDatabase databaseWasInitialized], @"preference was not updated after erasing database");
+    XCTAssertFalse([EncryptedDatabase databaseWasCreated], @"preference was not updated after erasing database");
 }
 
 
