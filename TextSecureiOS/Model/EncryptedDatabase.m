@@ -61,6 +61,9 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     
     // 3. Erase the DB encryption key from the Keychain
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
+    
+    // 4. Update the preferences
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kKeyForInitBool];
 }
 
 
