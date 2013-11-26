@@ -1726,6 +1726,7 @@
 				8C0AB3CC184300B000DEC2B6 /* Frameworks */,
 				8C0AB3CD184300B000DEC2B6 /* Resources */,
 				F3C546A9635E449C961ECCD7 /* Copy Pods Resources */,
+				8C0AC40918455C5B0067845E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2190,6 +2191,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+		};
+		8C0AC40918455C5B0067845E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "codesign --verify --force --sign \"$CODE_SIGN_IDENTITY\" \"$CODESIGNING_FOLDER_PATH\"";
 		};
 		DE866B39AA57421C900F2883 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -246,7 +246,9 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         @throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not generate a master key" userInfo:nil];
     }
     
-    [KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId];
+    if (![KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId]) {
+        @throw [NSException exceptionWithName:@"keychain error" reason:@"could not write DB master key to the keychain" userInfo:nil];
+    }
     return dbMasterKey;
 }
 
@@ -255,7 +257,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 #warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
     NSString *encryptedDbMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
     if (!encryptedDbMasterKey) {
-        @throw [NSException exceptionWithName:@"keychain corrupted" reason:@"could not retrieve DB master key from the keychain" userInfo:nil];
+        @throw [NSException exceptionWithName:@"keychain error" reason:@"could not retrieve DB master key from the keychain" userInfo:nil];
     }
     
     NSData *dbMasterKey = [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedDbMasterKey] withPassword:userPassword error:error];
