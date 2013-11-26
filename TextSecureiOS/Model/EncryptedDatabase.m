@@ -43,8 +43,8 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 #pragma mark DB Instantiation Methods
 
 +(instancetype) database {
-  if (!SharedCryptographyDatabase) {
-     @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"database must be accessed with password prior to being able to use this method" userInfo:nil];
+  if (!SharedCryptographyDatabase.dbQueue) {
+     @throw [NSException exceptionWithName:@"incorrect initialization" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
   }
   return SharedCryptographyDatabase;
   
@@ -52,35 +52,40 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 +(void) databaseErase {
-    
-    // 1. Remove the reference to the DB
-    [EncryptedDatabase databaseLock];
-    
-    // 2. Erase the DB file
-    [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
-    
-    // 3. Erase the DB encryption key from the Keychain
-    [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
-    
-    // 4. Update the preferences
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kKeyForInitBool];
+    @synchronized(SharedCryptographyDatabase) {
+        [EncryptedDatabase databaseLock];
+        
+        // Erase the DB file
+        [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
+        
+        // Erase the DB encryption key from the Keychain
+        [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
+        
+        // Update the preferences
+        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kKeyForInitBool];
+    }
 }
 
 
 +(void) databaseLock {
-    [SharedCryptographyDatabase.dbQueue close];
-    SharedCryptographyDatabase = nil;
+    @synchronized(SharedCryptographyDatabase.dbQueue) {
+        // Synchronized in case some other code/thread still has a reference to the DB
+        [SharedCryptographyDatabase.dbQueue close];
+        SharedCryptographyDatabase.dbQueue = nil;
+    }
 }
 
 
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error {
 
     // Sanity check; is there a DB already ?
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[FilePath pathInDocumentsDirectory:databaseFileName]]) {        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-        
-        // TODO : define error codes
-        [errorDetail setValue:@"Database already exists" forKey:NSLocalizedDescriptionKey];
-        *error = [NSError errorWithDomain:@"textSecure" code:101 userInfo:errorDetail];
+    if ([EncryptedDatabase databaseWasInitialized]) {
+        if (error) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            // TODO : define error codes
+            [errorDetail setValue:@"database already exists" forKey:NSLocalizedDescriptionKey];
+            *error = [NSError errorWithDomain:@"textSecure" code:101 userInfo:errorDetail];
+        }
         return nil;
     }
 
@@ -113,10 +118,14 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
      ];
     
     if (!dbInitSuccess) {
-        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-        // TODO : define error codes
-        [errorDetail setValue:@"Database was corrupted" forKey:NSLocalizedDescriptionKey];
-        *error = [NSError errorWithDomain:@"textSecure" code:102 userInfo:errorDetail];
+        if (error) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            // TODO : define error codes
+            [errorDetail setValue:@"could not create database" forKey:NSLocalizedDescriptionKey];
+            *error = [NSError errorWithDomain:@"textSecure" code:102 userInfo:errorDetail];
+        }
+        // Cleanup
+        [EncryptedDatabase databaseErase];
         return nil;
     }
     
@@ -148,12 +157,13 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     
     
     // 4. Success
+    // Initialize the DB singleton
+    SharedCryptographyDatabase = preFinalDb;
+    
     // Store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kKeyForInitBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    // Initialize the DB singleton
-    SharedCryptographyDatabase = preFinalDb;
+
     return SharedCryptographyDatabase;
 }
 
@@ -161,19 +171,33 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
     
     // DB is already unlocked
-    if (SharedCryptographyDatabase) {
+    if ((SharedCryptographyDatabase) && (SharedCryptographyDatabase.dbQueue)) {
         return SharedCryptographyDatabase;
     }
     
+    
+    // Make sure a DB has already been created
+    if (![EncryptedDatabase databaseWasInitialized]) {
+        if (error) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            [errorDetail setValue:@"no DB available" forKey:NSLocalizedDescriptionKey];
+            // TODO: Define error codes
+            *error = [NSError errorWithDomain:@"textSecure" code:103 userInfo:errorDetail];
+        }
+        return nil;
+    }
+    
+    // Get the master key
     NSData *key = [Cryptography getMasterSecretKey:userPassword];
     if(key == nil) {
         // Invalid password
-        // TODO: Return a different error if this failed because the encryptedMasterKey was not found in the keychain
-        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-        
-        [errorDetail setValue:@"Wrong password" forKey:NSLocalizedDescriptionKey];
-        // TODO: Define error codes
-        *error = [NSError errorWithDomain:@"textSecure" code:100 userInfo:errorDetail];
+        if (error) {
+            // TODO: Return a different error if this failed because the encryptedMasterKey was not found in the keychain
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            [errorDetail setValue:@"Wrong password" forKey:NSLocalizedDescriptionKey];
+            // TODO: Define error codes
+            *error = [NSError errorWithDomain:@"textSecure" code:100 userInfo:errorDetail];
+        }
         return nil;
     }
     
@@ -205,7 +229,15 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     
     // Initialize the DB singleton
-    SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
+    if (!SharedCryptographyDatabase) {
+        // First time in the app's lifecycle we're unlocking the DB
+        SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
+    }
+    else {
+        // DB was just locked
+        SharedCryptographyDatabase.dbQueue = dbQueue;
+    }
+    
     return SharedCryptographyDatabase;
 }
 

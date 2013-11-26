@@ -37,9 +37,12 @@ static NSString *dbPw = @"1234test";
 
 - (void)testDatabaseErase
 {
+    NSError *error = nil;
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseErase];
-    XCTAssertThrows([EncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked after being erased");
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
+    XCTAssertNotNil(error, @"database was unlocked after being erased");
+    XCTAssertNil(encDb, @"database was unlocked after being erased");
 }
 
 
@@ -63,6 +66,15 @@ static NSString *dbPw = @"1234test";
 }
 
 
+- (void)testDatabaseAfterCreate
+{
+    [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    EncryptedDatabase *encDb = [EncryptedDatabase database];
+    
+    XCTAssertNotNil(encDb, @"could not get a reference to the database");
+}
+
+
 - (void)testDatabaseLock
 {
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
@@ -76,7 +88,7 @@ static NSString *dbPw = @"1234test";
     NSError *error = nil;
     EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
-
+    
     encDb = [EncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
     XCTAssertNotNil(encDb, @"valid password did not unlock the database");
     XCTAssertNil(error, @"valid password returned an error");
