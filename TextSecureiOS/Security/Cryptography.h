@@ -17,10 +17,8 @@
 + (BOOL) storeUsernameToken:(NSString*)token;
 + (NSString*) getUsernameToken;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
-+ (NSData*) getMasterSecretKey:(NSString*) userPassword;
 +(NSMutableData*) generateRandomBytes:(int)numberBytes;
-+ (BOOL) storeEncryptedMasterSecretKey:(NSString*)token;
-+ (NSString*) getEncryptedMasterSecretKey;
+
 /* 
  Basic auth is username:password base64 encoded where the "username" is the device's phone number in E164 format, and the "password" is a random string you generate at registration time.
  What we're doing is just using the Authorization header to convey that information, since it's more REST-ish. In subsequent calls, you'll authenticate with the same Authorization header.

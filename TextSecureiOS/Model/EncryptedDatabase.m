@@ -24,7 +24,6 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 #pragma mark Private Methods
-
 @interface EncryptedDatabase(Private)
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
@@ -33,11 +32,14 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 -(void) generatePersonalPrekeys;
 -(void) generateIdentityKey;
 
+// DB master key functions
++(NSData*) generateDatabaseMasterKeyWithPassword:(NSString *)userPassword;
++(NSData*) getDatabaseMasterKeyWithPassword:(NSString *)userPassword error:(NSError **)error;
++(void) eraseDatabaseMasterKey;
 @end
 
 
 @implementation EncryptedDatabase
-
 
 
 #pragma mark DB Instantiation Methods
@@ -59,7 +61,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
         
         // Erase the DB encryption key from the Keychain
-        [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
+        [EncryptedDatabase eraseDatabaseMasterKey];
         
         // Update the preferences
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
@@ -89,15 +91,9 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         return nil;
     }
 
-    
-    // 1. Generate and store DB encryption key
-    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
-    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:dbMasterKey withPassword:userPassword];
-    // TODO: Access the keychain from here
-    [Cryptography storeEncryptedMasterSecretKey:[encryptedDbMasterKey base64EncodedString]];
-    
-    
-    // 2. Create the DB and the tables
+
+    // 1. Create the DB encryption, the DB and the tables
+    NSData *dbMasterKey = [EncryptedDatabase generateDatabaseMasterKeyWithPassword: userPassword];
     __block BOOL dbInitSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
@@ -182,17 +178,9 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         return nil;
     }
     
-    // Get the master key
-    NSData *key = [Cryptography getMasterSecretKey:userPassword];
+    // Get the DB master key
+    NSData *key = [EncryptedDatabase getDatabaseMasterKeyWithPassword:userPassword error:error];
     if(key == nil) {
-        // Invalid password
-        if (error) {
-            // TODO: Return a different error if this failed because the encryptedMasterKey was not found in the keychain
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            [errorDetail setValue:@"Wrong password" forKey:NSLocalizedDescriptionKey];
-            // TODO: Define error codes
-            *error = [NSError errorWithDomain:@"textSecure" code:100 userInfo:errorDetail];
-        }
         return nil;
     }
     
@@ -200,11 +188,6 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     __block BOOL initSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
-        
-        NSData *key = [Cryptography getMasterSecretKey:userPassword];
-        if(key == nil) {
-            return;
-        }
         
         if(![db setKeyWithData:key]) {
             // Supplied password was valid but the master key wasn't !?
@@ -248,6 +231,53 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         return YES;
     }
     return NO;
+}
+
+
+#pragma mark DB Master Key Private Methods
+
+
++(NSData*) generateDatabaseMasterKeyWithPassword:(NSString*) userPassword {
+    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
+    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:dbMasterKey withPassword:userPassword];
+    [KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId];
+    return dbMasterKey;
+}
+
+
++ (NSData*) getDatabaseMasterKeyWithPassword:(NSString*) userPassword error:(NSError**) error {
+#warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
+    // PBKDF2 password (key)
+    // encrypt  using AES256 of that with
+    // IV=16random bytes
+    //ciphertext=AES in CBC mode with key from PBKDF2
+    // MAC =HMACshaw1(cipertext||IV) with key from PBKDF2
+    // store IV||ciphertext||mac(IV||ciphertext)
+    // decryption is AES256-1(ciphertext,IV) after verifying the MAC
+    
+    NSString *encryptedDbMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
+    if (!encryptedDbMasterKey) {
+        @throw [NSException exceptionWithName:@"keychain corrupted" reason:@"could not retrieve DB master key from the keychain" userInfo:nil];
+    }
+    
+    NSData *dbMasterKey = [Cryptography AES256Decryption:[NSData dataFromBase64String:encryptedDbMasterKey] withPassword:userPassword];
+    if(dbMasterKey == nil) {
+        // Invalid password
+        if (error) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            [errorDetail setValue:@"Wrong password" forKey:NSLocalizedDescriptionKey];
+            // TODO: Define error codes
+            *error = [NSError errorWithDomain:@"textSecure" code:100 userInfo:errorDetail];
+        }
+        return nil;
+    }
+    
+    return dbMasterKey;
+}
+
+
++(void) eraseDatabaseMasterKey {
+    [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
 }
 
 

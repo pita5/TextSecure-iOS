@@ -9,8 +9,9 @@
 #import <XCTest/XCTest.h>
 #import "EncryptedDatabase.h"
 #import "Cryptography.h"
-#include "NSData+Base64.h"
-
+#import "KeychainWrapper.h"
+#import "NSData+Base64.h"
+#import "Constants.h"
 
 
 static NSString *dbPw = @"1234test";
@@ -119,18 +120,23 @@ static NSString *dbPw = @"1234test";
 }
 
 
+- (void)testDatabaseUnlockWithDeletedKeychain
+{
+    [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    [EncryptedDatabase databaseLock];
+    [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
+    XCTAssertThrows([EncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked with deleted keychain");
+}
+
+
 - (void)testDatabaseUnlockWithCorruptedKeychain
 {
-    NSError *error = nil;
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
     
-    [Cryptography storeEncryptedMasterSecretKey:[[Cryptography generateRandomBytes:36] base64EncodedString]];
-    EncryptedDatabase *encDb = [EncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
-    
-    // TODO: Look at the error code
-    XCTAssertNotNil(error, @"database was unlocked with corrupted keychain");
-    XCTAssertNil(encDb, @"database was unlocked with corrupted keychain");
+    NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:[Cryptography generateRandomBytes:36] withPassword:dbPw];
+    [KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId];
+    XCTAssertThrows([EncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked with corrupted keychain");
 }
 
 

@@ -22,9 +22,6 @@
 
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
-#include "ECKeyPair.h"
-#import "EncryptedDatabase.h"
-#import "TSRegisterPrekeys.h"
 #import "FilePath.h"
 
 
@@ -54,22 +51,6 @@
     @throw [NSException exceptionWithName:@"random problem" reason:@"problem generating the random " userInfo:nil];
   }
   return randomBytes;
-}
-
-
-+ (NSData*) getMasterSecretKey:(NSString*) userPassword {
-  #warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
-  // PBKDF2 password (key)
-  // encrypt  using AES256 of that with
-  // IV=16random bytes
-  //ciphertext=AES in CBC mode with key from PBKDF2
-  // MAC =HMACshaw1(cipertext||IV) with key from PBKDF2
-  // store IV||ciphertext||mac(IV||ciphertext)
-  // decryption is AES256-1(ciphertext,IV) after verifying the MAC
-
-  NSData* masterSecretPasswordEncrypted = [NSData dataFromBase64String:[Cryptography getEncryptedMasterSecretKey]];
-  NSData* masterSecretPassword = [Cryptography AES256Decryption:masterSecretPasswordEncrypted withPassword:userPassword];
-  return masterSecretPassword;
 }
 
 
@@ -115,15 +96,6 @@
   return [KeychainWrapper keychainStringFromMatchingIdentifier:signalingTokenStorageId];
 }
 
-#pragma mark encrypted master secret key
-
-+ (BOOL) storeEncryptedMasterSecretKey:(NSString*)token {
-  return [KeychainWrapper createKeychainValue:token forIdentifier:encryptedMasterSecretKeyStorageId];
-}
-
-+ (NSString*) getEncryptedMasterSecretKey {
-  return [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
-}
 
 + (NSData*)computeMACDigestForString:(NSString*)input withSeed:(NSString*)seed {
   //  void CCHmac(CCHmacAlgorithm algorithm, const void *key, size_t keyLength, const void *data,
