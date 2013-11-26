@@ -29,7 +29,7 @@
 
 +(BOOL) databaseWasCreated;
 
--(BOOL) isUnlocked;
+-(BOOL) isLocked;
 -(ECKeyPair*) getIdentityKey;
 -(NSArray*) getPersonalPrekeys;
 @end

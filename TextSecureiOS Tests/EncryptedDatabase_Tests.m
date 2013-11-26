@@ -88,9 +88,9 @@ static NSString *dbPw = @"1234test";
 - (void)testDatabaseIsLocked
 {
     EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
-    XCTAssertTrue([encDb isUnlocked], @"database was in locked state after creation");
+    XCTAssertFalse([encDb isLocked], @"database was in locked state after creation");
     [EncryptedDatabase databaseLock];
-    XCTAssertFalse([encDb isUnlocked], @"database was in unlocked state after getting locked");
+    XCTAssertTrue([encDb isLocked], @"database was in unlocked state after getting locked");
 }
 
 

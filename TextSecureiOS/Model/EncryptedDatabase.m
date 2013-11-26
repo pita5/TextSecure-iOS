@@ -167,7 +167,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
     
     // DB is already unlocked
-    if ((SharedCryptographyDatabase) && ([SharedCryptographyDatabase isUnlocked])) {
+    if ((SharedCryptographyDatabase) && (![SharedCryptographyDatabase isLocked])) {
         return SharedCryptographyDatabase;
     }
     
@@ -243,11 +243,11 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 
--(BOOL) isUnlocked {
+-(BOOL) isLocked {
     if ((!SharedCryptographyDatabase) || (!SharedCryptographyDatabase.dbQueue) ) {
-        return NO;
+        return YES;
     }
-    return YES;
+    return NO;
 }
 
 
@@ -308,7 +308,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 -(NSArray*) getPersonalPrekeys {
     
     // TODO: Error handling
-    if (![SharedCryptographyDatabase isUnlocked]) {
+    if ([SharedCryptographyDatabase isLocked]) {
         @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
     }
     
@@ -329,7 +329,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 -(ECKeyPair*) getIdentityKey {
     
     // TODO: Error handling
-    if (![SharedCryptographyDatabase isUnlocked]) {
+    if ([SharedCryptographyDatabase isLocked]) {
         @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
     }
     
