@@ -55,6 +55,9 @@ static NSString *dbPw = @"1234test";
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
     XCTAssertNil(error, @"database creation returned an error");
     XCTAssertNotNil(encDb, @"database creation failed");
+    
+    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
+    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
 }
 
 
@@ -104,6 +107,9 @@ static NSString *dbPw = @"1234test";
     encDb = [TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
     XCTAssertNotNil(encDb, @"valid password did not unlock the database");
     XCTAssertNil(error, @"valid password returned an error");
+    
+    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
+    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
 }
 
 
