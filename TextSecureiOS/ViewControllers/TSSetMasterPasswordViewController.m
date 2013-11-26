@@ -41,7 +41,8 @@
 }
 
 - (void) setupDatabase{
-    [EncryptedDatabase databaseCreateWithPassword:self.pass.text];
+    // TODO: Error handling
+    [EncryptedDatabase databaseCreateWithPassword:self.pass.text error:nil];
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 
 }

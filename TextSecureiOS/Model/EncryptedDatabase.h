@@ -14,7 +14,7 @@
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
 
 // Three ways to get the shared encrypted DB:
-+(instancetype) databaseCreateWithPassword:(NSString *)userPassword;
++(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error;
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error;
 // The last one can only be called after the DB has been created or unlocked
 +(instancetype) database;

@@ -70,9 +70,17 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-+(instancetype) databaseCreateWithPassword:(NSString *)userPassword {
-    // Creating a new DB; this should never fail
-    // TODO: Error checking and check if a DB is already there
++(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error {
+
+    // Sanity check; is there a DB already ?
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[FilePath pathInDocumentsDirectory:databaseFileName]]) {        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+        
+        // TODO : define error codes
+        [errorDetail setValue:@"Database already exists" forKey:NSLocalizedDescriptionKey];
+        *error = [NSError errorWithDomain:@"textSecure" code:101 userInfo:errorDetail];
+        return nil;
+    }
+
     
     // 1. Generate and store DB encryption key
     NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
@@ -82,24 +90,33 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     
     
     // 2. Create the DB and the tables
-    __block BOOL initSuccess = NO;
+    __block BOOL dbInitSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
         
         if(![db setKeyWithData:dbMasterKey]) {
-            @throw [NSException exceptionWithName:@"DB creation failed" reason:@"master key was rejected" userInfo:nil];
+            return;
         }
         
         if (![db executeUpdate:@"CREATE TABLE persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"]) {
             // Happens when the master key is wrong (ie. wrong (old?) encrypted key in the keychain)
-            @throw [NSException exceptionWithName:@"DB creation failed" reason:@"table creation failed" userInfo:nil];
+            return;
         }
         if (![db executeUpdate:@"CREATE TABLE personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INTEGER)"]){
-            @throw [NSException exceptionWithName:@"DB creation failed" reason:@"table creation failed" userInfo:nil];
+            return;
         }
-        initSuccess = YES;
+        dbInitSuccess = YES;
     }
      ];
+    
+    if (!dbInitSuccess) {
+        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+        // TODO : define error codes
+        [errorDetail setValue:@"Database was corrupted" forKey:NSLocalizedDescriptionKey];
+        *error = [NSError errorWithDomain:@"textSecure" code:102 userInfo:errorDetail];
+        return nil;
+    }
+    
     
     // We have now have an empty DB
     EncryptedDatabase *preFinalDb = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
@@ -152,6 +169,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
         
         [errorDetail setValue:@"Wrong password" forKey:NSLocalizedDescriptionKey];
+        // TODO: Define error codes
         *error = [NSError errorWithDomain:@"textSecure" code:100 userInfo:errorDetail];
         return nil;
     }
