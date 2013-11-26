@@ -241,7 +241,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(NSData*) generateDatabaseMasterKeyWithPassword:(NSString*) userPassword {
     NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
-    NSData *encryptedDbMasterKey = [RNEncryptor encryptData:dataToEncrypt withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
+    NSData *encryptedDbMasterKey = [RNEncryptor encryptData:dbMasterKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
     
     if(!encryptedDbMasterKey) {
         @throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not generate a master key" userInfo:nil];
