@@ -7,6 +7,7 @@
 //
 
 #import "TSEncryptedDatabase.h"
+#import "TSEncryptedDatabase_Private.h"
 #import "RNDecryptor.h"
 #import "RNEncryptor.h"
 #import "Cryptography.h"
@@ -18,33 +19,19 @@
 #import "TSRegisterPrekeys.h"
 #import "KeychainWrapper.h"
 
+
 #define kDBWasCreatedBool @"DBWasCreated"
 #define databaseFileName @"cryptography.db"
+
 
 // Reference to the singleton
 static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
-#pragma mark Private Methods
-@interface TSEncryptedDatabase(Private)
-
--(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
-
-// DB creation helper functions
--(void) generatePersonalPrekeys;
--(void) generateIdentityKey;
-
-// DB master key functions
-+(NSData*) generateDatabaseMasterKeyWithPassword:(NSString *)userPassword;
-+(NSData*) getDatabaseMasterKeyWithPassword:(NSString *)userPassword error:(NSError **)error;
-+(void) eraseDatabaseMasterKey;
-@end
-
-
 @implementation TSEncryptedDatabase
 
 
-#pragma mark DB Instantiation Methods
+#pragma mark Database instantiation methods
 
 +(instancetype) database {
   if (!SharedCryptographyDatabase) {

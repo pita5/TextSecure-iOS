@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "TSEncryptedDatabase.h"
+#import "TSEncryptedDatabase_Private.h"
 #import "Cryptography.h"
 #import "KeychainWrapper.h"
 #import "NSData+Base64.h"
@@ -140,10 +141,9 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [TSEncryptedDatabase databaseLock];
     
-    //TODO Fix this
-    //NSData *encryptedDbMasterKey = [Cryptography AES256Encryption:[Cryptography generateRandomBytes:36] withPassword:dbPw];
-    //[KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId];
-    //XCTAssertThrows([TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked with corrupted keychain");
+    // Replace the master key
+    [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword:dbPw];
+    XCTAssertThrows([TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked with corrupted keychain");
 }
 
 
