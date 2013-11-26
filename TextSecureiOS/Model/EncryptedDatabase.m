@@ -210,7 +210,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-+(BOOL) dataBaseWasInitialized{
++(BOOL) databaseWasInitialized {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kKeyForInitBool];
 }
 

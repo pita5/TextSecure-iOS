@@ -48,7 +48,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([UserDefaults hasVerifiedPhoneNumber] && [EncryptedDatabase dataBaseWasInitialized]) {
+	if([UserDefaults hasVerifiedPhoneNumber] && [EncryptedDatabase databaseWasInitialized]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
      UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];

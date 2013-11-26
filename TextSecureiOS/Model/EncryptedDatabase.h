@@ -21,7 +21,7 @@
 +(void) databaseLock;  // TODO: Use this to lock the DB after X minutes
 +(void) databaseErase;
 
-+(BOOL) dataBaseWasInitialized;
++(BOOL) databaseWasInitialized;
 -(ECKeyPair*) getIdentityKey;
 -(NSArray*) getPersonalPrekeys;
 @end
