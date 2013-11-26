@@ -15,7 +15,7 @@
 #import "FMDatabaseQueue.h"
 #import "ECKeyPair.h"
 #import "FilePath.h"
-#include "NSData+Base64.h"
+#import "NSData+Base64.h"
 #import "TSRegisterPrekeys.h"
 #import "KeychainWrapper.h"
 
