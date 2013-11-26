@@ -83,10 +83,9 @@ static NSString *dbPw = @"1234test";
 
 - (void)testDatabaseLock
 {
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [TSEncryptedDatabase databaseLock];
     XCTAssertThrows([[TSEncryptedDatabase database] getIdentityKey], @"database was still accessible after getting locked");
-    XCTAssertNil(encDb.dbQueue, @"database was still accessible after getting locked");
 }
 
 

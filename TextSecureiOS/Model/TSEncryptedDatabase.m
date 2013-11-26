@@ -28,8 +28,11 @@
 static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
-@implementation TSEncryptedDatabase
+@implementation TSEncryptedDatabase {
 
+# pragma mark Internal database queue
+    @protected FMDatabaseQueue *dbQueue;
+}
 
 #pragma mark Database instantiation
 
@@ -68,11 +71,11 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         return;
     }
     
-    @synchronized(SharedCryptographyDatabase.dbQueue) {
+    @synchronized(SharedCryptographyDatabase->dbQueue) {
         // Synchronized in case some other code/thread still has a reference to the DB
         // TODO: Investigate whether this truly closes the DB (in memory)
-        [SharedCryptographyDatabase.dbQueue close];
-        SharedCryptographyDatabase.dbQueue = nil;
+        [SharedCryptographyDatabase->dbQueue close];
+        SharedCryptographyDatabase->dbQueue = nil;
     }
 }
 
@@ -211,7 +214,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     else {
         // DB had already been instantiated but was locked
-        SharedCryptographyDatabase.dbQueue = dbQueue;
+        SharedCryptographyDatabase->dbQueue = dbQueue;
     }
     
     return SharedCryptographyDatabase;
@@ -226,7 +229,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 -(BOOL) isLocked {
-    if ((!SharedCryptographyDatabase) || (!SharedCryptographyDatabase.dbQueue) ) {
+    if ((!SharedCryptographyDatabase) || (!SharedCryptographyDatabase->dbQueue) ) {
         return YES;
     }
     return NO;
@@ -269,7 +272,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue {
     if (self = [super init]) {
-        self.dbQueue = queue;
+        self->dbQueue = queue;
     }
     return self;
 }
@@ -285,7 +288,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // No need to the check if the DB is locked as this happens during DB creation
     ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
     
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [self->dbQueue inDatabase:^(FMDatabase *db) {
         BOOL updateResult = NO;
         
         updateResult = [db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]];
@@ -310,7 +313,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // Generate keys
     for(int i=0; i<numberOfPreKeys; i++) {
         ECKeyPair *keyPair = [ECKeyPair createAndGeneratePublicPrivatePair:++prekeyCounter];
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self->dbQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]], [keyPair publicKey], [keyPair privateKey],[NSNumber numberWithInt:0]];
         }];
     }
@@ -327,7 +330,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     
   NSMutableArray *prekeyArray = [[NSMutableArray alloc] init];
-  [self.dbQueue inDatabase:^(FMDatabase *db) {
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
     FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM personal_prekeys"]];
     while([rs next]) {
       ECKeyPair *keyPair = [[ECKeyPair alloc] initWithPublicKey:[rs stringForColumn:@"public_key"]
@@ -349,7 +352,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     
   __block NSString* identityKeyPrivate = nil;
   __block NSString* identityKeyPublic = nil;
-  [self.dbQueue inDatabase:^(FMDatabase *db) {
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
     FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT setting_value FROM persistent_settings WHERE setting_name=\"identity_key_public\""]];
     if([rs next]){
       identityKeyPublic = [rs stringForColumn:@"setting_value"];

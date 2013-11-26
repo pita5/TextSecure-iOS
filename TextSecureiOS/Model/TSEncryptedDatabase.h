@@ -12,7 +12,6 @@
 @class FMDatabaseQueue;
 
 @interface TSEncryptedDatabase : NSObject
-@property (nonatomic,strong) FMDatabaseQueue *dbQueue;
 
 
 /**
