@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1968DDDCCDBB4F7F9F0A7586 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
-		6389A6B861B845189F24D51B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
-		8C0AB3CA1842FE5500DEC2B6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C20E5271842F863005DA478 /* XCTest.framework */; };
 		8C0AB3D0184300B000DEC2B6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C20E5271842F863005DA478 /* XCTest.framework */; };
 		8C0AB3D1184300B000DEC2B6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		8C0AB3D2184300B000DEC2B6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
@@ -39,10 +37,6 @@
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
 		A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718C516FF95DF00C6FCCF /* AppDelegate.m */; };
 		A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
-		A53718DA16FF95DF00C6FCCF /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */; };
-		A53718DB16FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
-		A53718DC16FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
-		A53718E416FF95DF00C6FCCF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A53718E216FF95DF00C6FCCF /* InfoPlist.strings */; };
 		A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718F016FF98C100C6FCCF /* MessageUI.framework */; };
 		A537190816FFC45C00C6FCCF /* textsecure.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190616FFC45B00C6FCCF /* textsecure.png */; };
 		A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190716FFC45B00C6FCCF /* textsecure@2x.png */; };
@@ -454,13 +448,6 @@
 			remoteGlobalIDString = A53718B116FF95DF00C6FCCF;
 			remoteInfo = TextSecureiOS;
 		};
-		A53718DD16FF95DF00C6FCCF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A53718AA16FF95DF00C6FCCF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A53718B116FF95DF00C6FCCF;
-			remoteInfo = TextSecureiOS;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -517,7 +504,6 @@
 		A53718C416FF95DF00C6FCCF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A53718C516FF95DF00C6FCCF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A53718CE16FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		A53718D816FF95DF00C6FCCF /* TextSecureiOSTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextSecureiOSTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		A53718E116FF95DF00C6FCCF /* TextSecureiOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSecureiOSTests-Info.plist"; sourceTree = "<group>"; };
 		A53718E316FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -992,18 +978,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A53718D416FF95DF00C6FCCF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8C0AB3CA1842FE5500DEC2B6 /* XCTest.framework in Frameworks */,
-				A53718DA16FF95DF00C6FCCF /* SenTestingKit.framework in Frameworks */,
-				A53718DB16FF95DF00C6FCCF /* UIKit.framework in Frameworks */,
-				A53718DC16FF95DF00C6FCCF /* Foundation.framework in Frameworks */,
-				6389A6B861B845189F24D51B /* libPods.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1055,7 +1029,6 @@
 			isa = PBXGroup;
 			children = (
 				A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */,
-				A53718D816FF95DF00C6FCCF /* TextSecureiOSTests.octest */,
 				8C0AB3CF184300B000DEC2B6 /* TextSecureiOS Tests.xctest */,
 			);
 			name = Products;
@@ -1783,27 +1756,6 @@
 			productReference = A53718B216FF95DF00C6FCCF /* TextSecureiOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A53718D716FF95DF00C6FCCF /* TextSecureiOSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A53718ED16FF95DF00C6FCCF /* Build configuration list for PBXNativeTarget "TextSecureiOSTests" */;
-			buildPhases = (
-				1842C4D9B2D74E86A4C2620B /* Check Pods Manifest.lock */,
-				A53718D316FF95DF00C6FCCF /* Sources */,
-				A53718D416FF95DF00C6FCCF /* Frameworks */,
-				A53718D516FF95DF00C6FCCF /* Resources */,
-				A53718D616FF95DF00C6FCCF /* ShellScript */,
-				25D1CC072DB24E63AF7F7208 /* Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A53718DE16FF95DF00C6FCCF /* PBXTargetDependency */,
-			);
-			name = TextSecureiOSTests;
-			productName = TextSecureiOSTests;
-			productReference = A53718D816FF95DF00C6FCCF /* TextSecureiOSTests.octest */;
-			productType = "com.apple.product-type.bundle";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1839,7 +1791,6 @@
 			projectRoot = "";
 			targets = (
 				A53718B116FF95DF00C6FCCF /* TextSecureiOS */,
-				A53718D716FF95DF00C6FCCF /* TextSecureiOSTests */,
 				8C0AB3CE184300B000DEC2B6 /* TextSecureiOS Tests */,
 			);
 		};
@@ -2223,47 +2174,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A53718D516FF95DF00C6FCCF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A53718E416FF95DF00C6FCCF /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1842C4D9B2D74E86A4C2620B /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		25D1CC072DB24E63AF7F7208 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3CB5212BC54445C68D08CFCC /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2277,19 +2190,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
-		};
-		A53718D616FF95DF00C6FCCF /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
 		DE866B39AA57421C900F2883 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2400,13 +2300,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A53718D316FF95DF00C6FCCF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2414,11 +2307,6 @@
 			isa = PBXTargetDependency;
 			target = A53718B116FF95DF00C6FCCF /* TextSecureiOS */;
 			targetProxy = 8C0AB3DC184300B000DEC2B6 /* PBXContainerItemProxy */;
-		};
-		A53718DE16FF95DF00C6FCCF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A53718B116FF95DF00C6FCCF /* TextSecureiOS */;
-			targetProxy = A53718DD16FF95DF00C6FCCF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2627,46 +2515,6 @@
 			};
 			name = Release;
 		};
-		A53718EE16FF95DF00C6FCCF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TextSecureiOS.app/TextSecureiOS";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
-				INFOPLIST_FILE = "TextSecureiOSTests/TextSecureiOSTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		A53718EF16FF95DF00C6FCCF /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TextSecureiOS.app/TextSecureiOS";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
-				INFOPLIST_FILE = "TextSecureiOSTests/TextSecureiOSTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2693,15 +2541,6 @@
 			buildConfigurations = (
 				A53718EB16FF95DF00C6FCCF /* Debug */,
 				A53718EC16FF95DF00C6FCCF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A53718ED16FF95DF00C6FCCF /* Build configuration list for PBXNativeTarget "TextSecureiOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A53718EE16FF95DF00C6FCCF /* Debug */,
-				A53718EF16FF95DF00C6FCCF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
