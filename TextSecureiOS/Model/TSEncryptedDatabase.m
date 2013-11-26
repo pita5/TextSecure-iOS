@@ -61,25 +61,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-+(void) databaseLock {
-    
-    if (!SharedCryptographyDatabase) {
-        @throw [NSException exceptionWithName:@"DB lock failed" reason:@"tried to lock the DB before opening/unlocking it" userInfo:nil];
-    }
-    
-    if ([SharedCryptographyDatabase isLocked]) {
-        return;
-    }
-    
-    @synchronized(SharedCryptographyDatabase->dbQueue) {
-        // Synchronized in case some other code/thread still has a reference to the DB
-        // TODO: Investigate whether this truly closes the DB (in memory)
-        [SharedCryptographyDatabase->dbQueue close];
-        SharedCryptographyDatabase->dbQueue = nil;
-    }
-}
-
-
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error {
 
     // Have we created a DB on this device already ?
@@ -225,6 +206,25 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(BOOL) databaseWasCreated {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kDBWasCreatedBool];
+}
+
+
++(void) databaseLock {
+    
+    if (!SharedCryptographyDatabase) {
+        @throw [NSException exceptionWithName:@"DB lock failed" reason:@"tried to lock the DB before opening/unlocking it" userInfo:nil];
+    }
+    
+    if ([SharedCryptographyDatabase isLocked]) {
+        return;
+    }
+    
+    @synchronized(SharedCryptographyDatabase->dbQueue) {
+        // Synchronized in case some other code/thread still has a reference to the DB
+        // TODO: Investigate whether this truly closes the DB (in memory)
+        [SharedCryptographyDatabase->dbQueue close];
+        SharedCryptographyDatabase->dbQueue = nil;
+    }
 }
 
 
