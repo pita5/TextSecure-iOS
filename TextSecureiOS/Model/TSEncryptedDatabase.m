@@ -1,12 +1,12 @@
 //
-//  CryptographyDatabase.m
+//  TSEncryptedDatabase.m
 //  TextSecureiOS
 //
 //  Created by Christine Corbett Moran on 10/12/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import "EncryptedDatabase.h"
+#import "TSEncryptedDatabase.h"
 #import "Cryptography.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
@@ -20,11 +20,11 @@
 #define databaseFileName @"cryptography.db"
 
 // Reference to the singleton
-static EncryptedDatabase *SharedCryptographyDatabase = nil;
+static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 #pragma mark Private Methods
-@interface EncryptedDatabase(Private)
+@interface TSEncryptedDatabase(Private)
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
@@ -39,7 +39,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 @end
 
 
-@implementation EncryptedDatabase
+@implementation TSEncryptedDatabase
 
 
 #pragma mark DB Instantiation Methods
@@ -55,13 +55,13 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(void) databaseErase {
     @synchronized(SharedCryptographyDatabase) {
-        [EncryptedDatabase databaseLock];
+        [TSEncryptedDatabase databaseLock];
         
         // Erase the DB file
         [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
         
         // Erase the DB encryption key from the Keychain
-        [EncryptedDatabase eraseDatabaseMasterKey];
+        [TSEncryptedDatabase eraseDatabaseMasterKey];
         
         // Update the preferences
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
@@ -81,7 +81,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error {
 
     // Have we created a DB already ?
-    if ([EncryptedDatabase databaseWasCreated]) {
+    if ([TSEncryptedDatabase databaseWasCreated]) {
         if (error) {
             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
             // TODO : define error codes
@@ -93,7 +93,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
     // 1. Create the DB encryption key, the DB and the tables
-    NSData *dbMasterKey = [EncryptedDatabase generateDatabaseMasterKeyWithPassword: userPassword];
+    NSData *dbMasterKey = [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword: userPassword];
     __block BOOL dbInitSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
@@ -121,12 +121,12 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
             *error = [NSError errorWithDomain:@"textSecure" code:102 userInfo:errorDetail];
         }
         // Cleanup
-        [EncryptedDatabase databaseErase];
+        [TSEncryptedDatabase databaseErase];
         return nil;
     }
     
     // We have now have an empty DB
-    SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
+    SharedCryptographyDatabase = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
 
     
     // 3. Generate and store the user's identity keys and prekeys
@@ -168,7 +168,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     
     // Make sure a DB has already been created
-    if (![EncryptedDatabase databaseWasCreated]) {
+    if (![TSEncryptedDatabase databaseWasCreated]) {
         if (error) {
             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
             [errorDetail setValue:@"no DB available" forKey:NSLocalizedDescriptionKey];
@@ -179,7 +179,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     
     // Get the DB master key
-    NSData *key = [EncryptedDatabase getDatabaseMasterKeyWithPassword:userPassword error:error];
+    NSData *key = [TSEncryptedDatabase getDatabaseMasterKeyWithPassword:userPassword error:error];
     if(key == nil) {
         return nil;
     }
@@ -209,7 +209,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     // Initialize the DB singleton
     if (!SharedCryptographyDatabase) {
         // First time in the app's lifecycle we're unlocking the DB
-        SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
+        SharedCryptographyDatabase = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
     }
     else {
         // DB had already been instantiated but was locked

@@ -12,7 +12,7 @@
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
 #import "Message.h"
-#import "EncryptedDatabase.h"
+#import "TSEncryptedDatabase.h"
 #import "TSRegisterForPushRequest.h"
 #import "ECKeyPair.h"
 #import "NSString+Conversion.h"
@@ -48,7 +48,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([UserDefaults hasVerifiedPhoneNumber] && [EncryptedDatabase databaseWasCreated]) {
+	if([UserDefaults hasVerifiedPhoneNumber] && [TSEncryptedDatabase databaseWasCreated]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
      UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
@@ -66,7 +66,7 @@
 #warning we will want better error handling, including reprompting if user enters password wrong
     if(buttonIndex==1) {
         NSString* password = [[alertView textFieldAtIndex:0] text];
-        if (![EncryptedDatabase databaseUnlockWithPassword:password error:&dbError]) {
+        if (![TSEncryptedDatabase databaseUnlockWithPassword:password error:&dbError]) {
             // Wrong password
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error entering user password" message:@"database will not open" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
             [alert show];

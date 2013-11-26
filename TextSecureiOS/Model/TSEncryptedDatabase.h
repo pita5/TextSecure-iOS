@@ -1,5 +1,5 @@
 //
-//  CryptographyDatabase.h
+//  TSEncryptedDatabase.h
 //  TextSecureiOS
 //
 //  Created by Christine Corbett Moran on 10/12/13.
@@ -10,7 +10,7 @@
 
 @class ECKeyPair;
 @class FMDatabaseQueue;
-@interface EncryptedDatabase : NSObject
+@interface TSEncryptedDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
 
 // Three ways to get the shared encrypted DB:
