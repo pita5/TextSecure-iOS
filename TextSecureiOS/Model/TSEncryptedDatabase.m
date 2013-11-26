@@ -31,7 +31,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 @implementation TSEncryptedDatabase
 
 
-#pragma mark Database instantiation methods
+#pragma mark Database instantiation
 
 +(instancetype) database {
   if (!SharedCryptographyDatabase) {
@@ -209,10 +209,11 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
+#pragma mark Database state
+
 +(BOOL) databaseWasCreated {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kDBWasCreatedBool];
 }
-
 
 
 -(BOOL) isLocked {
@@ -223,8 +224,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-#pragma mark DB Master Key Private Methods
-
+#pragma mark Database encryption master key - private
 
 +(NSData*) generateDatabaseMasterKeyWithPassword:(NSString*) userPassword {
     NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
@@ -256,7 +256,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-#pragma mark DB Creation Private Methods
+#pragma mark Database initialization - private
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue {
     if (self = [super init]) {
@@ -308,7 +308,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-#pragma mark Keys Fetching Methods
+#pragma mark Database content
 
 -(NSArray*) getPersonalPrekeys {
     
