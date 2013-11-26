@@ -70,7 +70,6 @@ static NSString *dbPw = @"1234test";
 {
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     EncryptedDatabase *encDb = [EncryptedDatabase database];
-    
     XCTAssertNotNil(encDb, @"could not get a reference to the database");
 }
 
@@ -79,7 +78,7 @@ static NSString *dbPw = @"1234test";
 {
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
-    XCTAssertThrows([[EncryptedDatabase database] getIdentityKey], @"database was still available after getting locked");
+    XCTAssertThrows([[EncryptedDatabase database] getIdentityKey], @"database was still accessible after getting locked");
 }
 
 
@@ -119,7 +118,6 @@ static NSString *dbPw = @"1234test";
 
 - (void)testDatabaseWasCreated
 {
-    XCTAssertFalse([EncryptedDatabase databaseWasCreated], @"preference was not updated after erasing database");
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     XCTAssertTrue([EncryptedDatabase databaseWasCreated], @"preference was not updated after creating database");
 }

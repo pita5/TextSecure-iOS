@@ -17,10 +17,10 @@
 // Create a new one
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error;
 
-// Open an existing one
+// Open and unlock an existing one or unlock it if it was already opened
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error;
 
-// Get a reference if it has already been created/opened; it might locked (ie. pw-protected) tho
+// Get a reference if it has already been created/opened; it might be locked (ie. pw-protected) tho
 +(instancetype) database;
 
 

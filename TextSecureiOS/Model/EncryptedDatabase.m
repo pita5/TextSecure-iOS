@@ -78,7 +78,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(instancetype) databaseCreateWithPassword:(NSString *)userPassword error:(NSError **)error {
 
-    // Sanity check; is there a DB already ?
+    // Have we created a DB already ?
     if ([EncryptedDatabase databaseWasCreated]) {
         if (error) {
             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
