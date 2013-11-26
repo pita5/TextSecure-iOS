@@ -78,9 +78,10 @@ static NSString *dbPw = @"1234test";
 
 - (void)testDatabaseLock
 {
-    [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
+    EncryptedDatabase *encDb = [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseLock];
     XCTAssertThrows([[EncryptedDatabase database] getIdentityKey], @"database was still accessible after getting locked");
+    XCTAssertNil(encDb.dbQueue, @"database was still accessible after getting locked");
 }
 
 
@@ -140,7 +141,7 @@ static NSString *dbPw = @"1234test";
 }
 
 
-- (void)testDatabaseWasInitializedAfterErase
+- (void)testDatabaseWasCreatedAfterErase
 {
     [EncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [EncryptedDatabase databaseErase];

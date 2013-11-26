@@ -129,21 +129,16 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         return nil;
     }
     
-    
     // We have now have an empty DB
-    EncryptedDatabase *preFinalDb = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
+    SharedCryptographyDatabase = [[EncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
 
+    
     // 3. Generate and store the user's identity keys and prekeys
-    [preFinalDb generateIdentityKey];
-    [preFinalDb generatePersonalPrekeys];
+    [SharedCryptographyDatabase generateIdentityKey];
+    [SharedCryptographyDatabase generatePersonalPrekeys];
 
-    
-    // 4. Success
-    // Initialize the DB singleton
-    SharedCryptographyDatabase = preFinalDb;
-    
     // Send new prekeys to network
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:[preFinalDb getPersonalPrekeys] identityKey:[preFinalDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:[SharedCryptographyDatabase getPersonalPrekeys] identityKey:[SharedCryptographyDatabase getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         switch (operation.response.statusCode) {
             case 200:
@@ -160,6 +155,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
     }];
     
+    // 4. Success
     // Store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kDBWasCreatedBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
