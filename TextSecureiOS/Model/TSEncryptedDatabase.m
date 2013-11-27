@@ -117,22 +117,26 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     [SharedCryptographyDatabase generatePersonalPrekeys];
 
     // Send new prekeys to network
+    __block BOOL sendSuccess = NO;
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:[SharedCryptographyDatabase getPersonalPrekeys] identityKey:[SharedCryptographyDatabase getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        switch (operation.response.statusCode) {
-            case 200:
-                DLog(@"Device registered prekeys");
-                break;
-                
-            default:
-                DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
-#warning Add error handling if not able to send the prekeys
-                break;
+        if (operation.response.statusCode == 200) {
+            sendSuccess = YES;
         }
+        DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning Add error handling if not able to send the token
         DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
     }];
+    if (!sendSuccess) {
+        if (error) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            // TODO : define error codes
+            [errorDetail setValue:@"could not send prekeys to the server" forKey:NSLocalizedDescriptionKey];
+            *error = [NSError errorWithDomain:@"textSecure" code:105 userInfo:errorDetail];
+        }
+        // Cleanup
+        [TSEncryptedDatabase databaseErase];
+        return nil;
+    }
     
     // 4. Success
     // Store in the preferences that the DB has been successfully created
@@ -294,12 +298,12 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     [self->dbQueue inDatabase:^(FMDatabase *db) {
         
         if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]]) {
-            NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
+            DLog(@"Error updating DB: %@", [db lastErrorMessage]);
             return;
         }
         
         if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]]) {
-            NSLog(@"Error updating DB: %@", [db lastErrorMessage]);
+            DLog(@"Error updating DB: %@", [db lastErrorMessage]);
             return;
         }
         updateSuccess = YES;

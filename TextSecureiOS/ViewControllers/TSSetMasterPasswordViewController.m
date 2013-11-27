@@ -40,11 +40,13 @@
     [self.pass becomeFirstResponder];
 }
 
-- (void) setupDatabase{
+- (void) setupDatabase {
+    NSError *error = nil;
     // TODO: Error handling
-    [TSEncryptedDatabase databaseCreateWithPassword:self.pass.text error:nil];
+    if(![TSEncryptedDatabase databaseCreateWithPassword:self.pass.text error:&error]) {
+        @throw [NSException exceptionWithName:@"DB creation failed" reason:[error localizedDescription] userInfo:nil];
+    }
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
-
 }
 
 - (void)didReceiveMemoryWarning
