@@ -2203,7 +2203,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"${SDKROOT}\" != *Simulator* ]]\nthen thencodesign --verify --force --sign \"$CODE_SIGN_IDENTITY\" \"$CODESIGNING_FOLDER_PATH\"\nfi";
+			shellScript = "if [[ \"${SDKROOT}\" != *Simulator* ]]\nthen codesign --verify --force --sign \"$CODE_SIGN_IDENTITY\" \"$CODESIGNING_FOLDER_PATH\"\nfi";
 		};
 		DE866B39AA57421C900F2883 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
