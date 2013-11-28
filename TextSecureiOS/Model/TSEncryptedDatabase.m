@@ -318,6 +318,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     
     // TODO: Error handling
     if ([SharedCryptographyDatabase isLocked]) {
+        // TODO: Prompt the user for their password and call databaseUnlock first
         @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
     }
     
@@ -338,7 +339,9 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 -(ECKeyPair*) getIdentityKey {
     
     // TODO: Error handling
+    
     if ([SharedCryptographyDatabase isLocked]) {
+        // TODO: Prompt the user for their password and call databaseUnlock first
         @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
     }
     

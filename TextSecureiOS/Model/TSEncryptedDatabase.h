@@ -46,7 +46,7 @@
 
 
 /**
- * Lock the TextSecure database, requiring a call to databaseUnlockWithPassword:error to unlock it. Any code with a reference to the database that tries to access its content while locked will trigger exceptions.
+ * Lock the TextSecure database, requiring a call to databaseUnlockWithPassword:error to unlock it. Any code with a reference to the database that tries to access its content while locked will trigger exceptions. TODO: Automatically prompt the user for their password instead.
  * @author Alban Diquet
  *
  */
@@ -80,7 +80,7 @@
 
 
 /**
- * Get the identity key stored in the database.
+ * Get the identity key stored in the database. Will trigger exceptions if the database is locked. TODO: Automatically prompt the user for their password instead.
  * @author Alban Diquet
  *
  * @return The identity key.
@@ -89,7 +89,7 @@
 
 
 /**
- * Get the pre keys stored in the database.
+ * Get the pre keys stored in the database. Will trigger exceptions if the database is locked. TODO: Automatically prompt the user for their password instead.
  * @author Alban Diquet
  *
  * @return An array of pre-keys.
