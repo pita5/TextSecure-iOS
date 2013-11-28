@@ -2,7 +2,7 @@
 //  TSEncryptedDatabase.m
 //  TextSecureiOS
 //
-//  Created by Christine Corbett Moran on 10/12/13.
+//  Created by Alban Diquet on 11/25/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
@@ -16,7 +16,6 @@
 #import "ECKeyPair.h"
 #import "FilePath.h"
 #import "NSData+Base64.h"
-#import "TSRegisterPrekeys.h"
 #import "KeychainWrapper.h"
 
 
@@ -111,32 +110,9 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // We have now have an empty DB
     SharedCryptographyDatabase = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
 
-    
     // 3. Generate and store the user's identity keys and prekeys
     [SharedCryptographyDatabase generateIdentityKey];
     [SharedCryptographyDatabase generatePersonalPrekeys];
-
-    // Send new prekeys to network
-    __block BOOL sendSuccess = NO;
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:[SharedCryptographyDatabase getPersonalPrekeys] identityKey:[SharedCryptographyDatabase getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (operation.response.statusCode == 200) {
-            sendSuccess = YES;
-        }
-        DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
-    }];
-    if (!sendSuccess) {
-        if (error) {
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            // TODO : define error codes
-            [errorDetail setValue:@"could not send prekeys to the server" forKey:NSLocalizedDescriptionKey];
-            *error = [NSError errorWithDomain:@"textSecure" code:105 userInfo:errorDetail];
-        }
-        // Cleanup
-        [TSEncryptedDatabase databaseErase];
-        return nil;
-    }
     
     // 4. Success
     // Store in the preferences that the DB has been successfully created

@@ -2,7 +2,7 @@
 //  TSEncryptedDatabase.h
 //  TextSecureiOS
 //
-//  Created by Christine Corbett Moran on 10/12/13.
+//  Created by Alban Diquet on 11/25/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 

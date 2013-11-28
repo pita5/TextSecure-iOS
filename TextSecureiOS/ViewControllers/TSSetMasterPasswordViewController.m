@@ -8,7 +8,8 @@
 
 #import "TSSetMasterPasswordViewController.h"
 #import "TSEncryptedDatabase.h"
-#import "Cryptography.h"
+#import "TSRegisterPrekeys.h"
+
 @interface TSSetMasterPasswordViewController ()
 
 @end
@@ -41,12 +42,31 @@
 }
 
 - (void) setupDatabase {
+    // Create the database on the device
     NSError *error = nil;
     // TODO: Error handling
-    if(![TSEncryptedDatabase databaseCreateWithPassword:self.pass.text error:&error]) {
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:self.pass.text error:&error];
+    if(!encDb) {
         @throw [NSException exceptionWithName:@"DB creation failed" reason:[error localizedDescription] userInfo:nil];
     }
-    [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
+    
+    // Send the user's newly generated keys to the API
+    // TODO: Error handling & retry if network error
+    __block BOOL sendSuccess = NO;
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:[encDb getPersonalPrekeys] identityKey:[encDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (operation.response.statusCode == 200) {
+            sendSuccess = YES;
+        }
+        DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
+    }];
+    if (!sendSuccess) {
+        @throw [NSException exceptionWithName:@"setup database error" reason:@"could not send the user's keys to the server" userInfo:nil];
+        }
+    else {
+        [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
+    }
 }
 
 - (void)didReceiveMemoryWarning
