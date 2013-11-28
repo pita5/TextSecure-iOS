@@ -1,5 +1,5 @@
 //
-//  TSEncryptedDatabase_Private.h
+//  TSEncryptedDatabase+Private.h
 //  TextSecureiOS
 //
 //  Created by Alban Diquet on 11/26/13.

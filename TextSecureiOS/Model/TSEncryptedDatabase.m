@@ -7,7 +7,7 @@
 //
 
 #import "TSEncryptedDatabase.h"
-#import "TSEncryptedDatabase_Private.h"
+#import "TSEncryptedDatabase+Private.h"
 #import "RNDecryptor.h"
 #import "RNEncryptor.h"
 #import "Cryptography.h"
@@ -29,7 +29,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 @implementation TSEncryptedDatabase {
 
-# pragma mark Internal database queue
     @protected FMDatabaseQueue *dbQueue;
 }
 

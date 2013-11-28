@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "TSEncryptedDatabase.h"
-#import "TSEncryptedDatabase_Private.h"
+#import "TSEncryptedDatabase+Private.h"
 #import "Cryptography.h"
 #import "KeychainWrapper.h"
 #import "NSData+Base64.h"

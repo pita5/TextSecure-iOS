@@ -457,7 +457,7 @@
 		8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabase_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSEncryptedDatabase_Tests.m; sourceTree = "<group>"; };
 		8C0AB3DB184300B000DEC2B6 /* TextSecureiOS Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS Tests-Prefix.pch"; sourceTree = "<group>"; };
 		8C20E5271842F863005DA478 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		8C6F78C1184530E2008A158D /* TSEncryptedDatabase_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TSEncryptedDatabase_Private.h; path = Model/TSEncryptedDatabase_Private.h; sourceTree = "<group>"; };
+		8C6F78C1184530E2008A158D /* TSEncryptedDatabase+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "TSEncryptedDatabase+Private.h"; path = "Model/TSEncryptedDatabase+Private.h"; sourceTree = "<group>"; };
 		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		A515AFD9180966E30084ABA5 /* TSEncryptedDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSEncryptedDatabase.h; path = Model/TSEncryptedDatabase.h; sourceTree = "<group>"; };
 		A515AFDA180966E30084ABA5 /* TSEncryptedDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSEncryptedDatabase.m; path = Model/TSEncryptedDatabase.m; sourceTree = "<group>"; };
@@ -1007,7 +1007,7 @@
 				A5169CFA170FEA3E00A2CE9E /* Message.m */,
 				A515AFD9180966E30084ABA5 /* TSEncryptedDatabase.h */,
 				A515AFDA180966E30084ABA5 /* TSEncryptedDatabase.m */,
-				8C6F78C1184530E2008A158D /* TSEncryptedDatabase_Private.h */,
+				8C6F78C1184530E2008A158D /* TSEncryptedDatabase+Private.h */,
 			);
 			name = Model;
 			sourceTree = "<group>";
