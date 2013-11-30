@@ -420,7 +420,6 @@
 		B635B3E8182181E1003CE732 /* UIColor+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3BF182181E1003CE732 /* UIColor+JSMessagesView.m */; };
 		B635B3E9182181E1003CE732 /* UIImage+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3C1182181E1003CE732 /* UIImage+JSMessagesView.m */; };
 		B635B3EA182181E1003CE732 /* UIView+AnimationOptionsForCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3C3182181E1003CE732 /* UIView+AnimationOptionsForCurve.m */; };
-		B635B3EB182181E1003CE732 /* TITokenField.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3C6182181E1003CE732 /* TITokenField.m */; };
 		B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EC18218456003CE732 /* CoreAudio.framework */; };
 		B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EE18218481003CE732 /* AudioToolbox.framework */; };
 		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
@@ -906,8 +905,6 @@
 		B635B3C1182181E1003CE732 /* UIImage+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+JSMessagesView.m"; sourceTree = "<group>"; };
 		B635B3C2182181E1003CE732 /* UIView+AnimationOptionsForCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AnimationOptionsForCurve.h"; sourceTree = "<group>"; };
 		B635B3C3182181E1003CE732 /* UIView+AnimationOptionsForCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AnimationOptionsForCurve.m"; sourceTree = "<group>"; };
-		B635B3C5182181E1003CE732 /* TITokenField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TITokenField.h; sourceTree = "<group>"; };
-		B635B3C6182181E1003CE732 /* TITokenField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TITokenField.m; sourceTree = "<group>"; };
 		B635B3EC18218456003CE732 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		B635B3EE18218481003CE732 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		B639AF0B17F5A68100B2244D /* TSNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSNetworkManager.h; path = TextSecureiOS/Networking/TSNetworkManager.h; sourceTree = "<group>"; };
@@ -1518,7 +1515,6 @@
 			isa = PBXGroup;
 			children = (
 				B635B392182181E1003CE732 /* JSMessagesTableViewController */,
-				B635B3C4182181E1003CE732 /* TokenField */,
 			);
 			name = "Modified-VCs";
 			path = "ViewControllers/Conversations/Modified-VCs";
@@ -1599,15 +1595,6 @@
 				B635B3BB182181E1003CE732 /* messageSent.aiff */,
 			);
 			path = Sounds;
-			sourceTree = "<group>";
-		};
-		B635B3C4182181E1003CE732 /* TokenField */ = {
-			isa = PBXGroup;
-			children = (
-				B635B3C5182181E1003CE732 /* TITokenField.h */,
-				B635B3C6182181E1003CE732 /* TITokenField.m */,
-			);
-			path = TokenField;
 			sourceTree = "<group>";
 		};
 		B639AF0A17F5A53700B2244D /* Networking */ = {
@@ -2232,7 +2219,6 @@
 				B68A2292180AC32C00D93C16 /* TSRegisterForPushRequest.m in Sources */,
 				B635B3CC182181E1003CE732 /* JSMessageSoundEffect.m in Sources */,
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
-				B635B3EB182181E1003CE732 /* TITokenField.m in Sources */,
 				B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				B635B3EA182181E1003CE732 /* UIView+AnimationOptionsForCurve.m in Sources */,
