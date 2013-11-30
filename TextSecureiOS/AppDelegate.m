@@ -13,7 +13,6 @@
 #import "NSObject+SBJson.h"
 #import "EncryptedDatabase.h"
 #import "TSRegisterForPushRequest.h"
-#import "ECKeyPair.h"
 #import "NSString+Conversion.h"
 @implementation AppDelegate
 

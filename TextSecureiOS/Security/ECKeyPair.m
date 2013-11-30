@@ -25,6 +25,7 @@
 
 - (id)init {
 #warning this class should be refactored to not store strings but bytes for speed
+#warning for Android interoperability (and conforming to protocol) we will need to add leading byte of 0x05 to keys prior to sending/remove before using
 	if (![super init]) {
 		return nil;
   }

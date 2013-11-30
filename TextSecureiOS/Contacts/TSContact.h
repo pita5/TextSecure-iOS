@@ -12,8 +12,8 @@
 
 @property (nonatomic, copy) NSNumber *userABID;
 @property (nonatomic, copy) NSString *relay;
+@property (nonatomic, copy) NSString *registeredId;
 @property (nonatomic, assign) BOOL supportsSMS;
-
 - (NSString*) name;
 
 @end

@@ -9,7 +9,7 @@
 #import "TSRequest.h"
 @class ECKeyPair;
 
-@interface TSRegisterPrekeys : TSRequest
+@interface TSRegisterPrekeysRequest : TSRequest
 
 - (id)initWithPrekeyArray:(NSArray*)prekeys identityKey:(ECKeyPair*) identityKey;
 

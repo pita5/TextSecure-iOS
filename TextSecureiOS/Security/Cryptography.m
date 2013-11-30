@@ -24,7 +24,7 @@
 #include "NSData+Base64.h"
 #include "ECKeyPair.h"
 #import "EncryptedDatabase.h"
-#import "TSRegisterPrekeys.h"
+#import "TSRegisterPrekeysRequest.h"
 #import "FilePath.h"
 
 
@@ -115,15 +115,16 @@
   [cryptoDB savePersonalPrekeys:prekeys];
   // Sending new prekeys to network
   
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:prekeys identityKey:[cryptoDB getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:prekeys identityKey:[cryptoDB getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {
       case 200:
+      case 204:
         DLog(@"Device registered prekeys");
         break;
         
       default:
-        DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
+        DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
 #warning Add error handling if not able to send the prekeys
         break;
     }

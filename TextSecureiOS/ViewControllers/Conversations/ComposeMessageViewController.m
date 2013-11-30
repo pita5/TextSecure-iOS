@@ -162,11 +162,14 @@
     
     [self.timestamps addObject:[NSDate date]];
     
-    if((self.messages.count - 1) % 2)
+    if((self.messages.count - 1) % 2) {
         [JSMessageSoundEffect playMessageSentSound];
-    else
+    }
+    else {
         [JSMessageSoundEffect playMessageReceivedSound];
-    
+    }
+
+  
     [self finishSend];
 }
 
