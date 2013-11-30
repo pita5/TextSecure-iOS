@@ -13,6 +13,7 @@
 #import "NSObject+SBJson.h"
 #import "Message.h"
 #import "TSEncryptedDatabase.h"
+#import "TSEncryptedDatabaseError.h"
 #import "TSRegisterForPushRequest.h"
 #import "ECKeyPair.h"
 #import "NSString+Conversion.h"
@@ -62,14 +63,22 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSError *dbError = nil;
+    NSError *error = nil;
 #warning we will want better error handling, including reprompting if user enters password wrong
     if(buttonIndex==1) {
         NSString* password = [[alertView textFieldAtIndex:0] text];
-        if (![TSEncryptedDatabase databaseUnlockWithPassword:password error:&dbError]) {
-            // Wrong password
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error entering user password" message:@"database will not open" delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-            [alert show];
+        if (![TSEncryptedDatabase databaseUnlockWithPassword:password error:&error]) {
+            if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
+                switch ([error code]) {
+                    case InvalidPassword:
+                        // TODO: Proper error handling
+                        @throw [NSException exceptionWithName:@"Wrong password" reason:[error localizedDescription] userInfo:nil];
+                        break;
+                    case NoDbAvailable:
+                        // TODO: Proper error handling
+                        @throw [NSException exceptionWithName:@"No DB available; create one first" reason:[error localizedDescription] userInfo:nil];
+                }
+            }
         }
   }
 }

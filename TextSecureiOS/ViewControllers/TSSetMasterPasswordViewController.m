@@ -8,6 +8,7 @@
 
 #import "TSSetMasterPasswordViewController.h"
 #import "TSEncryptedDatabase.h"
+#import "TSEncryptedDatabaseError.h"
 #import "TSRegisterPrekeys.h"
 
 @interface TSSetMasterPasswordViewController ()
@@ -44,10 +45,16 @@
 - (void) setupDatabase {
     // Create the database on the device
     NSError *error = nil;
-    // TODO: Error handling
+    
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:self.pass.text error:&error];
     if(!encDb) {
-        @throw [NSException exceptionWithName:@"DB creation failed" reason:[error localizedDescription] userInfo:nil];
+        if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
+            switch ([error code]) {
+                case DbCreationFailed:
+                    // TODO: Proper error handling
+                    @throw [NSException exceptionWithName:@"DB creation failed" reason:[error localizedDescription] userInfo:nil];
+            }
+        }
     }
     
     // Send the user's newly generated keys to the API
