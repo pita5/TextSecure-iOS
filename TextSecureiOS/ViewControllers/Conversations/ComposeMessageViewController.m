@@ -45,6 +45,7 @@
     [_tokenFieldView setForcePickSearchResult:YES];
     
 	[_tokenFieldView.tokenField setDelegate:self];
+    _tokenFieldView.tokenField.delegate = self;
 	[_tokenFieldView.tokenField addTarget:self action:@selector(tokenFieldFrameDidChange:) forControlEvents:(UIControlEvents) TITokenFieldControlEventFrameDidChange];
 	[_tokenFieldView.tokenField setTokenizingCharacters:[NSCharacterSet characterSetWithCharactersInString:@",;."]]; // Default is a comma
     [_tokenFieldView.tokenField setPromptText:@"To:"];
@@ -69,6 +70,8 @@
         
         [_tokenFieldView setSourceArray:contacts];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
+        
+        [_tokenFieldView becomeFirstResponder];
     }];
     
     self.messages = [NSMutableArray array];
@@ -233,6 +236,20 @@
     return nil;
 }
 
+-(void)tokenField:(TITokenField *)tokenField didAddToken:(TIToken *)token{
+    if (_tokenFieldView.tokenField.tokens) {
+        self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
+        [self startedWritingMessage];
+        DLog(@"Contact set to : %@", self.contact.name);
+    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        sleep(0);
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [self.inputToolBarView.textView becomeFirstResponder];
+        });
+    });
+}
+
 #pragma mark UITextViewDelegate (Sending box)
 
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView{
@@ -240,18 +257,7 @@
     if ([textView isEqual:self.inputToolBarView.textView]) {
         
         self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
-        
-        // We start editing the message field, proceed to UI changes.
-        if (_tokenFieldView) {
-            if (_tokenFieldView.tokenField.tokens) {
-                self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
-                [self startedWritingMessage];
-                NSLog(@"Contact set to : %@", self.contact.name);
-            }
-            else{
-                return FALSE;
-            }
-        }
+
     }
     
     return true;
