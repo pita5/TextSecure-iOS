@@ -25,6 +25,7 @@
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
+		A530CB011849F55E0052B615 /* curve25519-donna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B1E47818496A9C005A5E31 /* curve25519-donna.a */; };
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
@@ -376,7 +377,6 @@
 		A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F631170F824700A0CDC1 /* CryptographyTests.m */; };
 		A5B0B82618198C8E00AF41A7 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */; };
 		A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */; };
-		A5B1E47918496A9C005A5E31 /* curve25519-donna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B1E47818496A9C005A5E31 /* curve25519-donna.a */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
@@ -945,6 +945,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A530CB011849F55E0052B615 /* curve25519-donna.a in Frameworks */,
 				B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */,
 				B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */,
 				A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */,
@@ -957,7 +958,6 @@
 				A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */,
 				A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */,
 				A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */,
-				A5B1E47918496A9C005A5E31 /* curve25519-donna.a in Frameworks */,
 				A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */,
 				A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */,
 				A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */,
@@ -2211,7 +2211,6 @@
 				B6B478E61809E7F5005DDE12 /* TSContactsIntersectionRequest.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */,
-				A5169CFB170FEA3E00A2CE9E /* Message.m in Sources */,
 				B635B3CE182181E1003CE732 /* NSString+JSMessagesView.m in Sources */,
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
@@ -2219,7 +2218,6 @@
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */,
-				A5169D0A170FEA8D00A2CE9E /* ThreadViewController.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				B635B3CD182181E1003CE732 /* JSMessagesViewController.m in Sources */,
