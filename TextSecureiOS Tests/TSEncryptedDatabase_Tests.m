@@ -149,7 +149,13 @@ static NSString *dbPw = @"1234test";
     
     // Replace the master key
     [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword:dbPw];
-    XCTAssertThrows([TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked with corrupted keychain");
+    
+    NSError *error = nil;
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
+    
+    XCTAssertNil(encDb, @"database was unlocked with corrupted keychain");
+    // TODO: Look at the actual error code
+    XCTAssertNotNil(error, @"database was unlocked with corrupted keychain");
 }
 
 

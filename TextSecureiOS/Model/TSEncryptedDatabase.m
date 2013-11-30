@@ -164,7 +164,13 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         }
     }];
     if (!initSuccess) {
-        @throw [NSException exceptionWithName:@"DB unlock failed" reason:@"DB was corrupted" userInfo:nil];
+        if (error) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            [errorDetail setValue:@"DB was corrupted" forKey:NSLocalizedDescriptionKey];
+            // TODO: Define error codes
+            *error = [NSError errorWithDomain:@"textSecure" code:113 userInfo:errorDetail];
+        }
+        return nil;
     }
     
     // Initialize the DB singleton
