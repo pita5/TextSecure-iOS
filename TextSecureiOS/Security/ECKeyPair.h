@@ -7,20 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <openssl/ec.h>
-
+extern void curve25519_donna(unsigned char *output, const unsigned char *a,
+                             const unsigned char *b);
 @interface ECKeyPair : NSObject {
-  EC_KEY *ecKey;
-  unsigned int curveType;
-
+ 
 }
 @property (nonatomic) int prekeyId;
+// Base 64 serialized string, later store bytes directly for speed
+@property (nonatomic,strong) NSString* publicKey;
+@property (nonatomic,strong) NSString* privateKey;
+
 - (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey prekeyId:(int)prekeyId;
 - (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
 - (id)initWithPublicKey:(NSString *)publicKey;
 - (BOOL)generateKeys;
 - (BOOL)setPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
-- (NSString *)publicKey;
-- (NSString *)privateKey;
 +(ECKeyPair*) createAndGeneratePublicPrivatePair:(int)prekeyId;
+-(NSString*) getSharedSecret:(NSString*)theirPublicKey ;
 @end

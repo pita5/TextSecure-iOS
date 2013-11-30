@@ -20,3 +20,5 @@ NSString* const textSecureAccountsAPI = @"v1/accounts";
 NSString* const textSecureMessagesAPI = @"v1/messages";
 NSString* const textSecureKeysAPI = @"v1/keys";
 NSString* const textSecureDirectoryAPI= @"v1/directory";
+double const timeOutForRequests = 10;
+

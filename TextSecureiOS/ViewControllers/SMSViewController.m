@@ -7,7 +7,6 @@
 //
 
 #import "SMSViewController.h"
-#import "Message.h"
 @implementation SMSViewController
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -28,9 +27,6 @@
   UILabel *previewLabel = (UILabel *)[cell viewWithTag:2];
   UILabel *dateLabel = (UILabel *)[cell viewWithTag:3];
   
-  Message* message = [self.messages objectAtIndex:indexPath.row];
-  phoneNumberLabel.text = [message.destinations objectAtIndex:0];
-  previewLabel.text = message.text;
   NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
   [dateFormatter setDateFormat:@"HH:mm"];
   NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];

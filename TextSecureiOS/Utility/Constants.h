@@ -19,6 +19,9 @@ extern NSString* const usernameTokenStorageId;
 extern NSString* const signalingTokenStorageId;
 extern NSString* const prekeyCounterStorageId;
 extern NSString* const encryptedMasterSecretKeyStorageId;
+
+extern double const timeOutForRequests;
+
 typedef enum {
 	CREATE_ACCOUNT=0,
 	VERIFY_ACCOUNT=1,
@@ -38,4 +41,3 @@ typedef enum {
   DOWNLOAD=4
 } HTTPRequestType;
 
-double const timeOutForRequests;
