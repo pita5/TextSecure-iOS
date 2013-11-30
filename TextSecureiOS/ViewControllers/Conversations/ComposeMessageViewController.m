@@ -180,6 +180,7 @@
     else {
         [JSMessageSoundEffect playMessageReceivedSound];
     }
+#warning we don't need to do this every time, just at the beginning of a session... 
   TSContact *recipient = [[TSContact alloc] init];
   recipient.registeredId = @"dummy";
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -190,8 +191,8 @@
         break;
         
       default:
-        DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
-#warning Add error handling if not able to send the prekeys
+        DLog(@"Issue getting contacts' prekeys");
+#warning Add error handling if not able to get contacts prekey
         break;
     }
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

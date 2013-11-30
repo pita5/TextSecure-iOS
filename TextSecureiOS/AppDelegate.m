@@ -116,9 +116,11 @@
 }
 
 -(void) handlePush:(NSDictionary *)pushInfo {
-	NSDictionary* fullMessageJson = [[pushInfo objectForKey:@"message_body"] JSONValue];
-	NSLog(@"full message json %@",fullMessageJson);
-#warning we need to handle this push!
+	
+	NSLog(@"full message json %@",pushInfo);
+  UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:[pushInfo objectForKey:@"alert"] message:[pushInfo objectForKey:@"m"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+  [pushAlert show];
+#warning we need to handle this push!, the UI will need to select the appropriate message view
 
 }
 

@@ -12,8 +12,31 @@
 @implementation IncomingPushMessageSignal
 
 
+-(id) initWithRecipient:(NSString*) recipientId message:(NSString*)message date:(NSDate*) date type:(int)type{
+  std::string  *cppRecipientId = new std::string([recipientId UTF8String]);
+  std::string *cppMessage = new std::string([message UTF8String]);
+  
+  textsecure::IncomingPushMessageSignal *incomingPushMessage = new textsecure::IncomingPushMessageSignal();
+  // TODO: store this
+  incomingPushMessage->set_type(type); // 0=plaintext,1=ciphertext,3=prekeybundle
+  incomingPushMessage->set_allocated_source(cppRecipientId);
+  //incomingPushMessage->set_destinations(<#int index#>, <#const ::std::string &value#>); //leaving empty, not a group message.
+  incomingPushMessage->set_timestamp((uint64_t)[date timeIntervalSince1970]);
+  incomingPushMessage->set_allocated_message(cppMessage);
+  return self;
+}
+
+-(id) initWithSerializedIncomingPushMessage:(NSData*) serializedIncomingPushMessage {
+  // Deserializing message
+  // TODO: store this
+  textsecure::IncomingPushMessageSignal *deserializedIncomingPushMessage = [IncomingPushMessageSignal getIncomingPushMessageSignalForData:serializedIncomingPushMessage];
+  return self;
+}
+
+
 -(id) init {
   // Testing things out
+#warning remove this type of init
   if(self = [super init]) {
     // Creating message
     /*
@@ -32,26 +55,26 @@
     incomingPushMessage->set_timestamp((uint64_t)[[NSDate date] timeIntervalSince1970]);
     incomingPushMessage->set_allocated_message(&message);
     // Printing message
-    [self prettyPrint:incomingPushMessage];
+    [IncomingPushMessageSignal prettyPrint:incomingPushMessage];
     // Serializing message
-    NSData* serializedIncomingPushMessage = [self getDataForIncomingPushMessageSignal:incomingPushMessage];
+    NSData* serializedIncomingPushMessage = [IncomingPushMessageSignal getDataForIncomingPushMessageSignal:incomingPushMessage];
     
     // Deserializing message
-    textsecure::IncomingPushMessageSignal *deserializedIncomingPushMessage = [self getIncomingPushMessageSignalForData:serializedIncomingPushMessage];
+    textsecure::IncomingPushMessageSignal *deserializedIncomingPushMessage = [IncomingPushMessageSignal getIncomingPushMessageSignalForData:serializedIncomingPushMessage];
     // Printing deserialized message
-    [self prettyPrint:deserializedIncomingPushMessage];
+    [IncomingPushMessageSignal prettyPrint:deserializedIncomingPushMessage];
   }
   return self;
 }
 
 // Serialize to NSData.
-- (NSData *)getDataForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessage {
++ (NSData *)getDataForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessage {
   std::string ps = incomingPushMessage->SerializeAsString();
   return [NSData dataWithBytes:ps.c_str() length:ps.size()];
 }
 
 // De-serialize from an NSData object.
-- (textsecure::IncomingPushMessageSignal *)getIncomingPushMessageSignalForData:(NSData *)data {
++ (textsecure::IncomingPushMessageSignal *)getIncomingPushMessageSignalForData:(NSData *)data {
   int len = [data length];
   char raw[len];
   textsecure::IncomingPushMessageSignal *incomingPushMessage = new textsecure::IncomingPushMessageSignal;
@@ -61,7 +84,7 @@
 }
 
 // Dlog
-- (void)prettyPrint:(textsecure::IncomingPushMessageSignal *)incomingPushMessage {
++ (void)prettyPrint:(textsecure::IncomingPushMessageSignal *)incomingPushMessage {
   /*
    Type
    Allowed source
