@@ -30,7 +30,7 @@ sudo gem update
 3b) **Temporary** - Building Curve25519-donna manually. This step should be removed soon
 
 - Clone the [git repository](https://github.com/agl/curve25519-donna.git) into `Libraries/src/`
-- Run the bash script called `build-libcurve25519.sh  from within `Libraries/`. This build should be quick, no coffee for you.
+- Run the bash script called `build-libcurve25519.sh`  from within `Libraries/`. This build should be quick, no coffee for you.
 
 
 4) Open the `TextSecureiOS.xcworkspace` in Xcode. **Note that for CocoaPods to work properly it is very important to always open the workspace and not the `.xcodeproj` file.** Build and Run and you are ready to go!
