@@ -44,16 +44,8 @@
 	[self.view setBackgroundColor:[UIColor whiteColor]];
 	[self.navigationItem setTitle:@"New Message"];
     
-    NSMutableArray *usersArray = [NSMutableArray array];
-    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
-        [contacts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            TSContact *contact = obj;
-            [usersArray addObject:contact.name];
-        }];
-    }];
-    
 	_tokenFieldView = [[TITokenFieldView alloc] initWithFrame:self.view.bounds];
-	[_tokenFieldView setSourceArray:usersArray];
+    [_tokenFieldView setForcePickSearchResult:YES];
     
 	[_tokenFieldView.tokenField setDelegate:self];
 	[_tokenFieldView.tokenField addTarget:self action:@selector(tokenFieldFrameDidChange:) forControlEvents:(UIControlEvents) TITokenFieldControlEventFrameDidChange];
@@ -74,6 +66,7 @@
 	// They both do the same thing.
 	[_tokenFieldView becomeFirstResponder];
     
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
         _tokenFieldView.hidden = FALSE;
         
@@ -81,8 +74,9 @@
         for (TSContact *contact in contacts){
             [contactNames addObject:[contact name]];
         }
-        NSLog(@"Contacts Loaded : %@", contactNames);
         [_tokenFieldView setSourceArray:contactNames];
+        _tokenFieldView.tokenField.text = @"";
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
     }];
     
     self.messages = [NSMutableArray array];
@@ -94,13 +88,10 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;
-
 	[self.view setBackgroundColor:[UIColor whiteColor]];
-    
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
     
 }
@@ -247,7 +238,6 @@
 
 -(void) startedWritingMessage{
     // Change frames for editing
-    
     if (_tokenFieldView) {
         [_tokenFieldView setScrollEnabled:FALSE];
          _tokenFieldView.frame = CGRectMake(_tokenFieldView.frame.origin.x, _tokenFieldView.frame.origin.y, _tokenFieldView.frame.size.width, 43);
