@@ -2380,9 +2380,7 @@
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)/**",
-					"\\\"$(SRCROOT)/Libraries/lib\\\"/**",
-					"\\\"$(SRCROOT)\\\"/**",
-					/Users/corbett/Dropbox/Projects/Mobile/TextSecureiOS/Libraries/lib,
+					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "99F3A2BB-CD0D-460F-9C75-89C081AEC53E";
@@ -2404,9 +2402,7 @@
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)/**",
-					"\\\"$(SRCROOT)/Libraries/lib\\\"/**",
-					"\\\"$(SRCROOT)\\\"/**",
-					/Users/corbett/Dropbox/Projects/Mobile/TextSecureiOS/Libraries/lib,
+					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "99F3A2BB-CD0D-460F-9C75-89C081AEC53E";
