@@ -381,8 +381,6 @@
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
-		A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA41702DF6E00856385 /* libssl.a */; };
-		A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15AA51702DF6E00856385 /* libcrypto.a */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* ComposeMessageViewController.m */; };
 		B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B394182181E1003CE732 /* JSBubbleMessageCell.m */; };
@@ -420,7 +418,6 @@
 		B635B3E8182181E1003CE732 /* UIColor+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3BF182181E1003CE732 /* UIColor+JSMessagesView.m */; };
 		B635B3E9182181E1003CE732 /* UIImage+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3C1182181E1003CE732 /* UIImage+JSMessagesView.m */; };
 		B635B3EA182181E1003CE732 /* UIView+AnimationOptionsForCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3C3182181E1003CE732 /* UIView+AnimationOptionsForCurve.m */; };
-		B635B3EB182181E1003CE732 /* TITokenField.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B3C6182181E1003CE732 /* TITokenField.m */; };
 		B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EC18218456003CE732 /* CoreAudio.framework */; };
 		B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EE18218481003CE732 /* AudioToolbox.framework */; };
 		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
@@ -428,6 +425,7 @@
 		B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B639F69E180955E100B7DF00 /* TSServerCodeVerificationRequest.m */; };
 		B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */; };
 		B63A72181808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */; };
+		B661DDBD184A583A00E369A8 /* TSMessagesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B661DDBC184A583A00E369A8 /* TSMessagesManager.m */; };
 		B68A2292180AC32C00D93C16 /* TSRegisterForPushRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */; };
 		B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */; };
 		B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */; };
@@ -906,8 +904,6 @@
 		B635B3C1182181E1003CE732 /* UIImage+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+JSMessagesView.m"; sourceTree = "<group>"; };
 		B635B3C2182181E1003CE732 /* UIView+AnimationOptionsForCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AnimationOptionsForCurve.h"; sourceTree = "<group>"; };
 		B635B3C3182181E1003CE732 /* UIView+AnimationOptionsForCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AnimationOptionsForCurve.m"; sourceTree = "<group>"; };
-		B635B3C5182181E1003CE732 /* TITokenField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TITokenField.h; sourceTree = "<group>"; };
-		B635B3C6182181E1003CE732 /* TITokenField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TITokenField.m; sourceTree = "<group>"; };
 		B635B3EC18218456003CE732 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		B635B3EE18218481003CE732 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		B639AF0B17F5A68100B2244D /* TSNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSNetworkManager.h; path = TextSecureiOS/Networking/TSNetworkManager.h; sourceTree = "<group>"; };
@@ -919,6 +915,8 @@
 		B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationCodeViewController.h; path = ViewControllers/VerificationCodeViewController.h; sourceTree = "<group>"; };
 		B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationCodeViewController.m; path = ViewControllers/VerificationCodeViewController.m; sourceTree = "<group>"; };
 		B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = gcm.textsecure.whispersystems.org.cer; path = TextSecureiOS/gcm.textsecure.whispersystems.org.cer; sourceTree = "<group>"; };
+		B661DDBB184A583A00E369A8 /* TSMessagesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessagesManager.h; path = MessagesManager/TSMessagesManager.h; sourceTree = "<group>"; };
+		B661DDBC184A583A00E369A8 /* TSMessagesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessagesManager.m; path = MessagesManager/TSMessagesManager.m; sourceTree = "<group>"; };
 		B68A2290180AC32C00D93C16 /* TSRegisterForPushRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterForPushRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.h; sourceTree = "<group>"; };
 		B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterForPushRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.m; sourceTree = "<group>"; };
 		B68BFDED1809855B005CC817 /* TSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSettingsViewController.h; path = ViewControllers/TSSettingsViewController.h; sourceTree = "<group>"; };
@@ -962,8 +960,6 @@
 				A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */,
 				A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */,
 				A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */,
-				A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */,
-				A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */,
 				A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1039,6 +1035,8 @@
 		A53718BB16FF95DF00C6FCCF /* TextSecureiOS */ = {
 			isa = PBXGroup;
 			children = (
+				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
+				B661DDBC184A583A00E369A8 /* TSMessagesManager.m */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
@@ -1518,7 +1516,6 @@
 			isa = PBXGroup;
 			children = (
 				B635B392182181E1003CE732 /* JSMessagesTableViewController */,
-				B635B3C4182181E1003CE732 /* TokenField */,
 			);
 			name = "Modified-VCs";
 			path = "ViewControllers/Conversations/Modified-VCs";
@@ -1599,15 +1596,6 @@
 				B635B3BB182181E1003CE732 /* messageSent.aiff */,
 			);
 			path = Sounds;
-			sourceTree = "<group>";
-		};
-		B635B3C4182181E1003CE732 /* TokenField */ = {
-			isa = PBXGroup;
-			children = (
-				B635B3C5182181E1003CE732 /* TITokenField.h */,
-				B635B3C6182181E1003CE732 /* TITokenField.m */,
-			);
-			path = TokenField;
 			sourceTree = "<group>";
 		};
 		B639AF0A17F5A53700B2244D /* Networking */ = {
@@ -2232,11 +2220,11 @@
 				B68A2292180AC32C00D93C16 /* TSRegisterForPushRequest.m in Sources */,
 				B635B3CC182181E1003CE732 /* JSMessageSoundEffect.m in Sources */,
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
-				B635B3EB182181E1003CE732 /* TITokenField.m in Sources */,
 				B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				B635B3EA182181E1003CE732 /* UIView+AnimationOptionsForCurve.m in Sources */,
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
+				B661DDBD184A583A00E369A8 /* TSMessagesManager.m in Sources */,
 				A515AFDB180966E30084ABA5 /* EncryptedDatabase.m in Sources */,
 				B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,

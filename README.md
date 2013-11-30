@@ -21,13 +21,7 @@ occasionally, CocoaPods itself will need to be updated. Do this with
 sudo gem update
 ```
 
-3a) **Temporary** - Building OpenSSL manually. This step should be removed soon. The goal is to make a pod specification that builds OpenSSL during the `pod install` phase.
-
-- Download the [latest sources](http://www.openssl.org/source/)
-- Decompress and copy them in the `Libraries/src/` folder. 
-- Run the bash script called `build-libssl.sh` from within `Libraries/`. It will build the necessary dependencies (may take a bit but go get a cup of coffee) and you should be ready to go.
-
-3b) **Temporary** - Building Curve25519-donna manually. This step should be removed soon
+3) **Temporary** - Building Curve25519-donna manually. This step should be removed soon
 
 - Clone the [git repository](https://github.com/agl/curve25519-donna.git) into `Libraries/src/`
 - Run the bash script called `build-libcurve25519.sh`  from within `Libraries/`. This build should be quick, no coffee for you.
@@ -37,6 +31,22 @@ sudo gem update
 
 5) Debugging network calls. If you are contributing networked code, PonyDebugger is integrated in Debug mode of the application. Check out https://github.com/square/PonyDebugger#quick-start and easily debug network code from the iOS simulator
 
+## Certificate Pinning
+
+TextSecure uses certificate-pinning to avoid (wo)man-in-the-middle attacks. If you use your own server, here are the steps to generate the certificate file. 
+
+1) Use OpenSSL to download the certificate (copy-paste the text between the `BEGIN` and `END` into a `cert.pem` file).
+
+```bash
+openssl s_client -showcerts -connect textsecure-service.whispersystems.org:443 </dev/null
+```
+2) Use OpenSSL to convert this PEM certificate into a DER certificate. 
+
+```bash
+openssl x509 -inform PEM -outform DER -in cert.pem -out cert.der
+```
+
+3) Rename and move `cert.der` to `TextSecureiOS/gcm.textsecure.whispersystems.org.cer`
 
 ## Documentation
 
