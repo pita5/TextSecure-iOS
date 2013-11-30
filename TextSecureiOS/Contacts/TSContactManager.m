@@ -62,7 +62,8 @@
         CFArrayRef all = ABAddressBookCopyArrayOfAllPeople(addressBook);
         CFIndex n = ABAddressBookGetPersonCount(addressBook);
         NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-        NSMutableDictionary *cleanedAB = [NSMutableDictionary dictionary];
+        NSMutableDictionary *hashedAB = [NSMutableDictionary dictionary];
+        NSMutableDictionary *originalAB = [NSMutableDictionary dictionary];
         
         for( int i = 0 ; i < n ; i++ )
         {
@@ -80,20 +81,23 @@
                 NBPhoneNumber *phone = [phoneUtil parse:phoneNumber defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
                 NSString *cleanedNumber = [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
-                [cleanedAB setObject:hashedPhoneNumber forKey:contactReferenceID];
+                
+                [hashedAB setObject:hashedPhoneNumber forKey:contactReferenceID];
+                [originalAB setObject:cleanedNumber forKey:hashedPhoneNumber];
             }
         }
 
         // Send hashes to server
         
-        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[cleanedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[hashedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
 
             NSMutableArray *contacts = [NSMutableArray array];
             for (NSDictionary *contactHash in contactsHashes) {
                 TSContact *contact = [[TSContact alloc]init];
                 // The case where a phone number would be in two contacts sheets is not managed properly yet.
-                contact.userABID = [[cleanedAB allKeysForObject:[contactHash objectForKey:@"token"]] objectAtIndex:0];
+                contact.userABID = [[hashedAB allKeysForObject:[contactHash objectForKey:@"token"]] objectAtIndex:0];
+                contact.registeredId = [originalAB objectForKey:[contactHash objectForKey:@"token"]];
                 [contacts addObject:contact];
             }
             
