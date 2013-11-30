@@ -37,6 +37,22 @@ sudo gem update
 
 5) Debugging network calls. If you are contributing networked code, PonyDebugger is integrated in Debug mode of the application. Check out https://github.com/square/PonyDebugger#quick-start and easily debug network code from the iOS simulator
 
+## Certificate Pinning
+
+TextSecure uses certificate-pinning to avoid (wo)man-in-the-middle attacks. If you use your own server, here are the steps to generate the certificate file. 
+
+1) Use OpenSSL to download the certificate (copy-paste the text between the `BEGIN` and `END` into a `cert.pem` file).
+
+```bash
+openssl s_client -showcerts -connect textsecure-service.whispersystems.org:443 </dev/null
+```
+2) Use OpenSSL to convert this PEM certificate into a DER certificate. 
+
+```bash
+openssl x509 -inform PEM -outform DER -in cert.pem -out cert.der
+```
+
+3) Rename and move `cert.der` to `TextSecureiOS/gcm.textsecure.whispersystems.org.cer`
 
 ## Documentation
 
