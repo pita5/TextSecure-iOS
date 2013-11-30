@@ -376,7 +376,7 @@
 		A5A1F632170F824700A0CDC1 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A1F631170F824700A0CDC1 /* CryptographyTests.m */; };
 		A5B0B82618198C8E00AF41A7 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */; };
 		A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */; };
-		A5B1E47718496420005A5E31 /* curve25519-donna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B1E47618496420005A5E31 /* curve25519-donna.a */; };
+		A5B1E47918496A9C005A5E31 /* curve25519-donna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B1E47818496A9C005A5E31 /* curve25519-donna.a */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
@@ -807,7 +807,7 @@
 		A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
 		A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.hh; sourceTree = "<group>"; };
 		A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.mm; sourceTree = "<group>"; };
-		A5B1E47618496420005A5E31 /* curve25519-donna.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "curve25519-donna.a"; path = "Libraries/lib/curve25519-donna.a"; sourceTree = "<group>"; };
+		A5B1E47818496A9C005A5E31 /* curve25519-donna.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "curve25519-donna.a"; path = "Libraries/lib/curve25519-donna.a"; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -867,11 +867,11 @@
 				A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */,
 				A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */,
 				A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */,
+				A5B1E47918496A9C005A5E31 /* curve25519-donna.a in Frameworks */,
 				A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */,
 				A5F15AA61702DF6E00856385 /* libssl.a in Frameworks */,
 				A5F15AA71702DF6E00856385 /* libcrypto.a in Frameworks */,
 				A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */,
-				A5B1E47718496420005A5E31 /* curve25519-donna.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -921,7 +921,7 @@
 		A53718B416FF95DF00C6FCCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A5B1E47618496420005A5E31 /* curve25519-donna.a */,
+				A5B1E47818496A9C005A5E31 /* curve25519-donna.a */,
 				A568910217E2F37A00C360A1 /* QuartzCore.framework */,
 				A568910017E2F37000C360A1 /* CoreText.framework */,
 				A51B77A217051096002B8E53 /* libsqlite3.dylib */,
