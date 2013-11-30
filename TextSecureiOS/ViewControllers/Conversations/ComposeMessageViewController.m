@@ -12,6 +12,7 @@
 
 @interface ComposeMessageViewController (Private)
 - (void)resizeViews;
+@property (nonatomic, retain) NSArray *contacts;
 @end
 
 @implementation ComposeMessageViewController {
@@ -20,16 +21,12 @@
 	CGFloat _keyboardHeight;
 }
 
-- (id) initWithConversationID:(NSString*)contactID{
+- (id) initWithConversationID:(TSContact*)contact{
     self = [super initWithNibName:nil bundle:nil];
-    
-    NSString *nameOfContact = @"ContactX";
-    
     self.messages = [NSMutableArray array];
-    
     self.timestamps = [NSMutableArray array];
-    
-    self.title = nameOfContact;
+    self.title = contact.name;
+    self.contact = contact;
     
     return self;
 }
@@ -70,12 +67,7 @@
     [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
         _tokenFieldView.hidden = FALSE;
         
-        NSMutableArray *contactNames = [NSMutableArray array];
-        for (TSContact *contact in contacts){
-            [contactNames addObject:[contact name]];
-        }
-        [_tokenFieldView setSourceArray:contactNames];
-        _tokenFieldView.tokenField.text = @"";
+        [_tokenFieldView setSourceArray:contacts];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
     }];
     
@@ -142,6 +134,14 @@
     
 }
 
+- (NSString *)tokenField:(TITokenField *)tokenField searchResultStringForRepresentedObject:(id)object{
+    return [(TSContact*)object name];
+}
+
+- (NSString *)tokenField:(TITokenField *)tokenField displayStringForRepresentedObject:(id)object{
+    return [(TSContact*)object name];
+}
+
 #pragma mark delegate methods #pragma mark - Initialization
 - (UIButton *)sendButton
 {
@@ -179,8 +179,8 @@
     else {
         [JSMessageSoundEffect playMessageReceivedSound];
     }
-
-  
+    
+    
     [self finishSend];
 }
 
@@ -243,7 +243,14 @@
         
         // We start editing the message field, proceed to UI changes.
         if (_tokenFieldView) {
-            [self startedWritingMessage];
+            if (_tokenFieldView.tokenField.tokens) {
+                self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
+                [self startedWritingMessage];
+                NSLog(@"Contact set to : %@", self.contact.name);
+            }
+            else{
+                return FALSE;
+            }
         }
     }
     
@@ -254,14 +261,14 @@
     // Change frames for editing
     if (_tokenFieldView) {
         [_tokenFieldView setScrollEnabled:FALSE];
-         _tokenFieldView.frame = CGRectMake(_tokenFieldView.frame.origin.x, _tokenFieldView.frame.origin.y, _tokenFieldView.frame.size.width, 43);
+        _tokenFieldView.frame = CGRectMake(_tokenFieldView.frame.origin.x, _tokenFieldView.frame.origin.y, _tokenFieldView.frame.size.width, 43);
         self.tableView.frame = CGRectMake(0, 44, self.tableView.frame.size.width, self.tableView.frame.size.height);
         _tokenFieldView.contentSize = CGSizeMake(_tokenFieldView.frame.size.width, 43);
     }
 }
 
 -(void) startedEditingReceipients{
-    //change frames for 
+    //change frames for
 }
 
 @end
