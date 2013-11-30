@@ -10,10 +10,11 @@
 #import "Cryptography.h"
 #import "UserDefaults.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
-#import "NSObject+SBJson.h"
 #import "EncryptedDatabase.h"
 #import "TSRegisterForPushRequest.h"
 #import "NSString+Conversion.h"
+#import "TSMessagesManager.h"
+
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -115,11 +116,8 @@
 	[self handlePush:userInfo];
 }
 
--(void) handlePush:(NSDictionary *)pushInfo {
-	NSDictionary* fullMessageJson = [[pushInfo objectForKey:@"message_body"] JSONValue];
-	NSLog(@"full message json %@",fullMessageJson);
-#warning we need to handle this push!
-
+- (void) handlePush:(NSDictionary *)pushInfo{
+    [[TSMessagesManager sharedManager]processPushNotification:pushInfo];
 }
 
 #pragma mark - HockeyApp Delegate Methods
