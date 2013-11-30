@@ -14,8 +14,8 @@
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
 // DB creation helper functions
--(void) generatePersonalPrekeys;
--(void) generateIdentityKey;
+-(BOOL) generatePersonalPrekeys;
+-(BOOL) generateIdentityKey;
 
 // DB master key functions
 +(NSData*) generateDatabaseMasterKeyWithPassword:(NSString *)userPassword;

@@ -8,6 +8,7 @@
 
 #import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabase+Private.h"
+#import "TSEncryptedDatabaseError.h"
 #import "RNDecryptor.h"
 #import "RNEncryptor.h"
 #import "Cryptography.h"
@@ -64,17 +65,20 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // Have we created a DB on this device already ?
     if ([TSEncryptedDatabase databaseWasCreated]) {
         if (error) {
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            // TODO : define error codes
-            [errorDetail setValue:@"database already exists" forKey:NSLocalizedDescriptionKey];
-            *error = [NSError errorWithDomain:@"textSecure" code:101 userInfo:errorDetail];
+            *error = [TSEncryptedDatabaseError dbAlreadyExists];
         }
         return nil;
     }
 
-
     // 1. Create the DB encryption key, the DB and the tables
-    NSData *dbMasterKey = [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword: userPassword];
+    NSData *dbMasterKey = [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword:userPassword];
+    if (!dbMasterKey) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError dbCreationFailed];
+        }
+        return nil;
+    }
+    
     __block BOOL dbInitSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
@@ -96,10 +100,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     
     if (!dbInitSuccess) {
         if (error) {
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            // TODO : define error codes
-            [errorDetail setValue:@"could not create database" forKey:NSLocalizedDescriptionKey];
-            *error = [NSError errorWithDomain:@"textSecure" code:102 userInfo:errorDetail];
+            *error = [TSEncryptedDatabaseError dbCreationFailed];
         }
         // Cleanup
         [TSEncryptedDatabase databaseErase];
@@ -109,11 +110,18 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // We have now have an empty DB
     SharedCryptographyDatabase = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
 
-    // 3. Generate and store the user's identity keys and prekeys
-    [SharedCryptographyDatabase generateIdentityKey];
-    [SharedCryptographyDatabase generatePersonalPrekeys];
+    // 2. Generate and store the user's identity keys and prekeys
+    if ((![SharedCryptographyDatabase generateIdentityKey]) || (![SharedCryptographyDatabase generatePersonalPrekeys])) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError dbCreationFailed];
+        }
+        // Cleanup
+        [TSEncryptedDatabase databaseErase];
+        return nil;
+    }
     
-    // 4. Success
+    
+    // 3. Success
     // Store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kDBWasCreatedBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -132,10 +140,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // Make sure a DB has already been created
     if (![TSEncryptedDatabase databaseWasCreated]) {
         if (error) {
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            [errorDetail setValue:@"no DB available" forKey:NSLocalizedDescriptionKey];
-            // TODO: Define error codes
-            *error = [NSError errorWithDomain:@"textSecure" code:103 userInfo:errorDetail];
+            *error = [TSEncryptedDatabaseError noDbAvailable];
         }
         return nil;
     }
@@ -165,10 +170,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }];
     if (!initSuccess) {
         if (error) {
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            [errorDetail setValue:@"DB was corrupted" forKey:NSLocalizedDescriptionKey];
-            // TODO: Define error codes
-            *error = [NSError errorWithDomain:@"textSecure" code:113 userInfo:errorDetail];
+            *error = [TSEncryptedDatabaseError dbWasCorrupted];
         }
         return nil;
     }
@@ -226,13 +228,16 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 +(NSData*) generateDatabaseMasterKeyWithPassword:(NSString*) userPassword {
     NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
     NSData *encryptedDbMasterKey = [RNEncryptor encryptData:dbMasterKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
-    
     if(!encryptedDbMasterKey) {
-        @throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not generate a master key" userInfo:nil];
+        // TODO: Can we really recover from this ? Maybe we should throw an exception
+        //@throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not generate a master key" userInfo:nil];
+        return nil;
     }
     
     if (![KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId]) {
-        @throw [NSException exceptionWithName:@"keychain error" reason:@"could not write DB master key to the keychain" userInfo:nil];
+        // TODO: Can we really recover from this ? Maybe we should throw an exception
+        //@throw [NSException exceptionWithName:@"keychain error" reason:@"could not write DB master key to the keychain" userInfo:nil];
+        return nil;
     }
     return dbMasterKey;
 }
@@ -242,10 +247,18 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 #warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
     NSString *encryptedDbMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
     if (!encryptedDbMasterKey) {
-        @throw [NSException exceptionWithName:@"keychain error" reason:@"could not retrieve DB master key from the keychain" userInfo:nil];
+        if (error) {
+            *error = [TSEncryptedDatabaseError dbWasCorrupted];
+        }
+        return nil;
     }
     
     NSData *dbMasterKey = [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedDbMasterKey] withPassword:userPassword error:error];
+    if ((!dbMasterKey) && (error) && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
+        // Wrong password; clarify the error returned
+        *error = [TSEncryptedDatabaseError invalidPassword];
+        return nil;
+    }
     return dbMasterKey;
 }
 
@@ -265,7 +278,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
--(void) generateIdentityKey {
+-(BOOL) generateIdentityKey {
     /*
      An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
      
@@ -289,13 +302,11 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         updateSuccess = YES;
     }];
-    if (!updateSuccess) {
-        @throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write identity key" userInfo:nil];
-    }
+    return updateSuccess;
 }
 
 
--(void) generatePersonalPrekeys {
+-(BOOL) generatePersonalPrekeys {
     
     // No need to the check if the DB is locked as this happens during DB creation
     int numberOfPreKeys = 70;
@@ -312,9 +323,11 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
             }
         }];
         if (!updateSuccess) {
-            @throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write prekey" userInfo:nil];
+            return NO;
+            //@throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write prekey" userInfo:nil];
         }
     }
+    return YES;
 }
 
 

@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "TSEncryptedDatabase.h"
+#import "TSEncryptedDatabaseError.h"
 #import "TSEncryptedDatabase+Private.h"
 #import "Cryptography.h"
 #import "KeychainWrapper.h"
@@ -45,7 +46,8 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [TSEncryptedDatabase databaseErase];
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
-    XCTAssertNotNil(error, @"database was unlocked after being erased");
+    XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"database was unlocked after being erased");
+    XCTAssertEqual([error code], NoDbAvailable, @"database was unlocked after being erased");
     XCTAssertNil(encDb, @"database was unlocked after being erased");
 }
 
@@ -67,9 +69,10 @@ static NSString *dbPw = @"1234test";
     NSError *error = nil;
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
-    // TODO: Look at the actual error code
+    
     XCTAssertNil(encDb, @"database overwrite did not fail");
-    XCTAssertNotNil(error, @"database overwrite did not return an error");
+    XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"database overwrite did not fail");
+    XCTAssertEqual([error code], DbAlreadyExists, @"database overwrite did not fail");
 }
 
 
@@ -78,6 +81,9 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase database];
     XCTAssertNotNil(encDb, @"could not get a reference to the database");
+    
+    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
+    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
 }
 
 
@@ -93,7 +99,6 @@ static NSString *dbPw = @"1234test";
 {
     XCTAssertThrows([TSEncryptedDatabase databaseLock], @"database was locked before getting created");
 }
-
 
 
 - (void)testDatabaseIsLocked
@@ -127,9 +132,9 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseLock];
     
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseUnlockWithPassword:@"wrongpw" error:&error];
-    XCTAssertNil(encDb, @"wrong password unlocked the database");
-    // TODO: Look at the actual error code
-    XCTAssertNotNil(error, @"wrong password did not return an error");
+    XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"database was unlocked after being erased");
+    XCTAssertEqual([error code], InvalidPassword, @"database was unlocked after being erased");
+    XCTAssertNil(encDb, @"database was unlocked with an invalid password");
 }
 
 
@@ -138,7 +143,12 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [TSEncryptedDatabase databaseLock];
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
-    XCTAssertThrows([TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:nil], @"database was unlocked with deleted keychain");
+    
+    NSError *error = nil;
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
+    XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"database was unlocked with deleted keychain");
+    XCTAssertEqual([error code], DbWasCorrupted, @"database was unlocked with deleted keychain");
+    XCTAssertNil(encDb, @"database was unlocked with deleted keychain");
 }
 
 
@@ -152,10 +162,9 @@ static NSString *dbPw = @"1234test";
     
     NSError *error = nil;
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
-    
+    XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"database was unlocked with corrupted keychain");
+    XCTAssertEqual([error code], DbWasCorrupted, @"database was unlocked with corrupted keychain");
     XCTAssertNil(encDb, @"database was unlocked with corrupted keychain");
-    // TODO: Look at the actual error code
-    XCTAssertNotNil(error, @"database was unlocked with corrupted keychain");
 }
 
 
