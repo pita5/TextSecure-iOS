@@ -13,6 +13,7 @@
 #import "NSString+Conversion.h"
 #import "Cryptography.h"
 #import "TSContact.h"
+#import "TSNetworkManager.h"
 #import "TSContactsIntersectionRequest.h"
 
 @implementation TSContactManager
@@ -85,7 +86,7 @@
 
         // Send hashes to server
         
-        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[cleanedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[cleanedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
 
             NSMutableArray *contacts = [NSMutableArray array];

@@ -14,6 +14,7 @@
 #import "NSString+Conversion.h"
 #import "TSSettingsViewController.h"
 #import "TSContactManager.h"
+#import "TSContact.h"
 #import "ComposeMessageViewController.h"
 
 @implementation TextSecureViewController

@@ -44,19 +44,16 @@
 	[self.view setBackgroundColor:[UIColor whiteColor]];
 	[self.navigationItem setTitle:@"New Message"];
     
+    NSMutableArray *usersArray = [NSMutableArray array];
     [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
-        _tokenFieldView.hidden = FALSE;
-        
-        NSMutableArray *contactNames;
-        for (TSContact *contact in contacts){
-            [contactNames addObject:[contact name]];
-        }
-        
-        [_tokenFieldView setSourceArray:contactNames];
+        [contacts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            TSContact *contact = obj;
+            [usersArray addObject:contact.name];
+        }];
     }];
     
 	_tokenFieldView = [[TITokenFieldView alloc] initWithFrame:self.view.bounds];
-	[_tokenFieldView setSourceArray:nil];
+	[_tokenFieldView setSourceArray:usersArray];
     
 	[_tokenFieldView.tokenField setDelegate:self];
 	[_tokenFieldView.tokenField addTarget:self action:@selector(tokenFieldFrameDidChange:) forControlEvents:(UIControlEvents) TITokenFieldControlEventFrameDidChange];
@@ -76,6 +73,17 @@
 	// You can call this on either the view on the field.
 	// They both do the same thing.
 	[_tokenFieldView becomeFirstResponder];
+    
+    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
+        _tokenFieldView.hidden = FALSE;
+        
+        NSMutableArray *contactNames = [NSMutableArray array];
+        for (TSContact *contact in contacts){
+            [contactNames addObject:[contact name]];
+        }
+        NSLog(@"Contacts Loaded : %@", contactNames);
+        [_tokenFieldView setSourceArray:contactNames];
+    }];
     
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
