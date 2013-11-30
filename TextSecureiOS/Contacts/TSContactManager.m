@@ -13,6 +13,7 @@
 #import "NSString+Conversion.h"
 #import "Cryptography.h"
 #import "TSContact.h"
+#import "TSNetworkManager.h"
 #import "TSContactsIntersectionRequest.h"
 
 @implementation TSContactManager
@@ -34,7 +35,7 @@
     return self;
 }
 
-+ (void) getAllContactsIDs{
++ (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock{
     
     // Lookup contacts
     
@@ -78,29 +79,25 @@
                 
                 NBPhoneNumber *phone = [phoneUtil parse:phoneNumber defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
                 NSString *cleanedNumber = [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
-                NSLog(@"Number : %@", cleanedNumber);
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
-                NSLog(@"Hashed Number: %@", hashedPhoneNumber);
                 [cleanedAB setObject:hashedPhoneNumber forKey:contactReferenceID];
             }
         }
 
         // Send hashes to server
         
-        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[cleanedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
-            
+        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[cleanedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
-            
-            DLog(@"Contact Hashes %@", contactsHashes);
+
             NSMutableArray *contacts = [NSMutableArray array];
             for (NSDictionary *contactHash in contactsHashes) {
                 TSContact *contact = [[TSContact alloc]init];
                 // The case where a phone number would be in two contacts sheets is not managed properly yet.
                 contact.userABID = [[cleanedAB allKeysForObject:[contactHash objectForKey:@"token"]] objectAtIndex:0];
-                
                 [contacts addObject:contact];
             }
+            
+            contactFetchCompletionBlock(contacts);
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             

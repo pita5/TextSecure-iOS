@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TSSetMasterPasswordViewController : UIViewController
+@interface TSSetMasterPasswordViewController : UIViewController<UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *pass;
+@property (nonatomic, strong) UIBarButtonItem *nextButton;
 
 @end

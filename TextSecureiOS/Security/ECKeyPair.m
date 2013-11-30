@@ -11,8 +11,20 @@
 #include "NSData+Base64.h"
 
 @implementation ECKeyPair
-// TODO: this should be refactored to not store strings but bytes for speed
+
+/*
+
+ Example generation and usage
+ ECKeyPair* myKeys = [ECKeyPair createAndGeneratePublicPrivatePair:0];
+ ECKeyPair* theirKeys = [ECKeyPair createAndGeneratePublicPrivatePair:1];
+ 
+ NSLog(@"my shared secret %@",[myKeys getSharedSecret:theirKeys.publicKey]);
+ NSLog(@"their shared secret %@",[theirKeys getSharedSecret:myKeys.publicKey]);
+ */
+
+
 - (id)init {
+#warning this class should be refactored to not store strings but bytes for speed
 	if (![super init]) {
 		return nil;
   }
@@ -45,19 +57,20 @@
 
 
 - (BOOL)generateKeys {
-  //To generate a private key, generate 32 random bytes and:
+  /* generate private key */
   NSMutableData *randomBytes = [Cryptography  generateRandomBytes:32];
   unsigned char* mysecret = (unsigned char*) [randomBytes bytes];
   mysecret[0] &= 248;
   mysecret[31] &= 127;
   mysecret[31] |= 64;
 
+  /* generate public key */
   unsigned char  mypublic[32];
-  //To generate the public key, just do
+
   static const uint8_t basepoint[32] = {9};
   curve25519_donna(mypublic, mysecret, basepoint);
   
-  // Now let's go ahead and store these
+  /* storing in class */
   NSData* secretData = [NSData dataWithBytes:mysecret length:32];
   NSData* publicData = [NSData dataWithBytes:mypublic length:32];
   
@@ -73,6 +86,7 @@
 }
 
 -(NSString*) getSharedSecret:(NSString*)theirPublicKey {
+  /* computing shared secret based on this class' private key*/
   unsigned char* mysecret = (unsigned char*)[[NSData dataFromBase64String:self.privateKey] bytes];
   unsigned char* theirpublic = (unsigned char*)[[NSData dataFromBase64String:theirPublicKey] bytes];
   uint8_t my_shared_key[32];

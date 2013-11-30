@@ -13,6 +13,8 @@
 #import "NSString+Conversion.h"
 #import "TSSettingsViewController.h"
 #import "TSContactManager.h"
+#import "TSContact.h"
+#import "ComposeMessageViewController.h"
 
 @implementation TextSecureViewController
 @synthesize composingMessageText;
@@ -35,7 +37,7 @@
 }
 
 - (void) composeMessage{
-    [TSContactManager getAllContactsIDs];
+    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc]initNewConversation]] animated:YES completion:nil];
 }
 
 - (void) openSettings{

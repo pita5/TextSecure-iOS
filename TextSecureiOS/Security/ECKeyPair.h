@@ -23,4 +23,5 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a,
 - (BOOL)generateKeys;
 - (BOOL)setPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey;
 +(ECKeyPair*) createAndGeneratePublicPrivatePair:(int)prekeyId;
+-(NSString*) getSharedSecret:(NSString*)theirPublicKey ;
 @end

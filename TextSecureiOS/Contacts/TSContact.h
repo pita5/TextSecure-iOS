@@ -10,8 +10,10 @@
 
 @interface TSContact : NSObject
 
-@property (nonatomic, copy) NSString *userABID;
+@property (nonatomic, copy) NSNumber *userABID;
 @property (nonatomic, copy) NSString *relay;
 @property (nonatomic, assign) BOOL supportsSMS;
+
+- (NSString*) name;
 
 @end

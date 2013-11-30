@@ -12,6 +12,6 @@
 
 + (id)sharedManager;
 
-+ (void) getAllContactsIDs;
++ (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock;
 
 @end

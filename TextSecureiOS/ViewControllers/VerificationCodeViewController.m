@@ -81,7 +81,7 @@
                 
                 break;
                 
-            case 200:
+            case 204:
                 
                 [Cryptography storeSignalingKeyToken:signalingKey];
                 [Cryptography storeAuthenticationToken:authToken];
@@ -96,11 +96,13 @@
                 
             default:
                 [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"An unknown error occured. Pleasy try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+                DLog(@"Verification operation failed with response: %@ and response code : %i", responseObject, operation.response.statusCode);
                 break;
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         defaultNetworkErrorMessage
+        DLog(@"Verification operation request failed with error: %@", error);
     }];
 }
 
