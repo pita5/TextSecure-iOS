@@ -7,100 +7,71 @@
 //
 
 #import "ECKeyPair.h"
-#include <openssl/obj_mac.h>
-#include <openssl/evp.h>
+#import "Cryptography.h"
 #include "NSData+Base64.h"
 
-
 @implementation ECKeyPair
+
 - (id)init {
 	if (![super init]) {
 		return nil;
   }
-	curveType = NID_X9_62_prime256v1;
 	return self;
 }
 
 
-- (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey prekeyId:(int)prekeyId {
-	if (![self initWithPublicKey:publicKey privateKey:privateKey]) {
+- (id)initWithPublicKey:(NSString *)pubKey privateKey:(NSString *)privKey prekeyId:(int)prekeyId {
+	if (![self initWithPublicKey:pubKey privateKey:privKey]) {
   	return nil;
   }
   self.prekeyId=prekeyId;
 	return self;
 }
 
-- (id)initWithPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey {
+- (id)initWithPublicKey:(NSString *)pubKey privateKey:(NSString *)privKey {
 	if (![self init]) {
 		return nil;
   }
-	if (![self setPublicKey:publicKey privateKey:privateKey]) {
+	if (![self setPublicKey:pubKey privateKey:privKey]) {
   	return nil;
   }
 	return self;
 }
 
-- (id)initWithPublicKey:(NSString *)publicKey {
-	return [self initWithPublicKey:publicKey privateKey:nil];
+- (id)initWithPublicKey:(NSString *)pubKey {
+	return [self initWithPublicKey:pubKey privateKey:nil];
 }
 
 
 
 - (BOOL)generateKeys {
-	if (ecKey) {
-		EC_KEY_free(ecKey);
-  }
-  ecKey = EC_KEY_new();
-	if (!ecKey) {
-		return NO;
-  }
-  EC_GROUP *group = EC_GROUP_new_by_curve_name(curveType);
-  if (!group) {
-		return NO;
-  }
-  EC_KEY_set_group(ecKey, group);
-  EC_GROUP_set_point_conversion_form(group, POINT_CONVERSION_COMPRESSED);
-  return EC_KEY_generate_key(ecKey);
+  //To generate a private key, generate 32 random bytes and:
+  NSMutableData *randomBytes = [Cryptography  generateRandomBytes:32];
+  unsigned char* mysecret = (unsigned char*) [randomBytes bytes];
+  mysecret[0] &= 248;
+  mysecret[31] &= 127;
+  mysecret[31] |= 64;
+
+  unsigned char  mypublic[32];
+  //To generate the public key, just do
+  static const uint8_t basepoint[32] = {9};
+  curve25519_donna(mypublic, mysecret, basepoint);
   
-}
-
-- (BOOL)setPublicKey:(NSString *)publicKey privateKey:(NSString *)privateKey {
-	if (ecKey) {
-		EC_KEY_free(ecKey);
-  }
-  ecKey = EC_KEY_new_by_curve_name(curveType);
-	if (ecKey == NULL) {
-		return NO;
-  }
+  // Now let's go ahead and store these
+  NSData* secretData = [NSData dataWithBytes:mysecret length:32];
+  NSData* publicData = [NSData dataWithBytes:mypublic length:32];
   
-	NSData *publicKeyData = [NSData dataFromBase64String:publicKey];
-	const unsigned char *pubBytes = [publicKeyData bytes];
-	ecKey = o2i_ECPublicKey(&ecKey, &pubBytes, [publicKeyData length]);
-	if (ecKey == NULL) {
-		return NO;
-  }
-	if (privateKey) {
-		NSData *privateKeyData = [NSData dataFromBase64String:privateKey];
-		const unsigned char *privBytes = [privateKeyData bytes];
-		ecKey = d2i_ECPrivateKey(&ecKey, &privBytes, [privateKeyData length]);
-		if (ecKey == NULL) {
-			return NO;
-    }
-	}
-	return (EC_KEY_check_key(ecKey));
+  self.privateKey = [secretData base64EncodedString];
+  self.publicKey = [publicData base64EncodedString];
+  return YES;
 }
 
-- (NSString *)publicKey {
-	unsigned char *bytes = NULL;
-	int length = i2o_ECPublicKey(ecKey, &bytes);
-	return [[NSData dataWithBytesNoCopy:bytes length:length] base64Encoding];
+- (BOOL)setPublicKey:(NSString *)pubKey privateKey:(NSString *)privKey {
+  self.publicKey = pubKey;
+  self.privateKey = privKey;
+  return YES;
 }
 
-- (NSString *)privateKey {
-	unsigned char *bytes = NULL;
-	int length = i2d_ECPrivateKey(ecKey, &bytes);
-	return [[NSData dataWithBytesNoCopy:bytes length:length] base64Encoding];
-}
 
 +(ECKeyPair*) createAndGeneratePublicPrivatePair:(int)prekeyId {
   ECKeyPair* pair =[[ECKeyPair alloc] init];

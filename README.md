@@ -21,11 +21,18 @@ occasionally, CocoaPods itself will need to be updated. Do this with
 sudo gem update
 ```
 
-3) **Temporary** - Building OpenSSL manually. This step should be removed soon. The goal is to make a pod specification that builds OpenSSL during the `pod install` phase.
+3a) **Temporary** - Building OpenSSL manually. This step should be removed soon. The goal is to make a pod specification that builds OpenSSL during the `pod install` phase.
 
 - Download the [latest sources](http://www.openssl.org/source/)
 - Decompress and copy them in the `Libraries/src/` folder. 
 - Run the bash script called `build-libssl.sh` from within `Libraries/`. It will build the necessary dependencies (may take a bit but go get a cup of coffee) and you should be ready to go.
+
+3b) **Temporary** - Building Curve25519-donna manually. This step should be removed soon
+
+- Clone the [git repository](https://github.com/agl/curve25519-donna.git) into `Libraries/src/`
+- make
+- make install by: cp *.a ../../lib
+
 
 4) Open the `TextSecureiOS.xcworkspace` in Xcode. **Note that for CocoaPods to work properly it is very important to always open the workspace and not the `.xcodeproj` file.** Build and Run and you are ready to go!
 
