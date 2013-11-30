@@ -8,6 +8,7 @@
 
 #import "ComposeMessageViewController.h"
 #import "TSContactManager.h"
+#import "TSRecipientPrekeyRequest.h"
 #import "TSContact.h"
 
 @interface ComposeMessageViewController (Private)
@@ -179,6 +180,27 @@
     else {
         [JSMessageSoundEffect playMessageReceivedSound];
     }
+  TSContact *recipient = [[TSContact alloc] init];
+  recipient.registeredId = @"dummy";
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    switch (operation.response.statusCode) {
+      case 200:
+        DLog(@"we have prekey of Fred %@",responseObject);
+        break;
+        
+      default:
+        DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
+#warning Add error handling if not able to send the prekeys
+        break;
+    }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning Add error handling if not able to send the token
+    DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
+    
+    
+  }];
+  
 
   
     [self finishSend];
