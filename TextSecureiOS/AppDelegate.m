@@ -56,6 +56,7 @@
     [passwordDialogue show];
     
 	}
+  
 	return YES;
 
 }

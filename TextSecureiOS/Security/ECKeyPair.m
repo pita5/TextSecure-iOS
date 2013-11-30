@@ -11,7 +11,7 @@
 #include "NSData+Base64.h"
 
 @implementation ECKeyPair
-
+// TODO: this should be refactored to not store strings but bytes for speed
 - (id)init {
 	if (![super init]) {
 		return nil;
@@ -72,6 +72,13 @@
   return YES;
 }
 
+-(NSString*) getSharedSecret:(NSString*)theirPublicKey {
+  unsigned char* mysecret = (unsigned char*)[[NSData dataFromBase64String:self.privateKey] bytes];
+  unsigned char* theirpublic = (unsigned char*)[[NSData dataFromBase64String:theirPublicKey] bytes];
+  uint8_t my_shared_key[32];
+  curve25519_donna(my_shared_key, mysecret, theirpublic);
+  return [[NSData dataWithBytes:my_shared_key length:32] base64EncodedString];
+}
 
 +(ECKeyPair*) createAndGeneratePublicPrivatePair:(int)prekeyId {
   ECKeyPair* pair =[[ECKeyPair alloc] init];
