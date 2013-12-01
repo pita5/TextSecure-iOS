@@ -14,7 +14,7 @@
     self.message=text;
     self.senderId=sender;
     self.recipientId=[recipients objectAtIndex:0];
-    self.timestamp = date;
+    self.messageTimestamp = date;
   }
   return self;
 }

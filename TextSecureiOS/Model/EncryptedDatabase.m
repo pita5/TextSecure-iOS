@@ -78,7 +78,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-    NSString *sqlDate = [dateFormatter stringFromDate:message.timestamp];
+    NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
   #warning every message is on the same thread! also we only support one recipient
     [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",[NSNumber numberWithInt:0],message.message,message.senderId,message.recipientId,sqlDate];
   }];

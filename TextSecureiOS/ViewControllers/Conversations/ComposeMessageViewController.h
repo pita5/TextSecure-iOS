@@ -14,9 +14,8 @@
 @class TSMessage;
 @interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
-@property (strong, nonatomic) NSMutableArray *messages;
-@property (strong, nonatomic) NSMutableArray *timestamps;
 @property (nonatomic, retain) TSContact *contact;
+@property (nonatomic) int threadID;
 // Need to be initialized with one of those methods
 
 - (id) initWithConversationID:(NSString*)contactID;
