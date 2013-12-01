@@ -87,8 +87,8 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 -(NSArray*) getMessagesOnThread:(int) threadId {
   NSMutableArray *messageArray = [[NSMutableArray alloc] init];
   [self.dbQueue inDatabase:^(FMDatabase *db) {
-//    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
-    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
+    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
+//    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
     while([rs next]) {
       NSString* timestamp = [rs stringForColumn:@"timestamp"];
       NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -100,6 +100,28 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     }
   }];
   return messageArray;
+  
+}
+
+
+-(NSArray*) getThreads {
+  NSMutableArray *threadArray = [[NSMutableArray alloc] init];
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+#warning modify this to work with the thread query
+    //    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
+    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
+    while([rs next]) {
+      NSString* timestamp = [rs stringForColumn:@"timestamp"];
+      NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+      [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
+      [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+      NSDate *date = [dateFormatter dateFromString:timestamp];
+//      [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:[[NSArray alloc] initWithObjects:[rs stringForColumn:@"recipient_id"],nil] sentOnDate:date]];
+      
+    }
+  }];
+  return nil;
+ // return messageArray;
   
 }
 

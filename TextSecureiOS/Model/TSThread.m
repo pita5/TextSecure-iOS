@@ -14,6 +14,7 @@
     TSThread *thread = [[TSThread alloc] init];
     thread.participants = participants;
     thread.threadID = [participants threadID];
+    return thread;
 }
 
 @end
