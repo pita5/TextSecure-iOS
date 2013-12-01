@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B36184B66AD007BDC73 /* TSRequestAttachmentId.m */; };
+		A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B39184B68EA007BDC73 /* TSRequestAttachment.m */; };
+		A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B3C184B6F35007BDC73 /* TSAttachmentManager.m */; };
 		A515AFDB180966E30084ABA5 /* EncryptedDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */; };
 		A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */; };
 		A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */; };
@@ -452,6 +455,12 @@
 
 /* Begin PBXFileReference section */
 		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		A5145B35184B66AD007BDC73 /* TSRequestAttachmentId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequestAttachmentId.h; path = TextSecureiOS/Networking/Requests/TSRequestAttachmentId.h; sourceTree = "<group>"; };
+		A5145B36184B66AD007BDC73 /* TSRequestAttachmentId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequestAttachmentId.m; path = TextSecureiOS/Networking/Requests/TSRequestAttachmentId.m; sourceTree = "<group>"; };
+		A5145B38184B68EA007BDC73 /* TSRequestAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequestAttachment.h; path = TextSecureiOS/Networking/Requests/TSRequestAttachment.h; sourceTree = "<group>"; };
+		A5145B39184B68EA007BDC73 /* TSRequestAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequestAttachment.m; path = TextSecureiOS/Networking/Requests/TSRequestAttachment.m; sourceTree = "<group>"; };
+		A5145B3B184B6F35007BDC73 /* TSAttachmentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachmentManager.h; path = TextSecureiOS/Networking/TSAttachmentManager.h; sourceTree = "<group>"; };
+		A5145B3C184B6F35007BDC73 /* TSAttachmentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachmentManager.m; path = TextSecureiOS/Networking/TSAttachmentManager.m; sourceTree = "<group>"; };
 		A515AFD9180966E30084ABA5 /* EncryptedDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncryptedDatabase.h; path = Model/EncryptedDatabase.h; sourceTree = "<group>"; };
 		A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncryptedDatabase.m; path = Model/EncryptedDatabase.m; sourceTree = "<group>"; };
 		A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationViewController.m; path = ViewControllers/VerificationViewController.m; sourceTree = "<group>"; };
@@ -1605,6 +1614,8 @@
 				B639AF0E17F5AA6000B2244D /* Request Types */,
 				B639AF0B17F5A68100B2244D /* TSNetworkManager.h */,
 				B639AF0C17F5A68100B2244D /* TSNetworkManager.m */,
+				A5145B3B184B6F35007BDC73 /* TSAttachmentManager.h */,
+				A5145B3C184B6F35007BDC73 /* TSAttachmentManager.m */,
 			);
 			name = Networking;
 			path = ..;
@@ -1627,6 +1638,10 @@
 				A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */,
 				A530CB02184A02620052B615 /* TSRecipientPrekeyRequest.h */,
 				A530CB03184A02620052B615 /* TSRecipientPrekeyRequest.m */,
+				A5145B35184B66AD007BDC73 /* TSRequestAttachmentId.h */,
+				A5145B36184B66AD007BDC73 /* TSRequestAttachmentId.m */,
+				A5145B38184B68EA007BDC73 /* TSRequestAttachment.h */,
+				A5145B39184B68EA007BDC73 /* TSRequestAttachment.m */,
 			);
 			name = "Request Types";
 			sourceTree = "<group>";
@@ -2206,6 +2221,7 @@
 				B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */,
 				B635B3CE182181E1003CE732 /* NSString+JSMessagesView.m in Sources */,
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
+				A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
@@ -2213,6 +2229,7 @@
 				B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
+				A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */,
 				B635B3CD182181E1003CE732 /* JSMessagesViewController.m in Sources */,
 				B635B3CB182181E1003CE732 /* JSMessageInputView.m in Sources */,
 				B635B3E7182181E1003CE732 /* UIButton+JSMessagesView.m in Sources */,
@@ -2243,6 +2260,7 @@
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
 				B635B3E8182181E1003CE732 /* UIColor+JSMessagesView.m in Sources */,
 				B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */,
+				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
 				A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */,
 				B635B3E9182181E1003CE732 /* UIImage+JSMessagesView.m in Sources */,
