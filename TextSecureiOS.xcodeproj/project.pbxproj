@@ -383,6 +383,8 @@
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
+		B60CEE75184B4971006A8256 /* TSThread.m in Sources */ = {isa = PBXBuildFile; fileRef = B60CEE74184B4971006A8256 /* TSThread.m */; };
+		B60CEE78184B4A96006A8256 /* TSParticipants.m in Sources */ = {isa = PBXBuildFile; fileRef = B60CEE77184B4A96006A8256 /* TSParticipants.m */; };
 		B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* ComposeMessageViewController.m */; };
 		B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B394182181E1003CE732 /* JSBubbleMessageCell.m */; };
 		B635B3C9182181E1003CE732 /* JSBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B396182181E1003CE732 /* JSBubbleView.m */; };
@@ -859,6 +861,10 @@
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B60CEE73184B4971006A8256 /* TSThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSThread.h; path = Model/TSThread.h; sourceTree = "<group>"; };
+		B60CEE74184B4971006A8256 /* TSThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSThread.m; path = Model/TSThread.m; sourceTree = "<group>"; };
+		B60CEE76184B4A96006A8256 /* TSParticipants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSParticipants.h; path = Model/TSParticipants.h; sourceTree = "<group>"; };
+		B60CEE77184B4A96006A8256 /* TSParticipants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSParticipants.m; path = Model/TSParticipants.m; sourceTree = "<group>"; };
 		B635B38F182181E1003CE732 /* ComposeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComposeMessageViewController.h; path = ViewControllers/Conversations/ComposeMessageViewController.h; sourceTree = "<group>"; };
 		B635B390182181E1003CE732 /* ComposeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComposeMessageViewController.m; path = ViewControllers/Conversations/ComposeMessageViewController.m; sourceTree = "<group>"; };
 		B635B393182181E1003CE732 /* JSBubbleMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBubbleMessageCell.h; sourceTree = "<group>"; };
@@ -987,6 +993,12 @@
 				A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */,
 				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
 				A5145B30184AAD51007BDC73 /* TSMessage.m */,
+				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
+				B661DDBC184A583A00E369A8 /* TSMessagesManager.m */,
+				B60CEE73184B4971006A8256 /* TSThread.h */,
+				B60CEE74184B4971006A8256 /* TSThread.m */,
+				B60CEE76184B4A96006A8256 /* TSParticipants.h */,
+				B60CEE77184B4A96006A8256 /* TSParticipants.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1040,17 +1052,15 @@
 		A53718BB16FF95DF00C6FCCF /* TextSecureiOS */ = {
 			isa = PBXGroup;
 			children = (
-				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
-				B661DDBC184A583A00E369A8 /* TSMessagesManager.m */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
 				B6F10B1417EF49D700723719 /* Categories */,
 				B6B478E01809B9B3005DDE12 /* Contacts */,
-				A5F15AA117029BB400856385 /* Security */,
-				A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */,
 				A51B779B17050EDB002B8E53 /* Model */,
 				B639AF0A17F5A53700B2244D /* Networking */,
+				A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */,
+				A5F15AA117029BB400856385 /* Security */,
 				A5F15B1D1703740D00856385 /* View */,
 				A5F15AA217029BCF00856385 /* ViewControllers */,
 				A5F15AA317029C5300856385 /* Utility */,
@@ -2213,6 +2223,7 @@
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
+				B60CEE75184B4971006A8256 /* TSThread.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */,
@@ -2232,6 +2243,7 @@
 				B661DDBD184A583A00E369A8 /* TSMessagesManager.m in Sources */,
 				A515AFDB180966E30084ABA5 /* EncryptedDatabase.m in Sources */,
 				B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */,
+				B60CEE78184B4A96006A8256 /* TSParticipants.m in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
