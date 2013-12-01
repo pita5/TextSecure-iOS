@@ -11,7 +11,7 @@
 @interface TSMessage : NSObject
 @property (nonatomic,strong) NSString *senderId;
 @property (nonatomic,strong) NSString *recipientId;
-@property (nonatomic,strong) NSDate *timestamp;
+@property (nonatomic,strong) NSDate *messageTimestamp;
 @property (nonatomic,strong) NSString* message;
 -(id) initWithMessage:(NSString*)text sender:(NSString*)sender recipients:(NSArray*)recipients sentOnDate:(NSDate*)date;
 

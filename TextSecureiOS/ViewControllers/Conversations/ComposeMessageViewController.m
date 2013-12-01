@@ -26,11 +26,12 @@
 
 - (id) initWithConversationID:(TSContact*)contact{
     self = [super initWithNibName:nil bundle:nil];
-    self.messages = [NSMutableArray array];
-    self.timestamps = [NSMutableArray array];
     self.title = contact.name;
     self.contact = contact;
-    
+#warning always threadid of 0, later this will be an object
+
+    self.threadID = 0;
+  
     return self;
 }
 
@@ -77,9 +78,7 @@
         [_tokenFieldView becomeFirstResponder];
     }];
     
-    self.messages = [NSMutableArray array];
-    self.timestamps = [NSMutableArray array];
-    
+  
     UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
@@ -161,9 +160,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
-#warning always threadid of 0
-  NSLog(@"db count is local count? %d=%d",[[cryptoDB getMessagesOnThread:0] count],[self.messages count]);
-    return [self.messages count];
+    return [[cryptoDB getMessagesOnThread:self.threadID] count];
 
 }
 
@@ -202,15 +199,17 @@
 }
 
 -(void)addMessage:(TSMessage*)message {
-  [self.messages addObject:message];
-  [self.timestamps addObject:[NSDate date]];
   EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
   [cryptoDB storeMessage:message];
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  if([[[self.messages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
+  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+
+  
+  if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
     return JSBubbleMessageTypeOutgoing;
   }
    else {
@@ -246,13 +245,16 @@
 #pragma mark - Messages view data source
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    return [[self.messages objectAtIndex:indexPath.row] message];
+    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+    return [[dbMessages objectAtIndex:indexPath.row] message];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.timestamps objectAtIndex:indexPath.row];
+    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+    return [[dbMessages objectAtIndex:indexPath.row]  messageTimestamp];
 }
 
 - (UIImage *)avatarImageForIncomingMessage{

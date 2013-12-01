@@ -62,7 +62,7 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INTEGER)"];
 #warning we will want a subtler format than this, prototype message db format
-        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id INTEGER,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp TEXT)"];
+        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id INTEGER,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE)"];
         [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kKeyForInitBool];
         [[NSUserDefaults standardUserDefaults] synchronize];
       }
@@ -78,9 +78,9 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-    NSString *sqlDate = [dateFormatter stringFromDate:message.timestamp];
+    NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
   #warning every message is on the same thread! also we only support one recipient
-    [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?)",[NSNumber numberWithInt:0],message.message,message.senderId,message.recipientId,sqlDate];
+    [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",[NSNumber numberWithInt:0],message.message,message.senderId,message.recipientId,sqlDate];
   }];
 }
 
