@@ -12,6 +12,7 @@
 #import "FMDatabaseQueue.h"
 #import "ECKeyPair.h"
 #import "FilePath.h"
+#import "TSMessage.h"
 
 #define kKeyForInitBool @"DBWasInit"
 
@@ -60,6 +61,8 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"];
         [db executeUpdate:@"CREATE TABLE IF NOT EXISTS personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INTEGER)"];
+#warning we will want a subtler format than this, prototype message db format
+        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id INTEGER,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp TEXT)"];
         [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kKeyForInitBool];
         [[NSUserDefaults standardUserDefaults] synchronize];
       }
@@ -67,6 +70,37 @@ static EncryptedDatabase *SharedCryptographyDatabase = nil;
 	}
 	return self;
 
+}
+
+-(void) storeMessage:(TSMessage*)message {
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSString *sqlDate = [dateFormatter stringFromDate:message.timestamp];
+  #warning every message is on the same thread! also we only support one recipient
+    [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?)",[NSNumber numberWithInt:0],message.message,message.senderId,message.recipientId,sqlDate];
+  }];
+}
+
+-(NSArray*) getMessagesOnThread:(int) threadId {
+  NSMutableArray *messageArray = [[NSMutableArray alloc] init];
+  [self.dbQueue inDatabase:^(FMDatabase *db) {
+//    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
+    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
+    while([rs next]) {
+      NSString* timestamp = [rs stringForColumn:@"timestamp"];
+      NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+      [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
+      [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+      NSDate *date = [dateFormatter dateFromString:timestamp];
+      [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:[[NSArray alloc] initWithObjects:[rs stringForColumn:@"recipient_id"],nil] sentOnDate:date]];
+      
+    }
+  }];
+  return messageArray;
+  
 }
 
 +(BOOL) dataBaseWasInitialized{

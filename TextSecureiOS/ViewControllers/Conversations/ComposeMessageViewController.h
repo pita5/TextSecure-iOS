@@ -11,6 +11,7 @@
 #import "JSMessagesViewController.h"
 #import "TSContact.h"
 
+@class TSMessage;
 @interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
 @property (strong, nonatomic) NSMutableArray *messages;
@@ -21,5 +22,9 @@
 - (id) initWithConversationID:(NSString*)contactID;
 - (id) initNewConversation;
 
+
+-(void) messageSent:(TSMessage*) message;
+-(void) messageRecieved:(TSMessage*) message;
+-(void)addMessage:(TSMessage*)message;
 @end
 

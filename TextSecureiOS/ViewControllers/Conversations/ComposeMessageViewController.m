@@ -10,6 +10,8 @@
 #import "TSContactManager.h"
 #import "TSRecipientPrekeyRequest.h"
 #import "TSContact.h"
+#import "EncryptedDatabase.h"
+#import "TSMessage.h"
 
 @interface ComposeMessageViewController (Private)
 - (void)resizeViews;
@@ -158,7 +160,11 @@
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.messages.count;
+    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+#warning always threadid of 0
+  NSLog(@"db count is local count? %d=%d",[[cryptoDB getMessagesOnThread:0] count],[self.messages count]);
+    return [self.messages count];
+
 }
 
 #pragma mark - Messages view delegate
@@ -173,45 +179,43 @@
         _tokenFieldView = nil;
     }
     
-    [self.messages addObject:text];
-    
-    [self.timestamps addObject:[NSDate date]];
-    
-    if((self.messages.count - 1) % 2) {
-        [JSMessageSoundEffect playMessageSentSound];
-    }
-    else {
-        [JSMessageSoundEffect playMessageReceivedSound];
-    }
-#warning we don't need to do this every time, just at the beginning of a session...
-  TSContact *recipient = [[TSContact alloc] init];
-  recipient.registeredId = @"dummy";
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    
-    switch (operation.response.statusCode) {
-      case 200:
-        DLog(@"we have prekey of Fred %@",responseObject);
-        break;
-        
-      default:
-        DLog(@"Issue getting contacts' prekeys");
-#warning Add error handling if not able to get contacts prekey
-        break;
-    }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning Add error handling if not able to send the token
-    DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
-    
-    
-  }];
-  
 
+
+    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredId, nil] sentOnDate:[NSDate date]];
+    [self messageSent:message];
+#warning remove this dummy reply
+    TSMessage *reply = [[TSMessage alloc] initWithMessage:@"why do you feel that way?" sender:@"elisa" recipients:[[NSArray alloc] initWithObjects:@"me", nil] sentOnDate:[NSDate date]];
+    [self messageRecieved:reply];
     [self finishSend];
+}
+
+
+-(void) messageSent:(TSMessage*) message {
+  [JSMessageSoundEffect playMessageSentSound];
+  [self addMessage:message];
+}
+
+-(void) messageRecieved:(TSMessage*) message {
+  [JSMessageSoundEffect playMessageReceivedSound];
+  [self addMessage:message];
+
+}
+
+-(void)addMessage:(TSMessage*)message {
+  [self.messages addObject:message];
+  [self.timestamps addObject:[NSDate date]];
+  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  [cryptoDB storeMessage:message];
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (indexPath.row % 2) ? JSBubbleMessageTypeIncoming : JSBubbleMessageTypeOutgoing;
+  if([[[self.messages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
+    return JSBubbleMessageTypeOutgoing;
+  }
+   else {
+     return  JSBubbleMessageTypeIncoming;
+   }
 }
 
 - (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -242,7 +246,8 @@
 #pragma mark - Messages view data source
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.messages objectAtIndex:indexPath.row];
+    
+    return [[self.messages objectAtIndex:indexPath.row] message];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath

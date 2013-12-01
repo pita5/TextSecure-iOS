@@ -10,6 +10,7 @@
 
 @class ECKeyPair;
 @class FMDatabaseQueue;
+@class TSMessage;
 @interface EncryptedDatabase : NSObject
 @property (nonatomic,strong) FMDatabaseQueue *dbQueue;
 +(void) setupDatabaseWithPassword:(NSString*) userPassword;
@@ -24,4 +25,6 @@
 -(void) setLastPrekeyId:(int)lastPrekeyId;
 -(void) savePersonalPrekeys:(NSArray*)prekeyArray;
 -(NSArray*) getPersonalPrekeys;
+-(void) storeMessage:(TSMessage*)message;
+-(NSArray*) getMessagesOnThread:(int) threadId;
 @end
