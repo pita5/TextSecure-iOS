@@ -8,7 +8,6 @@
 
 #import "ComposeMessageViewController.h"
 #import "TSContactManager.h"
-#import "TSRecipientPrekeyRequest.h"
 #import "TSContact.h"
 #import "EncryptedDatabase.h"
 #import "TSMessage.h"
@@ -183,8 +182,13 @@
 #warning remove this dummy reply
     TSMessage *reply = [[TSMessage alloc] initWithMessage:@"why do you feel that way?" sender:@"elisa" recipients:[[NSArray alloc] initWithObjects:@"me", nil] sentOnDate:[NSDate date]];
     [self messageRecieved:reply];
+  
+
+
+
     [self finishSend];
 }
+
 
 
 -(void) messageSent:(TSMessage*) message {

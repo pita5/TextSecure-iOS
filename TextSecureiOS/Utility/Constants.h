@@ -12,7 +12,7 @@ extern NSString* const textSecureKeysAPI;
 
 extern NSString* const textSecureMessagesAPI;
 extern NSString* const textSecureDirectoryAPI;
-
+extern NSString* const textSecureAttachmentsAPI;
 extern NSString* const appName;
 extern NSString* const authenticationTokenStorageId;
 extern NSString* const usernameTokenStorageId;
