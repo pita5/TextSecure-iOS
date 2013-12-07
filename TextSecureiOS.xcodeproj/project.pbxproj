@@ -384,6 +384,7 @@
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
+		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* ComposeMessageViewController.m */; };
 		B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B394182181E1003CE732 /* JSBubbleMessageCell.m */; };
@@ -864,6 +865,8 @@
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
+		A5FBAB93184E980E0012E9A5 /* TSUploadAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUploadAttachment.h; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.h; sourceTree = "<group>"; };
+		A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUploadAttachment.m; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.m; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B635B38F182181E1003CE732 /* ComposeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComposeMessageViewController.h; path = ViewControllers/Conversations/ComposeMessageViewController.h; sourceTree = "<group>"; };
 		B635B390182181E1003CE732 /* ComposeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComposeMessageViewController.m; path = ViewControllers/Conversations/ComposeMessageViewController.m; sourceTree = "<group>"; };
@@ -1642,6 +1645,8 @@
 				A5145B36184B66AD007BDC73 /* TSRequestAttachmentId.m */,
 				A5145B38184B68EA007BDC73 /* TSRequestAttachment.h */,
 				A5145B39184B68EA007BDC73 /* TSRequestAttachment.m */,
+				A5FBAB93184E980E0012E9A5 /* TSUploadAttachment.h */,
+				A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */,
 			);
 			name = "Request Types";
 			sourceTree = "<group>";
@@ -2243,6 +2248,7 @@
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
 				B661DDBD184A583A00E369A8 /* TSMessagesManager.m in Sources */,
 				A515AFDB180966E30084ABA5 /* EncryptedDatabase.m in Sources */,
+				A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */,
 				B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,

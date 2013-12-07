@@ -9,6 +9,7 @@
 #import "TSAttachmentManager.h"
 #import "TSRequestAttachment.h"
 #import "TSRequestAttachmentId.h"
+#import "TSUploadAttachment.h"
 
 @implementation TSAttachmentManager
 
@@ -21,9 +22,8 @@
     switch (operation.response.statusCode) {
         // in both cases attachment info currently in header under "Content-Location " = "contentonamazonwebsite";
       case 200:
-        uploadLocation = [[operation.response allHeaderFields] objectForKey:@"Content-Location"];
+        uploadLocation = [responseObject objectForKey:@"location"];
         DLog(@"we have attachment id %@ location %@",responseObject,uploadLocation);
-        
         break;
         
       default:
@@ -43,6 +43,27 @@
 -(BOOL) uploadAttachment:(NSData*) attachement {
 #warning just testing attachments
   NSString* uploadLocation = [self retrieveNewAttachmentUploadLocation];
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:attachement uploadLocation:uploadLocation] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    switch (operation.response.statusCode) {
+        // in both cases attachment info currently in header under "Content-Location " = "contentonamazonwebsite";
+      case 200:
+        break;
+        
+      default:
+#warning Add error handling if not able to get contacts prekey
+        break;
+    }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning Add error handling if not able to send the token
+    
+    
+  }];
+
+  
+       
+       
+       
+       
   
   
   
@@ -55,7 +76,7 @@
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestAttachment alloc] initWithId:attachmentId] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     switch (operation.response.statusCode) {
       case 200:
-        uploadLocation = [[operation.response allHeaderFields] objectForKey:@"Content-Location"];
+        uploadLocation = [responseObject objectForKey:@"location"];
         DLog(@"we have attachment id %@ location %@",responseObject,uploadLocation);
       default:
         DLog(@"Issue getting attachment ");
