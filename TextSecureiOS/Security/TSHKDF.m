@@ -22,25 +22,25 @@ const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
 @implementation TSHKDF
 
 
-+(NSData*) deriveKeyFromMaterial:(NSData *)input outputLength:(NSUInteger)outputLength info:(NSString *)info {
++(NSData*) deriveKeyFromMaterial:(NSData *)input outputLength:(NSUInteger)outputLength info:(NSData *)info {
     NSData *defaultSalt = [NSData dataWithBytesNoCopy:HKDFDefaultSalt length:HKDF_HASH_LEN];
     return [TSHKDF deriveKeyFromMaterial:input outputLength:outputLength info:info salt:defaultSalt];
 }
 
 
-+(NSData*) deriveKeyFromMaterial:(NSData *)input outputLength:(NSUInteger)outputLength info:(NSString *)info salt:(NSData *)salt {
++(NSData*) deriveKeyFromMaterial:(NSData *)input outputLength:(NSUInteger)outputLength info:(NSData *)info salt:(NSData *)salt {
     char prk[HKDF_HASH_LEN] = {0};
-    void *okm = NULL;
+    char *okm = NULL;
     
     //check all arguments incl info and len
     
     
     // Step 1 - Extract
-    [TSHKDF extract:[input bytes] ikmLength:[input length] salt:HKDFDefaultSalt saltLength:HKDF_HASH_LEN prkOut:prk];
+    [TSHKDF extract:[input bytes] ikmLength:[input length] salt:[salt bytes] saltLength:[salt length] prkOut:prk];
     
     // Step 2 - Expand
     okm = malloc(outputLength);
-    [TSHKDF expand:prk prkLength:sizeof(prk) info:[info UTF8String] output:okm outputLength:outputLength];
+    [TSHKDF expand:prk prkLength:sizeof(prk) info:[info bytes] infoLength:[info length] output:okm outputLength:outputLength];
     
     return [NSData dataWithBytesNoCopy:okm length:outputLength freeWhenDone:YES];
 }
@@ -71,13 +71,13 @@ const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
  T(3) = HMAC-Hash(PRK, T(2) | info | 0x03)
  ...
  */
-+(void) expand:(const void *)prk prkLength:(size_t)prkLength info:(const void *)info output:(void *)output outputLength:(size_t)outputLength {
++(void) expand:(const void *)prk prkLength:(size_t)prkLength info:(const void *)info infoLength:(size_t)infoLength output:(void *)output outputLength:(size_t)outputLength {
     int i = 0;
     int N = 0;
     size_t TInputLength = 0;
-    char *TiInput = malloc(HKDF_HASH_LEN + strlen(info)+1 + 1);
-    char *TiOutput = malloc(HKDF_HASH_LEN);
     void *outputCurrentPosition = output;
+    char *TiInput = malloc(HKDF_HASH_LEN + infoLength + 1);
+    char *TiOutput = malloc(HKDF_HASH_LEN);
     
     // Compute N, the number of HMAC rounds
     N = ceil((float)outputLength/HKDF_HASH_LEN); // FIXME; try with 255
@@ -88,9 +88,9 @@ const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
 
     
     // Generate input for T(1)
-    memcpy(TiInput, info, strlen(info)+1);
-    memset(TiInput + strlen(info)+1, (char)i, 1);
-    TInputLength = strlen(info)+1 + 1;
+    memcpy(TiInput, info, infoLength);
+    memset(TiInput + infoLength, (char)i, 1);
+    TInputLength = infoLength + 1;
 
     
     // Compute T(i)
@@ -112,9 +112,9 @@ const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
         
         // Generate input for T(i+1)
         memcpy(TiInput, TiOutput, HKDF_HASH_LEN);
-        memcpy(TiInput + HKDF_HASH_LEN, info, strlen(info)+1);
-        memset(TiInput + HKDF_HASH_LEN + strlen(info)+1, i+1, 1);
-        TInputLength = HKDF_HASH_LEN + strlen(info)+1 + 1;
+        memcpy(TiInput + HKDF_HASH_LEN, info, infoLength);
+        memset(TiInput + HKDF_HASH_LEN + infoLength, i+1, 1);
+        TInputLength = HKDF_HASH_LEN + infoLength + 1;
     }
     
     free(TiInput);
