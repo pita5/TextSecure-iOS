@@ -16,7 +16,7 @@
 #define HKDF_HASH_LEN CC_SHA256_DIGEST_LENGTH
 
 
-const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
+static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
 
 
 @implementation TSHKDF
@@ -39,7 +39,7 @@ const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     [TSHKDF extract:[input bytes] ikmLength:[input length] salt:[salt bytes] saltLength:[salt length] prkOut:prk];
     
     // Step 2 - Expand
-    okm = malloc(outputLength);
+    okm = malloc(outputLength); // automatically freed by NSData
     [TSHKDF expand:prk prkLength:sizeof(prk) info:[info bytes] infoLength:[info length] output:okm outputLength:outputLength];
     
     return [NSData dataWithBytesNoCopy:okm length:outputLength freeWhenDone:YES];
@@ -79,6 +79,8 @@ const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     char *TiInput = malloc(HKDF_HASH_LEN + infoLength + 1);
     char *TiOutput = malloc(HKDF_HASH_LEN);
     
+    //TODO: check malloc ret value
+    
     // Compute N, the number of HMAC rounds
     N = ceil((float)outputLength/HKDF_HASH_LEN); // FIXME; try with 255
     if (N > 255) {
@@ -89,7 +91,7 @@ const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     
     // Generate input for T(1)
     memcpy(TiInput, info, infoLength);
-    memset(TiInput + infoLength, (char)i, 1);
+    memset(TiInput + infoLength, (char)1, 1);
     TInputLength = infoLength + 1;
 
     
