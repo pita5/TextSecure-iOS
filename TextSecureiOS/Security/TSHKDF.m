@@ -95,7 +95,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     // The caller already checked that all arguments are sane
     
     // Compute N, the number of HMAC rounds; the caller already checked that N <= 255
-    N = ceil((float)outputLength/HKDF_HASH_LEN); // TODO: try with 255
+    N = ceil((float)outputLength/HKDF_HASH_LEN);
     
     // Generate input for T(1)
     memcpy(TiInput, info, infoLength);
