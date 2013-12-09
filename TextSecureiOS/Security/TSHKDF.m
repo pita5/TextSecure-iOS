@@ -29,6 +29,10 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
         @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument was nil" userInfo:nil];
     }
     
+    if (([input length] == 0) || ([salt length] == 0)) {
+        @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument had a length of 0" userInfo:nil];
+    }
+    
     if (ceil((float)outputLength/HKDF_HASH_LEN) > 255) {
         @throw [NSException exceptionWithName:@"Invalid output length" reason:@"The supplied output length is larger than the max HKDF output length" userInfo:nil];
     }

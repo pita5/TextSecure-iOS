@@ -166,4 +166,14 @@
 }
 
 
+- (void)test0BytesInput {
+    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData data] outputLength:32 info:[NSData data]], @"0 bytes input did not throw exception");
+}
+
+
+- (void)test0BytesSalt {
+    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData data] outputLength:32 info:[NSData data] salt:[NSData data]], @"0 bytes salt did not throw exception");
+}
+
+
 @end
