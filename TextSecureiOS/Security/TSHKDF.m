@@ -60,7 +60,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
  PRK = HMAC-Hash(salt, IKM)
  */
 +(void) extract:(const void *)ikm ikmLength:(size_t)ikmLength salt:(const void *)salt saltLength:(size_t)saltLength prkOut:(void *)prkOut {
-    // The caller already checked that all arguments != NULL
+    // The caller already checked that all arguments are sane
     CCHmac(HKDF_HASH_ALG, salt, saltLength, ikm, ikmLength, prkOut);
 }
 
@@ -99,7 +99,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
         @throw [NSException exceptionWithName:@"malloc failed" reason:@"Could not allocate TiOutput" userInfo:nil];
     }
     
-    // The caller already checked that all arguments != NULL
+    // The caller already checked that all arguments are sane
     
     // Compute N, the number of HMAC rounds; the caller already checked that N <= 255
     N = ceil((float)outputLength/HKDF_HASH_LEN); // TODO: try with 255
