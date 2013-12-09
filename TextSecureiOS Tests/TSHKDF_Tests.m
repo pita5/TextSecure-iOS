@@ -51,9 +51,9 @@
     };
     
     NSData *okmTest = nil;
-    NSData *okmRef = [NSData dataWithBytesNoCopy:okm length:sizeof(okm)];
+    NSData *okmRef = [NSData dataWithBytesNoCopy:okm length:sizeof(okm) freeWhenDone:NO];
     
-    okmTest = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:ikm length:sizeof(ikm)] outputLength:sizeof(okm) info:[NSData dataWithBytesNoCopy:info length:sizeof(info)] salt:[NSData dataWithBytesNoCopy:salt length:sizeof(salt)]];
+    okmTest = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:ikm length:sizeof(ikm) freeWhenDone:NO] outputLength:sizeof(okm) info:[NSData dataWithBytesNoCopy:info length:sizeof(info) freeWhenDone:NO] salt:[NSData dataWithBytesNoCopy:salt length:sizeof(salt) freeWhenDone:NO]];
     
     XCTAssertTrue([okmTest isEqualToData:okmRef], @"RFC test case 1 failed");
 }
@@ -97,9 +97,9 @@
     };
     
     NSData *okmTest = nil;
-    NSData *okmRef = [NSData dataWithBytesNoCopy:okm length:sizeof(okm)];
+    NSData *okmRef = [NSData dataWithBytesNoCopy:okm length:sizeof(okm) freeWhenDone:NO];
     
-    okmTest = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:ikm length:sizeof(ikm)] outputLength:sizeof(okm) info:[NSData dataWithBytesNoCopy:info length:sizeof(info)] salt:[NSData dataWithBytesNoCopy:salt length:sizeof(salt)]];
+    okmTest = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:ikm length:sizeof(ikm) freeWhenDone:NO] outputLength:sizeof(okm) info:[NSData dataWithBytesNoCopy:info length:sizeof(info) freeWhenDone:NO] salt:[NSData dataWithBytesNoCopy:salt length:sizeof(salt) freeWhenDone:NO]];
     
     XCTAssertTrue([okmTest isEqualToData:okmRef], @"RFC test case 2 failed");
 }
@@ -118,9 +118,9 @@
     };
     
     NSData *okmTest = nil;
-    NSData *okmRef = [NSData dataWithBytesNoCopy:okm length:sizeof(okm)];
+    NSData *okmRef = [NSData dataWithBytesNoCopy:okm length:sizeof(okm) freeWhenDone:NO];
     
-    okmTest = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:ikm length:sizeof(ikm)] outputLength:sizeof(okm) info:[NSData data]];
+    okmTest = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:ikm length:sizeof(ikm) freeWhenDone:NO] outputLength:sizeof(okm) info:[NSData data]];
     
     XCTAssertTrue([okmTest isEqualToData:okmRef], @"RFC test case 3 failed");
 }
@@ -136,8 +136,8 @@
     };
     
     XCTAssertThrows([TSHKDF deriveKeyFromMaterial:nil outputLength:32 info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)]], @"Nil input did not throw an exception");
-    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] outputLength:32 info:nil salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)]], @"Nil info did not throw an exception");
-    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] outputLength:32 info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] salt:nil], @"Nil salt did not throw an exception");
+    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] outputLength:32 info:nil salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)]], @"Nil info did not throw an exception");
+    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] outputLength:32 info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] salt:nil], @"Nil salt did not throw an exception");
 }
 
 
@@ -149,7 +149,7 @@
     NSUInteger maxOutputLength = 255*HKDF_HASH_LEN;
     NSData *okmOut = nil;
     
-    okmOut = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] outputLength:maxOutputLength info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)]];
+    okmOut = [TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] outputLength:maxOutputLength info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO]];
     
     XCTAssertNotNil(okmOut, @"max output length failed");
 }
@@ -162,7 +162,7 @@
     };
     NSUInteger badOutputLength = 256*HKDF_HASH_LEN;
     
-    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] outputLength:badOutputLength info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)]], @"bad output length input did not throw an exception");
+    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] outputLength:badOutputLength info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO]], @"bad output length input did not throw an exception");
 }
 
 

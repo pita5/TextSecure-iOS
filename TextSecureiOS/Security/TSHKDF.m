@@ -16,7 +16,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
 
 
 +(NSData*) deriveKeyFromMaterial:(NSData *)input outputLength:(NSUInteger)outputLength info:(NSData *)info {
-    NSData *defaultSalt = [NSData dataWithBytesNoCopy:HKDFDefaultSalt length:HKDF_HASH_LEN];
+    NSData *defaultSalt = [NSData dataWithBytesNoCopy:HKDFDefaultSalt length:HKDF_HASH_LEN freeWhenDone:NO];
     return [TSHKDF deriveKeyFromMaterial:input outputLength:outputLength info:info salt:defaultSalt];
 }
 
