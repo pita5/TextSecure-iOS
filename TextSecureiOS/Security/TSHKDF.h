@@ -7,6 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CommonCrypto/CommonHMAC.h>
+#import <CommonCrypto/CommonDigest.h>
+
+
+// TextSecure HKDF constants
+#define HKDF_HASH_ALG kCCHmacAlgSHA256
+#define HKDF_HASH_LEN CC_SHA256_DIGEST_LENGTH
+
 
 @interface TSHKDF : NSObject
 

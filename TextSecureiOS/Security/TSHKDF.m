@@ -7,13 +7,6 @@
 //
 
 #import "TSHKDF.h"
-#include <CommonCrypto/CommonHMAC.h>
-#include <CommonCrypto/CommonDigest.h>
-
-
-// TextSecure HKDF constants
-#define HKDF_HASH_ALG kCCHmacAlgSHA256
-#define HKDF_HASH_LEN CC_SHA256_DIGEST_LENGTH
 
 
 static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
