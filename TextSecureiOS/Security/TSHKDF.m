@@ -32,14 +32,22 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     char prk[HKDF_HASH_LEN] = {0};
     char *okm = NULL;
     
-    //check all arguments incl info and len
+    if ((!input) || (!info) || (!salt)) {
+        @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument was nil" userInfo:nil];
+    }
     
+    if (ceil((float)outputLength/HKDF_HASH_LEN) > 255) {
+        @throw [NSException exceptionWithName:@"Invalid output length" reason:@"The supplied output length is larger than the max HKDF output length" userInfo:nil];
+    }
     
     // Step 1 - Extract
     [TSHKDF extract:[input bytes] ikmLength:[input length] salt:[salt bytes] saltLength:[salt length] prkOut:prk];
     
     // Step 2 - Expand
     okm = malloc(outputLength); // automatically freed by NSData
+    if (!okm) {
+        @throw [NSException exceptionWithName:@"malloc failed" reason:@"Could not allocate okm" userInfo:nil];
+    }
     [TSHKDF expand:prk prkLength:sizeof(prk) info:[info bytes] infoLength:[info length] output:okm outputLength:outputLength];
     
     return [NSData dataWithBytesNoCopy:okm length:outputLength freeWhenDone:YES];
@@ -52,6 +60,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
  PRK = HMAC-Hash(salt, IKM)
  */
 +(void) extract:(const void *)ikm ikmLength:(size_t)ikmLength salt:(const void *)salt saltLength:(size_t)saltLength prkOut:(void *)prkOut {
+    // The caller already checked that all arguments != NULL
     CCHmac(HKDF_HASH_ALG, salt, saltLength, ikm, ikmLength, prkOut);
 }
 
@@ -76,18 +85,24 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     int N = 0;
     size_t TInputLength = 0;
     void *outputCurrentPosition = output;
-    char *TiInput = malloc(HKDF_HASH_LEN + infoLength + 1);
-    char *TiOutput = malloc(HKDF_HASH_LEN);
+    char *TiInput = NULL;
+    char *TiOutput = NULL;
     
-    //TODO: check malloc ret value
     
-    // Compute N, the number of HMAC rounds
-    N = ceil((float)outputLength/HKDF_HASH_LEN); // FIXME; try with 255
-    if (N > 255) {
-        @throw [NSException exceptionWithName:@"Invalid output length" reason:@"The supplied output length is larger than the max HKDF output length" userInfo:nil];
+    TiInput = malloc(HKDF_HASH_LEN + infoLength + 1);
+    if (!TiInput) {
+        @throw [NSException exceptionWithName:@"malloc failed" reason:@"Could not allocate TiInput" userInfo:nil];
     }
-    //TODO: check all pointers ?
-
+    TiOutput = malloc(HKDF_HASH_LEN);
+    if (!TiOutput) {
+        free(TiInput);
+        @throw [NSException exceptionWithName:@"malloc failed" reason:@"Could not allocate TiOutput" userInfo:nil];
+    }
+    
+    // The caller already checked that all arguments != NULL
+    
+    // Compute N, the number of HMAC rounds; the caller already checked that N <= 255
+    N = ceil((float)outputLength/HKDF_HASH_LEN); // TODO: try with 255
     
     // Generate input for T(1)
     memcpy(TiInput, info, infoLength);
