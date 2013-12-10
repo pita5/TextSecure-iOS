@@ -26,7 +26,7 @@
  * @param input Input keying material.
  * @param outputLength Size in bytes of the key material to generate.
  * @param info Application-specific information.
- * @return Key material derived from the input.
+ * @return Key material derived from the input or nil if memory could not be allocated.
  */
 +(NSData*) deriveKeyFromMaterial:(NSData *)input outputLength:(NSUInteger)outputLength info:(NSData *)info;
 
@@ -40,7 +40,7 @@
  * @param outputLength Size in bytes of the key material to generate.
  * @param info Application-specific information.
  * @param salt Salt value.
- * @return Key material derived from the input.
+ * @return Key material derived from the input or nil if memory could not be allocated.
  */
 +(NSData*) deriveKeyFromMaterial:(NSData *)input outputLength:(NSUInteger)outputLength info:(NSData *)info salt:(NSData *)salt;
 

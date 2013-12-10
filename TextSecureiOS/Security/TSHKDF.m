@@ -43,9 +43,11 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     // Step 2 - Expand
     okm = malloc(outputLength); // automatically freed by NSData
     if (!okm) {
-        @throw [NSException exceptionWithName:@"malloc failed" reason:@"Could not allocate okm" userInfo:nil];
+        return nil;
     }
-    [TSHKDF expand:prk prkLength:sizeof(prk) info:[info bytes] infoLength:[info length] output:okm outputLength:outputLength];
+    if (![TSHKDF expand:prk prkLength:sizeof(prk) info:[info bytes] infoLength:[info length] output:okm outputLength:outputLength]) {
+        return nil;
+    }
     
     return [NSData dataWithBytesNoCopy:okm length:outputLength freeWhenDone:YES];
 }
@@ -77,7 +79,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
  T(3) = HMAC-Hash(PRK, T(2) | info | 0x03)
  ...
  */
-+(void) expand:(const void *)prk prkLength:(size_t)prkLength info:(const void *)info infoLength:(size_t)infoLength output:(void *)output outputLength:(size_t)outputLength {
++(BOOL) expand:(const void *)prk prkLength:(size_t)prkLength info:(const void *)info infoLength:(size_t)infoLength output:(void *)output outputLength:(size_t)outputLength {
     int i = 0;
     int N = 0;
     size_t TInputLength = 0;
@@ -88,12 +90,12 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     
     TiInput = malloc(HKDF_HASH_LEN + infoLength + 1);
     if (!TiInput) {
-        @throw [NSException exceptionWithName:@"malloc failed" reason:@"Could not allocate TiInput" userInfo:nil];
+        return NO;
     }
     TiOutput = malloc(HKDF_HASH_LEN);
     if (!TiOutput) {
         free(TiInput);
-        @throw [NSException exceptionWithName:@"malloc failed" reason:@"Could not allocate TiOutput" userInfo:nil];
+        return NO;
     }
     
     // The caller already checked that all arguments are sane
@@ -133,6 +135,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     
     free(TiInput);
     free(TiOutput);
+    return YES;
 }
 
 
