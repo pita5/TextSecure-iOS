@@ -46,6 +46,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
         return nil;
     }
     if (![TSHKDF expand:prk prkLength:sizeof(prk) info:[info bytes] infoLength:[info length] output:okm outputLength:outputLength]) {
+        free(okm);
         return nil;
     }
     
