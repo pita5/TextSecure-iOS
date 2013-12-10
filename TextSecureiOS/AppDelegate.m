@@ -11,12 +11,12 @@
 #import "UserDefaults.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
-#import "Message.h"
 #import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabaseError.h"
 #import "TSRegisterForPushRequest.h"
-#import "ECKeyPair.h"
 #import "NSString+Conversion.h"
+#import "TSMessagesManager.h"
+
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -59,6 +59,7 @@
     
 	}
 	return YES;
+
 }
 
 
@@ -112,6 +113,7 @@
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
     [alert show];
+    
 #ifdef DEBUG
 #warning registering with dummy ID so that we can proceed in the simulator. You'll want to change this!
   [self application:application didRegisterForRemoteNotificationsWithDeviceToken:[[NSData alloc] initWithBase64Encoding:[@"christine" base64Encoded]]];
@@ -126,11 +128,7 @@
 }
 
 -(void) handlePush:(NSDictionary *)pushInfo {
-	NSDictionary* fullMessageJson = [[pushInfo objectForKey:@"message_body"] JSONValue];
-	NSLog(@"full message json %@",fullMessageJson);
-	Message *message = [[Message alloc] initWithText:[fullMessageJson objectForKey:@"messageText"] messageSource:[fullMessageJson objectForKey:@"source"] messageDestinations:[fullMessageJson objectForKey:@"destinations"] messageAttachments:[fullMessageJson objectForKey:@"attachments"] messageTimestamp:[NSDate date]];
-#warning we need to handle this push!
-
+  [[TSMessagesManager sharedManager]processPushNotification:pushInfo];
 }
 
 #pragma mark - HockeyApp Delegate Methods

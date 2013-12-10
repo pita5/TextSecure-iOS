@@ -12,6 +12,7 @@
 
 @interface ComposeMessageViewController (Private)
 - (void)resizeViews;
+@property (nonatomic, retain) NSArray *contacts;
 @end
 
 @implementation ComposeMessageViewController {
@@ -20,16 +21,12 @@
 	CGFloat _keyboardHeight;
 }
 
-- (id) initWithConversationID:(NSString*)contactID{
+- (id) initWithConversationID:(TSContact*)contact{
     self = [super initWithNibName:nil bundle:nil];
-    
-    NSString *nameOfContact = @"ContactX";
-    
     self.messages = [NSMutableArray array];
-    
     self.timestamps = [NSMutableArray array];
-    
-    self.title = nameOfContact;
+    self.title = contact.name;
+    self.contact = contact;
     
     return self;
 }
@@ -44,21 +41,11 @@
 	[self.view setBackgroundColor:[UIColor whiteColor]];
 	[self.navigationItem setTitle:@"New Message"];
     
-    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
-        _tokenFieldView.hidden = FALSE;
-        
-        NSMutableArray *contactNames;
-        for (TSContact *contact in contacts){
-            [contactNames addObject:[contact name]];
-        }
-        
-        [_tokenFieldView setSourceArray:contactNames];
-    }];
-    
 	_tokenFieldView = [[TITokenFieldView alloc] initWithFrame:self.view.bounds];
-	[_tokenFieldView setSourceArray:nil];
+    [_tokenFieldView setForcePickSearchResult:YES];
     
 	[_tokenFieldView.tokenField setDelegate:self];
+    _tokenFieldView.tokenField.delegate = self;
 	[_tokenFieldView.tokenField addTarget:self action:@selector(tokenFieldFrameDidChange:) forControlEvents:(UIControlEvents) TITokenFieldControlEventFrameDidChange];
 	[_tokenFieldView.tokenField setTokenizingCharacters:[NSCharacterSet characterSetWithCharactersInString:@",;."]]; // Default is a comma
     [_tokenFieldView.tokenField setPromptText:@"To:"];
@@ -77,22 +64,40 @@
 	// They both do the same thing.
 	[_tokenFieldView becomeFirstResponder];
     
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
+        _tokenFieldView.hidden = FALSE;
+        
+        [_tokenFieldView setSourceArray:contacts];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
+        
+        [_tokenFieldView becomeFirstResponder];
+    }];
+    
     self.messages = [NSMutableArray array];
     self.timestamps = [NSMutableArray array];
     
+    UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
+    
+    self.navigationItem.leftBarButtonItem = dismissButton;
+    
     return self;
+}
+
+- (void) dismissVC{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-    
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;
-
 	[self.view setBackgroundColor:[UIColor whiteColor]];
-    
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
     
 }
@@ -132,6 +137,14 @@
     
 }
 
+- (NSString *)tokenField:(TITokenField *)tokenField searchResultStringForRepresentedObject:(id)object{
+    return [(TSContact*)object name];
+}
+
+- (NSString *)tokenField:(TITokenField *)tokenField displayStringForRepresentedObject:(id)object{
+    return [(TSContact*)object name];
+}
+
 #pragma mark delegate methods #pragma mark - Initialization
 - (UIButton *)sendButton
 {
@@ -163,13 +176,21 @@
     
     [self.timestamps addObject:[NSDate date]];
     
-    if((self.messages.count - 1) % 2)
+    if((self.messages.count - 1) % 2) {
         [JSMessageSoundEffect playMessageSentSound];
-    else
+    }
+    else {
         [JSMessageSoundEffect playMessageReceivedSound];
-    
+    }
+
+  
+
+
     [self finishSend];
 }
+
+
+
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -220,6 +241,20 @@
     return nil;
 }
 
+-(void)tokenField:(TITokenField *)tokenField didAddToken:(TIToken *)token{
+    if (_tokenFieldView.tokenField.tokens) {
+        self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
+        [self startedWritingMessage];
+        DLog(@"Contact set to : %@", self.contact.name);
+    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        sleep(0);
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [self.inputToolBarView.textView becomeFirstResponder];
+        });
+    });
+}
+
 #pragma mark UITextViewDelegate (Sending box)
 
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView{
@@ -227,11 +262,7 @@
     if ([textView isEqual:self.inputToolBarView.textView]) {
         
         self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
-        
-        // We start editing the message field, proceed to UI changes.
-        if (_tokenFieldView) {
-            [self startedWritingMessage];
-        }
+
     }
     
     return true;
@@ -239,17 +270,16 @@
 
 -(void) startedWritingMessage{
     // Change frames for editing
-    
     if (_tokenFieldView) {
         [_tokenFieldView setScrollEnabled:FALSE];
-         _tokenFieldView.frame = CGRectMake(_tokenFieldView.frame.origin.x, _tokenFieldView.frame.origin.y, _tokenFieldView.frame.size.width, 43);
+        _tokenFieldView.frame = CGRectMake(_tokenFieldView.frame.origin.x, _tokenFieldView.frame.origin.y, _tokenFieldView.frame.size.width, 43);
         self.tableView.frame = CGRectMake(0, 44, self.tableView.frame.size.width, self.tableView.frame.size.height);
         _tokenFieldView.contentSize = CGSizeMake(_tokenFieldView.frame.size.width, 43);
     }
 }
 
 -(void) startedEditingReceipients{
-    //change frames for 
+    //change frames for
 }
 
 @end

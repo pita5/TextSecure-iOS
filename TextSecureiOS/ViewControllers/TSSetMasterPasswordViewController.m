@@ -9,7 +9,7 @@
 #import "TSSetMasterPasswordViewController.h"
 #import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabaseError.h"
-#import "TSRegisterPrekeys.h"
+#import "TSRegisterPrekeysRequest.h"
 
 @interface TSSetMasterPasswordViewController ()
 
@@ -30,17 +30,20 @@
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(setupDatabase)];
+    self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(setupDatabase)];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
     
-    self.navigationItem.rightBarButtonItem = nextButton;
+    self.navigationItem.rightBarButtonItem = self.nextButton;
+    
+    self.pass.delegate = self;
 }
 
 - (void) viewDidAppear:(BOOL)animated{
     [self.pass becomeFirstResponder];
 }
+
 
 - (void) setupDatabase {
     // Create the database on the device
@@ -60,7 +63,7 @@
     // Send the user's newly generated keys to the API
     // TODO: Error handling & retry if network error
     __block BOOL sendSuccess = NO;
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeys alloc] initWithPrekeyArray:[encDb getPersonalPrekeys] identityKey:[encDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[encDb getPersonalPrekeys] identityKey:[encDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (operation.response.statusCode == 200) {
             sendSuccess = YES;
         }
@@ -74,6 +77,17 @@
     else {
         [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
     }
+}
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if ([textField.text isEqualToString:@""]) {
+        // Application password shouldn't be empty
+        self.nextButton.enabled = NO;
+    } else{
+        self.nextButton.enabled = YES;
+    }
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning

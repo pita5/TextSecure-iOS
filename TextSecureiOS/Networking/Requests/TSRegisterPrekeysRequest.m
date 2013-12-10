@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSRegisterPrekeys.h"
+#import "TSRegisterPrekeysRequest.h"
 #import "ECKeyPair.h"
-@implementation TSRegisterPrekeys
+@implementation TSRegisterPrekeysRequest
 
 - (id)initWithPrekeyArray:(NSArray*)prekeys identityKey:(ECKeyPair*) identityKey{
 #warning this method needs to be tested

@@ -8,12 +8,12 @@
 
 #import "TextSecureViewController.h"
 #import "UserDefaults.h"
-#import "Message.h"
 #import "Cryptography.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "NSString+Conversion.h"
 #import "TSSettingsViewController.h"
 #import "TSContactManager.h"
+#import "TSContact.h"
 #import "ComposeMessageViewController.h"
 
 @implementation TextSecureViewController
@@ -52,9 +52,6 @@
     UILabel *previewLabel = (UILabel *)[cell viewWithTag:2];
     UILabel *dateLabel = (UILabel *)[cell viewWithTag:3];
     
-    Message* message = [self.messages objectAtIndex:indexPath.row];
-    phoneNumberLabel.text = [message.destinations objectAtIndex:0];
-    previewLabel.text = message.text;
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm"];
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
@@ -83,13 +80,7 @@
     }
     else if(alertView.tag==1) {
         self.composingMessageText=[alertView textFieldAtIndex:0].text;
-        Message *newMessage = [[Message alloc]
-                               initWithText:self.composingMessageText
-                               messageSource:[Cryptography getUsernameToken]
-                               messageDestinations:[[NSArray alloc] initWithObjects:self.composingMessagePhoneNumber,nil]
-                               messageAttachments:[[NSArray alloc] init]
-                               messageTimestamp:[NSDate date]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"SendMessage" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:newMessage, @"message",nil]];
+#warning send message here
 #warning add message to database here
         self.composingMessageText = nil;
         self.composingMessagePhoneNumber = nil;
