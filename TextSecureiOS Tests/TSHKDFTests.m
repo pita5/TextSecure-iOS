@@ -9,11 +9,11 @@
 #import <XCTest/XCTest.h>
 #import "TSHKDF.h"
 
-@interface TSHKDF_Tests : XCTestCase
+@interface TSHKDFTests : XCTestCase
 
 @end
 
-@implementation TSHKDF_Tests
+@implementation TSHKDFTests
 
 - (void)setUp
 {

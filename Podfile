@@ -11,7 +11,7 @@ pod 'GoogleProtobuf', 			'~> 2.5.0'
 pod 'TITokenField', 			'~> 0.9.5'
 
 #pod 'OpenSSL',            '~> 1.0.1'
-
+link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 post_install do |lib_rep|
   lib_rep.project.targets.each do |target|
     if target.name == 'Pods-FMDB'
