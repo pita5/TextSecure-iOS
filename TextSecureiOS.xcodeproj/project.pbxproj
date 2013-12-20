@@ -1021,6 +1021,8 @@
 		A51B779B17050EDB002B8E53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
+				B661DDBC184A583A00E369A8 /* TSMessagesManager.m */,
 				A515AFD9180966E30084ABA5 /* EncryptedDatabase.h */,
 				A515AFDA180966E30084ABA5 /* EncryptedDatabase.m */,
 			);
@@ -1078,8 +1080,6 @@
 		A53718BB16FF95DF00C6FCCF /* TextSecureiOS */ = {
 			isa = PBXGroup;
 			children = (
-				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
-				B661DDBC184A583A00E369A8 /* TSMessagesManager.m */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
@@ -1781,7 +1781,7 @@
 						TestTargetID = A53718B116FF95DF00C6FCCF;
 					};
 					A53718B116FF95DF00C6FCCF = {
-						DevelopmentTeam = ZXJBFW2XA8;
+						DevelopmentTeam = U68MSDN6DR;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
