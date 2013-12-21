@@ -15,9 +15,10 @@
 @end
 
 
+#if 0
+#warning this is out of date.
 
 @implementation CryptographyTests
-#warning this is out of date.
 -(void) testAES256RNEncryption {
   // we are going to want to use kCCModeCTR instead of kCCModeCBC... may need to change settings as well.
   NSData *data = [@"hello world here is some much longer text in fact it is a paragraph of text omgz it is awesome hello world here is some much longer text in fact it is a paragraph of text omgz it is awesomehello world here is some much longer text in fact it is a paragraph of text omgz it is awesome ello world here is some much longer text in fact it is a paragraph of text omgz it is awesome  hello world here is some much longer text in fact it is a paragraph of text omgz it is awesome" dataUsingEncoding:NSUTF8StringEncoding];
@@ -63,5 +64,6 @@
   
 }
  */
-
 @end
+
+#endif
