@@ -9,6 +9,10 @@
 #import "TSEncryptedDatabase.h"
 
 
+#define kDBWasCreatedBool @"DBWasCreated"
+#define databaseFileName @"cryptography.db"
+
+
 @interface TSEncryptedDatabase(Private)
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;

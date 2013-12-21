@@ -20,8 +20,6 @@
 #import "KeychainWrapper.h"
 
 
-#define kDBWasCreatedBool @"DBWasCreated"
-#define databaseFileName @"cryptography.db"
 
 
 // Reference to the singleton
@@ -69,8 +67,11 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         return nil;
     }
+    
+    // 1. Cleanup remnants of a previous DB
+    [TSEncryptedDatabase databaseErase];
 
-    // 1. Create the DB encryption key, the DB and the tables
+    // 2. Create the DB encryption key, the DB and the tables
     NSData *dbMasterKey = [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword:userPassword];
     if (!dbMasterKey) {
         if (error) {
@@ -110,7 +111,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // We have now have an empty DB
     SharedCryptographyDatabase = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
 
-    // 2. Generate and store the user's identity keys and prekeys
+    // 3. Generate and store the user's identity keys and prekeys
     if ((![SharedCryptographyDatabase generateIdentityKey]) || (![SharedCryptographyDatabase generatePersonalPrekeys])) {
         if (error) {
             *error = [TSEncryptedDatabaseError dbCreationFailed];
@@ -121,8 +122,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     
     
-    // 3. Success
-    // Store in the preferences that the DB has been successfully created
+    // 4. Success - store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kDBWasCreatedBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
     

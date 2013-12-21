@@ -63,6 +63,23 @@ static NSString *dbPw = @"1234test";
     XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
 }
 
+    
+- (void)testDatabaseCreateWithPreviousDatabaseRemnants
+    {
+        NSError *error = nil;
+        TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:@"wrongpassword" error:&error];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        XCTAssertFalse([TSEncryptedDatabase databaseWasCreated], @"databaseWasCreated did not return the expected result");
+        
+        encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
+        XCTAssertNil(error, @"database creation returned an error");
+        XCTAssertNotNil(encDb, @"database creation failed");
+        XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
+        XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
+    }
+    
 
 - (void)testDatabaseCreateAndOverwrite
 {
@@ -74,6 +91,7 @@ static NSString *dbPw = @"1234test";
     XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"database overwrite did not fail");
     XCTAssertEqual([error code], DbAlreadyExists, @"database overwrite did not fail");
 }
+
 
 
 - (void)testDatabaseAfterCreate
