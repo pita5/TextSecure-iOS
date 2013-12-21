@@ -10,6 +10,7 @@
 		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
 		8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C42C14418551B8C000DD353 /* TSHKDFTests.m */; };
 		8C49FC1018497E86006132F6 /* TSEncryptedDatabaseError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */; };
+		8C7D62D71865F898003E2B90 /* TSEncryptedDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */; };
 		A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B36184B66AD007BDC73 /* TSRequestAttachmentId.m */; };
 		A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B39184B68EA007BDC73 /* TSRequestAttachment.m */; };
 		A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B3C184B6F35007BDC73 /* TSAttachmentManager.m */; };
@@ -454,7 +455,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabase_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSEncryptedDatabase_Tests.m; sourceTree = "<group>"; };
+		8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSEncryptedDatabaseTests.m; sourceTree = "<group>"; };
 		8C3C917518544FDF003EA71D /* TSHKDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSHKDF.h; path = Security/TSHKDF.h; sourceTree = "<group>"; };
 		8C3C917618544FDF003EA71D /* TSHKDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSHKDF.m; path = Security/TSHKDF.m; sourceTree = "<group>"; };
 		8C42C13918551B8C000DD353 /* TextSecureiOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TextSecureiOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -997,7 +998,7 @@
 		8C42C13E18551B8C000DD353 /* TextSecureiOS Tests */ = {
 			isa = PBXGroup;
 			children = (
-				8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabase_Tests.m */,
+				8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */,
 				A52CE05C1862D88B00AF9E39 /* CryptographyTests.m */,
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
@@ -2268,6 +2269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C7D62D71865F898003E2B90 /* TSEncryptedDatabaseTests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
 				A52CE05D1862D88B00AF9E39 /* CryptographyTests.m in Sources */,
 			);

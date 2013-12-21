@@ -1,5 +1,5 @@
 //
-//  TSHKDF_Tests.m
+//  TSHKDFTests.m
 //  TSHKDF Tests
 //
 //  Created by Alban Diquet on 12/8/13.

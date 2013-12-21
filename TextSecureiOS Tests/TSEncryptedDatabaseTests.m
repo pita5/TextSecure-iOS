@@ -1,6 +1,6 @@
 //
-//  EncryptedDatabase_Tests.m
-//  EncryptedDatabase Tests
+//  TSEncryptedDatabaseTests.m
+//  TSEncryptedDatabase Tests
 //
 //  Created by Alban Diquet on 11/24/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
@@ -19,11 +19,11 @@
 static NSString *dbPw = @"1234test";
 
 
-@interface TSEncryptedDatabase_Tests : XCTestCase
+@interface TSEncryptedDatabaseTests : XCTestCase
 
 @end
 
-@implementation TSEncryptedDatabase_Tests
+@implementation TSEncryptedDatabaseTests
 
 - (void)setUp
 {
