@@ -38,6 +38,16 @@
                ReferencedContainer = "container:TextSecureiOS.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8C42C13818551B8C000DD353"
+               BuildableName = "TextSecureiOS Tests.xctest"
+               BlueprintName = "TextSecureiOS Tests"
+               ReferencedContainer = "container:TextSecureiOS.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
