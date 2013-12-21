@@ -62,21 +62,25 @@
     
     // Send the user's newly generated keys to the API
     // TODO: Error handling & retry if network error
-    __block BOOL sendSuccess = NO;
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[encDb getPersonalPrekeys] identityKey:[encDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (operation.response.statusCode == 200) {
-            sendSuccess = YES;
+        
+        switch (operation.response.statusCode) {
+            case 200:
+            case 204:
+            DLog(@"Device registered prekeys");
+            break;
+            
+            default:
+            DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
+#warning Add error handling if not able to send the prekeys
+            break;
         }
-        DLog(@"response %d, %@",operation.response.statusCode,operation.response.description);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning Add error handling if not able to send the token
         DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
     }];
-    if (!sendSuccess) {
-        @throw [NSException exceptionWithName:@"setup database error" reason:@"could not send the user's keys to the server" userInfo:nil];
-        }
-    else {
-        [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
-    }
+    
+    [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
 
 
