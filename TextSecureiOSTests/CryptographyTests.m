@@ -5,7 +5,7 @@
 //  Created by Christine Corbett Moran on 4/5/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
-
+#warning: TODO remove or fix these unit tests
 #import "CryptographyTests.h"
 #import "Cryptography.h"
 #import <RNCryptor/RNEncryptor.h>
