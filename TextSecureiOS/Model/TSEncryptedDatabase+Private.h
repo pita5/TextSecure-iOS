@@ -9,8 +9,10 @@
 #import "TSEncryptedDatabase.h"
 
 
+// Internal constants exposed for unit testing
 #define kDBWasCreatedBool @"DBWasCreated"
 #define databaseFileName @"cryptography.db"
+#define numberOfPreKeys 70
 
 
 @interface TSEncryptedDatabase(Private)

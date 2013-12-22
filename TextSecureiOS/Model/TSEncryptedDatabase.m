@@ -307,14 +307,14 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 -(BOOL) generatePersonalPrekeys {
-    
     // No need to the check if the DB is locked as this happens during DB creation
-    int numberOfPreKeys = 70;
-    int prekeyCounter = arc4random() % 16777215; // 16777215 is 0xFFFFFF
     
-    // Generate keys
-    for(int i=0; i<numberOfPreKeys; i++) {
-        ECKeyPair *keyPair = [ECKeyPair createAndGeneratePublicPrivatePair:++prekeyCounter];
+    // Key of last resort
+    ECKeyPair *keyPair = [ECKeyPair createAndGeneratePublicPrivatePair:0xFFFFFF];
+    int prekeyCounter = arc4random() % 0xFFFFFF;
+
+    // Generate and store keys
+    for(int i=0; i<numberOfPreKeys+1; i++) {
         
         __block BOOL updateSuccess = NO;
         [self->dbQueue inDatabase:^(FMDatabase *db) {
@@ -326,6 +326,9 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
             return NO;
             //@throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write prekey" userInfo:nil];
         }
+        
+        // Generate next key
+        keyPair = [ECKeyPair createAndGeneratePublicPrivatePair:++prekeyCounter];
     }
     return YES;
 }
