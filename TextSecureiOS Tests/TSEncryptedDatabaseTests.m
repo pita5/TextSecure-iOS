@@ -12,6 +12,7 @@
 #import "TSEncryptedDatabase+Private.h"
 #import "Cryptography.h"
 #import "KeychainWrapper.h"
+#import "ECKeyPair.h"
 #import "NSData+Base64.h"
 #import "Constants.h"
 
@@ -61,25 +62,39 @@ static NSString *dbPw = @"1234test";
     
     XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
     XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
+    
+    // We should have generated numberOfPreKeys + 1 (for the key of last resort) keys
+    NSArray *preKeys = [encDb getPersonalPrekeys];
+    XCTAssertEqual([preKeys count], (NSUInteger)numberOfPreKeys+1, @"db creation generated an unexpected number of keys");
+    
+    // Ensure we generated the key of last resort
+    BOOL hasKeyOfLastResort = NO;
+    for (ECKeyPair *preKey in preKeys) {
+        if (preKey.prekeyId == 0xFFFFFF) {
+            hasKeyOfLastResort = YES;
+            break;
+        }
+    }
+    XCTAssertTrue(hasKeyOfLastResort, @"db creation did not generate a key of last resort");
 }
 
     
 - (void)testDatabaseCreateWithPreviousDatabaseRemnants
-    {
-        NSError *error = nil;
-        TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:@"wrongpassword" error:&error];
-        
-        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        XCTAssertFalse([TSEncryptedDatabase databaseWasCreated], @"databaseWasCreated did not return the expected result");
-        
-        encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
-        XCTAssertNil(error, @"database creation returned an error");
-        XCTAssertNotNil(encDb, @"database creation failed");
-        XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
-        XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
-    }
+{
+    NSError *error = nil;
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:@"wrongpassword" error:&error];
     
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    XCTAssertFalse([TSEncryptedDatabase databaseWasCreated], @"databaseWasCreated did not return the expected result");
+    
+    encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
+    XCTAssertNil(error, @"database creation returned an error");
+    XCTAssertNotNil(encDb, @"database creation failed");
+    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
+    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
+}
+
 
 - (void)testDatabaseCreateAndOverwrite
 {
