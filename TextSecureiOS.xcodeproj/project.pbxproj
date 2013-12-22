@@ -442,6 +442,7 @@
 		B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1617EF4A3A00723719 /* NSLocale+phonePrefixes.m */; };
 		B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6F10B1B17EF61FE00723719 /* CountryCodes.plist */; };
 		B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */; };
+		CE74D2F57964464494640956 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -967,6 +968,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE74D2F57964464494640956 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2443,6 +2445,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2479,6 +2482,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2513,7 +2517,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "99F3A2BB-CD0D-460F-9C75-89C081AEC53E";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2535,7 +2539,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "99F3A2BB-CD0D-460F-9C75-89C081AEC53E";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
