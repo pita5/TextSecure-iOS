@@ -7,8 +7,10 @@
 //
 
 #import "TSSetMasterPasswordViewController.h"
-#import "EncryptedDatabase.h"
-#import "Cryptography.h"
+#import "TSEncryptedDatabase.h"
+#import "TSEncryptedDatabaseError.h"
+#import "TSRegisterPrekeysRequest.h"
+
 @interface TSSetMasterPasswordViewController ()
 
 @end
@@ -42,11 +44,45 @@
     [self.pass becomeFirstResponder];
 }
 
-- (void) setupDatabase{
-    [Cryptography generateAndStoreMasterSecretPassword:self.pass.text];
-    [EncryptedDatabase setupDatabaseWithPassword:self.pass.text];
+
+- (void) setupDatabase {
+    // Create the database on the device
+    NSError *error = nil;
+    
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:self.pass.text error:&error];
+    if(!encDb) {
+        if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
+            switch ([error code]) {
+                case DbCreationFailed:
+                    // TODO: Proper error handling
+                    @throw [NSException exceptionWithName:@"DB creation failed" reason:[error localizedDescription] userInfo:nil];
+            }
+        }
+    }
+    
+    // Send the user's newly generated keys to the API
+    // TODO: Error handling & retry if network error
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[encDb getPersonalPrekeys] identityKey:[encDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        switch (operation.response.statusCode) {
+            case 200:
+            case 204:
+            DLog(@"Device registered prekeys");
+            break;
+            
+            default:
+            DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
+#warning Add error handling if not able to send the prekeys
+            break;
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning Add error handling if not able to send the token
+        DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
+    }];
+    
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
+
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     if ([textField.text isEqualToString:@""]) {

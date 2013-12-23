@@ -10,7 +10,9 @@
 #import "Cryptography.h"
 #import "UserDefaults.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
-#import "EncryptedDatabase.h"
+#import "NSObject+SBJson.h"
+#import "TSEncryptedDatabase.h"
+#import "TSEncryptedDatabaseError.h"
 #import "TSRegisterForPushRequest.h"
 #import "NSString+Conversion.h"
 #import "TSMessagesManager.h"
@@ -47,7 +49,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([UserDefaults hasVerifiedPhoneNumber] && [EncryptedDatabase dataBaseWasInitialized]) {
+	if([UserDefaults hasVerifiedPhoneNumber] && [TSEncryptedDatabase databaseWasCreated]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
      UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
@@ -62,14 +64,23 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSError *error = nil;
 #warning we will want better error handling, including reprompting if user enters password wrong
-  if(buttonIndex==1) {
-    NSString* password = [[alertView textFieldAtIndex:0] text];
-    [EncryptedDatabase setupDatabaseWithPassword:password];
-    // TODO: remove
-    [Cryptography generateAndStoreNewPreKeys:70];
-
-    
+    if(buttonIndex==1) {
+        NSString* password = [[alertView textFieldAtIndex:0] text];
+        if (![TSEncryptedDatabase databaseUnlockWithPassword:password error:&error]) {
+            if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
+                switch ([error code]) {
+                    case InvalidPassword:
+                        // TODO: Proper error handling
+                        @throw [NSException exceptionWithName:@"Wrong password" reason:[error localizedDescription] userInfo:nil];
+                        break;
+                    case NoDbAvailable:
+                        // TODO: Proper error handling
+                        @throw [NSException exceptionWithName:@"No DB available; create one first" reason:[error localizedDescription] userInfo:nil];
+                }
+            }
+        }
   }
 }
 

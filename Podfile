@@ -1,4 +1,7 @@
 platform :ios, '7.0'
+
+link_with ['TextSecureiOS', 'TextSecureiOS Tests']
+
 pod 'RNCryptor',			'~> 2.1'
 pod 'FMDB', 				'~> 2.1'
 pod 'SBJson', 				'~> 3.2'
