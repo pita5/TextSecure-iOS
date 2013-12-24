@@ -119,8 +119,8 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 -(BOOL) storePrekeys:(NSArray*)prekeyArray {
+  __block BOOL updateSuccess = NO;
   for(ECKeyPair* keyPair in prekeyArray) {
-    __block BOOL updateSuccess = NO;
     [self->dbQueue inDatabase:^(FMDatabase *db) {
       if ([db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]], [keyPair publicKey], [keyPair privateKey],[NSNumber numberWithInt:0]]) {
         updateSuccess = YES;
@@ -131,11 +131,14 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
       //@throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write prekey" userInfo:nil];
     }
   }
-  return YES;
+  return updateSuccess;
 }
 
 -(BOOL) storeIdentityKey:(ECKeyPair*)identityKey {
   __block BOOL updateSuccess = NO;
+  if(!identityKey) {
+    return updateSuccess;
+  }
   [self->dbQueue inDatabase:^(FMDatabase *db) {
     
     if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]]) {

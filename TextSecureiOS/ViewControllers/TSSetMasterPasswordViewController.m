@@ -59,15 +59,13 @@
             }
         }
     }
-    // Generate the identity key and prekeys and store in the databse
+    // Generate the identity key and prekeys and store in the database
   
-    BOOL prekeySuccess = [encDb storePrekeys:[TSKeyManager generatePersonalPrekeys:70]];
-    BOOL identityKeySuccess =  [encDb storeIdentityKey:[TSKeyManager generateIdentityKey]];
-    if (!(prekeySuccess&&identityKeySuccess)) {
-     @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
-   }
-
-  
+    BOOL prekeyGenerationAndStorageSuccess = [encDb storePrekeys:[TSKeyManager generatePersonalPrekeys:70]];
+    BOOL identityKeyGenerationAndStorageSuccess =  [encDb storeIdentityKey:[TSKeyManager generateIdentityKey]];
+    if (!(prekeyGenerationAndStorageSuccess&&identityKeyGenerationAndStorageSuccess)) {
+      @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
+    }
   
     // Send the user's newly generated keys to the API
     // TODO: Error handling & retry if network error
