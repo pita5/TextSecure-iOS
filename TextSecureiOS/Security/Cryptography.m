@@ -41,7 +41,7 @@
 
 
 
-#pragma mark SHA1 methods
+#pragma mark SHA1
 +(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string{
   /* used by TSContactManager to send hashed/truncated contact list to server */
   NSMutableData *hashData = [NSMutableData dataWithLength:20];
@@ -51,6 +51,22 @@
   return [[truncatedData base64EncodedString] stringByReplacingOccurrencesOfString:@"=" withString:@""];
 }
 
+#pragma HMAC/SHA256
+
++(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey {
+  uint8_t ourHmac[CC_SHA256_DIGEST_LENGTH] = {0};
+  CCHmac(kCCHmacAlgSHA256,
+         [HMACKey bytes],
+         [HMACKey length],
+         [dataToHMAC bytes],
+         [dataToHMAC  length],
+         ourHmac);
+  return [NSData dataWithBytes: ourHmac length: 10];
+}
+
+
+
+#pragma mark encrypted database key methods
 +(NSData*) getEncryptedDatabaseKey:(NSData*)decryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error  {
   
   return [RNEncryptor encryptData:decryptedDatabaseKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
@@ -66,6 +82,77 @@
   else {
     return decryptedDatabaseKey;
   }
+}
+
+
+
+#pragma mark push payload encryptiong/decryption
++(NSData*) decryptPushPayload:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
+  /* AES256 CBC encrypt then mac 
+   Returns nil if hmac invalid or decryption fails
+   */
+  //verify hmac of version||encrypted data||iv
+  NSMutableData *dataToHmac = [NSMutableData data ];
+  [dataToHmac appendData:version];
+  [dataToHmac appendData:iv];
+  [dataToHmac appendData:dataToDecrypt];
+  
+  // verify hmac
+  NSData* ourHmacData = [Cryptography truncatedHMAC:dataToHmac withHMACKey:hmacKey];
+  if(![ourHmacData isEqualToData:hmac]) {
+    return nil;
+  }
+  
+  // decrypt
+  size_t bufferSize           = [dataToDecrypt length] + kCCBlockSizeAES128;
+  void* buffer                = malloc(bufferSize);
+  
+  size_t bytesDecrypted    = 0;
+  CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
+                                        [key bytes], [key length],
+                                        [iv bytes],
+                                        [dataToDecrypt bytes], [dataToDecrypt length],
+                                        buffer, bufferSize,
+                                        &bytesDecrypted);
+  if (cryptStatus == kCCSuccess) {
+    return [NSData dataWithBytesNoCopy:buffer length:bytesDecrypted];
+  }
+  
+  free(buffer);
+  return nil;
+  
+  
+}
+
+
++(NSData*)encryptPushPayload:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
+  /* AES256 CBC encrypt then mac
+   Returns nil if encryption fails
+   */
+  size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
+  void* buffer                = malloc(bufferSize);
+  
+  size_t bytesEncrypted    = 0;
+  CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
+                                        [key bytes], [key length],
+                                        [iv bytes],
+                                        [dataToEncrypt bytes], [dataToEncrypt length],
+                                        buffer, bufferSize,
+                                        &bytesEncrypted);
+  
+  if (cryptStatus == kCCSuccess){
+    NSData* encryptedData= [NSData dataWithBytesNoCopy:buffer length:bytesEncrypted];
+    //compute hmac of version||encrypted data||iv
+    NSMutableData *dataToHmac = [NSMutableData data];
+    [dataToHmac appendData:version];
+    [dataToHmac appendData:iv];
+    [dataToHmac appendData:encryptedData];
+    *hmac = [Cryptography truncatedHMAC:dataToHmac withHMACKey:hmacKey];
+    return encryptedData;
+  }
+  free(buffer);
+  return nil;
+  
 }
 
 

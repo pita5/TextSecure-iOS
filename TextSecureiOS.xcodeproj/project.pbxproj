@@ -30,7 +30,7 @@
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */; };
-		A52CE05D1862D88B00AF9E39 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.m */; };
+		A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
 		A530CB011849F55E0052B615 /* curve25519-donna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B1E47818496A9C005A5E31 /* curve25519-donna.a */; };
 		A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A530CB03184A02620052B615 /* TSRecipientPrekeyRequest.m */; };
@@ -507,7 +507,7 @@
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A5285069181A64800073CEDD /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
 		A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.pb.mm; sourceTree = "<group>"; };
-		A52CE05C1862D88B00AF9E39 /* CryptographyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptographyTests.m; sourceTree = "<group>"; };
+		A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CryptographyTests.mm; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
 		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "TextSecureiOS/Utility/NSData+Base64.m"; sourceTree = "<group>"; };
 		A530CB02184A02620052B615 /* TSRecipientPrekeyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRecipientPrekeyRequest.h; path = TextSecureiOS/Networking/Requests/TSRecipientPrekeyRequest.h; sourceTree = "<group>"; };
@@ -1001,7 +1001,7 @@
 			isa = PBXGroup;
 			children = (
 				8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */,
-				A52CE05C1862D88B00AF9E39 /* CryptographyTests.m */,
+				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
 			);
@@ -2273,7 +2273,7 @@
 			files = (
 				8C7D62D71865F898003E2B90 /* TSEncryptedDatabaseTests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
-				A52CE05D1862D88B00AF9E39 /* CryptographyTests.m in Sources */,
+				A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
