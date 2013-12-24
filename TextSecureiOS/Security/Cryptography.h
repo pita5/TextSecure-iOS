@@ -12,4 +12,6 @@
 +(NSMutableData*) generateRandomBytes:(int)numberBytes;
 +(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string;
 
++(NSData*) getEncryptedDatabaseKey:(NSData*)decryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error ;
++(NSData*) getDecryptedDatabaseKey:(NSString*)encryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error ;
 @end

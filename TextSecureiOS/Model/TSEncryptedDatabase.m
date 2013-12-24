@@ -11,14 +11,13 @@
 #import "TSEncryptedDatabaseError.h"
 #import "RNDecryptor.h"
 #import "RNEncryptor.h"
-#import "Cryptography.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
 #import "ECKeyPair.h"
 #import "FilePath.h"
 #import "NSData+Base64.h"
 #import "KeychainWrapper.h"
-
+#import "TSKeyManager.h"
 
 
 
@@ -49,7 +48,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
         
         // Erase the DB encryption key from the Keychain
-        [TSEncryptedDatabase eraseDatabaseMasterKey];
+        [TSKeyManager eraseDatabaseMasterKey];
         
         // Update the preferences
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
@@ -72,7 +71,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     [TSEncryptedDatabase databaseErase];
 
     // 2. Create the DB encryption key, the DB and the tables
-    NSData *dbMasterKey = [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword:userPassword];
+    NSData *dbMasterKey = [TSKeyManager generateDatabaseMasterKeyWithPassword:userPassword];
     if (!dbMasterKey) {
         if (error) {
             *error = [TSEncryptedDatabaseError dbCreationFailed];
@@ -111,17 +110,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // We have now have an empty DB
     SharedCryptographyDatabase = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
 
-    // 3. Generate and store the user's identity keys and prekeys
-    if ((![SharedCryptographyDatabase generateIdentityKey]) || (![SharedCryptographyDatabase generatePersonalPrekeys])) {
-        if (error) {
-            *error = [TSEncryptedDatabaseError dbCreationFailed];
-        }
-        // Cleanup
-        [TSEncryptedDatabase databaseErase];
-        return nil;
-    }
-    
-    
     // 4. Success - store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kDBWasCreatedBool];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -129,6 +117,43 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     return SharedCryptographyDatabase;
 }
 
+
+-(BOOL) storePrekeys:(NSArray*)prekeyArray {
+  for(ECKeyPair* keyPair in prekeyArray) {
+    __block BOOL updateSuccess = NO;
+    [self->dbQueue inDatabase:^(FMDatabase *db) {
+      if ([db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]], [keyPair publicKey], [keyPair privateKey],[NSNumber numberWithInt:0]]) {
+        updateSuccess = YES;
+      }
+    }];
+    if (!updateSuccess) {
+      return NO;
+      //@throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write prekey" userInfo:nil];
+    }
+  }
+  return YES;
+}
+
+-(BOOL) storeIdentityKey:(ECKeyPair*)identityKey {
+  __block BOOL updateSuccess = NO;
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    
+    if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]]) {
+      DLog(@"Error updating DB: %@", [db lastErrorMessage]);
+      return;
+    }
+    
+    if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]]) {
+      DLog(@"Error updating DB: %@", [db lastErrorMessage]);
+      return;
+    }
+    updateSuccess = YES;
+  }];
+  return updateSuccess;
+  
+  
+  
+}
 
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
     
@@ -146,7 +171,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     
     // Get the DB master key
-    NSData *key = [TSEncryptedDatabase getDatabaseMasterKeyWithPassword:userPassword error:error];
+    NSData *key = [TSKeyManager getDatabaseMasterKeyWithPassword:userPassword error:error];
     if(key == nil) {
         return nil;
     }
@@ -223,50 +248,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
-#pragma mark Database encryption master key - private
-
-+(NSData*) generateDatabaseMasterKeyWithPassword:(NSString*) userPassword {
-    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
-    NSData *encryptedDbMasterKey = [RNEncryptor encryptData:dbMasterKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
-    if(!encryptedDbMasterKey) {
-        // TODO: Can we really recover from this ? Maybe we should throw an exception
-        //@throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not generate a master key" userInfo:nil];
-        return nil;
-    }
-    
-    if (![KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId]) {
-        // TODO: Can we really recover from this ? Maybe we should throw an exception
-        //@throw [NSException exceptionWithName:@"keychain error" reason:@"could not write DB master key to the keychain" userInfo:nil];
-        return nil;
-    }
-    return dbMasterKey;
-}
-
-
-+ (NSData*) getDatabaseMasterKeyWithPassword:(NSString*) userPassword error:(NSError**) error {
-#warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
-    NSString *encryptedDbMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
-    if (!encryptedDbMasterKey) {
-        if (error) {
-            *error = [TSEncryptedDatabaseError dbWasCorrupted];
-        }
-        return nil;
-    }
-    
-    NSData *dbMasterKey = [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedDbMasterKey] withPassword:userPassword error:error];
-    if ((!dbMasterKey) && (error) && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
-        // Wrong password; clarify the error returned
-        *error = [TSEncryptedDatabaseError invalidPassword];
-        return nil;
-    }
-    return dbMasterKey;
-}
-
-
-+(void) eraseDatabaseMasterKey {
-    [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
-}
-
 
 #pragma mark Database initialization - private
 
@@ -278,60 +259,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
--(BOOL) generateIdentityKey {
-    /*
-     An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
-     
-     In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
-     */
-    
-    // No need to the check if the DB is locked as this happens during DB creation
-    ECKeyPair *identityKey = [ECKeyPair createAndGeneratePublicPrivatePair:-1];
-    
-    __block BOOL updateSuccess = NO;
-    [self->dbQueue inDatabase:^(FMDatabase *db) {
-        
-        if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]]) {
-            DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-            return;
-        }
-        
-        if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]]) {
-            DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-            return;
-        }
-        updateSuccess = YES;
-    }];
-    return updateSuccess;
-}
-
-
--(BOOL) generatePersonalPrekeys {
-    // No need to the check if the DB is locked as this happens during DB creation
-    
-    // Key of last resort
-    ECKeyPair *keyPair = [ECKeyPair createAndGeneratePublicPrivatePair:0xFFFFFF];
-    int prekeyCounter = arc4random() % 0xFFFFFF;
-
-    // Generate and store keys
-    for(int i=0; i<numberOfPreKeys+1; i++) {
-        
-        __block BOOL updateSuccess = NO;
-        [self->dbQueue inDatabase:^(FMDatabase *db) {
-            if ([db executeUpdate:@"INSERT OR REPLACE INTO personal_prekeys (prekey_id,public_key,private_key,last_counter) VALUES (?,?,?,?)",[NSNumber numberWithInt:[keyPair prekeyId]], [keyPair publicKey], [keyPair privateKey],[NSNumber numberWithInt:0]]) {
-                updateSuccess = YES;
-            }
-        }];
-        if (!updateSuccess) {
-            return NO;
-            //@throw [NSException exceptionWithName:@"DB creation error" reason:@"could not write prekey" userInfo:nil];
-        }
-        
-        // Generate next key
-        keyPair = [ECKeyPair createAndGeneratePublicPrivatePair:++prekeyCounter];
-    }
-    return YES;
-}
 
 
 #pragma mark Database content

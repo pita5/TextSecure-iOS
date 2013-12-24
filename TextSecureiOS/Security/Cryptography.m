@@ -20,6 +20,7 @@
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #import "FilePath.h"
+#import "TSEncryptedDatabaseError.h"
 
 
 @implementation Cryptography
@@ -50,8 +51,22 @@
   return [[truncatedData base64EncodedString] stringByReplacingOccurrencesOfString:@"=" withString:@""];
 }
 
++(NSData*) getEncryptedDatabaseKey:(NSData*)decryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error  {
+  
+  return [RNEncryptor encryptData:decryptedDatabaseKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
+}
 
-
++(NSData*) getDecryptedDatabaseKey:(NSString*)encryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error  {
+  
+  NSData* decryptedDatabaseKey= [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedDatabaseKey] withPassword:userPassword error:error];
+  if ((!decryptedDatabaseKey) && (error) && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
+    *error = [TSEncryptedDatabaseError invalidPassword];
+    return nil;
+  }
+  else {
+    return decryptedDatabaseKey;
+  }
+}
 
 
 
