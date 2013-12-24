@@ -30,7 +30,7 @@
 }
 
 - (void)clearAndQuit:(id)sender{
-    [UserDefaults removeAllKeychainItems];
+    [TSKeyManager removeAllKeychainItems];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
     exit(0);
 }

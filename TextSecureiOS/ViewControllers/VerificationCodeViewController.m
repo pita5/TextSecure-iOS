@@ -8,7 +8,7 @@
 
 #import "VerificationCodeViewController.h"
 #import "TSServerCodeVerificationRequest.h"
-#import "Cryptography.h"
+#import "TSKeyManager.h"
 
 @interface VerificationCodeViewController ()
 
@@ -67,8 +67,8 @@
     
     NSString* verificationCode = [_verificationCode_part1.text stringByAppendingString:_verificationCode_part2.text];
     
-    NSString *authToken = [Cryptography generateNewAccountAuthenticationToken];
-    NSString *signalingKey = [Cryptography generateNewSignalingKeyToken];
+    NSString *authToken = [TSKeyManager generateNewAccountAuthenticationToken];
+    NSString *signalingKey = [TSKeyManager generateNewSignalingKeyToken];
     
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSServerCodeVerificationRequest alloc] initWithVerificationCode:verificationCode signalingKey:signalingKey authToken:authToken] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
@@ -83,8 +83,8 @@
                 
             case 204:
                 
-                [Cryptography storeSignalingKeyToken:signalingKey];
-                [Cryptography storeAuthenticationToken:authToken];
+                [TSKeyManager storeSignalingKeyToken:signalingKey];
+                [TSKeyManager storeAuthenticationToken:authToken];
 
                 [self performSegueWithIdentifier:@"setMasterPassword" sender:self];
                 

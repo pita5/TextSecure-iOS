@@ -7,8 +7,7 @@
 //
 
 #import "VerificationViewController.h"
-#import "Cryptography.h"
-
+#import "TSKeyManager.h"
 @interface VerificationViewController ()
 
 @end
@@ -51,7 +50,7 @@
 
 - (void) viewDidAppear:(BOOL)animated{
     // If user comes back to this page, make him re-enter all data.
-    [UserDefaults removeAllKeychainItems];
+    [TSKeyManager removeAllKeychainItems];
 }
 
 #pragma mark Phone number formatting
@@ -98,10 +97,10 @@
           
         // Now we store the phone number to which the notification has been sent and generate the appropriate keys
 
-        [Cryptography storeUsernameToken:self.selectedPhoneNumber];
+        [TSKeyManager storeUsernameToken:self.selectedPhoneNumber];
         
-        [Cryptography generateNewAccountAuthenticationToken];
-        [Cryptography generateNewSignalingKeyToken];
+        [TSKeyManager generateNewAccountAuthenticationToken];
+        [TSKeyManager generateNewSignalingKeyToken];
         
         [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
         
