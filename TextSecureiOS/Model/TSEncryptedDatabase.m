@@ -157,7 +157,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     __block BOOL initSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
-        
         if(![db setKeyWithData:key]) {
             // Supplied password was valid but the master key wasn't !?
             return;
