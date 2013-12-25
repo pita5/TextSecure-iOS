@@ -137,25 +137,29 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
   return updateSuccess;
 }
 
--(BOOL) storeIdentityKey:(ECKeyPair*)identityKey {
-  __block BOOL updateSuccess = NO;
-  if(!identityKey) {
-    return updateSuccess;
-  }
+
+-(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues {
+    __block BOOL updateSuccess = YES;
   [self->dbQueue inDatabase:^(FMDatabase *db) {
-    
-    if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]]) {
-      DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-      return;
+    for(id settingName in settingNamesAndValues) {
+      if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",settingName,[settingNamesAndValues objectForKey:settingName]]) {
+        DLog(@"Error updating DB: %@", [db lastErrorMessage]);
+        updateSuccess = NO;
+      }
     }
-    
-    if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]]) {
-      DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-      return;
-    }
-    updateSuccess = YES;
   }];
   return updateSuccess;
+}
+
+
+
+-(BOOL) storeIdentityKey:(ECKeyPair*)identityKey {
+
+  if(!identityKey) {
+    return NO;
+  }
+  NSDictionary *settings = [[NSDictionary alloc] initWithObjectsAndKeys:[identityKey privateKey],@"identity_key_private", [identityKey publicKey],@"identity_key_public",nil];
+  return [self storePersistentSettings:settings];
   
   
   
@@ -192,10 +196,12 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         }
         
         // Do a test query to make sure the DB is available
-        FMResultSet *rset = [db executeQuery:@"SELECT * FROM persistent_settings"];
+        // if this throws an error, the key was incorrect. If it succeeds and returns a numeric value, the key is correct;
+        FMResultSet *rset = [db executeQuery:@"SELECT count(*) FROM sqlite_master"];
         if (rset) {
             [rset close];
             initSuccess = YES;
+            return;
         }
     }];
     if (!initSuccess) {

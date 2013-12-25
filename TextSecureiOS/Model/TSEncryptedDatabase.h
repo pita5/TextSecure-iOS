@@ -95,6 +95,9 @@
  * @return An array of pre-keys.
  */
 -(NSArray*) getPersonalPrekeys;
+#pragma mark - settings values
+-(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
+-(BOOL) setDatabaseCreatedPersistantSetting ;
 
 
 #pragma mark - DB message functions

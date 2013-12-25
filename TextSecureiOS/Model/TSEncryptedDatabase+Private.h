@@ -19,13 +19,4 @@
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
 
-#pragma mark - DB creation helper functions
--(BOOL) generatePersonalPrekeys;
--(BOOL) generateIdentityKey;
-
-#pragma mark - DB master key functions
-+(NSData*) generateDatabaseMasterKeyWithPassword:(NSString *)userPassword;
-+(NSData*) getDatabaseMasterKeyWithPassword:(NSString *)userPassword error:(NSError **)error;
-+(void) eraseDatabaseMasterKey;
-
 @end
