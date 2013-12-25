@@ -10,7 +10,7 @@
 
 @class ECKeyPair;
 @class FMDatabaseQueue;
-
+@class TSMessage;
 @interface TSEncryptedDatabase : NSObject
 
 
@@ -95,9 +95,19 @@
  * @return An array of pre-keys.
  */
 -(NSArray*) getPersonalPrekeys;
+#pragma mark - settings values
+-(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
+-(BOOL) setDatabaseCreatedPersistantSetting ;
+
+
+#pragma mark - DB message functions
+-(void) storeMessage:(TSMessage*)message;
+-(NSArray*) getMessagesOnThread:(int) threadId;
+-(NSArray*) getThreads;
 
 -(BOOL) storePrekeys:(NSArray*)prekeyArray;
 -(BOOL) storeIdentityKey:(ECKeyPair*)identityKey;
+
 
 @end
 

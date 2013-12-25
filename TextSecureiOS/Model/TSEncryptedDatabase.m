@@ -9,14 +9,15 @@
 #import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabase+Private.h"
 #import "TSEncryptedDatabaseError.h"
-#import "RNDecryptor.h"
-#import "RNEncryptor.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
 #import "ECKeyPair.h"
 #import "FilePath.h"
 #import "NSData+Base64.h"
 #import "KeychainWrapper.h"
+#import "TSMessage.h"
+
+
 #import "TSKeyManager.h"
 
 
@@ -134,25 +135,29 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
   return updateSuccess;
 }
 
--(BOOL) storeIdentityKey:(ECKeyPair*)identityKey {
-  __block BOOL updateSuccess = NO;
-  if(!identityKey) {
-    return updateSuccess;
-  }
+
+-(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues {
+    __block BOOL updateSuccess = YES;
   [self->dbQueue inDatabase:^(FMDatabase *db) {
-    
-    if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_private",[identityKey privateKey]]) {
-      DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-      return;
+    for(id settingName in settingNamesAndValues) {
+      if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",settingName,[settingNamesAndValues objectForKey:settingName]]) {
+        DLog(@"Error updating DB: %@", [db lastErrorMessage]);
+        updateSuccess = NO;
+      }
     }
-    
-    if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",@"identity_key_public",[identityKey publicKey]]) {
-      DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-      return;
-    }
-    updateSuccess = YES;
   }];
   return updateSuccess;
+}
+
+
+
+-(BOOL) storeIdentityKey:(ECKeyPair*)identityKey {
+
+  if(!identityKey) {
+    return NO;
+  }
+  NSDictionary *settings = [[NSDictionary alloc] initWithObjectsAndKeys:[identityKey privateKey],@"identity_key_private", [identityKey publicKey],@"identity_key_public",nil];
+  return [self storePersistentSettings:settings];
   
   
   
@@ -183,17 +188,18 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     __block BOOL initSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
-        
         if(![db setKeyWithData:key]) {
             // Supplied password was valid but the master key wasn't !?
             return;
         }
         
         // Do a test query to make sure the DB is available
-        FMResultSet *rset = [db executeQuery:@"SELECT * FROM persistent_settings"];
+        // if this throws an error, the key was incorrect. If it succeeds and returns a numeric value, the key is correct;
+        FMResultSet *rset = [db executeQuery:@"SELECT count(*) FROM sqlite_master"];
         if (rset) {
             [rset close];
             initSuccess = YES;
+            return;
         }
     }];
     if (!initSuccess) {
@@ -264,8 +270,8 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 
 
-#pragma mark Database content
-
+#pragma mark - Database content
+#pragma mark - prekeys
 -(NSArray*) getPersonalPrekeys {
     
     // TODO: Error handling
@@ -286,6 +292,28 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
   }];
   return prekeyArray;
 }
+
+-(int) getLastPrekeyId {
+  __block int counter = -1;
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT prekey_id FROM personal_prekeys WHERE last_counter=\"1\""]];
+    if([rs next]){
+      counter = [rs intForColumn:@"prekey_id"];
+    }
+    [rs close];
+    
+  }];
+  return counter;
+  
+}
+
+-(void) setLastPrekeyId:(int)lastPrekeyId {
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    [db executeUpdate:@"UPDATE personal_prekeys SET last_counter=0"];
+    [db executeUpdate:[NSString stringWithFormat:@"UPDATE personal_prekeys SET last_counter=1 WHERE prekey_id=%d",lastPrekeyId]];
+  }];
+}
+
 
 
 -(ECKeyPair*) getIdentityKey {
@@ -318,6 +346,60 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
   else {
     return [[ECKeyPair alloc] initWithPublicKey:identityKeyPublic privateKey:identityKeyPrivate];
   }
+}
+
+#pragma mark - DB message methods
+-(void) storeMessage:(TSMessage*)message {
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
+#warning every message is on the same thread! also we only support one recipient
+    [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",[NSNumber numberWithInt:0],message.message,message.senderId,message.recipientId,sqlDate];
+  }];
+}
+
+-(NSArray*) getMessagesOnThread:(int) threadId {
+  NSMutableArray *messageArray = [[NSMutableArray alloc] init];
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
+    //    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
+    while([rs next]) {
+      NSString* timestamp = [rs stringForColumn:@"timestamp"];
+      NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+      [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
+      [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+      NSDate *date = [dateFormatter dateFromString:timestamp];
+      [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:[[NSArray alloc] initWithObjects:[rs stringForColumn:@"recipient_id"],nil] sentOnDate:date]];
+      
+    }
+  }];
+  return messageArray;
+  
+}
+
+
+-(NSArray*) getThreads {
+  NSMutableArray *threadArray = [[NSMutableArray alloc] init];
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+#warning modify this to work with the thread query
+    //    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
+    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
+    while([rs next]) {
+      NSString* timestamp = [rs stringForColumn:@"timestamp"];
+      NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+      [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
+      [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+      NSDate *date = [dateFormatter dateFromString:timestamp];
+      //      [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:[[NSArray alloc] initWithObjects:[rs stringForColumn:@"recipient_id"],nil] sentOnDate:date]];
+      
+    }
+  }];
+  return nil;
+  // return messageArray;
+  
 }
 
 @end

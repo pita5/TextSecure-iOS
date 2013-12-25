@@ -19,6 +19,4 @@
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
 
-
-
 @end
