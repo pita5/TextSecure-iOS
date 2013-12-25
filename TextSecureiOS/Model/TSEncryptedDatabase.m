@@ -9,8 +9,6 @@
 #import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabase+Private.h"
 #import "TSEncryptedDatabaseError.h"
-#import "RNDecryptor.h"
-#import "RNEncryptor.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
 #import "ECKeyPair.h"
