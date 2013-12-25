@@ -1030,9 +1030,9 @@
 		A51B779B17050EDB002B8E53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A515AFD9180966E30084ABA5 /* TSEncryptedDatabase.h */,
 				8C49FC0E18497E86006132F6 /* TSEncryptedDatabaseError.h */,
 				8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */,
+				A515AFD9180966E30084ABA5 /* TSEncryptedDatabase.h */,
 				A515AFDA180966E30084ABA5 /* TSEncryptedDatabase.m */,
 				8C6F78C1184530E2008A158D /* TSEncryptedDatabase+Private.h */,
 				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
