@@ -9,7 +9,7 @@
 #import "ComposeMessageViewController.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
-#import "EncryptedDatabase.h"
+#import "TSEncryptedDatabase.h"
 #import "TSMessage.h"
 
 @interface ComposeMessageViewController (Private)
@@ -158,7 +158,7 @@
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
     return [[cryptoDB getMessagesOnThread:self.threadID] count];
 
 }
@@ -203,13 +203,13 @@
 }
 
 -(void)addMessage:(TSMessage*)message {
-  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
   [cryptoDB storeMessage:message];
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
   NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
 
   
@@ -249,14 +249,14 @@
 #pragma mark - Messages view data source
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
     NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
     return [[dbMessages objectAtIndex:indexPath.row] message];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
     NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
     return [[dbMessages objectAtIndex:indexPath.row]  messageTimestamp];
 }
