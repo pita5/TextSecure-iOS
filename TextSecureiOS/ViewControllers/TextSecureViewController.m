@@ -7,7 +7,7 @@
 //
 
 #import "TextSecureViewController.h"
-#import "UserDefaults.h"
+#import "TSKeyManager.h"
 #import "Cryptography.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "NSString+Conversion.h"
@@ -62,7 +62,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     self.navigationController.navigationBarHidden = NO;
-    if(![UserDefaults hasVerifiedPhoneNumber]){
+    if(![TSKeyManager hasVerifiedPhoneNumber]){
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
     }
     

@@ -15,8 +15,11 @@ CFLAGS="-Wmissing-prototypes -Wdeclaration-after-statement -O2 -Wall"
 ARCHS="i386 armv7 armv7s"
 DEVELOPER=`xcode-select -print-path`
 
+mkdir -p "${CURRENTPATH}/src"
 mkdir -p "${CURRENTPATH}/lib"
 
+cd "${CURRENTPATH}/src/"
+git clone https://github.com/agl/curve25519-donna.git
 cd "${CURRENTPATH}/src/curve25519-donna/"
 
 for ARCH in ${ARCHS}

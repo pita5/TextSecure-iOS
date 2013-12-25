@@ -96,5 +96,8 @@
  */
 -(NSArray*) getPersonalPrekeys;
 
+-(BOOL) storePrekeys:(NSArray*)prekeyArray;
+-(BOOL) storeIdentityKey:(ECKeyPair*)identityKey;
+
 @end
 

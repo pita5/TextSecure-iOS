@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Cryptography.h"
-#import "UserDefaults.h"
+#import "TSKeyManager.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
 #import "TSEncryptedDatabase.h"
@@ -29,7 +29,7 @@
     if (![[NSUserDefaults standardUserDefaults] boolForKey:firstLaunchKey]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:firstLaunchKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [UserDefaults removeAllKeychainItems];
+        [TSKeyManager removeAllKeychainItems];
         DLog(@"First Launch");
       
     }
@@ -49,7 +49,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([UserDefaults hasVerifiedPhoneNumber] && [TSEncryptedDatabase databaseWasCreated]) {
+	if([TSKeyManager hasVerifiedPhoneNumber] && [TSEncryptedDatabase databaseWasCreated]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
      UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];

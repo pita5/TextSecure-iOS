@@ -9,7 +9,7 @@
 
 #import "TSNetworkManager.h"
 #import "TSRequest.h"
-#import "Cryptography.h"
+#import "TSKeyManager.h"
 #import "TSServerCodeVerificationRequest.h"
 
 @implementation TSNetworkManager
@@ -50,7 +50,7 @@
         
         // Take out the Basic Auth Params
         
-        [operationManager.requestSerializer setAuthorizationHeaderFieldWithUsername:[Cryptography getUsernameToken] password:[request.parameters objectForKey:@"AuthKey"]];
+        [operationManager.requestSerializer setAuthorizationHeaderFieldWithUsername:[TSKeyManager getUsernameToken] password:[request.parameters objectForKey:@"AuthKey"]];
         
         [request.parameters removeObjectForKey:@"AuthKey"];
         
@@ -59,7 +59,7 @@
         // For all other equests, we do add an authorization header
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
         
-        [operationManager.requestSerializer setAuthorizationHeaderFieldWithUsername:[Cryptography getUsernameToken] password:[Cryptography getAuthenticationToken]];
+        [operationManager.requestSerializer setAuthorizationHeaderFieldWithUsername:[TSKeyManager getUsernameToken] password:[TSKeyManager getAuthenticationToken]];
                 
         if ([request.HTTPMethod isEqualToString:@"GET"]) {
             [operationManager GET:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];

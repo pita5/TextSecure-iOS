@@ -16,7 +16,7 @@
     #import "Constants.h"
     #import "NSString+escape.h"
     #import "TSNetworkManager.h"
-    #import "UserDefaults.h"
+    #import "TSKeyManager.h"
     #define _AFNETWORKING_PIN_SSL_CERTIFICATES_
 
 #endif

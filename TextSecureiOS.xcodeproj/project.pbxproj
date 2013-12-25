@@ -24,14 +24,13 @@
 		A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */; };
 		A5169D20170FEB1900A2CE9E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D19170FEB1900A2CE9E /* Constants.m */; };
 		A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */; };
-		A5169D22170FEB1900A2CE9E /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D1D170FEB1900A2CE9E /* UserDefaults.m */; };
 		A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */; };
 		A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */; };
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */; };
-		A52CE05D1862D88B00AF9E39 /* CryptographyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.m */; };
+		A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
 		A530CB011849F55E0052B615 /* curve25519-donna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B1E47818496A9C005A5E31 /* curve25519-donna.a */; };
 		A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A530CB03184A02620052B615 /* TSRecipientPrekeyRequest.m */; };
@@ -376,6 +375,7 @@
 		A5372A9517011A5300C6FCCF /* zh.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294817011A5200C6FCCF /* zh.png */; };
 		A5372A9617011A5300C6FCCF /* zm.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294917011A5200C6FCCF /* zm.png */; };
 		A5372A9717011A5300C6FCCF /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294A17011A5200C6FCCF /* zw.png */; };
+		A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A538A27D1869DC6500CD0A3D /* TSKeyManager.m */; };
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
@@ -495,8 +495,6 @@
 		A5169D19170FEB1900A2CE9E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Constants.m; path = Utility/Constants.m; sourceTree = "<group>"; };
 		A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Conversion.h"; path = "TextSecureiOS/Utility/NSData+Conversion.h"; sourceTree = "<group>"; };
 		A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Conversion.m"; path = "TextSecureiOS/Utility/NSData+Conversion.m"; sourceTree = "<group>"; };
-		A5169D1C170FEB1900A2CE9E /* UserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserDefaults.h; path = Utility/UserDefaults.h; sourceTree = "<group>"; };
-		A5169D1D170FEB1900A2CE9E /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserDefaults.m; path = Utility/UserDefaults.m; sourceTree = "<group>"; };
 		A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainWrapper.m; path = Security/KeychainWrapper.m; sourceTree = "<group>"; };
 		A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ECKeyPair.m; path = Security/ECKeyPair.m; sourceTree = "<group>"; };
 		A5169D26170FEB8F00A2CE9E /* Cryptography.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Cryptography.m; path = Security/Cryptography.m; sourceTree = "<group>"; };
@@ -509,7 +507,7 @@
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A5285069181A64800073CEDD /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
 		A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.pb.mm; sourceTree = "<group>"; };
-		A52CE05C1862D88B00AF9E39 /* CryptographyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptographyTests.m; sourceTree = "<group>"; };
+		A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CryptographyTests.mm; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
 		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "TextSecureiOS/Utility/NSData+Base64.m"; sourceTree = "<group>"; };
 		A530CB02184A02620052B615 /* TSRecipientPrekeyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRecipientPrekeyRequest.h; path = TextSecureiOS/Networking/Requests/TSRecipientPrekeyRequest.h; sourceTree = "<group>"; };
@@ -858,6 +856,8 @@
 		A537294817011A5200C6FCCF /* zh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zh.png; sourceTree = "<group>"; };
 		A537294917011A5200C6FCCF /* zm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zm.png; sourceTree = "<group>"; };
 		A537294A17011A5200C6FCCF /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zw.png; sourceTree = "<group>"; };
+		A538A27C1869DC6500CD0A3D /* TSKeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSKeyManager.h; path = Security/TSKeyManager.h; sourceTree = "<group>"; };
+		A538A27D1869DC6500CD0A3D /* TSKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSKeyManager.m; path = Security/TSKeyManager.m; sourceTree = "<group>"; };
 		A54188821862D95A007FB1DA /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		A568910017E2F37000C360A1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1001,7 +1001,7 @@
 			isa = PBXGroup;
 			children = (
 				8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */,
-				A52CE05C1862D88B00AF9E39 /* CryptographyTests.m */,
+				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
 			);
@@ -1022,9 +1022,9 @@
 			isa = PBXGroup;
 			children = (
 				A515AFD9180966E30084ABA5 /* TSEncryptedDatabase.h */,
+				A515AFDA180966E30084ABA5 /* TSEncryptedDatabase.m */,
 				8C49FC0E18497E86006132F6 /* TSEncryptedDatabaseError.h */,
 				8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */,
-				A515AFDA180966E30084ABA5 /* TSEncryptedDatabase.m */,
 				8C6F78C1184530E2008A158D /* TSEncryptedDatabase+Private.h */,
 			);
 			name = Model;
@@ -1081,8 +1081,6 @@
 		A53718BB16FF95DF00C6FCCF /* TextSecureiOS */ = {
 			isa = PBXGroup;
 			children = (
-				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
-				B661DDBC184A583A00E369A8 /* TSMessagesManager.m */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
@@ -1480,6 +1478,8 @@
 		A5F15AA117029BB400856385 /* Security */ = {
 			isa = PBXGroup;
 			children = (
+				A538A27C1869DC6500CD0A3D /* TSKeyManager.h */,
+				A538A27D1869DC6500CD0A3D /* TSKeyManager.m */,
 				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,
 				A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */,
 				A5169D28170FEB8F00A2CE9E /* ECKeyPair.h */,
@@ -1517,8 +1517,6 @@
 				A5169D15170FEB1900A2CE9E /* FilePath.m */,
 				A5169D18170FEB1900A2CE9E /* Constants.h */,
 				A5169D19170FEB1900A2CE9E /* Constants.m */,
-				A5169D1C170FEB1900A2CE9E /* UserDefaults.h */,
-				A5169D1D170FEB1900A2CE9E /* UserDefaults.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -1534,6 +1532,8 @@
 		B613B4D41815CEA900755184 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
+				B661DDBC184A583A00E369A8 /* TSMessagesManager.m */,
 				B635B38F182181E1003CE732 /* ComposeMessageViewController.h */,
 				B635B390182181E1003CE732 /* ComposeMessageViewController.m */,
 				B635B391182181E1003CE732 /* Modified-VCs */,
@@ -2273,7 +2273,7 @@
 			files = (
 				8C7D62D71865F898003E2B90 /* TSEncryptedDatabaseTests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
-				A52CE05D1862D88B00AF9E39 /* CryptographyTests.m in Sources */,
+				A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2295,6 +2295,7 @@
 				B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
+				A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */,
 				A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */,
 				B635B3CD182181E1003CE732 /* JSMessagesViewController.m in Sources */,
 				B635B3CB182181E1003CE732 /* JSMessageInputView.m in Sources */,
@@ -2323,7 +2324,6 @@
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				B635B3C9182181E1003CE732 /* JSBubbleView.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
-				A5169D22170FEB1900A2CE9E /* UserDefaults.m in Sources */,
 				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
 				8C49FC1018497E86006132F6 /* TSEncryptedDatabaseError.m in Sources */,

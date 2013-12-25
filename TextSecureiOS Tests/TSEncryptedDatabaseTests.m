@@ -19,7 +19,7 @@
 
 static NSString *dbPw = @"1234test";
 
-
+#if 0
 @interface TSEncryptedDatabaseTests : XCTestCase
 
 @end
@@ -217,3 +217,4 @@ static NSString *dbPw = @"1234test";
 
 
 @end
+#endif
