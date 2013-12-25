@@ -9,6 +9,8 @@
 #import "ComposeMessageViewController.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
+#import "EncryptedDatabase.h"
+#import "TSMessage.h"
 
 @interface ComposeMessageViewController (Private)
 - (void)resizeViews;
@@ -23,11 +25,12 @@
 
 - (id) initWithConversationID:(TSContact*)contact{
     self = [super initWithNibName:nil bundle:nil];
-    self.messages = [NSMutableArray array];
-    self.timestamps = [NSMutableArray array];
     self.title = contact.name;
     self.contact = contact;
-    
+#warning always threadid of 0, later this will be an object
+
+    self.threadID = 0;
+  
     return self;
 }
 
@@ -74,9 +77,7 @@
         [_tokenFieldView becomeFirstResponder];
     }];
     
-    self.messages = [NSMutableArray array];
-    self.timestamps = [NSMutableArray array];
-    
+  
     UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
@@ -157,7 +158,9 @@
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.messages.count;
+    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    return [[cryptoDB getMessagesOnThread:self.threadID] count];
+
 }
 
 #pragma mark - Messages view delegate
@@ -172,18 +175,15 @@
         _tokenFieldView = nil;
     }
     
-    [self.messages addObject:text];
-    
-    [self.timestamps addObject:[NSDate date]];
-    
-    if((self.messages.count - 1) % 2) {
-        [JSMessageSoundEffect playMessageSentSound];
-    }
-    else {
-        [JSMessageSoundEffect playMessageReceivedSound];
-    }
 
+
+    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredId, nil] sentOnDate:[NSDate date]];
+    [self messageSent:message];
+#warning remove this dummy reply
+    TSMessage *reply = [[TSMessage alloc] initWithMessage:@"why do you feel that way?" sender:@"elisa" recipients:[[NSArray alloc] initWithObjects:@"me", nil] sentOnDate:[NSDate date]];
+    [self messageRecieved:reply];
   
+
 
 
     [self finishSend];
@@ -191,10 +191,34 @@
 
 
 
+-(void) messageSent:(TSMessage*) message {
+  [JSMessageSoundEffect playMessageSentSound];
+  [self addMessage:message];
+}
+
+-(void) messageRecieved:(TSMessage*) message {
+  [JSMessageSoundEffect playMessageReceivedSound];
+  [self addMessage:message];
+
+}
+
+-(void)addMessage:(TSMessage*)message {
+  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  [cryptoDB storeMessage:message];
+}
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return (indexPath.row % 2) ? JSBubbleMessageTypeIncoming : JSBubbleMessageTypeOutgoing;
+  EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+  NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+
+  
+  if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
+    return JSBubbleMessageTypeOutgoing;
+  }
+   else {
+     return  JSBubbleMessageTypeIncoming;
+   }
 }
 
 - (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -225,12 +249,16 @@
 #pragma mark - Messages view data source
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.messages objectAtIndex:indexPath.row];
+    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+    return [[dbMessages objectAtIndex:indexPath.row] message];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.timestamps objectAtIndex:indexPath.row];
+    EncryptedDatabase *cryptoDB = [EncryptedDatabase database];
+    NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+    return [[dbMessages objectAtIndex:indexPath.row]  messageTimestamp];
 }
 
 - (UIImage *)avatarImageForIncomingMessage{
