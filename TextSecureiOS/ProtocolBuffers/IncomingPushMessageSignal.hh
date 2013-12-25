@@ -11,10 +11,12 @@
 #import <Foundation/Foundation.h>
 #import "IncomingPushMessageSignal.pb.hh"
 
-@interface IncomingPushMessageSignal : NSObject {
-  textsecure::IncomingPushMessageSignal *incomingPushMessage;
-}
+@interface IncomingPushMessageSignal : NSObject
 + (NSData *)getDataForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessage;
 + (textsecure::IncomingPushMessageSignal *)getIncomingPushMessageSignalForData:(NSData *)data;
-+ (void)prettyPrint:(textsecure::IncomingPushMessageSignal *)incomingPushMessage;
++ (textsecure::PushMessageContent *)getPushMessageContentForData:(NSData *)data;
++ (NSString*)prettyPrint:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
++ (NSString*)prettyPrintPushMessageContent:(textsecure::PushMessageContent *)pushMessageContent;
++ (NSData *)createSerializedPushMessageContent:(NSString*) message withAttachments:(NSArray*) attachments;
++ (NSString*) getMessageBody:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
 @end

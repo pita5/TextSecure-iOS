@@ -23,7 +23,6 @@ sudo gem update
 
 3) **Temporary** - Building Curve25519-donna manually. This step should be removed soon
 
-- Clone the [git repository](https://github.com/agl/curve25519-donna.git) into `Libraries/src/`
 - Run the bash script called `build-libcurve25519.sh`  from within `Libraries/`. This build should be quick, no coffee for you.
 
 

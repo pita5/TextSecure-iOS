@@ -7,7 +7,7 @@
 //
 
 #import "TSRequest.h"
-#import "Cryptography.h"
+#import "TSKeyManager.h"
 
 @implementation TSRequest
 
@@ -30,7 +30,7 @@
 }
 
 - (void) makeAuthenticatedRequest{
-    [self.parameters addEntriesFromDictionary:@{@"Authorization":[Cryptography getAuthorizationToken]}];
+    [self.parameters addEntriesFromDictionary:@{@"Authorization":[TSKeyManager getAuthorizationToken]}];
 }
 
 @end

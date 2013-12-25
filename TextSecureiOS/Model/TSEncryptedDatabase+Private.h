@@ -12,13 +12,13 @@
 // Internal constants exposed for unit testing
 #define kDBWasCreatedBool @"DBWasCreated"
 #define databaseFileName @"cryptography.db"
-#define numberOfPreKeys 70
 
 
 @interface TSEncryptedDatabase(Private)
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
+<<<<<<< HEAD
 #pragma mark - DB creation helper functions
 -(BOOL) generatePersonalPrekeys;
 -(BOOL) generateIdentityKey;
@@ -28,6 +28,9 @@
 +(NSData*) getDatabaseMasterKeyWithPassword:(NSString *)userPassword error:(NSError **)error;
 +(void) eraseDatabaseMasterKey;
 
+=======
+
+>>>>>>> 6de8c85ebe36d78587114bb41810fdaddcb10da3
 
 
 @end

@@ -102,5 +102,9 @@
 -(NSArray*) getMessagesOnThread:(int) threadId;
 -(NSArray*) getThreads;
 
+-(BOOL) storePrekeys:(NSArray*)prekeyArray;
+-(BOOL) storeIdentityKey:(ECKeyPair*)identityKey;
+
+
 @end
 
