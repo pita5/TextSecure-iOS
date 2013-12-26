@@ -10,11 +10,11 @@
 #import "TSContact.h"
 @implementation TSSubmitMessageRequest
 
--(TSRequest*) initWithRecipient:(TSContact*) contact message:(NSString*) messageBody {
+-(TSRequest*) initWithRecipient:(NSString*) contactRegisteredID message:(NSString*) messageBody {
   NSMutableDictionary *messageDictionary = [[NSMutableDictionary alloc]
                                             initWithObjects:[[NSArray alloc]
                                                              initWithObjects:[NSNumber numberWithInt:0],
-                                                             [contact registeredID],
+                                                             contactRegisteredID,
                                                              messageBody,
                                                              [NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]],
                                                              nil]

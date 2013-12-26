@@ -9,5 +9,5 @@
 #import "TSRequest.h"
 @class TSContact;
 @interface TSSubmitMessageRequest : TSRequest
--(TSRequest*) initWithRecipient:(TSContact*) contact message:(NSString*) messageBody ;
+-(TSRequest*) initWithRecipient:(NSString*) contactRegisteredID message:(NSString*) messageBody;
 @end

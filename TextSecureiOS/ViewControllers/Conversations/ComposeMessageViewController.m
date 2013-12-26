@@ -7,6 +7,7 @@
 //
 
 #import "ComposeMessageViewController.h"
+#import "TSMessagesManager.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
 #import "TSEncryptedDatabase.h"
@@ -181,10 +182,8 @@
 
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
     [self messageSent:message];
-#warning remove this dummy reply
-    TSMessage *reply = [[TSMessage alloc] initWithMessage:@"why do you feel that way?" sender:@"elisa" recipients:[[NSArray alloc] initWithObjects:@"me", nil] sentOnDate:[NSDate date]];
-    [self messageRecieved:reply];
-  
+    [[TSMessagesManager sharedManager] sendMessage:message];
+
 
 
 

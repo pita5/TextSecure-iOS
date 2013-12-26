@@ -11,9 +11,10 @@
 
 
 #import <Foundation/Foundation.h>
-
+@class TSMessage;
 @interface TSMessagesManager : NSObject
 + (id)sharedManager;
 
 - (void) processPushNotification:(NSDictionary*)pushDict;
+-(void) sendMessage:(TSMessage*) message;
 @end

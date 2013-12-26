@@ -14,6 +14,7 @@
 #import "TSMessagesManager.h"
 #import "TSKeyManager.h"
 #import "Cryptography.h"
+#import "TSMessage.h"
 
 @implementation TSMessagesManager
 
@@ -28,7 +29,6 @@
 
 - (id)init {
     if (self = [super init]) {
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMessage:) name:@"SendMessage" object:nil];
         
     }
     return self;
@@ -66,13 +66,12 @@
 }
 
 
--(void) sendMessage:(NSNotification*)notification {
-  TSContact* contact = [[notification userInfo] objectForKey:@"contact"];
-  NSString *message = [[notification userInfo] objectForKey:@"message"];
-  NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message withAttachments:nil] base64Encoding];
+-(void) sendMessage:(TSMessage*)message {
+
+  NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
   //Tests deserialization
   //NSString* deserializedMessage = [IncomingPushMessageSignal prettyPrintPushMessageContent:[IncomingPushMessageSignal getPushMessageContentForData:[NSData dataFromBase64String:serializedMessage]]];
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:contact message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {
       case 200:
