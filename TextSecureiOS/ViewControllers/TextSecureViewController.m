@@ -40,8 +40,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     
     self.navigationItem.leftBarButtonItem = settingsButton;
     
-    UIBarButtonItem *create = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(composeMessage)];
-    self.navigationItem.rightBarButtonItem = create;
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
+    self.navigationItem.rightBarButtonItem = composeButton;
+    
     
     self.messages = @[
                       @{kThreadTitleKey:@"Clément Duval", kThreadDateKey:@"26/12/13", kThreadMessageKey: @"Theft exists only through the exploitation of man by man... when Society refuses you the right to exist, you must take it... the policeman arrested me in the name of the Law, I struck him in the name of Liberty", kThreadImageKey: @"avatar_duval"},
