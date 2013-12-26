@@ -12,6 +12,8 @@
 #import "NSData+Base64.h"
 #import "TSSubmitMessageRequest.h"
 #import "TSMessagesManager.h"
+#import "TSKeyManager.h"
+#import "Cryptography.h"
 
 @implementation TSMessagesManager
 
@@ -45,13 +47,13 @@
   [payload getBytes:mac range:NSMakeRange([payload length]-10, 10)];
   
   
-  NSData* signalingKey = [NSData dataFromBase64String:[Cryptography getSignalingKeyToken]];
-  NSLog(@"signaling key %@",[Cryptography getSignalingKeyToken]);
+  NSData* signalingKey = [NSData dataFromBase64String:[TSKeyManager getSignalingKeyToken]];
+  NSLog(@"signaling key %@",[TSKeyManager getSignalingKeyToken]);
   // Actually only the first 32 bits of this are the crypto key
   NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
   NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
-  NSData* decryption=[Cryptography CC_AES256_CBC_Decryption:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withMacKey:signalingKeyHMACKeyMaterial forMac:[NSData dataWithBytes:mac length:10]];
-  
+  NSData* decryption=[Cryptography decryptPushPayload:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
+  NSLog(@"length of decryption %d",[decryption length]);
   // Now get the protocol buffer message out
   textsecure::IncomingPushMessageSignal *fullMessageInfoRecieved = [IncomingPushMessageSignal getIncomingPushMessageSignalForData:decryption];
   
