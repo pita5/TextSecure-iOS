@@ -7,6 +7,11 @@
 //
 
 #import "TSMessagesManager.h"
+#import "IncomingPushMessageSignal.hh"
+#import "TSContact.h"
+#import "NSData+Base64.h"
+#import "TSSubmitMessageRequest.h"
+#import "TSMessagesManager.h"
 
 @implementation TSMessagesManager
 
@@ -27,7 +32,7 @@
 }
 
 - (void)processPushNotification:(NSDictionary *)pushInfo{
-  NSLog(@"full message json %@",pushInfo);
+  // obviously
   NSData *payload = [NSData dataFromBase64String:[pushInfo objectForKey:@"m"]];
   unsigned char version[1];
   unsigned char iv[16];
