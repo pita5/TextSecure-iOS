@@ -15,6 +15,7 @@
 #import "TSKeyManager.h"
 #import "Cryptography.h"
 #import "TSMessage.h"
+#import "TSEncryptedDatabase.h"
 
 @implementation TSMessagesManager
 
@@ -60,7 +61,10 @@
   
   NSString *decryptedMessage = [IncomingPushMessageSignal getMessageBody:fullMessageInfoRecieved];
   NSString *decryptedMessageAndInfo = [IncomingPushMessageSignal prettyPrint:fullMessageInfoRecieved];
-  UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"decrypted message" message:decryptedMessageAndInfo delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+  TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
+  [cryptoDB storeMessage:[IncomingPushMessageSignal getTSMessage:fullMessageInfoRecieved]];
+  
+  UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
   [pushAlert show];
 #warning we need to handle this push!, the UI will need to select the appropriate message view
 }

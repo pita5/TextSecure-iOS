@@ -7,7 +7,7 @@
 //
 
 #import "IncomingPushMessageSignal.hh"
-
+#import "TSMessage.h"
 
 @implementation IncomingPushMessageSignal
 
@@ -95,6 +95,20 @@
   return  body;
 #warning doesn't handle attachments yet
   
+}
+
++(TSMessage*)getTSMessage:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal {
+  const uint32_t cppType = incomingPushMessageSignal->type();
+  const std::string cppSource = incomingPushMessageSignal->source();
+  const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
+  /* testing conversion to objective c objects */
+  NSNumber* type = [NSNumber numberWithInteger:cppType];
+  NSString* source = [NSString stringWithCString:cppSource.c_str() encoding:NSASCIIStringEncoding];
+  NSNumber* timestamp = [NSNumber numberWithInteger:cppTimestamp];
+  
+  NSString* message = [IncomingPushMessageSignal getMessageBody:incomingPushMessageSignal];
+  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:source, nil] sentOnDate:[[NSDate alloc] initWithTimeIntervalSince1970:[timestamp doubleValue]]];
+  return tsMessage;
 }
 
 @end

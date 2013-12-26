@@ -86,6 +86,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     __block BOOL dbInitSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
+#warning remove this ifdef, just for dev
 #ifndef UNENCRYPTED_LOCAL_STORAGE
         if(![db setKeyWithData:dbMasterKey]) {
             return;
@@ -201,6 +202,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
   
     [dbQueue inDatabase:^(FMDatabase *db) {
+#warning remove this ifdef, just for dev
 #ifndef UNENCRYPTED_LOCAL_STORAGE
         if(![db setKeyWithData:key]) {
             // Supplied password was valid but the master key wasn't !?
