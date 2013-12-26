@@ -193,6 +193,7 @@
 
 
 
+
 -(void) messageSent:(TSMessage*) message {
   [JSMessageSoundEffect playMessageSentSound];
   [self addMessage:message];

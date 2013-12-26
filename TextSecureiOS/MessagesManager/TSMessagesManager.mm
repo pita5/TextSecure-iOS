@@ -28,6 +28,7 @@
 
 - (id)init {
     if (self = [super init]) {
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMessage:) name:@"SendMessage" object:nil];
         
     }
     return self;
@@ -64,8 +65,34 @@
 #warning we need to handle this push!, the UI will need to select the appropriate message view
 }
 
-- (void)dealloc {
 
+-(void) sendMessage:(NSNotification*)notification {
+  TSContact* contact = [[notification userInfo] objectForKey:@"contact"];
+  NSString *message = [[notification userInfo] objectForKey:@"message"];
+  NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message withAttachments:nil] base64Encoding];
+  //Tests deserialization
+  //NSString* deserializedMessage = [IncomingPushMessageSignal prettyPrintPushMessageContent:[IncomingPushMessageSignal getPushMessageContentForData:[NSData dataFromBase64String:serializedMessage]]];
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:contact message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    switch (operation.response.statusCode) {
+      case 200:
+        DLog(@"we have some success information %@",responseObject);
+        // So let's encrypt a message using this
+        break;
+        
+      default:
+        DLog(@"error sending message");
+#warning Add error handling if not able to get contacts prekey
+        break;
+    }
+  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning Add error handling if not able to send the token
+    DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
+    
+    
+  }];
+  
+  
 }
 
 @end
