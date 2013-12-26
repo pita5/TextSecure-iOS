@@ -11,6 +11,7 @@
 @class ECKeyPair;
 @class FMDatabaseQueue;
 @class TSMessage;
+@class TSContact;
 @interface TSEncryptedDatabase : NSObject
 
 
@@ -104,9 +105,13 @@
 -(void) storeMessage:(TSMessage*)message;
 -(NSArray*) getMessagesOnThread:(int) threadId;
 -(NSArray*) getThreads;
+-(void)storeTSContact:(TSContact*)contact;
+
 
 -(BOOL) storePrekeys:(NSArray*)prekeyArray;
 -(BOOL) storeIdentityKey:(ECKeyPair*)identityKey;
+
+
 
 
 @end

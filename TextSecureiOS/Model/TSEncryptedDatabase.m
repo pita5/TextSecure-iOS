@@ -16,6 +16,8 @@
 #import "NSData+Base64.h"
 #import "KeychainWrapper.h"
 #import "TSMessage.h"
+#import "TSContact.h"
+#import "TSThread.h"
 
 
 #import "TSKeyManager.h"
@@ -84,7 +86,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     __block BOOL dbInitSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
     [dbQueue inDatabase:^(FMDatabase *db) {
-#ifdef UNENCRYPTED_LOCAL_STORAGE
+#ifndef UNENCRYPTED_LOCAL_STORAGE
         if(![db setKeyWithData:dbMasterKey]) {
             return;
         }
@@ -96,6 +98,15 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         if (![db executeUpdate:@"CREATE TABLE personal_prekeys (prekey_id INTEGER UNIQUE,public_key TEXT,private_key TEXT, last_counter INTEGER)"]){
             return;
         }
+#warning we will want a subtler format than this, prototype message db format
+      if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id INTEGER,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE)"]) {
+        return;
+      }
+      if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_phone_number TEXT,relay TEXT, useraddressbookid INTEGER, identitykey TEXT, identityverified INTEGER, supports_sms INTEGER, next_key TEXT)"]){
+        return;
+      }
+
+      
         dbInitSuccess = YES;
     }
      ];
@@ -188,8 +199,9 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     // Try to open the DB
     __block BOOL initSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
+  
     [dbQueue inDatabase:^(FMDatabase *db) {
-#ifdef UNENCRYPTED_LOCAL_STORAGE
+#ifndef UNENCRYPTED_LOCAL_STORAGE
         if(![db setKeyWithData:key]) {
             // Supplied password was valid but the master key wasn't !?
             return;
@@ -402,6 +414,45 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
   return nil;
   // return messageArray;
   
+}
+
+
+-(void)storeTSThread:(TSThread*)thread{
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    for(TSContact* contact in thread.participants) {
+      [contact save];
+    }
+  }];
+}
+
+-(void)findTSContactForPhoneNumber:(NSString*)phoneNumber{
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    
+    FMResultSet *searchIfExitInDB = [db executeQuery:@"SELECT registeredID FROM contacts WHERE registered_phone_number = :phoneNumber " withParameterDictionary:@{@"phoneNumber":phoneNumber}];
+    
+    if ([searchIfExitInDB next]) {
+      // That was found :)
+      NSLog(@"Entry %@", [searchIfExitInDB stringForColumn:@"useraddressbookid"]);
+    }
+    
+    [searchIfExitInDB close];
+  }];
+}
+
+-(void)storeTSContact:(TSContact*)contact{
+  [self->dbQueue inDatabase:^(FMDatabase *db) {
+    
+    FMResultSet *searchIfExitInDB = [db executeQuery:@"SELECT registeredID FROM contacts WHERE registered_phone_number = :phoneNumber " withParameterDictionary:@{@"phoneNumber":contact.registeredID}];
+    
+    if ([searchIfExitInDB next]) {
+      // the phone number was found, let's now update the contact
+      [db executeUpdate:@"UPDATE contacts SET relay = :relay, useraddressbookid :userABID, identitykey = :identityKey, identityverified = :identityKeyIsVerified, supports_sms = :supportsSMS, next_key = :nextKey WHERE registered_phone_number = :registeredID" withParameterDictionary:@{@"registeredID": contact.registeredID, @"relay": contact.relay, @"userABID": contact.userABID, @"identityKey": contact.identityKey, @"identityKeyIsVerified":[NSNumber numberWithInt:((contact.identityKeyIsVerified)?1:0)], @"supportsSMS":[NSNumber numberWithInt:((contact.supportsSMS)?1:0)], @"nextKey":contact.nextKey}];
+    }
+    else{
+      // the contact doesn't exist, let's create him
+      [db executeUpdate:@"REPLACE INTO contacts (:registeredID,:relay , :userABID, :identityKey, :identityKeyIsVerified, :supportsSMS, :nextKey)" withParameterDictionary:@{@"registeredID": contact.registeredID, @"relay": contact.relay, @"userABID": contact.userABID, @"identityKey": contact.identityKey, @"identityKeyIsVerified":[NSNumber numberWithInt:((contact.identityKeyIsVerified)?1:0)], @"supportsSMS":[NSNumber numberWithInt:((contact.supportsSMS)?1:0)], @"nextKey":contact.nextKey}];
+    }
+  }];
 }
 
 @end

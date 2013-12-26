@@ -26,7 +26,7 @@
 - (NSString*) concatenatedPhoneNumbers{
     NSMutableArray *phoneNumbers = [NSMutableArray array];
     for (TSContact *contact in self) {
-        [phoneNumbers addObject:contact.registeredId];
+        [phoneNumbers addObject:contact.registeredID];
     }
 
     NSArray *sortedArray = [phoneNumbers sortedArrayUsingDescriptors:

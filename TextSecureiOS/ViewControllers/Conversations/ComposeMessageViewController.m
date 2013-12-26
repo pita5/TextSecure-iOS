@@ -159,6 +159,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
+  
+  NSLog(@"messages on thread: %d",[[cryptoDB getMessagesOnThread:self.threadID] count]);
     return [[cryptoDB getMessagesOnThread:self.threadID] count];
 
 }
@@ -177,7 +179,7 @@
     
 
 
-    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredId, nil] sentOnDate:[NSDate date]];
+    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
     [self messageSent:message];
 #warning remove this dummy reply
     TSMessage *reply = [[TSMessage alloc] initWithMessage:@"why do you feel that way?" sender:@"elisa" recipients:[[NSArray alloc] initWithObjects:@"me", nil] sentOnDate:[NSDate date]];

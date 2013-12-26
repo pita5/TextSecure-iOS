@@ -13,10 +13,10 @@
 -(TSRequest*) initWithRecipient:(TSContact*) contact {
   NSString* recipientInformation;
   if([contact.relay length]){
-    recipientInformation = [NSString stringWithFormat:@"%@?%@",contact.registeredId,contact.relay];
+    recipientInformation = [NSString stringWithFormat:@"%@?%@",contact.registeredID,contact.relay];
   }
   else {
-    recipientInformation=contact.registeredId;
+    recipientInformation=contact.registeredID;
   }
   self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", textSecureKeysAPI, recipientInformation]]];
     

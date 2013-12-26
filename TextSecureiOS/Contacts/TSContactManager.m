@@ -97,7 +97,7 @@
                 TSContact *contact = [[TSContact alloc]init];
                 // The case where a phone number would be in two contacts sheets is not managed properly yet.
                 contact.userABID = [[hashedAB allKeysForObject:[contactHash objectForKey:@"token"]] objectAtIndex:0];
-                contact.registeredId = [originalAB objectForKey:[contactHash objectForKey:@"token"]];
+                contact.registeredID = [originalAB objectForKey:[contactHash objectForKey:@"token"]];
                 [contacts addObject:contact];
             }
             
