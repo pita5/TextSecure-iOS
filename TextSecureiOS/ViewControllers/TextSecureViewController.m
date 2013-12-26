@@ -15,12 +15,20 @@
 #import "TSContactManager.h"
 #import "TSContact.h"
 #import "ComposeMessageViewController.h"
+#import "TSMessageThreadCell.h"
+
+static NSString *kCellIdentifier = @"CellIdentifier";
+
+static NSString *kThreadTitleKey = @"kThreadTitleKey";
+static NSString *kThreadDateKey = @"kThreadDateKey";
+static NSString *kThreadMessageKey = @"kThreadMessageKey";
+static NSString *kThreadImageKey = @"kThreadImageKey";
 
 @implementation TextSecureViewController
-@synthesize composingMessageText;
-@synthesize messages;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationController.navigationBarHidden = NO;
 #warning we'll want to get messages from the message db here
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
@@ -34,38 +42,65 @@
     
     UIBarButtonItem *create = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(composeMessage)];
     self.navigationItem.rightBarButtonItem = create;
+    
+    self.messages = @[
+                      @{kThreadTitleKey:@"Clément Duval", kThreadDateKey:@"26/12/13", kThreadMessageKey: @"Theft exists only through the exploitation of man by man... when Society refuses you the right to exist, you must take it... the policeman arrested me in the name of the Law, I struck him in the name of Liberty", kThreadImageKey: @"avatar_duval"},
+                      @{kThreadTitleKey:@"Nestor Makhno", kThreadDateKey:@"25/12/13", kThreadMessageKey: @"need a ride?", kThreadImageKey: @"avatar_makhno"},
+                      @{kThreadTitleKey:@"Wilhelm Reich", kThreadDateKey:@"24/12/13", kThreadMessageKey: @"Only the liberation of the natural capacity for love in human beings can master their sadistic destructiveness.", kThreadImageKey: @"avatar_reich"},
+                      @{kThreadTitleKey:@"Masha Kolenkina", kThreadDateKey:@"22/12/13", kThreadMessageKey: @"Revenge, for it's own sake!", kThreadImageKey: @"avatar_kolenkina"},
+                      @{kThreadTitleKey:@"Jules Bonnot", kThreadDateKey:@"20/12/13", kThreadMessageKey: @"Regrets, yes, but no remorce...", kThreadImageKey: @"avatar_bonnot"},
+                      @{kThreadTitleKey:@"George Gurdjieff", kThreadDateKey:@"18/12/13", kThreadMessageKey: @"Levitation!", kThreadImageKey: @"avatar_gurdjieff"},
+                      ];
+    
+    [self.tableView registerClass:[TSMessageThreadCell class] forCellReuseIdentifier:kCellIdentifier];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorColor = [UIColor lightGrayColor];
 }
 
-- (void) composeMessage{
+- (void) composeMessage {
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc]initNewConversation]] animated:YES completion:nil];
 }
 
-- (void) openSettings{
+- (void) openSettings {
     [self performSegueWithIdentifier:@"openSettings" sender:self];
 }
 
 // for custom designed cells
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    // for custom designed cells
- 	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMS"];
-    UILabel *phoneNumberLabel = (UILabel *)[cell viewWithTag:1];
-    UILabel *previewLabel = (UILabel *)[cell viewWithTag:2];
-    UILabel *dateLabel = (UILabel *)[cell viewWithTag:3];
     
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm"];
-    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
-    dateLabel.text = dateString;
+ 	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:kCellIdentifier];
     
+    if ([cell isKindOfClass:[TSMessageThreadCell class]]) {
+        
+        NSDictionary *messageDict = self.messages[indexPath.row];
+        
+        TSMessageThreadCell *threadCell = (TSMessageThreadCell *)cell;
+        threadCell.titleLabel.text = messageDict[kThreadTitleKey];
+        threadCell.timestampLabel.text = messageDict[kThreadDateKey];
+        threadCell.threadPreviewLabel.text = messageDict[kThreadMessageKey];
+        
+        UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        threadCell.disclosureImageView.image = disclosureIndicatorImage;
+        
+        NSString *imageName = messageDict[kThreadImageKey];
+        threadCell.threadImageView.image = [UIImage imageNamed:imageName];
+    }
+        
     return cell;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     self.navigationController.navigationBarHidden = NO;
     if(![TSKeyManager hasVerifiedPhoneNumber]){
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
     }
     
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 74.0f;
 }
 
 -(void) reloadModel:(NSNotification*)notification {
@@ -86,21 +121,6 @@
         self.composingMessagePhoneNumber = nil;
     }
 }
-
-
-
-
-
-/* for default cells
- - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
- // for default cells
- UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMSDefault"];
- Message* message = [self.messages objectAtIndex:indexPath.row];
- cell.textLabel.text = [message.destinations objectAtIndex:0];
- cell.detailTextLabel.text = message.text;
- return cell;
- }
- */
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView  editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if(self.editing == NO || !indexPath) {
