@@ -18,5 +18,9 @@
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
+// DB master key functions
++(NSData*) generateDatabaseMasterKeyWithPassword:(NSString *)userPassword;
++(NSData*) getDatabaseMasterKeyWithPassword:(NSString *)userPassword error:(NSError **)error;
++(void) eraseDatabaseMasterKey;
 
 @end

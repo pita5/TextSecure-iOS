@@ -18,7 +18,9 @@
 #import "TSMessage.h"
 #import "TSContact.h"
 #import "TSThread.h"
-
+#import "RNEncryptor.h"
+#import "RNDecryptor.h"
+#import "Cryptography.h"
 
 #import "TSKeyManager.h"
 #warning remove this, just for dev
@@ -52,7 +54,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         [[NSFileManager defaultManager] removeItemAtPath:[FilePath pathInDocumentsDirectory:databaseFileName] error:nil];
         
         // Erase the DB encryption key from the Keychain
-        [TSKeyManager eraseDatabaseMasterKey];
+        [TSEncryptedDatabase eraseDatabaseMasterKey];
         
         // Update the preferences
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kDBWasCreatedBool];
@@ -75,7 +77,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     [TSEncryptedDatabase databaseErase];
 
     // 2. Create the DB encryption key, the DB and the tables
-    NSData *dbMasterKey = [TSKeyManager generateDatabaseMasterKeyWithPassword:userPassword];
+    NSData *dbMasterKey = [TSEncryptedDatabase generateDatabaseMasterKeyWithPassword:userPassword];
     if (!dbMasterKey) {
         if (error) {
             *error = [TSEncryptedDatabaseError dbCreationFailed];
@@ -193,7 +195,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }
     
     // Get the DB master key
-    NSData *key = [TSKeyManager getDatabaseMasterKeyWithPassword:userPassword error:error];
+    NSData *key = [TSEncryptedDatabase getDatabaseMasterKeyWithPassword:userPassword error:error];
     if(key == nil) {
         return nil;
     }
@@ -458,6 +460,51 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
       [db executeUpdate:@"REPLACE INTO contacts (:registeredID,:relay , :userABID, :identityKey, :identityKeyIsVerified, :supportsSMS, :nextKey)" withParameterDictionary:@{@"registeredID": contact.registeredID, @"relay": contact.relay, @"userABID": contact.userABID, @"identityKey": contact.identityKey, @"identityKeyIsVerified":[NSNumber numberWithInt:((contact.identityKeyIsVerified)?1:0)], @"supportsSMS":[NSNumber numberWithInt:((contact.supportsSMS)?1:0)], @"nextKey":contact.nextKey}];
     }
   }];
+}
+
+
+#pragma mark Database encryption master key - private
+
++(NSData*) generateDatabaseMasterKeyWithPassword:(NSString*) userPassword {
+    NSData *dbMasterKey = [Cryptography generateRandomBytes:36];
+    NSData *encryptedDbMasterKey = [RNEncryptor encryptData:dbMasterKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
+    if(!encryptedDbMasterKey) {
+        // TODO: Can we really recover from this ? Maybe we should throw an exception
+        //@throw [NSException exceptionWithName:@"DB creation failed" reason:@"could not generate a master key" userInfo:nil];
+        return nil;
+    }
+    
+    if (![KeychainWrapper createKeychainValue:[encryptedDbMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId]) {
+        // TODO: Can we really recover from this ? Maybe we should throw an exception
+        //@throw [NSException exceptionWithName:@"keychain error" reason:@"could not write DB master key to the keychain" userInfo:nil];
+        return nil;
+    }
+    return dbMasterKey;
+}
+
+
++ (NSData*) getDatabaseMasterKeyWithPassword:(NSString*) userPassword error:(NSError**) error {
+#warning TODO: verify the settings of RNCryptor to assert that what is going on in encryption/decryption is exactly what we want
+    NSString *encryptedDbMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
+    if (!encryptedDbMasterKey) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError dbWasCorrupted];
+        }
+        return nil;
+    }
+    
+    NSData *dbMasterKey = [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedDbMasterKey] withPassword:userPassword error:error];
+    if ((!dbMasterKey) && (error) && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
+        // Wrong password; clarify the error returned
+        *error = [TSEncryptedDatabaseError invalidPassword];
+        return nil;
+    }
+    return dbMasterKey;
+}
+
+
++(void) eraseDatabaseMasterKey {
+    [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
 }
 
 @end
