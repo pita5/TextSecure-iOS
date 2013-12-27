@@ -71,10 +71,15 @@
         if (![TSEncryptedDatabase databaseUnlockWithPassword:password error:&error]) {
             if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
                 switch ([error code]) {
-                    case InvalidPassword:
+                  case InvalidPassword: {
                         // TODO: Proper error handling
-                        @throw [NSException exceptionWithName:@"Wrong password" reason:[error localizedDescription] userInfo:nil];
+#warning we won't want to allow indefinite password attempts
+                        UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password incorrect" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                        passwordDialogue.alertViewStyle = UIAlertViewStyleSecureTextInput;
+                    
+                        [passwordDialogue show];
                         break;
+                    }
                     case NoDbAvailable:
                         // TODO: Proper error handling
                         @throw [NSException exceptionWithName:@"No DB available; create one first" reason:[error localizedDescription] userInfo:nil];
