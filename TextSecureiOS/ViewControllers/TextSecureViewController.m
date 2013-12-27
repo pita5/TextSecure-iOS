@@ -14,7 +14,9 @@
 #import "TSSettingsViewController.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
+#import "TSMessage.h"
 #import "ComposeMessageViewController.h"
+#import "TSEncryptedDatabase.h"
 
 @implementation TextSecureViewController
 @synthesize composingMessageText;
@@ -36,6 +38,8 @@
     self.navigationItem.rightBarButtonItem = create;
 }
 
+
+
 - (void) composeMessage{
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc]initNewConversation]] animated:YES completion:nil];
 }
@@ -54,9 +58,16 @@
     
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm"];
-    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
-    dateLabel.text = dateString;
-    
+  
+  
+    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
+    TSMessage* message=[[cryptoDB getMessagesOnThread:indexPath.row] objectAtIndex:0];
+    if(message!=nil) {
+      phoneNumberLabel.text = message.senderId;
+      previewLabel.text = message.message;
+      NSString *dateString = [dateFormatter stringFromDate:message.messageTimestamp];
+      dateLabel.text = dateString;
+    }
     return cell;
 }
 
@@ -91,16 +102,6 @@
 
 
 
-/* for default cells
- - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
- // for default cells
- UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:@"TextSecureSMSDefault"];
- Message* message = [self.messages objectAtIndex:indexPath.row];
- cell.textLabel.text = [message.destinations objectAtIndex:0];
- cell.detailTextLabel.text = message.text;
- return cell;
- }
- */
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView  editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if(self.editing == NO || !indexPath) {
@@ -135,7 +136,13 @@
 	}
 }
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
-    return [self.messages count];
+  if(![TSEncryptedDatabase isLockedOrNotCreated]) {
+    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
+    return [[cryptoDB getThreads] count];
+  }
+  else {
+    return 0;
+  }
 }
 
 #pragma mark contact picker UI

@@ -18,5 +18,6 @@
 @property (nonatomic,strong) NSString* composingMessagePhoneNumber;
 @property (nonatomic,strong) NSString* composingMessageText;
 - (IBAction) Edit:(id)sender;
+-(void) appInitialSetupComplete;
 @end
 

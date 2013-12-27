@@ -52,10 +52,10 @@
 	if([TSKeyManager hasVerifiedPhoneNumber] && [TSEncryptedDatabase databaseWasCreated]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-     UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     passwordDialogue.alertViewStyle = UIAlertViewStyleSecureTextInput;
-
-    [passwordDialogue show];
+    
+    [passwordDialogue show]; 
     
 	}
 	return YES;
@@ -80,6 +80,9 @@
                         @throw [NSException exceptionWithName:@"No DB available; create one first" reason:[error localizedDescription] userInfo:nil];
                 }
             }
+        }
+        else {
+          [[NSNotificationCenter defaultCenter] postNotificationName:@"DatabaseUpdated" object:self];
         }
   }
 }

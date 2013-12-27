@@ -950,7 +950,7 @@
 		B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationCodeViewController.h; path = ViewControllers/VerificationCodeViewController.h; sourceTree = "<group>"; };
 		B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationCodeViewController.m; path = ViewControllers/VerificationCodeViewController.m; sourceTree = "<group>"; };
 		B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = gcm.textsecure.whispersystems.org.cer; path = TextSecureiOS/gcm.textsecure.whispersystems.org.cer; sourceTree = "<group>"; };
-		B661DDBB184A583A00E369A8 /* TSMessagesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessagesManager.h; path = MessagesManager/TSMessagesManager.h; sourceTree = "<group>"; };
+		B661DDBB184A583A00E369A8 /* TSMessagesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessagesManager.h; path = /Users/corbett/Dropbox/Projects/Mobile/TextSecureiOS/TextSecureiOS/MessagesManager/TSMessagesManager.h; sourceTree = "<absolute>"; };
 		B68A2290180AC32C00D93C16 /* TSRegisterForPushRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterForPushRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.h; sourceTree = "<group>"; };
 		B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterForPushRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.m; sourceTree = "<group>"; };
 		B68BFDED1809855B005CC817 /* TSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSettingsViewController.h; path = ViewControllers/TSSettingsViewController.h; sourceTree = "<group>"; };
@@ -1041,7 +1041,6 @@
 				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
 				A5145B30184AAD51007BDC73 /* TSMessage.m */,
 				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
-				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
 				B60CEE73184B4971006A8256 /* TSThread.h */,
 				B60CEE74184B4971006A8256 /* TSThread.m */,
 				B60CEE76184B4A96006A8256 /* TSParticipants.h */,
@@ -1553,6 +1552,7 @@
 			isa = PBXGroup;
 			children = (
 				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
+				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
 				B635B38F182181E1003CE732 /* ComposeMessageViewController.h */,
 				B635B390182181E1003CE732 /* ComposeMessageViewController.m */,
 				B635B391182181E1003CE732 /* Modified-VCs */,

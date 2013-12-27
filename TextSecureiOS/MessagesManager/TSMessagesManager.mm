@@ -66,7 +66,7 @@
   
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
   [pushAlert show];
-#warning we need to handle this push!, the UI will need to select the appropriate message view
+
 }
 
 

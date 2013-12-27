@@ -176,10 +176,11 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
   
 }
 
+
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
     
     // DB is already unlocked
-    if ((SharedCryptographyDatabase) && (![SharedCryptographyDatabase isLocked])) {
+    if (![TSEncryptedDatabase isLockedOrNotCreated]) {
         return SharedCryptographyDatabase;
     }
     
@@ -246,13 +247,15 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
+
+
 +(void) databaseLock {
     
     if (!SharedCryptographyDatabase) {
         @throw [NSException exceptionWithName:@"DB lock failed" reason:@"tried to lock the DB before opening/unlocking it" userInfo:nil];
     }
     
-    if ([SharedCryptographyDatabase isLocked]) {
+    if ([TSEncryptedDatabase isLockedOrNotCreated]) {
         return;
     }
     
@@ -265,7 +268,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 
--(BOOL) isLocked {
++(BOOL) isLockedOrNotCreated {
     if ((!SharedCryptographyDatabase) || (!SharedCryptographyDatabase->dbQueue) ) {
         return YES;
     }
@@ -291,7 +294,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 -(NSArray*) getPersonalPrekeys {
     
     // TODO: Error handling
-    if ([SharedCryptographyDatabase isLocked]) {
+    if ([TSEncryptedDatabase isLockedOrNotCreated]) {
         // TODO: Prompt the user for their password and call databaseUnlock first
         @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
     }
@@ -336,7 +339,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     
     // TODO: Error handling
     
-    if ([SharedCryptographyDatabase isLocked]) {
+    if ([TSEncryptedDatabase isLockedOrNotCreated]) {
         // TODO: Prompt the user for their password and call databaseUnlock first
         @throw [NSException exceptionWithName:@"DB is locked" reason:@"database must be unlocked or created prior to being able to use this method" userInfo:nil];
     }

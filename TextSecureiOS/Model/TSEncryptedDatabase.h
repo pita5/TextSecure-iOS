@@ -77,7 +77,7 @@
  *
  * @return YES if the TextSecure database is locked.
  */
--(BOOL) isLocked;
++(BOOL) isLockedOrNotCreated;
 
 
 /**
