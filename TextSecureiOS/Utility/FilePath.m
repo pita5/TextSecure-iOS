@@ -9,14 +9,12 @@
 #import "FilePath.h"
 
 @implementation FilePath
+
 + (NSString *)applicationDocumentsDirectory {
-  
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
   return basePath;
 }
-
-
 
 + (NSString*)pathInDocumentsDirectory:(NSString*) fileBasename {
   return  [NSString stringWithFormat:@"%@/%@",[FilePath applicationDocumentsDirectory],fileBasename];

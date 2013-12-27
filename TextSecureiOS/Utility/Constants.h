@@ -20,6 +20,6 @@ extern NSString* const signalingTokenStorageId;
 extern NSString* const prekeyCounterStorageId;
 extern NSString* const encryptedMasterSecretKeyStorageId;
 extern NSString* const textSecureAttachmentsAPI;
-extern double const timeOutForRequests;
+extern NSTimeInterval const timeOutForRequests;
 
 

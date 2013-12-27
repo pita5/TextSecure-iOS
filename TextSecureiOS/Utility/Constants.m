@@ -22,5 +22,5 @@ NSString* const textSecureKeysAPI = @"v1/keys";
 NSString* const textSecureDirectoryAPI= @"v1/directory";
 NSString* const textSecureAttachmentsAPI= @"v1/attachments";
 
-double const timeOutForRequests = 10;
+NSTimeInterval const timeOutForRequests = 10;
 
