@@ -36,6 +36,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ll4-Qe-OAW"/>
                     <connections>
+                        <outlet property="searchBar" destination="UIm-1x-b3n" id="xIA-QV-TdF"/>
                         <outlet property="tableView" destination="J2e-4a-z97" id="b6p-Kp-cHI"/>
                         <segue destination="QLA-c3-DBT" kind="modal" identifier="openSettings" id="QH5-tG-39l"/>
                         <segue destination="opT-L0-F9p" kind="modal" identifier="ObtainVerificationCode" id="dxJ-2H-wBi"/>
