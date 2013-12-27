@@ -229,7 +229,6 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
         // DB had already been instantiated but was locked
         SharedCryptographyDatabase->dbQueue = dbQueue;
     }
-    
     return SharedCryptographyDatabase;
 }
 

@@ -78,6 +78,9 @@
                     case NoDbAvailable:
                         // TODO: Proper error handling
                         @throw [NSException exceptionWithName:@"No DB available; create one first" reason:[error localizedDescription] userInfo:nil];
+                    default:
+                      // TODO: proper error handling
+                      @throw [NSException exceptionWithName:@"Miscelaneous DB exception" reason:[error localizedDescription] userInfo:nil];
                 }
             }
         }
