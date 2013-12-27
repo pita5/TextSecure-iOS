@@ -147,8 +147,7 @@ static NSString *dbPw = @"1234test";
     XCTAssertNil(encDb, @"database was unlocked with an invalid password");
 }
 
-#if 0
-#warning TODO: Fix this once the DB encryption works
+
 - (void)testDatabaseUnlockWithDeletedKeychain
 {
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
@@ -177,7 +176,7 @@ static NSString *dbPw = @"1234test";
     XCTAssertEqual([error code], DbWasCorrupted, @"database was unlocked with corrupted keychain");
     XCTAssertNil(encDb, @"database was unlocked with corrupted keychain");
 }
-#endif
+
 
 - (void)testDatabaseWasCreated
 {
