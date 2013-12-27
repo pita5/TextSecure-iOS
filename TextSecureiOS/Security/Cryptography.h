@@ -15,10 +15,6 @@
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
 +(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey;
 
-#pragma mark database key encryption/decryption
-+(NSData*) getEncryptedDatabaseKey:(NSData*)decryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error ;
-+(NSData*) getDecryptedDatabaseKey:(NSString*)encryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error ;
-
 
 #pragma mark push payload encryption/decryption
 +(NSData*) decryptPushPayload:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) HMACKey forHMAC:(NSData *)hmac;

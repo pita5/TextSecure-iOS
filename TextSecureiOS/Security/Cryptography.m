@@ -9,18 +9,14 @@
 #import "Cryptography.h"
 #import <Security/Security.h>
 #import <CommonCrypto/CommonHMAC.h>
-#include <CommonCrypto/CommonHMAC.h>
-
+#import <CommonCrypto/CommonCryptor.h>
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
-#import <RNCryptor/RNEncryptor.h>
-#import <RNCryptor/RNDecryptor.h>
 
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #import "FilePath.h"
-#import "TSEncryptedDatabaseError.h"
 
 
 @implementation Cryptography
@@ -80,27 +76,6 @@
          ourHmac);
   return [NSData dataWithBytes: ourHmac length: 10];
 }
-
-
-
-#pragma mark encrypted database key methods
-+(NSData*) getEncryptedDatabaseKey:(NSData*)decryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error  {
-  
-  return [RNEncryptor encryptData:decryptedDatabaseKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
-}
-
-+(NSData*) getDecryptedDatabaseKey:(NSString*)encryptedDatabaseKey withPassword:(NSString*)userPassword error:(NSError**) error  {
-  
-  NSData* decryptedDatabaseKey= [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedDatabaseKey] withPassword:userPassword error:error];
-  if ((!decryptedDatabaseKey) && (error) && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
-    *error = [TSEncryptedDatabaseError invalidPassword];
-    return nil;
-  }
-  else {
-    return decryptedDatabaseKey;
-  }
-}
-
 
 
 #pragma mark push payload encryptiong/decryption

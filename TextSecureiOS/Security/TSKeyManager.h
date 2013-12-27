@@ -41,10 +41,6 @@
 +(void) removeAllKeychainItems;
 +(BOOL) hasVerifiedPhoneNumber;
 
-#pragma mark DB master key functions
-+(NSData*) generateDatabaseMasterKeyWithPassword:(NSString *)userPassword;
-+(NSData*) getDatabaseMasterKeyWithPassword:(NSString *)userPassword error:(NSError **)error;
-+(void) eraseDatabaseMasterKey;
 #pragma mark keys generated at install management
 +(NSArray*) generatePersonalPrekeys:(int)numberToGenerate;
 +(ECKeyPair*) generateIdentityKey;
