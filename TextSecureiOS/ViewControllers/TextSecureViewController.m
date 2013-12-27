@@ -38,10 +38,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBarHidden = NO;
-#warning we'll want to get messages from the message db here
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
     self.title = @"Messages";
+    self.navigationController.navigationBarHidden = NO;
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
@@ -58,7 +58,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.searchBarCoverView.userInteractionEnabled = NO;
     [self.searchBar addSubview:self.searchBarCoverView];
     
-    
     self.messages = @[
                       @{kThreadTitleKey:@"Clément Duval", kThreadDateKey:@"26/12/13", kThreadMessageKey: @"Theft exists only through the exploitation of man by man... when Society refuses you the right to exist, you must take it... the policeman arrested me in the name of the Law, I struck him in the name of Liberty", kThreadImageKey: @"avatar_duval"},
                       @{kThreadTitleKey:@"Nestor Makhno", kThreadDateKey:@"25/12/13", kThreadMessageKey: @"need a ride?", kThreadImageKey: @"avatar_makhno"},
@@ -74,15 +73,26 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 
-- (void) composeMessage {
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.navigationController.navigationBarHidden = NO;
+    if(![TSKeyManager hasVerifiedPhoneNumber]){
+        [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
+    }
+    
+}
+
+- (void)composeMessage {
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc]initNewConversation]] animated:YES completion:nil];
 }
 
-- (void) openSettings {
+- (void)openSettings {
     [self performSegueWithIdentifier:@"openSettings" sender:self];
 }
 
-// for custom designed cells
+#pragma mark - UITableViewDataSource methods
+
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
    /*
@@ -129,18 +139,50 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     return cell;
 }
 
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    self.navigationController.navigationBarHidden = NO;
-    if(![TSKeyManager hasVerifiedPhoneNumber]){
-        [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
+    /*
+     //sketch of using database data getMessagesOnThread and getThreads
+     // need fleshed out (currently schema is 1 thread only) --corbett
+     if(![TSEncryptedDatabase isLockedOrNotCreated]) {
+     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
+     return [[cryptoDB getThreads] count];
+     }
+     else {
+     return 0;
+     }
+     */
+    if(![TSEncryptedDatabase isLockedOrNotCreated]) {
+        // don't display until db is unlocked (we have "dummy data" right now, but this better mimics UX behavior)
+        return [self.messages count];
     }
-    
+    else {
+        return 0;
+    }
 }
+
+#pragma mark - UITableViewDelegate methods
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 74.0f;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView  editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if(self.editing == NO || !indexPath) {
+		return UITableViewCellEditingStyleNone;
+	}
+	else {
+		return UITableViewCellEditingStyleDelete;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // TODO: update with ability to delete
+        [self Edit:self];
+	}
+	else if (editingStyle == UITableViewCellEditingStyleInsert) {
+		[self Edit:self];
+	}
 }
 
 -(void) reloadModel:(NSNotification*)notification {
@@ -162,17 +204,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     }
 }
 
-
-- (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView  editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if(self.editing == NO || !indexPath) {
-		return UITableViewCellEditingStyleNone;
-	}
-	else {
-		return UITableViewCellEditingStyleDelete;
-    }
-}
-
-- (IBAction) Edit:(id)sender{
+- (IBAction) Edit:(id)sender {
     if(self.editing) {
 		[super setEditing:NO animated:NO];
 		[self.tableView setEditing:NO animated:NO];
@@ -184,74 +216,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 		[self.tableView setEditing:YES animated:YES];
 		[self.tableView reloadData];
     }
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // TODO: update with ability to delete
-        [self Edit:self];
-	}
-	else if (editingStyle == UITableViewCellEditingStyleInsert) {
-		[self Edit:self];
-	}
-}
-- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
-  /*
-   //sketch of using database data getMessagesOnThread and getThreads
-   // need fleshed out (currently schema is 1 thread only) --corbett
-  if(![TSEncryptedDatabase isLockedOrNotCreated]) {
-    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-    return [[cryptoDB getThreads] count];
-  }
-  else {
-    return 0;
-  }
-   */
-   if(![TSEncryptedDatabase isLockedOrNotCreated]) {
-     // don't display until db is unlocked (we have "dummy data" right now, but this better mimics UX behavior)
-     return [self.messages count];
-   }
-   else {
-     return 0;
-   }
-}
-
-#pragma mark contact picker UI
-// Called after the user has pressed cancel
-// The delegate is responsible for dismissing the peoplePicker
-- (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker {
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
-// Called after a person has been selected by the user.
-// Return YES if you want the person to be displayed.
-// Return NO  to do nothing (the delegate is responsible for dismissing the peoplePicker).
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person {
-    ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-    // If the contact has multiple phone numbers, iterate on each of them
-    NSString *phoneNumberFromAB = [(__bridge_transfer NSString*)ABMultiValueCopyValueAtIndex(phoneNumbers, 0) unformattedPhoneNumber];
-    self.composingMessagePhoneNumber=phoneNumberFromAB;
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Title" message:@"Message" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    alert.tag = 1;
-    [alert show];
-    return NO;
-}
-// Called after a value has been selected by the user.
-// Return YES if you want default action to be performed.
-// Return NO to do nothing (the delegate is responsible for dismissing the peoplePicker).
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier {
-    //ABRecordRef phone =ABRecordCopyValue(person, property);
-    //NSInteger phoneIdx = ABMultiValueGetIndexForIdentifier(phone,identifier);
-    //NSString* phoneNumber = [(NSString*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(phone,phoneIdx)) unformattedPhoneNumber];
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Title" message:@"Message" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    alert.tag = 1;
-    [alert show];
-    
-    return YES;
 }
 
 #pragma mark - SWTableViewCellDelegate

@@ -8,36 +8,27 @@
 
 #import "CountryViewController.h"
 #import "VerificationViewController.h"
-@interface CountryViewController ()
-
-@end
 
 @implementation CountryViewController
-@synthesize countryList;
-@synthesize countryDict;
-- (id)initWithStyle:(UITableViewStyle)style
-{
+
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
+    if (!self) return nil;
+    
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-
-  
-  
-  NSString *plistFile = [[NSBundle mainBundle] pathForResource:@"CountryCodes" ofType:@"plist"];
-
-  self.countryDict = [[NSMutableDictionary alloc] initWithContentsOfFile:plistFile];
-  self.countryList = [[self.countryDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-  // finally we export to a plist
+    
+    NSString *plistFile = [[NSBundle mainBundle] pathForResource:@"CountryCodes" ofType:@"plist"];
+    
+    self.countryDict = [[NSMutableDictionary alloc] initWithContentsOfFile:plistFile];
+    self.countryList = [[self.countryDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    // finally we export to a plist
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -69,10 +60,7 @@
     return cell;
 }
 
-
-
-#pragma mark - Table view delegate
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
   if ([[segue identifier] isEqualToString:@"CountrySegue"])  {
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     NSString* countryTitle = [self.countryList objectAtIndex:indexPath.row];

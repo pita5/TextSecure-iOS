@@ -17,8 +17,7 @@
 
 @implementation TSSetMasterPasswordViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
     
@@ -26,8 +25,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(setupDatabase)];
@@ -40,7 +38,9 @@
     self.pass.delegate = self;
 }
 
-- (void) viewDidAppear:(BOOL)animated{
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     [self.pass becomeFirstResponder];
 }
 
@@ -90,8 +90,7 @@
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
 
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if ([textField.text isEqualToString:@""]) {
         // Application password shouldn't be empty
         self.nextButton.enabled = NO;

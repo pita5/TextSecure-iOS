@@ -12,11 +12,12 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMessageComposeViewController.h>
 
-@interface TextSecureViewController : UIViewController<ABPeoplePickerNavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic,strong) IBOutlet UITableView* tableView;
+@interface TextSecureViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *messages;
-@property (nonatomic,strong) NSString* composingMessagePhoneNumber;
-@property (nonatomic,strong) NSString* composingMessageText;
+@property (nonatomic, copy) NSString *composingMessagePhoneNumber;
+@property (nonatomic, copy) NSString *composingMessageText;
+
 - (IBAction) Edit:(id)sender;
 -(void) appInitialSetupComplete;
 @end

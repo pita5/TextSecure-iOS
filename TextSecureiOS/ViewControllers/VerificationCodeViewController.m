@@ -25,8 +25,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
@@ -34,7 +33,9 @@
     self.verificationCode_part2.delegate = self;
 }
 
-- (void) viewDidAppear:(BOOL)animated{
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     [self.verificationCode_part1 becomeFirstResponder];
 }
 
@@ -46,7 +47,7 @@
 
 #pragma mark UITextFieldDelegateMethod
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField == self.verificationCode_part1 && ![string isEqualToString:@""] && range.location == 2 && string.length == 1) {
         [self.verificationCode_part2 becomeFirstResponder];

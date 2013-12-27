@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface CountryViewController : UITableViewController
-
-@property (nonatomic,strong) NSDictionary* countryDict;
-@property (nonatomic,strong) NSArray* countryList;
-
-        
+@property (nonatomic, strong) NSDictionary *countryDict;
+@property (nonatomic, strong) NSArray *countryList;
 @end
