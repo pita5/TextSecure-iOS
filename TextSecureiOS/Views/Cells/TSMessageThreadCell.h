@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <SWTableViewCell.h>
 
-@interface TSMessageThreadCell : UITableViewCell
+@interface TSMessageThreadCell : SWTableViewCell
 
 @property(nonatomic, readwrite, strong) UILabel *titleLabel;
 @property(nonatomic, readwrite, strong) UILabel *timestampLabel;
