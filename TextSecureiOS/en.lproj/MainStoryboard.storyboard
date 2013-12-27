@@ -38,11 +38,12 @@
                     <connections>
                         <outlet property="tableView" destination="J2e-4a-z97" id="b6p-Kp-cHI"/>
                         <segue destination="QLA-c3-DBT" kind="modal" identifier="openSettings" id="QH5-tG-39l"/>
+                        <segue destination="opT-L0-F9p" kind="modal" identifier="ObtainVerificationCode" id="dxJ-2H-wBi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OQN-EK-1ZQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1939" y="-4123"/>
+            <point key="canvasLocation" x="-1935" y="-4167"/>
         </scene>
         <!--Set Master Password View Controller-->
         <scene sceneID="lPb-1c-Xuz">
