@@ -26,6 +26,13 @@ static NSString *kThreadDateKey = @"kThreadDateKey";
 static NSString *kThreadMessageKey = @"kThreadMessageKey";
 static NSString *kThreadImageKey = @"kThreadImageKey";
 
+@interface TextSecureViewController() <SWTableViewCellDelegate>
+@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *settingsBarButtonItem;
+@property (nonatomic, strong) UIView *searchBarCoverView;
+@end
+
 @implementation TextSecureViewController
 
 - (void)viewDidLoad {
@@ -35,15 +42,21 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 #warning we'll want to get messages from the message db here
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
     self.title = @"Messages";
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
     
-    self.navigationItem.leftBarButtonItem = settingsButton;
+    self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
+    self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
     
-    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
-    self.navigationItem.rightBarButtonItem = composeButton;
+    self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
+    self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
+    
+    self.searchBarCoverView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
+    self.searchBarCoverView.backgroundColor = [UIColor grayColor];
+    self.searchBarCoverView.alpha = 0;
+    self.searchBarCoverView.userInteractionEnabled = NO;
+    [self.searchBar addSubview:self.searchBarCoverView];
     
     
     self.messages = @[
@@ -103,8 +116,14 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         threadCell.disclosureImageView.image = disclosureIndicatorImage;
         
-        NSString *imageName = messageDict[kThreadImageKey];
-        threadCell.threadImageView.image = [UIImage imageNamed:imageName];
+        NSMutableArray *rightUtilityButtons = [[NSMutableArray alloc] init];
+        UIColor *deleteButtonColor = [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f];
+        [rightUtilityButtons sw_addUtilityButtonWithColor:deleteButtonColor title:@"Delete"];
+        
+        threadCell.rightUtilityButtons = rightUtilityButtons;
+        threadCell.delegate = self;
+        threadCell.containingTableView = tv;
+        threadCell.cellHeight = [self tableView:tv heightForRowAtIndexPath:indexPath];
     }
         
     return cell;
@@ -235,6 +254,49 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     return YES;
 }
 
+#pragma mark - SWTableViewCellDelegate
 
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    // Remove item here
+    
+    [self animateEnteringEditingMode:NO];
+}
+
+// This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,
+// e.g. when the right utility buttons are not set.
+// TODO: Fix bugs in SWTableViewCell
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell scrollingToState:(SWCellState)state {
+    BOOL isEnteringEditingMode = (state == kCellStateRight);
+    [self animateEnteringEditingMode:isEnteringEditingMode];
+}
+
+- (void)animateEnteringEditingMode:(BOOL)isEditing {
+    __weak typeof(self) weakSelf = self;
+    CGFloat animationDuration = 0.3f;
+    
+    if (!isEditing) {
+        [self.navigationItem setRightBarButtonItem:self.composeBarButtonItem animated:YES];
+        [self.navigationItem setLeftBarButtonItem:self.settingsBarButtonItem animated:YES];
+        
+        [UIView animateWithDuration:animationDuration animations:^{
+            weakSelf.searchBarCoverView.alpha = 0;
+        } completion:^(BOOL finished) {
+            weakSelf.searchBarCoverView.alpha = 0;
+            weakSelf.searchBar.userInteractionEnabled = YES;
+        }];
+    } else {
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+        
+        [UIView animateWithDuration:animationDuration animations:^{
+            weakSelf.searchBarCoverView.alpha = 0.3;
+        } completion:^(BOOL finished) {
+            weakSelf.searchBarCoverView.alpha = 0.3;
+            weakSelf.searchBar.userInteractionEnabled = NO;
+        }];
+    }
+}
 
 @end

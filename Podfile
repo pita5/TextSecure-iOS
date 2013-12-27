@@ -12,6 +12,7 @@ pod 'PonyDebugger', 			'~> 0.3.0'
 pod 'SQLCipher', 			'~> 2.1.1'
 pod 'GoogleProtobuf', 			'~> 2.5.0'
 pod 'TITokenField', 			'~> 0.9.5'
+pod 'SWTableViewCell',       '~> 0.2.1'
 
 #pod 'OpenSSL',            '~> 1.0.1'
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
