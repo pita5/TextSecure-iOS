@@ -19,7 +19,7 @@
 
 static NSString *dbPw = @"1234test";
 
-#if 0
+
 @interface TSEncryptedDatabaseTests : XCTestCase
 
 @end
@@ -59,23 +59,6 @@ static NSString *dbPw = @"1234test";
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
     XCTAssertNil(error, @"database creation returned an error");
     XCTAssertNotNil(encDb, @"database creation failed");
-    
-    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
-    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
-    
-    // We should have generated numberOfPreKeys + 1 (for the key of last resort) keys
-    NSArray *preKeys = [encDb getPersonalPrekeys];
-    XCTAssertEqual([preKeys count], (NSUInteger)numberOfPreKeys+1, @"db creation generated an unexpected number of keys");
-    
-    // Ensure we generated the key of last resort
-    BOOL hasKeyOfLastResort = NO;
-    for (ECKeyPair *preKey in preKeys) {
-        if (preKey.prekeyId == 0xFFFFFF) {
-            hasKeyOfLastResort = YES;
-            break;
-        }
-    }
-    XCTAssertTrue(hasKeyOfLastResort, @"db creation did not generate a key of last resort");
 }
 
     
@@ -91,8 +74,6 @@ static NSString *dbPw = @"1234test";
     encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
     XCTAssertNil(error, @"database creation returned an error");
     XCTAssertNotNil(encDb, @"database creation failed");
-    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
-    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
 }
 
 
@@ -114,9 +95,6 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase database];
     XCTAssertNotNil(encDb, @"could not get a reference to the database");
-    
-    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
-    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
 }
 
 
@@ -124,7 +102,8 @@ static NSString *dbPw = @"1234test";
 {
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
     [TSEncryptedDatabase databaseLock];
-    XCTAssertThrows([[TSEncryptedDatabase database] getIdentityKey], @"database was still accessible after getting locked");
+#warning TODO: Add a call to get something out of the DB
+    //XCTAssertThrows([[TSEncryptedDatabase database] getIdentityKey], @"database was still accessible after getting locked");
 }
 
 
@@ -133,7 +112,8 @@ static NSString *dbPw = @"1234test";
     XCTAssertThrows([TSEncryptedDatabase databaseLock], @"database was locked before getting created");
 }
 
-
+#if 0
+#warning TODO: fix the locking mechanism first
 - (void)testDatabaseIsLocked
 {
     TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
@@ -141,7 +121,7 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseLock];
     XCTAssertTrue([encDb isLocked], @"database was in unlocked state after getting locked");
 }
-
+#endif
 
 - (void)testDatabaseUnlock
 {
@@ -152,9 +132,6 @@ static NSString *dbPw = @"1234test";
     encDb = [TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
     XCTAssertNotNil(encDb, @"valid password did not unlock the database");
     XCTAssertNil(error, @"valid password returned an error");
-    
-    XCTAssertNotNil([encDb getPersonalPrekeys], @"could not retrieve user keys");
-    XCTAssertNotNil([encDb getIdentityKey], @"could not retrieve user keys");
 }
 
 
@@ -170,7 +147,8 @@ static NSString *dbPw = @"1234test";
     XCTAssertNil(encDb, @"database was unlocked with an invalid password");
 }
 
-
+#if 0
+#warning TODO: Fix this once the DB encryption works
 - (void)testDatabaseUnlockWithDeletedKeychain
 {
     [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
@@ -199,7 +177,7 @@ static NSString *dbPw = @"1234test";
     XCTAssertEqual([error code], DbWasCorrupted, @"database was unlocked with corrupted keychain");
     XCTAssertNil(encDb, @"database was unlocked with corrupted keychain");
 }
-
+#endif
 
 - (void)testDatabaseWasCreated
 {
@@ -217,4 +195,3 @@ static NSString *dbPw = @"1234test";
 
 
 @end
-#endif
