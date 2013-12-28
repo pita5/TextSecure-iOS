@@ -103,7 +103,7 @@
 
 #pragma mark - DB message functions
 -(void) storeMessage:(TSMessage*)message;
--(NSArray*) getMessagesOnThread:(int) threadId;
+-(NSArray*) getMessagesOnThread:(NSInteger) threadId;
 -(NSArray*) getThreads;
 -(void)storeTSContact:(TSContact*)contact;
 

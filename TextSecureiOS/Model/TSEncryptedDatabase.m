@@ -369,7 +369,7 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     }];
 }
 
--(NSArray*) getMessagesOnThread:(int) threadId {
+-(NSArray*) getMessagesOnThread:(NSInteger) threadId {
     __block NSMutableArray *messageArray = [[NSMutableArray alloc] init];
     
     [self->dbQueue inDatabase:^(FMDatabase *db) {
