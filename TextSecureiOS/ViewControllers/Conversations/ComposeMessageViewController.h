@@ -15,11 +15,11 @@
 @interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
 @property (nonatomic, retain) TSContact *contact;
-@property (nonatomic) int threadID;
+@property (nonatomic) NSInteger threadID;
 // Need to be initialized with one of those methods
 
-- (id) initWithConversationID:(NSString*)contactID;
-- (id) initNewConversation;
+- (instancetype)initWithConversationID:(NSString*)contactID;
+- (instancetype)initNewConversation;
 
 
 -(void) messageSent:(TSMessage*) message;

@@ -13,8 +13,7 @@
 #import "TSEncryptedDatabase.h"
 #import "TSMessage.h"
 
-@interface ComposeMessageViewController (Private)
-- (void)resizeViews;
+@interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
 @end
 
@@ -24,8 +23,10 @@
 	CGFloat _keyboardHeight;
 }
 
-- (id) initWithConversationID:(TSContact*)contact{
+- (id) initWithConversationID:(TSContact*)contact {
     self = [super initWithNibName:nil bundle:nil];
+    if (!self) return nil;
+    
     self.title = contact.name;
     self.contact = contact;
 #warning always threadid of 0, later this will be an object
@@ -35,15 +36,17 @@
     return self;
 }
 
-- (id) initNewConversation{
-    
+- (id) initNewConversation {
     self = [super initWithNibName:nil bundle:nil];
+    if (!self) return nil;
     
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
-	[self.view setBackgroundColor:[UIColor whiteColor]];
-	[self.navigationItem setTitle:@"New Message"];
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationItem.title = @"New Message";
+    
     
 	_tokenFieldView = [[TITokenFieldView alloc] initWithFrame:self.view.bounds];
     [_tokenFieldView setForcePickSearchResult:YES];
@@ -89,19 +92,18 @@
     return self;
 }
 
-- (void) dismissVC{
+- (void) dismissVC {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
+    
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;
 	[self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
-    
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -139,37 +141,31 @@
     
 }
 
-- (NSString *)tokenField:(TITokenField *)tokenField searchResultStringForRepresentedObject:(id)object{
+- (NSString *)tokenField:(TITokenField *)tokenField searchResultStringForRepresentedObject:(id)object {
     return [(TSContact*)object name];
 }
 
-- (NSString *)tokenField:(TITokenField *)tokenField displayStringForRepresentedObject:(id)object{
+- (NSString *)tokenField:(TITokenField *)tokenField displayStringForRepresentedObject:(id)object {
     return [(TSContact*)object name];
 }
 
-#pragma mark delegate methods #pragma mark - Initialization
-- (UIButton *)sendButton
-{
+- (UIButton *)sendButton {
     // Override to use a custom send button
     // The button's frame is set automatically for you
-    
     return [UIButton defaultSendButton];
 }
 
 #pragma mark - Table view data source
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
   
   NSLog(@"messages on thread: %d",[[cryptoDB getMessagesOnThread:self.threadID] count]);
     return [[cryptoDB getMessagesOnThread:self.threadID] count];
-
 }
 
 #pragma mark - Messages view delegate
-- (void)sendPressed:(UIButton *)sender withText:(NSString *)text
-{
-    
+
+- (void)sendPressed:(UIButton *)sender withText:(NSString *)text {
     // We remove the token field because we don't want the user to be able to edit the receipients list again
     
     if (_tokenFieldView) {
@@ -177,21 +173,13 @@
         self.title = [NSString stringWithFormat:@"%@", [_tokenFieldView.tokenField.tokenTitles objectAtIndex:0]];
         _tokenFieldView = nil;
     }
-    
-
 
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
     [self messageSent:message];
     [[TSMessagesManager sharedManager] sendMessage:message];
 
-
-
-
     [self finishSend];
 }
-
-
-
 
 -(void) messageSent:(TSMessage*) message {
   [JSMessageSoundEffect playMessageSentSound];
@@ -209,11 +197,9 @@
   [cryptoDB storeMessage:message];
 }
 
-- (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
   TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
   NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
-
   
   if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
     return JSBubbleMessageTypeOutgoing;
@@ -223,55 +209,49 @@
    }
 }
 
-- (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     return JSBubbleMessageStyleFlat;
 }
 
-- (JSMessagesViewTimestampPolicy)timestampPolicy
-{
+- (JSMessagesViewTimestampPolicy)timestampPolicy {
     return JSMessagesViewTimestampPolicyEveryThree;
 }
 
-- (JSMessagesViewAvatarPolicy)avatarPolicy
-{
+- (JSMessagesViewAvatarPolicy)avatarPolicy {
     return JSMessagesViewAvatarPolicyNone;
 }
 
-- (JSAvatarStyle)avatarStyle
-{
+- (JSAvatarStyle)avatarStyle {
     return JSAvatarStyleSquare;
 }
 
-- (JSInputBarStyle)inputBarStyle
-{
+- (JSInputBarStyle)inputBarStyle {
     return JSInputBarStyleFlat;
 }
 
 #pragma mark - Messages view data source
-- (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+
+- (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
     NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
     return [[dbMessages objectAtIndex:indexPath.row] message];
 }
 
-- (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
     NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
     return [[dbMessages objectAtIndex:indexPath.row]  messageTimestamp];
 }
 
-- (UIImage *)avatarImageForIncomingMessage{
+- (UIImage *)avatarImageForIncomingMessage {
     return nil;
 }
 
-- (UIImage *)avatarImageForOutgoingMessage{
+- (UIImage *)avatarImageForOutgoingMessage {
     return nil;
 }
 
--(void)tokenField:(TITokenField *)tokenField didAddToken:(TIToken *)token{
+-(void)tokenField:(TITokenField *)tokenField didAddToken:(TIToken *)token {
     if (_tokenFieldView.tokenField.tokens) {
         self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
         [self startedWritingMessage];
@@ -287,8 +267,7 @@
 
 #pragma mark UITextViewDelegate (Sending box)
 
--(BOOL)textViewShouldBeginEditing:(UITextView *)textView{
-    
+-(BOOL)textViewShouldBeginEditing:(UITextView *)textView {
     if ([textView isEqual:self.inputToolBarView.textView]) {
         
         self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
@@ -298,7 +277,7 @@
     return true;
 }
 
--(void) startedWritingMessage{
+-(void) startedWritingMessage {
     // Change frames for editing
     if (_tokenFieldView) {
         [_tokenFieldView setScrollEnabled:FALSE];
@@ -308,7 +287,7 @@
     }
 }
 
--(void) startedEditingReceipients{
+-(void) startedEditingReceipients {
     //change frames for
 }
 
