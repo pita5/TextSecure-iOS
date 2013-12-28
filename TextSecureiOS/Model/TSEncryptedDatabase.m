@@ -166,13 +166,9 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
   if(!identityKey) {
     return NO;
   }
-  NSDictionary *settings = [[NSDictionary alloc] initWithObjectsAndKeys:[identityKey privateKey],@"identity_key_private", [identityKey publicKey],@"identity_key_public",nil];
+    NSDictionary *settings = @{@"identity_key_private": identityKey.privateKey, @"identity_key_public": identityKey.publicKey};
   return [self storePersistentSettings:settings];
-  
-  
-  
 }
-
 
 +(instancetype) databaseUnlockWithPassword:(NSString *)userPassword error:(NSError **)error {
     
@@ -361,61 +357,63 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 }
 
 #pragma mark - DB message methods
+
 -(void) storeMessage:(TSMessage*)message {
-  [self->dbQueue inDatabase:^(FMDatabase *db) {
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-    NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
+    [self->dbQueue inDatabase:^(FMDatabase *db) {
+        
+        NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
+        NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
+        
 #warning every message is on the same thread! also we only support one recipient
-    [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",[NSNumber numberWithInt:0],message.message,message.senderId,message.recipientId,sqlDate];
-  }];
+        [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",[NSNumber numberWithInt:0],message.message,message.senderId,message.recipientId,sqlDate];
+    }];
 }
 
 -(NSArray*) getMessagesOnThread:(int) threadId {
-  NSMutableArray *messageArray = [[NSMutableArray alloc] init];
-  [self->dbQueue inDatabase:^(FMDatabase *db) {
-    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
-    //    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
-    while([rs next]) {
-      NSString* timestamp = [rs stringForColumn:@"timestamp"];
-      NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-      [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
-      [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-      NSDate *date = [dateFormatter dateFromString:timestamp];
-      [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:[[NSArray alloc] initWithObjects:[rs stringForColumn:@"recipient_id"],nil] sentOnDate:date]];
-      
-    }
-  }];
-  return messageArray;
-  
+    __block NSMutableArray *messageArray = [[NSMutableArray alloc] init];
+    
+    [self->dbQueue inDatabase:^(FMDatabase *db) {
+        
+        NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
+        FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp", threadId]];
+
+        while([rs next]) {
+            NSString* timestamp = [rs stringForColumn:@"timestamp"];
+            NSDate *date = [dateFormatter dateFromString:timestamp];
+            
+            [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date]];
+        }
+    }];
+    
+    return messageArray;
 }
 
+// This is only a temporary stub for fetching the message threads
+// TODO: return the threads containing participants as well
+-(NSArray *) getThreads {
+    __block NSMutableArray *threadArray = [[NSMutableArray alloc] init];
+    
+    [self->dbQueue inDatabase:^(FMDatabase *db) {
+        
+        NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
+        FMResultSet  *rs = [db executeQuery:@"SELECT *,MAX(m.timestamp) FROM messages m GROUP BY thread_id ORDER BY timestamp DESC;"];
+        
+        while([rs next]) {
+            NSString* timestamp = [rs stringForColumn:@"timestamp"];
+            NSDate *date = [dateFormatter dateFromString:timestamp];
+            
+            TSThread *messageThread = [[TSThread alloc] init];
+            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date];
+            
+            [threadArray addObject:messageThread];
+        }
+    }];
 
--(NSArray*) getThreads {
-  NSMutableArray *threadArray = [[NSMutableArray alloc] init];
-  [self->dbQueue inDatabase:^(FMDatabase *db) {
-#warning modify this to work with the thread query
-    //    FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp",threadId]];
-    FMResultSet  *rs = [db executeQuery:@"select * from messages"];
-    while([rs next]) {
-      NSString* timestamp = [rs stringForColumn:@"timestamp"];
-      NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-      [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
-      [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-      NSDate *date = [dateFormatter dateFromString:timestamp];
-      //      [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:[[NSArray alloc] initWithObjects:[rs stringForColumn:@"recipient_id"],nil] sentOnDate:date]];
-      
-    }
-  }];
-  return nil;
-  // return messageArray;
-  
+    return threadArray;
 }
 
-
--(void)storeTSThread:(TSThread*)thread{
+-(void)storeTSThread:(TSThread*)thread {
+    
   [self->dbQueue inDatabase:^(FMDatabase *db) {
     for(TSContact* contact in thread.participants) {
       [contact save];
@@ -496,6 +494,20 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
 +(void) eraseDatabaseMasterKey {
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
+}
+
+#pragma mark - shared private objects
+
++ (NSDateFormatter *)sharedDateFormatter {
+    static NSDateFormatter *_sharedFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedFormatter = [[NSDateFormatter alloc] init];
+        _sharedFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        _sharedFormatter.timeZone = [NSTimeZone localTimeZone];
+    });
+    
+    return _sharedFormatter;
 }
 
 @end
