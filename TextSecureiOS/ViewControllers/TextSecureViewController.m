@@ -186,6 +186,15 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 -(void) reloadModel:(NSNotification*)notification {
+    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
+
+    if([TSEncryptedDatabase isLockedOrNotCreated] == NO) {
+        TSMessage *message = [[cryptoDB getMessagesOnThread:0] objectAtIndex:0];
+        
+        NSArray *allThreads = [cryptoDB getThreads];
+        NSLog(@"allThreads.count: %d", allThreads.count);
+    }
+    
 #warning get the messages from the database here
     [self.tableView reloadData];
 }
