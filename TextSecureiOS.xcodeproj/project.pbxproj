@@ -33,7 +33,6 @@
 		A515AFDB180966E30084ABA5 /* TSEncryptedDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A515AFDA180966E30084ABA5 /* TSEncryptedDatabase.m */; };
 		A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */; };
 		A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */; };
-		A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D01170FEA8D00A2CE9E /* SMSViewController.m */; };
 		A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D04170FEA8D00A2CE9E /* CountryViewController.m */; };
 		A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D06170FEA8D00A2CE9E /* CountrySegue.m */; };
 		A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D15170FEB1900A2CE9E /* FilePath.m */; };
@@ -518,8 +517,6 @@
 		A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextSecureViewController.m; path = ViewControllers/TextSecureViewController.m; sourceTree = "<group>"; };
 		A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationViewController.h; path = ViewControllers/VerificationViewController.h; sourceTree = "<group>"; };
 		A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextSecureViewController.h; path = ViewControllers/TextSecureViewController.h; sourceTree = "<group>"; };
-		A5169D01170FEA8D00A2CE9E /* SMSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SMSViewController.m; path = ViewControllers/SMSViewController.m; sourceTree = "<group>"; };
-		A5169D02170FEA8D00A2CE9E /* SMSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMSViewController.h; path = ViewControllers/SMSViewController.h; sourceTree = "<group>"; };
 		A5169D04170FEA8D00A2CE9E /* CountryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountryViewController.m; path = ViewControllers/CountryViewController.m; sourceTree = "<group>"; };
 		A5169D05170FEA8D00A2CE9E /* CountryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CountryViewController.h; path = ViewControllers/CountryViewController.h; sourceTree = "<group>"; };
 		A5169D06170FEA8D00A2CE9E /* CountrySegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CountrySegue.m; path = ViewControllers/CountrySegue.m; sourceTree = "<group>"; };
@@ -1591,8 +1588,6 @@
 				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
-				A5169D02170FEA8D00A2CE9E /* SMSViewController.h */,
-				A5169D01170FEA8D00A2CE9E /* SMSViewController.m */,
 				A5169D05170FEA8D00A2CE9E /* CountryViewController.h */,
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
@@ -1863,7 +1858,7 @@
 		A53718AA16FF95DF00C6FCCF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Open Whisper Systems";
 				TargetAttributes = {
 					8C42C13818551B8C000DD353 = {
@@ -2401,7 +2396,6 @@
 				B635B3CD182181E1003CE732 /* JSMessagesViewController.m in Sources */,
 				B635B3CB182181E1003CE732 /* JSMessageInputView.m in Sources */,
 				B635B3E7182181E1003CE732 /* UIButton+JSMessagesView.m in Sources */,
-				A5169D0B170FEA8D00A2CE9E /* SMSViewController.m in Sources */,
 				B68A2292180AC32C00D93C16 /* TSRegisterForPushRequest.m in Sources */,
 				B635B3CC182181E1003CE732 /* JSMessageSoundEffect.m in Sources */,
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
@@ -2477,7 +2471,6 @@
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TextSecureiOS.app/TextSecureiOS";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -2511,7 +2504,6 @@
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/TextSecureiOS.app/TextSecureiOS";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -2563,7 +2555,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -2593,7 +2585,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

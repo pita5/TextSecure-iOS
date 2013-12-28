@@ -23,7 +23,7 @@
 
 
 -(void) messageSent:(TSMessage*) message;
--(void) messageRecieved:(TSMessage*) message;
+-(void) messageRecieved;
 -(void)addMessage:(TSMessage*)message;
 @end
 

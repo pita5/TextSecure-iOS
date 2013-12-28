@@ -25,6 +25,7 @@
 
 - (id) initWithConversationID:(TSContact*)contact {
     self = [super initWithNibName:nil bundle:nil];
+
     if (!self) return nil;
     
     self.title = contact.name;
@@ -98,7 +99,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageRecieved) name:@"DatabaseUpdated" object:nil];
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;
@@ -186,15 +187,16 @@
   [self addMessage:message];
 }
 
--(void) messageRecieved:(TSMessage*) message {
+-(void) messageRecieved {
   [JSMessageSoundEffect playMessageReceivedSound];
-  [self addMessage:message];
+  [self.tableView reloadData];
 
 }
 
 -(void)addMessage:(TSMessage*)message {
   TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
   [cryptoDB storeMessage:message];
+  [self.tableView reloadData];
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
