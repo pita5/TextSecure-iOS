@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "TSParticipants.h"
+#import "TSMessage.h"
+
 @interface TSThread : NSObject
 
 @property (nonatomic, copy) NSString *threadID;
 @property (nonatomic, retain) TSParticipants *participants;
+@property (nonatomic, retain) TSMessage *latestMessage;
 
 @end
