@@ -20,8 +20,5 @@
 -(NSData*) getPublicKey;
 -(NSData*) generateSharedSecretFromPublicKey:(NSData*)theirPublicKey;
 
--(void) encodeWithCoder:(NSCoder*)coder;
--(instancetype) initWithCoder:(NSCoder*)coder;
-
 
 @end
