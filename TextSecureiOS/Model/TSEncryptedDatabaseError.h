@@ -20,6 +20,7 @@ typedef enum TSEncryptedDatabaseErrorCode {
 } TSEncryptedDatabaseErrorCode;
 
 
+// TODO: change this to TSStorageError
 @interface TSEncryptedDatabaseError : NSObject
 
 + (NSString *)domain;
@@ -28,6 +29,7 @@ typedef enum TSEncryptedDatabaseErrorCode {
 + (NSError *)noDbAvailable;
 + (NSError *)dbWasCorrupted;
 + (NSError *)invalidPassword;
++ (NSError *) keychainError;
 
 @end
 

@@ -12,6 +12,7 @@
 
 
 +(NSData*) createStorageMasterKeyWithPassword:(NSString *)userPassword;
++(BOOL) wasStorageMasterKeyCreated;
 
 +(NSData*) unlockStorageMasterKeyUsingPassword:(NSString *)userPassword error:(NSError **)error;
 +(NSData*) getStorageMasterKeyWithError:(NSError **)error;
