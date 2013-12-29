@@ -22,7 +22,7 @@
  * @param preKeyId The TextSecure preKeyId to assign to the newly generated key pair. See https://github.com/WhisperSystems/TextSecure/wiki/ProtocolV2 for more information.
  * @return A reference to the newly generated key pair or nil if memory could not be allocated.
  */
-+(instancetype) keyPairGenerateWithKeyId:(int32_t)preKeyId;
++(instancetype) keyPairGenerateWithPreKeyId:(int32_t)preKeyId;
 
 
 /**
