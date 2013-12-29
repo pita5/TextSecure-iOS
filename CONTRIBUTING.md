@@ -9,3 +9,7 @@ We are trying to follow the [GitHub code conventions for Objective-C](https://gi
 In addition to that, always add curly braces to your `if` conditionals, even if there is no `else`.
 
 One note, for programmers joining us from Java or similar language communities, note that [exceptions are not commonly used for errors that may occur in normal use](http://stackoverflow.com/questions/324284/throwing-an-exception-in-objective-c-cocoa/324805#324805) so familiarize yourself with **NSError** 
+
+## BitHub
+
+Open Whisper Systems is currently [experimenting](https://whispersystems.org/blog/bithub/) with the funding privacy Free and Open Source software. Payements are opt-in for the `TextSecure-iOS` repo and can be enabled by adding `MONEYMONEY` in a commit message string. 
