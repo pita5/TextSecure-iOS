@@ -31,7 +31,7 @@
 
 - (void)testGenerateKeyPair
 {
-    TSECKeyPair *keyPair = [TSECKeyPair keyPairGenerateWithKeyId:1];
+    TSECKeyPair *keyPair = [TSECKeyPair keyPairGenerateWithPreKeyId:1];
     XCTAssertNotNil(keyPair, @"Key pair generation returned a nil key pair.");
     
     NSData *publicKey = [keyPair getPublicKey];
@@ -41,8 +41,8 @@
 
 - (void)testGenerateSharedSecret
 {
-    TSECKeyPair *keyPair1 = [TSECKeyPair keyPairGenerateWithKeyId:1];
-    TSECKeyPair *keyPair2 = [TSECKeyPair keyPairGenerateWithKeyId:2];
+    TSECKeyPair *keyPair1 = [TSECKeyPair keyPairGenerateWithPreKeyId:1];
+    TSECKeyPair *keyPair2 = [TSECKeyPair keyPairGenerateWithPreKeyId:2];
     
     NSData *publicKey = [keyPair1 getPublicKey];
     NSData *sharedSecret = [keyPair2 generateSharedSecretFromPublicKey:publicKey];
@@ -52,7 +52,7 @@
 
 - (void)testSerialization
 {
-    TSECKeyPair *keyPair1 = [TSECKeyPair keyPairGenerateWithKeyId:1];
+    TSECKeyPair *keyPair1 = [TSECKeyPair keyPairGenerateWithPreKeyId:1];
     NSData *serializedKeyPair = [NSKeyedArchiver archivedDataWithRootObject:keyPair1];
     XCTAssertNotNil(serializedKeyPair, @"Key pair serialization returned a nil data object.");
     
