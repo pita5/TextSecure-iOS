@@ -16,6 +16,7 @@
 #import "TSRegisterForPushRequest.h"
 #import "NSString+Conversion.h"
 #import "TSMessagesManager.h"
+#import "NSData+Base64.h"
 
 @implementation AppDelegate
 
@@ -133,7 +134,8 @@
     
 #ifdef DEBUG
 #warning registering with dummy ID so that we can proceed in the simulator. You'll want to change this!
-  [self application:application didRegisterForRemoteNotificationsWithDeviceToken:[[NSData alloc] initWithBase64Encoding:[@"christine" base64Encoded]]];
+  NSData *deviceToken = [NSData dataFromBase64String:[@"christine" base64Encoded]];
+  [self application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 #endif
   
 }
