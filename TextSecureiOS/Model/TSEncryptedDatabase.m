@@ -375,12 +375,11 @@ static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
     [self->dbQueue inDatabase:^(FMDatabase *db) {
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
-        FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp DESC", threadId]];
+        FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%d ORDER BY timestamp", threadId]];
 
         while([rs next]) {
             NSString* timestamp = [rs stringForColumn:@"timestamp"];
             NSDate *date = [dateFormatter dateFromString:timestamp];
-            NSLog(@"date %@ sender %@",date, [rs stringForColumn:@"sender_id"]);
             [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date]];
         }
     }];
