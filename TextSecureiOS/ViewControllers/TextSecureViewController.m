@@ -189,8 +189,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
 
     if([TSEncryptedDatabase isLockedOrNotCreated] == NO) {
-        TSMessage *message = [[cryptoDB getMessagesOnThread:0] objectAtIndex:0];
-        
         NSArray *allThreads = [cryptoDB getThreads];
         NSLog(@"allThreads.count: %d", allThreads.count);
     }
