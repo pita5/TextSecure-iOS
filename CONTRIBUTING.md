@@ -1,10 +1,10 @@
 ## Contribute
 
-At this early stage there are two primary developers of TextSecure iOS: @corbett and @FredericJacobs and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing, with any of the [Open Issues](https://github.com/WhisperSystems/TextSecure-iOS/issues?state=open) or [Milestones](ttps://github.com/WhisperSystems/TextSecure-iOS/issues/milestones?state=open). It may help contact us if you plan to make a major contribution before starting work so we can be sure to clarify questions, give an overview of architectural plans, and ensure we do not overlap work.
+At this early stage there are two primary developers of TextSecure iOS: [@corbett](https://github.com/corbett) and [@FredericJacobs](https://github.com/fredericjacobs) and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing, with any of the [Open Issues](https://github.com/WhisperSystems/TextSecure-iOS/issues?state=open) or [Milestones](https://github.com/WhisperSystems/TextSecure-iOS/issues/milestones?state=open). It may help to open an issue or milestone if you plan to make a contribution so we can be sure to clarify questions, give an overview of architectural plans, and ensure we do not overlap work.
 
 ## Code Conventions
 
-We are trying to follow the [GitHub code conventions for Objective-C](https://github.com/github/objective-c-conventions) and we would really appreciate that pull requests do conform with those conventions. 
+We are trying to follow the [GitHub code conventions for Objective-C](https://github.com/github/objective-c-conventions) and we appreciate that pull requests do conform with those conventions. 
 
 In addition to that, always add curly braces to your `if` conditionals, even if there is no `else`.
 
@@ -13,4 +13,5 @@ One note, for programmers joining us from Java or similar language communities, 
 ## BitHub
 
 Open Whisper Systems is currently [experimenting](https://whispersystems.org/blog/bithub/) with the funding privacy Free and Open Source software. Payements are opt-in for the `TextSecure-iOS` repo and can be enabled by adding `MONEYMONEY` in a commit message string. For example, this is the current Open WhisperSystems payout per commit, rendered dynamically as an image by the Open WhisperSystems BitHub instance:
+
 ![Bithub Payment Amount](https://bithub.herokuapp.com/v1/status/payment/commit?format=png)

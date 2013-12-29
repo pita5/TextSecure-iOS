@@ -1,6 +1,6 @@
 # TextSecure for iOS
 
-Currently in early development stage. See [Contributing](https://github.com/WhisperSystems/TextSecure-iOS/blob/master/CONTRIBUTING.md) for details how best to contribute.
+Currently in early development stage. Please see [Contributing](https://github.com/WhisperSystems/TextSecure-iOS/blob/master/CONTRIBUTING.md) for details how best to contribute.
 
 ## Building
 
