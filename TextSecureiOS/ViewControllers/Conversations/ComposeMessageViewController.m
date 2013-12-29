@@ -99,7 +99,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageRecieved) name:@"DatabaseUpdated" object:nil];
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageRecieved) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;
