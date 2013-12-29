@@ -41,10 +41,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.title = @"Messages";
     self.navigationController.navigationBarHidden = NO;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:@"DatabaseUpdated" object:nil];
-    
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     
     self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
     self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
@@ -189,8 +186,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
 
     if([TSEncryptedDatabase isLockedOrNotCreated] == NO) {
-        TSMessage *message = [[cryptoDB getMessagesOnThread:0] objectAtIndex:0];
-        
         NSArray *allThreads = [cryptoDB getThreads];
         NSLog(@"allThreads.count: %d", allThreads.count);
     }

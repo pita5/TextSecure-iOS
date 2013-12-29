@@ -85,9 +85,6 @@
   
     UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
     
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor grayColor]} forState:UIControlStateDisabled];
-    
     self.navigationItem.leftBarButtonItem = dismissButton;
     
     return self;
@@ -99,7 +96,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageRecieved) name:@"DatabaseUpdated" object:nil];
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageRecieved) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;

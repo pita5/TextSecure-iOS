@@ -65,7 +65,7 @@
   [cryptoDB storeMessage:[IncomingPushMessageSignal getTSMessage:fullMessageInfoRecieved]];
   
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"DatabaseUpdated" object:self];
+  [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self];
   [pushAlert show];
 
 }

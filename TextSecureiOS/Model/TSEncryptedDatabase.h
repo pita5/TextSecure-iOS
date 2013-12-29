@@ -112,7 +112,10 @@
 -(BOOL) storeIdentityKey:(ECKeyPair*)identityKey;
 
 
-
+/**
+ * Posted when the database receives an update
+ */
+extern NSString * const TSDatabaseDidUpdateNotification;
 
 @end
 
