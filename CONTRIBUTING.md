@@ -1,6 +1,6 @@
 ## Contribute
 
-At this early stage there are two primary developers of TextSecure iOS and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing. Please contact us.
+At this early stage there are two primary developers of TextSecure iOS: @corbett and @FredericJacobs and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing, with any of the [Open Issues](https://github.com/WhisperSystems/TextSecure-iOS/issues?state=open) or [Milestones](ttps://github.com/WhisperSystems/TextSecure-iOS/issues/milestones?state=open). It may help contact us if you plan to make a major contribution before starting work so we can be sure to clarify questions, give an overview of architectural plans, and ensure we do not overlap work.
 
 ## Code Conventions
 
