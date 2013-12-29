@@ -28,6 +28,7 @@
 // Reference to the singleton
 static TSEncryptedDatabase *SharedCryptographyDatabase = nil;
 
+NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database.update";
 
 @implementation TSEncryptedDatabase {
 
