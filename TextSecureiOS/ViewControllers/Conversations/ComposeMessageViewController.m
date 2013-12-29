@@ -159,9 +159,6 @@
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-  
-  NSLog(@"messages on thread: %d",[[cryptoDB getMessagesOnThread:self.threadID] count]);
-    return [[cryptoDB getMessagesOnThread:self.threadID] count];
 }
 
 #pragma mark - Messages view delegate
