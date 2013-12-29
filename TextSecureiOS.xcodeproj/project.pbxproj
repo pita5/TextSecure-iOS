@@ -29,6 +29,7 @@
 		8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
 		8CF7BD8D187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
 		8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */; };
+		8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */; };
 		A5145B31184AAD51007BDC73 /* TSMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B30184AAD51007BDC73 /* TSMessage.m */; };
 		A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B36184B66AD007BDC73 /* TSRequestAttachmentId.m */; };
 		A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B39184B68EA007BDC73 /* TSRequestAttachment.m */; };
@@ -508,6 +509,8 @@
 		8CF7BD8A187088D80023A781 /* TSECKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSECKeyPair.h; path = Security/TSECKeyPair.h; sourceTree = "<group>"; };
 		8CF7BD8B187088D80023A781 /* TSECKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSECKeyPair.m; path = Security/TSECKeyPair.m; sourceTree = "<group>"; };
 		8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSECKeyPairTests.m; sourceTree = "<group>"; };
+		8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStorageMasterKey.h; path = Security/TSStorageMasterKey.h; sourceTree = "<group>"; };
+		8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStorageMasterKey.m; path = Security/TSStorageMasterKey.m; sourceTree = "<group>"; };
 		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		A5145B2F184AAD51007BDC73 /* TSMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessage.h; path = Model/TSMessage.h; sourceTree = "<group>"; };
 		A5145B30184AAD51007BDC73 /* TSMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessage.m; path = Model/TSMessage.m; sourceTree = "<group>"; };
@@ -1111,6 +1114,8 @@
 				8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */,
 				A515AFD9180966E30084ABA5 /* TSEncryptedDatabase.h */,
 				A515AFDA180966E30084ABA5 /* TSEncryptedDatabase.m */,
+				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
+				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
 				8C6F78C1184530E2008A158D /* TSEncryptedDatabase+Private.h */,
 				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
 				A5145B30184AAD51007BDC73 /* TSMessage.m */,
@@ -2400,6 +2405,7 @@
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
+				8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */,
 				4C0ACB4B186C876200B328D5 /* TSMessageThreadCell.m in Sources */,
