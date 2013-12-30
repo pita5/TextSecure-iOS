@@ -78,8 +78,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
     if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
         
-        PasswordUnlockViewController *passwordUnlock = [[PasswordUnlockViewController alloc] initWithNibName:nil bundle:nil];
-        [self presentViewController:passwordUnlock animated:NO completion:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        UIViewController *passwordUnlockViewController = [storyboard instantiateViewControllerWithIdentifier:@"PasswordUnlockViewController"];
+        [self presentViewController:passwordUnlockViewController animated:NO completion:nil];
         
     } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
