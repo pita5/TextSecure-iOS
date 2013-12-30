@@ -17,6 +17,7 @@ typedef enum TSEncryptedDatabaseErrorCode {
     NoDbAvailable,
     DbWasCorrupted,
     InvalidPassword,
+    keychainError,
 } TSEncryptedDatabaseErrorCode;
 
 

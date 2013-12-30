@@ -61,7 +61,7 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
 + (NSError *)keychainError {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"Could not recover the storage master key from the Keychain" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:InvalidPassword userInfo:errorDetail];
+    return [self errorWithErrorCode:keychainError userInfo:errorDetail];
 }
 
 @end
