@@ -34,10 +34,13 @@
     self.title = contact.name;
     self.contact = contact;
   
-    TSContact *me = [[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken]];
-    self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[me,contact]]];
-  
+    [self setupThreadWithContact];
     return self;
+}
+
+-(void) setupThreadWithContact {
+  TSContact *me = [[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken]];
+  self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[me,self.contact]]];
 }
 
 - (id) initNewConversation {
@@ -256,6 +259,7 @@
         self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
         [self startedWritingMessage];
         DLog(@"Contact set to : %@", self.contact.name);
+        [self setupThreadWithContact];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         sleep(0);
