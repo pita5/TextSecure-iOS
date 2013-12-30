@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TSParticipants : NSMutableArray
-
+@interface TSParticipants : NSObject
+@property (nonatomic,strong) NSArray *participants;
 - (id) initWithTSContactsArray:(NSArray*)tsContacts;
 
 - (NSString*) threadID;

@@ -917,6 +917,7 @@
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
+		A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessagesManager.h; path = MessagesManager/TSMessagesManager.h; sourceTree = "<group>"; };
 		A5FBAB93184E980E0012E9A5 /* TSUploadAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUploadAttachment.h; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.h; sourceTree = "<group>"; };
 		A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUploadAttachment.m; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.m; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -983,7 +984,6 @@
 		B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerificationCodeViewController.h; path = ViewControllers/VerificationCodeViewController.h; sourceTree = "<group>"; };
 		B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerificationCodeViewController.m; path = ViewControllers/VerificationCodeViewController.m; sourceTree = "<group>"; };
 		B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = gcm.textsecure.whispersystems.org.cer; path = TextSecureiOS/gcm.textsecure.whispersystems.org.cer; sourceTree = "<group>"; };
-		B661DDBB184A583A00E369A8 /* TSMessagesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessagesManager.h; path = /Users/corbett/Dropbox/Projects/Mobile/TextSecureiOS/TextSecureiOS/MessagesManager/TSMessagesManager.h; sourceTree = "<absolute>"; };
 		B68A2290180AC32C00D93C16 /* TSRegisterForPushRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterForPushRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.h; sourceTree = "<group>"; };
 		B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterForPushRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.m; sourceTree = "<group>"; };
 		B68BFDED1809855B005CC817 /* TSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSettingsViewController.h; path = ViewControllers/TSSettingsViewController.h; sourceTree = "<group>"; };
@@ -1113,7 +1113,6 @@
 				8C6F78C1184530E2008A158D /* TSEncryptedDatabase+Private.h */,
 				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
 				A5145B30184AAD51007BDC73 /* TSMessage.m */,
-				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
 				B60CEE73184B4971006A8256 /* TSThread.h */,
 				B60CEE74184B4971006A8256 /* TSThread.m */,
 				B60CEE76184B4A96006A8256 /* TSParticipants.h */,
@@ -1618,6 +1617,7 @@
 		B613B4D41815CEA900755184 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */,
 				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
 				B635B38F182181E1003CE732 /* ComposeMessageViewController.h */,
 				B635B390182181E1003CE732 /* ComposeMessageViewController.m */,

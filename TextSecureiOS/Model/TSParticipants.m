@@ -14,12 +14,12 @@
 
 - (id) initWithTSContactsArray:(NSArray*)tsContacts{
     self = [super init];
-    [self addObjectsFromArray:tsContacts];
+    self.participants = tsContacts;
     return self;
 }
 
 - (NSString*) threadID{
-  return [TSParticipants threadIDForParticipants:self];
+  return [TSParticipants threadIDForParticipants:self.participants];
 }
 
 + (NSString*) threadIDForParticipants:(NSArray*)tsContacts {

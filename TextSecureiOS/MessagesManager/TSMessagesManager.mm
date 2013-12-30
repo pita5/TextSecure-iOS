@@ -50,7 +50,6 @@
   
   
   NSData* signalingKey = [NSData dataFromBase64String:[TSKeyManager getSignalingKeyToken]];
-  NSLog(@"signaling key %@",[TSKeyManager getSignalingKeyToken]);
   // Actually only the first 32 bits of this are the crypto key
   NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
   NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
