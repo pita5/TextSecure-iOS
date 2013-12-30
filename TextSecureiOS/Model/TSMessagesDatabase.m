@@ -11,7 +11,6 @@
 #import "TSEncryptedDatabaseError.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
-#import "ECKeyPair.h"
 #import "FilePath.h"
 #import "TSMessage.h"
 #import "TSContact.h"

@@ -47,7 +47,6 @@
 		A5169D20170FEB1900A2CE9E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D19170FEB1900A2CE9E /* Constants.m */; };
 		A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */; };
 		A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */; };
-		A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */; };
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
@@ -547,10 +546,8 @@
 		A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Conversion.h"; path = "TextSecureiOS/Utility/NSData+Conversion.h"; sourceTree = "<group>"; };
 		A5169D1B170FEB1900A2CE9E /* NSData+Conversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Conversion.m"; path = "TextSecureiOS/Utility/NSData+Conversion.m"; sourceTree = "<group>"; };
 		A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeychainWrapper.m; path = Security/KeychainWrapper.m; sourceTree = "<group>"; };
-		A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ECKeyPair.m; path = Security/ECKeyPair.m; sourceTree = "<group>"; };
 		A5169D26170FEB8F00A2CE9E /* Cryptography.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Cryptography.m; path = Security/Cryptography.m; sourceTree = "<group>"; };
 		A5169D27170FEB8F00A2CE9E /* Cryptography.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cryptography.h; path = Security/Cryptography.h; sourceTree = "<group>"; };
-		A5169D28170FEB8F00A2CE9E /* ECKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ECKeyPair.h; path = Security/ECKeyPair.h; sourceTree = "<group>"; };
 		A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeychainWrapper.h; path = Security/KeychainWrapper.h; sourceTree = "<group>"; };
 		A5169D39170FEDC600A2CE9E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
@@ -1595,8 +1592,6 @@
 				A538A27D1869DC6500CD0A3D /* TSKeyManager.m */,
 				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,
 				A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */,
-				A5169D28170FEB8F00A2CE9E /* ECKeyPair.h */,
-				A5169D24170FEB8E00A2CE9E /* ECKeyPair.m */,
 				8CF7BD8A187088D80023A781 /* TSECKeyPair.h */,
 				8CF7BD8B187088D80023A781 /* TSECKeyPair.m */,
 				A5169D27170FEB8F00A2CE9E /* Cryptography.h */,
@@ -2462,7 +2457,6 @@
 				B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */,
 				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
-				A5169D2C170FEB8F00A2CE9E /* ECKeyPair.m in Sources */,
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
 				B635B3E9182181E1003CE732 /* UIImage+JSMessagesView.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,

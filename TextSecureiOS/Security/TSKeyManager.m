@@ -12,7 +12,7 @@
 #import "NSData+Base64.h"
 #import "NSData+Conversion.h"
 #import "TSEncryptedDatabaseError.h"
-#import "ECKeyPair.h"
+
 @implementation TSKeyManager
 
 //+ (BOOL) generateCryptographyKeysForNewUser {

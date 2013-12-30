@@ -11,7 +11,6 @@
 #import "TSEncryptedDatabaseError.h"
 #import "Cryptography.h"
 #import "KeychainWrapper.h"
-#import "ECKeyPair.h"
 #import "NSData+Base64.h"
 #import "Constants.h"
 #import "TSStorageMasterKey.h"
