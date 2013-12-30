@@ -59,7 +59,7 @@ static BOOL isMasterKeyLocked = TRUE;
     // Update user preferences
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kStorageMasterKeyWasCreated];
     
-    return [NSData dataWithBytesNoCopy:storageMasterKey length:MASTER_KEY_SIZE];
+    return [NSData dataWithBytesNoCopy:storageMasterKey length:MASTER_KEY_SIZE freeWhenDone:NO];
 }
 
 
@@ -85,7 +85,7 @@ static BOOL isMasterKeyLocked = TRUE;
     
     isMasterKeyLocked = FALSE;
     memcpy(storageMasterKey, [masterKey bytes], MASTER_KEY_SIZE);
-    return [NSData dataWithBytesNoCopy:storageMasterKey length:MASTER_KEY_SIZE];
+    return [NSData dataWithBytesNoCopy:storageMasterKey length:MASTER_KEY_SIZE freeWhenDone:NO];
 }
 
 
@@ -107,7 +107,7 @@ static BOOL isMasterKeyLocked = TRUE;
         return nil;
     }
     
-    return [NSData dataWithBytesNoCopy:storageMasterKey length:MASTER_KEY_SIZE];
+    return [NSData dataWithBytesNoCopy:storageMasterKey length:MASTER_KEY_SIZE freeWhenDone:NO];
 }
 
 

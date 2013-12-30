@@ -66,8 +66,12 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
     
     
     // Generate and store the TextSecure keys for the current user
-    [TSUserKeysDatabase generateAndStorePreKeys];
-    [TSUserKeysDatabase generateAndStoreIdentityKey];
+    if (![TSUserKeysDatabase generateAndStorePreKeys]) {
+        return NO;
+    };
+    if (![TSUserKeysDatabase generateAndStoreIdentityKey]) {
+        return NO;
+    };
     
     
     return YES;
@@ -112,10 +116,11 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
     // Fetch the key from the DB
     __block NSData *serializedKeyPair = nil;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
-        FMResultSet *rs = [db executeQuery:@"SELECT serialized_key_pair FROM user_identity_key"];
+        FMResultSet *rs = [db executeQuery:@"SELECT serialized_keypair FROM user_identity_key"];
         if([rs next]) {
-            serializedKeyPair = [rs dataForColumn:@"serialized_key_pair"];
+            serializedKeyPair = [rs dataForColumn:@"serialized_keypair"];
         }
+        [rs close];
     }];
     if (!serializedKeyPair) {
         // TODO: better error handling
@@ -140,14 +145,15 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
     __block int preKeysNb = 0;
     
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
-        FMResultSet *rs = [db executeQuery:@"SELECT serialized_key_pair FROM user_prekeys"];
-        if([rs next]) {
+        FMResultSet *rs = [db executeQuery:@"SELECT serialized_keypair FROM user_prekeys"];
+        while([rs next]) {
             preKeysNb++;
-            NSData *serializedKeyPair = [rs dataForColumn:@"serialized_key_pair"];
+            NSData *serializedKeyPair = [rs dataForColumn:@"serialized_keypair"];
             [preKeys addObject:[NSKeyedUnarchiver unarchiveObjectWithData:serializedKeyPair]];
         }
+        [rs close];
     }];
-    if (preKeysNb != PREKEYS_NUMBER){
+    if (preKeysNb != PREKEYS_NUMBER+1){
         // TODO: better error handling
         return nil;
     }
@@ -168,10 +174,11 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
     // Fetch the key from the DB
     __block NSData *serializedKeyPair = nil;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
-        FMResultSet *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT serialized_key_pair FROM user_prekeys WHERE prekey_id=%d", preKeyId]];
+        FMResultSet *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT serialized_keypair FROM user_prekeys WHERE prekey_id=%d", preKeyId]];
         if([rs next]) {
-            serializedKeyPair = [rs dataForColumn:@"serialized_key_pair"];
+            serializedKeyPair = [rs dataForColumn:@"serialized_keypair"];
         }
+        [rs close];
     }];
     if (!serializedKeyPair) {
         // TODO: better error handling
