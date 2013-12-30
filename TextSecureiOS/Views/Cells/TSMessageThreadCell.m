@@ -23,7 +23,7 @@
     
     UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     timestampLabel.textColor = [UIColor lightGrayColor];
-    timestampLabel.font = [UIFont systemFontOfSize:14.0f];
+    timestampLabel.font = [UIFont systemFontOfSize:10.0f];
     self.timestampLabel = timestampLabel;
     
     UILabel *threadPreviewLabel = [[UILabel alloc] initWithFrame:CGRectZero];
