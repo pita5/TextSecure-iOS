@@ -23,8 +23,7 @@
 - (instancetype)initNewConversation;
 
 
--(void) messageSent:(TSMessage*) message;
--(void) messageRecieved;
--(void)addMessage:(TSMessage*)message;
+
+-(void) reloadModel:(NSNotification*)notification ;
 @end
 

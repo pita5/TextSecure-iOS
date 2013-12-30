@@ -102,7 +102,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageRecieved) name:TSDatabaseDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;
@@ -177,27 +177,23 @@
     }
   
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
-    [self messageSent:message];
-    [[TSMessagesManager sharedManager] sendMessage:message];
 
+    [[TSMessagesManager sharedManager] sendMessage:message];
     [self finishSend];
 }
 
--(void) messageSent:(TSMessage*) message {
-  [JSMessageSoundEffect playMessageSentSound];
-  [self addMessage:message];
-}
 
--(void) messageRecieved {
-  [JSMessageSoundEffect playMessageReceivedSound];
+
+
+
+-(void) reloadModel:(NSNotification*)notification {
   [self.tableView reloadData];
-
-}
-
--(void)addMessage:(TSMessage*)message {
-    // TODO: error handling
-  [TSMessagesDatabase storeMessage:message];
-  [self.tableView reloadData];
+  if([[[notification userInfo] objectForKey:@"messageType"] isEqualToString:@"send"]) {
+    [JSMessageSoundEffect playMessageSentSound];
+  }
+  else {
+    [JSMessageSoundEffect playMessageReceivedSound];
+  }
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
