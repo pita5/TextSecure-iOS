@@ -1618,7 +1618,6 @@
 		B613B4D41815CEA900755184 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				B661DDBB184A583A00E369A8 /* TSMessagesManager.h */,
 				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
 				B635B38F182181E1003CE732 /* ComposeMessageViewController.h */,
 				B635B390182181E1003CE732 /* ComposeMessageViewController.m */,

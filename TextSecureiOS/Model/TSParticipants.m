@@ -19,13 +19,18 @@
 }
 
 - (NSString*) threadID{
-    NSString *phoneNumbers = [self concatenatedPhoneNumbers];
-    return[Cryptography computeSHA1DigestForString:phoneNumbers];
+  return [TSParticipants threadIDForParticipants:self];
 }
 
-- (NSString*) concatenatedPhoneNumbers{
++ (NSString*) threadIDForParticipants:(NSArray*)tsContacts {
+  NSString *phoneNumbers = [TSParticipants concatenatedPhoneNumbersForPaticipants:tsContacts];
+  return [Cryptography computeSHA1DigestForString:phoneNumbers];
+
+}
+
++ (NSString*) concatenatedPhoneNumbersForPaticipants:(NSArray*)tsContacts{
     NSMutableArray *phoneNumbers = [NSMutableArray array];
-    for (TSContact *contact in self) {
+    for (TSContact *contact in tsContacts) {
         [phoneNumbers addObject:contact.registeredID];
     }
 

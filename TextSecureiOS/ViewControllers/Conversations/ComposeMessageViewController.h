@@ -12,10 +12,11 @@
 #import "TSContact.h"
 
 @class TSMessage;
+@class TSThread;
 @interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
 @property (nonatomic, retain) TSContact *contact;
-@property (nonatomic) NSInteger threadID;
+@property (nonatomic) TSThread *thread;
 // Need to be initialized with one of those methods
 
 - (instancetype)initWithConversationID:(NSString*)contactID;

@@ -19,4 +19,6 @@
 @property (nonatomic) BOOL identityKeyIsVerified;
 - (NSString*) name;
 -(void) save;
+
+-(id) initWithRegisteredID:(NSString*)registeredID;
 @end

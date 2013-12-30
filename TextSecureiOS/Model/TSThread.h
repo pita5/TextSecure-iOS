@@ -16,4 +16,6 @@
 @property (nonatomic, retain) TSParticipants *participants;
 @property (nonatomic, retain) TSMessage *latestMessage;
 
++ (TSThread*) threadWithParticipants:(TSParticipants*)participants;
+
 @end

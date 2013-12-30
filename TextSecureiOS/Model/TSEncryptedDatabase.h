@@ -12,6 +12,7 @@
 @class FMDatabaseQueue;
 @class TSMessage;
 @class TSContact;
+@class TSThread;
 @interface TSEncryptedDatabase : NSObject
 
 
@@ -103,7 +104,7 @@
 
 #pragma mark - DB message functions
 -(void) storeMessage:(TSMessage*)message;
--(NSArray*) getMessagesOnThread:(NSInteger) threadId;
+-(NSArray*) getMessagesOnThread:(TSThread*) thread;
 -(NSArray*) getThreads;
 -(void)storeTSContact:(TSContact*)contact;
 

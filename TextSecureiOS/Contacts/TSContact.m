@@ -10,6 +10,14 @@
 #import <AddressBook/AddressBook.h>
 #import "TSEncryptedDatabase.h"
 @implementation TSContact
+-(id) initWithRegisteredID:(NSString*)registeredID {
+#warning added this to use the compute thread ids methods as is, but awkward as there are some db calls that assume TSContact has more fields (see header) that will crash with a TSContact initialized in this manner.
+  if(self=[super init]) {
+    self.registeredID = registeredID;
+  }
+  return self;
+  
+}
 - (NSString*) name{
   if (self.userABID){
     
@@ -23,6 +31,7 @@
     
   }else {return nil;}
 }
+
 
 -(void) save{
   [[TSEncryptedDatabase database] storeTSContact:self];

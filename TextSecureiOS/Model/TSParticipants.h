@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface TSParticipants : NSMutableArray
+
 - (id) initWithTSContactsArray:(NSArray*)tsContacts;
+
 - (NSString*) threadID;
++ (NSString*) concatenatedPhoneNumbersForPaticipants:(NSArray*)tsContacts;
++ (NSString*) threadIDForParticipants:(NSArray*)tsContacts;
 @end
