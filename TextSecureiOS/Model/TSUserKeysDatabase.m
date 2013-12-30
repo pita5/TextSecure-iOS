@@ -68,6 +68,7 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
+        userKeysDb = nil;
         return NO;
     }
     
@@ -79,6 +80,7 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
+        userKeysDb = nil;
         return NO;
     };
     

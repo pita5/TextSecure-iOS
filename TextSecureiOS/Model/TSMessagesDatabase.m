@@ -37,10 +37,7 @@ static TSEncryptedDatabase2 *messagesDb = nil;
 @end
 
 
-@implementation TSMessagesDatabase {
-
-    @protected FMDatabaseQueue *dbQueue;
-}
+@implementation TSMessagesDatabase
 
 #pragma mark DB creation
 
@@ -55,8 +52,7 @@ static TSEncryptedDatabase2 *messagesDb = nil;
     
     // Create the tables we need
     __block BOOL dbInitSuccess = NO;
-    FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:[FilePath pathInDocumentsDirectory:databaseFileName]];
-    [dbQueue inDatabase:^(FMDatabase *db) {
+    [db.dbQueue inDatabase:^(FMDatabase *db) {
         if (![db executeUpdate:@"CREATE TABLE persistent_settings (setting_name TEXT UNIQUE,setting_value TEXT)"]) {
             // Happens when the master key is wrong (ie. wrong (old?) encrypted key in the keychain)
             return;
@@ -85,7 +81,7 @@ static TSEncryptedDatabase2 *messagesDb = nil;
         return NO;
     }
 
-    
+    messagesDb = db;
     return YES;
 }
 
@@ -102,11 +98,10 @@ static TSEncryptedDatabase2 *messagesDb = nil;
         return YES;
     }
     
-    TSEncryptedDatabase2 *db = [TSEncryptedDatabase2 databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] error:error];
-    if (!db) {
+    messagesDb = [TSEncryptedDatabase2 databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] error:error];
+    if (!messagesDb) {
         return NO;
     }
-    messagesDb = db;
     return YES;
 }
 
