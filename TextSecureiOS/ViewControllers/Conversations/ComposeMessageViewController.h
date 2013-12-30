@@ -19,7 +19,7 @@
 @property (nonatomic) TSThread *thread;
 // Need to be initialized with one of those methods
 
-- (instancetype)initWithConversationID:(NSString*)contactID;
+- (instancetype)initWithConversation:(TSThread*)thread;
 - (instancetype)initNewConversation;
 
 

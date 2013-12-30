@@ -115,17 +115,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
-    /*
-     //sketch of using database data getMessagesOnThread and getThreads
-     // need fleshed out (currently schema is 1 thread only) --corbett
-     if(![TSEncryptedDatabase isLockedOrNotCreated]) {
-     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-     return [[cryptoDB getThreads] count];
-     }
-     else {
-     return 0;
-     }
-     */
     if([TSMessagesDatabase databaseWasCreated]) {
         // don't display until db is unlocked (we have "dummy data" right now, but this better mimics UX behavior)
         return [[TSMessagesDatabase getThreads] count];
@@ -158,6 +147,11 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 	else if (editingStyle == UITableViewCellEditingStyleInsert) {
 		[self Edit:self];
 	}
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
+  [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc] initWithConversation:thread]] animated:YES completion:nil];
 }
 
 -(void) reloadModel:(NSNotification*)notification {
