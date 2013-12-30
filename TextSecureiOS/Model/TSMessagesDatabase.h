@@ -12,6 +12,14 @@
 @class TSMessage;
 @class TSContact;
 
+/**
+ 
+ * Posted when the database receives an update
+ 
+ */
+
+extern NSString * const TSDatabaseDidUpdateNotification;
+
 
 @interface TSMessagesDatabase : NSObject
 

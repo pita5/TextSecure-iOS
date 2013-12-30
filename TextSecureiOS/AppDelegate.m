@@ -17,6 +17,7 @@
 #import "TSRegisterForPushRequest.h"
 #import "NSString+Conversion.h"
 #import "TSMessagesManager.h"
+#import "NSData+Base64.h"
 
 @implementation AppDelegate
 
@@ -25,6 +26,12 @@
 #define firstLaunchKey @"FirstLaunch"
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // UIAppearance proxy setup
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor]} forState:UIControlStateDisabled];
+    
+    
     // If this is the first launch, we want to remove stuff from the Keychain that might be there from a previous install
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:firstLaunchKey]) {
@@ -92,7 +99,7 @@
             }
         }
         else {
-          [[NSNotificationCenter defaultCenter] postNotificationName:@"DatabaseUpdated" object:self];
+          [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self];
         }
   }
 }
@@ -124,12 +131,13 @@
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
 
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-    [alert show];
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//    [alert show];
     
 #ifdef DEBUG
 #warning registering with dummy ID so that we can proceed in the simulator. You'll want to change this!
-  [self application:application didRegisterForRemoteNotificationsWithDeviceToken:[[NSData alloc] initWithBase64Encoding:[@"christine" base64Encoded]]];
+  NSData *deviceToken = [NSData dataFromBase64String:[@"christine" base64Encoded]];
+  [self application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 #endif
   
 }

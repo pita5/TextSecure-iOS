@@ -52,6 +52,7 @@
   textsecure::PushMessageContent *pushMessageContent = new textsecure::PushMessageContent();
   const std::string body([message cStringUsingEncoding:NSASCIIStringEncoding]);
   pushMessageContent->set_body(body);
+
   NSData *serializedPushMessageContent = [IncomingPushMessageSignal getDataForPushMessageContent:pushMessageContent];
   delete pushMessageContent;
   return serializedPushMessageContent;
@@ -104,10 +105,12 @@
   /* testing conversion to objective c objects */
   NSNumber* type = [NSNumber numberWithInteger:cppType];
   NSString* source = [NSString stringWithCString:cppSource.c_str() encoding:NSASCIIStringEncoding];
+
   NSNumber* timestamp = [NSNumber numberWithInteger:cppTimestamp];
-  
+  //[[NSDate alloc] initWithTimeIntervalSince1970:[timestamp longLongValue]]
   NSString* message = [IncomingPushMessageSignal getMessageBody:incomingPushMessageSignal];
-  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:source, nil] sentOnDate:[[NSDate alloc] initWithTimeIntervalSince1970:[timestamp doubleValue]]];
+#warning ignoring timestamp sent, setting to now, fix issue with timestamp received being incorrectly interpreted (a few years off). currently behavior is when received.
+  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:source, nil] sentOnDate:[NSDate date]];
   return tsMessage;
 }
 

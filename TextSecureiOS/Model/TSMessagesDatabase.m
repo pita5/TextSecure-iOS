@@ -23,6 +23,9 @@
 #define databaseFileName @"TSMessages.db"
 
 
+NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database.update";
+
+
 // Reference to the singleton
 static TSEncryptedDatabase2 *messagesDb = nil;
 

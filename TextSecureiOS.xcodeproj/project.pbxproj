@@ -27,7 +27,6 @@
 		8C49FC1018497E86006132F6 /* TSEncryptedDatabaseError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */; };
 		8C7D62D71865F898003E2B90 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0AB3D9184300B000DEC2B6 /* TSMessagesDatabaseTests.m */; };
 		8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
-		8CF7BD8D187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
 		8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */; };
 		8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */; };
 		8CF7BD981870D9450023A781 /* TSEncryptedDatabase2.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD971870D9450023A781 /* TSEncryptedDatabase2.m */; };
@@ -2391,7 +2390,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CF7BD8D187088D80023A781 /* TSECKeyPair.m in Sources */,
 				8CF7BD9F187130F80023A781 /* TSStorageMasterKeyTests.m in Sources */,
 				8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */,
 				8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */,
