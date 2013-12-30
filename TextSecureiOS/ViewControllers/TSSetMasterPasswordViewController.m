@@ -10,6 +10,7 @@
 #import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabaseError.h"
 #import "TSRegisterPrekeysRequest.h"
+#import "TSUserKeysDatabase.h"
 
 @interface TSSetMasterPasswordViewController ()
 
@@ -60,16 +61,13 @@
         }
     }
     // Generate the identity key and prekeys and store in the database
-  
-    BOOL prekeyGenerationAndStorageSuccess = [encDb storePrekeys:[TSKeyManager generatePersonalPrekeys:70]];
-    BOOL identityKeyGenerationAndStorageSuccess =  [encDb storeIdentityKey:[TSKeyManager generateIdentityKey]];
-    if (!(prekeyGenerationAndStorageSuccess&&identityKeyGenerationAndStorageSuccess)) {
+    if (![TSUserKeysDatabase databaseCreateUserKeysWithError:&error]) {
       @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
     }
   
     // Send the user's newly generated keys to the API
     // TODO: Error handling & retry if network error
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[encDb getPersonalPrekeys] identityKey:[encDb getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[TSUserKeysDatabase getAllPreKeys] identityKey:[TSUserKeysDatabase getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         switch (operation.response.statusCode) {
             case 200:

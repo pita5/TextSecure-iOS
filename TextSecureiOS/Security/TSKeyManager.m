@@ -99,38 +99,5 @@
 }
 
 
-+(ECKeyPair*) generateIdentityKey {
-  /*
-   An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
-   
-   In secure protocols, identity keys generally never actually encrypt anything, so it doesn't affect previous confidentiality if they are compromised. The typical relationship is that you have a long term identity key pair which is used to sign ephemeral keys (like the prekeys).
-   */
-  
-  // No need to the check if the DB is locked as this happens during DB creation
-  return [ECKeyPair createAndGeneratePublicPrivatePair:-1];
-}
-
-
-+(NSArray*) generatePersonalPrekeys:(int)numberToGenerate {
-  // Key of last resort
-  NSMutableArray* prekeysGenerated = [[NSMutableArray alloc] init];
-  
-  [prekeysGenerated addObject:[ECKeyPair createAndGeneratePublicPrivatePair:0xFFFFFF]];
-  int prekeyCounter = arc4random() % 0xFFFFFF;
-  
-  // Generate and store keys
-  for(int i=0; i<numberToGenerate; i++) {
-    [prekeysGenerated addObject:[ECKeyPair createAndGeneratePublicPrivatePair:++prekeyCounter]];
-
-  }
-  return prekeysGenerated;
-}
-
-
-
-
-
-
-
 
 @end

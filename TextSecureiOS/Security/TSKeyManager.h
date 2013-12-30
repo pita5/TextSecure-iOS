@@ -41,8 +41,5 @@
 +(void) removeAllKeychainItems;
 +(BOOL) hasVerifiedPhoneNumber;
 
-#pragma mark keys generated at install management
-+(NSArray*) generatePersonalPrekeys:(int)numberToGenerate;
-+(ECKeyPair*) generateIdentityKey;
 
 @end

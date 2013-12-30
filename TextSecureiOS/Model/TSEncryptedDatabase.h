@@ -80,22 +80,6 @@
 +(BOOL) isLockedOrNotCreated;
 
 
-/**
- * Get the identity key stored in the database. Will trigger exceptions if the database is locked. TODO: Automatically prompt the user for their password instead.
- * @author Alban Diquet
- *
- * @return The identity key.
- */
--(ECKeyPair*) getIdentityKey;
-
-
-/**
- * Get the pre keys stored in the database. Will trigger exceptions if the database is locked. TODO: Automatically prompt the user for their password instead.
- * @author Alban Diquet
- *
- * @return An array of pre-keys.
- */
--(NSArray*) getPersonalPrekeys;
 #pragma mark - settings values
 -(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
 -(BOOL) setDatabaseCreatedPersistantSetting ;
@@ -106,12 +90,6 @@
 -(NSArray*) getMessagesOnThread:(NSInteger) threadId;
 -(NSArray*) getThreads;
 -(void)storeTSContact:(TSContact*)contact;
-
-
--(BOOL) storePrekeys:(NSArray*)prekeyArray;
--(BOOL) storeIdentityKey:(ECKeyPair*)identityKey;
-
-
 
 
 @end
