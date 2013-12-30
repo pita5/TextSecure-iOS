@@ -9,18 +9,17 @@
 #import <Foundation/Foundation.h>
 
 @class FMDatabase;
+@class FMDatabaseQueue;
 
 
 @interface TSEncryptedDatabase2 : NSObject
 
-@property (nonatomic, retain) NSString *dbFilePath;
+@property (nonatomic, retain) FMDatabaseQueue *dbQueue;
 
 
 +(instancetype) databaseCreateAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName error:(NSError **)error;
 +(instancetype) databaseOpenAndDecryptAtFilePath:(NSString *)dbFilePath error:(NSError **)error;
 +(void) databaseEraseAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName;
-
--(BOOL) queryWithBlock:(void (^)(FMDatabase *db) ) queryBlock error:(NSError **)error;
 
 
 @end

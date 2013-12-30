@@ -113,6 +113,7 @@ static BOOL isMasterKeyLocked = TRUE;
 
 +(void) lockStorageMasterKey {
     // Best-effort "secure" erase; may be overkill and may not work at all
+    // We'll also probably have pointers to decrypted DBs hanging around :(
     isMasterKeyLocked = TRUE;
     
     // TODO: See if this actually works the way I think it works

@@ -13,6 +13,13 @@
 #import "TSStorageMasterKey.h"
 
 
+@interface TSEncryptedDatabase2(Private)
+
+-(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
+
+@end
+
+
 
 @implementation TSEncryptedDatabase2 {
 }
@@ -62,7 +69,7 @@
         return nil;
     }
     
-    TSEncryptedDatabase2 *encryptedDB = [[TSEncryptedDatabase2 alloc] initWithDatabaseFilePath:dbFilePath];
+    TSEncryptedDatabase2 *encryptedDB = [[TSEncryptedDatabase2 alloc] initWithDatabaseQueue:dbQueue];
     
     // Success - store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:preferenceName];
@@ -75,8 +82,8 @@
 +(instancetype) databaseOpenAndDecryptAtFilePath:(NSString *)dbFilePath error:(NSError **)error {
     
     // Get the storage master key
-    NSData *key = [TSStorageMasterKey getStorageMasterKeyWithError:error];
-    if (!key) {
+    NSData *storageKey = [TSStorageMasterKey getStorageMasterKeyWithError:error];
+    if (!storageKey) {
         return nil;
     }
     
@@ -85,7 +92,7 @@
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbFilePath];
     
     [dbQueue inDatabase:^(FMDatabase *db) {
-        if(![db setKeyWithData:key]) {
+        if(![db setKeyWithData:storageKey]) {
             // Supplied password was valid but the master key wasn't
             return;
         }
@@ -105,7 +112,7 @@
         return nil;
     }
     
-    TSEncryptedDatabase2 *encryptedDB = [[TSEncryptedDatabase2 alloc] initWithDatabaseFilePath:dbFilePath];
+    TSEncryptedDatabase2 *encryptedDB = [[TSEncryptedDatabase2 alloc] initWithDatabaseQueue:dbQueue];
     return encryptedDB;
 }
 
@@ -119,33 +126,11 @@
 }
 
 
--(instancetype) initWithDatabaseFilePath:(NSString *)dbFilePath {
+-(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue {
     if(self=[super init]) {
-        self.dbFilePath = dbFilePath;
+        self.dbQueue = queue;
     }
     return self;
-}
-
-
--(BOOL) queryWithBlock:(void (^)(FMDatabase *db) ) queryBlock error:(NSError **)error {
- 
-    // Get the storage master key
-    NSData *key = [TSStorageMasterKey getStorageMasterKeyWithError:error];
-    if (!key) {
-        return NO;
-    }
-        
-    // Try to open the DB
-    FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:self.dbFilePath];
-    if (!dbQueue) {
-        if (error){
-            *error = [TSEncryptedDatabaseError dbWasCorrupted];
-        }
-        return NO;
-    }
-    
-    [dbQueue inDatabase:queryBlock];
-    return YES;
 }
 
 
