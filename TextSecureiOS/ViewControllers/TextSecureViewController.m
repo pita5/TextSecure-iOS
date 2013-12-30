@@ -182,17 +182,17 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 -(void) reloadModel:(NSNotification*)notification {
-
-    if([TSMessagesDatabase databaseWasCreated] == YES) {
-        NSArray *messagesOnThread = [TSMessagesDatabase getMessagesOnThread:0];
-        if (messagesOnThread && [messagesOnThread count] ) {
-            TSMessage *message = [messagesOnThread objectAtIndex:0];
-        }
-        
-        NSArray *allThreads = [TSMessagesDatabase getThreads];
-        NSLog(@"allThreads.count: %d", allThreads.count);
-    }
-    
+// sketch of using database
+//    if([TSMessagesDatabase databaseWasCreated] == YES) {
+//        NSArray *messagesOnThread = [TSMessagesDatabase getMessagesOnThread:0];
+//        if (messagesOnThread && [messagesOnThread count] ) {
+//            TSMessage *message = [messagesOnThread objectAtIndex:0];
+//        }
+//        
+//        NSArray *allThreads = [TSMessagesDatabase getThreads];
+//        NSLog(@"allThreads.count: %d", allThreads.count);
+//    }
+//    
 #warning get the messages from the database here
     [self.tableView reloadData];
 }

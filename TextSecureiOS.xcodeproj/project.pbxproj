@@ -1122,11 +1122,11 @@
 			children = (
 				8C49FC0E18497E86006132F6 /* TSEncryptedDatabaseError.h */,
 				8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */,
-				A515AFD9180966E30084ABA5 /* TSMessagesDatabase.h */,
 				8CF7BD961870D9450023A781 /* TSEncryptedDatabase2.h */,
 				8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */,
 				8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */,
 				8CF7BD971870D9450023A781 /* TSEncryptedDatabase2.m */,
+				A515AFD9180966E30084ABA5 /* TSMessagesDatabase.h */,
 				A515AFDA180966E30084ABA5 /* TSMessagesDatabase.m */,
 				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
 				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,

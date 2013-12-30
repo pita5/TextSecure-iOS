@@ -157,7 +157,7 @@ static TSEncryptedDatabase2 *messagesDb = nil;
     }];
 }
 
--(NSArray*) getMessagesOnThread:(TSThread*) thread {
++(NSArray*) getMessagesOnThread:(TSThread*) thread {
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
