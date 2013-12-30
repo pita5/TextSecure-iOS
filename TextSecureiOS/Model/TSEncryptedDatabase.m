@@ -360,16 +360,17 @@ NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database
 #pragma mark - DB message methods
 
 -(void) storeMessage:(TSMessage*)message {
+   TSContact *sender = [[TSContact alloc] initWithRegisteredID:message.senderId];
+   TSContact *reciever = [[TSContact alloc] initWithRegisteredID:message.recipientId];
+
     [self->dbQueue inDatabase:^(FMDatabase *db) {
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
         NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
-      
-        TSContact *sender = [[TSContact alloc] initWithRegisteredID:message.senderId];
-        TSContact *reciever = [[TSContact alloc] initWithRegisteredID:message.recipientId];
-
-        [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",[TSParticipants threadIDForParticipants:@[sender,reciever]],message.message,message.senderId,message.recipientId,sqlDate];
+        NSLog(@"SQL QUERY:\n INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (%@, %@, %@, %@, %@)",threadId,message.message,message.senderId,message.recipientId,sqlDate);
+        [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate];
     }];
+
 }
 
 -(NSArray*) getMessagesOnThread:(TSThread*) thread {
@@ -378,16 +379,14 @@ NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database
     [self->dbQueue inDatabase:^(FMDatabase *db) {
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
-        FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=%@ ORDER BY timestamp", [thread threadID]]];
-
+        FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=\"%@\" ORDER BY timestamp", [thread threadID]]];
+      
         while([rs next]) {
             NSString* timestamp = [rs stringForColumn:@"timestamp"];
             NSDate *date = [dateFormatter dateFromString:timestamp];
             [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date]];
         }
     }];
-  
-    
     return messageArray;
 }
 
@@ -404,10 +403,13 @@ NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database
         while([rs next]) {
             NSString* timestamp = [rs stringForColumn:@"timestamp"];
             NSDate *date = [dateFormatter dateFromString:timestamp];
-            
-            TSThread *messageThread = [[TSThread alloc] init];
-            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date];
-            
+            TSContact *sender = [[TSContact alloc] initWithRegisteredID:[rs stringForColumn:@"sender_id"]];
+            TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[rs stringForColumn:@"recipient_id"]];
+            TSThread *messageThread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[sender,receiver]]];
+          
+          
+            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date];
+            NSLog(@"thread id in get threads %@",[messageThread threadID]);
             [threadArray addObject:messageThread];
         }
     }];
@@ -418,7 +420,8 @@ NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database
 -(void)storeTSThread:(TSThread*)thread {
     
   [self->dbQueue inDatabase:^(FMDatabase *db) {
-    for(TSContact* contact in thread.participants) {
+#warning thread.participants participants awkward, but TSParticipants being NSArray also awkward.
+    for(TSContact* contact in [thread.participants participants]) {
       [contact save];
     }
   }];

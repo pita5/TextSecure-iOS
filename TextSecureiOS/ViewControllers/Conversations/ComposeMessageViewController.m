@@ -175,8 +175,8 @@
         self.title = [NSString stringWithFormat:@"%@", [_tokenFieldView.tokenField.tokenTitles objectAtIndex:0]];
         _tokenFieldView = nil;
     }
-
-    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
+  
+    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
     [self messageSent:message];
     [[TSMessagesManager sharedManager] sendMessage:message];
 
@@ -204,7 +204,7 @@
   TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
   NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.thread];
   
-  if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
+  if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:[TSKeyManager getUsernameToken]]) {
     return JSBubbleMessageTypeOutgoing;
   }
    else {

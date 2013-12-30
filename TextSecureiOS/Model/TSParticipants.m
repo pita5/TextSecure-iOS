@@ -19,12 +19,16 @@
 }
 
 - (NSString*) threadID{
+
   return [TSParticipants threadIDForParticipants:self.participants];
 }
 
 + (NSString*) threadIDForParticipants:(NSArray*)tsContacts {
   NSString *phoneNumbers = [TSParticipants concatenatedPhoneNumbersForPaticipants:tsContacts];
-  return [Cryptography computeSHA1DigestForString:phoneNumbers];
+  NSString* threadID= [Cryptography computeSHA1DigestForString:phoneNumbers];
+  return threadID;
+
+
 
 }
 
@@ -43,7 +47,8 @@
     for (NSString *number in sortedArray){
         returnString = [returnString stringByAppendingString:number];
     }
-    
+
+  
     return returnString;
 }
 
