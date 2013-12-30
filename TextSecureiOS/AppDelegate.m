@@ -60,50 +60,10 @@
 	if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    passwordDialogue.alertViewStyle = UIAlertViewStyleSecureTextInput;
-    
-    [passwordDialogue show]; 
-    
 	}
 	return YES;
 
 }
-
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSError *error = nil;
-#warning we will want better error handling, including reprompting if user enters password wrong
-    if(buttonIndex==1) {
-        NSString* password = [[alertView textFieldAtIndex:0] text];
-        // Unlock the storage master key so we can access the user's DBs
-        if (![TSStorageMasterKey unlockStorageMasterKeyUsingPassword:password error:&error]) {
-            if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
-                switch ([error code]) {
-                  case InvalidPassword: {
-                        // TODO: Proper error handling
-#warning we won't want to allow indefinite password attempts
-                        UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password incorrect" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-                        passwordDialogue.alertViewStyle = UIAlertViewStyleSecureTextInput;
-                    
-                        [passwordDialogue show];
-                        break;
-                    }
-                    case NoDbAvailable:
-                        // TODO: Proper error handling
-                        @throw [NSException exceptionWithName:@"No DB available; create one first" reason:[error localizedDescription] userInfo:nil];
-                    default:
-                      // TODO: proper error handling
-                      @throw [NSException exceptionWithName:@"Miscelaneous DB exception" reason:[error localizedDescription] userInfo:nil];
-                }
-            }
-        }
-        else {
-          [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self];
-        }
-  }
-}
-
 
 #pragma mark - Push notifications
 
