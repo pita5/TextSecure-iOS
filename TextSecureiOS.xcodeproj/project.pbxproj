@@ -22,10 +22,12 @@
 		4C0ACB87186CF2F100B328D5 /* avatar_reich@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB79186CF2F100B328D5 /* avatar_reich@2x.png */; };
 		4C0ACB88186CF2F100B328D5 /* disclosure_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB7A186CF2F100B328D5 /* disclosure_indicator.png */; };
 		4C0ACB89186CF2F100B328D5 /* disclosure_indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB7B186CF2F100B328D5 /* disclosure_indicator@2x.png */; };
+		4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */; };
+		4C77526E18707A46000FCCA6 /* PasswordUnlockViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C77526C18707A46000FCCA6 /* PasswordUnlockViewController.xib */; };
 		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
 		8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C42C14418551B8C000DD353 /* TSHKDFTests.m */; };
 		8C49FC1018497E86006132F6 /* TSEncryptedDatabaseError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */; };
-		8C7D62D71865F898003E2B90 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0AB3D9184300B000DEC2B6 /* TSMessagesDatabaseTests.m */; };
+		8C7D62D71865F898003E2B90 /* TSEncryptedDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */; };
 		8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
 		8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */; };
 		8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */; };
@@ -497,7 +499,10 @@
 		4C0ACB79186CF2F100B328D5 /* avatar_reich@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_reich@2x.png"; sourceTree = "<group>"; };
 		4C0ACB7A186CF2F100B328D5 /* disclosure_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure_indicator.png; sourceTree = "<group>"; };
 		4C0ACB7B186CF2F100B328D5 /* disclosure_indicator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure_indicator@2x.png"; sourceTree = "<group>"; };
-		8C0AB3D9184300B000DEC2B6 /* TSMessagesDatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSMessagesDatabaseTests.m; sourceTree = "<group>"; };
+		4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordUnlockViewController.h; path = ViewControllers/PasswordUnlockViewController.h; sourceTree = "<group>"; };
+		4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordUnlockViewController.m; path = ViewControllers/PasswordUnlockViewController.m; sourceTree = "<group>"; };
+		4C77526C18707A46000FCCA6 /* PasswordUnlockViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PasswordUnlockViewController.xib; path = ViewControllers/PasswordUnlockViewController.xib; sourceTree = "<group>"; };
+		8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSEncryptedDatabaseTests.m; sourceTree = "<group>"; };
 		8C3C917518544FDF003EA71D /* TSHKDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSHKDF.h; path = Security/TSHKDF.h; sourceTree = "<group>"; };
 		8C3C917618544FDF003EA71D /* TSHKDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSHKDF.m; path = Security/TSHKDF.m; sourceTree = "<group>"; };
 		8C42C13918551B8C000DD353 /* TextSecureiOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TextSecureiOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1098,7 +1103,7 @@
 				8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */,
 				8CF7BDA0187137640023A781 /* TSEncryptedDatabase2Tests.m */,
 				8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */,
-				8C0AB3D9184300B000DEC2B6 /* TSMessagesDatabaseTests.m */,
+				8C0AB3D9184300B000DEC2B6 /* TSEncryptedDatabaseTests.m */,
 				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
@@ -1612,6 +1617,9 @@
 				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
+				4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */,
+				4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */,
+				4C77526C18707A46000FCCA6 /* PasswordUnlockViewController.xib */,
 				A5169D05170FEA8D00A2CE9E /* CountryViewController.h */,
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
@@ -1944,6 +1952,7 @@
 				A537295417011A5200C6FCCF /* an@2x.png in Resources */,
 				A537295517011A5200C6FCCF /* ao.png in Resources */,
 				A537295617011A5200C6FCCF /* ar.png in Resources */,
+				4C77526E18707A46000FCCA6 /* PasswordUnlockViewController.xib in Resources */,
 				A537295717011A5200C6FCCF /* as.png in Resources */,
 				B635B3D6182181E1003CE732 /* bubble-flat-outgoing-selected@2x.png in Resources */,
 				A537295817011A5200C6FCCF /* ast.png in Resources */,
@@ -2392,7 +2401,7 @@
 				8CF7BD9F187130F80023A781 /* TSStorageMasterKeyTests.m in Sources */,
 				8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */,
 				8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */,
-				8C7D62D71865F898003E2B90 /* TSMessagesDatabaseTests.m in Sources */,
+				8C7D62D71865F898003E2B90 /* TSEncryptedDatabaseTests.m in Sources */,
 				8CF7BDA1187137640023A781 /* TSEncryptedDatabase2Tests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
 				A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */,
@@ -2461,6 +2470,7 @@
 				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
+				4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */,
 				B635B3E9182181E1003CE732 /* UIImage+JSMessagesView.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
 				A5169D3D170FEDC600A2CE9E /* main.m in Sources */,
