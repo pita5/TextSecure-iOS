@@ -11,7 +11,8 @@
 #import "TSKeyManager.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "NSObject+SBJson.h"
-#import "TSEncryptedDatabase.h"
+#import "TSMessagesDatabase.h"
+#import "TSStorageMasterKey.h"
 #import "TSEncryptedDatabaseError.h"
 #import "TSRegisterForPushRequest.h"
 #import "NSString+Conversion.h"
@@ -49,7 +50,7 @@
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
-	if([TSKeyManager hasVerifiedPhoneNumber] && [TSEncryptedDatabase databaseWasCreated]) {
+	if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     UIAlertView *passwordDialogue =   [[UIAlertView alloc] initWithTitle:@"Password" message:@"enter your password" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
@@ -68,7 +69,8 @@
 #warning we will want better error handling, including reprompting if user enters password wrong
     if(buttonIndex==1) {
         NSString* password = [[alertView textFieldAtIndex:0] text];
-        if (![TSEncryptedDatabase databaseUnlockWithPassword:password error:&error]) {
+        // Unlock the storage master key so we can access the user's DBs
+        if (![TSStorageMasterKey unlockStorageMasterKeyUsingPassword:password error:&error]) {
             if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
                 switch ([error code]) {
                   case InvalidPassword: {

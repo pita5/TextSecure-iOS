@@ -8,7 +8,8 @@
 
 #import "TSContact.h"
 #import <AddressBook/AddressBook.h>
-#import "TSEncryptedDatabase.h"
+#import "TSMessagesDatabase.h"
+
 @implementation TSContact
 - (NSString*) name{
   if (self.userABID){
@@ -25,6 +26,6 @@
 }
 
 -(void) save{
-  [[TSEncryptedDatabase database] storeTSContact:self];
+  [TSMessagesDatabase storeTSContact:self];
 }
 @end

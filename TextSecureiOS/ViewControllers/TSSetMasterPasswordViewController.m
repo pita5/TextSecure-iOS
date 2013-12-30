@@ -7,7 +7,6 @@
 //
 
 #import "TSSetMasterPasswordViewController.h"
-#import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabaseError.h"
 #import "TSRegisterPrekeysRequest.h"
 #import "TSUserKeysDatabase.h"
@@ -51,19 +50,13 @@
     // Create the database on the device
     NSError *error = nil;
     
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:self.pass.text error:&error];
-    if(!encDb) {
-        if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
-            switch ([error code]) {
-                case DbCreationFailed:
-                    // TODO: Proper error handling
-                    @throw [NSException exceptionWithName:@"DB creation failed" reason:[error localizedDescription] userInfo:nil];
-            }
-        }
+    
+    // Derive the storage master key from the user's password and store it so we can then create DBs
+    if (![TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text]) {
+        @throw [NSException exceptionWithName:@"Storage master key creation failed" reason:[error localizedDescription] userInfo:nil];
     }
-    // Derive the storage master key from the user's password and store it
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text];
-    // Generate the identity key and prekeys and store in the user DB
+    
+    // Create the user keys DB and generate the user's identity key and prekeys
     if (![TSUserKeysDatabase databaseCreateUserKeysWithError:&error]) {
       @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
     }

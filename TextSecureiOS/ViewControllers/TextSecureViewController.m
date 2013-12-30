@@ -7,8 +7,8 @@
 //
 
 #import "TextSecureViewController.h"
-#import "TSKeyManager.h"
 #import "Cryptography.h"
+#import "TSMessagesDatabase.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "NSString+Conversion.h"
 #import "TSSettingsViewController.h"
@@ -16,7 +16,6 @@
 #import "TSContact.h"
 #import "TSMessage.h"
 #import "ComposeMessageViewController.h"
-#import "TSEncryptedDatabase.h"
 #import "TSMessageThreadCell.h"
 
 static NSString *kCellIdentifier = @"CellIdentifier";
@@ -151,7 +150,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
      return 0;
      }
      */
-    if(![TSEncryptedDatabase isLockedOrNotCreated]) {
+    if([TSMessagesDatabase databaseWasCreated]) {
         // don't display until db is unlocked (we have "dummy data" right now, but this better mimics UX behavior)
         return [self.messages count];
     }
@@ -186,12 +185,11 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 -(void) reloadModel:(NSNotification*)notification {
-    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-
-    if([TSEncryptedDatabase isLockedOrNotCreated] == NO) {
-        TSMessage *message = [[cryptoDB getMessagesOnThread:0] objectAtIndex:0];
+    
+    if([TSMessagesDatabase databaseWasCreated] == YES) {
+        TSMessage *message = [[TSMessagesDatabase getMessagesOnThread:0] objectAtIndex:0];
         
-        NSArray *allThreads = [cryptoDB getThreads];
+        NSArray *allThreads = [TSMessagesDatabase getThreads];
         NSLog(@"allThreads.count: %d", allThreads.count);
     }
     

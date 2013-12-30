@@ -8,6 +8,7 @@
 
 #import "TSUserKeysDatabase.h"
 #import "TSEncryptedDatabase2.h"
+#import "TSEncryptedDatabaseError.h"
 #import "TSECKeyPair.h"
 #import "FilePath.h"
 #import "FMDatabase.h"
@@ -17,6 +18,7 @@
 
 #define USER_KEYS_DB_FILE_NAME @"TSUserKeys.db"
 #define USER_KEYS_DB_PREFERENCE @"TSUserKeysDbWasCreated"
+
 
 static TSEncryptedDatabase2 *userKeysDb = nil;
 
@@ -61,15 +63,22 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
         querySuccess = YES;
     }];
     if (!querySuccess) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError dbCreationFailed];
+        }
+        // Cleanup
+        [TSUserKeysDatabase databaseErase];
         return NO;
     }
     
     
     // Generate and store the TextSecure keys for the current user
-    if (![TSUserKeysDatabase generateAndStorePreKeys]) {
-        return NO;
-    };
-    if (![TSUserKeysDatabase generateAndStoreIdentityKey]) {
+    if (!([TSUserKeysDatabase generateAndStorePreKeys] && ([TSUserKeysDatabase generateAndStoreIdentityKey]))) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError dbCreationFailed];
+        }
+        // Cleanup
+        [TSUserKeysDatabase databaseErase];
         return NO;
     };
     

@@ -1,15 +1,14 @@
 //
-//  TSEncryptedDatabaseTests.m
-//  TSEncryptedDatabase Tests
+//  TSMessagesDatabase.m
+//  TSMessagesDatabase Tests
 //
 //  Created by Alban Diquet on 11/24/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
-#import "TSEncryptedDatabase.h"
+#import "TSMessagesDatabase.h"
 #import "TSEncryptedDatabaseError.h"
-#import "TSEncryptedDatabase+Private.h"
 #import "Cryptography.h"
 #import "KeychainWrapper.h"
 #import "ECKeyPair.h"
@@ -20,17 +19,17 @@
 static NSString *dbPw = @"1234test";
 
 
-@interface TSEncryptedDatabaseTests : XCTestCase
+@interface TSMessagesDatabaseTests : XCTestCase
 
 @end
 
-@implementation TSEncryptedDatabaseTests
+@implementation TSMessagesDatabaseTests
 
 - (void)setUp
 {
     [super setUp];
     // Remove any existing DB
-    [TSEncryptedDatabase databaseErase];
+    [TSMessagesDatabase databaseErase];
     
     
     [TSStorageMasterKey eraseStorageMasterKey];
@@ -47,27 +46,17 @@ static NSString *dbPw = @"1234test";
 
 
 
-- (void)testDatabaseErase
-{
-    NSError *error = nil;
-    [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:nil];
-    [TSEncryptedDatabase databaseErase];
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseUnlockWithPassword:dbPw error:&error];
-    XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"database was unlocked after being erased");
-    XCTAssertEqual([error code], NoDbAvailable, @"database was unlocked after being erased");
-    XCTAssertNil(encDb, @"database was unlocked after being erased");
-}
-
-
 - (void)testDatabaseCreate
 {
     NSError *error = nil;
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseCreateWithPassword:dbPw error:&error];
-    XCTAssertNil(error, @"database creation returned an error");
-    XCTAssertNotNil(encDb, @"database creation failed");
+    
+    XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:&error], @"message db creation failed");
+    XCTAssertNil(error, @"message db creation returned an error");
 }
 
-    
+
+#if 0
+// TODO: Move these tests to TSEncryptedDatabaseTests
 - (void)testDatabaseCreateWithPreviousDatabaseRemnants
 {
     NSError *error = nil;
@@ -182,6 +171,6 @@ static NSString *dbPw = @"1234test";
     [TSEncryptedDatabase databaseErase];
     XCTAssertFalse([TSEncryptedDatabase databaseWasCreated], @"preference was not updated after erasing database");
 }
-
+#endif
 
 @end

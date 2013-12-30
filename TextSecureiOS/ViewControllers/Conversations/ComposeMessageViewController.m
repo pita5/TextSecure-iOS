@@ -10,7 +10,7 @@
 #import "TSMessagesManager.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
-#import "TSEncryptedDatabase.h"
+#import "TSMessagesDatabase.h"
 #import "TSMessage.h"
 
 @interface ComposeMessageViewController ()
@@ -158,10 +158,8 @@
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-  
-  NSLog(@"messages on thread: %d",[[cryptoDB getMessagesOnThread:self.threadID] count]);
-    return [[cryptoDB getMessagesOnThread:self.threadID] count];
+  NSLog(@"messages on thread: %d",[[TSMessagesDatabase getMessagesOnThread:self.threadID] count]);
+    return [[TSMessagesDatabase getMessagesOnThread:self.threadID] count];
 }
 
 #pragma mark - Messages view delegate
@@ -194,14 +192,14 @@
 }
 
 -(void)addMessage:(TSMessage*)message {
-  TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-  [cryptoDB storeMessage:message];
+    // TODO: error handling
+  [TSMessagesDatabase storeMessage:message];
   [self.tableView reloadData];
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
-  TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-  NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+    //TODO: error handling
+  NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.threadID];
   
   if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
     return JSBubbleMessageTypeOutgoing;
@@ -234,14 +232,14 @@
 #pragma mark - Messages view data source
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-    NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+    //TODO: error handling
+    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.threadID];
     return [[dbMessages objectAtIndex:indexPath.row] message];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-    NSArray *dbMessages = [cryptoDB getMessagesOnThread:self.threadID];
+    //TODO: error handling
+    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.threadID];
     return [[dbMessages objectAtIndex:indexPath.row]  messageTimestamp];
 }
 
