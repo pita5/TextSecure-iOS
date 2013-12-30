@@ -17,6 +17,8 @@
 #import "TSMessage.h"
 #import "ComposeMessageViewController.h"
 #import "TSMessageThreadCell.h"
+#import "PasswordUnlockViewController.h"
+#import "TSStorageMasterKey.h"
 
 static NSString *kCellIdentifier = @"CellIdentifier";
 
@@ -73,10 +75,15 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [super viewDidAppear:animated];
     
     self.navigationController.navigationBarHidden = NO;
-    if(![TSKeyManager hasVerifiedPhoneNumber]){
+
+    if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
+        
+        PasswordUnlockViewController *passwordUnlock = [[PasswordUnlockViewController alloc] initWithNibName:nil bundle:nil];
+        [self presentViewController:passwordUnlock animated:NO completion:nil];
+        
+    } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
     }
-    
 }
 
 - (void)composeMessage {
