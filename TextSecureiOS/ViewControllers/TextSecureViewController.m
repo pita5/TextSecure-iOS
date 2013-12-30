@@ -184,7 +184,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 -(void) reloadModel:(NSNotification*)notification {
 
     if([TSMessagesDatabase databaseWasCreated] == YES) {
-        TSMessage *message = [[TSMessagesDatabase getMessagesOnThread:0] objectAtIndex:0];
+        NSArray *messagesOnThread = [TSMessagesDatabase getMessagesOnThread:0];
+        if (messagesOnThread && [messagesOnThread count] ) {
+            TSMessage *message = [messagesOnThread objectAtIndex:0];
+        }
         
         NSArray *allThreads = [TSMessagesDatabase getThreads];
         NSLog(@"allThreads.count: %d", allThreads.count);
