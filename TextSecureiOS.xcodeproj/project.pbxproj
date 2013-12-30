@@ -23,7 +23,6 @@
 		4C0ACB88186CF2F100B328D5 /* disclosure_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB7A186CF2F100B328D5 /* disclosure_indicator.png */; };
 		4C0ACB89186CF2F100B328D5 /* disclosure_indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB7B186CF2F100B328D5 /* disclosure_indicator@2x.png */; };
 		4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */; };
-		4C77526E18707A46000FCCA6 /* PasswordUnlockViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C77526C18707A46000FCCA6 /* PasswordUnlockViewController.xib */; };
 		4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */; };
 		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
 		8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C42C14418551B8C000DD353 /* TSHKDFTests.m */; };
@@ -501,7 +500,6 @@
 		4C0ACB7B186CF2F100B328D5 /* disclosure_indicator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure_indicator@2x.png"; sourceTree = "<group>"; };
 		4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordUnlockViewController.h; path = ViewControllers/PasswordUnlockViewController.h; sourceTree = "<group>"; };
 		4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordUnlockViewController.m; path = ViewControllers/PasswordUnlockViewController.m; sourceTree = "<group>"; };
-		4C77526C18707A46000FCCA6 /* PasswordUnlockViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PasswordUnlockViewController.xib; path = ViewControllers/PasswordUnlockViewController.xib; sourceTree = "<group>"; };
 		4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSMessagesDatabaseTests.m; sourceTree = "<group>"; };
 		8C3C917518544FDF003EA71D /* TSHKDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSHKDF.h; path = Security/TSHKDF.h; sourceTree = "<group>"; };
 		8C3C917618544FDF003EA71D /* TSHKDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSHKDF.m; path = Security/TSHKDF.m; sourceTree = "<group>"; };
@@ -1619,7 +1617,6 @@
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
 				4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */,
 				4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */,
-				4C77526C18707A46000FCCA6 /* PasswordUnlockViewController.xib */,
 				A5169D05170FEA8D00A2CE9E /* CountryViewController.h */,
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
@@ -1952,7 +1949,6 @@
 				A537295417011A5200C6FCCF /* an@2x.png in Resources */,
 				A537295517011A5200C6FCCF /* ao.png in Resources */,
 				A537295617011A5200C6FCCF /* ar.png in Resources */,
-				4C77526E18707A46000FCCA6 /* PasswordUnlockViewController.xib in Resources */,
 				A537295717011A5200C6FCCF /* as.png in Resources */,
 				B635B3D6182181E1003CE732 /* bubble-flat-outgoing-selected@2x.png in Resources */,
 				A537295817011A5200C6FCCF /* ast.png in Resources */,
