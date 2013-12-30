@@ -11,6 +11,7 @@
 #import "TSRegisterPrekeysRequest.h"
 #import "TSUserKeysDatabase.h"
 #import "TSStorageMasterKey.h"
+#import "TSMessagesDatabase.h"
 
 @interface TSSetMasterPasswordViewController ()
 
@@ -54,6 +55,12 @@
     // Derive the storage master key from the user's password and store it so we can then create DBs
     if (![TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text]) {
         @throw [NSException exceptionWithName:@"Storage master key creation failed" reason:[error localizedDescription] userInfo:nil];
+    }
+    
+    
+    // Create the messages DB
+    if(![TSMessagesDatabase databaseCreateWithError:nil]) {
+        @throw [NSException exceptionWithName:@"Initial setup of messages DB failed" reason:[error localizedDescription] userInfo:nil];
     }
     
     // Create the user keys DB and generate the user's identity key and prekeys
