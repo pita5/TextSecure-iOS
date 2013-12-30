@@ -34,6 +34,10 @@
     self.thread = thread;
   
     [self setupThread];
+    UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
+  
+    self.navigationItem.leftBarButtonItem = dismissButton;
+
     return self;
 }
 
