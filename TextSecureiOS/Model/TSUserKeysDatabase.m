@@ -74,6 +74,12 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
 }
 
 
++(void) databaseErase {
+    [TSEncryptedDatabase2 databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] updateBoolPreference:USER_KEYS_DB_PREFERENCE];
+}
+
+
+
 #pragma mark DB access - private
 
 +(BOOL) databaseOpenWithError:(NSError **)error {
@@ -176,7 +182,7 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
 }
 
 
-#pragma mark Keys generation - private
+#pragma mark User keys generation - private
 
 +(BOOL) generateAndStoreIdentityKey {
     /*

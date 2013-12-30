@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class TSECKeyPair;
 
 @interface TSUserKeysDatabase : NSObject
 
 +(BOOL) databaseCreateUserKeysWithError:(NSError **)error;
++(void) databaseErase;
 
-
-+(ECKeyPair*) getIdentityKey;
++(TSECKeyPair*) getIdentityKey;
 +(NSArray*) getAllPreKeys;
 +(NSArray*) getPreKeyWithId:(int32_t)preKeyId;
 
