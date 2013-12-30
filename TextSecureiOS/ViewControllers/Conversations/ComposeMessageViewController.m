@@ -12,6 +12,8 @@
 #import "TSContact.h"
 #import "TSMessagesDatabase.h"
 #import "TSMessage.h"
+#import "TSThread.h"
+#import "TSKeyManager.h"
 
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
@@ -24,17 +26,21 @@
 }
 
 - (id) initWithConversationID:(TSContact*)contact {
+#warning this isn't supporting group messaging yet, obviously
     self = [super initWithNibName:nil bundle:nil];
 
     if (!self) return nil;
     
     self.title = contact.name;
     self.contact = contact;
-#warning always threadid of 0, later this will be an object
-
-    self.threadID = 0;
   
+    [self setupThreadWithContact];
     return self;
+}
+
+-(void) setupThreadWithContact {
+  TSContact *me = [[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken]];
+  self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[me,self.contact]]];
 }
 
 - (id) initNewConversation {
@@ -155,8 +161,8 @@
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  NSLog(@"messages on thread: %d",[[TSMessagesDatabase getMessagesOnThread:self.threadID] count]);
-    return [[TSMessagesDatabase getMessagesOnThread:self.threadID] count];
+  NSLog(@"messages on thread: %d",[[TSMessagesDatabase getMessagesOnThread:self.thread] count]);
+    return [[TSMessagesDatabase getMessagesOnThread:self.thread] count];
 }
 
 #pragma mark - Messages view delegate
@@ -169,8 +175,8 @@
         self.title = [NSString stringWithFormat:@"%@", [_tokenFieldView.tokenField.tokenTitles objectAtIndex:0]];
         _tokenFieldView = nil;
     }
-
-    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:@"me" recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
+  
+    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
     [self messageSent:message];
     [[TSMessagesManager sharedManager] sendMessage:message];
 
@@ -195,10 +201,11 @@
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
+
     //TODO: error handling
-  NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.threadID];
+  NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
   
-  if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:@"me"]) {
+  if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:[TSKeyManager getUsernameToken]]) {
     return JSBubbleMessageTypeOutgoing;
   }
    else {
@@ -230,13 +237,13 @@
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
     //TODO: error handling
-    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.threadID];
+    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
     return [[dbMessages objectAtIndex:indexPath.row] message];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
     //TODO: error handling
-    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.threadID];
+    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
     return [[dbMessages objectAtIndex:indexPath.row]  messageTimestamp];
 }
 
@@ -253,6 +260,7 @@
         self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
         [self startedWritingMessage];
         DLog(@"Contact set to : %@", self.contact.name);
+        [self setupThreadWithContact];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         sleep(0);

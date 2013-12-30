@@ -10,14 +10,12 @@
 
 
 @class TSMessage;
+@class TSThread;
 @class TSContact;
 
 /**
- 
  * Posted when the database receives an update
- 
  */
-
 extern NSString * const TSDatabaseDidUpdateNotification;
 
 
@@ -36,7 +34,7 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 
 #pragma mark - DB message functions
 +(void) storeMessage:(TSMessage*)message;
-+(NSArray*) getMessagesOnThread:(NSInteger) threadId;
++(NSArray*) getMessagesOnThread:(TSThread*) thread;
 +(NSArray*) getThreads;
 +(void)storeTSContact:(TSContact*)contact;
 
