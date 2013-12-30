@@ -34,18 +34,6 @@ static NSString *masterPw = @"1234test";
     [super tearDown];
 }
 
-/*
- +(NSData*) createStorageMasterKeyWithPassword:(NSString *)userPassword;
- +(BOOL) wasStorageMasterKeyCreated;
- 
- +(NSData*) unlockStorageMasterKeyUsingPassword:(NSString *)userPassword error:(NSError **)error;
- +(NSData*) getStorageMasterKeyWithError:(NSError **)error;
- 
- +(void) lockStorageMasterKey;
- +(BOOL) isStorageMasterKeyLocked;
- 
- +(void) eraseStorageMasterKey;
- */
 
 - (void)testCreate
 {
