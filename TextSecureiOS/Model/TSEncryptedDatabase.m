@@ -362,12 +362,11 @@ NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database
 -(void) storeMessage:(TSMessage*)message {
    TSContact *sender = [[TSContact alloc] initWithRegisteredID:message.senderId];
    TSContact *reciever = [[TSContact alloc] initWithRegisteredID:message.recipientId];
-
+    NSString* threadId = [TSParticipants threadIDForParticipants:@[sender,reciever]];
     [self->dbQueue inDatabase:^(FMDatabase *db) {
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
         NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
-        NSLog(@"SQL QUERY:\n INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (%@, %@, %@, %@, %@)",threadId,message.message,message.senderId,message.recipientId,sqlDate);
         [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate];
     }];
 
@@ -409,7 +408,6 @@ NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database
           
           
             messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date];
-            NSLog(@"thread id in get threads %@",[messageThread threadID]);
             [threadArray addObject:messageThread];
         }
     }];
