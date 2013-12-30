@@ -54,6 +54,11 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
 }
 
 
+-(int32_t) getPreKeyId {
+    return self->preKeyId;
+}
+
+
 -(NSData*) generateSharedSecretFromPublicKey:(NSData*)theirPublicKey {
     unsigned char *sharedSecret = NULL;
     

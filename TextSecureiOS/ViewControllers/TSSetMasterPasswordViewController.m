@@ -11,6 +11,7 @@
 #import "TSEncryptedDatabaseError.h"
 #import "TSRegisterPrekeysRequest.h"
 #import "TSUserKeysDatabase.h"
+#import "TSStorageMasterKey.h"
 
 @interface TSSetMasterPasswordViewController ()
 
@@ -60,7 +61,9 @@
             }
         }
     }
-    // Generate the identity key and prekeys and store in the database
+    // Derive the storage master key from the user's password and store it
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text];
+    // Generate the identity key and prekeys and store in the user DB
     if (![TSUserKeysDatabase databaseCreateUserKeysWithError:&error]) {
       @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
     }

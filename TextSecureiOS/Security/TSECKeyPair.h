@@ -35,6 +35,15 @@
 
 
 /**
+ * Return the key pair's preKeyId.
+ * @author Alban Diquet
+ *
+ * @return The key pair's preKeyId.
+ */
+-(int32_t) getPreKeyId;
+
+
+/**
  * Compute a shared secret using the supplied third-party public key and the key pair's private key. See https://code.google.com/p/curve25519-donna/ for more information.
  * @author Alban Diquet
  *
