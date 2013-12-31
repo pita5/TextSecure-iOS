@@ -25,22 +25,35 @@
 	CGFloat _keyboardHeight;
 }
 
-- (id) initWithConversationID:(TSContact*)contact {
+- (id) initWithConversation:(TSThread*)thread {
 #warning this isn't supporting group messaging yet, obviously
     self = [super initWithNibName:nil bundle:nil];
 
     if (!self) return nil;
     
-    self.title = contact.name;
-    self.contact = contact;
+    self.thread = thread;
   
-    [self setupThreadWithContact];
+    [self setupThread];
+    UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
+  
+    self.navigationItem.leftBarButtonItem = dismissButton;
+
     return self;
 }
 
--(void) setupThreadWithContact {
-  TSContact *me = [[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken]];
-  self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[me,self.contact]]];
+-(void) setupThread  {
+#warning hack we will want to change when we support more than one contact
+  NSString* myUsername = [TSKeyManager getUsernameToken];
+  for(TSContact* contact in self.thread.participants.participants) {
+    self.title = contact.registeredID;
+    self.contact = contact;
+    if(![contact.registeredID isEqualToString:myUsername] ){
+      // handles edge case where I'm writing myself
+      break;
+    }
+  }
+  [self.tableView reloadData];
+  [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
 }
 
 - (id) initNewConversation {
@@ -102,7 +115,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageRecieved) name:TSDatabaseDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
     self.inputToolBarView.textView.delegate = self;
@@ -177,27 +190,23 @@
     }
   
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
-    [self messageSent:message];
-    [[TSMessagesManager sharedManager] sendMessage:message];
 
+    [[TSMessagesManager sharedManager] sendMessage:message];
     [self finishSend];
 }
 
--(void) messageSent:(TSMessage*) message {
-  [JSMessageSoundEffect playMessageSentSound];
-  [self addMessage:message];
-}
 
--(void) messageRecieved {
-  [JSMessageSoundEffect playMessageReceivedSound];
+
+
+
+-(void) reloadModel:(NSNotification*)notification {
   [self.tableView reloadData];
-
-}
-
--(void)addMessage:(TSMessage*)message {
-    // TODO: error handling
-  [TSMessagesDatabase storeMessage:message];
-  [self.tableView reloadData];
+  if([[[notification userInfo] objectForKey:@"messageType"] isEqualToString:@"send"]) {
+    [JSMessageSoundEffect playMessageSentSound];
+  }
+  else {
+    [JSMessageSoundEffect playMessageReceivedSound];
+  }
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -257,10 +266,12 @@
 
 -(void)tokenField:(TITokenField *)tokenField didAddToken:(TIToken *)token {
     if (_tokenFieldView.tokenField.tokens) {
-        self.contact = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
+        TSContact* receiver = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
         [self startedWritingMessage];
         DLog(@"Contact set to : %@", self.contact.name);
-        [self setupThreadWithContact];
+        TSContact* me = [[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken]];
+        self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[me,receiver]]];
+        [self setupThread];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         sleep(0);

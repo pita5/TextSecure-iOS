@@ -17,6 +17,10 @@
 #import "TSMessage.h"
 #import "ComposeMessageViewController.h"
 #import "TSMessageThreadCell.h"
+#import "PasswordUnlockViewController.h"
+#import "TSStorageMasterKey.h"
+#import "TSThread.h"
+
 
 static NSString *kCellIdentifier = @"CellIdentifier";
 
@@ -54,14 +58,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.searchBarCoverView.userInteractionEnabled = NO;
     [self.searchBar addSubview:self.searchBarCoverView];
     
-    self.messages = @[
-                      @{kThreadTitleKey:@"Clément Duval", kThreadDateKey:@"26/12/13", kThreadMessageKey: @"Theft exists only through the exploitation of man by man... when Society refuses you the right to exist, you must take it... the policeman arrested me in the name of the Law, I struck him in the name of Liberty", kThreadImageKey: @"avatar_duval"},
-                      @{kThreadTitleKey:@"Nestor Makhno", kThreadDateKey:@"25/12/13", kThreadMessageKey: @"need a ride?", kThreadImageKey: @"avatar_makhno"},
-                      @{kThreadTitleKey:@"Wilhelm Reich", kThreadDateKey:@"24/12/13", kThreadMessageKey: @"Only the liberation of the natural capacity for love in human beings can master their sadistic destructiveness.", kThreadImageKey: @"avatar_reich"},
-                      @{kThreadTitleKey:@"Masha Kolenkina", kThreadDateKey:@"22/12/13", kThreadMessageKey: @"Revenge, for it's own sake!", kThreadImageKey: @"avatar_kolenkina"},
-                      @{kThreadTitleKey:@"Jules Bonnot", kThreadDateKey:@"20/12/13", kThreadMessageKey: @"Regrets, yes, but no remorce...", kThreadImageKey: @"avatar_bonnot"},
-                      @{kThreadTitleKey:@"George Gurdjieff", kThreadDateKey:@"18/12/13", kThreadMessageKey: @"Levitation!", kThreadImageKey: @"avatar_gurdjieff"},
-                      ];
+
     
     [self.tableView registerClass:[TSMessageThreadCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -73,10 +70,16 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [super viewDidAppear:animated];
     
     self.navigationController.navigationBarHidden = NO;
-    if(![TSKeyManager hasVerifiedPhoneNumber]){
+
+    if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        UIViewController *passwordUnlockViewController = [storyboard instantiateViewControllerWithIdentifier:@"PasswordUnlockViewController"];
+        [self presentViewController:passwordUnlockViewController animated:NO completion:nil];
+        
+    } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
     }
-    
 }
 
 - (void)composeMessage {
@@ -90,34 +93,19 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 #pragma mark - UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-   /*
-    //sketch of using database data getMessagesOnThread and getThreads
-    // need fleshed out (currently schema is 1 thread only) --corbett
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm"];
   
-  
-    TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-    TSMessage* message=[[cryptoDB getMessagesOnThread:indexPath.row] objectAtIndex:0];
-    if(message!=nil) {
-      phoneNumberLabel.text = message.senderId;
-      previewLabel.text = message.message;
-      NSString *dateString = [dateFormatter stringFromDate:message.messageTimestamp];
-      dateLabel.text = dateString;
-    }
-    */
-
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+  [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
  	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:kCellIdentifier];
     
     if ([cell isKindOfClass:[TSMessageThreadCell class]]) {
-        
-        NSDictionary *messageDict = self.messages[indexPath.row];
-        
+
+        TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
         TSMessageThreadCell *threadCell = (TSMessageThreadCell *)cell;
-        threadCell.titleLabel.text = messageDict[kThreadTitleKey];
-        threadCell.timestampLabel.text = messageDict[kThreadDateKey];
-        threadCell.threadPreviewLabel.text = messageDict[kThreadMessageKey];
+        threadCell.titleLabel.text =thread.latestMessage.senderId;
+        threadCell.timestampLabel.text = [dateFormatter stringFromDate:thread.latestMessage.messageTimestamp];
+        threadCell.threadPreviewLabel.text = thread.latestMessage.message;
         
         UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         threadCell.disclosureImageView.image = disclosureIndicatorImage;
@@ -136,20 +124,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
-    /*
-     //sketch of using database data getMessagesOnThread and getThreads
-     // need fleshed out (currently schema is 1 thread only) --corbett
-     if(![TSEncryptedDatabase isLockedOrNotCreated]) {
-     TSEncryptedDatabase *cryptoDB = [TSEncryptedDatabase database];
-     return [[cryptoDB getThreads] count];
-     }
-     else {
-     return 0;
-     }
-     */
     if([TSMessagesDatabase databaseWasCreated]) {
         // don't display until db is unlocked (we have "dummy data" right now, but this better mimics UX behavior)
-        return [self.messages count];
+        return [[TSMessagesDatabase getThreads] count];
     }
     else {
         return 0;
@@ -181,19 +158,12 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 	}
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
+  [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc] initWithConversation:thread]] animated:YES completion:nil];
+}
+
 -(void) reloadModel:(NSNotification*)notification {
-// sketch of using database
-//    if([TSMessagesDatabase databaseWasCreated] == YES) {
-//        NSArray *messagesOnThread = [TSMessagesDatabase getMessagesOnThread:0];
-//        if (messagesOnThread && [messagesOnThread count] ) {
-//            TSMessage *message = [messagesOnThread objectAtIndex:0];
-//        }
-//        
-//        NSArray *allThreads = [TSMessagesDatabase getThreads];
-//        NSLog(@"allThreads.count: %d", allThreads.count);
-//    }
-//    
-#warning get the messages from the database here
     [self.tableView reloadData];
 }
 

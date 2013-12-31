@@ -19,12 +19,11 @@
 @property (nonatomic) TSThread *thread;
 // Need to be initialized with one of those methods
 
-- (instancetype)initWithConversationID:(NSString*)contactID;
+- (instancetype)initWithConversation:(TSThread*)thread;
 - (instancetype)initNewConversation;
 
 
--(void) messageSent:(TSMessage*) message;
--(void) messageRecieved;
--(void)addMessage:(TSMessage*)message;
+
+-(void) reloadModel:(NSNotification*)notification ;
 @end
 

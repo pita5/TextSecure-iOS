@@ -64,14 +64,14 @@
   [TSMessagesDatabase storeMessage:[IncomingPushMessageSignal getTSMessage:fullMessageInfoRecieved]];
   
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-  [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self];
+  [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:@{@"messageType":@"receive"}];
   [pushAlert show];
 
 }
 
 
 -(void) sendMessage:(TSMessage*)message {
-
+  [TSMessagesDatabase storeMessage:message];
   NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
   //Tests deserialization
   //NSString* deserializedMessage = [IncomingPushMessageSignal prettyPrintPushMessageContent:[IncomingPushMessageSignal getPushMessageContentForData:[NSData dataFromBase64String:serializedMessage]]];
@@ -89,9 +89,9 @@
         break;
     }
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning Add error handling if not able to send the token
+#warning right now it is not succesfully processing returned response, but is giving 200
     DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-    
+      [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:@{@"messageType":@"send"}];
     
   }];
   

@@ -210,9 +210,7 @@ static TSEncryptedDatabase *messagesDb = nil;
             TSThread *messageThread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[sender,receiver]]];
             
             messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date];
-            NSLog(@"thread id in get threads %@",[messageThread threadID]);
 
-            
             [threadArray addObject:messageThread];
         }
     }];
