@@ -1117,7 +1117,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		A51B779B17050EDB002B8E53 /* Model */ = {
+		8CCC26381872A3CB00E521A1 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
 				8C49FC0E18497E86006132F6 /* TSEncryptedDatabaseError.h */,
@@ -1130,6 +1130,14 @@
 				A515AFDA180966E30084ABA5 /* TSMessagesDatabase.m */,
 				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
 				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
+			);
+			name = Storage;
+			sourceTree = "<group>";
+		};
+		A51B779B17050EDB002B8E53 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8CCC26381872A3CB00E521A1 /* Storage */,
 				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
 				A5145B30184AAD51007BDC73 /* TSMessage.m */,
 				B60CEE73184B4971006A8256 /* TSThread.h */,
