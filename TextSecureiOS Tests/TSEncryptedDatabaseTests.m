@@ -7,11 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TSEncryptedDatabase2.h"
+#import "TSEncryptedDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "FilePath.h"
 
-@interface TSEncryptedDatabase2Tests : XCTestCase
+@interface TSEncryptedDatabaseTests : XCTestCase
 
 @end
 
@@ -21,7 +21,7 @@ static NSString *dbFileName = @"test.db";
 static NSString *dbPreference = @"WasTestDbCreated";
 
 
-@implementation TSEncryptedDatabase2Tests
+@implementation TSEncryptedDatabaseTests
 
 - (void)setUp
 {
@@ -31,7 +31,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
     [TSStorageMasterKey eraseStorageMasterKey];
     [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
     
-    [TSEncryptedDatabase2 databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference];
+    [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference];
 }
 
 - (void)tearDown
@@ -45,7 +45,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
 - (void)testDatabaseCreate
 {
     NSError *error = nil;
-    TSEncryptedDatabase2 *encDb = [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     
     XCTAssertNotNil(encDb, @"database creation returned nil");
     XCTAssertNil(error, @"database creation returned an error");
@@ -55,9 +55,9 @@ static NSString *dbPreference = @"WasTestDbCreated";
 - (void)testDatabaseCreateWithPreviousDatabaseRemnants
 {
     NSError *error = nil;
-    [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:@"" error:nil];
+    [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:@"" error:nil];
     
-    TSEncryptedDatabase2 *encDb = [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     // TODO: check for the specific error code
     XCTAssertNil(error, @"database creation returned an error");
     XCTAssertNotNil(encDb, @"database creation failed");
@@ -68,7 +68,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
 {
     [TSStorageMasterKey eraseStorageMasterKey];
     NSError *error = nil;
-    TSEncryptedDatabase2 *encDb = [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     
     // TODO: check for the specific error code
     XCTAssertNotNil(error, @"database creation succeeded with no master key");
@@ -80,9 +80,9 @@ static NSString *dbPreference = @"WasTestDbCreated";
 - (void)testDatabaseCreateAndOverwrite
 {
     NSError *error = nil;
-    [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     
-    TSEncryptedDatabase2 *encDb = [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     // TODO: check for the specific error code
     XCTAssertNotNil(error, @"database overwrite did not return an error");
     XCTAssertNil(encDb, @"database overwrite succeeded");
@@ -91,10 +91,10 @@ static NSString *dbPreference = @"WasTestDbCreated";
 
 - (void)testDatabaseDecrypt
 {
-    [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:nil];
+    [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:nil];
     
     NSError *error = nil;
-    TSEncryptedDatabase2 *encDb = [TSEncryptedDatabase2 databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] error:&error];
+    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] error:&error];
     
     XCTAssertNotNil(encDb, @"database decryption returned nil");
     XCTAssertNil(error, @"database decryption returned an error");

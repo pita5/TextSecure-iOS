@@ -1,19 +1,19 @@
 //
-//  TSEncryptedDatabase2.m
+//  TSEncryptedDatabase.m
 //  TextSecureiOS
 //
 //  Created by Alban Diquet on 12/29/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSEncryptedDatabase2.h"
+#import "TSEncryptedDatabase.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabase.h"
 #import "TSEncryptedDatabaseError.h"
 #import "TSStorageMasterKey.h"
 
 
-@interface TSEncryptedDatabase2(Private)
+@interface TSEncryptedDatabase(Private)
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
@@ -21,7 +21,7 @@
 
 
 
-@implementation TSEncryptedDatabase2 {
+@implementation TSEncryptedDatabase {
 }
 
 
@@ -36,7 +36,7 @@
     }
     
     // Cleanup remnants of a previous DB
-    [TSEncryptedDatabase2 databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
+    [TSEncryptedDatabase databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
     
     // Retrieve storage master key
     NSData *dbMasterKey = [TSStorageMasterKey getStorageMasterKeyWithError:error];
@@ -65,11 +65,11 @@
             *error = [TSEncryptedDatabaseError dbCreationFailed];
         }
         // Cleanup
-        [TSEncryptedDatabase2 databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
+        [TSEncryptedDatabase databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
         return nil;
     }
     
-    TSEncryptedDatabase2 *encryptedDB = [[TSEncryptedDatabase2 alloc] initWithDatabaseQueue:dbQueue];
+    TSEncryptedDatabase *encryptedDB = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
     
     // Success - store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:preferenceName];
@@ -112,7 +112,7 @@
         return nil;
     }
     
-    TSEncryptedDatabase2 *encryptedDB = [[TSEncryptedDatabase2 alloc] initWithDatabaseQueue:dbQueue];
+    TSEncryptedDatabase *encryptedDB = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
     return encryptedDB;
 }
 

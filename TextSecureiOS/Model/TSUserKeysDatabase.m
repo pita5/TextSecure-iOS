@@ -7,7 +7,7 @@
 //
 
 #import "TSUserKeysDatabase.h"
-#import "TSEncryptedDatabase2.h"
+#import "TSEncryptedDatabase.h"
 #import "TSEncryptedDatabaseError.h"
 #import "TSECKeyPair.h"
 #import "FilePath.h"
@@ -20,7 +20,7 @@
 #define USER_KEYS_DB_PREFERENCE @"TSUserKeysDbWasCreated"
 
 
-static TSEncryptedDatabase2 *userKeysDb = nil;
+static TSEncryptedDatabase *userKeysDb = nil;
 
 
 @interface TSUserKeysDatabase(Private)
@@ -42,7 +42,7 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
 +(BOOL) databaseCreateUserKeysWithError:(NSError **)error {
     
     // Create the database
-    TSEncryptedDatabase2 *db = [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] updateBoolPreference:USER_KEYS_DB_PREFERENCE error:error];
+    TSEncryptedDatabase *db = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] updateBoolPreference:USER_KEYS_DB_PREFERENCE error:error];
     if (!db) {
         return NO;
     }
@@ -90,7 +90,7 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
 
 
 +(void) databaseErase {
-    [TSEncryptedDatabase2 databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] updateBoolPreference:USER_KEYS_DB_PREFERENCE];
+    [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] updateBoolPreference:USER_KEYS_DB_PREFERENCE];
 }
 
 
@@ -104,7 +104,7 @@ static TSEncryptedDatabase2 *userKeysDb = nil;
         return YES;
     }
     
-    TSEncryptedDatabase2 *db = [TSEncryptedDatabase2 databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] error:error];
+    TSEncryptedDatabase *db = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] error:error];
     if (!db) {
         return NO;
     }

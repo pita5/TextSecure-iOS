@@ -15,7 +15,7 @@
 #import "TSContact.h"
 #import "TSThread.h"
 #import "TSStorageMasterKey.h"
-#import "TSEncryptedDatabase2.h"
+#import "TSEncryptedDatabase.h"
 
 
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
@@ -26,7 +26,7 @@ NSString * const TSDatabaseDidUpdateNotification = @"com.whispersystems.database
 
 
 // Reference to the singleton
-static TSEncryptedDatabase2 *messagesDb = nil;
+static TSEncryptedDatabase *messagesDb = nil;
 
 
 @interface TSMessagesDatabase(Private)
@@ -43,7 +43,7 @@ static TSEncryptedDatabase2 *messagesDb = nil;
 +(BOOL) databaseCreateWithError:(NSError **)error {
     
     // Create the database
-    TSEncryptedDatabase2 *db = [TSEncryptedDatabase2  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] updateBoolPreference:kDBWasCreatedBool error:error];
+    TSEncryptedDatabase *db = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] updateBoolPreference:kDBWasCreatedBool error:error];
     if (!db) {
         return NO;
     }
@@ -86,7 +86,7 @@ static TSEncryptedDatabase2 *messagesDb = nil;
 
 
 +(void) databaseErase {
-    [TSEncryptedDatabase2 databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] updateBoolPreference:kDBWasCreatedBool];
+    [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] updateBoolPreference:kDBWasCreatedBool];
 }
 
 
@@ -97,7 +97,7 @@ static TSEncryptedDatabase2 *messagesDb = nil;
         return YES;
     }
     
-    messagesDb = [TSEncryptedDatabase2 databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] error:error];
+    messagesDb = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] error:error];
     if (!messagesDb) {
         return NO;
     }
