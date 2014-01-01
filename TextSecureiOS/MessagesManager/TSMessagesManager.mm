@@ -63,7 +63,7 @@
   [TSMessagesDatabase storeMessage:[IncomingPushMessageSignal getTSMessageForIncomingPushMessageSignal:fullMessageInfoRecieved]];
   
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-  [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:@{@"messageType":@"receive"}];
+  [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"receive"}];
   [pushAlert show];
 
 }
@@ -88,7 +88,7 @@
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
     DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-      [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:@{@"messageType":@"send"}];
+      [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"send"}];
     
   }];
   
