@@ -2638,8 +2638,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
@@ -2650,7 +2650,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99F3A2BB-CD0D-460F-9C75-89C081AEC53E";
+				PROVISIONING_PROFILE = "13BB76F1-C544-432F-A2BA-0EE336E8DF0B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2660,8 +2660,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
@@ -2672,7 +2672,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99F3A2BB-CD0D-460F-9C75-89C081AEC53E";
+				PROVISIONING_PROFILE = "13BB76F1-C544-432F-A2BA-0EE336E8DF0B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
