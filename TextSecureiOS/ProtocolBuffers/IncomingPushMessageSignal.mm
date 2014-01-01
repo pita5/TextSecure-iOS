@@ -92,13 +92,12 @@
 + (NSString*)prettyPrintPushMessageContent:(textsecure::PushMessageContent *)pushMessageContent {
   const std::string cppBody = pushMessageContent->body();
   NSString* body = [NSString stringWithCString:cppBody.c_str() encoding:NSASCIIStringEncoding];
-  NSLog(@"recieved message %@",body);
   return  body;
 #warning doesn't handle attachments yet
   
 }
 
-+(TSMessage*)getTSMessage:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal {
++(TSMessage*)getTSMessageForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal {
   const uint32_t cppType = incomingPushMessageSignal->type();
   const std::string cppSource = incomingPushMessageSignal->source();
   const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
@@ -110,7 +109,8 @@
   //[[NSDate alloc] initWithTimeIntervalSince1970:[timestamp longLongValue]]
   NSString* message = [IncomingPushMessageSignal getMessageBody:incomingPushMessageSignal];
 #warning ignoring timestamp sent, setting to now, fix issue with timestamp received being incorrectly interpreted (a few years off). currently behavior is when received.
-  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:source, nil] sentOnDate:[NSDate date]];
+  // this phone is the recipient of the message
+  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:[TSKeyManager getUsernameToken], nil] sentOnDate:[NSDate date]];
   return tsMessage;
 }
 

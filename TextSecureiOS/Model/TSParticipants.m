@@ -41,15 +41,8 @@
     NSArray *sortedArray = [phoneNumbers sortedArrayUsingDescriptors:
                             @[[NSSortDescriptor sortDescriptorWithKey:@"doubleValue"
                                                             ascending:YES]]];
-    
-    NSString *returnString = @"";
-    
-    for (NSString *number in sortedArray){
-        returnString = [returnString stringByAppendingString:number];
-    }
-
   
-    return returnString;
+  return [sortedArray componentsJoinedByString:@""];;
 }
 
 @end
