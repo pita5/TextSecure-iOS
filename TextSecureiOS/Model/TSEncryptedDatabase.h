@@ -1,5 +1,5 @@
 //
-//  TSEncryptedDatabase2.h
+//  TSEncryptedDatabase.h
 //  TextSecureiOS
 //
 //  Created by Alban Diquet on 12/29/13.
@@ -12,7 +12,7 @@
 @class FMDatabaseQueue;
 
 
-@interface TSEncryptedDatabase2 : NSObject
+@interface TSEncryptedDatabase : NSObject
 
 @property (nonatomic, retain) FMDatabaseQueue *dbQueue;
 

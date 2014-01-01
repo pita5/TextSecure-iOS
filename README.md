@@ -21,14 +21,9 @@ occasionally, CocoaPods itself will need to be updated. Do this with
 sudo gem update
 ```
 
-3) **Temporary** - Building Curve25519-donna manually. This step should be removed soon
+3) Open the `TextSecureiOS.xcworkspace` in Xcode. **Note that for CocoaPods to work properly it is very important to always open the workspace and not the `.xcodeproj` file.** Build and Run and you are ready to go!
 
-- Run the bash script called `build-libcurve25519.sh`  from within `Libraries/`. This build should be quick, no coffee for you.
-
-
-4) Open the `TextSecureiOS.xcworkspace` in Xcode. **Note that for CocoaPods to work properly it is very important to always open the workspace and not the `.xcodeproj` file.** Build and Run and you are ready to go!
-
-5) Debugging network calls. If you are contributing networked code, PonyDebugger is integrated in Debug mode of the application. Check out https://github.com/square/PonyDebugger#quick-start and easily debug network code from the iOS simulator
+4) Debugging network calls. If you are contributing networked code, PonyDebugger is integrated in Debug mode of the application. Check out https://github.com/square/PonyDebugger#quick-start and easily debug network code from the iOS simulator
 
 ## Certificate Pinning
 

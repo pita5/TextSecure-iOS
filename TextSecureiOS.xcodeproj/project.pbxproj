@@ -30,11 +30,11 @@
 		8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
 		8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */; };
 		8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */; };
-		8CF7BD981870D9450023A781 /* TSEncryptedDatabase2.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD971870D9450023A781 /* TSEncryptedDatabase2.m */; };
+		8CF7BD981870D9450023A781 /* TSEncryptedDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */; };
 		8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */; };
 		8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */; };
 		8CF7BD9F187130F80023A781 /* TSStorageMasterKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */; };
-		8CF7BDA1187137640023A781 /* TSEncryptedDatabase2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BDA0187137640023A781 /* TSEncryptedDatabase2Tests.m */; };
+		8CF7BDA1187137640023A781 /* TSEncryptedDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BDA0187137640023A781 /* TSEncryptedDatabaseTests.m */; };
 		A5145B31184AAD51007BDC73 /* TSMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B30184AAD51007BDC73 /* TSMessage.m */; };
 		A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B36184B66AD007BDC73 /* TSRequestAttachmentId.m */; };
 		A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5145B39184B68EA007BDC73 /* TSRequestAttachment.m */; };
@@ -55,7 +55,6 @@
 		A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */; };
 		A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
-		A530CB011849F55E0052B615 /* curve25519-donna.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B1E47818496A9C005A5E31 /* curve25519-donna.a */; };
 		A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A530CB03184A02620052B615 /* TSRecipientPrekeyRequest.m */; };
 		A53718B616FF95DF00C6FCCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B516FF95DF00C6FCCF /* UIKit.framework */; };
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
@@ -516,13 +515,13 @@
 		8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSECKeyPairTests.m; sourceTree = "<group>"; };
 		8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStorageMasterKey.h; path = Security/TSStorageMasterKey.h; sourceTree = "<group>"; };
 		8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStorageMasterKey.m; path = Security/TSStorageMasterKey.m; sourceTree = "<group>"; };
-		8CF7BD961870D9450023A781 /* TSEncryptedDatabase2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSEncryptedDatabase2.h; path = Model/TSEncryptedDatabase2.h; sourceTree = "<group>"; };
-		8CF7BD971870D9450023A781 /* TSEncryptedDatabase2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSEncryptedDatabase2.m; path = Model/TSEncryptedDatabase2.m; sourceTree = "<group>"; };
+		8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSEncryptedDatabase.h; path = Model/TSEncryptedDatabase.h; sourceTree = "<group>"; };
+		8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSEncryptedDatabase.m; path = Model/TSEncryptedDatabase.m; sourceTree = "<group>"; };
 		8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUserKeysDatabase.h; path = Model/TSUserKeysDatabase.h; sourceTree = "<group>"; };
 		8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUserKeysDatabase.m; path = Model/TSUserKeysDatabase.m; sourceTree = "<group>"; };
 		8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUserKeysDatabaseTests.m; path = "TextSecureiOS Tests/TSUserKeysDatabaseTests.m"; sourceTree = SOURCE_ROOT; };
 		8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStorageMasterKeyTests.m; path = "TextSecureiOS Tests/TSStorageMasterKeyTests.m"; sourceTree = SOURCE_ROOT; };
-		8CF7BDA0187137640023A781 /* TSEncryptedDatabase2Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSEncryptedDatabase2Tests.m; sourceTree = "<group>"; };
+		8CF7BDA0187137640023A781 /* TSEncryptedDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSEncryptedDatabaseTests.m; sourceTree = "<group>"; };
 		950A849531204A2EBF7475C2 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		A5145B2F184AAD51007BDC73 /* TSMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessage.h; path = Model/TSMessage.h; sourceTree = "<group>"; };
 		A5145B30184AAD51007BDC73 /* TSMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessage.m; path = Model/TSMessage.m; sourceTree = "<group>"; };
@@ -911,7 +910,6 @@
 		A537294A17011A5200C6FCCF /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zw.png; sourceTree = "<group>"; };
 		A538A27C1869DC6500CD0A3D /* TSKeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSKeyManager.h; path = Security/TSKeyManager.h; sourceTree = "<group>"; };
 		A538A27D1869DC6500CD0A3D /* TSKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSKeyManager.m; path = Security/TSKeyManager.m; sourceTree = "<group>"; };
-		A54188821862D95A007FB1DA /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		A5620DEB186BD27F0033483E /* TSMessagesManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessagesManager.mm; path = MessagesManager/TSMessagesManager.mm; sourceTree = "<group>"; };
 		A5620DED186BD4FA0033483E /* TSSubmitMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSubmitMessageRequest.h; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.h; sourceTree = "<group>"; };
 		A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSubmitMessageRequest.m; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.m; sourceTree = "<group>"; };
@@ -922,12 +920,9 @@
 		A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
 		A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.hh; sourceTree = "<group>"; };
 		A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.mm; sourceTree = "<group>"; };
-		A5B1E47818496A9C005A5E31 /* curve25519-donna.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "curve25519-donna.a"; path = "Libraries/lib/curve25519-donna.a"; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		A5F15AA41702DF6E00856385 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = Libraries/lib/libssl.a; sourceTree = "<group>"; };
-		A5F15AA51702DF6E00856385 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = Libraries/lib/libcrypto.a; sourceTree = "<group>"; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1035,7 +1030,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A530CB011849F55E0052B615 /* curve25519-donna.a in Frameworks */,
 				B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */,
 				B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */,
 				A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */,
@@ -1099,7 +1093,7 @@
 			isa = PBXGroup;
 			children = (
 				8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */,
-				8CF7BDA0187137640023A781 /* TSEncryptedDatabase2Tests.m */,
+				8CF7BDA0187137640023A781 /* TSEncryptedDatabaseTests.m */,
 				8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */,
 				4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */,
 				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
@@ -1120,19 +1114,27 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		A51B779B17050EDB002B8E53 /* Model */ = {
+		8CCC26381872A3CB00E521A1 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
 				8C49FC0E18497E86006132F6 /* TSEncryptedDatabaseError.h */,
 				8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */,
-				8CF7BD961870D9450023A781 /* TSEncryptedDatabase2.h */,
+				8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */,
 				8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */,
 				8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */,
-				8CF7BD971870D9450023A781 /* TSEncryptedDatabase2.m */,
+				8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */,
 				A515AFD9180966E30084ABA5 /* TSMessagesDatabase.h */,
 				A515AFDA180966E30084ABA5 /* TSMessagesDatabase.m */,
 				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
 				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
+			);
+			name = Storage;
+			sourceTree = "<group>";
+		};
+		A51B779B17050EDB002B8E53 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8CCC26381872A3CB00E521A1 /* Storage */,
 				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
 				A5145B30184AAD51007BDC73 /* TSMessage.m */,
 				B60CEE73184B4971006A8256 /* TSThread.h */,
@@ -1167,15 +1169,11 @@
 		A53718B416FF95DF00C6FCCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A54188821862D95A007FB1DA /* libPods.a */,
-				A5B1E47818496A9C005A5E31 /* curve25519-donna.a */,
 				B635B3EE18218481003CE732 /* AudioToolbox.framework */,
 				B635B3EC18218456003CE732 /* CoreAudio.framework */,
 				A568910217E2F37A00C360A1 /* QuartzCore.framework */,
 				A568910017E2F37000C360A1 /* CoreText.framework */,
 				A51B77A217051096002B8E53 /* libsqlite3.dylib */,
-				A5F15AA41702DF6E00856385 /* libssl.a */,
-				A5F15AA51702DF6E00856385 /* libcrypto.a */,
 				A5DE19D3170702ED00ACAFDD /* AddressBook.framework */,
 				A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */,
 				A5F15A99170280B700856385 /* Security.framework */,
@@ -2398,7 +2396,7 @@
 				4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */,
 				8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */,
 				8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */,
-				8CF7BDA1187137640023A781 /* TSEncryptedDatabase2Tests.m in Sources */,
+				8CF7BDA1187137640023A781 /* TSEncryptedDatabaseTests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
 				A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */,
 			);
@@ -2435,7 +2433,7 @@
 				B635B3CC182181E1003CE732 /* JSMessageSoundEffect.m in Sources */,
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
 				B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */,
-				8CF7BD981870D9450023A781 /* TSEncryptedDatabase2.m in Sources */,
+				8CF7BD981870D9450023A781 /* TSEncryptedDatabase.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				B635B3EA182181E1003CE732 /* UIView+AnimationOptionsForCurve.m in Sources */,
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
