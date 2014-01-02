@@ -410,6 +410,7 @@
 		A5E6CBF91875DC2D002A1735 /* photo.png in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CBF71875DC2D002A1735 /* photo.png */; };
 		A5E6CBFA1875DC2D002A1735 /* photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CBF81875DC2D002A1735 /* photo@2x.png */; };
 		A5E6CBFC187629D4002A1735 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */; };
+		A5E6CBFF18762BDB002A1735 /* TSAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CBFE18762BDB002A1735 /* TSAttachment.m */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
@@ -928,6 +929,8 @@
 		A5E6CBF71875DC2D002A1735 /* photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo.png; sourceTree = "<group>"; };
 		A5E6CBF81875DC2D002A1735 /* photo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo@2x.png"; sourceTree = "<group>"; };
 		A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		A5E6CBFD18762BDB002A1735 /* TSAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachment.h; path = Model/TSAttachment.h; sourceTree = "<group>"; };
+		A5E6CBFE18762BDB002A1735 /* TSAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachment.m; path = Model/TSAttachment.m; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
@@ -1148,6 +1151,8 @@
 				B60CEE74184B4971006A8256 /* TSThread.m */,
 				B60CEE76184B4A96006A8256 /* TSParticipants.h */,
 				B60CEE77184B4A96006A8256 /* TSParticipants.m */,
+				A5E6CBFD18762BDB002A1735 /* TSAttachment.h */,
+				A5E6CBFE18762BDB002A1735 /* TSAttachment.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2449,6 +2454,7 @@
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				B635B3EA182181E1003CE732 /* UIView+AnimationOptionsForCurve.m in Sources */,
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
+				A5E6CBFF18762BDB002A1735 /* TSAttachment.m in Sources */,
 				A515AFDB180966E30084ABA5 /* TSMessagesDatabase.m in Sources */,
 				8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */,
 				A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */,

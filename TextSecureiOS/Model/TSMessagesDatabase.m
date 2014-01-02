@@ -14,6 +14,7 @@
 #import "TSMessage.h"
 #import "TSContact.h"
 #import "TSThread.h"
+#import "TSAttachment.h"
 #import "TSStorageMasterKey.h"
 #import "TSEncryptedDatabase.h"
 
@@ -60,7 +61,8 @@ static TSEncryptedDatabase *messagesDb = nil;
             return;
         }
 #warning we will want a subtler format than this, prototype message db format
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id TEXT,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE)"]) {
+#warning we don't want to store attachments as blobs in the db, but to ease complexity for prototype we are doing just that
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id TEXT,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE, attachment_type INT,attachment BLOB)"]) {
             return;
         }
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_phone_number TEXT,relay TEXT, useraddressbookid INTEGER, identitykey TEXT, identityverified INTEGER, supports_sms INTEGER, next_key TEXT)"]){
@@ -176,7 +178,13 @@ static TSEncryptedDatabase *messagesDb = nil;
         while([rs next]) {
             NSString* timestamp = [rs stringForColumn:@"timestamp"];
             NSDate *date = [dateFormatter dateFromString:timestamp];
-            [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date]];
+            TSAttachment *attachment = nil;
+            TSAttachmentType attachmentType = [rs intForColumn:@"attachment_type"];
+            if(attachmentType!=TSAttachmentEmpty) {
+              NSData *attachmentData = [rs dataForColumn:@"attachment"];
+              attachment = [[TSAttachment alloc] initWithAttachmentData:attachmentData withType:attachmentType];
+            }
+            [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date attachment:attachment]];
         }
     }];
     
@@ -208,8 +216,15 @@ static TSEncryptedDatabase *messagesDb = nil;
             TSContact *sender = [[TSContact alloc] initWithRegisteredID:[rs stringForColumn:@"sender_id"]];
             TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[rs stringForColumn:@"recipient_id"]];
             TSThread *messageThread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[sender,receiver]]];
-            
-            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date];
+          
+            TSAttachment *attachment = nil;
+            TSAttachmentType attachmentType = [rs intForColumn:@"attachment_type"];
+            if(attachmentType!=TSAttachmentEmpty) {
+              NSData *attachmentData = [rs dataForColumn:@"attachment"];
+              attachment = [[TSAttachment alloc] initWithAttachmentData:attachmentData withType:attachmentType];
+            }
+
+            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date attachment:attachment];
 
             [threadArray addObject:messageThread];
         }

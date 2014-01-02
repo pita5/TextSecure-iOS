@@ -110,7 +110,7 @@
   NSString* message = [IncomingPushMessageSignal getMessageBody:incomingPushMessageSignal];
 #warning ignoring timestamp sent, setting to now, fix issue with timestamp received being incorrectly interpreted (a few years off). currently behavior is when received.
   // this phone is the recipient of the message
-  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:[TSKeyManager getUsernameToken], nil] sentOnDate:[NSDate date]];
+  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:[TSKeyManager getUsernameToken], nil] sentOnDate:[NSDate date] attachment:nil];
   return tsMessage;
 }
 
