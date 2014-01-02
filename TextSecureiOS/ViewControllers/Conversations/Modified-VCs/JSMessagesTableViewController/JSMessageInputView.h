@@ -56,6 +56,7 @@ typedef enum
 
 @property (strong, nonatomic) JSDismissiveTextView *textView;
 @property (strong, nonatomic) UIButton *sendButton;
+@property (strong, nonatomic) UIButton *photoButton;
 
 #pragma mark - Initialization
 - (id)initWithFrame:(CGRect)frame

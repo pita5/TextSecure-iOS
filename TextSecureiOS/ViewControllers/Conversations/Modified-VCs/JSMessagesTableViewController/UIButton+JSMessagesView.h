@@ -11,5 +11,6 @@
 @interface UIButton (JSMessagesView)
 
 + (UIButton *)defaultSendButton;
++ (UIButton *)defaultPhotoButton;
 
 @end

@@ -78,7 +78,19 @@
     [sendButton addTarget:self
                    action:@selector(sendPressed:)
          forControlEvents:UIControlEventTouchUpInside];
+    UIButton *photoButton = [self photoButton];
+    photoButton.frame = CGRectMake(8.0f, 8.0f, 59.0f/2.0, 26.0f);
+    [photoButton addTarget:self
+                   action:@selector(photoPressed:)
+         forControlEvents:UIControlEventTouchUpInside];
+
+  
+  
+  // adding two send buttons
+    [self.inputToolBarView setPhotoButton:photoButton];
+  
     [self.inputToolBarView setSendButton:sendButton];
+  
     [self.view addSubview:self.inputToolBarView];
 
     [self setBackgroundColor:[UIColor messagesBackgroundColor]];    
@@ -87,6 +99,11 @@
 - (UIButton *)sendButton
 {
     return [UIButton defaultSendButton];
+}
+
+- (UIButton *)photoButton
+{
+  return [UIButton defaultPhotoButton];
 }
 
 #pragma mark - View lifecycle
@@ -158,6 +175,12 @@
 {
     [self.delegate sendPressed:sender
                       withText:[self.inputToolBarView.textView.text trimWhitespace]];
+}
+
+
+- (void)photoPressed:(UIButton *)sender
+{
+  [self.delegate photoPressed:sender];
 }
 
 #pragma mark - Table view data source

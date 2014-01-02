@@ -195,6 +195,12 @@
     [self finishSend];
 }
 
+- (void)photoPressed:(UIButton *)sender {
+  UIAlertView* alertView= [[UIAlertView alloc] initWithTitle:@"later you will pick a photo!" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+  [alertView show];
+  
+}
+
 
 
 

@@ -54,7 +54,7 @@ static id<JSMessageInputViewDelegate> __delegate;
 @implementation JSMessageInputView
 
 @synthesize sendButton;
-
+@synthesize photoButton;
 #pragma mark - Initialization
 - (id)initWithFrame:(CGRect)frame
            delegate:(id<UITextViewDelegate, JSMessageInputViewDelegate>)delegate
@@ -90,23 +90,31 @@ static id<JSMessageInputViewDelegate> __delegate;
     [self setupTextView];
 }
 
+-(CGFloat)setupPhotoButton {
+  CGFloat offset = SEND_BUTTON_WIDTH/2.0;
+  self.photoButton = [UIButton buttonWithType:UIButtonTypeSystem];
+  [self addSubview:self.photoButton];
+  return offset;
+}
 - (void)setupTextView
 {
-    CGFloat width = self.frame.size.width - SEND_BUTTON_WIDTH;
+   CGFloat offset = [self setupPhotoButton];
+  //experimenting wtih adding additional buttons
+    CGFloat width = self.frame.size.width - SEND_BUTTON_WIDTH - offset;
     CGFloat height = [JSMessageInputView textViewLineHeight];
-    
+  
     // JeremyStone
     JSInputBarStyle style = [JSMessageInputView inputBarStyle];
     
     if (style == JSInputBarStyleDefault)
     {
-        self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(6.0f, 3.0f, width, height)];
+        self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(6.0f+offset, 3.0f, width, height)];
         self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.textView.backgroundColor = [UIColor whiteColor];
     }
     else
     {
-        self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(8.0f, 6.0f, width, height)];
+        self.textView = [[JSDismissiveTextView  alloc] initWithFrame:CGRectMake(8.0f+offset, 6.0f, width, height)];
         self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.textView.backgroundColor = [UIColor clearColor];
 
@@ -150,6 +158,15 @@ static id<JSMessageInputViewDelegate> __delegate;
     sendButton = btn;
     [self addSubview:self.sendButton];
 }
+
+-(void) setPhotoButton:(UIButton*)btn {
+  if(photoButton)
+    [photoButton removeFromSuperview];
+  
+  photoButton = btn;
+  [self addSubview:self.photoButton];
+}
+
 
 #pragma mark - Message input view
 - (void)adjustTextViewHeightBy:(CGFloat)changeInHeight

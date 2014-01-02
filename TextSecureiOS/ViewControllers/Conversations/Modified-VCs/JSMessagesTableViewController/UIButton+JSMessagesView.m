@@ -51,4 +51,13 @@
     return sendButton;
 }
 
+
++ (UIButton *)defaultPhotoButton
+{
+  UIButton* photoButton =[UIButton buttonWithType:UIButtonTypeCustom];
+  [photoButton setImage:[UIImage imageNamed:@"send.png"] forState:UIControlStateNormal];
+  //photoButton.autoresizingMask =  (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizing);
+  return photoButton;
+ }
+
 @end
