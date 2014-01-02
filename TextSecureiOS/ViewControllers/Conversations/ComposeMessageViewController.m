@@ -196,11 +196,53 @@
 }
 
 - (void)photoPressed:(UIButton *)sender {
-  UIAlertView* alertView= [[UIAlertView alloc] initWithTitle:@"later you will pick a photo!" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-  [alertView show];
+  UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo or Video",@"Choose Existing", nil];
+  [actionSheet showInView:self.view];
+  
   
 }
 
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+  UIImagePickerController *imagePicker =  [[UIImagePickerController alloc] init];
+  imagePicker.delegate = self;
+  
+  
+  imagePicker.mediaTypes =  @[(NSString *) kUTTypeImage, (NSString *) kUTTypeMovie];
+  
+  imagePicker.allowsEditing = NO;
+
+  switch (buttonIndex) {
+    case 0:
+      imagePicker.sourceType =  UIImagePickerControllerSourceTypeCamera;
+      break;
+    case 1:
+      imagePicker.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
+      break;
+    case 2:
+      // cancel
+      return;
+    default:
+      break;
+  }
+  [self presentViewController:imagePicker animated:YES completion:nil];
+
+}
+
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+ // flesh this out
+  NSString *mediaType = info[UIImagePickerControllerMediaType];
+  
+  if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
+    // Media is an image
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+  }
+  else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
+    // Media is a video
+    NSURL *url = info[UIImagePickerControllerMediaURL];
+  }
+  [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 
 

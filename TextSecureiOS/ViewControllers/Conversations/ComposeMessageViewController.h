@@ -13,7 +13,7 @@
 
 @class TSMessage;
 @class TSThread;
-@interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
+@interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
 @property (nonatomic, retain) TSContact *contact;
 @property (nonatomic) TSThread *thread;
