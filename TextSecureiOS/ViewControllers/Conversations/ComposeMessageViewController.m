@@ -14,6 +14,8 @@
 #import "TSMessage.h"
 #import "TSThread.h"
 #import "TSKeyManager.h"
+#import <UIImage-Categories/UIImage+Resize.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
@@ -174,7 +176,6 @@
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  NSLog(@"messages on thread: %d",[[TSMessagesDatabase getMessagesOnThread:self.thread] count]);
     return [[TSMessagesDatabase getMessagesOnThread:self.thread] count];
 }
 
@@ -192,6 +193,8 @@
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
 
     [[TSMessagesManager sharedManager] sendMessage:message];
+    [self.inputToolBarView.photoButton setImage:[UIImage imageNamed:@"photo.png"] forState:UIControlStateNormal];
+    self.attachment = nil;
     [self finishSend];
 }
 
@@ -232,17 +235,29 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
  // flesh this out
   NSString *mediaType = info[UIImagePickerControllerMediaType];
-  
+  UIImage *thumbnail;
   if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
     // Media is an image
     UIImage *image = info[UIImagePickerControllerOriginalImage];
+    thumbnail = image;
+    self.attachment = UIImagePNGRepresentation(image);
   }
   else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
     // Media is a video
-    NSURL *url = info[UIImagePickerControllerMediaURL];
+    NSURL *videoURL = info[UIImagePickerControllerMediaURL];
+    
+    MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
+    thumbnail = [player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+    //Player autoplays audio on init
+    [player stop];
+    self.attachment = [NSData dataWithContentsOfURL:videoURL];
   }
+  thumbnail = [thumbnail thumbnailImage:26 transparentBorder:0 cornerRadius:3.0 interpolationQuality:0];
+  [self.inputToolBarView.photoButton setImage:thumbnail forState:UIControlStateNormal];
   [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+
 
 
 

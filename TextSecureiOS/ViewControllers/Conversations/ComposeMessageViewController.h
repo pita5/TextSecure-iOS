@@ -17,6 +17,7 @@
 
 @property (nonatomic, retain) TSContact *contact;
 @property (nonatomic) TSThread *thread;
+@property (nonatomic, strong) NSData *attachment;
 // Need to be initialized with one of those methods
 
 - (instancetype)initWithConversation:(TSThread*)thread;
