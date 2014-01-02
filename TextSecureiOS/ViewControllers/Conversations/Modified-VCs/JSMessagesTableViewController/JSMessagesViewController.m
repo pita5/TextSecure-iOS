@@ -79,7 +79,7 @@
                    action:@selector(sendPressed:)
          forControlEvents:UIControlEventTouchUpInside];
     UIButton *photoButton = [self photoButton];
-    photoButton.frame = CGRectMake(8.0f, 8.0f, 59.0f/2.0, 26.0f);
+    photoButton.frame = CGRectMake(8.0f, 10.0f, 59.0f/2.0, 26.0f);
     [photoButton addTarget:self
                    action:@selector(photoPressed:)
          forControlEvents:UIControlEventTouchUpInside];

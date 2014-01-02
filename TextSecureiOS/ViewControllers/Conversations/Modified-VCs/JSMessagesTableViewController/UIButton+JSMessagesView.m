@@ -54,8 +54,9 @@
 
 + (UIButton *)defaultPhotoButton
 {
+#warning camera icon currently from http://icons8.com/license/, we need to link, purchase, or draw our own.
   UIButton* photoButton =[UIButton buttonWithType:UIButtonTypeCustom];
-  [photoButton setImage:[UIImage imageNamed:@"send.png"] forState:UIControlStateNormal];
+  [photoButton setImage:[UIImage imageNamed:@"photo.png"] forState:UIControlStateNormal];
   //photoButton.autoresizingMask =  (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizing);
   return photoButton;
  }
