@@ -61,8 +61,7 @@
   if([message.attachment readyForUpload]) {
     textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
 
-    
-    const uint64_t attachment_id = atoll([message.attachment.attachmentId UTF8String]);
+    const uint64_t attachment_id = [message.attachment.attachmentId integerValue]; // this is incorrect
 #warning key not used yet.
     attachmentPointer->set_id(attachment_id);
     const std::string attachment_encryption_key([@"dummy key" cStringUsingEncoding:NSASCIIStringEncoding]);

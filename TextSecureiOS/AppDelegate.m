@@ -18,8 +18,6 @@
 #import "NSString+Conversion.h"
 #import "TSMessagesManager.h"
 #import "NSData+Base64.h"
-#import "TSAttachmentManager.h"
-#import "TSAttachment.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -28,10 +26,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   //
-#warning remove
-  TSAttachment* testAttachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation([UIImage imageNamed:@"photo.png"]) withType:TSAttachmentEmpty withThumbnailImage:[UIImage imageNamed:@"photo.png"]];
-  [TSAttachmentManager uploadAttachment:testAttachment];
-  [testAttachment testUpload];
 
     // UIAppearance proxy setup
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];

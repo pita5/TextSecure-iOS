@@ -10,7 +10,9 @@
 #import "TSRequestAttachment.h"
 #import "TSRequestAttachmentId.h"
 #import "TSUploadAttachment.h"
+#import "TSMessage.h"
 #import "TSAttachment.h"
+#import "TSMessagesManager.h"
 
 @implementation TSAttachmentManager
 
@@ -19,7 +21,7 @@
 
 
 
-+(void) uploadAttachment:(TSAttachment*) attachment {
++(void) uploadAttachment:(TSMessage*) message {
 
   
 #warning error handling
@@ -27,11 +29,14 @@
     switch (operation.response.statusCode) {
         // in both cases attachment info currently in header under "Content-Location " = "contentonamazonwebsite";
       case 200: {
-        attachment.attachmentId = [responseObject objectForKey:@"id"];
-        attachment.attachmentURL = [NSURL URLWithString:[[responseObject objectForKey:@"location"] stringByReplacingOccurrencesOfString:@"%3D" withString:@"="]];
-        DLog(@"we have attachment id %@ location %@",attachment.attachmentId,attachment.attachmentURL);
+        message.attachment.attachmentId = [responseObject objectForKey:@"id"];
+        message.attachment.attachmentURL = [NSURL URLWithString:[[responseObject objectForKey:@"location"] stringByReplacingOccurrencesOfString:@"%3D" withString:@"="]];
+        DLog(@"we have attachment id %@ location %@",message.attachment.attachmentId,message.attachment.attachmentURL);
+#warning later do this AFTER the attachment has been uploaded but still having success issues
+        // we can now send the messsage
+        [[TSMessagesManager sharedManager] sendMessage:message];
 //        [attachment testUpload]; // using for debugging
-        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:attachment] success:^(AFHTTPRequestOperation *uploadOperation, id uploadResponseObject) {
+        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:message.attachment] success:^(AFHTTPRequestOperation *uploadOperation, id uploadResponseObject) {
           switch (uploadOperation.response.statusCode) {
               
             case 200:
@@ -66,9 +71,9 @@
 
 }
 
-+(void) downloadAttachment:(TSAttachment*)attachment {
++(void) downloadAttachment:(TSMessage*) message {
 #warning error handling
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestAttachment alloc] initWithId:attachment.attachmentId] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestAttachment alloc] initWithId:message.attachment.attachmentId] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     switch (operation.response.statusCode) {
       case 200: {
         NSString* uploadLocation = [responseObject objectForKey:@"location"];

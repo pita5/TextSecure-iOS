@@ -73,9 +73,7 @@
 -(void) sendMessage:(TSMessage*)message {
   [TSMessagesDatabase storeMessage:message];
   // upload attachments as needed
-  if(message.attachment.attachmentType!=TSAttachmentEmpty) {
-    [TSAttachmentManager uploadAttachment:message.attachment];
-  }
+
   NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message] base64Encoding];
   
   

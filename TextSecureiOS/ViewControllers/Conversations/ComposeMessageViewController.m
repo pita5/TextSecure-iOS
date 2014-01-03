@@ -17,6 +17,7 @@
 #import "TSThread.h"
 #import "TSKeyManager.h"
 #import "TSAttachment.h"
+#import "TSAttachmentManager.h"
 
 
 @interface ComposeMessageViewController ()
@@ -193,8 +194,13 @@
     }
   
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date] attachment:self.attachment];
-
-    [[TSMessagesManager sharedManager] sendMessage:message];
+    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+    // this is asynchronous so message will only be send by messages manager when it succeeds
+      [TSAttachmentManager uploadAttachment:message];
+    }
+    else {
+      [[TSMessagesManager sharedManager] sendMessage:message];
+    }
     [self.inputToolBarView.photoButton setImage:[UIImage imageNamed:@"photo.png"] forState:UIControlStateNormal];
     self.attachment = nil;
     [self finishSend];
