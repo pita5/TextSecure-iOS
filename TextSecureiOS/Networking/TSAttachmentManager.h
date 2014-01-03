@@ -10,11 +10,9 @@
 
 @interface TSAttachmentManager : NSObject
 #pragma mark uploading files
--(NSString*) retrieveNewAttachmentUploadLocation;
--(BOOL) uploadAttachment:(NSData*) attachement;
++(NSString*) uploadAttachment:(NSData*) attachement;
 #pragma mark downloading files
--(NSString*) retrieveAttachmentUploadLocationForId:(NSString*) attachmentId;
--(NSData*) retrieveAttachmentForId:(NSString*)attachmentId;
++(NSData*) retrieveAttachmentForId:(NSString*)attachmentId;
 
 
 @end

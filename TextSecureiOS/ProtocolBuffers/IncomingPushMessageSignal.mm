@@ -8,6 +8,7 @@
 
 #import "IncomingPushMessageSignal.hh"
 #import "TSMessage.h"
+#import "TSAttachment.h"
 
 @implementation IncomingPushMessageSignal
 
@@ -29,6 +30,10 @@
   return incomingPushMessage;
 }
 
+// Serialize TSAttachment to AttachmentPointer
+
+// De-Serialize AttachmentPointer to TSAttachment
+
 // Serialize PushMessageContent to NSData.
 + (NSData *)getDataForPushMessageContent:(textsecure::PushMessageContent *)pushMessageContent {
   std::string ps = pushMessageContent->SerializeAsString();
@@ -47,12 +52,24 @@
 }
 
 // Create PushMessageContent from it's Objective C contents
-+ (NSData *)createSerializedPushMessageContent:(NSString*) message withAttachments:(NSArray*) attachments {
++ (NSData *)createSerializedPushMessageContent:(TSMessage*) message  {
 #warning no attachments suppoart yet
   textsecure::PushMessageContent *pushMessageContent = new textsecure::PushMessageContent();
-  const std::string body([message cStringUsingEncoding:NSASCIIStringEncoding]);
-  pushMessageContent->set_body(body);
+  const std::string body([message.message cStringUsingEncoding:NSASCIIStringEncoding]);
 
+  pushMessageContent->set_body(body);
+  if(message.attachment.attachmentType != TSAttachmentEmpty) {
+    textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
+
+    
+    const uint64_t attachment_id = atoll([message.attachment.attachmentId UTF8String]);
+#warning key not used yet.
+    attachmentPointer->set_id(attachment_id);
+    const std::string attachment_encryption_key([@"dummy key" cStringUsingEncoding:NSASCIIStringEncoding]);
+    attachmentPointer->set_key(attachment_encryption_key);
+    std::string attachment_contenttype([[message.attachment getMIMEContentType]  cStringUsingEncoding:NSASCIIStringEncoding]);
+    attachmentPointer->set_contenttype(attachment_contenttype);
+  }
   NSData *serializedPushMessageContent = [IncomingPushMessageSignal getDataForPushMessageContent:pushMessageContent];
   delete pushMessageContent;
   return serializedPushMessageContent;

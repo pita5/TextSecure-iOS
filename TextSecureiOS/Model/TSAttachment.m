@@ -25,4 +25,19 @@
   return  [self.attachmentThumbnail thumbnailImage:size transparentBorder:0 cornerRadius:3.0 interpolationQuality:0];
 }
 
+-(NSString*) getMIMEContentType {
+  switch (self.attachmentType) {
+    case TSAttachmentEmpty:
+      return @"";
+      break;
+    case TSAttachmentPhoto:
+      return @"image/png";
+      break;
+    case TSAttachmentVideo:
+      return @"video/mp4";
+    default:
+      return @"";
+      break;
+  }
+}
 @end

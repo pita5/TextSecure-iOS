@@ -12,11 +12,12 @@
 #import "NSData+Base64.h"
 #import "TSSubmitMessageRequest.h"
 #import "TSMessagesManager.h"
+#import "TSAttachmentManager.h"
 #import "TSKeyManager.h"
 #import "Cryptography.h"
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
-
+#import "TSAttachment.h"
 
 @implementation TSMessagesManager
 
@@ -71,7 +72,14 @@
 
 -(void) sendMessage:(TSMessage*)message {
   [TSMessagesDatabase storeMessage:message];
-  NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
+  // upload attachments as needed
+  if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+    message.attachment.attachmentId = [TSAttachmentManager uploadAttachment:message.attachment.attachmentData];
+  }
+  NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message] base64Encoding];
+  
+  
+  
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {

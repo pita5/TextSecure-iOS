@@ -16,7 +16,7 @@
 
 
 
--(NSString*) retrieveNewAttachmentUploadLocation {
++(NSString*) retrieveNewAttachmentUploadLocation {
   __block NSString* uploadLocation;
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestAttachmentId alloc] init] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     switch (operation.response.statusCode) {
@@ -40,9 +40,9 @@
   return uploadLocation;
 }
 
--(BOOL) uploadAttachment:(NSData*) attachement {
++(NSString*) uploadAttachment:(NSData*) attachement {
 #warning just testing attachments
-  NSString* uploadLocation = [self retrieveNewAttachmentUploadLocation];
+  NSString* uploadLocation = [TSAttachmentManager retrieveNewAttachmentUploadLocation];
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:attachement uploadLocation:uploadLocation] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     switch (operation.response.statusCode) {
         // in both cases attachment info currently in header under "Content-Location " = "contentonamazonwebsite";
@@ -58,19 +58,12 @@
     
     
   }];
+  return uploadLocation;
 
-  
-       
-       
-       
-       
-  
-  
-  
   
 }
 
--(NSString*) retrieveAttachmentUploadLocationForId:(NSString*) attachmentId {
++(NSString*) retrieveAttachmentUploadLocationForId:(NSString*) attachmentId {
   __block NSString* uploadLocation;
   NSString* attachmentLocation = [self retrieveNewAttachmentUploadLocation];
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestAttachment alloc] initWithId:attachmentId] success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -94,10 +87,11 @@
   return uploadLocation;
   
 }
--(NSData*) retrieveAttachmentForId:(NSString*)attachmentId {
-  NSString* uploadLoaction = [self retrieveAttachmentUploadLocationForId:attachmentId];
++(NSData*) retrieveAttachmentForId:(NSString*)attachmentId {
+  NSString* uploadLoaction = [TSAttachmentManager retrieveAttachmentUploadLocationForId:attachmentId];
 
   __block NSData* attachment;
+#warning not implemented yet
   
 }
 
