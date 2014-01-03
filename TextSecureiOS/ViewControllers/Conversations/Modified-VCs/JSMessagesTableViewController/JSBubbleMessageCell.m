@@ -199,6 +199,10 @@
                                                               timeStyle:NSDateFormatterShortStyle];
 }
 
+- (void) setThumbnail:(UIImage*)image {
+  [self.bubbleView addSubview:[[UIImageView alloc] initWithImage:image ]];
+}
+
 - (void)setAvatarImage:(UIImage *)image
 {
     UIImage *styledImg = nil;
@@ -219,11 +223,12 @@
     self.avatarImageView.image = styledImg;
 }
 
-+ (CGFloat)neededHeightForText:(NSString *)bubbleViewText timestamp:(BOOL)hasTimestamp avatar:(BOOL)hasAvatar
++ (CGFloat)neededHeightForText:(NSString *)bubbleViewText timestamp:(BOOL)hasTimestamp avatar:(BOOL)hasAvatar thumbnail:(UIImage*)thumbnailImage
 {
     CGFloat timestampHeight = (hasTimestamp) ? TIMESTAMP_LABEL_HEIGHT : 0.0f;
     CGFloat avatarHeight = (hasAvatar) ? kJSAvatarSize : 0.0f;
-    return MAX(avatarHeight, [JSBubbleView cellHeightForText:bubbleViewText]) + timestampHeight;
+    CGFloat thumbailHeight = (thumbnailImage!=nil) ? thumbnailImage.size.height : 0.0f;
+    return MAX(avatarHeight, [JSBubbleView cellHeightForText:bubbleViewText]) + timestampHeight + thumbailHeight;
 }
 
 #pragma mark - Copying

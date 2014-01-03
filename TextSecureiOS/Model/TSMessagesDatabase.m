@@ -149,13 +149,19 @@ static TSEncryptedDatabase *messagesDb = nil;
     TSContact *sender = [[TSContact alloc] initWithRegisteredID:message.senderId];
     TSContact *reciever = [[TSContact alloc] initWithRegisteredID:message.recipientId];
     NSString* threadId = [TSParticipants threadIDForParticipants:@[sender,reciever]];
-    
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
         NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
+      
+      if(message.attachment.attachmentType != TSAttachmentEmpty) {
+
+          [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp,attachment_type,attachment,attachment_thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate,[NSNumber numberWithInt:message.attachment.attachmentType],message.attachment.attachmentData,UIImagePNGRepresentation(message.attachment.attachmentThumbnail)];
+      }
+      else {
+            [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate];
         
-        [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate];
+      }
     }];
 }
 

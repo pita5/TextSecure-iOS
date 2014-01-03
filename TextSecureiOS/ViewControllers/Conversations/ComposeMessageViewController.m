@@ -237,7 +237,6 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
   NSString *mediaType = info[UIImagePickerControllerMediaType];
-  UIImage *thumbnail;
   if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     self.attachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation(image) withType:TSAttachmentPhoto withThumbnailImage:image];
@@ -304,7 +303,11 @@
 }
 
 #pragma mark - Messages view data source
-
+- (BOOL) shouldHaveThumbnailForRowAtIndexPath:(NSIndexPath*)indexPath {
+  NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
+  TSAttachment *attachment = [[dbMessages objectAtIndex:indexPath.row] attachment];
+  return attachment.attachmentType != TSAttachmentEmpty;
+}
 - (UIImage *)thumbnailForRowAtIndexPath:(NSIndexPath *)indexPath {
   NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
   TSAttachment *attachment = [[dbMessages objectAtIndex:indexPath.row] attachment];

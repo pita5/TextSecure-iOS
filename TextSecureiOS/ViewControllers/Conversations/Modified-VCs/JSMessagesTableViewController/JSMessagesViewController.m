@@ -202,7 +202,7 @@
     
     BOOL hasTimestamp = [self shouldHaveTimestampForRowAtIndexPath:indexPath];
     BOOL hasAvatar = [self shouldHaveAvatarForRowAtIndexPath:indexPath];
-    
+    BOOL hasThumbnail = [self shouldHaveThumbnailForRowAtIndexPath:indexPath];
     NSString *CellID = [NSString stringWithFormat:@"MessageCell_%d_%d_%d_%d", type, bubbleStyle, hasTimestamp, hasAvatar];
     JSBubbleMessageCell *cell = (JSBubbleMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellID];
     
@@ -227,6 +227,9 @@
                 break;
         }
     }
+    if(hasThumbnail) {
+      [cell setThumbnail:[self.dataSource thumbnailForRowAtIndexPath:indexPath]];
+    }
     
     [cell setMessage:[self.dataSource textForRowAtIndexPath:indexPath]];
     [cell setBackgroundColor:tableView.backgroundColor];
@@ -238,7 +241,8 @@
 {
     return [JSBubbleMessageCell neededHeightForText:[self.dataSource textForRowAtIndexPath:indexPath]
                                           timestamp:[self shouldHaveTimestampForRowAtIndexPath:indexPath]
-                                             avatar:[self shouldHaveAvatarForRowAtIndexPath:indexPath]];
+                                             avatar:[self shouldHaveAvatarForRowAtIndexPath:indexPath]
+                                          thumbnail:[self.dataSource thumbnailForRowAtIndexPath:indexPath]];
 }
 
 #pragma mark - Messages view controller

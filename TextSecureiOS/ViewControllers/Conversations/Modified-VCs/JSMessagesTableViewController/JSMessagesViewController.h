@@ -75,6 +75,7 @@ typedef enum {
 
 @protocol JSMessagesViewDataSource <NSObject>
 @required
+- (UIImage *)thumbnailForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (UIImage *)avatarImageForIncomingMessage;
@@ -99,6 +100,7 @@ typedef enum {
 - (void)sendPressed:(UIButton *)sender;
 
 #pragma mark - Messages view controller
+- (BOOL) shouldHaveThumbnailForRowAtIndexPath:(NSIndexPath*)indexPath;
 - (BOOL)shouldHaveTimestampForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)shouldHaveAvatarForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)finishSend;
