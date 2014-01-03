@@ -10,4 +10,5 @@
 @class TSAttachment;
 @interface TSUploadAttachment : TSRequest
 -(TSRequest*) initWithAttachment:(TSAttachment*) attachment ;
+
 @end

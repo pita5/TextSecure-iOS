@@ -11,6 +11,7 @@
 #import "TSRequest.h"
 #import "TSKeyManager.h"
 #import "TSServerCodeVerificationRequest.h"
+#import "TSUploadAttachment.h"
 
 @implementation TSNetworkManager
 
@@ -30,6 +31,7 @@
         operationManager = [[AFHTTPRequestOperationManager manager] initWithBaseURL:[[NSURL alloc] initWithString:textSecureServer]];
         operationManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
+    
         
     }
     return self;
@@ -38,10 +40,39 @@
 #pragma mark Manager Methods
 
 - (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
-    
-    // The only unauthenticated request is the initial request for a verification code
-    
-    if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
+  
+    if ([request usingExternalServer]){
+      // requests using external to textSecureServer server, unauthenticated
+      if(request.mimeType!=nil) {
+        [operationManager.requestSerializer setValue:request.mimeType forHTTPHeaderField:@"Content-Type"];
+      }
+      if ([request.HTTPMethod isEqualToString:@"GET"]) {
+        [operationManager GET:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+      }
+      else if ([request.HTTPMethod isEqualToString:@"POST"]){
+        if(request.data!=nil) {
+          // not currently working
+          [operationManager POST:request.URL.absoluteString parameters:request.parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFormData:request.data name:@"file"];
+          } success:successCompletionBlock failure:failureCompletionBlock];
+        }
+        else {
+          [operationManager POST:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        }
+      }
+      else if ([request.HTTPMethod isEqualToString:@"PUT"]){
+        if(request.data!=nil) {
+          [operationManager PUT:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        }
+        else {
+          [operationManager PUT:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        }
+      }
+    }
+  
+   else if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
+      // The only unauthenticated request is the initial request for a verification code
+
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
         [operationManager GET:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
     } else if ([request isKindOfClass:[TSServerCodeVerificationRequest class]]){
@@ -55,7 +86,8 @@
         [request.parameters removeObjectForKey:@"AuthKey"];
         
         [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-    } else{
+    }
+    else{
         // For all other equests, we do add an authorization header
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
         

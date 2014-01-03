@@ -33,4 +33,7 @@
     [self.parameters addEntriesFromDictionary:@{@"Authorization":[TSKeyManager getAuthorizationToken]}];
 }
 
+- (BOOL) usingExternalServer {
+  return NO;
+}
 @end

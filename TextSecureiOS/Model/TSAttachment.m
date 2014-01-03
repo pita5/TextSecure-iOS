@@ -8,6 +8,8 @@
 
 #import "TSAttachment.h"
 #import <UIImage-Categories/UIImage+Resize.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
+#import <AFNetworking/AFNetworking.h>
 
 @implementation TSAttachment
 
@@ -43,5 +45,40 @@
 
 -(BOOL) readyForUpload {
   return (self.attachmentType != TSAttachmentEmpty && self.attachmentId != nil && self.attachmentURL != nil);
+}
+
+- (void)uploadTest {
+  NSURL *url = [NSURL URLWithString:@"https://xxx.s3-ap-northeast-1.amazonaws.com/"];
+  AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
+  NSData *imageData = UIImagePNGRepresentation([UIImage imageNamed:@"194-note-2.png"]);
+  NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
+                          @"xxxxx/videos/XXXXW",@"key",
+                          @"XXXXXXXX",@"AWSAccessKeyId",
+                          
+                          @"XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",@"policy",
+                          @"XXXXXXXXXXXXXXXXXXXXXXXXX",@"signature",
+                          
+                          nil];
+  
+  
+  NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:@"/" parameters:params constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+    [formData appendPartWithFileData:imageData name:@"file" fileName:@"194-note-2.png" mimeType:@"image/png"];
+  }];
+  
+  AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+  [operation setUploadProgressBlock:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+    NSLog(@"Sent %d of %d bytes", totalBytesWritten, totalBytesExpectedToWrite);
+  }];
+  [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *theOperation, id responseObject) {
+    NSLog(@"Success:%@,%@",operation.response.allHeaderFields, operation.responseString);
+    
+    
+    
+  } failure:^(AFHTTPRequestOperation *theOperation, NSError *error) {
+    NSLog(@"Error:%@ ,%@,%@",error,operation.response.allHeaderFields,operation.responseString);
+  }];
+  [operation start];
+  
+  
 }
 @end
