@@ -200,6 +200,7 @@
 }
 
 - (void) setThumbnail:(UIImage*)image {
+
   [self.bubbleView addSubview:[[UIImageView alloc] initWithImage:image ]];
 }
 
