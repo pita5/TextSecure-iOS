@@ -13,18 +13,34 @@
 
 @implementation TSAttachment
 
--(id) initWithAttachmentData:(NSData*) data  withType:(TSAttachmentType)type withThumbnailImage:(UIImage*)thumbnail {
+-(id) initWithAttachmentDataPath:(NSString*) dataPath  withType:(TSAttachmentType)type withThumbnailImagePath:(NSString*)thumbnailImagePath withDecryptionKey:(NSData*)decryptionKey {
   if(self=[super init]) {
-    self.attachmentData = data;
+    self.attachmentDataPath = dataPath;
     self.attachmentType = type;
-    self.attachmentThumbnail=thumbnail;
+    self.attachmentThumbnailPath=thumbnailImagePath;
+    self.attachmentDecryptionKey = decryptionKey;
   }
   return self;
 }
 
 
 -(UIImage*) getThumbnailOfSize:(int)size {
-  return  [self.attachmentThumbnail thumbnailImage:size transparentBorder:0 cornerRadius:3.0 interpolationQuality:0];
+  NSData *thumbnailData = [NSData dataWithContentsOfFile:self.attachmentThumbnailPath options:NSDataReadingUncached error:nil];
+  //later decrypt
+  UIImage* thumbnailImage = [UIImage imageWithData:thumbnailData];
+  return  [thumbnailImage thumbnailImage:size transparentBorder:0 cornerRadius:3.0 interpolationQuality:0];
+}
+
+-(UIImage*) getImage  {
+  NSData *attachmentData = [NSData dataWithContentsOfFile:self.attachmentDataPath options:NSDataReadingUncached error:nil];
+  //later decrypt
+  return [UIImage imageWithData:attachmentData];
+
+}
+
+-(NSData*) getData {
+  return  [NSData dataWithContentsOfFile:self.attachmentDataPath options:NSDataReadingUncached error:nil];
+
 }
 
 -(NSString*) getMIMEContentType {
@@ -47,25 +63,4 @@
   return (self.attachmentType != TSAttachmentEmpty && self.attachmentId != nil && self.attachmentURL != nil);
 }
 
-- (void)testUpload {
-  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-  [request setHTTPMethod:@"PUT"];
-  [request setValue:@"image/png" forHTTPHeaderField:@"Content-Type"];
-  [request setHTTPBody:self.attachmentData];
-  [request setValue:[NSString stringWithFormat:@"%d", [self.attachmentData length]] forHTTPHeaderField:@"Content-Length"];
-  [request setValue:@"public-read" forHTTPHeaderField:@"x-amz-acl"];
-  [request setValue:@"iPhone-OS/7.0 en EN" forHTTPHeaderField:@"User-Agent"];
-  [request setURL:self.attachmentURL];
-  NSHTTPURLResponse * response = nil;
-  NSError * error = nil;
-  NSData * data = [NSURLConnection sendSynchronousRequest:request
-                                        returningResponse:&response
-                                                    error:&error];
-  
-  NSLog(@"response %d",[response statusCode]);
-  
-
-  
-  
-}
 @end

@@ -18,6 +18,7 @@
 #import "TSKeyManager.h"
 #import "TSAttachment.h"
 #import "TSAttachmentManager.h"
+#import "Cryptography.h"
 
 
 @interface ComposeMessageViewController ()
@@ -243,21 +244,36 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
   NSString *mediaType = info[UIImagePickerControllerMediaType];
+
+  NSData* attachmentData;
+  TSAttachmentType  attachmentType;
+  NSData *thumbnailData;
   if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    self.attachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation(image) withType:TSAttachmentPhoto withThumbnailImage:image];
+    attachmentData= UIImagePNGRepresentation(image);
+    attachmentType = TSAttachmentPhoto;
+    thumbnailData = attachmentData;
   }
   else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
     NSURL *videoURL = info[UIImagePickerControllerMediaURL];
     MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
-    UIImage *thumbnail = [player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+    thumbnailData = UIImagePNGRepresentation([player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame]);
     [player stop]; //make sure it doesn't autoplay
-    self.attachment = [[TSAttachment alloc] initWithAttachmentData:[NSData dataWithContentsOfURL:videoURL] withType:TSAttachmentVideo withThumbnailImage:thumbnail];
+    attachmentData=[NSData dataWithContentsOfURL:videoURL];
+    attachmentType = TSAttachmentVideo;
   }
+  // write attachment data to file
+  
+  NSData *encryptedData;
+  
+  NSString* filename;
+  //self.attachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation(image) withType:TSAttachmentPhoto withThumbnailImage:image];
+
    //size of button
   [self.inputToolBarView.photoButton setImage:[self.attachment getThumbnailOfSize:26] forState:UIControlStateNormal];
   [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 
 
 

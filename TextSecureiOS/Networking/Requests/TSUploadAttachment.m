@@ -14,7 +14,7 @@
   
   self = [super initWithURL:attachment.attachmentURL];
   self.HTTPMethod = @"PUT";
-  self.data = attachment.attachmentData;
+  self.data = [attachment getData];
   self.mimeType = [attachment getMIMEContentType];
   return self;
   

@@ -78,6 +78,16 @@
 }
 
 
+#pragma mark encrypting and decrypting attachments
++(NSData*) encryptAttachment:(NSData*) attachmentToEncrypt {
+  // returns the following
+}
+
++(NSData*) decryptAttachment:(NSData*) attachmentToDecrypt {
+  // returns the following
+}
+
+
 #pragma mark push payload encryptiong/decryption
 +(NSData*) decryptPushPayload:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
   /* AES256 CBC encrypt then mac 

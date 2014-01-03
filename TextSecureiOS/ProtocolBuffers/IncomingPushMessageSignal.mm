@@ -88,8 +88,15 @@
   textsecure::PushMessageContent *messageContent = [IncomingPushMessageSignal getPushMessageContentForData:messageData];
   if(messageContent->attachments_size()>0) {
     const textsecure::PushMessageContent_AttachmentPointer attachmentPointer = messageContent->attachments(0);
-   // [[TSAttachment alloc] initWithAttachmentData:<#(NSData *)#> withType:<#(TSAttachmentType)#> withThumbnailImage:<#(UIImage *)#>]'
+#warning not implemented!
+//    attachmentPointer->get_
+//    NSData *attachmentData = [NSData dataWithBytes:attachmentPointer-> length:<#(NSUInteger)#>]
     
+//   return [[TSAttachment alloc] initWithAttachmentData:<#(NSData *)#> withType:<#(TSAttachmentType)#> withThumbnailImage:<#(UIImage *)#>]'
+    return nil;
+  }
+  else {
+    return nil;
   }
 
 }
@@ -136,6 +143,7 @@
   //[[NSDate alloc] initWithTimeIntervalSince1970:[timestamp longLongValue]]
   NSString* message = [IncomingPushMessageSignal getMessageBody:incomingPushMessageSignal];
 #warning ignoring timestamp sent, setting to now, fix issue with timestamp received being incorrectly interpreted (a few years off). currently behavior is when received.
+//  TSAttachment *tsAttachment = [IncomingPushMessageSignal getMessageAttachmentData:incomingPushMessageSignal]; // not implemented
   // this phone is the recipient of the message
   TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:[TSKeyManager getUsernameToken], nil] sentOnDate:[NSDate date] attachment:nil];
   return tsMessage;

@@ -14,14 +14,17 @@ typedef enum {
   TSAttachmentVideo
 } TSAttachmentType;
 @interface TSAttachment : NSObject
-@property (nonatomic,strong) NSData* attachmentData;
+@property (nonatomic,strong) NSString* attachmentDataPath;
 @property (nonatomic) TSAttachmentType attachmentType;
 @property (nonatomic,strong) NSString* attachmentId;
-@property (nonatomic,strong) UIImage* attachmentThumbnail;
+@property (nonatomic,strong) NSString* attachmentThumbnailPath;
+@property (nonatomic,strong) NSData* attachmentDecryptionKey;
 @property (nonatomic,strong) NSURL* attachmentURL;
--(id) initWithAttachmentData:(NSData*) data  withType:(TSAttachmentType)type withThumbnailImage:(UIImage*)thumbnail;
+-(id) initWithAttachmentDataPath:(NSString*) dataPath  withType:(TSAttachmentType)type withThumbnailImagePath:(NSString*)thumbnailImagePath withDecryptionKey:attachmentDecryptionKey;
 -(UIImage*) getThumbnailOfSize:(int)size;
 -(NSString*) getMIMEContentType;
+-(NSData*) getData;
+-(UIImage*) getImage;
 -(BOOL) readyForUpload;
 - (void)testUpload;
 @end
