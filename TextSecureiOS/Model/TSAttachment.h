@@ -17,7 +17,7 @@ typedef enum {
 @property (nonatomic,strong) NSData* attachmentData;
 @property (nonatomic) TSAttachmentType attachmentType;
 @property (nonatomic,strong) NSURL* attachmentUrl;
-
--(id) initWithAttachmentData:(NSData*) data  withType:(TSAttachmentType)type;
-
+@property (nonatomic,strong) UIImage* attachmentThumbnail;
+-(id) initWithAttachmentData:(NSData*) data  withType:(TSAttachmentType)type withThumbnailImage:(UIImage*)thumbnail;
+-(UIImage*) getThumbnailOfSize:(int)size;
 @end

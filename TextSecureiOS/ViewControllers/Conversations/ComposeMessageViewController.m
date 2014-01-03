@@ -8,7 +8,6 @@
 
 #import "ComposeMessageViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
-#import <UIImage-Categories/UIImage+Resize.h>
 
 #import "TSMessagesManager.h"
 #import "TSContactManager.h"
@@ -241,18 +240,17 @@
   UIImage *thumbnail;
   if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    thumbnail = image;
-    self.attachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation(image) withType:TSAttachmentPhoto];
+    self.attachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation(image) withType:TSAttachmentPhoto withThumbnailImage:image];
   }
   else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
     NSURL *videoURL = info[UIImagePickerControllerMediaURL];
     MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
-    thumbnail = [player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+    UIImage *thumbnail = [player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
     [player stop]; //make sure it doesn't autoplay
-    self.attachment = [[TSAttachment alloc] initWithAttachmentData:[NSData dataWithContentsOfURL:videoURL] withType:TSAttachmentVideo];
+    self.attachment = [[TSAttachment alloc] initWithAttachmentData:[NSData dataWithContentsOfURL:videoURL] withType:TSAttachmentVideo withThumbnailImage:thumbnail];
   }
-  thumbnail = [thumbnail thumbnailImage:26 transparentBorder:0 cornerRadius:3.0 interpolationQuality:0]; //size of button
-  [self.inputToolBarView.photoButton setImage:thumbnail forState:UIControlStateNormal];
+   //size of button
+  [self.inputToolBarView.photoButton setImage:[self.attachment getThumbnailOfSize:26] forState:UIControlStateNormal];
   [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -306,6 +304,13 @@
 }
 
 #pragma mark - Messages view data source
+
+- (UIImage *)thumbnailForRowAtIndexPath:(NSIndexPath *)indexPath {
+  NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
+  TSAttachment *attachment = [[dbMessages objectAtIndex:indexPath.row] attachment];
+  return [attachment getThumbnailOfSize:100];
+  
+}
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
     //TODO: error handling

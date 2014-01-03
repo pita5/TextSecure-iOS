@@ -62,7 +62,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         }
 #warning we will want a subtler format than this, prototype message db format
 #warning we don't want to store attachments as blobs in the db, but to ease complexity for prototype we are doing just that
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id TEXT,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE, attachment_type INT,attachment BLOB)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id TEXT,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE, attachment_type INT,attachment BLOB,attachment_thumbnail BLOB)"]) {
             return;
         }
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_phone_number TEXT,relay TEXT, useraddressbookid INTEGER, identitykey TEXT, identityverified INTEGER, supports_sms INTEGER, next_key TEXT)"]){
@@ -182,7 +182,8 @@ static TSEncryptedDatabase *messagesDb = nil;
             TSAttachmentType attachmentType = [rs intForColumn:@"attachment_type"];
             if(attachmentType!=TSAttachmentEmpty) {
               NSData *attachmentData = [rs dataForColumn:@"attachment"];
-              attachment = [[TSAttachment alloc] initWithAttachmentData:attachmentData withType:attachmentType];
+              NSData *attachmentThumbnail = [rs dataForColumn:@"attachment_thumbnail"];
+              attachment = [[TSAttachment alloc] initWithAttachmentData:attachmentData withType:attachmentType withThumbnailImage:[UIImage imageWithData:attachmentThumbnail]];
             }
             [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date attachment:attachment]];
         }
@@ -221,10 +222,12 @@ static TSEncryptedDatabase *messagesDb = nil;
             TSAttachmentType attachmentType = [rs intForColumn:@"attachment_type"];
             if(attachmentType!=TSAttachmentEmpty) {
               NSData *attachmentData = [rs dataForColumn:@"attachment"];
-              attachment = [[TSAttachment alloc] initWithAttachmentData:attachmentData withType:attachmentType];
+              NSData *attachmentThumbnail = [rs dataForColumn:@"attachment_thumbnail"];
+
+              attachment = [[TSAttachment alloc] initWithAttachmentData:attachmentData withType:attachmentType withThumbnailImage:[UIImage imageWithData:attachmentThumbnail]];
             }
 
-            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date attachment:attachment];
+            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date attachment:nil];
 
             [threadArray addObject:messageThread];
         }
