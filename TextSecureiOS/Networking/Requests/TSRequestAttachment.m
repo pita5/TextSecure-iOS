@@ -7,7 +7,7 @@
 //
 
 #import "TSRequestAttachment.h"
-
+#import "Constants.h"
 @implementation TSRequestAttachment
 -(TSRequest*) initWithId:(NSString*) attachmentId {
   

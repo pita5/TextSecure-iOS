@@ -7,12 +7,12 @@
 //
 
 #import "TSUploadAttachment.h"
-
+#import "TSAttachment.h"
 @implementation TSUploadAttachment
 
--(TSRequest*) initWithAttachment:(NSData*) attachment uploadLocation:(NSString*)uploadLocation{
+-(TSRequest*) initWithAttachment:(TSAttachment*) attachment{
   
-  self = [super initWithURL:[NSURL URLWithString:uploadLocation]];
+  self = [super initWithURL:attachment.attachmentURL];
   self.HTTPMethod = @"PUT";
   return self;
   

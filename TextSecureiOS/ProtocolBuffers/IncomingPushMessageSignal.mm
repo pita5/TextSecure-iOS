@@ -58,7 +58,7 @@
   const std::string body([message.message cStringUsingEncoding:NSASCIIStringEncoding]);
 
   pushMessageContent->set_body(body);
-  if(message.attachment.attachmentType != TSAttachmentEmpty) {
+  if([message.attachment readyForUpload]) {
     textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
 
     
@@ -83,6 +83,17 @@
   return [IncomingPushMessageSignal prettyPrintPushMessageContent:messageContent];
 }
 
++ (TSAttachment*) getMessageAttachmentData:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal {
+  const std::string cppMessage = incomingPushMessageSignal->message();
+  NSData *messageData =[NSData dataWithBytes:cppMessage.c_str() length:cppMessage.size()];
+  textsecure::PushMessageContent *messageContent = [IncomingPushMessageSignal getPushMessageContentForData:messageData];
+  if(messageContent->attachments_size()>0) {
+    const textsecure::PushMessageContent_AttachmentPointer attachmentPointer = messageContent->attachments(0);
+   // [[TSAttachment alloc] initWithAttachmentData:<#(NSData *)#> withType:<#(TSAttachmentType)#> withThumbnailImage:<#(UIImage *)#>]'
+    
+  }
+
+}
 + (NSString*)prettyPrint:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal {
   /*
    Type

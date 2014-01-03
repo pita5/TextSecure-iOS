@@ -40,4 +40,8 @@
       break;
   }
 }
+
+-(BOOL) readyForUpload {
+  return (self.attachmentType != TSAttachmentEmpty && self.attachmentId != nil && self.attachmentURL != nil);
+}
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "TSRequest.h"
-
+@class TSAttachment;
 @interface TSUploadAttachment : TSRequest
--(TSRequest*) initWithAttachment:(NSData*) attachment uploadLocation:(NSString*)uploadLocation;
+-(TSRequest*) initWithAttachment:(TSAttachment*) attachment ;
 @end

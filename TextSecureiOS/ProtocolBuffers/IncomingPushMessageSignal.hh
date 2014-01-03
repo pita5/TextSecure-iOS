@@ -11,6 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "IncomingPushMessageSignal.pb.hh"
 @class TSMessage;
+@class TSAttachment;
 @interface IncomingPushMessageSignal : NSObject
 + (NSData *)getDataForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessage;
 + (textsecure::IncomingPushMessageSignal *)getIncomingPushMessageSignalForData:(NSData *)data;
@@ -20,4 +21,6 @@
 + (NSData *)createSerializedPushMessageContent:(TSMessage*) message;
 + (NSString*) getMessageBody:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
 +(TSMessage*)getTSMessageForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
+
++ (TSAttachment*) getMessageAttachmentData:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
 @end

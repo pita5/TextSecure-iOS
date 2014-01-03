@@ -18,7 +18,8 @@
 #import "NSString+Conversion.h"
 #import "TSMessagesManager.h"
 #import "NSData+Base64.h"
-
+#import "TSAttachmentManager.h"
+#import "TSAttachment.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -26,7 +27,6 @@
 #define firstLaunchKey @"FirstLaunch"
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     // UIAppearance proxy setup
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor]} forState:UIControlStateDisabled];
