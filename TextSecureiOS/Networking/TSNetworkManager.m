@@ -41,33 +41,9 @@
 
 - (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
   
-    if ([request usingExternalServer]){
-      // requests using external to textSecureServer server, unauthenticated
-      if(request.mimeType!=nil) {
-        [operationManager.requestSerializer setValue:request.mimeType forHTTPHeaderField:@"Content-Type"];
-      }
-      if ([request.HTTPMethod isEqualToString:@"GET"]) {
-        [operationManager GET:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-      }
-      else if ([request.HTTPMethod isEqualToString:@"POST"]){
-        if(request.data!=nil) {
-          // not currently working
-          [operationManager POST:request.URL.absoluteString parameters:request.parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFormData:request.data name:@"file"];
-          } success:successCompletionBlock failure:failureCompletionBlock];
-        }
-        else {
-          [operationManager POST:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-        }
-      }
-      else if ([request.HTTPMethod isEqualToString:@"PUT"]){
-        if(request.data!=nil) {
-          [operationManager PUT:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-        }
-        else {
-          [operationManager PUT:request.URL.absoluteString parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-        }
-      }
+    if ([request isKindOfClass:[TSUploadAttachment class]]){
+      // only supporting the upload attachment request for now // later anthing using an external server can be checked with [request usingExternalServer
+        [operationManager PUT:request.URL.absoluteString parameters:nil success:successCompletionBlock failure:failureCompletionBlock];
     }
   
    else if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {

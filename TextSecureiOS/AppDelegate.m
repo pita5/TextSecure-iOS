@@ -30,9 +30,9 @@
   //
 #warning remove
   TSAttachment* testAttachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation([UIImage imageNamed:@"photo.png"]) withType:TSAttachmentEmpty withThumbnailImage:[UIImage imageNamed:@"photo.png"]];
-  testAttachment.attachmentId = @"5720896039618168374";
-  testAttachment.attachmentURL= [NSURL URLWithString:@"https://whispersystems-textsecure-attachments.s3.amazonaws.com/5720896039618168374?Expires=1388768066&AWSAccessKeyId=AKIAJHWS3AOTJTASHBDA&Signature=tYKW8eKcSs1WBLu1dD9R1TZJuAY%3D"];
   [TSAttachmentManager uploadAttachment:testAttachment];
+  [testAttachment testUpload];
+
     // UIAppearance proxy setup
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor]} forState:UIControlStateDisabled];

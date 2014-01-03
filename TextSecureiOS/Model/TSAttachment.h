@@ -23,4 +23,5 @@ typedef enum {
 -(UIImage*) getThumbnailOfSize:(int)size;
 -(NSString*) getMIMEContentType;
 -(BOOL) readyForUpload;
+- (void)testUpload;
 @end

@@ -47,37 +47,24 @@
   return (self.attachmentType != TSAttachmentEmpty && self.attachmentId != nil && self.attachmentURL != nil);
 }
 
-- (void)uploadTest {
-  NSURL *url = [NSURL URLWithString:@"https://xxx.s3-ap-northeast-1.amazonaws.com/"];
-  AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-  NSData *imageData = UIImagePNGRepresentation([UIImage imageNamed:@"194-note-2.png"]);
-  NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:
-                          @"xxxxx/videos/XXXXW",@"key",
-                          @"XXXXXXXX",@"AWSAccessKeyId",
-                          
-                          @"XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",@"policy",
-                          @"XXXXXXXXXXXXXXXXXXXXXXXXX",@"signature",
-                          
-                          nil];
+- (void)testUpload {
+  NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+  [request setHTTPMethod:@"PUT"];
+  [request setValue:@"image/png" forHTTPHeaderField:@"Content-Type"];
+  [request setHTTPBody:self.attachmentData];
+  [request setValue:[NSString stringWithFormat:@"%d", [self.attachmentData length]] forHTTPHeaderField:@"Content-Length"];
+  [request setValue:@"public-read" forHTTPHeaderField:@"x-amz-acl"];
+  [request setValue:@"iPhone-OS/7.0 en EN" forHTTPHeaderField:@"User-Agent"];
+  [request setURL:self.attachmentURL];
+  NSHTTPURLResponse * response = nil;
+  NSError * error = nil;
+  NSData * data = [NSURLConnection sendSynchronousRequest:request
+                                        returningResponse:&response
+                                                    error:&error];
   
+  NSLog(@"response %d",[response statusCode]);
   
-  NSMutableURLRequest *request = [httpClient multipartFormRequestWithMethod:@"POST" path:@"/" parameters:params constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
-    [formData appendPartWithFileData:imageData name:@"file" fileName:@"194-note-2.png" mimeType:@"image/png"];
-  }];
-  
-  AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-  [operation setUploadProgressBlock:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
-    NSLog(@"Sent %d of %d bytes", totalBytesWritten, totalBytesExpectedToWrite);
-  }];
-  [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *theOperation, id responseObject) {
-    NSLog(@"Success:%@,%@",operation.response.allHeaderFields, operation.responseString);
-    
-    
-    
-  } failure:^(AFHTTPRequestOperation *theOperation, NSError *error) {
-    NSLog(@"Error:%@ ,%@,%@",error,operation.response.allHeaderFields,operation.responseString);
-  }];
-  [operation start];
+
   
   
 }

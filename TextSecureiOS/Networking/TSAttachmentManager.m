@@ -28,8 +28,9 @@
         // in both cases attachment info currently in header under "Content-Location " = "contentonamazonwebsite";
       case 200: {
         attachment.attachmentId = [responseObject objectForKey:@"id"];
-        attachment.attachmentURL = [NSURL URLWithString:[responseObject objectForKey:@"location"]];
+        attachment.attachmentURL = [NSURL URLWithString:[[responseObject objectForKey:@"location"] stringByReplacingOccurrencesOfString:@"%3D" withString:@"="]];
         DLog(@"we have attachment id %@ location %@",attachment.attachmentId,attachment.attachmentURL);
+//        [attachment testUpload]; // using for debugging
         [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:attachment] success:^(AFHTTPRequestOperation *uploadOperation, id uploadResponseObject) {
           switch (uploadOperation.response.statusCode) {
               
