@@ -46,7 +46,7 @@
     } else {
         if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
             switch ([error code]) {
-                case InvalidPassword: {
+                case TSStorageErrorInvalidPassword: {
                     
                     self.passwordTextField.text = nil;
                     self.passwordTextField.placeholder = @"Please try again.";

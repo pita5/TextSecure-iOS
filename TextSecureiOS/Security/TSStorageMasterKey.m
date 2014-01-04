@@ -77,17 +77,31 @@ static BOOL isMasterKeyLocked = TRUE;
 
 
 +(NSData*) unlockStorageMasterKeyUsingPassword:(NSString *)userPassword error:(NSError **)error {
+    
+    if (![TSStorageMasterKey wasStorageMasterKeyCreated]) {
+        // A master key has not been generated on this device yet
+        if (error){
+            *error = [TSEncryptedDatabaseError errorMasterKeyNotCreated];
+        }
+        return nil;
+    }
+    
     NSString *encryptedStorageMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
     if (!encryptedStorageMasterKey) {
         if (error) {
-            *error = [TSEncryptedDatabaseError keychainError];
+            *error = [TSEncryptedDatabaseError errorMasterKeyCorrupted];
         }
         return nil;
     }
     
     NSData *masterKey = [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedStorageMasterKey] withPassword:userPassword error:error];
-    if ((!masterKey) && (error) && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
-        *error = [TSEncryptedDatabaseError invalidPassword];
+    if (!masterKey)  {
+        if (error && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
+            *error = [TSEncryptedDatabaseError errorInvalidPassword];
+        }
+        else if (error) {
+            *error = [TSEncryptedDatabaseError errorMasterKeyCorrupted];
+        }
         return nil;
     }
     
@@ -100,17 +114,15 @@ static BOOL isMasterKeyLocked = TRUE;
 +(NSData*) getStorageMasterKeyWithError:(NSError **)error {
 
     if (![TSStorageMasterKey wasStorageMasterKeyCreated]) {
-        // TODO error handling
         if (error) {
-            *error = [TSEncryptedDatabaseError keychainError];
+            *error = [TSEncryptedDatabaseError errorMasterKeyNotCreated];
         }
         return nil;
     }
     
     if (isMasterKeyLocked) {
-        // TODO error handling
         if (error) {
-            *error = [TSEncryptedDatabaseError keychainError];
+            *error = [TSEncryptedDatabaseError errorMasterKeyLocked];
         }
         return nil;
     }

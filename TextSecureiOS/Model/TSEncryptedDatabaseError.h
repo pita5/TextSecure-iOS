@@ -16,10 +16,12 @@ typedef enum TSEncryptedDatabaseErrorCode {
     DbCreationFailed,
     NoDbAvailable,
     DbWasCorrupted,
-    InvalidPassword,
-    keychainError,
+    TSStorageErrorInvalidPassword,
+    TSStorageErrorMasterKeyLocked,
+    TSStorageErrorMasterKeyCorrupted,
     TSStorageErrorMasterKeyAlreadyCreated,
-    TSStorageErrorMasterKeyCreationFailed
+    TSStorageErrorMasterKeyCreationFailed,
+    TSStorageErrorMasterKeyNotCreated
 } TSEncryptedDatabaseErrorCode;
 
 
@@ -31,10 +33,12 @@ typedef enum TSEncryptedDatabaseErrorCode {
 + (NSError *)dbCreationFailed;
 + (NSError *)noDbAvailable;
 + (NSError *)dbWasCorrupted;
-+ (NSError *)invalidPassword;
-+ (NSError *)keychainError;
++ (NSError *)errorInvalidPassword;
++ (NSError *)errorMasterKeyLocked;
++ (NSError *)errorMasterKeyCorrupted;
 + (NSError *)errorMasterKeyAlreadyCreated;
 + (NSError *)errorMasterKeyCreationFailed;
++ (NSError *)errorMasterKeyNotCreated;
 
 @end
 
