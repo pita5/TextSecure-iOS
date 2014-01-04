@@ -10,6 +10,7 @@
 #import <Security/Security.h>
 #import <CommonCrypto/CommonHMAC.h>
 #import <CommonCrypto/CommonCryptor.h>
+#import <RNCryptor/RNCryptorEngine.h>
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
@@ -17,7 +18,8 @@
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #import "FilePath.h"
-
+#import <RNCryptor/RNEncryptor.h>
+#import <RNCryptor/RNDecryptor.h>
 
 @implementation Cryptography
 
@@ -79,17 +81,9 @@
 
 
 #pragma mark encrypting and decrypting attachments
-+(NSData*) encryptAttachment:(NSData*) attachmentToEncrypt {
-  // returns the following
-}
-
-+(NSData*) decryptAttachment:(NSData*) attachmentToDecrypt {
-  // returns the following
-}
-
 
 #pragma mark push payload encryptiong/decryption
-+(NSData*) decryptPushPayload:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
++(NSData*) decrypt:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
   /* AES256 CBC encrypt then mac 
    Returns nil if hmac invalid or decryption fails
    */
@@ -103,6 +97,7 @@
   NSData* ourHmacData = [Cryptography truncatedHMAC:dataToHmac withHMACKey:hmacKey];
   if(![ourHmacData isEqualToData:hmac]) {
     return nil;
+    
   }
   
   // decrypt
@@ -127,7 +122,7 @@
 }
 
 
-+(NSData*)encryptPushPayload:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
++(NSData*)encrypt:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
   /* AES256 CBC encrypt then mac
    Returns nil if encryption fails
    */
