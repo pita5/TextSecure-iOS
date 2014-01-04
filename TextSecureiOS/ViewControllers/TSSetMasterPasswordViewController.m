@@ -66,7 +66,7 @@
   
     // Send the user's newly generated keys to the API
     // TODO: Error handling & retry if network error
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[TSUserKeysDatabase getAllPreKeys] identityKey:[TSUserKeysDatabase getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[TSUserKeysDatabase getAllPreKeysWithError:nil] identityKey:[TSUserKeysDatabase getIdentityKeyWithError:nil]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         switch (operation.response.statusCode) {
             case 200:

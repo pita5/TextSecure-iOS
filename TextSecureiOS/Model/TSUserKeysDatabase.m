@@ -126,12 +126,11 @@ static TSEncryptedDatabase *userKeysDb = nil;
 
 #pragma Keys access
 
-+(TSECKeyPair*) getIdentityKey {
++(TSECKeyPair*) getIdentityKeyWithError:(NSError **)error {
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:nil])
-        // TODO: better error handling
+        if (![TSUserKeysDatabase databaseOpenWithError:error])
         return nil;
     }
     
@@ -145,7 +144,9 @@ static TSEncryptedDatabase *userKeysDb = nil;
         [rs close];
     }];
     if (!serializedKeyPair) {
-        // TODO: better error handling
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
+        }
         return nil;
     }
     
@@ -153,12 +154,11 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
-+(NSArray*) getAllPreKeys {
++(NSArray*) getAllPreKeysWithError:(NSError **)error {
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:nil])
-            // TODO: better error handling
+        if (![TSUserKeysDatabase databaseOpenWithError:error])
             return nil;
     }
     
@@ -175,8 +175,10 @@ static TSEncryptedDatabase *userKeysDb = nil;
         }
         [rs close];
     }];
-    if (preKeysNb != PREKEYS_NUMBER+1){
-        // TODO: better error handling
+    if (preKeysNb != PREKEYS_NUMBER+1) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
+        }
         return nil;
     }
     
@@ -184,12 +186,11 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
-+(NSArray*) getPreKeyWithId:(int32_t)preKeyId {
++(NSArray*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **) error {
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:nil])
-            // TODO: better error handling
+        if (![TSUserKeysDatabase databaseOpenWithError:error])
             return nil;
     }
     
@@ -203,7 +204,9 @@ static TSEncryptedDatabase *userKeysDb = nil;
         [rs close];
     }];
     if (!serializedKeyPair) {
-        // TODO: better error handling
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
+        }
         return nil;
     }
     

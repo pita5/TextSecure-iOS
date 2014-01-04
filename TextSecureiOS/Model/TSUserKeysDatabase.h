@@ -15,8 +15,8 @@
 +(BOOL) databaseWasCreated;
 +(void) databaseErase;
 
-+(TSECKeyPair*) getIdentityKey;
-+(NSArray*) getAllPreKeys;
-+(NSArray*) getPreKeyWithId:(int32_t)preKeyId;
++(TSECKeyPair*) getIdentityKeyWithError:(NSError **)error;
++(NSArray*) getAllPreKeysWithError:(NSError **)error;
++(NSArray*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **)error;
 
 @end
