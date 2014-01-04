@@ -7,8 +7,6 @@
 //
 
 #import "ComposeMessageViewController.h"
-#import <MediaPlayer/MediaPlayer.h>
-
 #import "TSMessagesManager.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
@@ -19,7 +17,7 @@
 #import "TSAttachment.h"
 #import "TSAttachmentManager.h"
 #import "Cryptography.h"
-
+#import "FilePath.h"
 
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
@@ -246,29 +244,26 @@
   NSString *mediaType = info[UIImagePickerControllerMediaType];
 
   NSData* attachmentData;
-  TSAttachmentType  attachmentType;
-  NSData *thumbnailData;
+  TSAttachmentType  attachmentType = TSAttachmentEmpty;
   if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     attachmentData= UIImagePNGRepresentation(image);
     attachmentType = TSAttachmentPhoto;
-    thumbnailData = attachmentData;
   }
   else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
+    // getting thumbnail data from a movie
     NSURL *videoURL = info[UIImagePickerControllerMediaURL];
-    MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
-    thumbnailData = UIImagePNGRepresentation([player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame]);
-    [player stop]; //make sure it doesn't autoplay
+
     attachmentData=[NSData dataWithContentsOfURL:videoURL];
     attachmentType = TSAttachmentVideo;
   }
-  // write attachment data to file
-  
-  NSData *encryptedData;
-  
-  NSString* filename;
-  //self.attachment = [[TSAttachment alloc] initWithAttachmentData:UIImagePNGRepresentation(image) withType:TSAttachmentPhoto withThumbnailImage:image];
-
+  // encryption attachment data, write to file, and initialize the attachment
+  NSData *randomEncryptionKey;
+  NSData *encryptedData = [Cryptography encryptAttachment:attachmentData withRandomKey:&randomEncryptionKey];
+  NSString* filename = [encryptedData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString* writeToFile = [FilePath pathInDocumentsDirectory:filename];
+  [encryptedData writeToFile:writeToFile atomically:YES];
+  self.attachment = [[TSAttachment alloc] initWithAttachmentDataPath:writeToFile withType:attachmentType withDecryptionKey:randomEncryptionKey];
    //size of button
   [self.inputToolBarView.photoButton setImage:[self.attachment getThumbnailOfSize:26] forState:UIControlStateNormal];
   [self dismissViewControllerAnimated:YES completion:nil];

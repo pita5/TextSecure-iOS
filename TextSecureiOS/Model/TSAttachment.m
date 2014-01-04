@@ -10,36 +10,46 @@
 #import <UIImage-Categories/UIImage+Resize.h>
 #import <AFNetworking/AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
-
+#import <MediaPlayer/MediaPlayer.h>
+#import "Cryptography.h"
 @implementation TSAttachment
 
--(id) initWithAttachmentDataPath:(NSString*) dataPath  withType:(TSAttachmentType)type withThumbnailImagePath:(NSString*)thumbnailImagePath withDecryptionKey:(NSData*)decryptionKey {
+-(id) initWithAttachmentDataPath:(NSString*) dataPath  withType:(TSAttachmentType)type withDecryptionKey:(NSData*)decryptionKey {
   if(self=[super init]) {
     self.attachmentDataPath = dataPath;
     self.attachmentType = type;
-    self.attachmentThumbnailPath=thumbnailImagePath;
     self.attachmentDecryptionKey = decryptionKey;
   }
   return self;
 }
 
 
+-(NSData*) decryptedAttachmentData:(BOOL)isThumbnail {
+  NSData *attachmentData = [NSData dataWithContentsOfFile:self.attachmentDataPath options:NSDataReadingUncached error:nil];
+  NSData *decryptedData= [Cryptography decryptAttachment:attachmentData withKey:self.attachmentDecryptionKey];
+  if (isThumbnail && self.attachmentType==TSAttachmentVideo) {
+      // this is untested and probably doesn't work
+      NSString *urlString = [[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding]; // Or any other appropriate encoding
+      NSURL *videoURL = [[NSURL alloc] initWithString:urlString];
+      MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
+      return [player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+      [player stop]; //make sure it doesn't autoplay
+  }
+  return decryptedData;
+}
 -(UIImage*) getThumbnailOfSize:(int)size {
-  NSData *thumbnailData = [NSData dataWithContentsOfFile:self.attachmentThumbnailPath options:NSDataReadingUncached error:nil];
-  //later decrypt
-  UIImage* thumbnailImage = [UIImage imageWithData:thumbnailData];
+  UIImage* thumbnailImage = nil;
+  [UIImage imageWithData:[self decryptedAttachmentData:YES]];
   return  [thumbnailImage thumbnailImage:size transparentBorder:0 cornerRadius:3.0 interpolationQuality:0];
 }
 
 -(UIImage*) getImage  {
-  NSData *attachmentData = [NSData dataWithContentsOfFile:self.attachmentDataPath options:NSDataReadingUncached error:nil];
-  //later decrypt
-  return [UIImage imageWithData:attachmentData];
+  return [UIImage imageWithData:[self decryptedAttachmentData:YES]];
 
 }
 
 -(NSData*) getData {
-  return  [NSData dataWithContentsOfFile:self.attachmentDataPath options:NSDataReadingUncached error:nil];
+  return  [self decryptedAttachmentData:NO];
 
 }
 

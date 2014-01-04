@@ -62,7 +62,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         }
 #warning we will want a subtler format than this, prototype message db format
 #warning we don't want to store attachments as blobs in the db, but to ease complexity for prototype we are doing just that
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id TEXT,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE, attachment_type INT,attachment TEXT,attachment_thumbnail TEXT, attachment_decryption_key BLOB)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id TEXT,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE, attachment_type INT,attachment TEXT, attachment_decryption_key BLOB)"]) {
             return;
         }
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_phone_number TEXT,relay TEXT, useraddressbookid INTEGER, identitykey TEXT, identityverified INTEGER, supports_sms INTEGER, next_key TEXT)"]){
@@ -156,7 +156,7 @@ static TSEncryptedDatabase *messagesDb = nil;
       
       if(message.attachment.attachmentType != TSAttachmentEmpty) {
 
-          [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp,attachment_type,attachment,attachment_thumbnail,attachment_decryption_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate,[NSNumber numberWithInt:message.attachment.attachmentType],message.attachment.attachmentDataPath,message.attachment.attachmentThumbnailPath,message.attachment.attachmentDecryptionKey];
+          [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp,attachment_type,attachment,attachment_decryption_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate,[NSNumber numberWithInt:message.attachment.attachmentType],message.attachment.attachmentDataPath,message.attachment.attachmentDecryptionKey];
       }
       else {
             [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate];
@@ -188,9 +188,8 @@ static TSEncryptedDatabase *messagesDb = nil;
             TSAttachmentType attachmentType = [rs intForColumn:@"attachment_type"];
             if(attachmentType!=TSAttachmentEmpty) {
               NSString *attachmentDataPath = [rs stringForColumn:@"attachment"];
-              NSString *attachmentThumbnailPath = [rs stringForColumn:@"attachment_thumbnail"];
               NSData *attachmentDecryptionKey = [rs dataForColumn:@"attachment_decryption_key"];
-              attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withThumbnailImagePath:attachmentThumbnailPath withDecryptionKey:attachmentDecryptionKey];
+              attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withDecryptionKey:attachmentDecryptionKey];
             }
             [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date attachment:attachment]];
         }
@@ -229,9 +228,8 @@ static TSEncryptedDatabase *messagesDb = nil;
             TSAttachmentType attachmentType = [rs intForColumn:@"attachment_type"];
             if(attachmentType!=TSAttachmentEmpty) {
               NSString *attachmentDataPath = [rs stringForColumn:@"attachment"];
-              NSString *attachmentThumbnailPath = [rs stringForColumn:@"attachment_thumbnail"];
               NSData *attachmentDecryptionKey = [rs dataForColumn:@"attachment_decryption_key"];
-              attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withThumbnailImagePath:attachmentThumbnailPath withDecryptionKey:attachmentDecryptionKey];
+              attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withDecryptionKey:attachmentDecryptionKey];
             }
 
             messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date attachment:nil];
