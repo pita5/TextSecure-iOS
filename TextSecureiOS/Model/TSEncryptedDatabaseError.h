@@ -18,10 +18,10 @@ typedef enum TSEncryptedDatabaseErrorCode {
     DbWasCorrupted,
     TSStorageErrorInvalidPassword,
     TSStorageErrorMasterKeyLocked,
-    TSStorageErrorMasterKeyCorrupted,
-    TSStorageErrorMasterKeyAlreadyCreated,
-    TSStorageErrorMasterKeyCreationFailed,
-    TSStorageErrorMasterKeyNotCreated
+    TSStorageErrorStorageKeyCorrupted,
+    TSStorageErrorStorageKeyAlreadyCreated,
+    TSStorageErrorStorageKeyCreationFailed,
+    TSStorageErrorStorageKeyNotCreated
 } TSEncryptedDatabaseErrorCode;
 
 
@@ -29,16 +29,16 @@ typedef enum TSEncryptedDatabaseErrorCode {
 @interface TSEncryptedDatabaseError : NSObject
 
 + (NSString *)domain;
-+ (NSError *)dbAlreadyExists;
-+ (NSError *)dbCreationFailed;
-+ (NSError *)noDbAvailable;
-+ (NSError *)dbWasCorrupted;
+//+ (NSError *)dbAlreadyExists;
+//+ (NSError *)dbCreationFailed;
+//+ (NSError *)noDbAvailable;
+//+ (NSError *)dbWasCorrupted;
 + (NSError *)errorInvalidPassword;
-+ (NSError *)errorMasterKeyLocked;
-+ (NSError *)errorMasterKeyCorrupted;
-+ (NSError *)errorMasterKeyAlreadyCreated;
-+ (NSError *)errorMasterKeyCreationFailed;
-+ (NSError *)errorMasterKeyNotCreated;
++ (NSError *)errorStorageKeyLocked;
++ (NSError *)errorStorageKeyCorrupted;
++ (NSError *)errorStorageKeyAlreadyCreated;
++ (NSError *)errorStorageKeyCreationFailed;
++ (NSError *)errorStorageKeyNotCreated;
 
 @end
 

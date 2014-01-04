@@ -58,34 +58,34 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
     return [self errorWithErrorCode:TSStorageErrorInvalidPassword userInfo:errorDetail];
 }
 
-+ (NSError *)errorMasterKeyLocked {
++ (NSError *)errorStorageKeyLocked {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"The storage key is locked and needs to be unlocked with the user's password" forKey:NSLocalizedDescriptionKey];
     return [self errorWithErrorCode:TSStorageErrorMasterKeyLocked userInfo:errorDetail];
 }
 
-+ (NSError *)errorMasterKeyCorrupted {
++ (NSError *)errorStorageKeyCorrupted {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"Could not recover the storage master key from the Keychain" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:TSStorageErrorMasterKeyCorrupted userInfo:errorDetail];
+    return [self errorWithErrorCode:TSStorageErrorStorageKeyCorrupted userInfo:errorDetail];
 }
 
-+ (NSError *)errorMasterKeyAlreadyCreated {
++ (NSError *)errorStorageKeyAlreadyCreated {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"A storage master key has already been created" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:TSStorageErrorMasterKeyAlreadyCreated userInfo:errorDetail];
+    return [self errorWithErrorCode:TSStorageErrorStorageKeyAlreadyCreated userInfo:errorDetail];
 }
 
-+ (NSError *)errorMasterKeyCreationFailed {
++ (NSError *)errorStorageKeyCreationFailed {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"Could not generate the storage master key" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:TSStorageErrorMasterKeyCreationFailed userInfo:errorDetail];
+    return [self errorWithErrorCode:TSStorageErrorStorageKeyCreationFailed userInfo:errorDetail];
 }
 
-+ (NSError *)errorMasterKeyNotCreated {
++ (NSError *)errorStorageKeyNotCreated {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"No storage master key has been created" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:TSStorageErrorMasterKeyNotCreated userInfo:errorDetail];
+    return [self errorWithErrorCode:TSStorageErrorStorageKeyNotCreated userInfo:errorDetail];
 }
 
 @end
