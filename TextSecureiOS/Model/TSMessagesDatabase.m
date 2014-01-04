@@ -73,7 +73,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     if (!dbInitSuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbCreationFailed];
+            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSMessagesDatabase databaseErase];
@@ -96,7 +96,14 @@ static TSEncryptedDatabase *messagesDb = nil;
     if (messagesDb){
         return YES;
     }
-    
+
+    if (![TSMessagesDatabase databaseWasCreated]) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorDatabaseNotCreated];
+        }
+        return NO;
+    }
+
     messagesDb = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] error:error];
     if (!messagesDb) {
         return NO;

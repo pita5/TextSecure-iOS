@@ -30,7 +30,7 @@
     // Have we created a DB on this device already ?
     if ([[NSUserDefaults standardUserDefaults] boolForKey:preferenceName]) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbAlreadyExists];
+            *error = [TSEncryptedDatabaseError errorDatabaseAlreadyCreated];
         }
         return nil;
     }
@@ -62,7 +62,7 @@
     
     if (!dbInitSuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbCreationFailed];
+            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSEncryptedDatabase databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
@@ -107,7 +107,7 @@
     
     if (!initSuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbWasCorrupted];
+            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
         }
         return nil;
     }

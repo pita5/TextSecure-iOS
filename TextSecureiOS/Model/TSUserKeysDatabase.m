@@ -64,7 +64,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }];
     if (!querySuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbCreationFailed];
+            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
@@ -76,7 +76,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     // Generate and store the TextSecure keys for the current user
     if (!([TSUserKeysDatabase generateAndStorePreKeys] && ([TSUserKeysDatabase generateAndStoreIdentityKey]))) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbCreationFailed];
+            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
@@ -94,6 +94,10 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
++(BOOL) databaseWasCreated {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:USER_KEYS_DB_PREFERENCE];
+}
+
 
 #pragma mark DB access - private
 
@@ -102,6 +106,13 @@ static TSEncryptedDatabase *userKeysDb = nil;
     // DB was already unlocked
     if (userKeysDb){
         return YES;
+    }
+    
+    if (![TSUserKeysDatabase databaseWasCreated]) {
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorDatabaseNotCreated];
+        }
+        return NO;
     }
     
     TSEncryptedDatabase *db = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] error:error];

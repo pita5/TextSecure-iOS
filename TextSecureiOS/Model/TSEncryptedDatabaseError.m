@@ -25,31 +25,31 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
 }
 
 
-+ (NSError *)dbAlreadyExists {
++ (NSError *)errorDatabaseAlreadyCreated {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:@"A textsecure database already exists on this device" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:DbAlreadyExists userInfo:errorDetail];
+    [errorDetail setValue:@"The database was already created" forKey:NSLocalizedDescriptionKey];
+    return [self errorWithErrorCode:TSStorageErrorDatabaseAlreadyCreated userInfo:errorDetail];
 }
 
 
-+ (NSError *)noDbAvailable {
++ (NSError *)errorDatabaseNotCreated {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:@"No textsecure database was found on this device" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:NoDbAvailable userInfo:errorDetail];
+    [errorDetail setValue:@"The database could not be found" forKey:NSLocalizedDescriptionKey];
+    return [self errorWithErrorCode:TSStorageErrorDatabaseNotCreated userInfo:errorDetail];
 }
 
 
-+ (NSError *)dbWasCorrupted {
++ (NSError *)errorDatabaseCorrupted {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:@"The textsecure database was corrupted and cannot be opened" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:DbWasCorrupted userInfo:errorDetail];
+    [errorDetail setValue:@"The database was corrupted and could not be opened" forKey:NSLocalizedDescriptionKey];
+    return [self errorWithErrorCode:TSStorageErrorDatabaseCorrupted userInfo:errorDetail];
 }
 
 
-+ (NSError *)dbCreationFailed {
++ (NSError *)errorDatabaseCreationFailed {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:@"Could not create a textsecure database on this device" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:DbCreationFailed userInfo:errorDetail];
+    [errorDetail setValue:@"The database could not be created" forKey:NSLocalizedDescriptionKey];
+    return [self errorWithErrorCode:TSStorageErrorDatabaseCreationFailed userInfo:errorDetail];
 }
 
 + (NSError *)errorInvalidPassword {
@@ -61,7 +61,7 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
 + (NSError *)errorStorageKeyLocked {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"The storage key is locked and needs to be unlocked with the user's password" forKey:NSLocalizedDescriptionKey];
-    return [self errorWithErrorCode:TSStorageErrorMasterKeyLocked userInfo:errorDetail];
+    return [self errorWithErrorCode:TSStorageErrorStorageKeyLocked userInfo:errorDetail];
 }
 
 + (NSError *)errorStorageKeyCorrupted {
@@ -72,7 +72,7 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
 
 + (NSError *)errorStorageKeyAlreadyCreated {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:@"A storage master key has already been created" forKey:NSLocalizedDescriptionKey];
+    [errorDetail setValue:@"The storage master key has already been created" forKey:NSLocalizedDescriptionKey];
     return [self errorWithErrorCode:TSStorageErrorStorageKeyAlreadyCreated userInfo:errorDetail];
 }
 
@@ -84,7 +84,7 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
 
 + (NSError *)errorStorageKeyNotCreated {
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-    [errorDetail setValue:@"No storage master key has been created" forKey:NSLocalizedDescriptionKey];
+    [errorDetail setValue:@"The storage master key has been created yet" forKey:NSLocalizedDescriptionKey];
     return [self errorWithErrorCode:TSStorageErrorStorageKeyNotCreated userInfo:errorDetail];
 }
 

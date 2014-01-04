@@ -11,13 +11,12 @@
 extern NSString * const TSEncryptedDatabaseErrorDomain;
 
 typedef enum TSEncryptedDatabaseErrorCode {
-    Undefined = 0,
-    DbAlreadyExists,
-    DbCreationFailed,
-    NoDbAvailable,
-    DbWasCorrupted,
+    TSStorageErrorDatabaseAlreadyCreated,
+    TSStorageErrorDatabaseCreationFailed,
+    TSStorageErrorDatabaseNotCreated,
+    TSStorageErrorDatabaseCorrupted,
     TSStorageErrorInvalidPassword,
-    TSStorageErrorMasterKeyLocked,
+    TSStorageErrorStorageKeyLocked,
     TSStorageErrorStorageKeyCorrupted,
     TSStorageErrorStorageKeyAlreadyCreated,
     TSStorageErrorStorageKeyCreationFailed,
@@ -29,10 +28,10 @@ typedef enum TSEncryptedDatabaseErrorCode {
 @interface TSEncryptedDatabaseError : NSObject
 
 + (NSString *)domain;
-//+ (NSError *)dbAlreadyExists;
-//+ (NSError *)dbCreationFailed;
-//+ (NSError *)noDbAvailable;
-//+ (NSError *)dbWasCorrupted;
++ (NSError *)errorDatabaseAlreadyCreated;
++ (NSError *)errorDatabaseCreationFailed;
++ (NSError *)errorDatabaseNotCreated;
++ (NSError *)errorDatabaseCorrupted;
 + (NSError *)errorInvalidPassword;
 + (NSError *)errorStorageKeyLocked;
 + (NSError *)errorStorageKeyCorrupted;

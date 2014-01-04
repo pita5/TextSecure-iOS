@@ -54,7 +54,7 @@ static NSString *masterPw = @"1234test";
 
     XCTAssertNotNil(error, @"master storage key overwrite did not return an error");
     XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"master storage key overwrite returned an unexcpected error");
-    XCTAssertEqual([error code], TSStorageErrorMasterKeyAlreadyCreated, @"master storage key overwrite returned an unexcpected error");
+    XCTAssertEqual([error code], TSStorageErrorStorageKeyAlreadyCreated, @"master storage key overwrite returned an unexcpected error");
     XCTAssertNil(masterKey, @"master storage key overwrite returned an unexcpected error");
 }
 
@@ -89,7 +89,7 @@ static NSString *masterPw = @"1234test";
     
     XCTAssertNotNil(error, @"master storage key was unlocked before creation");
     XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"master storage key unlocking returned an unexpected error");
-    XCTAssertEqual([error code], TSStorageErrorMasterKeyNotCreated, @"master storage key unlocking returned an unexpected error");
+    XCTAssertEqual([error code], TSStorageErrorStorageKeyNotCreated, @"master storage key unlocking returned an unexpected error");
     XCTAssertNil(masterKey, @"master storage key was unlocked before creation");
 }
 
@@ -101,7 +101,7 @@ static NSString *masterPw = @"1234test";
     
     XCTAssertNotNil(error, @"master storage key was unlocked before creation");
     XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"master storage key unlocking returned an unexpected error");
-    XCTAssertEqual([error code], TSStorageErrorMasterKeyNotCreated, @"master storage key unlocking returned an unexpected error");
+    XCTAssertEqual([error code], TSStorageErrorStorageKeyNotCreated, @"master storage key unlocking returned an unexpected error");
     XCTAssertNil(masterKey, @"master storage key was unlocked before creation");
 }
 
@@ -115,7 +115,7 @@ static NSString *masterPw = @"1234test";
     
     XCTAssertNotNil(error, @"master storage key locking failed");
     XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"master storage key unlocking returned an unexpected error");
-    XCTAssertEqual([error code], TSStorageErrorMasterKeyLocked, @"master storage key unlocking returned an unexpected error");
+    XCTAssertEqual([error code], TSStorageErrorStorageKeyLocked, @"master storage key unlocking returned an unexpected error");
     
     XCTAssertTrue([TSStorageMasterKey isStorageMasterKeyLocked],@"master storage key locking failed");
     XCTAssertNil(masterKey, @"master storage key locking failed");
@@ -133,7 +133,7 @@ static NSString *masterPw = @"1234test";
     
     XCTAssertNotNil(error, @"master storage key locking failed");
     XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"master storage key was unlocked with deleted keychain");
-    XCTAssertEqual([error code], TSStorageErrorMasterKeyCorrupted, @"master storage key was unlocked with deleted keychain");
+    XCTAssertEqual([error code], TSStorageErrorStorageKeyCorrupted, @"master storage key was unlocked with deleted keychain");
     XCTAssertNil(masterKey, @"master storage key was unlocked with deleted keychain");
 }
 
@@ -149,7 +149,7 @@ static NSString *masterPw = @"1234test";
     XCTAssertNil(masterKey, @"master storage key deletion failed");
     XCTAssertNotNil(error, @"master storage key deletion failed");
     XCTAssertTrue([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain], @"master storage key deletion failed");
-    XCTAssertEqual([error code], TSStorageErrorMasterKeyNotCreated, @"master storage key deletion failed");
+    XCTAssertEqual([error code], TSStorageErrorStorageKeyNotCreated, @"master storage key deletion failed");
 }
 
 

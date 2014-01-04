@@ -12,6 +12,7 @@
 @interface TSUserKeysDatabase : NSObject
 
 +(BOOL) databaseCreateUserKeysWithError:(NSError **)error;
++(BOOL) databaseWasCreated;
 +(void) databaseErase;
 
 +(TSECKeyPair*) getIdentityKey;
