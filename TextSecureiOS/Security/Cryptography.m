@@ -82,11 +82,11 @@
 +(NSData*) decryptAttachment:(NSData*) dataToDecrypt withKey:(NSData*) key {
   // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
   NSData *encryptionKey = [key subdataWithRange:NSMakeRange(0, 32)];
-  NSData *hmacKey = [key subdataWithRange:NSMakeRange(32, 64)];
-  // dataToDecrypt: IV || Ciphertext || MAC(IV||Ciphertext)
+  NSData *hmacKey = [key subdataWithRange:NSMakeRange(32, 32)];
+  // dataToDecrypt: IV || Ciphertext || truncated MAC(IV||Ciphertext)
   NSData *iv = [dataToDecrypt subdataWithRange:NSMakeRange(0, 10)];
-  NSData *encryptedAttachment = [dataToDecrypt subdataWithRange:NSMakeRange(10, [dataToDecrypt length]-64)];
-  NSData *hmac = [dataToDecrypt subdataWithRange:NSMakeRange([dataToDecrypt length]-20, [dataToDecrypt length])];
+  NSData *encryptedAttachment = [dataToDecrypt subdataWithRange:NSMakeRange(10, [dataToDecrypt length]-10-10)];
+  NSData *hmac = [dataToDecrypt subdataWithRange:NSMakeRange([dataToDecrypt length]-10, 10)];
   return [Cryptography decrypt:encryptedAttachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey forHMAC:hmac];
 }
 
@@ -94,7 +94,7 @@
   // generate
   // random 10 byte IV
   // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
-  // returns: IV || Ciphertext || MAC(IV||Ciphertext)
+  // returns: IV || Ciphertext || truncated MAC(IV||Ciphertext)
   NSData* iv = [Cryptography generateRandomBytes:10];
   NSData* encryptionKey = [Cryptography generateRandomBytes:32];
   NSData* hmacKey = [Cryptography generateRandomBytes:32];

@@ -38,8 +38,7 @@
   return decryptedData;
 }
 -(UIImage*) getThumbnailOfSize:(int)size {
-  UIImage* thumbnailImage = nil;
-  [UIImage imageWithData:[self decryptedAttachmentData:YES]];
+  UIImage* thumbnailImage = [UIImage imageWithData:[self decryptedAttachmentData:YES]];
   return  [thumbnailImage thumbnailImage:size transparentBorder:0 cornerRadius:3.0 interpolationQuality:0];
 }
 

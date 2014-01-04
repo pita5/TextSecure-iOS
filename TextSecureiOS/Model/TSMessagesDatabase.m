@@ -156,7 +156,7 @@ static TSEncryptedDatabase *messagesDb = nil;
       
       if(message.attachment.attachmentType != TSAttachmentEmpty) {
 
-          [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp,attachment_type,attachment,attachment_decryption_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate,[NSNumber numberWithInt:message.attachment.attachmentType],message.attachment.attachmentDataPath,message.attachment.attachmentDecryptionKey];
+          [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp,attachment_type,attachment,attachment_decryption_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate,[NSNumber numberWithInt:message.attachment.attachmentType],message.attachment.attachmentDataPath,message.attachment.attachmentDecryptionKey];
       }
       else {
             [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate];
