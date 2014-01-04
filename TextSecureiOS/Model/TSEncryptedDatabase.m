@@ -107,7 +107,7 @@
     
     if (!initSuccess) {
         if (error) {
-            *error = [TSStorageError errorDatabaseCorrupted];
+            *error = [TSStorageError errorStorageKeyCorrupted];
         }
         return nil;
     }
