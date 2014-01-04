@@ -13,7 +13,7 @@
 
 
 @interface TSEncryptedDatabase : NSObject
-// TODO: Use notifications to get rid of dbQueue when [TSStorageMasterKey lockStorageMasterKey] gets called
+// TODO: Use notifications to set dbQueue to nil when [TSStorageMasterKey lockStorageMasterKey] gets called
 // This would close opened DB handles when we lock the key
 @property (nonatomic, retain) FMDatabaseQueue *dbQueue;
 
