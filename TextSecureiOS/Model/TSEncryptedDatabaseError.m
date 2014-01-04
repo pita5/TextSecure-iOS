@@ -64,4 +64,19 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
     return [self errorWithErrorCode:keychainError userInfo:errorDetail];
 }
 
++ (NSError *)errorMasterKeyAlreadyCreated {
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    [errorDetail setValue:@"A storage master key has already been created" forKey:NSLocalizedDescriptionKey];
+    return [self errorWithErrorCode:TSStorageErrorMasterKeyAlreadyCreated userInfo:errorDetail];
+}
+
+
++ (NSError *)errorMasterKeyCreationFailed {
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    [errorDetail setValue:@"Could not generate the storage master key" forKey:NSLocalizedDescriptionKey];
+    return [self errorWithErrorCode:TSStorageErrorMasterKeyCreationFailed userInfo:errorDetail];
+}
+
+
+
 @end

@@ -11,7 +11,7 @@
 @interface TSStorageMasterKey : NSObject
 
 
-+(NSData*) createStorageMasterKeyWithPassword:(NSString *)userPassword;
++(NSData*) createStorageMasterKeyWithPassword:(NSString *)userPassword error:(NSError **) error;
 +(BOOL) wasStorageMasterKeyCreated;
 
 +(NSData*) unlockStorageMasterKeyUsingPassword:(NSString *)userPassword error:(NSError **)error;

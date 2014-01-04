@@ -26,29 +26,37 @@ static BOOL isMasterKeyLocked = TRUE;
 @implementation TSStorageMasterKey
 
 
-+(NSData*) createStorageMasterKeyWithPassword:(NSString *)userPassword {
++(NSData*) createStorageMasterKeyWithPassword:(NSString *)userPassword error:(NSError **) error {
     
     if ([TSStorageMasterKey wasStorageMasterKeyCreated]) {
         // A master key has already been generated on this device
-        // TODO: Better error handling
+        if (error){
+            *error = [TSEncryptedDatabaseError errorMasterKeyAlreadyCreated];
+        }
         return nil;
     }
     
     NSData *masterKey = [Cryptography generateRandomBytes:36];
     if(!masterKey) {
-        // TODO: Better error handling
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorMasterKeyCreationFailed];
+        }
         return nil;
     }
     
     NSData *encryptedMasterKey = [RNEncryptor encryptData:masterKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
     if(!encryptedMasterKey) {
-        // TODO: Better error handling
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorMasterKeyCreationFailed];
+        }
         return nil;
     }
     
     // Store the encrypted master key in the Keychain
     if (![KeychainWrapper createKeychainValue:[encryptedMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId]) {
-        // TODO: Better error handling
+        if (error) {
+            *error = [TSEncryptedDatabaseError errorMasterKeyCreationFailed];
+        }
         return nil;
     }
     
