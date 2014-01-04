@@ -29,7 +29,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
     
     // Create a storage master key
     [TSStorageMasterKey eraseStorageMasterKey];
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     
     [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference];
 }
@@ -73,7 +73,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
     // TODO: check for the specific error code
     XCTAssertNotNil(error, @"database creation succeeded with no master key");
     XCTAssertNil(encDb, @"database creation succeeded with no master key");
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
 }
 
 

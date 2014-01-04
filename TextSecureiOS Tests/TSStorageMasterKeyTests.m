@@ -37,17 +37,19 @@ static NSString *masterPw = @"1234test";
 
 - (void)testCreate
 {
+    NSError *error = nil;
     XCTAssertFalse([TSStorageMasterKey wasStorageMasterKeyCreated], @"wrong default preference");
     
-    NSData *masterKey = [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    NSData *masterKey = [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:&error];
     XCTAssertNotNil(masterKey, @"master storage key creation returned nil");
+    XCTAssertNil(error, @"master storage key creation returned an error");
     XCTAssertTrue([TSStorageMasterKey wasStorageMasterKeyCreated], @"master storage key creation did not update preferences");
 }
 
 
 - (void)testUnlock
 {
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     
     NSError *error = nil;
     NSData *masterKey = [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:masterPw error:&error];
@@ -57,7 +59,7 @@ static NSString *masterPw = @"1234test";
 
 - (void)testUnlockWithWrongPassword
 {
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     
     NSError *error = nil;
     NSData *masterKey = [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:@"wrongpassword" error:&error];
@@ -70,7 +72,7 @@ static NSString *masterPw = @"1234test";
 
 - (void)testLock
 {
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     [TSStorageMasterKey lockStorageMasterKey];
     
     NSError *error = nil;
@@ -84,7 +86,7 @@ static NSString *masterPw = @"1234test";
 
 - (void)testUnlockWithDeletedKeychain
 {
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     [TSStorageMasterKey lockStorageMasterKey];
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
     
@@ -98,7 +100,7 @@ static NSString *masterPw = @"1234test";
 
 - (void)testErase
 {
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     [TSStorageMasterKey eraseStorageMasterKey];
     
     NSError *error = nil;

@@ -29,7 +29,7 @@ static NSString *storageKeyPw = @"1234test";
     
     // Create a storage master key
     [TSStorageMasterKey eraseStorageMasterKey];
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:storageKeyPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:storageKeyPw error:nil];
 }
 
 - (void)tearDown

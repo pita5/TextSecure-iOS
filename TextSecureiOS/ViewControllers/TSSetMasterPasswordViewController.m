@@ -45,12 +45,11 @@
 
 
 - (void) setupDatabase {
-    // Create the database on the device
     NSError *error = nil;
     
     
-    // Derive the storage master key from the user's password and store it so we can then create DBs
-    if (![TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text]) {
+    // Create and store the storage master key from the user's password so we can then create DBs
+    if (![TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text error:&error]) {
         @throw [NSException exceptionWithName:@"Storage master key creation failed" reason:[error localizedDescription] userInfo:nil];
     }
     
