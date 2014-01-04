@@ -251,7 +251,6 @@
     attachmentType = TSAttachmentPhoto;
   }
   else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
-    // getting thumbnail data from a movie
     NSURL *videoURL = info[UIImagePickerControllerMediaURL];
 
     attachmentData=[NSData dataWithContentsOfURL:videoURL];

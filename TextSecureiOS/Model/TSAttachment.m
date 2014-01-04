@@ -28,12 +28,7 @@
   NSData *attachmentData = [NSData dataWithContentsOfFile:self.attachmentDataPath options:NSDataReadingUncached error:nil];
   NSData *decryptedData= [Cryptography decryptAttachment:attachmentData withKey:self.attachmentDecryptionKey];
   if (isThumbnail && self.attachmentType==TSAttachmentVideo) {
-      // this is untested and probably doesn't work
-      NSString *urlString = [[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding]; // Or any other appropriate encoding
-      NSURL *videoURL = [[NSURL alloc] initWithString:urlString];
-      MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
-      return [player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
-      [player stop]; //make sure it doesn't autoplay
+    return UIImagePNGRepresentation([UIImage imageNamed:@"movie.png"]);
   }
   return decryptedData;
 }
