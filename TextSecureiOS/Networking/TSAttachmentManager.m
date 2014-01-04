@@ -30,12 +30,12 @@
         // in both cases attachment info currently in header under "Content-Location " = "contentonamazonwebsite";
       case 200: {
         message.attachment.attachmentId = [responseObject objectForKey:@"id"];
-        message.attachment.attachmentURL = [NSURL URLWithString:[[responseObject objectForKey:@"location"] stringByReplacingOccurrencesOfString:@"%3D" withString:@"="]];
+        message.attachment.attachmentURL = [NSURL URLWithString:[responseObject objectForKey:@"location"]];
         DLog(@"we have attachment id %@ location %@",message.attachment.attachmentId,message.attachment.attachmentURL);
-#warning later do this AFTER the attachment has been uploaded but still having success issues
+        [TSAttachmentManager downloadAttachment:message]; // remove testing to see if upload = download
+#warning later do this only after the attachment has been uploaded but still having success issues so am doing before for now.
         // we can now send the messsage
         [[TSMessagesManager sharedManager] sendMessage:message];
-//        [attachment testUpload]; // using for debugging
         [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:message.attachment] success:^(AFHTTPRequestOperation *uploadOperation, id uploadResponseObject) {
           switch (uploadOperation.response.statusCode) {
               
@@ -78,7 +78,7 @@
       case 200: {
         NSString* uploadLocation = [responseObject objectForKey:@"location"];
         // Now, download the data
-        DLog(@"we have attachment id %@ location %@",responseObject,uploadLocation);
+        DLog(@"we have attachment download id %@ location %@",responseObject,uploadLocation);
         break;
       }
       default:

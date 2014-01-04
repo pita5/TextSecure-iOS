@@ -9,6 +9,8 @@
 #import "IncomingPushMessageSignal.hh"
 #import "TSMessage.h"
 #import "TSAttachment.h"
+#import "NSData+Base64.h"
+#include <stdlib.h>
 
 @implementation IncomingPushMessageSignal
 
@@ -60,11 +62,15 @@
   pushMessageContent->set_body(body);
   if([message.attachment readyForUpload]) {
     textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
-
-    const uint64_t attachment_id = [message.attachment.attachmentId integerValue]; // this is incorrect
-#warning key not used yet.
+#warning attachment_id
+    const std::string cppAttachmentId([message.attachment.attachmentId cStringUsingEncoding:NSASCIIStringEncoding]);
+ 
+    //const uint64_t attachment_id = [message.attachment.attachmentId integerValue]; // this is incorrect
+    size_t idx;
+    const uint64_t attachment_id =  stoull(cppAttachmentId,&idx,10);
+    
     attachmentPointer->set_id(attachment_id);
-    const std::string attachment_encryption_key([@"dummy key" cStringUsingEncoding:NSASCIIStringEncoding]);
+    const std::string attachment_encryption_key([[message.attachment.attachmentDecryptionKey base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] cStringUsingEncoding:NSASCIIStringEncoding]);
     attachmentPointer->set_key(attachment_encryption_key);
     std::string attachment_contenttype([[message.attachment getMIMEContentType]  cStringUsingEncoding:NSASCIIStringEncoding]);
     attachmentPointer->set_contenttype(attachment_contenttype);
@@ -87,9 +93,14 @@
   NSData *messageData =[NSData dataWithBytes:cppMessage.c_str() length:cppMessage.size()];
   textsecure::PushMessageContent *messageContent = [IncomingPushMessageSignal getPushMessageContentForData:messageData];
   if(messageContent->attachments_size()>0) {
-    const textsecure::PushMessageContent_AttachmentPointer attachmentPointer = messageContent->attachments(0);
-#warning not implemented!
-//    attachmentPointer->get_
+    const textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = messageContent->mutable_attachments(0);
+
+    const std::string cppContentType = attachmentPointer->contenttype();
+    NSString *contentType = [NSString stringWithCString:cppContentType.c_str() encoding:NSASCIIStringEncoding];
+    const std::string cppKey = attachmentPointer->key();
+    NSData *decryptionKey = [NSData dataFromBase64String:[NSString stringWithCString:cppKey.c_str() encoding:NSASCIIStringEncoding]];
+    const uint64_t cppId = attachmentPointer->id();
+    NSString *attachmentId = [NSString stringWithFormat:@"%" PRIu64 @"\n",cppId];
 //    NSData *attachmentData = [NSData dataWithBytes:attachmentPointer-> length:<#(NSUInteger)#>]
     
 //   return [[TSAttachment alloc] initWithAttachmentData:<#(NSData *)#> withType:<#(TSAttachmentType)#> withThumbnailImage:<#(UIImage *)#>]'
