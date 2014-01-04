@@ -32,7 +32,7 @@
         message.attachment.attachmentId = [responseObject objectForKey:@"id"];
         message.attachment.attachmentURL = [NSURL URLWithString:[responseObject objectForKey:@"location"]];
         DLog(@"we have attachment id %@ location %@",message.attachment.attachmentId,message.attachment.attachmentURL);
-        [TSAttachmentManager downloadAttachment:message]; // remove testing to see if upload = download
+        //[TSAttachmentManager downloadAttachment:message]; // remove testing to see if upload = download
 #warning later do this only after the attachment has been uploaded but still having success issues so am doing before for now.
         // we can now send the messsage
         [[TSMessagesManager sharedManager] sendMessage:message];
