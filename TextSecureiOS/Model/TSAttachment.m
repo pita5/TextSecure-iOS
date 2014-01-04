@@ -12,6 +12,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "Cryptography.h"
+#import "FilePath.h"
 @implementation TSAttachment
 
 -(id) initWithAttachmentDataPath:(NSString*) dataPath  withType:(TSAttachmentType)type withDecryptionKey:(NSData*)decryptionKey {
@@ -23,6 +24,24 @@
   return self;
 }
 
+-(id) initWithAttachmentId:(NSNumber*)attachmentId contentMIMEType:(NSString*)contentType decryptionKey:(NSData*)decryptionKey {
+  if(self=[super init]) {
+    self.attachmentId = attachmentId;
+    self.attachmentDecryptionKey = decryptionKey;
+#warning download attachment here
+    // encryption attachment data, write to file, and initialize the attachment
+    NSData *randomEncryptionKey;
+    NSData *encryptedData = [Cryptography encryptAttachment:UIImagePNGRepresentation([UIImage imageNamed:@"photo.png"]) withRandomKey:&randomEncryptionKey];
+    NSString* filename = [[Cryptography truncatedHMAC:encryptedData withHMACKey:randomEncryptionKey] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSString* writeToFile = [FilePath pathInDocumentsDirectory:filename];
+    [encryptedData writeToFile:writeToFile atomically:YES];
+    self.attachmentDecryptionKey = randomEncryptionKey;
+                                                                                     self.attachmentDataPath = filename;
+    self.attachmentType = [contentType isEqualToString:@"video/mp4"] ? TSAttachmentVideo : TSAttachmentPhoto;
+    
+  }
+  return self;
+}
 
 -(NSData*) decryptedAttachmentData:(BOOL)isThumbnail {
   NSData *attachmentData = [NSData dataWithContentsOfFile:self.attachmentDataPath options:NSDataReadingUncached error:nil];

@@ -9,7 +9,7 @@
 #import "TSRequestAttachment.h"
 #import "Constants.h"
 @implementation TSRequestAttachment
--(TSRequest*) initWithId:(NSString*) attachmentId {
+-(TSRequest*) initWithId:(NSNumber*) attachmentId {
   
   self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",textSecureAttachmentsAPI,attachmentId]]];
   self.HTTPMethod = @"GET";
