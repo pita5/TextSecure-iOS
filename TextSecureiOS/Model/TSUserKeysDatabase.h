@@ -15,6 +15,7 @@
 +(BOOL) databaseWasCreated;
 +(void) databaseErase;
 
+// Calling the following functions will fail if the storage master key hasn't been unlocked
 +(TSECKeyPair*) getIdentityKeyWithError:(NSError **)error;
 +(NSArray*) getAllPreKeysWithError:(NSError **)error;
 +(NSArray*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **)error;

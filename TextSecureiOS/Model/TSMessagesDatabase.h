@@ -27,6 +27,8 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(BOOL) databaseWasCreated;
 
 
+// Calling the following functions will fail if the storage master key hasn't been unlocked
+
 #pragma mark - settings values
 +(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
 +(BOOL) setDatabaseCreatedPersistantSetting ;

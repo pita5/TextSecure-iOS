@@ -1096,10 +1096,7 @@
 		8C42C13E18551B8C000DD353 /* TextSecureiOS Tests */ = {
 			isa = PBXGroup;
 			children = (
-				8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */,
-				8CF7BDA0187137640023A781 /* TSEncryptedDatabaseTests.m */,
-				8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */,
-				4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */,
+				8C4328CB187885FD005F25E2 /* Storage */,
 				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
@@ -1116,6 +1113,17 @@
 				8C42C14618551B8C000DD353 /* TextSecureiOS Tests-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8C4328CB187885FD005F25E2 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */,
+				8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */,
+				8CF7BDA0187137640023A781 /* TSEncryptedDatabaseTests.m */,
+				8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */,
+			);
+			name = Storage;
 			sourceTree = "<group>";
 		};
 		8CCC26381872A3CB00E521A1 /* Storage */ = {

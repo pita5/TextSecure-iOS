@@ -24,7 +24,6 @@ typedef enum TSStorageErrorCode {
 } TSStorageErrorCode;
 
 
-// TODO: change this to TSStorageError
 @interface TSStorageError : NSObject
 
 + (NSString *)domain;
