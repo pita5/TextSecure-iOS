@@ -11,7 +11,7 @@
 #import "KeychainWrapper.h"
 #import "NSData+Base64.h"
 #import "NSData+Conversion.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 
 @implementation TSKeyManager
 

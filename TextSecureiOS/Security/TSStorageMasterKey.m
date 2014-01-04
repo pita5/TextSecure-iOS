@@ -12,7 +12,7 @@
 #import "RNDecryptor.h"
 #import "KeychainWrapper.h"
 #import "NSData+Base64.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 
 
 #define kStorageMasterKeyWasCreated @"StorageMasterKeyWasCreated"
@@ -31,7 +31,7 @@ static BOOL isMasterKeyLocked = TRUE;
     if ([TSStorageMasterKey wasStorageMasterKeyCreated]) {
         // A master key has already been generated on this device
         if (error){
-            *error = [TSEncryptedDatabaseError errorStorageKeyAlreadyCreated];
+            *error = [TSStorageError errorStorageKeyAlreadyCreated];
         }
         return nil;
     }
@@ -39,7 +39,7 @@ static BOOL isMasterKeyLocked = TRUE;
     NSData *masterKey = [Cryptography generateRandomBytes:36];
     if(!masterKey) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorStorageKeyCreationFailed];
+            *error = [TSStorageError errorStorageKeyCreationFailed];
         }
         return nil;
     }
@@ -47,7 +47,7 @@ static BOOL isMasterKeyLocked = TRUE;
     NSData *encryptedMasterKey = [RNEncryptor encryptData:masterKey withSettings:kRNCryptorAES256Settings password:userPassword error:nil];
     if(!encryptedMasterKey) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorStorageKeyCreationFailed];
+            *error = [TSStorageError errorStorageKeyCreationFailed];
         }
         return nil;
     }
@@ -55,7 +55,7 @@ static BOOL isMasterKeyLocked = TRUE;
     // Store the encrypted master key in the Keychain
     if (![KeychainWrapper createKeychainValue:[encryptedMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId]) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorStorageKeyCreationFailed];
+            *error = [TSStorageError errorStorageKeyCreationFailed];
         }
         return nil;
     }
@@ -81,7 +81,7 @@ static BOOL isMasterKeyLocked = TRUE;
     if (![TSStorageMasterKey wasStorageMasterKeyCreated]) {
         // A master key has not been generated on this device yet
         if (error){
-            *error = [TSEncryptedDatabaseError errorStorageKeyNotCreated];
+            *error = [TSStorageError errorStorageKeyNotCreated];
         }
         return nil;
     }
@@ -89,7 +89,7 @@ static BOOL isMasterKeyLocked = TRUE;
     NSString *encryptedStorageMasterKey = [KeychainWrapper keychainStringFromMatchingIdentifier:encryptedMasterSecretKeyStorageId];
     if (!encryptedStorageMasterKey) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorStorageKeyCorrupted];
+            *error = [TSStorageError errorStorageKeyCorrupted];
         }
         return nil;
     }
@@ -97,10 +97,10 @@ static BOOL isMasterKeyLocked = TRUE;
     NSData *masterKey = [RNDecryptor decryptData:[NSData dataFromBase64String:encryptedStorageMasterKey] withPassword:userPassword error:error];
     if (!masterKey)  {
         if (error && ([*error domain] == kRNCryptorErrorDomain) && ([*error code] == kRNCryptorHMACMismatch)) {
-            *error = [TSEncryptedDatabaseError errorInvalidPassword];
+            *error = [TSStorageError errorInvalidPassword];
         }
         else if (error) {
-            *error = [TSEncryptedDatabaseError errorStorageKeyCorrupted];
+            *error = [TSStorageError errorStorageKeyCorrupted];
         }
         return nil;
     }
@@ -115,14 +115,14 @@ static BOOL isMasterKeyLocked = TRUE;
 
     if (![TSStorageMasterKey wasStorageMasterKeyCreated]) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorStorageKeyNotCreated];
+            *error = [TSStorageError errorStorageKeyNotCreated];
         }
         return nil;
     }
     
     if (isMasterKeyLocked) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorStorageKeyLocked];
+            *error = [TSStorageError errorStorageKeyLocked];
         }
         return nil;
     }

@@ -8,7 +8,7 @@
 
 #import "TSUserKeysDatabase.h"
 #import "TSEncryptedDatabase.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "TSECKeyPair.h"
 #import "FilePath.h"
 #import "FMDatabase.h"
@@ -64,7 +64,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }];
     if (!querySuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
+            *error = [TSStorageError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
@@ -76,7 +76,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     // Generate and store the TextSecure keys for the current user
     if (!([TSUserKeysDatabase generateAndStorePreKeys] && ([TSUserKeysDatabase generateAndStoreIdentityKey]))) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
+            *error = [TSStorageError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
@@ -110,7 +110,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     
     if (![TSUserKeysDatabase databaseWasCreated]) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseNotCreated];
+            *error = [TSStorageError errorDatabaseNotCreated];
         }
         return NO;
     }
@@ -145,7 +145,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }];
     if (!serializedKeyPair) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
+            *error = [TSStorageError errorDatabaseCorrupted];
         }
         return nil;
     }
@@ -177,7 +177,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }];
     if (preKeysNb != PREKEYS_NUMBER+1) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
+            *error = [TSStorageError errorDatabaseCorrupted];
         }
         return nil;
     }
@@ -205,7 +205,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }];
     if (!serializedKeyPair) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
+            *error = [TSStorageError errorDatabaseCorrupted];
         }
         return nil;
     }

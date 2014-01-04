@@ -7,7 +7,7 @@
 //
 
 #import "TSMessagesDatabase.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
 #import "FilePath.h"
@@ -73,7 +73,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     if (!dbInitSuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
+            *error = [TSStorageError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSMessagesDatabase databaseErase];
@@ -99,7 +99,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
     if (![TSMessagesDatabase databaseWasCreated]) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseNotCreated];
+            *error = [TSStorageError errorDatabaseNotCreated];
         }
         return NO;
     }

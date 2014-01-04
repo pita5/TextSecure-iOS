@@ -9,7 +9,7 @@
 #import "TSEncryptedDatabase.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabase.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "TSStorageMasterKey.h"
 
 
@@ -30,7 +30,7 @@
     // Have we created a DB on this device already ?
     if ([[NSUserDefaults standardUserDefaults] boolForKey:preferenceName]) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseAlreadyCreated];
+            *error = [TSStorageError errorDatabaseAlreadyCreated];
         }
         return nil;
     }
@@ -62,7 +62,7 @@
     
     if (!dbInitSuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCreationFailed];
+            *error = [TSStorageError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSEncryptedDatabase databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
@@ -107,7 +107,7 @@
     
     if (!initSuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError errorDatabaseCorrupted];
+            *error = [TSStorageError errorDatabaseCorrupted];
         }
         return nil;
     }

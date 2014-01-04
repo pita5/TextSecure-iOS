@@ -7,7 +7,7 @@
 //
 
 #import "TSSetMasterPasswordViewController.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "TSRegisterPrekeysRequest.h"
 #import "TSUserKeysDatabase.h"
 #import "TSStorageMasterKey.h"

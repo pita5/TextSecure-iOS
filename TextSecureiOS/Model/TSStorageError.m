@@ -1,18 +1,18 @@
 //
-//  TSEncryptedDatabaseError.m
+//  TSStorageError.m
 //  TextSecureiOS
 //
 //  Created by Alban Diquet on 11/29/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 
 
-NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.textsecure.TSEncryptedDatabaseErrorDomain";
+NSString * const TSStorageErrorDomain = @"org.whispersystems.whisper.textsecure.TSStorageErrorDomain";
 
 
-@implementation TSEncryptedDatabaseError
+@implementation TSStorageError
 
 + (NSError *)errorWithErrorCode:(NSInteger)errorCode userInfo:(NSDictionary *)userInfo {
     return [NSError errorWithDomain:[self domain] code:errorCode userInfo:userInfo];
@@ -21,7 +21,7 @@ NSString * const TSEncryptedDatabaseErrorDomain = @"org.whispersystems.whisper.t
 
 + (NSString *)domain
 {
-    return TSEncryptedDatabaseErrorDomain;
+    return TSStorageErrorDomain;
 }
 
 

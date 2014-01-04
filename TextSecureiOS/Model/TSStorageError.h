@@ -1,5 +1,5 @@
 //
-//  TSEncryptedDatabaseError.h
+//  TSStorageError.h
 //  TextSecureiOS
 //
 //  Created by Alban Diquet on 11/29/13.
@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const TSEncryptedDatabaseErrorDomain;
+extern NSString * const TSStorageErrorDomain;
 
-typedef enum TSEncryptedDatabaseErrorCode {
+typedef enum TSStorageErrorCode {
     TSStorageErrorDatabaseAlreadyCreated,
     TSStorageErrorDatabaseCreationFailed,
     TSStorageErrorDatabaseNotCreated,
@@ -21,11 +21,11 @@ typedef enum TSEncryptedDatabaseErrorCode {
     TSStorageErrorStorageKeyAlreadyCreated,
     TSStorageErrorStorageKeyCreationFailed,
     TSStorageErrorStorageKeyNotCreated
-} TSEncryptedDatabaseErrorCode;
+} TSStorageErrorCode;
 
 
 // TODO: change this to TSStorageError
-@interface TSEncryptedDatabaseError : NSObject
+@interface TSStorageError : NSObject
 
 + (NSString *)domain;
 + (NSError *)errorDatabaseAlreadyCreated;

@@ -26,7 +26,7 @@
 		4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */; };
 		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
 		8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C42C14418551B8C000DD353 /* TSHKDFTests.m */; };
-		8C49FC1018497E86006132F6 /* TSEncryptedDatabaseError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */; };
+		8C49FC1018497E86006132F6 /* TSStorageError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49FC0F18497E86006132F6 /* TSStorageError.m */; };
 		8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
 		8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */; };
 		8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */; };
@@ -510,8 +510,8 @@
 		8C42C14218551B8C000DD353 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8C42C14418551B8C000DD353 /* TSHKDFTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSHKDFTests.m; sourceTree = "<group>"; };
 		8C42C14618551B8C000DD353 /* TextSecureiOS Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS Tests-Prefix.pch"; sourceTree = "<group>"; };
-		8C49FC0E18497E86006132F6 /* TSEncryptedDatabaseError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSEncryptedDatabaseError.h; path = Model/TSEncryptedDatabaseError.h; sourceTree = "<group>"; };
-		8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSEncryptedDatabaseError.m; path = Model/TSEncryptedDatabaseError.m; sourceTree = "<group>"; };
+		8C49FC0E18497E86006132F6 /* TSStorageError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStorageError.h; path = Model/TSStorageError.h; sourceTree = "<group>"; };
+		8C49FC0F18497E86006132F6 /* TSStorageError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStorageError.m; path = Model/TSStorageError.m; sourceTree = "<group>"; };
 		8CF7BD8A187088D80023A781 /* TSECKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSECKeyPair.h; path = Security/TSECKeyPair.h; sourceTree = "<group>"; };
 		8CF7BD8B187088D80023A781 /* TSECKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSECKeyPair.m; path = Security/TSECKeyPair.m; sourceTree = "<group>"; };
 		8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSECKeyPairTests.m; sourceTree = "<group>"; };
@@ -1121,8 +1121,8 @@
 		8CCC26381872A3CB00E521A1 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				8C49FC0E18497E86006132F6 /* TSEncryptedDatabaseError.h */,
-				8C49FC0F18497E86006132F6 /* TSEncryptedDatabaseError.m */,
+				8C49FC0E18497E86006132F6 /* TSStorageError.h */,
+				8C49FC0F18497E86006132F6 /* TSStorageError.m */,
 				8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */,
 				8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */,
 				8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */,
@@ -2466,7 +2466,7 @@
 				8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */,
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
 				A5620DEC186BD27F0033483E /* TSMessagesManager.mm in Sources */,
-				8C49FC1018497E86006132F6 /* TSEncryptedDatabaseError.m in Sources */,
+				8C49FC1018497E86006132F6 /* TSStorageError.m in Sources */,
 				B635B3E8182181E1003CE732 /* UIColor+JSMessagesView.m in Sources */,
 				B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */,
 				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
