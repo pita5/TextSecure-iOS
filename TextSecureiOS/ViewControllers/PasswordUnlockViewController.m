@@ -9,7 +9,7 @@
 #import "PasswordUnlockViewController.h"
 #import "TSUserKeysDatabase.h"
 #import "TSStorageMasterKey.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "TSMessagesDatabase.h"
 
 @interface PasswordUnlockViewController () <UITextFieldDelegate>
@@ -44,9 +44,9 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         
     } else {
-        if ([[error domain] isEqualToString:TSEncryptedDatabaseErrorDomain]) {
+        if ([[error domain] isEqualToString:TSStorageErrorDomain]) {
             switch ([error code]) {
-                case InvalidPassword: {
+                case TSStorageErrorInvalidPassword: {
                     
                     self.passwordTextField.text = nil;
                     self.passwordTextField.placeholder = @"Please try again.";

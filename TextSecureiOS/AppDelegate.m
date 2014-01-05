@@ -13,7 +13,7 @@
 #import "NSObject+SBJson.h"
 #import "TSMessagesDatabase.h"
 #import "TSStorageMasterKey.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "TSRegisterForPushRequest.h"
 #import "NSString+Conversion.h"
 #import "TSMessagesManager.h"

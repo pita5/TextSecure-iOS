@@ -29,10 +29,14 @@
 	// Do any additional setup after loading the view.
 }
 
-- (void)clearAndQuit:(id)sender{
+- (IBAction)clearAndQuit:(id)sender {
     [TSKeyManager removeAllKeychainItems];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
     exit(0);
+}
+
+- (IBAction)dimissButtonPressed:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
