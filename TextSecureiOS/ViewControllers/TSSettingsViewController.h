@@ -9,7 +9,4 @@
 #import <UIKit/UIKit.h>
 
 @interface TSSettingsViewController : UIViewController
-
--(IBAction)clearAndQuit:(id)sender;
-
 @end
