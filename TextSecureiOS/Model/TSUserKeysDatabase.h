@@ -12,10 +12,12 @@
 @interface TSUserKeysDatabase : NSObject
 
 +(BOOL) databaseCreateUserKeysWithError:(NSError **)error;
++(BOOL) databaseWasCreated;
 +(void) databaseErase;
 
-+(TSECKeyPair*) getIdentityKey;
-+(NSArray*) getAllPreKeys;
-+(NSArray*) getPreKeyWithId:(int32_t)preKeyId;
+// Calling the following functions will fail if the storage master key is in a "locked" state; see TSStorageMasterKey
++(TSECKeyPair*) getIdentityKeyWithError:(NSError **)error;
++(NSArray*) getAllPreKeysWithError:(NSError **)error;
++(NSArray*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **)error;
 
 @end

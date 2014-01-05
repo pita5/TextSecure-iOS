@@ -8,7 +8,7 @@
 
 #import "TSUserKeysDatabase.h"
 #import "TSEncryptedDatabase.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "TSECKeyPair.h"
 #import "FilePath.h"
 #import "FMDatabase.h"
@@ -64,7 +64,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }];
     if (!querySuccess) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbCreationFailed];
+            *error = [TSStorageError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
@@ -76,7 +76,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     // Generate and store the TextSecure keys for the current user
     if (!([TSUserKeysDatabase generateAndStorePreKeys] && ([TSUserKeysDatabase generateAndStoreIdentityKey]))) {
         if (error) {
-            *error = [TSEncryptedDatabaseError dbCreationFailed];
+            *error = [TSStorageError errorDatabaseCreationFailed];
         }
         // Cleanup
         [TSUserKeysDatabase databaseErase];
@@ -94,6 +94,10 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
++(BOOL) databaseWasCreated {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:USER_KEYS_DB_PREFERENCE];
+}
+
 
 #pragma mark DB access - private
 
@@ -102,6 +106,13 @@ static TSEncryptedDatabase *userKeysDb = nil;
     // DB was already unlocked
     if (userKeysDb){
         return YES;
+    }
+    
+    if (![TSUserKeysDatabase databaseWasCreated]) {
+        if (error) {
+            *error = [TSStorageError errorDatabaseNotCreated];
+        }
+        return NO;
     }
     
     TSEncryptedDatabase *db = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] error:error];
@@ -115,12 +126,11 @@ static TSEncryptedDatabase *userKeysDb = nil;
 
 #pragma Keys access
 
-+(TSECKeyPair*) getIdentityKey {
++(TSECKeyPair*) getIdentityKeyWithError:(NSError **)error {
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:nil])
-        // TODO: better error handling
+        if (![TSUserKeysDatabase databaseOpenWithError:error])
         return nil;
     }
     
@@ -134,7 +144,9 @@ static TSEncryptedDatabase *userKeysDb = nil;
         [rs close];
     }];
     if (!serializedKeyPair) {
-        // TODO: better error handling
+        if (error) {
+            *error = [TSStorageError errorDatabaseCorrupted];
+        }
         return nil;
     }
     
@@ -142,12 +154,11 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
-+(NSArray*) getAllPreKeys {
++(NSArray*) getAllPreKeysWithError:(NSError **)error {
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:nil])
-            // TODO: better error handling
+        if (![TSUserKeysDatabase databaseOpenWithError:error])
             return nil;
     }
     
@@ -164,8 +175,10 @@ static TSEncryptedDatabase *userKeysDb = nil;
         }
         [rs close];
     }];
-    if (preKeysNb != PREKEYS_NUMBER+1){
-        // TODO: better error handling
+    if (preKeysNb != PREKEYS_NUMBER+1) {
+        if (error) {
+            *error = [TSStorageError errorDatabaseCorrupted];
+        }
         return nil;
     }
     
@@ -173,12 +186,11 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
-+(NSArray*) getPreKeyWithId:(int32_t)preKeyId {
++(NSArray*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **) error {
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:nil])
-            // TODO: better error handling
+        if (![TSUserKeysDatabase databaseOpenWithError:error])
             return nil;
     }
     
@@ -192,7 +204,9 @@ static TSEncryptedDatabase *userKeysDb = nil;
         [rs close];
     }];
     if (!serializedKeyPair) {
-        // TODO: better error handling
+        if (error) {
+            *error = [TSStorageError errorDatabaseCorrupted];
+        }
         return nil;
     }
     

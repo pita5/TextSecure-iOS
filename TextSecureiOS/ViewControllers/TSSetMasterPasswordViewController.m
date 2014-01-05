@@ -7,7 +7,7 @@
 //
 
 #import "TSSetMasterPasswordViewController.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "TSRegisterPrekeysRequest.h"
 #import "TSUserKeysDatabase.h"
 #import "TSStorageMasterKey.h"
@@ -45,12 +45,11 @@
 
 
 - (void) setupDatabase {
-    // Create the database on the device
     NSError *error = nil;
     
     
-    // Derive the storage master key from the user's password and store it so we can then create DBs
-    if (![TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text]) {
+    // Create and store the storage master key from the user's password so we can then create DBs
+    if (![TSStorageMasterKey createStorageMasterKeyWithPassword:self.pass.text error:&error]) {
         @throw [NSException exceptionWithName:@"Storage master key creation failed" reason:[error localizedDescription] userInfo:nil];
     }
     
@@ -67,7 +66,7 @@
   
     // Send the user's newly generated keys to the API
     // TODO: Error handling & retry if network error
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[TSUserKeysDatabase getAllPreKeys] identityKey:[TSUserKeysDatabase getIdentityKey]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[TSUserKeysDatabase getAllPreKeysWithError:nil] identityKey:[TSUserKeysDatabase getIdentityKeyWithError:nil]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         switch (operation.response.statusCode) {
             case 200:

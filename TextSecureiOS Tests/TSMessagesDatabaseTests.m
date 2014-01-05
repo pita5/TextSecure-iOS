@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "TSMessagesDatabase.h"
-#import "TSEncryptedDatabaseError.h"
+#import "TSStorageError.h"
 #import "Cryptography.h"
 #import "NSData+Base64.h"
 #import "TSStorageMasterKey.h"
@@ -30,7 +30,7 @@ static NSString *masterPw = @"1234test";
     
     
     [TSStorageMasterKey eraseStorageMasterKey];
-    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     
 }
 
