@@ -36,11 +36,11 @@
 #warning later do this only after the attachment has been uploaded but still having success issues so am doing before for now.
         // we can now send the messsage
         [[TSMessagesManager sharedManager] sendMessage:message];
-        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:message.attachment] success:^(AFHTTPRequestOperation *uploadOperation, id uploadResponseObject) {
+        [[TSNetworkManager sharedManager] queueUnauthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:message.attachment] success:^(AFHTTPRequestOperation *uploadOperation, id uploadResponseObject) {
           switch (uploadOperation.response.statusCode) {
               
             case 200:
-              NSLog(@"upload success");
+              NSLog(@"upload file success!!!!!");
               break;
               
             default:

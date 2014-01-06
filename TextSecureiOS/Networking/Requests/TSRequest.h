@@ -11,8 +11,5 @@
 @interface TSRequest : NSMutableURLRequest
 
 @property (nonatomic,retain) NSMutableDictionary *parameters;
-@property (nonatomic,retain) NSData* data;
-@property (nonatomic,retain) NSString* mimeType;
 - (void) makeAuthenticatedRequest;
-- (BOOL) usingExternalServer;
 @end

@@ -12,6 +12,8 @@
 #import "TSKeyManager.h"
 #import "TSServerCodeVerificationRequest.h"
 #import "TSUploadAttachment.h"
+#import "TSAttachment.h"
+#import <AFNetworking/AFURLRequestSerialization.h>
 
 @implementation TSNetworkManager
 
@@ -39,14 +41,16 @@
 
 #pragma mark Manager Methods
 
+- (void) queueUnauthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
+  AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+  [operation  setCompletionBlockWithSuccess:successCompletionBlock failure:failureCompletionBlock];
+  [operationManager.operationQueue addOperation:operation ];
+}
+
 - (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
   
-    if ([request isKindOfClass:[TSUploadAttachment class]]){
-      // only supporting the upload attachment request for now // later anthing using an external server can be checked with [request usingExternalServer
-        [operationManager PUT:request.URL.absoluteString parameters:nil success:successCompletionBlock failure:failureCompletionBlock];
-    }
-  
-   else if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
+   if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
       // The only unauthenticated request is the initial request for a verification code
 
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];

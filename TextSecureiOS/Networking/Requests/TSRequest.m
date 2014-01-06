@@ -14,6 +14,8 @@
 - (id)initWithURL:(NSURL *)URL{
     self = [super initWithURL:URL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:timeOutForRequests];
     self.parameters = [NSMutableDictionary dictionary];
+  
+
     return self;
 }
 

@@ -9,6 +9,8 @@
 #import "TSRequest.h"
 @class TSAttachment;
 @interface TSUploadAttachment : TSRequest
+@property(nonatomic,strong) TSAttachment* attachment;
 -(TSRequest*) initWithAttachment:(TSAttachment*) attachment ;
 
+-(void) uploadAttachment;
 @end
