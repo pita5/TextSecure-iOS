@@ -13,7 +13,9 @@
 #import "TSMessage.h"
 #import "TSAttachment.h"
 #import "TSMessagesManager.h"
-
+#import "TSDownloadAttachment.h"
+#import "Cryptography.h"
+#import "FilePath.h"
 @implementation TSAttachmentManager
 
 
@@ -39,10 +41,12 @@
         [[TSNetworkManager sharedManager] queueUnauthenticatedRequest:[[TSUploadAttachment alloc] initWithAttachment:message.attachment] success:^(AFHTTPRequestOperation *uploadOperation, id uploadResponseObject) {
           switch (uploadOperation.response.statusCode) {
               
-            case 200:
+            case 200: {
               NSLog(@"upload file success!!!!!");
+#warning remove this testing
+
               break;
-              
+            }
             default:
               break;
           }
@@ -66,12 +70,17 @@
     
     
   }];
-  
-  
+ 
 
 }
 
 +(void) downloadAttachment:(TSMessage*) message {
+  /*
+   example:
+   TSMessage *newMessage = [[TSMessage alloc] initWithMessage:@"" sender:@"" recipients:nil sentOnDate:nil attachment:[[TSAttachment alloc] init]];
+   newMessage.attachment.attachmentId = [NSNumber numberWithUnsignedLongLong:7752343503763367516];
+   [TSAttachmentManager downloadAttachment:newMessage];
+   */
 #warning error handling
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestAttachment alloc] initWithId:message.attachment.attachmentId] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     switch (operation.response.statusCode) {
@@ -79,6 +88,35 @@
         NSString* uploadLocation = [responseObject objectForKey:@"location"];
         // Now, download the data
         DLog(@"we have attachment download id %@ location %@",responseObject,uploadLocation);
+        message.attachment.attachmentURL = [NSURL URLWithString:[responseObject objectForKey:@"location"]];
+        
+        
+        [[TSNetworkManager sharedManager] queueUnauthenticatedRequest:[[TSDownloadAttachment alloc] initWithAttachment:message.attachment] success:^(AFHTTPRequestOperation *downloadOperation, id downloadResponseObject) {
+          switch (downloadOperation.response.statusCode) {
+              
+            case 200:{
+              NSLog(@"download file success!!!!!");
+              // Save the file
+              NSData* attachmentData = downloadResponseObject;
+              NSData *hmacKey = [Cryptography generateRandomBytes:32];
+              message.attachment.attachmentDataPath = [FilePath pathInDocumentsDirectory:[[Cryptography truncatedHMAC:attachmentData withHMACKey:hmacKey] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength]];
+              [attachmentData writeToFile:message.attachment.attachmentDataPath atomically:YES];
+              
+              break;
+            }
+            default:
+              break;
+          }
+        } failure:^(AFHTTPRequestOperation *downloadOperation, NSError *downloadError) {
+          DLog(@"failure with uploading file, %d,   %@",downloadOperation.response.statusCode,downloadOperation.response.description);
+          
+          
+        }];
+
+        
+        
+        
+        
         break;
       }
       default:

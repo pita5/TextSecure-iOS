@@ -12,5 +12,4 @@
 @property(nonatomic,strong) TSAttachment* attachment;
 -(TSRequest*) initWithAttachment:(TSAttachment*) attachment ;
 
--(void) uploadAttachment;
 @end

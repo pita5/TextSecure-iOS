@@ -66,7 +66,7 @@
 
 #pragma HMAC/SHA256
 
-+(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey {
++(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey{
   uint8_t ourHmac[CC_SHA256_DIGEST_LENGTH] = {0};
   CCHmac(kCCHmacAlgSHA256,
          [HMACKey bytes],
@@ -75,6 +75,7 @@
          [dataToHMAC  length],
          ourHmac);
   return [NSData dataWithBytes: ourHmac length: 10];
+
 }
 
 
