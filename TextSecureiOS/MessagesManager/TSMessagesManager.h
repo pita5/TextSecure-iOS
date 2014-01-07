@@ -11,7 +11,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "TSProtocol.hh"
+#import "TSProtocol.h"
 @class TSMessage;
 
 @interface TSMessagesManager : NSObject <TSProtocol>
