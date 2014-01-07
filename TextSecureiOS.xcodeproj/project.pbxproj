@@ -956,6 +956,7 @@
 		A5E6CC3F187BF30A002A1735 /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
 		A5E6CC40187BF30A002A1735 /* PushMessageContent.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PushMessageContent.pb.mm; sourceTree = "<group>"; };
 		A5E6CC43187BF33D002A1735 /* PushMessageContent.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PushMessageContent.pb.hh; sourceTree = "<group>"; };
+		A5E6CC44187BFCB6002A1735 /* TSProtocol.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSProtocol.hh; path = Security/TSProtocol.hh; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
@@ -1660,6 +1661,7 @@
 		A5F15AA117029BB400856385 /* Security */ = {
 			isa = PBXGroup;
 			children = (
+				A5E6CC44187BFCB6002A1735 /* TSProtocol.hh */,
 				A538A27C1869DC6500CD0A3D /* TSKeyManager.h */,
 				A538A27D1869DC6500CD0A3D /* TSKeyManager.m */,
 				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,

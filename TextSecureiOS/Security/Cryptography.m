@@ -10,6 +10,7 @@
 #import <Security/Security.h>
 #import <CommonCrypto/CommonHMAC.h>
 #import <CommonCrypto/CommonCryptor.h>
+#import <RNCryptor/RNCryptorEngine.h>
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
@@ -17,7 +18,6 @@
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #import "FilePath.h"
-
 
 @implementation Cryptography
 
@@ -66,7 +66,7 @@
 
 #pragma HMAC/SHA256
 
-+(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey {
++(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey{
   uint8_t ourHmac[CC_SHA256_DIGEST_LENGTH] = {0};
   CCHmac(kCCHmacAlgSHA256,
          [HMACKey bytes],
@@ -75,17 +75,61 @@
          [dataToHMAC  length],
          ourHmac);
   return [NSData dataWithBytes: ourHmac length: 10];
+
+}
+
+
+#pragma mark encrypting and decrypting attachments
++(NSData*) decryptAttachment:(NSData*) dataToDecrypt withKey:(NSData*) key {
+  // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
+  NSData *encryptionKey = [key subdataWithRange:NSMakeRange(0, 32)];
+  NSData *hmacKey = [key subdataWithRange:NSMakeRange(32, 32)];
+  // dataToDecrypt: IV || Ciphertext || truncated MAC(IV||Ciphertext)
+  NSData *iv = [dataToDecrypt subdataWithRange:NSMakeRange(0, 10)];
+  NSData *encryptedAttachment = [dataToDecrypt subdataWithRange:NSMakeRange(10, [dataToDecrypt length]-10-10)];
+  NSData *hmac = [dataToDecrypt subdataWithRange:NSMakeRange([dataToDecrypt length]-10, 10)];
+  return [Cryptography decrypt:encryptedAttachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey forHMAC:hmac];
+}
+
++(NSData*) encryptAttachment:(NSData*) attachment withRandomKey:(NSData**)key{
+  // generate
+  // random 10 byte IV
+  // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
+  // returns: IV || Ciphertext || truncated MAC(IV||Ciphertext)
+  NSData* iv = [Cryptography generateRandomBytes:10];
+  NSData* encryptionKey = [Cryptography generateRandomBytes:32];
+  NSData* hmacKey = [Cryptography generateRandomBytes:32];
+  
+  // The concatenated key for storage
+  NSMutableData *outKey = [NSMutableData data];
+  [outKey appendData:encryptionKey];
+  [outKey appendData:hmacKey];
+  *key = [NSData dataWithData:outKey];
+  
+  NSData* computedHMAC;
+  NSData* ciphertext = [Cryptography encrypt:attachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey computedHMAC:&computedHMAC];
+  
+  NSMutableData* encryptedAttachment = [NSMutableData data];
+  [encryptedAttachment appendData:iv];
+  [encryptedAttachment appendData:ciphertext];
+  [encryptedAttachment appendData:computedHMAC];
+  return encryptedAttachment;
+
+  
+  
 }
 
 
 #pragma mark push payload encryptiong/decryption
-+(NSData*) decryptPushPayload:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
++(NSData*) decrypt:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
   /* AES256 CBC encrypt then mac 
    Returns nil if hmac invalid or decryption fails
    */
   //verify hmac of version||encrypted data||iv
   NSMutableData *dataToHmac = [NSMutableData data ];
-  [dataToHmac appendData:version];
+  if(version!=nil) {
+    [dataToHmac appendData:version];
+  }
   [dataToHmac appendData:iv];
   [dataToHmac appendData:dataToDecrypt];
   
@@ -93,6 +137,7 @@
   NSData* ourHmacData = [Cryptography truncatedHMAC:dataToHmac withHMACKey:hmacKey];
   if(![ourHmacData isEqualToData:hmac]) {
     return nil;
+    
   }
   
   // decrypt
@@ -117,7 +162,7 @@
 }
 
 
-+(NSData*)encryptPushPayload:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
++(NSData*)encrypt:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
   /* AES256 CBC encrypt then mac
    Returns nil if encryption fails
    */
@@ -136,7 +181,9 @@
     NSData* encryptedData= [NSData dataWithBytesNoCopy:buffer length:bytesEncrypted];
     //compute hmac of version||encrypted data||iv
     NSMutableData *dataToHmac = [NSMutableData data];
-    [dataToHmac appendData:version];
+    if(version!=nil) {
+      [dataToHmac appendData:version];
+    }
     [dataToHmac appendData:iv];
     [dataToHmac appendData:encryptedData];
     *hmac = [Cryptography truncatedHMAC:dataToHmac withHMACKey:hmacKey];

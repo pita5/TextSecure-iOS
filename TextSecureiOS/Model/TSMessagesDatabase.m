@@ -60,9 +60,38 @@ static TSEncryptedDatabase *messagesDb = nil;
             return;
         }
 #warning we will want a subtler format than this, prototype message db format
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (thread_id TEXT,message TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE)"]) {
+      /*
+       RK           : 32-byte root key which gets updated by DH ratchet
+       HKs, HKr     : 32-byte header keys (send and recv versions)
+       NHKs, NHKr   : 32-byte next header keys (")
+       CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
+       DHIs, DHIr   : DH or ECDH Identity keys
+       DHRs, DHRr   : DH or ECDH Ratchet keys
+       Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
+       PNs          : Previous message numbers (# of msgs sent under prev ratchet)
+       ratchet_flag : True if the party will send a new DH ratchet key in next msg
+       skipped_HK_MK : A list of stored message keys and their associated header keys
+       for "skipped" messages, i.e. messages that have not been
+       received despite the reception of more recent messages.
+       Entries may be stored with a timestamp, and deleted after a
+       certain age.
+       */
+      
+
+      if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, RK BLOB, HKs BLOB, HKr BLOB, NHKs BLOB, NHKr BLOB, CKs BLOB, CKr BLOB, DHIs BLOB, DHIr BLOB, DHRs BLOB, DHRr BLOB, Ns INT, Nr INT, PNs INT, ratchet_flag BOOL, skipped_HK_MK BLOB)"]) {
+          return;
+        }
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,FOREIGN KEY thread_id REFERENCES threads(thread_id)"]) {
+          /*corresponds to skipped_HK_MK MK??*/
+          return;
+        }
+
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id INT PRIMARY KEY,message TEXT,FOREIGN KEY thread_id REFERENCES threads(thread_id),sender_id TEXT,recipient_id TEXT, timestamp DATE)"]) {
             return;
         }
+      
+      
+
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_phone_number TEXT,relay TEXT, useraddressbookid INTEGER, identitykey TEXT, identityverified INTEGER, supports_sms INTEGER, next_key TEXT)"]){
             return;
         }
@@ -159,8 +188,8 @@ static TSEncryptedDatabase *messagesDb = nil;
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
         NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
-        
-        [db executeUpdate:@"INSERT OR REPLACE INTO messages (thread_id,message,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",threadId,message.message,message.senderId,message.recipientId,sqlDate];
+        [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",threadId];
+        [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.message,threadId,message.senderId,message.recipientId,sqlDate];
     }];
 }
 

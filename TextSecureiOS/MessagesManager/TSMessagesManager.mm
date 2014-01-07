@@ -17,6 +17,7 @@
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
 #import "PushMessageContent.hh"
+#import "TSThread.h"
 
 
 @implementation TSMessagesManager
@@ -55,7 +56,7 @@
   // Actually only the first 32 bits of this are the crypto key
   NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
   NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
-  NSData* decryption=[Cryptography decryptPushPayload:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
+  NSData* decryption=[Cryptography decrypt:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
   // Now get the protocol buffer message out
   textsecure::IncomingPushMessageSignal *fullMessageInfoRecieved = [IncomingPushMessageSignal getIncomingPushMessageSignalForData:decryption];
   
@@ -75,7 +76,20 @@
 }
 
 
--(void) sendMessage:(TSMessage*)message {
+#pragma mark TSProtocol
+-(NSData*) encryptMessage:(TSMessage*)message onThread:(TSThread*)thread {
+#warning not implemented
+  return nil;
+  
+}
+-(TSMessage*) decryptMessage:(NSData*)message onThread:(TSThread*)thread  {
+#warning not implemented
+  
+  return nil;
+  
+}
+
+-(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread {
   [TSMessagesDatabase storeMessage:message];
   NSString *serializedMessage = [[PushMessageContent createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -94,11 +108,12 @@
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
     DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-      [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"send"}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"send"}];
     
   }];
   
   
 }
+
 
 @end

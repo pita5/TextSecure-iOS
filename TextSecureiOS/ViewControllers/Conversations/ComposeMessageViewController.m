@@ -191,7 +191,7 @@
   
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
 
-    [[TSMessagesManager sharedManager] sendMessage:message];
+    [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread];
     [self finishSend];
 }
 
