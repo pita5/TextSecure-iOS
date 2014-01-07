@@ -956,7 +956,7 @@
 		A5E6CC3F187BF30A002A1735 /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
 		A5E6CC40187BF30A002A1735 /* PushMessageContent.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PushMessageContent.pb.mm; sourceTree = "<group>"; };
 		A5E6CC43187BF33D002A1735 /* PushMessageContent.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PushMessageContent.pb.hh; sourceTree = "<group>"; };
-		A5E6CC44187BFCB6002A1735 /* TSProtocol.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSProtocol.hh; path = Security/TSProtocol.hh; sourceTree = "<group>"; };
+		A5E6CC44187BFCB6002A1735 /* TSProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSProtocol.h; path = Security/TSProtocol.h; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
@@ -1162,9 +1162,9 @@
 			children = (
 				8C49FC0E18497E86006132F6 /* TSStorageError.h */,
 				8C49FC0F18497E86006132F6 /* TSStorageError.m */,
-				8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */,
 				8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */,
 				8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */,
+				8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */,
 				8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */,
 				A515AFD9180966E30084ABA5 /* TSMessagesDatabase.h */,
 				A515AFDA180966E30084ABA5 /* TSMessagesDatabase.m */,
@@ -1661,7 +1661,7 @@
 		A5F15AA117029BB400856385 /* Security */ = {
 			isa = PBXGroup;
 			children = (
-				A5E6CC44187BFCB6002A1735 /* TSProtocol.hh */,
+				A5E6CC44187BFCB6002A1735 /* TSProtocol.h */,
 				A538A27C1869DC6500CD0A3D /* TSKeyManager.h */,
 				A538A27D1869DC6500CD0A3D /* TSKeyManager.m */,
 				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,
