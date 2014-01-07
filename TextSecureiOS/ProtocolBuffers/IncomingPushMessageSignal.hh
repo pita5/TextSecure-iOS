@@ -14,10 +14,8 @@
 @interface IncomingPushMessageSignal : NSObject
 + (NSData *)getDataForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessage;
 + (textsecure::IncomingPushMessageSignal *)getIncomingPushMessageSignalForData:(NSData *)data;
-+ (textsecure::PushMessageContent *)getPushMessageContentForData:(NSData *)data;
+
 + (NSString*)prettyPrint:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
-+ (NSString*)prettyPrintPushMessageContent:(textsecure::PushMessageContent *)pushMessageContent;
-+ (NSData *)createSerializedPushMessageContent:(NSString*) message withAttachments:(NSArray*) attachments;
 + (NSString*) getMessageBody:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
 +(TSMessage*)getTSMessageForIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal;
 @end

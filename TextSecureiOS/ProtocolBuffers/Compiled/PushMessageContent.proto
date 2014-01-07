@@ -1,0 +1,14 @@
+package textsecure;
+
+message PushMessageContent {
+  optional string body = 1;
+
+  message AttachmentPointer {
+    optional fixed64 id = 1;
+    optional string contentType = 2;
+    optional bytes key = 3;
+  }
+
+  repeated AttachmentPointer attachments = 2;
+}
+

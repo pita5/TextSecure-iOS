@@ -16,6 +16,7 @@
 #import "Cryptography.h"
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
+#import "PushMessageContent.hh"
 
 
 @implementation TSMessagesManager
@@ -55,17 +56,17 @@
   NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
   NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
   NSData* decryption=[Cryptography decryptPushPayload:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
-
-  
-  
-  
   // Now get the protocol buffer message out
   textsecure::IncomingPushMessageSignal *fullMessageInfoRecieved = [IncomingPushMessageSignal getIncomingPushMessageSignalForData:decryption];
   
+  // This protocol buffer has a type which indicates whether its encrypted message is encapsulated in the PreKeyWhisperMessage format or the WhisperMessage format, it also has e.g. source, destination and timstame
+  
+  
+  TSMessage *message = [IncomingPushMessageSignal getTSMessageForIncomingPushMessageSignal:fullMessageInfoRecieved];
   // the first level of decryption is
   NSString *decryptedMessage = [IncomingPushMessageSignal getMessageBody:fullMessageInfoRecieved];
   NSString *decryptedMessageAndInfo = [IncomingPushMessageSignal prettyPrint:fullMessageInfoRecieved];
-  [TSMessagesDatabase storeMessage:[IncomingPushMessageSignal getTSMessageForIncomingPushMessageSignal:fullMessageInfoRecieved]];
+  [TSMessagesDatabase storeMessage:message];
   
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
   [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"receive"}];
@@ -76,7 +77,7 @@
 
 -(void) sendMessage:(TSMessage*)message {
   [TSMessagesDatabase storeMessage:message];
-  NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
+  NSString *serializedMessage = [[PushMessageContent createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {
