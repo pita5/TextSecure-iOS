@@ -1,12 +1,12 @@
 package textsecure;
 
 message PushMessageContent {
-  optional string body = 1;
+  optional string body = 1; //finally
 
   message AttachmentPointer {
-    optional fixed64 id = 1;
-    optional string contentType = 2;
-    optional bytes key = 3;
+    optional fixed64 id = 1; // this ID can be used to retrieve from server the location in the cloud of the attachment
+    optional string contentType = 2; // MIME type
+    optional bytes key = 3; // symmetric decryption key
   }
 
   repeated AttachmentPointer attachments = 2;

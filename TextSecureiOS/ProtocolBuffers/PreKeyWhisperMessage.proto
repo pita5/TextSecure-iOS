@@ -4,6 +4,6 @@ message PreKeyWhisperMessage {
   optional uint32 preKeyId    = 1;
   optional bytes  baseKey     = 2;
   optional bytes  identityKey = 3;
-  optional bytes  message     = 4; // Encrypted PushMessageContent
+  optional bytes  message     = 4;
 }
 

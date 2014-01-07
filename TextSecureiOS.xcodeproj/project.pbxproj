@@ -1644,15 +1644,15 @@
 				A5E6CC1D187B82AA002A1735 /* IncomingPushMessageSignal.proto */,
 				A5E6CC3F187BF30A002A1735 /* IncomingPushMessageSignal.pb.hh */,
 				A5E6CC3E187BF30A002A1735 /* IncomingPushMessageSignal.pb.mm */,
-				A5E6CC3C187BF295002A1735 /* PushMessageContent.proto */,
-				A5E6CC43187BF33D002A1735 /* PushMessageContent.pb.hh */,
-				A5E6CC40187BF30A002A1735 /* PushMessageContent.pb.mm */,
 				A5E6CC20187B82AA002A1735 /* PreKeyWhisperMessage.proto */,
 				A5E6CC1F187B82AA002A1735 /* PreKeyWhisperMessage.pb.hh */,
 				A5E6CC1E187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm */,
+				A5E6CC23187B82AA002A1735 /* WhisperMessage.proto */,
 				A5E6CC22187B82AA002A1735 /* WhisperMessage.pb.hh */,
 				A5E6CC21187B82AA002A1735 /* WhisperMessage.pb.mm */,
-				A5E6CC23187B82AA002A1735 /* WhisperMessage.proto */,
+				A5E6CC3C187BF295002A1735 /* PushMessageContent.proto */,
+				A5E6CC43187BF33D002A1735 /* PushMessageContent.pb.hh */,
+				A5E6CC40187BF30A002A1735 /* PushMessageContent.pb.mm */,
 			);
 			path = Compiled;
 			sourceTree = "<group>";
