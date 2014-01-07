@@ -21,3 +21,4 @@ message PushMessageContent {
 
   repeated AttachmentPointer attachments = 2;
 }
+

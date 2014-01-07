@@ -52,7 +52,6 @@
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
-		A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */; };
 		A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
 		A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A530CB03184A02620052B615 /* TSRecipientPrekeyRequest.m */; };
@@ -403,12 +402,19 @@
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
-		A5B0B82618198C8E00AF41A7 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */; };
 		A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5E6CBF91875DC2D002A1735 /* photo.png in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CBF71875DC2D002A1735 /* photo.png */; };
 		A5E6CBFA1875DC2D002A1735 /* photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CBF81875DC2D002A1735 /* photo@2x.png */; };
+		A5E6CC18187B81E3002A1735 /* WhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC17187B81E3002A1735 /* WhisperMessage.mm */; };
+		A5E6CC24187B82AA002A1735 /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC1C187B82AA002A1735 /* IncomingPushMessageSignal.pb.mm */; };
+		A5E6CC25187B82AA002A1735 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC1D187B82AA002A1735 /* IncomingPushMessageSignal.proto */; };
+		A5E6CC26187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC1E187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm */; };
+		A5E6CC27187B82AA002A1735 /* PreKeyWhisperMessage.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC20187B82AA002A1735 /* PreKeyWhisperMessage.proto */; };
+		A5E6CC28187B82AA002A1735 /* WhisperMessage.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC21187B82AA002A1735 /* WhisperMessage.pb.mm */; };
+		A5E6CC29187B82AA002A1735 /* WhisperMessage.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC23187B82AA002A1735 /* WhisperMessage.proto */; };
+		A5E6CC2C187B832A002A1735 /* PreKeyWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC2B187B832A002A1735 /* PreKeyWhisperMessage.mm */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
@@ -559,8 +565,6 @@
 		A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
 		A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		A5285069181A64800073CEDD /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
-		A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.pb.mm; sourceTree = "<group>"; };
 		A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CryptographyTests.mm; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
 		A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "TextSecureiOS/Utility/NSData+Base64.m"; sourceTree = "<group>"; };
@@ -919,13 +923,25 @@
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A56D31B7180FCA840093D51B /* TSRegisterPrekeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterPrekeysRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.h; sourceTree = "<group>"; };
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeysRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.m; sourceTree = "<group>"; };
-		A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
 		A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.hh; sourceTree = "<group>"; };
 		A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.mm; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5E6CBF71875DC2D002A1735 /* photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo.png; sourceTree = "<group>"; };
 		A5E6CBF81875DC2D002A1735 /* photo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo@2x.png"; sourceTree = "<group>"; };
+		A5E6CC16187B81E3002A1735 /* WhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WhisperMessage.hh; sourceTree = "<group>"; };
+		A5E6CC17187B81E3002A1735 /* WhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WhisperMessage.mm; sourceTree = "<group>"; };
+		A5E6CC1B187B82AA002A1735 /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
+		A5E6CC1C187B82AA002A1735 /* IncomingPushMessageSignal.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.pb.mm; sourceTree = "<group>"; };
+		A5E6CC1D187B82AA002A1735 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
+		A5E6CC1E187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreKeyWhisperMessage.pb.mm; sourceTree = "<group>"; };
+		A5E6CC1F187B82AA002A1735 /* PreKeyWhisperMessage.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PreKeyWhisperMessage.pb.hh; sourceTree = "<group>"; };
+		A5E6CC20187B82AA002A1735 /* PreKeyWhisperMessage.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PreKeyWhisperMessage.proto; sourceTree = "<group>"; };
+		A5E6CC21187B82AA002A1735 /* WhisperMessage.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WhisperMessage.pb.mm; sourceTree = "<group>"; };
+		A5E6CC22187B82AA002A1735 /* WhisperMessage.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WhisperMessage.pb.hh; sourceTree = "<group>"; };
+		A5E6CC23187B82AA002A1735 /* WhisperMessage.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WhisperMessage.proto; sourceTree = "<group>"; };
+		A5E6CC2A187B832A002A1735 /* PreKeyWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PreKeyWhisperMessage.hh; sourceTree = "<group>"; };
+		A5E6CC2B187B832A002A1735 /* PreKeyWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreKeyWhisperMessage.mm; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
@@ -1591,13 +1607,31 @@
 		A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */ = {
 			isa = PBXGroup;
 			children = (
-				A5285069181A64800073CEDD /* IncomingPushMessageSignal.pb.hh */,
-				A528506A181A64800073CEDD /* IncomingPushMessageSignal.pb.mm */,
+				A5E6CC1A187B82AA002A1735 /* Compiled */,
+				A5E6CC16187B81E3002A1735 /* WhisperMessage.hh */,
+				A5E6CC17187B81E3002A1735 /* WhisperMessage.mm */,
 				A5B0B82818198DF200AF41A7 /* IncomingPushMessageSignal.hh */,
 				A5B0B82918198DF200AF41A7 /* IncomingPushMessageSignal.mm */,
-				A5B0B82318198C8E00AF41A7 /* IncomingPushMessageSignal.proto */,
+				A5E6CC2A187B832A002A1735 /* PreKeyWhisperMessage.hh */,
+				A5E6CC2B187B832A002A1735 /* PreKeyWhisperMessage.mm */,
 			);
 			path = ProtocolBuffers;
+			sourceTree = "<group>";
+		};
+		A5E6CC1A187B82AA002A1735 /* Compiled */ = {
+			isa = PBXGroup;
+			children = (
+				A5E6CC1B187B82AA002A1735 /* IncomingPushMessageSignal.pb.hh */,
+				A5E6CC1C187B82AA002A1735 /* IncomingPushMessageSignal.pb.mm */,
+				A5E6CC1D187B82AA002A1735 /* IncomingPushMessageSignal.proto */,
+				A5E6CC1F187B82AA002A1735 /* PreKeyWhisperMessage.pb.hh */,
+				A5E6CC1E187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm */,
+				A5E6CC20187B82AA002A1735 /* PreKeyWhisperMessage.proto */,
+				A5E6CC22187B82AA002A1735 /* WhisperMessage.pb.hh */,
+				A5E6CC21187B82AA002A1735 /* WhisperMessage.pb.mm */,
+				A5E6CC23187B82AA002A1735 /* WhisperMessage.proto */,
+			);
+			path = Compiled;
 			sourceTree = "<group>";
 		};
 		A5F15AA117029BB400856385 /* Security */ = {
@@ -1991,6 +2025,7 @@
 				A537297017011A5200C6FCCF /* bpy@2x.png in Resources */,
 				A537297117011A5200C6FCCF /* br.png in Resources */,
 				A537297217011A5200C6FCCF /* br@2x.png in Resources */,
+				A5E6CC25187B82AA002A1735 /* IncomingPushMessageSignal.proto in Resources */,
 				A537297317011A5200C6FCCF /* bs.png in Resources */,
 				A537297417011A5200C6FCCF /* bs@2x.png in Resources */,
 				A537297517011A5200C6FCCF /* bt.png in Resources */,
@@ -2041,6 +2076,7 @@
 				A537299D17011A5200C6FCCF /* eh.png in Resources */,
 				A537299E17011A5200C6FCCF /* el.png in Resources */,
 				A537299F17011A5200C6FCCF /* er.png in Resources */,
+				A5E6CC29187B82AA002A1735 /* WhisperMessage.proto in Resources */,
 				B635B3E5182181E1003CE732 /* messageReceived.aiff in Resources */,
 				A53729A017011A5200C6FCCF /* es.png in Resources */,
 				A53729A117011A5200C6FCCF /* et.png in Resources */,
@@ -2175,6 +2211,7 @@
 				A5372A1217011A5300C6FCCF /* mx.png in Resources */,
 				4C0ACB7E186CF2F100B328D5 /* avatar_duval.png in Resources */,
 				A5372A1317011A5300C6FCCF /* my.png in Resources */,
+				A5E6CC27187B82AA002A1735 /* PreKeyWhisperMessage.proto in Resources */,
 				A5372A1417011A5300C6FCCF /* mz.png in Resources */,
 				A5372A1517011A5300C6FCCF /* na.png in Resources */,
 				A5372A1617011A5300C6FCCF /* nap.png in Resources */,
@@ -2233,7 +2270,6 @@
 				A5372A4A17011A5300C6FCCF /* scn@2x.png in Resources */,
 				A5372A4B17011A5300C6FCCF /* scotland.png in Resources */,
 				4C0ACB88186CF2F100B328D5 /* disclosure_indicator.png in Resources */,
-				A5B0B82618198C8E00AF41A7 /* IncomingPushMessageSignal.proto in Resources */,
 				A5372A4C17011A5300C6FCCF /* sd.png in Resources */,
 				A5372A4D17011A5300C6FCCF /* se.png in Resources */,
 				A5372A4E17011A5300C6FCCF /* sg.png in Resources */,
@@ -2427,11 +2463,15 @@
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */,
 				B635B3CE182181E1003CE732 /* NSString+JSMessagesView.m in Sources */,
+				A5E6CC26187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */,
+				A5E6CC2C187B832A002A1735 /* PreKeyWhisperMessage.mm in Sources */,
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
 				A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */,
+				A5E6CC28187B82AA002A1735 /* WhisperMessage.pb.mm in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				B60CEE75184B4971006A8256 /* TSThread.m in Sources */,
+				A5E6CC24187B82AA002A1735 /* IncomingPushMessageSignal.pb.mm in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				B635B3C8182181E1003CE732 /* JSBubbleMessageCell.m in Sources */,
@@ -2457,13 +2497,13 @@
 				8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */,
 				A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */,
 				B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */,
+				A5E6CC18187B81E3002A1735 /* WhisperMessage.mm in Sources */,
 				B60CEE78184B4A96006A8256 /* TSParticipants.m in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
 				A5169D1E170FEB1900A2CE9E /* FilePath.m in Sources */,
 				A5B0B82A18198DF200AF41A7 /* IncomingPushMessageSignal.mm in Sources */,
-				A528506B181A64800073CEDD /* IncomingPushMessageSignal.pb.mm in Sources */,
 				B635B3CA182181E1003CE732 /* JSDismissiveTextView.m in Sources */,
 				A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */,
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
