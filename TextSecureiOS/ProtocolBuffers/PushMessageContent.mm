@@ -8,6 +8,7 @@
 
 #import "PushMessageContent.hh"
 #import "IncomingPushMessageSignal.pb.hh"
+#import "TSThread.h"
 @implementation PushMessageContent
 
 // Dlog
@@ -53,5 +54,24 @@
   textsecure::PushMessageContent *messageContent = [PushMessageContent getPushMessageContentForData:messageData];
   return [PushMessageContent prettyPrintPushMessageContent:messageContent];
 }
+
+
++(TSMessage*)getTSMessage:(textsecure::PushMessageContent *)pushMessageContent forIncomingPushMessageSignal:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal onThread:(TSThread*)thread {
+  const uint32_t cppType = incomingPushMessageSignal->type();
+  const std::string cppSource = incomingPushMessageSignal->source();
+  const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
+  /* testing conversion to objective c objects */
+  NSNumber* type = [NSNumber numberWithInteger:cppType];
+  NSString* source = [NSString stringWithCString:cppSource.c_str() encoding:NSASCIIStringEncoding];
+  
+  NSNumber* timestamp = [NSNumber numberWithInteger:cppTimestamp];
+  //[[NSDate alloc] initWithTimeIntervalSince1970:[timestamp longLongValue]]
+  NSString* message = [IncomingPushMessageSignal getMessageBody:incomingPushMessageSignal];
+#warning ignoring timestamp sent, setting to now, fix issue with timestamp received being incorrectly interpreted (a few years off). currently behavior is when received.
+  // this phone is the recipient of the message
+  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:[TSKeyManager getUsernameToken], nil] sentOnDate:[NSDate date]];
+  return tsMessage;
+}
+
 
 @end

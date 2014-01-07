@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSParticipants.h"
-#import "TSMessage.h"
+#import "TSProtocol.h"
+@class TSParticipants;
+@class TSMessage;
 @interface TSThread : NSObject
+@property (nonatomic,strong) id<AxolotlEphemeralStorageSending> sendEphemerals;
+@property (nonatomic,strong) id<AxolotlEphemeralStorageReceiving> receiveEphemerals;
 
 @property (nonatomic, copy) NSString *threadID;
 @property (nonatomic, retain) TSParticipants *participants;

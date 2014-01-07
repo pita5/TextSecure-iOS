@@ -7,12 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@interface TSPreKeyWhisperMessage : NSObject
+#import "TSWhisperMessage.h"
+@interface TSPreKeyWhisperMessage : TSWhisperMessage
 @property (nonatomic,strong) NSNumber* preKeyId;
 @property (nonatomic,strong) NSString* baseKey;
 @property (nonatomic,strong) NSString* identityKey;
-@property (nonatomic,strong) NSString* message;
 //optional uint32 preKeyId    = 1;
 //optional bytes  baseKey     = 2;
 //optional bytes  identityKey = 3;

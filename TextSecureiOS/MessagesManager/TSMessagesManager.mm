@@ -62,13 +62,14 @@
   
   // This protocol buffer has a type which indicates whether its encrypted message is encapsulated in the PreKeyWhisperMessage format or the WhisperMessage format, it also has e.g. source, destination and timstame
   
-  
-  TSMessage *message = [IncomingPushMessageSignal getTSMessageForIncomingPushMessageSignal:fullMessageInfoRecieved];
-  // the first level of decryption is
-  NSString *decryptedMessage = [IncomingPushMessageSignal getMessageBody:fullMessageInfoRecieved];
-  NSString *decryptedMessageAndInfo = [IncomingPushMessageSignal prettyPrint:fullMessageInfoRecieved];
+  // sets [thread.receiveEphemerals setReceiveEphemerals];
+  TSThread* thread = [IncomingPushMessageSignal getTSThreadForIncomingPushMessageSignal:fullMessageInfoRecieved];
+  // This allocation will update the keys as needed
+  TSWhisperMessage* whisperMessage = [IncomingPushMessageSignal getWhisperMessageIncomingPushMessageSignal:fullMessageInfoRecieved];
+  NSData* encryptedPushMessageContent = [whisperMessage getEncryptedPushMessageContent];
+  // All the ephemeral and persistant variables are updated, so we can go through the decryption process!
+  TSMessage* message = [self decryptMessage:encryptedPushMessageContent onThread:thread];
   [TSMessagesDatabase storeMessage:message];
-  
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
   [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"receive"}];
   [pushAlert show];
@@ -91,6 +92,7 @@
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread {
   [TSMessagesDatabase storeMessage:message];
+  [thread.sendEphemerals setSendEphemerals];
   NSString *serializedMessage = [[PushMessageContent createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     

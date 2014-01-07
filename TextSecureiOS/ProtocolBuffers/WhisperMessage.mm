@@ -28,7 +28,7 @@
 }
 
 
-+ (NSData *)createSerializedWhisperMessage:(TSWhisperMessage*) message {
++ (NSData *)createSerializedWhisperMessage:(TSEncryptedWhisperMessage*) message {
 #warning untested
 //  optional bytes  ephemeralKey    = 1;
 //  optional uint32 counter         = 2;
@@ -39,7 +39,7 @@
 
   uint32_t cppCounter = [message.counter unsignedLongValue];
   uint32_t cppPreviousCounter = [message.previousCounter unsignedLongValue];
-  const std::string cppCipherText([message.ciphertext cStringUsingEncoding:NSASCIIStringEncoding]);
+  const std::string cppCipherText([message.message cStringUsingEncoding:NSASCIIStringEncoding]);
   
   
   
@@ -52,13 +52,13 @@
   return serializedWhisperMessage;
   
 }
-+(TSWhisperMessage*)getTSWhisperMessageForWhisperMessage:(textsecure::WhisperMessage *)whisperMessage {
++(TSEncryptedWhisperMessage*)getTSWhisperMessageForWhisperMessage:(textsecure::WhisperMessage *)whisperMessage {
 #warning untested
   const std::string cppEphemeralKey = whisperMessage->ephemeralkey();
   uint32_t cppCounter = whisperMessage->counter();
   uint32_t cppPreviousCounter = whisperMessage->previouscounter();
   const std::string cppCiphertext = whisperMessage->ciphertext();
-  TSWhisperMessage *tsWhisperMessage = [[TSWhisperMessage alloc] init];
+  TSEncryptedWhisperMessage *tsWhisperMessage = [[TSEncryptedWhisperMessage alloc] init];
   
   tsWhisperMessage.ephemeralKey = [NSString stringWithCString:cppEphemeralKey.c_str() encoding:NSASCIIStringEncoding];
   tsWhisperMessage.counter = [NSNumber numberWithUnsignedLong:cppCounter];

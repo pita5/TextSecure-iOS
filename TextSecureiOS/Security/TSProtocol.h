@@ -72,7 +72,7 @@ typedef NS_ENUM(NSInteger, TSParty) {
 
 
 @protocol AxolotlEphemeralStorageSending  <NSObject,AxolotlEphemeralStorage>
-
+-(void) setSendEphemerals;
 
 @end
 
@@ -92,6 +92,7 @@ typedef NS_ENUM(NSInteger, TSParty) {
 @property(nonatomic,strong) NSData* purportedNHK;
 @property(nonatomic,strong) NSData* purportedHK;
 
+-(void) setReceiveEphemerals;
 
 @end
 

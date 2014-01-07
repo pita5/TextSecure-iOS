@@ -15,6 +15,6 @@
 + (textsecure::WhisperMessage *)getWhisperMessageForData:(NSData *)data;
 
 // Convert between protocol buffers and TSWhisperMessage
-+ (NSData *)createSerializedWhisperMessage:(TSWhisperMessage*) message;
-+(TSWhisperMessage*)getTSWhisperMessageForWhisperMessage:(textsecure::WhisperMessage *)whisperMessage;
++ (NSData *)createSerializedWhisperMessage:(TSEncryptedWhisperMessage*) message;
++(TSEncryptedWhisperMessage*)getTSWhisperMessageForWhisperMessage:(textsecure::WhisperMessage *)whisperMessage;
 @end
