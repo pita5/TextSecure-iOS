@@ -174,9 +174,10 @@ static TSEncryptedDatabase *messagesDb = nil;
 
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
-        if (![TSMessagesDatabase databaseOpenWithError:nil])
+      if (![TSMessagesDatabase databaseOpenWithError:nil]) {
             // TODO: better error handling
             return;
+      }
     }
     
     TSContact *sender = [[TSContact alloc] initWithRegisteredID:message.senderId];

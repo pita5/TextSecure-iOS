@@ -62,7 +62,7 @@
   // Now get the protocol buffer message out
   TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
   TSMessage* message = [self decryptMessageSignal:messageSignal];
-
+  message.recipientId = [TSKeyManager getUsernameToken]; // recipient is me!
   
   [TSMessagesDatabase storeMessage:message];
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -106,7 +106,7 @@
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread {
   [TSMessagesDatabase storeMessage:message];
-  [thread.sendEphemerals setSendEphemerals];
+//  [thread.sendEphemerals setSendEphemerals];
   NSString *serializedMessage = [[TSPushMessageContent serializedPushMessageContent:message] base64Encoding];
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
