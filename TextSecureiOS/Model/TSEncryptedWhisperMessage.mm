@@ -7,7 +7,7 @@
 //
 
 #import "TSEncryptedWhisperMessage.hh"
-#import "WhisperMessage.hh"
+#import "WhisperMessage.pb.hh"
 @implementation TSEncryptedWhisperMessage
 
 
