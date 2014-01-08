@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "TSProtocol.h"
 
 @class TSMessage;
 @class TSThread;
@@ -19,7 +19,7 @@
 extern NSString * const TSDatabaseDidUpdateNotification;
 
 
-@interface TSMessagesDatabase : NSObject
+@interface TSMessagesDatabase : NSObject<AxolotlPersistantStorage>
 
 
 +(BOOL) databaseCreateWithError:(NSError **)error;
@@ -40,6 +40,19 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(NSArray*) getThreads;
 +(void)storeTSContact:(TSContact*)contact;
 
+#pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
+-(NSData*) getAPSDataField:(NSString*)name;
+-(NSNumber*) getAPSIntField:(NSString*)name;
+-(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
+-(NSString*) getAPSStringField:(NSString*)name;
+-(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party;
+/*
+ parameters
+ nameField : name of db field to set
+ valueField : value of db field to set to
+ threadID" : thread id
+ */
+-(void) setAPSDataField:(NSDictionary*) parameters;
 
 @end
 

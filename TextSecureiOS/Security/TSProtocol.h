@@ -23,34 +23,35 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 };
 
 @protocol AxolotlPersistantStorage  <NSObject>
-/* Axolotl Protocol variables. Persistant storage per thread */
+#warning for efficiency, past the prototyping stage we will want to group these requests
+/* Axolotl Protocol variables. Persistant storage per thread. */
 //RK           : 32-byte root key which gets updated by DH ratchet
 -(NSData*) getRK:(TSThread*)thread;
 -(void) setRK:(NSData*)key onThread:(TSThread*)thread;
 //HKs, HKr     : 32-byte header keys (send and recv versions)
 -(NSData*) getHK:(TSThread*)thread forParty:(TSParty)party;
--(NSData*) setHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
+-(void) setHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //NHKs, NHKr   : 32-byte next header keys (")
 -(NSData*) getNHK:(TSThread*)thread forParty:(TSParty)party;
--(NSData*) setNHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
+-(void) setNHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
 -(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party;
--(NSData*) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
+-(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //DHIs, DHIr   : DH or ECDH Identity keys
--(ECKeyPair*) getDHI:(TSThread*)thread forParty:(TSParty)party;
--(ECKeyPair*) setDHI:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
+-(NSData*) getDHI:(TSThread*)thread forParty:(TSParty)party;
+-(void) setDHI:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //DHRs, DHRr   : DH or ECDH Ratchet keys
--(ECKeyPair*) getDHR:(TSThread*)thread forParty:(TSParty)party;
--(ECKeyPair*) setDHR:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
+-(NSData*) getDHR:(TSThread*)thread forParty:(TSParty)party;
+-(void) setDHR:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
--(int) getN:(TSThread*)thread forParty:(TSParty)party;
--(int) setN:(int)num onThread:(TSThread*)thread forParty:(TSParty)party;
+-(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party;
+-(void) setN:(NSNumber*)num onThread:(TSThread*)thread forParty:(TSParty)party;
 //PNs          : Previous message numbers (# of msgs sent under prev ratchet)
--(int)getPNs:(TSThread*)thread;
--(void)setPNs:(int)num onThread:(TSThread*)thread;
+-(NSNumber*)getPNs:(TSThread*)thread;
+-(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread;
 //ratchet_flag : True if the party will send a new DH ratchet key in next msg
 -(BOOL) getRachetFlag:(TSThread*)thread;
--(BOOL) setRachetFlag:(BOOL)flag onThread:(TSThread*)thread;
+-(void) setRachetFlag:(BOOL)flag onThread:(TSThread*)thread;
 //skipped_HK_MK : A list of stored message keys and their associated header keys
 //for "skipped" messages, i.e. messages that have not been
 //received despite the reception of more recent messages.

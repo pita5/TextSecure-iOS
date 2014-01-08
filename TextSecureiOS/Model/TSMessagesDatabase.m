@@ -320,6 +320,198 @@ static TSEncryptedDatabase *messagesDb = nil;
   }];
 }
 
+#pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
+//CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, RK BLOB, HKs BLOB, HKr BLOB, NHKs BLOB, NHKr BLOB, CKs BLOB, CKr BLOB, DHIs BLOB, DHIr BLOB, DHRs BLOB, DHRr BLOB, Ns INT, Nr INT, PNs INT, ratchet_flag BOOL, skipped_HK_MK BLOB
+//CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))  /*corresponds to skipped_HK_MK MK??*/
+
+-(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread{
+  if (!messagesDb) {
+    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+      // TODO: better error handling
+      return nil;
+    }
+  }
+  __block NSData* apsField = nil;
+  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    
+    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    if ([rs next]) {
+      apsField= [rs dataForColumn:name];
+    }
+  }];
+  return apsField;
+}
+
+
+-(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread {
+  if (!messagesDb) {
+    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+      // TODO: better error handling
+      return 0;
+    }
+  }
+  __block NSNumber* apsField = 0;
+  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    
+    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    if ([rs next]) {
+      apsField= [NSNumber numberWithInt:[rs intForColumn:name]];
+    }
+  }];
+  return apsField;
+
+}
+
+-(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread {
+  if (!messagesDb) {
+    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+      // TODO: better error handling
+      return 0;
+    }
+  }
+  __block int apsField = 0;
+  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    
+    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    if ([rs next]) {
+      apsField= [rs boolForColumn:name];
+    }
+  }];
+  return apsField;
+  
+}
+-(NSString*) getAPSStringField:(NSString*)name onThread:(TSThread*)thread {
+  if (!messagesDb) {
+    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+      // TODO: better error handling
+      return @"";
+    }
+  }
+  __block NSString* apsField = 0;
+  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    
+    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    if ([rs next]) {
+      apsField= [rs stringForColumn:name];
+    }
+  }];
+  return apsField;
+  
+}
+-(void) setAPSDataField:(NSDictionary*) parameters {
+  
+  // Decrypt the DB if it hasn't been done yet
+  if (!messagesDb) {
+    if (![TSMessagesDatabase databaseOpenWithError:nil])
+      // TODO: better error handling
+      return;
+  }
+  
+  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    
+    [db executeQuery:@"UPDATE threads SET :nameField = :valueField where thread_id = :threadID" withParameterDictionary:parameters];
+  }];
+
+}
+
+-(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party {
+  switch (party) {
+    case TSReceiver:
+      return [name stringByAppendingString:@"r"];
+      break;
+    case TSSender:
+      return [name stringByAppendingString:@"s"];
+    default:
+      return name;
+      break;
+  }
+}
+
+
+#pragma mark - AxolotlPersistantStorage protocol methods
+/* Axolotl Protocol variables. Persistant storage per thread */
+//RK           : 32-byte root key which gets updated by DH ratchet
+-(NSData*) getRK:(TSThread*)thread {
+  return [self getAPSDataField:@"RK"];
+}
+
+/*
+ parameters
+ nameField : name of db field to set
+ valueField : value of db field to set to
+ threadID" : thread id
+ */
+
+-(void) setRK:(NSData*)key onThread:(TSThread*)thread {
+  [self setAPSDataField:@{@"nameField":@"RK",@"valueField":key,@"threadID":thread.threadID}];
+}
+//HKs, HKr     : 32-byte header keys (send and recv versions)
+-(NSData*) getHK:(TSThread*)thread forParty:(TSParty)party{
+  return [self getAPSDataField:[self getAPSFieldName:@"HK" forParty:party]];
+}
+-(void) setHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"HK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+}
+//NHKs, NHKr   : 32-byte next header keys (")
+-(NSData*) getNHK:(TSThread*)thread forParty:(TSParty)party{
+  return [self getAPSDataField:[self getAPSFieldName:@"NHK" forParty:party]];
+  
+}
+-(void) setNHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"NHK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+
+}
+//CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
+-(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party{
+  return [self getAPSDataField:[self getAPSFieldName:@"CK" forParty:party]];
+
+}
+-(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"CK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+}
+//DHIs, DHIr   : DH or ECDH Identity keys
+-(NSData*) getDHI:(TSThread*)thread forParty:(TSParty)party{
+  return [self getAPSDataField:[self getAPSFieldName:@"DHI" forParty:party]];
+ 
+}
+-(void) setDHI:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"DHI" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+}
+//DHRs, DHRr   : DH or ECDH Ratchet keys
+-(NSData*) getDHR:(TSThread*)thread forParty:(TSParty)party{
+  return [self getAPSDataField:[self getAPSFieldName:@"DHR" forParty:party]];
+}
+-(void) setDHR:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"DHR" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+}
+//Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
+-(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party{
+  return [self getAPSIntField:[self getAPSFieldName:@"N" forParty:party]];
+  
+}
+-(void) setN:(NSNumber*)num onThread:(TSThread*)thread forParty:(TSParty)party{
+  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"N" forParty:party],@"valueField":num,@"threadID":thread.threadID}];
+}
+
+//PNs          : Previous message numbers (# of msgs sent under prev ratchet)
+-(NSNumber*)getPNs:(TSThread*)thread{
+  return [self getAPSIntField:@"PNs"];
+}
+
+-(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
+  [self setAPSDataField:@{@"nameField":@"PNs",@"valueField":num,@"threadID":thread.threadID}];
+}
+
+//ratchet_flag : True if the party will send a new DH ratchet key in next msg
+-(BOOL) getRachetFlag:(TSThread*)thread{
+  return [self getAPSBoolField:@"rachet_flag" onThread:thread];
+}
+
+-(void) setRachetFlag:(BOOL)flag onThread:(TSThread*)thread{
+  [self setAPSDataField:@{@"nameField":@"rachet_flag",@"valueField":[NSNumber numberWithBool:flag],@"threadID":thread.threadID}];
+}
+
+
 
 #pragma mark - shared private objects
 
