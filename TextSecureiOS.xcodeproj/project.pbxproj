@@ -424,6 +424,7 @@
 		A5E6CC87187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC80187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm */; };
 		A5E6CC8C187D1277002A1735 /* TSAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC8B187D1277002A1735 /* TSAttachment.m */; };
 		A5E6CC90187D1E41002A1735 /* TSWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */; };
+		A5E6CC94187E092A002A1735 /* TSMissedMessageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC93187E092A002A1735 /* TSMissedMessageKeys.m */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
@@ -969,6 +970,8 @@
 		A5E6CC8A187D1277002A1735 /* TSAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachment.h; path = Model/TSAttachment.h; sourceTree = "<group>"; };
 		A5E6CC8B187D1277002A1735 /* TSAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachment.m; path = Model/TSAttachment.m; sourceTree = "<group>"; };
 		A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSWhisperMessage.mm; path = ProtocolBufferWrappers/TSWhisperMessage.mm; sourceTree = "<group>"; };
+		A5E6CC92187E092A002A1735 /* TSMissedMessageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMissedMessageKeys.h; path = Model/TSMissedMessageKeys.h; sourceTree = "<group>"; };
+		A5E6CC93187E092A002A1735 /* TSMissedMessageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMissedMessageKeys.m; path = Model/TSMissedMessageKeys.m; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
@@ -1660,6 +1663,8 @@
 		A5E6CC4A187CAE2C002A1735 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
+				A5E6CC92187E092A002A1735 /* TSMissedMessageKeys.h */,
+				A5E6CC93187E092A002A1735 /* TSMissedMessageKeys.m */,
 				A5E6CC47187CAE09002A1735 /* TSSendEphemerals.h */,
 				A5E6CC48187CAE09002A1735 /* TSSendEphemerals.m */,
 				A5E6CC4B187CAE52002A1735 /* TSReceiveEphemerals.h */,
@@ -2605,6 +2610,7 @@
 				B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */,
 				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
 				A5E6CC4D187CAE52002A1735 /* TSReceiveEphemerals.m in Sources */,
+				A5E6CC94187E092A002A1735 /* TSMissedMessageKeys.m in Sources */,
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
 				4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */,

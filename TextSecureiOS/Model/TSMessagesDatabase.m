@@ -17,6 +17,7 @@
 #import "TSStorageMasterKey.h"
 #import "TSEncryptedDatabase.h"
 #import "TSParticipants.h"
+#import "TSMissedMessageKeys.h"
 
 
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
@@ -321,8 +322,6 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
-//CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, RK BLOB, HKs BLOB, HKr BLOB, NHKs BLOB, NHKr BLOB, CKs BLOB, CKr BLOB, DHIs BLOB, DHIr BLOB, DHRs BLOB, DHRr BLOB, Ns INT, Nr INT, PNs INT, ratchet_flag BOOL, skipped_HK_MK BLOB
-//CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))  /*corresponds to skipped_HK_MK MK??*/
 
 -(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread{
   if (!messagesDb) {
@@ -510,7 +509,40 @@ static TSEncryptedDatabase *messagesDb = nil;
 -(void) setRachetFlag:(BOOL)flag onThread:(TSThread*)thread{
   [self setAPSDataField:@{@"nameField":@"rachet_flag",@"valueField":[NSNumber numberWithBool:flag],@"threadID":thread.threadID}];
 }
+-(NSArray*) getSkippedHeaderAndMessageKeys:(TSThread*)thread {
+  ////CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))  /*corresponds to skipped_HK_MK MK??*/
+  // Decrypt the DB if it hasn't been done yet
+  if (!messagesDb) {
+    if (![TSMessagesDatabase databaseOpenWithError:nil])
+      // TODO: better error handling
+      return nil;
+  }
+  __block NSMutableArray *skippedHKMKs = [[NSMutableArray alloc] init];
+  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    
+    FMResultSet* rs = [db executeQuery:@"SELECT * FROM missed_messages WHERE thread_id = :threadID" withParameterDictionary:@{@"threadID":thread.threadID}];
+    while([rs next]) {
+      [skippedHKMKs addObject:[[TSMissedMessageKeys alloc] initWithSkippedMK:[rs dataForColumn:@"skipped_MK"] skippedHKs:[rs dataForColumn:@"skipped_HKs"] skippedHKr:[rs dataForColumn:@"skipped_HKr"]]];
+    }
+  }];
+  return skippedHKMKs;
+}
 
+
+
+-(void) setSkippedHeaderAndMessageKeys:(NSArray*)skippedHKMK onThread:(TSThread*)thread {
+  // Decrypt the DB if it hasn't been done yet
+  if (!messagesDb) {
+    if (![TSMessagesDatabase databaseOpenWithError:nil])
+      // TODO: better error handling
+      return;
+  }
+  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    for(TSMissedMessageKeys* skippedMessage in skippedHKMK) {
+      [db executeQuery:@"INSERT INTO missed_messages skipped_MK = :MK skipped_HKs = :HKs skipped_HKr = :HKr thread_id = :threadID" withParameterDictionary:@{@"skipped_MK": skippedMessage.skippedMK,@"skipped_HKs": skippedMessage.skippedHKs,@"skipped_HKr": skippedMessage.skippedHKr,@"threadID":thread.threadID}];
+    }
+  }];
+}
 
 
 #pragma mark - shared private objects
