@@ -13,13 +13,13 @@
 #pragma mark these must be overridden by subclass
 -(id) initWithData:(NSData*) buffer {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
 }
 
 -(const std::string) serializedProtocolBufferAsString {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 reason:[NSString stringWithFormat:@"'abstract methd' must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
 }
 

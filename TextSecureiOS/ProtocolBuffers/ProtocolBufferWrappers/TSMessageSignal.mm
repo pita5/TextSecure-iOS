@@ -25,11 +25,19 @@
     const std::string cppSource = incomingPushMessageSignal->source();
     const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
     const std::string cppMessage = incomingPushMessageSignal->message();
+    //
+    NSMutableArray *signalDestinations = [[NSMutableArray alloc] init];
+    for(int i=0; i<incomingPushMessageSignal->destinations_size(); i++) {
+      const std::string cppDestination = incomingPushMessageSignal->destinations(i);
+      [signalDestinations addObject:[self cppStringToObjc:cppDestination]];
+    }
+
     // c++->objective C
     self.contentType = (TSWhisperMessageType)cppType;
     self.source = [self cppStringToObjc:cppSource];
     self.timestamp = [self cppDateToObjc:cppTimestamp];
     self.message = [self getWhisperMessageForData:[self cppStringToObjcData:cppMessage]];
+    //self.destinations = signalDestinations;
   }
   return self; 
 }
@@ -42,7 +50,11 @@
   const std::string cppSource = [self objcStringToCpp:self.source];
   const uint64_t cppTimestamp = [self objcDateToCpp:self.timestamp];
   const std::string cppMessage = [self.message serializedProtocolBufferAsString];
-  
+   for(int i=0; i<[self.destinations count]; i++) {
+    const std::string cppDestination = [self objcStringToCpp:[self.destinations objectAtIndex:i]];
+    messageSignal->set_destinations(i, cppDestination);
+  }
+
   // c++->protocol buffer
   messageSignal->set_type(cppType);
   messageSignal->set_source(cppSource);

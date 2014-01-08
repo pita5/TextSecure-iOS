@@ -1649,15 +1649,10 @@
 				A5E6CC61187D0F4B002A1735 /* IncomingPushMessageSignal.pb.hh */,
 				A5E6CC62187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm */,
 				A5E6CC63187D0F4B002A1735 /* IncomingPushMessageSignal.proto */,
-				A5E6CC64187D0F4B002A1735 /* PreKeyWhisperMessage.pb.hh */,
-				A5E6CC65187D0F4B002A1735 /* PreKeyWhisperMessage.pb.mm */,
-				A5E6CC66187D0F4B002A1735 /* PreKeyWhisperMessage.proto */,
+				A5E6CC91187D3890002A1735 /* MessageTypes */,
 				A5E6CC67187D0F4B002A1735 /* PushMessageContent.pb.hh */,
 				A5E6CC68187D0F4B002A1735 /* PushMessageContent.pb.mm */,
 				A5E6CC69187D0F4B002A1735 /* PushMessageContent.proto */,
-				A5E6CC6A187D0F4B002A1735 /* WhisperMessage.pb.hh */,
-				A5E6CC6B187D0F4B002A1735 /* WhisperMessage.pb.mm */,
-				A5E6CC6C187D0F4B002A1735 /* WhisperMessage.proto */,
 			);
 			path = Compiled;
 			sourceTree = "<group>";
@@ -1676,11 +1671,11 @@
 		A5E6CC51187CC1C5002A1735 /* Protocol Buffer Wrappers */ = {
 			isa = PBXGroup;
 			children = (
-				A5E6CC8D187D1E02002A1735 /* MessageTypes */,
-				A5E6CC77187D0FF1002A1735 /* TSMessageSignal.hh */,
-				A5E6CC78187D0FF1002A1735 /* TSMessageSignal.mm */,
 				A5E6CC7B187D0FF1002A1735 /* TSProtocolBufferWrapper.hh */,
 				A5E6CC7C187D0FF1002A1735 /* TSProtocolBufferWrapper.mm */,
+				A5E6CC77187D0FF1002A1735 /* TSMessageSignal.hh */,
+				A5E6CC78187D0FF1002A1735 /* TSMessageSignal.mm */,
+				A5E6CC8D187D1E02002A1735 /* MessageTypes */,
 				A5E6CC7D187D0FF1002A1735 /* TSPushMessageContent.hh */,
 				A5E6CC7E187D0FF1002A1735 /* TSPushMessageContent.mm */,
 			);
@@ -1702,6 +1697,19 @@
 			);
 			name = MessageTypes;
 			path = ProtocolBuffers;
+			sourceTree = "<group>";
+		};
+		A5E6CC91187D3890002A1735 /* MessageTypes */ = {
+			isa = PBXGroup;
+			children = (
+				A5E6CC6A187D0F4B002A1735 /* WhisperMessage.pb.hh */,
+				A5E6CC6B187D0F4B002A1735 /* WhisperMessage.pb.mm */,
+				A5E6CC6C187D0F4B002A1735 /* WhisperMessage.proto */,
+				A5E6CC64187D0F4B002A1735 /* PreKeyWhisperMessage.pb.hh */,
+				A5E6CC65187D0F4B002A1735 /* PreKeyWhisperMessage.pb.mm */,
+				A5E6CC66187D0F4B002A1735 /* PreKeyWhisperMessage.proto */,
+			);
+			name = MessageTypes;
 			sourceTree = "<group>";
 		};
 		A5F15AA117029BB400856385 /* Security */ = {
