@@ -10,12 +10,12 @@
 #include <string>
 
 @interface TSProtocolBufferWrapper : NSObject 
-
+#pragma mark these must be overridden by subclass
 -(id) initWithData:(NSData*) buffer;
-
--(NSData*) serializedProtocolBuffer;
 -(const std::string) serializedProtocolBufferAsString;
 
+#pragma mark boilerplate code
+-(NSData*) serializedProtocolBuffer;
 // C++<->Objc dates
 -(uint64_t) objcDateToCpp:(NSDate*)objcDate;
 -(NSDate*) cppDateToObjc:(uint64_t)cppDate;

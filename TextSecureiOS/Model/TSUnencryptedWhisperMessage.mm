@@ -7,19 +7,19 @@
 //
 
 #import "TSUnencryptedWhisperMessage.hh"
-#import "PushMessageContent.hh"
+#import "TSPushMessageContent.hh"
 @implementation TSUnencryptedWhisperMessage
 -(id) initWithData:(NSData*) buffer {
-  
+  if(self=[super init]) {
+    self.message =  [[[TSPushMessageContent alloc] initWithData:buffer] serializedProtocolBuffer];
+  }
+  return self;
 }
 
 -(NSData*) serializedProtocolBuffer {
-  
+  return self.message;
 }
 
--(TSMessage*) getTSMessage {
-  
-}
 
 
 @end

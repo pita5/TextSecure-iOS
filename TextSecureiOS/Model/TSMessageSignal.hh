@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TSProtocolBufferWrapper.hh"
 #import "TSProtocol.h"
+@class TSPushMessageContent;
 @class TSWhisperMessage;
 @interface TSMessageSignal : TSProtocolBufferWrapper
 @property (nonatomic) TSWhisperMessageType contentType;
@@ -16,4 +17,5 @@
 @property (nonatomic,strong) NSArray *destinations;
 @property (nonatomic,strong) NSDate *timestamp;
 @property (nonatomic,strong) TSWhisperMessage *message;
+-(TSMessage*) getTSMessage:(TSPushMessageContent*) pushMessageContent;
 @end

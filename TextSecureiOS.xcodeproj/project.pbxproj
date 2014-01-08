@@ -412,7 +412,6 @@
 		A5E6CC27187B82AA002A1735 /* PreKeyWhisperMessage.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC20187B82AA002A1735 /* PreKeyWhisperMessage.proto */; };
 		A5E6CC28187B82AA002A1735 /* WhisperMessage.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC21187B82AA002A1735 /* WhisperMessage.pb.mm */; };
 		A5E6CC29187B82AA002A1735 /* WhisperMessage.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC23187B82AA002A1735 /* WhisperMessage.proto */; };
-		A5E6CC2C187B832A002A1735 /* PreKeyWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC2B187B832A002A1735 /* PreKeyWhisperMessage.mm */; };
 		A5E6CC32187B8845002A1735 /* TSEncryptedWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC31187B8845002A1735 /* TSEncryptedWhisperMessage.mm */; };
 		A5E6CC38187BC1C8002A1735 /* TSPreKeyWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC37187BC1C8002A1735 /* TSPreKeyWhisperMessage.mm */; };
 		A5E6CC3B187BF258002A1735 /* PushMessageContent.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC3A187BF258002A1735 /* PushMessageContent.mm */; };
@@ -946,8 +945,6 @@
 		A5E6CC21187B82AA002A1735 /* WhisperMessage.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WhisperMessage.pb.mm; sourceTree = "<group>"; };
 		A5E6CC22187B82AA002A1735 /* WhisperMessage.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WhisperMessage.pb.hh; sourceTree = "<group>"; };
 		A5E6CC23187B82AA002A1735 /* WhisperMessage.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WhisperMessage.proto; sourceTree = "<group>"; };
-		A5E6CC2A187B832A002A1735 /* PreKeyWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PreKeyWhisperMessage.hh; sourceTree = "<group>"; };
-		A5E6CC2B187B832A002A1735 /* PreKeyWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreKeyWhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC30187B8845002A1735 /* TSEncryptedWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSEncryptedWhisperMessage.hh; path = Model/TSEncryptedWhisperMessage.hh; sourceTree = "<group>"; };
 		A5E6CC31187B8845002A1735 /* TSEncryptedWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSEncryptedWhisperMessage.mm; path = Model/TSEncryptedWhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC36187BC1C8002A1735 /* TSPreKeyWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSPreKeyWhisperMessage.hh; path = Model/TSPreKeyWhisperMessage.hh; sourceTree = "<group>"; };
@@ -1645,8 +1642,6 @@
 				A5E6CC17187B81E3002A1735 /* WhisperMessage.mm */,
 				A5E6CC39187BF258002A1735 /* PushMessageContent.hh */,
 				A5E6CC3A187BF258002A1735 /* PushMessageContent.mm */,
-				A5E6CC2A187B832A002A1735 /* PreKeyWhisperMessage.hh */,
-				A5E6CC2B187B832A002A1735 /* PreKeyWhisperMessage.mm */,
 			);
 			path = ProtocolBuffers;
 			sourceTree = "<group>";
@@ -1691,10 +1686,10 @@
 				A5E6CC52187CC1E4002A1735 /* TSWhisperMessage.hh */,
 				A5E6CC36187BC1C8002A1735 /* TSPreKeyWhisperMessage.hh */,
 				A5E6CC37187BC1C8002A1735 /* TSPreKeyWhisperMessage.mm */,
-				A5E6CC4E187CC198002A1735 /* TSUnencryptedWhisperMessage.hh */,
-				A5E6CC4F187CC198002A1735 /* TSUnencryptedWhisperMessage.mm */,
 				A5E6CC30187B8845002A1735 /* TSEncryptedWhisperMessage.hh */,
 				A5E6CC31187B8845002A1735 /* TSEncryptedWhisperMessage.mm */,
+				A5E6CC4E187CC198002A1735 /* TSUnencryptedWhisperMessage.hh */,
+				A5E6CC4F187CC198002A1735 /* TSUnencryptedWhisperMessage.mm */,
 				A5E6CC58187CC62C002A1735 /* TSPushMessageContent.hh */,
 				A5E6CC59187CC62C002A1735 /* TSPushMessageContent.mm */,
 			);
@@ -2535,7 +2530,6 @@
 				B635B3CE182181E1003CE732 /* NSString+JSMessagesView.m in Sources */,
 				A5E6CC49187CAE09002A1735 /* TSSendEphemerals.m in Sources */,
 				A5E6CC26187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */,
-				A5E6CC2C187B832A002A1735 /* PreKeyWhisperMessage.mm in Sources */,
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
 				A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */,
 				A5E6CC28187B82AA002A1735 /* WhisperMessage.pb.mm in Sources */,

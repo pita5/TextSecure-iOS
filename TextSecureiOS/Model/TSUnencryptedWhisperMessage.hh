@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TSWhisperMessage.hh"
+@class TSPushMessageContent;
 @interface TSUnencryptedWhisperMessage : TSWhisperMessage
 
 

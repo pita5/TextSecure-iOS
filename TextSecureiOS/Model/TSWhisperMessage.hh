@@ -12,6 +12,5 @@
 @interface TSWhisperMessage : TSProtocolBufferWrapper
 @property (nonatomic,strong) NSData* message;
 
--(TSMessage*) getTSMessage;
 
 @end

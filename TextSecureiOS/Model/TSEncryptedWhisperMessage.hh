@@ -9,13 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TSWhisperMessage.hh"
 @interface TSEncryptedWhisperMessage : TSWhisperMessage
-//optional bytes  ephemeralKey    = 1;
-//optional uint32 counter         = 2;
-//optional uint32 previousCounter = 3;
-//optional bytes  ciphertext      = 4;
-//
-
-@property (nonatomic,strong) NSString* ephemeralKey;
+@property (nonatomic,strong) NSData* ephemeralKey;
 @property (nonatomic,strong) NSNumber* counter;
 @property (nonatomic,strong) NSNumber* previousCounter;
 

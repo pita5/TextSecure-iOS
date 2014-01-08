@@ -11,7 +11,9 @@
 #import "TSUnencryptedWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
+#import "TSPushMessageContent.hh"
 #import "IncomingPushMessageSignal.pb.hh"
+
 @implementation TSMessageSignal
 
 -(id) initWithData:(NSData*) data {
@@ -29,7 +31,7 @@
     self.timestamp = [self cppDateToObjc:cppTimestamp];
     self.message = [self getWhisperMessageForData:[self cppStringToObjcData:cppMessage]];
   }
-  return self; // super is abstract class
+  return self; 
 }
 
 
@@ -51,7 +53,9 @@
   return ps;
 }
 
-
+-(TSMessage*) getTSMessage:(TSPushMessageContent*) pushMessageContent {
+  return [[TSMessage alloc] initWithMessage:pushMessageContent.body sender:self.source recipients:self.destinations sentOnDate:self.timestamp];
+}
 
 #pragma mark private methods
 - (textsecure::IncomingPushMessageSignal *)deserialize:(NSData *)data {

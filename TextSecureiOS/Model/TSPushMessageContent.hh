@@ -11,4 +11,5 @@
 @interface TSPushMessageContent :  TSProtocolBufferWrapper
 @property (nonatomic,strong) NSString* body;
 @property (nonatomic,strong) NSArray* attachments;
+
 @end
