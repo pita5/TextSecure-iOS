@@ -6,8 +6,16 @@
 //  Copyright (c) 2014 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSPushMessageContent.h"
+#import "TSPushMessageContent.hh"
 
 @implementation TSPushMessageContent
+
+-(id) initWithData:(NSData*) buffer {
+  
+}
+
+-(NSData*) serializedProtocolBuffer {
+  
+}
 
 @end

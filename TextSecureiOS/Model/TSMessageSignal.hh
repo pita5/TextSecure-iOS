@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@interface TSMessageSignal : NSObject
-@property (nonatomic,strong) TSContentType contentType;
+#import "TSProtocolBufferWrapper.hh"
+#import "TSProtocol.h"
+@class TSWhisperMessage;
+@interface TSMessageSignal : TSProtocolBufferWrapper
+@property (nonatomic) TSWhisperMessageType contentType;
 @property (nonatomic,strong) NSString* source;
 @property (nonatomic,strong) NSArray *destinations;
 @property (nonatomic,strong) NSDate *timestamp;
 @property (nonatomic,strong) TSWhisperMessage *message;
--(id) initWithBuffer:(NSData*) buffer;
 @end

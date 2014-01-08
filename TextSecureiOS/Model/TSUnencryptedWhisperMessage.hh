@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSWhisperMessage.h"
+#import "TSWhisperMessage.hh"
 @interface TSUnencryptedWhisperMessage : TSWhisperMessage
 
 

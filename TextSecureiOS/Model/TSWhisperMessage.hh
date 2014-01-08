@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "TSMessage.h"
-@interface TSWhisperMessage : NSObject
+#import "TSProtocolBufferWrapper.hh"
+@interface TSWhisperMessage : TSProtocolBufferWrapper
 @property (nonatomic,strong) NSData* message;
 
 -(TSMessage*) getTSMessage;
--(id) initWithBuffer:(NSData*) buffer;
+
 @end

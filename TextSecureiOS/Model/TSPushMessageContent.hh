@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@interface TSPushMessageContent : NSObject
+#import "TSProtocolBufferWrapper.hh"
+@interface TSPushMessageContent :  TSProtocolBufferWrapper
 @property (nonatomic,strong) NSString* body;
 @property (nonatomic,strong) NSArray* attachments;
 @end

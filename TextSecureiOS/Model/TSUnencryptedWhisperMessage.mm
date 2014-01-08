@@ -6,11 +6,19 @@
 //  Copyright (c) 2014 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSUnencryptedWhisperMessage.h"
+#import "TSUnencryptedWhisperMessage.hh"
 #import "PushMessageContent.hh"
 @implementation TSUnencryptedWhisperMessage
+-(id) initWithData:(NSData*) buffer {
+  
+}
+
+-(NSData*) serializedProtocolBuffer {
+  
+}
+
 -(TSMessage*) getTSMessage {
-  return [PushMessageContent ]
+  
 }
 
 

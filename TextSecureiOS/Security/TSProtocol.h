@@ -14,6 +14,13 @@ typedef NS_ENUM(NSInteger, TSParty) {
   TSSender=0,
   TSReceiver
 };
+typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
+  TSUnencryptedWhisperMessageType = 0,
+  TSEncryptedWhisperMessageType = 1,
+  TSIgnoreOnIOSWhisperMessageType=2, // on droid this is the prekey bundle message irrelevant for us
+  TSPreKeyWhisperMessageType = 3
+};
+
 @protocol AxolotlPersistantStorage  <NSObject>
 /* Axolotl Protocol variables. Persistant storage per thread */
 //RK           : 32-byte root key which gets updated by DH ratchet

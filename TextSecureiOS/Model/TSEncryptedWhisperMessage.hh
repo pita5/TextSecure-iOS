@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSWhisperMessage.h"
+#import "TSWhisperMessage.hh"
 @interface TSEncryptedWhisperMessage : TSWhisperMessage
 //optional bytes  ephemeralKey    = 1;
 //optional uint32 counter         = 2;
