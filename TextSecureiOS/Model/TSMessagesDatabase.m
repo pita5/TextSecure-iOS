@@ -16,6 +16,7 @@
 #import "TSThread.h"
 #import "TSStorageMasterKey.h"
 #import "TSEncryptedDatabase.h"
+#import "TSParticipants.h"
 
 
 #define kDBWasCreatedBool @"TSMessagesWasCreated"

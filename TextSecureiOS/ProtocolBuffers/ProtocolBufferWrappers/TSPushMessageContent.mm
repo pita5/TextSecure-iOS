@@ -63,8 +63,7 @@
 }
 
 
-+ (NSData *)createSerializedPushMessageContent:(TSMessage*) message  {
-#warning no attachments suppoart yet
++ (NSData *)serializedPushMessageContent:(TSMessage*) message  {
   TSPushMessageContent* tsPushMessageContent = [[TSPushMessageContent alloc] init];
   tsPushMessageContent.body = message.message;
   tsPushMessageContent.attachments = message.attachments;

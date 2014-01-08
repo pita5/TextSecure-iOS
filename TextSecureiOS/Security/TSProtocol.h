@@ -10,6 +10,7 @@
 @class TSMessage;
 @class TSThread;
 @class ECKeyPair;
+@class TSMessageSignal;
 typedef NS_ENUM(NSInteger, TSParty) {
   TSSender=0,
   TSReceiver
@@ -117,8 +118,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 -(void) sendMessage:(TSMessage*) message onThread:(TSThread*)thread;
 -(NSData*) encryptMessage:(TSMessage*)message onThread:(TSThread*)thread;
--(TSMessage*) decryptMessage:(NSData*)message onThread:(TSThread*)thread;
-
+-(TSMessage*) decryptMessageSignal:(TSMessageSignal*)whisperMessage;
 
 @end
 

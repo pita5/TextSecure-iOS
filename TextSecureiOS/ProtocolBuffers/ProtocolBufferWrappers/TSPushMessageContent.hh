@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "TSProtocolBufferWrapper.hh"
+@class TSMessage;
 @interface TSPushMessageContent :  TSProtocolBufferWrapper
 @property (nonatomic,strong) NSString* body;
 @property (nonatomic,strong) NSArray* attachments;
 
-+ (NSData *)createSerializedPushMessageContent:(TSMessage*) message;
++ (NSData *) serializedPushMessageContent:(TSMessage*) message;
 @end

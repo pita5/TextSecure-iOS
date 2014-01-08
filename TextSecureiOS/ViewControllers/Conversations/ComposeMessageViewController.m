@@ -14,6 +14,7 @@
 #import "TSMessage.h"
 #import "TSThread.h"
 #import "TSKeyManager.h"
+#import "TSParticipants.h"
 
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
