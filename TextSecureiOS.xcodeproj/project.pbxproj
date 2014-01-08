@@ -406,7 +406,6 @@
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5E6CBF91875DC2D002A1735 /* photo.png in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CBF71875DC2D002A1735 /* photo.png */; };
 		A5E6CBFA1875DC2D002A1735 /* photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CBF81875DC2D002A1735 /* photo@2x.png */; };
-		A5E6CC18187B81E3002A1735 /* WhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC17187B81E3002A1735 /* WhisperMessage.mm */; };
 		A5E6CC25187B82AA002A1735 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC1D187B82AA002A1735 /* IncomingPushMessageSignal.proto */; };
 		A5E6CC26187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC1E187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm */; };
 		A5E6CC27187B82AA002A1735 /* PreKeyWhisperMessage.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC20187B82AA002A1735 /* PreKeyWhisperMessage.proto */; };
@@ -936,8 +935,6 @@
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5E6CBF71875DC2D002A1735 /* photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo.png; sourceTree = "<group>"; };
 		A5E6CBF81875DC2D002A1735 /* photo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo@2x.png"; sourceTree = "<group>"; };
-		A5E6CC16187B81E3002A1735 /* WhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WhisperMessage.hh; sourceTree = "<group>"; };
-		A5E6CC17187B81E3002A1735 /* WhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC1D187B82AA002A1735 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
 		A5E6CC1E187B82AA002A1735 /* PreKeyWhisperMessage.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PreKeyWhisperMessage.pb.mm; sourceTree = "<group>"; };
 		A5E6CC1F187B82AA002A1735 /* PreKeyWhisperMessage.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PreKeyWhisperMessage.pb.hh; sourceTree = "<group>"; };
@@ -1638,8 +1635,6 @@
 			children = (
 				A5E6CC51187CC1C5002A1735 /* Protocol Buffer Wrappers */,
 				A5E6CC1A187B82AA002A1735 /* Compiled */,
-				A5E6CC16187B81E3002A1735 /* WhisperMessage.hh */,
-				A5E6CC17187B81E3002A1735 /* WhisperMessage.mm */,
 				A5E6CC39187BF258002A1735 /* PushMessageContent.hh */,
 				A5E6CC3A187BF258002A1735 /* PushMessageContent.mm */,
 			);
@@ -2564,7 +2559,6 @@
 				8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */,
 				A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */,
 				B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */,
-				A5E6CC18187B81E3002A1735 /* WhisperMessage.mm in Sources */,
 				A5E6CC42187BF30A002A1735 /* PushMessageContent.pb.mm in Sources */,
 				A5E6CC5A187CC62C002A1735 /* TSPushMessageContent.mm in Sources */,
 				B60CEE78184B4A96006A8256 /* TSParticipants.m in Sources */,

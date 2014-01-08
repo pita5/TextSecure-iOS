@@ -13,6 +13,5 @@
 + (NSString*)prettyPrintPushMessageContent:(textsecure::PushMessageContent *)pushMessageContent;
 + (NSData *)createSerializedPushMessageContent:(NSString*) message withAttachments:(NSArray*) attachments;
 
-+(TSMessage*)getTSMessage:(textsecure::PushMessageContent *)pushMessageContent;
 
 @end
