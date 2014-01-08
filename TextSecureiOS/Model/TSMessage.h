@@ -13,6 +13,7 @@
 @property (nonatomic,strong) NSString *recipientId;
 @property (nonatomic,strong) NSDate *messageTimestamp;
 @property (nonatomic,strong) NSString* message;
+@property (nonatomic,strong) NSArray* attachments;
 -(id) initWithMessage:(NSString*)text sender:(NSString*)sender recipients:(NSArray*)recipients sentOnDate:(NSDate*)date;
 
 @end

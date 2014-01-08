@@ -12,4 +12,5 @@
 @property (nonatomic,strong) NSString* body;
 @property (nonatomic,strong) NSArray* attachments;
 
++ (NSData *)createSerializedPushMessageContent:(TSMessage*) message;
 @end

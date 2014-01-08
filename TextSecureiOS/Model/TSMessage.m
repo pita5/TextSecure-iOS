@@ -15,6 +15,7 @@
     self.senderId=sender;
     self.recipientId=[recipients objectAtIndex:0];
     self.messageTimestamp = date;
+    self.attachments = nil;
   }
   return self;
 }
