@@ -208,7 +208,8 @@
   
 }
 -(void)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party {
-#warning this is crap
+#warning just sudo code will have to split this up
+  /* Initial Root Key */
   NSData* masterKey;
   switch (party) {
     case TSSender: {
@@ -240,12 +241,22 @@
    The first 32 bytes out of the HDKF are used for the root key (RK) and the second 32 bytes out are used for the chain key (CK).
    */
   NSData* rkCK = [TSHKDF deriveKeyFromMaterial:masterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]];
-  
-  NSData* RK = [rkCK subdataWithRange:NSMakeRange(0, 32)];
-  NSData* CK = [rkCK subdataWithRange:NSMakeRange(32, 32)];
-  
-
-  
+  NSData* rootKeyRK = [rkCK subdataWithRange:NSMakeRange(0, 32)];
+  NSData* chainKeyCK = [rkCK subdataWithRange:NSMakeRange(32, 32)];
+  /* Chain Key Derivation */
+  NSData* messageKeyMK = [Cryptography computeHMAC:chainKeyCK withHMACKey:[NSData dataWithBytes:0x01 length:1]];
+  NSData* nextChainKey = [Cryptography computeHMAC:chainKeyCK withHMACKey:[NSData dataWithBytes:0x02 length:1]];
+  /* Message Key Derivation */
+  NSData* nextMessageCipherPlusMacKey = [TSHKDF deriveKeyFromMaterial:messageKeyMK outputLength:64 info:[@"WhisperMessageKeys" dataUsingEncoding:NSASCIIStringEncoding]];
+  NSData* nextMessageCipherKey = [nextMessageCipherPlusMacKey subdataWithRange:NSMakeRange(0, 32)];
+  NSData* nextMessageMacKey = [nextMessageCipherPlusMacKey subdataWithRange:NSMakeRange(32, 32)];
+  /* New Root Key Derivation */
+  // each new remote ephemeral key triggers the generation or a new rk and a new sender key chain
+  // obviously move this elsewhere
+  NSData* dummyNewPublicEphemeral;
+  NSData* newRkCK  = [TSHKDF deriveKeyFromMaterial:dummyNewPublicEphemeral outputLength:64 info:[@"WhisperRachet" dataUsingEncoding:NSASCIIStringEncoding]];
+  NSData* newRootKeyRK = [newRkCK subdataWithRange:NSMakeRange(0, 32)];
+  NSData* newChainKeyCK = [newRkCK subdataWithRange:NSMakeRange(32, 32)];
   
 }
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {

@@ -13,6 +13,7 @@
 #pragma mark SHA and HMAC methods
 +(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
++(NSData*) computeHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey;
 +(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey;
 
 

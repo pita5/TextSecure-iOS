@@ -38,6 +38,7 @@
 
 
 #pragma mark SHA1
+
 +(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string{
   /* used by TSContactManager to send hashed/truncated contact list to server */
   NSMutableData *hashData = [NSMutableData dataWithLength:20];
@@ -65,8 +66,7 @@
 }
 
 #pragma HMAC/SHA256
-
-+(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey{
++(NSData*) computeHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey{
   uint8_t ourHmac[CC_SHA256_DIGEST_LENGTH] = {0};
   CCHmac(kCCHmacAlgSHA256,
          [HMACKey bytes],
@@ -74,7 +74,12 @@
          [dataToHMAC bytes],
          [dataToHMAC  length],
          ourHmac);
-  return [NSData dataWithBytes: ourHmac length: 10];
+  return [NSData dataWithBytes:ourHmac length:20];
+}
+
+
++(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey{
+  return [[Cryptography computeHMAC:dataToHMAC withHMACKey:HMACKey] subdataWithRange:NSMakeRange(0, 10)];
 
 }
 
