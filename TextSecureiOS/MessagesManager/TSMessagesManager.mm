@@ -15,12 +15,14 @@
 #import "Cryptography.h"
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
+#import "TSUserKeysDatabase.h"
 #import "TSThread.h"
 #import "TSMessageSignal.hh"
 #import "TSPushMessageContent.hh"
 #import "TSWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
+#import "TSECKeyPair.h"
 
 @implementation TSMessagesManager
 
@@ -61,6 +63,7 @@
   NSData* decryptedPayload=[Cryptography decrypt:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
   // Now get the protocol buffer message out
   TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
+
   TSMessage* message = [self decryptMessageSignal:messageSignal];
   message.recipientId = [TSKeyManager getUsernameToken]; // recipient is me!
   
@@ -72,7 +75,7 @@
 }
 
 
-#pragma mark TSProtocol
+#pragma mark TSProtocol Methods
 -(NSData*) encryptMessage:(TSMessage*)message onThread:(TSThread*)thread {
 #warning not implemented
   return nil;
@@ -92,6 +95,7 @@
       break;
     case TSPreKeyWhisperMessageType:
 #warning not implemented
+      [self keyAgreement:(TSPreKeyWhisperMessage*)messageSignal.message forParty:TSReceiver];
       break;
     case TSUnencryptedWhisperMessageType: {
       TSPushMessageContent* messageContent = [[TSPushMessageContent alloc] initWithData:messageSignal.message.message];
@@ -131,5 +135,61 @@
   
 }
 
+#pragma mark - AxolotlKeyAgreement protocol methods
 
+-(void)keyAgreement:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party {
+#warning this is crap
+  NSData* masterKey;
+  switch (party) {
+    case TSSender: {
+      // TSPrekeyWhisperMessage comes pre-populated with their prekey/ephemeral key/base key and their identity key
+      TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
+      TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+      
+      masterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:keyAgreementMessage.baseKey theirEphemeralPublicKey:keyAgreementMessage.identityKey];
+      // TSPrekeyWhisperMessage comes we populate the TSPrekeyWhisperMessage instead with our public ephemeral key/base key and their identity key
+      keyAgreementMessage.baseKey = [ourEphemeralKey getPublicKey];
+      keyAgreementMessage.identityKey = [ourIdentityKey getPublicKey];
+      
+      break;
+    }
+    case TSReceiver: {
+      TSECKeyPair *ourEphemeralKey = [TSUserKeysDatabase getPreKeyWithId:[keyAgreementMessage.preKeyId unsignedLongValue] error:nil];
+      TSECKeyPair *ourIdentityKey =  [TSUserKeysDatabase getIdentityKeyWithError:nil];
+
+      masterKey=[self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:keyAgreementMessage.baseKey theirEphemeralPublicKey:keyAgreementMessage.identityKey];
+      break;
+    }
+    default:
+      break;
+  }
+  
+  
+}
+-(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
+  /*
+  ECDH (private,public)
+  ECDHE(theirEphemeral, ourIdentity)
+  ECDHE(theirIdentity, ourEphemeral)
+  ECDHE(theirEphemeral, ourEphemeral)
+   */
+  NSMutableData *masterKey = [NSMutableData data];
+  [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+  [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
+  [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+  return masterKey;
+}
+
+-(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
+  /*
+  ECDHE(theirIdentity, ourEphemeral)
+  ECDHE(theirEphemeral, ourIdentity)
+  ECDHE(theirEphemeral, ourEphemeral)
+   */
+  NSMutableData *masterKey = [NSMutableData data];
+  [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
+  [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+  [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+  return masterKey;
+}
 @end

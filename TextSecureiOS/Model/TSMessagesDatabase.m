@@ -441,25 +441,6 @@ static TSEncryptedDatabase *messagesDb = nil;
  threadID" : thread id
  */
 
--(void) setRK:(NSData*)key onThread:(TSThread*)thread {
-  [self setAPSDataField:@{@"nameField":@"RK",@"valueField":key,@"threadID":thread.threadID}];
-}
-//HKs, HKr     : 32-byte header keys (send and recv versions)
--(NSData*) getHK:(TSThread*)thread forParty:(TSParty)party{
-  return [self getAPSDataField:[self getAPSFieldName:@"HK" forParty:party]];
-}
--(void) setHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"HK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
-}
-//NHKs, NHKr   : 32-byte next header keys (")
--(NSData*) getNHK:(TSThread*)thread forParty:(TSParty)party{
-  return [self getAPSDataField:[self getAPSFieldName:@"NHK" forParty:party]];
-  
-}
--(void) setNHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"NHK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
-
-}
 //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
 -(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party{
   return [self getAPSDataField:[self getAPSFieldName:@"CK" forParty:party]];
@@ -501,48 +482,7 @@ static TSEncryptedDatabase *messagesDb = nil;
   [self setAPSDataField:@{@"nameField":@"PNs",@"valueField":num,@"threadID":thread.threadID}];
 }
 
-//ratchet_flag : True if the party will send a new DH ratchet key in next msg
--(BOOL) getRachetFlag:(TSThread*)thread{
-  return [self getAPSBoolField:@"rachet_flag" onThread:thread];
-}
 
--(void) setRachetFlag:(BOOL)flag onThread:(TSThread*)thread{
-  [self setAPSDataField:@{@"nameField":@"rachet_flag",@"valueField":[NSNumber numberWithBool:flag],@"threadID":thread.threadID}];
-}
--(NSArray*) getSkippedHeaderAndMessageKeys:(TSThread*)thread {
-  ////CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))  /*corresponds to skipped_HK_MK MK??*/
-  // Decrypt the DB if it hasn't been done yet
-  if (!messagesDb) {
-    if (![TSMessagesDatabase databaseOpenWithError:nil])
-      // TODO: better error handling
-      return nil;
-  }
-  __block NSMutableArray *skippedHKMKs = [[NSMutableArray alloc] init];
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-    
-    FMResultSet* rs = [db executeQuery:@"SELECT * FROM missed_messages WHERE thread_id = :threadID" withParameterDictionary:@{@"threadID":thread.threadID}];
-    while([rs next]) {
-      [skippedHKMKs addObject:[[TSMissedMessageKeys alloc] initWithSkippedMK:[rs dataForColumn:@"skipped_MK"] skippedHKs:[rs dataForColumn:@"skipped_HKs"] skippedHKr:[rs dataForColumn:@"skipped_HKr"]]];
-    }
-  }];
-  return skippedHKMKs;
-}
-
-
-
--(void) setSkippedHeaderAndMessageKeys:(NSArray*)skippedHKMK onThread:(TSThread*)thread {
-  // Decrypt the DB if it hasn't been done yet
-  if (!messagesDb) {
-    if (![TSMessagesDatabase databaseOpenWithError:nil])
-      // TODO: better error handling
-      return;
-  }
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-    for(TSMissedMessageKeys* skippedMessage in skippedHKMK) {
-      [db executeQuery:@"INSERT INTO missed_messages skipped_MK = :MK skipped_HKs = :HKs skipped_HKr = :HKr thread_id = :threadID" withParameterDictionary:@{@"skipped_MK": skippedMessage.skippedMK,@"skipped_HKs": skippedMessage.skippedHKs,@"skipped_HKr": skippedMessage.skippedHKr,@"threadID":thread.threadID}];
-    }
-  }];
-}
 
 
 #pragma mark - shared private objects

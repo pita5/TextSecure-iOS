@@ -11,6 +11,8 @@
 @class TSThread;
 @class ECKeyPair;
 @class TSMessageSignal;
+@class TSECKeyPair;
+@class TSPreKeyWhisperMessage;
 typedef NS_ENUM(NSInteger, TSParty) {
   TSSender=0,
   TSReceiver
@@ -28,12 +30,6 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 //RK           : 32-byte root key which gets updated by DH ratchet
 -(NSData*) getRK:(TSThread*)thread;
 -(void) setRK:(NSData*)key onThread:(TSThread*)thread;
-//HKs, HKr     : 32-byte header keys (send and recv versions)
--(NSData*) getHK:(TSThread*)thread forParty:(TSParty)party;
--(void) setHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
-//NHKs, NHKr   : 32-byte next header keys (")
--(NSData*) getNHK:(TSThread*)thread forParty:(TSParty)party;
--(void) setNHK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
 -(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party;
 -(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
@@ -49,16 +45,6 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 //PNs          : Previous message numbers (# of msgs sent under prev ratchet)
 -(NSNumber*)getPNs:(TSThread*)thread;
 -(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread;
-//ratchet_flag : True if the party will send a new DH ratchet key in next msg
--(BOOL) getRachetFlag:(TSThread*)thread;
--(void) setRachetFlag:(BOOL)flag onThread:(TSThread*)thread;
-//skipped_HK_MK : A list of stored message keys and their associated header keys
-//for "skipped" messages, i.e. messages that have not been
-//received despite the reception of more recent messages.
-//Entries may be stored with a timestamp, and deleted after a
-//certain age.
--(NSArray*) getSkippedHeaderAndMessageKeys:(TSThread*)thread;
--(void) setSkippedHeaderAndMessageKeys:(NSArray*)skippedHKMK onThread:(TSThread*)thread;
 @end
 
 @protocol AxolotlEphemeralStorage  <NSObject>
@@ -108,10 +94,9 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 @protocol AxolotlKeyAgreement <NSObject>
 
--(void)keyAgreement;
--(void)keyAgreementAlice;
--(void)keyAgreementBob;
-
+-(void)keyAgreement:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party;
+-(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
+-(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
 
 @end
 

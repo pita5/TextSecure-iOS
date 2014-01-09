@@ -33,7 +33,6 @@
  */
 -(NSData*) getPublicKey;
 
-
 /**
  * Return the key pair's preKeyId.
  * @author Alban Diquet

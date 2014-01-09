@@ -10,7 +10,7 @@
 #import "TSWhisperMessage.hh"
 @interface TSPreKeyWhisperMessage : TSWhisperMessage
 @property (nonatomic,strong) NSNumber* preKeyId;
-@property (nonatomic,strong) NSData* baseKey;
-@property (nonatomic,strong) NSData* identityKey;
+@property (nonatomic,strong) NSData* baseKey; // base Curve25519 key exchange ephemeral: A0 in axolotl
+@property (nonatomic,strong) NSData* identityKey; //Curve25519 identity key of the sender: A in axolotl
 
 @end
