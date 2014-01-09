@@ -78,9 +78,9 @@
 
 
 #pragma mark TSProtocol Methods
--(NSData*) encryptTSWhisperMessage:(TSWhisperMessage*)message onThread:(TSThread*)thread {
-#warning not implemented
-  return nil;
+-(void) encryptTSWhisperMessage:(TSEncryptedWhisperMessage*)message onThread:(TSThread*)thread {
+
+  
   
 }
 -(TSMessage*) decryptMessageSignal:(TSMessageSignal*)messageSignal  {
@@ -112,11 +112,18 @@
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType{
   [TSMessagesDatabase storeMessage:message];
-  NSString *serializedMessage=@"";
+  __block NSString *serializedMessage=@"";
   switch (messageType) {
-    case TSEncryptedWhisperMessageType:
-      // let's go ahead an decrypt and update our keys
+    case TSEncryptedWhisperMessageType: {
+      // let's go ahead and encrypt and update our keys
+      TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] init];
+      TSECKeyPair* ephemeralKey =[TSECKeyPair keyPairGenerateWithPreKeyId:0];;
+      
+      encryptedMessage.ephemeralKey = [ephemeralKey getPublicKey];
+      
+      encryptedMessage.counter = [TSMessagesDatabase getN:thread forParty:TSSender];
       break;
+    }
     case TSPreKeyWhisperMessageType:{
         // get a contact's prekey
         TSContact* contact = [[TSContact alloc] initWithRegisteredID:message.recipientId];
@@ -129,8 +136,18 @@
               prekeyMessage.recipientPreKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
               prekeyMessage.recipientIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
               [self initialRootKeyDerivation:prekeyMessage forParty:TSSender];
-              prekeyMessage.unencryptedMessage = message.message;
+              TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc] init];
+              NSData* ephemeralKeyPublic = [self createNewChainFromTheirPublicKey:prekeyMessage.recipientPreKey];
+              encryptedWhisperMessage.ephemeralKey = ephemeralKeyPublic;
+              encryptedWhisperMessage.previousCounter=0;
+              encryptedWhisperMessage.counter = 0;
+              
+              
               // So let's encrypt a message using this
+              [self encryptTSWhisperMessage:encryptedWhisperMessage onThread:thread];
+              
+              //Finally let's serialize
+              serializedMessage = [[encryptedWhisperMessage serializedProtocolBuffer] base64EncodedString];
               break;
             }
             default:
@@ -180,7 +197,14 @@
 }
 
 #pragma mark - AxolotlKeyAgreement protocol methods
-
+-(NSData*)createNewChainFromTheirPublicKey:(NSData*)publicKey {
+#warning store this
+  TSECKeyPair* myEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+  // store this
+  NSData* sharedSecret = [myEphemeralKey generateSharedSecretFromPublicKey:publicKey];
+  return [myEphemeralKey getPublicKey];
+  
+}
 -(void)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party {
 #warning this is crap
   NSData* masterKey;

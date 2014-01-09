@@ -323,7 +323,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
 
--(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread{
++(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread{
   if (!messagesDb) {
     if (![TSMessagesDatabase databaseOpenWithError:nil]) {
       // TODO: better error handling
@@ -342,7 +342,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 
--(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread {
++(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread {
   if (!messagesDb) {
     if (![TSMessagesDatabase databaseOpenWithError:nil]) {
       // TODO: better error handling
@@ -361,7 +361,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 }
 
--(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread {
++(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread {
   if (!messagesDb) {
     if (![TSMessagesDatabase databaseOpenWithError:nil]) {
       // TODO: better error handling
@@ -379,7 +379,8 @@ static TSEncryptedDatabase *messagesDb = nil;
   return apsField;
   
 }
--(NSString*) getAPSStringField:(NSString*)name onThread:(TSThread*)thread {
+
++(NSString*) getAPSStringField:(NSString*)name onThread:(TSThread*)thread {
   if (!messagesDb) {
     if (![TSMessagesDatabase databaseOpenWithError:nil]) {
       // TODO: better error handling
@@ -397,7 +398,8 @@ static TSEncryptedDatabase *messagesDb = nil;
   return apsField;
   
 }
--(void) setAPSDataField:(NSDictionary*) parameters {
+
++(void) setAPSDataField:(NSDictionary*) parameters {
   
   // Decrypt the DB if it hasn't been done yet
   if (!messagesDb) {
@@ -413,7 +415,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 }
 
--(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party {
++(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party {
   switch (party) {
     case TSReceiver:
       return [name stringByAppendingString:@"r"];
@@ -430,8 +432,8 @@ static TSEncryptedDatabase *messagesDb = nil;
 #pragma mark - AxolotlPersistantStorage protocol methods
 /* Axolotl Protocol variables. Persistant storage per thread */
 //RK           : 32-byte root key which gets updated by DH ratchet
--(NSData*) getRK:(TSThread*)thread {
-  return [self getAPSDataField:@"RK"];
++(NSData*) getRK:(TSThread*)thread {
+  return [TSMessagesDatabase getAPSDataField:@"RK"];
 }
 
 /*
@@ -442,44 +444,49 @@ static TSEncryptedDatabase *messagesDb = nil;
  */
 
 //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
--(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party{
-  return [self getAPSDataField:[self getAPSFieldName:@"CK" forParty:party]];
++(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party{
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"CK" forParty:party]];
 
 }
--(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"CK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
++(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"CK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
 }
 //DHIs, DHIr   : DH or ECDH Identity keys
--(NSData*) getDHI:(TSThread*)thread forParty:(TSParty)party{
-  return [self getAPSDataField:[self getAPSFieldName:@"DHI" forParty:party]];
++(NSData*) getDHI:(TSThread*)thread forParty:(TSParty)party{
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHI" forParty:party]];
  
 }
--(void) setDHI:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"DHI" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+
++(void) setDHI:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHI" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
 }
+
 //DHRs, DHRr   : DH or ECDH Ratchet keys
--(NSData*) getDHR:(TSThread*)thread forParty:(TSParty)party{
-  return [self getAPSDataField:[self getAPSFieldName:@"DHR" forParty:party]];
++(NSData*) getDHR:(TSThread*)thread forParty:(TSParty)party{
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party]];
 }
--(void) setDHR:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"DHR" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+
++(void) setDHR:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
 }
+
 //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
--(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party{
-  return [self getAPSIntField:[self getAPSFieldName:@"N" forParty:party]];
++(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party{
+  return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"N" forParty:party]];
   
 }
--(void) setN:(NSNumber*)num onThread:(TSThread*)thread forParty:(TSParty)party{
-  [self setAPSDataField:@{@"nameField":[self getAPSFieldName:@"N" forParty:party],@"valueField":num,@"threadID":thread.threadID}];
+
++(void) setN:(NSNumber*)num onThread:(TSThread*)thread forParty:(TSParty)party{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"N" forParty:party],@"valueField":num,@"threadID":thread.threadID}];
 }
 
 //PNs          : Previous message numbers (# of msgs sent under prev ratchet)
--(NSNumber*)getPNs:(TSThread*)thread{
-  return [self getAPSIntField:@"PNs"];
++(NSNumber*)getPNs:(TSThread*)thread{
+  return [TSMessagesDatabase getAPSIntField:@"PNs"];
 }
 
--(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
-  [self setAPSDataField:@{@"nameField":@"PNs",@"valueField":num,@"threadID":thread.threadID}];
++(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":@"PNs",@"valueField":num,@"threadID":thread.threadID}];
 }
 
 

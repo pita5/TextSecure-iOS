@@ -41,18 +41,18 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(void)storeTSContact:(TSContact*)contact;
 
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
--(NSData*) getAPSDataField:(NSString*)name;
--(NSNumber*) getAPSIntField:(NSString*)name;
--(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
--(NSString*) getAPSStringField:(NSString*)name;
--(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party;
++(NSData*) getAPSDataField:(NSString*)name;
++(NSNumber*) getAPSIntField:(NSString*)name;
++(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
++(NSString*) getAPSStringField:(NSString*)name;
++(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party;
 /*
  parameters
  nameField : name of db field to set
  valueField : value of db field to set to
  threadID" : thread id
  */
--(void) setAPSDataField:(NSDictionary*) parameters;
++(void) setAPSDataField:(NSDictionary*) parameters;
 
 @end
 

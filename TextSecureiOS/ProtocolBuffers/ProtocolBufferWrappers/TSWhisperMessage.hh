@@ -11,5 +11,4 @@
 #import "TSProtocolBufferWrapper.hh"
 @interface TSWhisperMessage : TSProtocolBufferWrapper
 @property (nonatomic,strong) NSData* message;
-@property (nonatomic,strong) NSString* unencryptedMessage; // will not be serialized but used to create the encrypted message
 @end
