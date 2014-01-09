@@ -52,17 +52,6 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 /* Protocol variables. Ephemeral storage per thread */
 //MK  : message key
 @property(nonatomic,strong) NSData* MK;
-//  try_skipped_header_and_message_keys() : Attempt to decrypt the message with skipped-over
-// message keys (and their associated header keys) from persistent storage.
--(void)trySkippedHeaderAndMessageKeys;
-//stage_skipped_header_and_message_keys() : Given a current header key, a current message number,
-//a future message number, and a chain key, calculates and stores all skipped-over message keys
-//(if any) in a staging area where they can later be committed, along with their associated
-//header key.  Returns the chain key and message key corresponding to the future message number.
--(void)stageSkippedHeaderAndMessageKeys;
-//commit_skipped_header_and_message_keys() : Commits any skipped-over message keys from the
-//staging area to persistent storage (along with their associated header keys).
--(void)commitSkippedHeaderAndMessageKeys;
 
 @end
 

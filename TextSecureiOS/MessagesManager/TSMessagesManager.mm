@@ -25,6 +25,8 @@
 #import "TSECKeyPair.h"
 #import "TSRecipientPrekeyRequest.h"
 
+#import "TSHKDF.h"
+
 
 @implementation TSMessagesManager
 
@@ -117,11 +119,11 @@
     case TSEncryptedWhisperMessageType: {
       // let's go ahead and encrypt and update our keys
       TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] init];
-      TSECKeyPair* ephemeralKey =[TSECKeyPair keyPairGenerateWithPreKeyId:0];;
+      TSECKeyPair* ephemeralKey =[TSECKeyPair keyPairGenerateWithPreKeyId:0];
       
       encryptedMessage.ephemeralKey = [ephemeralKey getPublicKey];
-      
       encryptedMessage.counter = [TSMessagesDatabase getN:thread forParty:TSSender];
+      encryptedMessage.previousCounter = [TSMessagesDatabase getPNs:thread];
       break;
     }
     case TSPreKeyWhisperMessageType:{
@@ -231,6 +233,18 @@
     default:
       break;
   }
+  
+  /*
+   The concatenated ECDHE shared secrets are then fed into HKDF to derive a 32 byte root key (RK) and 32 byte chain key (CK). HKDF is used with a salt of zero bytes and an info of the octet string "WhisperText".
+   
+   The first 32 bytes out of the HDKF are used for the root key (RK) and the second 32 bytes out are used for the chain key (CK).
+   */
+  NSData* rkCK = [TSHKDF deriveKeyFromMaterial:masterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]];
+  
+  NSData* RK = [rkCK subdataWithRange:NSMakeRange(0, 32)];
+  NSData* CK = [rkCK subdataWithRange:NSMakeRange(32, 32)];
+  
+
   
   
 }
