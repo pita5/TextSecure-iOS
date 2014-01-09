@@ -175,8 +175,13 @@
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+  NSInteger numberRows= [[TSMessagesDatabase getMessagesOnThread:self.thread] count];
+  if(numberRows==0) {
+    // we haven't sent or received any messages yet, so the first we send will be of type prekey
+    self.messagingType = TSPreKeyWhisperMessageType;
+  }
   NSLog(@"messages on thread: %d",[[TSMessagesDatabase getMessagesOnThread:self.thread] count]);
-    return [[TSMessagesDatabase getMessagesOnThread:self.thread] count];
+  return numberRows;
 }
 
 #pragma mark - Messages view delegate
@@ -191,8 +196,8 @@
     }
   
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
-
-    [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread];
+  
+    [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread ofType:self.messagingType];
     [self finishSend];
 }
 
@@ -255,6 +260,7 @@
     [JSMessageSoundEffect playMessageSentSound];
   }
   else {
+    self.messagingType = TSEncryptedWhisperMessageType;
     [JSMessageSoundEffect playMessageReceivedSound];
   }
 }

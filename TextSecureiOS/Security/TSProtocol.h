@@ -94,7 +94,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 @protocol AxolotlKeyAgreement <NSObject>
 
--(void)keyAgreement:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party;
+-(void)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party;
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
 -(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
 

@@ -23,6 +23,8 @@
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSECKeyPair.h"
+#import "TSRecipientPrekeyRequest.h"
+
 
 @implementation TSMessagesManager
 
@@ -76,7 +78,7 @@
 
 
 #pragma mark TSProtocol Methods
--(NSData*) encryptMessage:(TSMessage*)message onThread:(TSThread*)thread {
+-(NSData*) encryptTSWhisperMessage:(TSWhisperMessage*)message onThread:(TSThread*)thread {
 #warning not implemented
   return nil;
   
@@ -95,7 +97,7 @@
       break;
     case TSPreKeyWhisperMessageType:
 #warning not implemented
-      [self keyAgreement:(TSPreKeyWhisperMessage*)messageSignal.message forParty:TSReceiver];
+      [self initialRootKeyDerivation:(TSPreKeyWhisperMessage*)messageSignal.message forParty:TSReceiver];
       break;
     case TSUnencryptedWhisperMessageType: {
       TSPushMessageContent* messageContent = [[TSPushMessageContent alloc] initWithData:messageSignal.message.message];
@@ -108,10 +110,52 @@
   return nil;
 }
 
--(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread {
+-(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType{
   [TSMessagesDatabase storeMessage:message];
-//  [thread.sendEphemerals setSendEphemerals];
-  NSString *serializedMessage = [[TSPushMessageContent serializedPushMessageContent:message] base64Encoding];
+  NSString *serializedMessage=@"";
+  switch (messageType) {
+    case TSEncryptedWhisperMessageType:
+      // let's go ahead an decrypt and update our keys
+      break;
+    case TSPreKeyWhisperMessageType:{
+        // get a contact's prekey
+        TSContact* contact = [[TSContact alloc] initWithRegisteredID:message.recipientId];
+        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+          switch (operation.response.statusCode) {
+            case 200:{
+              
+              TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc] init];
+              prekeyMessage.preKeyId = [responseObject objectForKey:@"keyId"];
+              prekeyMessage.recipientPreKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
+              prekeyMessage.recipientIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+              [self initialRootKeyDerivation:prekeyMessage forParty:TSSender];
+              prekeyMessage.unencryptedMessage = message.message;
+              // So let's encrypt a message using this
+              break;
+            }
+            default:
+              DLog(@"error sending message");
+  #warning Add error handling if not able to get contacts prekey
+              break;
+          }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+  #warning right now it is not succesfully processing returned response, but is giving 200
+          
+        }];
+      }
+      
+      break;
+    case TSUnencryptedWhisperMessageType:
+      serializedMessage= [[TSPushMessageContent serializedPushMessageContent:message] base64Encoding];
+      break;
+    default:
+      break;
+  }
+  
+  
+  
+
+
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {
@@ -137,7 +181,7 @@
 
 #pragma mark - AxolotlKeyAgreement protocol methods
 
--(void)keyAgreement:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party {
+-(void)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party {
 #warning this is crap
   NSData* masterKey;
   switch (party) {
@@ -146,7 +190,7 @@
       TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
       TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
       
-      masterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:keyAgreementMessage.baseKey theirEphemeralPublicKey:keyAgreementMessage.identityKey];
+      masterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:keyAgreementMessage.recipientIdentityKey theirEphemeralPublicKey:keyAgreementMessage.recipientPreKey];
       // TSPrekeyWhisperMessage comes we populate the TSPrekeyWhisperMessage instead with our public ephemeral key/base key and their identity key
       keyAgreementMessage.baseKey = [ourEphemeralKey getPublicKey];
       keyAgreementMessage.identityKey = [ourIdentityKey getPublicKey];

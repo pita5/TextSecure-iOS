@@ -10,13 +10,14 @@
 #import "TITokenField.h"
 #import "JSMessagesViewController.h"
 #import "TSContact.h"
-
+#import "TSProtocol.h"
 @class TSMessage;
 @class TSThread;
 @interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
 @property (nonatomic, retain) TSContact *contact;
 @property (nonatomic) TSThread *thread;
+@property (nonatomic) TSWhisperMessageType messagingType;
 // Need to be initialized with one of those methods
 
 - (instancetype)initWithConversation:(TSThread*)thread;
