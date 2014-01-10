@@ -225,6 +225,7 @@
 
 #pragma mark - AxolotlKeyAgreement protocol methods
 
+#warning populate this with getters and setters
 -(TSWhisperMessageKeys*)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage onThread:(TSThread*)thread forParty:(TSParty) party {
 #warning just sudo code will have to split this up
   /* Initial Root Key */

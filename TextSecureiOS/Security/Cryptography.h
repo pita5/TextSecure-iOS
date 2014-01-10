@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class TSWhisperMessageKeys;
 @interface Cryptography : NSObject
 +(NSMutableData*) generateRandomBytes:(int)numberBytes;
 #pragma mark SHA and HMAC methods

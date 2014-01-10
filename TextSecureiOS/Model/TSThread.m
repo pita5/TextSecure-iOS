@@ -18,8 +18,6 @@
     TSThread *thread = [[TSThread alloc] init];
     thread.participants = participants;
     thread.threadID = [participants threadID];
-    thread.sendEphemerals = [[TSSendEphemerals alloc] init];
-    thread.receiveEphemerals = [[TSReceiveEphemerals alloc] init];
     return thread;
 }
 
