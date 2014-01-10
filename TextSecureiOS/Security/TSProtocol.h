@@ -26,6 +26,8 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
   TSPreKeyWhisperMessageType = 3
 };
 
+
+
 @protocol AxolotlPersistantStorage  <NSObject>
 #warning for efficiency, past the prototyping stage we will want to group these requests
 /* Axolotl Protocol variables. Persistant storage per thread. */
@@ -49,17 +51,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread;
 @end
 
-@protocol AxolotlEphemeralStorage  <NSObject>
-/* Protocol variables. Ephemeral storage per thread */
-//MK  : message key
-@property(nonatomic,strong) NSData* MK;
 
-@end
-
-
-@protocol AxolotlEphemeralStorageSending  <NSObject,AxolotlEphemeralStorage>
-
-@end
 
 
 @protocol AxolotlEphemeralStorageMessagingKeys  <NSObject>
@@ -67,20 +59,6 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 @property(nonatomic,strong) NSData* macKey;
 @end
 
-@protocol AxolotlEphemeralStorageReceiving  <NSObject,AxolotlEphemeralStorage>
-//Np  : Purported message number
-@property(nonatomic,strong) NSData* purportedN;
-//PNp : Purported previous message number
-@property(nonatomic,strong) NSData* purportedPN;
-//CKp : Purported new chain key
-@property(nonatomic,strong) NSData* purportedCK;
-//DHp : Purported new DHr
-@property(nonatomic,strong) NSData* purportedDHr;
-//RKp : Purported new root key
-@property(nonatomic,strong) NSData* purportedRK;
--(void) setReceiveEphemerals;
-
-@end
 
 
 @protocol AxolotlKeyAgreement <NSObject>
@@ -90,7 +68,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 -(TSWhisperMessageKeys*)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage onThread:(TSThread*)thread forParty:(TSParty) party; /* called when someone else initiazes a new session, as is indicated by the receipt of a PreKeyWhisperMessage */
 -(void) newRootKeyDerivationFromNewPublicEphemeral:(NSData*)newPublicEphemeral_DHR onThread:(TSThread*)thread forParty:(TSParty)party; /* called when new message received in a session, that is not a session initialization */
--(NSData*)updateAndGetNextMessageKeyOnThread:(TSThread*)thread forParty:(TSParty)party; /* */
+-(NSData*)updateAndGetNextMessageKeyOnThread:(TSThread*)thread forParty:(TSParty)party; /* continues and existing chain */
 -(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK; /* just parses 64 byte NSData into 32 byte cipher and mac keys, respectively*/
 
 

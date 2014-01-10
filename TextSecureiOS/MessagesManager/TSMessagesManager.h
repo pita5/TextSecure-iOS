@@ -1,6 +1,6 @@
 //
 //  MessagesManager.h
-//  TextSecureiOS
+//  TextSecureiOS`
 //
 //  Created by Frederic Jacobs on 30/11/13.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
@@ -15,6 +15,7 @@
 @class TSMessage;
 
 @interface TSMessagesManager : NSObject <TSProtocol>
+
 + (id)sharedManager;
 
 - (void) processPushNotification:(NSDictionary*)pushDict;

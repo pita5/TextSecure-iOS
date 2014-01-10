@@ -125,12 +125,21 @@
     case TSEncryptedWhisperMessageType: {
       // let's go ahead and encrypt and update our keys
       TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] init];
-      TSECKeyPair* ephemeralKey =[TSECKeyPair keyPairGenerateWithPreKeyId:0];
+#warning here we would want to decide whether or not to start a new ratchet, but now we are always doing so
+      NSData* currentMK = [self updateAndGetNextMessageKeyOnThread:thread forParty:TSSender];
+      TSWhisperMessageKeys *encryptionKeys = [self deriveTSWhisperMessageKeysFromMessageKey:currentMK];
+
       
-      encryptedMessage.ephemeralKey = [ephemeralKey getPublicKey];
+      /*
+       // Just updating current ratchet
+
+      NSData* nextMK = [self updateAndGetNextMessageKeyOnThread:thread forParty:TSSender];
+      TSWhisperMessageKeys* encryptionKeys = [self deriveTSWhisperMessageKeysFromMessageKey:nextMK];
+      encryptedMessage.ephemeralKey = [NSData data]; // TODO: ask moxie why this ephemeral is needed again, we are on the same ratchet!
       encryptedMessage.counter = [TSMessagesDatabase getN:thread forParty:TSSender];
       encryptedMessage.previousCounter = [TSMessagesDatabase getPNs:thread];
-      encryptedMessage.message = [self encryptTSMessage:message onThread:thread];
+      encryptedMessage.message = [self encryptTSMessage:message onThread:thread withKeys:encryptionKeys];
+       */
       break;
     }
     case TSPreKeyWhisperMessageType:{
@@ -147,7 +156,6 @@
               prekeyMessage.recipientIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
               TSWhisperMessageKeys* encryptionKeys = [self initialRootKeyDerivation:prekeyMessage onThread:thread forParty:TSSender];
               TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc] init];
-              //NSData* ephemeralKeyPublic = [self createNewChainFromTheirPublicKey:prekeyMessage.recipientPreKey];
               encryptedWhisperMessage.ephemeralKey = prekeyMessage.baseKey;
               encryptedWhisperMessage.previousCounter=0;
               encryptedWhisperMessage.counter = 0;
@@ -202,12 +210,11 @@
 }
 
 #pragma mark - AxolotlKeyAgreement protocol methods
--(NSData*)createNewChainFromTheirPublicKey:(NSData*)publicKey {
-#warning store this
+-(NSData*)createNewChainFromTheirPublicKey:(NSData*)publicKey onThread:(TSThread*)thread {
   TSECKeyPair* myEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   // store this
   NSData* sharedSecret = [myEphemeralKey generateSharedSecretFromPublicKey:publicKey];
-  
+  [TSMessagesDatabase setCK:sharedSecret onThread:thread forParty:TSReceiver];
   return [myEphemeralKey getPublicKey];
   
 }
