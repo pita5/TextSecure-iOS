@@ -96,6 +96,16 @@
   // All the ephemeral and persistant variables are updated, so we can go through the decryption process!
   switch (messageSignal.contentType) {
     case TSEncryptedWhisperMessageType: {
+      TSThread* thread =[TSThread threadWithMeAndParticipantsByRegisteredIds: @[messageSignal.source]];
+      // we update based on this new ephemeral
+      TSEncryptedWhisperMessage *whisperMessage = (TSEncryptedWhisperMessage*)messageSignal;
+      [self newRootKeyDerivationFromNewPublicEphemeral:whisperMessage.ephemeralKey onThread:thread forParty:TSReceiver];
+      NSData* messageKey = [self updateAndGetNextMessageKeyOnThread:thread forParty:TSReceiver];
+      TSWhisperMessageKeys *decryptionKeys = [self deriveTSWhisperMessageKeysFromMessageKey:messageKey];
+      NSData* tsMessageDecryption = [Cryptography aesDecryptCTRModeStub:decryptionKeys]; // aes in ctr mode TODO
+      return [[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:messageSignal.source recipients:messageSignal.destinations sentOnDate:messageSignal.timestamp];
+
+      
       break;
     }
     case TSPreKeyWhisperMessageType: {
@@ -124,12 +134,16 @@
   switch (messageType) {
     case TSEncryptedWhisperMessageType: {
       // let's go ahead and encrypt and update our keys
-      TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] init];
 #warning here we would want to decide whether or not to start a new ratchet, but now we are always doing so
       NSData* currentMK = [self updateAndGetNextMessageKeyOnThread:thread forParty:TSSender];
       TSWhisperMessageKeys *encryptionKeys = [self deriveTSWhisperMessageKeysFromMessageKey:currentMK];
+      TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc] init];
+      encryptedWhisperMessage.ephemeralKey = [TSMessagesDatabase getDHR:thread forParty:TSSender];
+      encryptedWhisperMessage.previousCounter=0;
+      encryptedWhisperMessage.counter = 0;
+      encryptedWhisperMessage.message=[self encryptTSMessage:message onThread:thread withKeys:encryptionKeys];
+      serializedMessage = [[encryptedWhisperMessage serializedProtocolBuffer] base64EncodedString];
 
-      
       /*
        // Just updating current ratchet
 
@@ -210,14 +224,7 @@
 }
 
 #pragma mark - AxolotlKeyAgreement protocol methods
--(NSData*)createNewChainFromTheirPublicKey:(NSData*)publicKey onThread:(TSThread*)thread {
-  TSECKeyPair* myEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-  // store this
-  NSData* sharedSecret = [myEphemeralKey generateSharedSecretFromPublicKey:publicKey];
-  [TSMessagesDatabase setCK:sharedSecret onThread:thread forParty:TSReceiver];
-  return [myEphemeralKey getPublicKey];
-  
-}
+
 -(TSWhisperMessageKeys*)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage onThread:(TSThread*)thread forParty:(TSParty) party {
 #warning just sudo code will have to split this up
   /* Initial Root Key */
