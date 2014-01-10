@@ -9,8 +9,6 @@
 #import "TSThread.h"
 #import "TSParticipants.h"
 #import "TSMessage.h"
-#import "TSSendEphemerals.h"
-#import "TSReceiveEphemerals.h"
 #import "TSContact.h"
 @implementation TSThread
 
