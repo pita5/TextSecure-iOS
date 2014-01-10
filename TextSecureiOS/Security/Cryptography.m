@@ -14,7 +14,7 @@
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
-
+#import "TSWhisperMessageKeys.h"
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #import "FilePath.h"
@@ -166,6 +166,15 @@
   
 }
 
++(NSData*)aesDecryptCTRModeStub:(TSWhisperMessageKeys*)keys {
+#warning unimplemented
+  return nil;
+}
+
++(NSData*)aesEncryptCTRModeStub:(TSWhisperMessageKeys*)keys {
+#warning unimplemented
+  return nil;
+}
 
 +(NSData*)encrypt:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
   /* AES256 CBC encrypt then mac

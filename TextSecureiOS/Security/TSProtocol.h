@@ -14,6 +14,7 @@
 @class TSECKeyPair;
 @class TSEncryptedWhisperMessage;
 @class TSPreKeyWhisperMessage;
+@class TSWhisperMessageKeys;
 typedef NS_ENUM(NSInteger, TSParty) {
   TSSender=0,
   TSReceiver
@@ -57,10 +58,14 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 
 @protocol AxolotlEphemeralStorageSending  <NSObject,AxolotlEphemeralStorage>
--(void) setSendEphemerals;
 
 @end
 
+
+@protocol AxolotlEphemeralStorageMessagingKeys  <NSObject>
+@property(nonatomic,strong) NSData* cipherKey;
+@property(nonatomic,strong) NSData* macKey;
+@end
 
 @protocol AxolotlEphemeralStorageReceiving  <NSObject,AxolotlEphemeralStorage>
 //Np  : Purported message number
@@ -80,18 +85,21 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 @protocol AxolotlKeyAgreement <NSObject>
 
--(void)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party;
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
 -(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
 
+-(TSWhisperMessageKeys*)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage onThread:(TSThread*)thread forParty:(TSParty) party; /* called when someone else initiazes a new session, as is indicated by the receipt of a PreKeyWhisperMessage */
+-(void) newRootKeyDerivationFromNewPublicEphemeral:(NSData*)newPublicEphemeral_DHR onThread:(TSThread*)thread forParty:(TSParty)party; /* called when new message received in a session, that is not a session initialization */
+-(NSData*)updateAndGetNextMessageKeyOnThread:(TSThread*)thread forParty:(TSParty)party; /* */
+-(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK; /* just parses 64 byte NSData into 32 byte cipher and mac keys, respectively*/
 
--(NSData*)createNewChainFromTheirPublicKey:(NSData*)publicKey; // returns public ephemeral keyy
+
 @end
 
 @protocol TSProtocol <NSObject,AxolotlKeyAgreement>
 
 -(void) sendMessage:(TSMessage*) message onThread:(TSThread*)thread;
--(void) encryptTSWhisperMessage:(TSEncryptedWhisperMessage*)message onThread:(TSThread*)thread;
+-(NSData*) encryptTSMessage:(TSMessage*)message onThread:(TSThread*)thread withKeys:(TSWhisperMessageKeys*)messageKeys;
 -(TSMessage*) decryptMessageSignal:(TSMessageSignal*)whisperMessage;
 
 

@@ -11,6 +11,7 @@
 #import "TSMessage.h"
 #import "TSSendEphemerals.h"
 #import "TSReceiveEphemerals.h"
+#import "TSContact.h"
 @implementation TSThread
 
 + (TSThread*) threadWithParticipants:(TSParticipants*)participants{
@@ -22,4 +23,13 @@
     return thread;
 }
 
++ (TSThread*) threadWithMeAndParticipantsByRegisteredIds:(NSArray*)participantRegisteredIds{
+  NSMutableArray* others = [[NSMutableArray alloc] init];
+  for(NSString* regid in participantRegisteredIds) {
+    [others addObject:[[TSContact alloc] initWithRegisteredID:regid]];
+  }
+ [others addObject:[[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken]]];
+
+  return [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:others]];
+}
 @end

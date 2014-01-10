@@ -20,4 +20,5 @@
 
 + (TSThread*) threadWithParticipants:(TSParticipants*)participants;
 
++ (TSThread*) threadWithMeAndParticipantsByRegisteredIds:(NSArray*)participantRegisteredIds;
 @end
