@@ -17,10 +17,12 @@
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSPushMessageContent.hh"
+#import "TSWhisperMessageKeys.h"
 @interface CryptographyTests : XCTestCase
 
 @end
 
+// To avoid + h files
 @interface TSMessageSignal (Test)
 + (textsecure::IncomingPushMessageSignal *)deserialize:(NSData *)data;
 + (TSWhisperMessage*) getWhisperMessageForData:(NSData*) data ofType:(TSWhisperMessageType)contentType;
@@ -109,6 +111,29 @@
   
 }
 
+
+-(void) testCTRModeDecryption {
+#warning write this
+  NSString* originalMessage = @"Hawaii is awesome";
+  TSWhisperMessageKeys * messageKeys = [[TSWhisperMessageKeys alloc] initWithCipherKey:[Cryptography generateRandomBytes:32] macKey:[Cryptography generateRandomBytes:32]];
+
+  NSData* ctr = [Cryptography generateRandomBytes:sizeof(int)];
+  int counter;
+  [ctr getBytes:&counter length:sizeof(counter)];
+
+  //Encrypt
+  NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:[NSNumber numberWithInt:counter]];
+  
+  NSData* expectedHmac = [Cryptography truncatedHMAC:[encryption subdataWithRange:NSMakeRange(0, [encryption length]-8)] withHMACKey:messageKeys.macKey truncation:8];
+  NSData* mac = [encryption subdataWithRange:NSMakeRange([encryption length]-8,8)];
+  XCTAssertTrue([mac isEqualToData:expectedHmac], @"Hmac of encrypted data %@,  not equal to expected hmac %@", [mac base64EncodedString], [expectedHmac base64EncodedString]);
+  
+  NSData* decryption = [Cryptography decryptCTRMode:encryption withKeys:messageKeys withCounter:[NSNumber numberWithInt:counter]];
+  
+  NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
+  XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
+
+}
 
 
 @end

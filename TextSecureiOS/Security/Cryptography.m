@@ -224,7 +224,7 @@
  
   cryptStatus = CCCryptorUpdate(cryptor, [dataToEncrypt bytes], [dataToEncrypt length], buffer, bufferSize, &bytesEncrypted);
   if (cryptStatus == kCCSuccess){
-    NSMutableData* encryptedData= [NSData dataWithBytesNoCopy:buffer length:bytesEncrypted];
+    NSMutableData* encryptedData= [NSMutableData dataWithBytesNoCopy:buffer length:bytesEncrypted];
     //compute hmac sha 256 of encrypted data, truncated to 8 bytes
     NSData* hmac = [Cryptography truncatedHMAC:encryptedData withHMACKey:keys.macKey truncation:8];
     [encryptedData appendData:hmac];
