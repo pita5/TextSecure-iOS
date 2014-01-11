@@ -128,7 +128,7 @@
 
 #pragma mark push payload encryptiong/decryption
 +(NSData*) decrypt:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
-  /* AES256 CBC encrypt then mac 
+  /* AES256 CBC encrypt then mac
    Returns nil if hmac invalid or decryption fails
    */
   //verify hmac of version||encrypted data||iv
@@ -167,11 +167,45 @@
   
 }
 
-+(NSData*)aesDecryptCTRModeStub:(NSData*)message withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr {
-#warning implement
++(NSData*)decryptCTRMode:(NSData*)dataToDecrypt withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
+  /* AES256 CBC encrypt then mac
+   Returns nil if hmac invalid or decryption fails
+   */
+  //verify hmac of version||encrypted data||iv
+  NSData* dataToHmac = [dataToDecrypt subdataWithRange:NSMakeRange(0, [dataToDecrypt length]-8)];
+  NSData* hmac = [dataToDecrypt subdataWithRange:NSMakeRange([dataToDecrypt length]-8, 8)];
+  // verify hmac
+  NSData* ourHmacData = [Cryptography truncatedHMAC:dataToHmac withHMACKey:keys.macKey truncation:8];
+  if(![ourHmacData isEqualToData:hmac]) {
+    return nil;
+    
+  }
+  
+  // decrypt
+  size_t bufferSize           = [dataToDecrypt length] + kCCBlockSizeAES128;
+  void* buffer                = malloc(bufferSize);
+  
+  size_t bytesDecrypted    = 0;
+  // setting up cryptor
+  CCCryptorStatus cryptStatus;
+  CCCryptorRef cryptor;
+  int counterInt = [counter intValue];
+  NSData *ctr = [NSData dataWithBytes:&counterInt length:sizeof(counterInt)];
+
+  cryptStatus = CCCryptorCreateWithMode(kCCDecrypt, kCCModeCTR, kCCAlgorithmAES128,
+                                                        ccNoPadding, [ctr bytes], [keys.cipherKey bytes], [keys.cipherKey length],
+                                                        NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
+  
+  cryptStatus = CCCryptorUpdate(cryptor, [dataToDecrypt bytes], [dataToDecrypt length], buffer, bufferSize, &bytesDecrypted);
+  if (cryptStatus == kCCSuccess) {
+    return [NSData dataWithBytesNoCopy:buffer length:bytesDecrypted];
+  }
+  
+  free(buffer);
   return nil;
+
 }
-+(NSData*)aesEncryptCTRModeStub:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
   size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
   void* buffer                = malloc(bufferSize);
   size_t bytesEncrypted    = 0;
