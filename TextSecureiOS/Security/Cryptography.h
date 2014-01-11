@@ -26,7 +26,7 @@
 +(NSData*)encrypt:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) HMACKey computedHMAC:(NSData**)hmac;
 
 
-+(NSData*)aesDecryptCTRModeStub:(TSWhisperMessageKeys*)keys;
-+(NSData*)aesEncryptCTRModeStub:(TSWhisperMessageKeys*)keys;
++(NSData*)decryptCTRMode:(NSData*)message withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr;
++(NSData*)encryptCTRMode:(NSData*)message withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr;
 
 @end

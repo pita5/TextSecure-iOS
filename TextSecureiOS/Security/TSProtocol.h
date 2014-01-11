@@ -86,9 +86,10 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 @protocol TSProtocol <NSObject,AxolotlKeyAgreement>
 
 -(void) sendMessage:(TSMessage*) message onThread:(TSThread*)thread;
--(NSData*) encryptTSMessage:(TSMessage*)message onThread:(TSThread*)thread withKeys:(TSWhisperMessageKeys*)messageKeys;
+-(NSData*) encryptTSMessage:(TSMessage*)message withKeys:(TSWhisperMessageKeys*)messageKeys withCounter:(NSNumber*)ctr;
 -(TSMessage*) decryptReceivedMessageSignal:(TSMessageSignal*)whisperMessage;
 
+-(NSData*) decryptAppleMessagePayload:(NSData*)messagePayload;
 
 @end
 
