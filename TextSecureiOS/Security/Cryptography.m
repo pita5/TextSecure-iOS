@@ -269,6 +269,26 @@
 }
 
 
++(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString{
+  unsigned char version[1];
+  unsigned char iv[16];
+  int ciphertext_length=([payload length]-10-17)*sizeof(char);
+  unsigned char *ciphertext =  (unsigned char*)malloc(ciphertext_length);
+  unsigned char mac[10];
+  [payload getBytes:version range:NSMakeRange(0, 1)];
+  [payload getBytes:iv range:NSMakeRange(1, 16)];
+  [payload getBytes:ciphertext range:NSMakeRange(17, [payload length]-10-17)];
+  [payload getBytes:mac range:NSMakeRange([payload length]-10, 10)];
+  
+  NSData* signalingKey = [NSData dataFromBase64String:signalingKeyString];
+  // Actually only the first 32 bits of this are the crypto key
+  NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
+  NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
+  return [Cryptography decrypt:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
+  
+}
+
+
 
 
 

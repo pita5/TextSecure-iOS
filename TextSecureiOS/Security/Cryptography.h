@@ -29,4 +29,6 @@
 +(NSData*)decryptCTRMode:(NSData*)message withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr;
 +(NSData*)encryptCTRMode:(NSData*)message withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr;
 
+#pragma mark decrypt symmetrically with key given to server this first layer just hides from apple encrypted protobufs message
++(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKey;
 @end

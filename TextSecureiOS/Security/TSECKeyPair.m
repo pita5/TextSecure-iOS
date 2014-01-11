@@ -49,9 +49,9 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
 # pragma mark Key pair usage
 
 
--(NSData*) getPrivateKey {
+-(NSData*) getPublicKey {
 #warning for Android interoperability (and conforming to protocol) we will need to add leading byte of 0x05 to keys prior to sending/remove before using
-  return [NSData dataWithBytes:self->privateKey length:32];
+  return [NSData dataWithBytes:self->publicKey length:32];
 }
 
 

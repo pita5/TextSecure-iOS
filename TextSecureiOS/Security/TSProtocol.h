@@ -87,7 +87,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 -(NSData*) encryptTSMessage:(TSMessage*)message withKeys:(TSWhisperMessageKeys*)messageKeys withCTR:(NSNumber*)ctr;
 -(TSMessage*) decryptReceivedMessageSignal:(TSMessageSignal*)whisperMessage;
 
--(NSData*) decryptAppleMessagePayload:(NSData*)messagePayload;
+
 
 @end
 
