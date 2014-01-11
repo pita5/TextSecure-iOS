@@ -174,8 +174,11 @@
 +(NSData*)aesEncryptCTRModeStub:(TSWhisperMessageKeys*)keys {
 #warning unimplemented
   return nil;
+    
+//  tatus = CCCryptorCreateWithMode(kCCEncrypt, kCCModeCTR, kCCAlgorithmAES128, ccNoPadding,
+//                                  ivPtr, [symmetricKey bytes], kCCKeySizeAES256, NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
+//}
 }
-
 +(NSData*)encrypt:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
   /* AES256 CBC encrypt then mac
    Returns nil if encryption fails

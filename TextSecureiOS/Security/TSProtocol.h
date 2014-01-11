@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 @protocol AxolotlPersistantStorage  <NSObject>
 #warning for efficiency, past the prototyping stage we will want to group these requests
 /* Axolotl Protocol variables. Persistant storage per thread. */
+// we have both SENDING and RECEIVING key chains
 //RK           : 32-byte root key which gets updated by DH ratchet
 +(NSData*) getRK:(TSThread*)thread;
 +(void) setRK:(NSData*)key onThread:(TSThread*)thread;
@@ -38,17 +39,21 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 +(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party;
 +(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //DHIs, DHIr   : DH or ECDH Identity keys
-+(NSData*) getDHI:(TSThread*)thread forParty:(TSParty)party;
-+(void) setDHI:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
-//DHRs, DHRr   : DH or ECDH Ratchet keys
-+(NSData*) getDHR:(TSThread*)thread forParty:(TSParty)party;
-+(void) setDHR:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
++(NSData*) getEphmeralPublicKeyOfChain:(TSThread*)thread forParty:(TSParty)party;
++(void) setEphemeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
 +(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party;
 +(void) setN:(NSNumber*)num onThread:(TSThread*)thread forParty:(TSParty)party;
+
+//Ns, Nr       : sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
++(NSNumber*) getNPlusPlus:(TSThread*)thread forParty:(TSParty)party;
+
 //PNs          : Previous message numbers (# of msgs sent under prev ratchet)
 +(NSNumber*)getPNs:(TSThread*)thread;
 +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread;
+
+// update a queue of last chain keys... in case a message is delayed in transit.
+
 @end
 
 
@@ -60,7 +65,8 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 @end
 
 
-
+#warning move to port of https://github.com/WhisperSystems/TextSecure/blob/master/library/src/org/whispersystems/textsecure/crypto/SessionCipherV2.java?source=cc
+#warning move to port of https://github.com/WhisperSystems/TextSecure/blob/master/src/org/thoughtcrime/securesms/crypto/KeyExchangeProcessorV2.java?source=c
 @protocol AxolotlKeyAgreement <NSObject>
 // all relevant database methods set inside these. only gets aloud outside of them
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
@@ -71,6 +77,9 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 -(NSData*)updateAndGetNextMessageKeyOnThread:(TSThread*)thread forParty:(TSParty)party; /* continues and existing chain */
 -(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK; /* just parses 64 byte NSData into 32 byte cipher and mac keys, respectively*/
 
+-(NSData*)newRootKeyMaterialFromTheirEphermalPublic:(NSData*)theirEphemeralPublic onThread:(TSThread*)thread forParty:(TSParty) party;
+-(TSECKeyPair*)generateNewEphemeralKeyPairOnThread:(TSThread*)thread forParty:(TSParty)party; // generates and stores a new ephemeral key
+
 
 @end
 
@@ -78,7 +87,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 -(void) sendMessage:(TSMessage*) message onThread:(TSThread*)thread;
 -(NSData*) encryptTSMessage:(TSMessage*)message onThread:(TSThread*)thread withKeys:(TSWhisperMessageKeys*)messageKeys;
--(TSMessage*) decryptMessageSignal:(TSMessageSignal*)whisperMessage;
+-(TSMessage*) decryptReceivedMessageSignal:(TSMessageSignal*)whisperMessage;
 
 
 @end

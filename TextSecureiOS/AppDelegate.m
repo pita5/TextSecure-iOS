@@ -104,12 +104,11 @@
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-	// TODO: add new message here!
 	[self handlePush:userInfo];
 }
 
 -(void) handlePush:(NSDictionary *)pushInfo {
-  [[TSMessagesManager sharedManager]processPushNotification:pushInfo];
+  [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
 }
 
 #pragma mark - HockeyApp Delegate Methods

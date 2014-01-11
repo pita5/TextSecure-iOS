@@ -461,11 +461,12 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 //DHRs, DHRr   : DH or ECDH Ratchet keys
-+(NSData*) getDHR:(TSThread*)thread forParty:(TSParty)party{
++(NSData*) getEphmeralPublicKeyOfChain:(TSThread*)thread forParty:(TSParty)party{
   return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party]];
 }
 
-+(void) setDHR:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
++(void) setEphmeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
+#warning implement serialization
   [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
 }
 
@@ -486,6 +487,16 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
   [TSMessagesDatabase setAPSDataField:@{@"nameField":@"PNs",@"valueField":num,@"threadID":thread.threadID}];
+}
+
+
+//Ns, Nr       : sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
++(NSNumber*) getNPlusPlus:(TSThread*)thread forParty:(TSParty)party {
+  NSNumber* N = [TSMessagesDatabase getN:thread forParty:party];
+  
+  [TSMessagesDatabase setN:[NSNumber numberWithInt:[N integerValue]+1] onThread:thread forParty:party];
+  return N;
+  
 }
 
 

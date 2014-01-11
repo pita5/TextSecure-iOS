@@ -18,6 +18,6 @@
 
 + (id)sharedManager;
 
-- (void) processPushNotification:(NSDictionary*)pushDict;
+- (void) receiveMessagePush:(NSDictionary*)pushDict;
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType;
 @end
