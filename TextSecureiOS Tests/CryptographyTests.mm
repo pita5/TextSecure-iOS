@@ -130,6 +130,7 @@
   
   NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
   XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
+  XCTAssertFalse([[originalMessage dataUsingEncoding:NSASCIIStringEncoding] isEqualToData:decryption], @"ctr encryption did nothing, as it encrypted data equals the original data. this is to catch that doesn't happen-as it could be disabled for testing/debugging");
 
 }
 
