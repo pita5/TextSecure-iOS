@@ -168,7 +168,7 @@
 }
 
 +(NSData*)decryptCTRMode:(NSData*)dataToDecrypt withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
-  /* AES256 CBC encrypt then mac
+  /* AES256 CTR decrypt then mac
    Returns nil if hmac invalid or decryption fails
    */
   //verify hmac of version||encrypted data||iv
@@ -206,6 +206,9 @@
 
 }
 +(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
+  /* AES256 CTR decrypt then mac
+   Returns nil if hmac invalid or decryption fails
+   */
   size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
   void* buffer                = malloc(bufferSize);
   size_t bytesEncrypted    = 0;

@@ -31,8 +31,6 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 
 #pragma mark - settings values
 +(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
-+(BOOL) setDatabaseCreatedPersistantSetting ;
-
 
 #pragma mark - DB message functions
 +(void) storeMessage:(TSMessage*)message;
@@ -43,10 +41,10 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 #pragma mark - AxolotlEphemeralStorage protocol getter/setter helper methods
 
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
-+(NSData*) getAPSDataField:(NSString*)name;
-+(NSNumber*) getAPSIntField:(NSString*)name;
++(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread;
++(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread;
 +(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
-+(NSString*) getAPSStringField:(NSString*)name;
++(NSString*) getAPSStringField:(NSString*)name  onThread:(TSThread*)thread;
 +(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party;
 /*
  parameters

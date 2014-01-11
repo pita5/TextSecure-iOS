@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 +(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party;
 +(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //DHIs, DHIr   : DH or ECDH Identity keys
-+(NSData*) getEphmeralPublicKeyOfChain:(TSThread*)thread forParty:(TSParty)party;
++(NSData*) getEphemeralPublicKeyOfChain:(TSThread*)thread forParty:(TSParty)party;
 +(void) setEphemeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party;
 //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
 +(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party;
@@ -65,8 +65,6 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 @end
 
 
-#warning move to port of https://github.com/WhisperSystems/TextSecure/blob/master/library/src/org/whispersystems/textsecure/crypto/SessionCipherV2.java?source=cc
-#warning move to port of https://github.com/WhisperSystems/TextSecure/blob/master/src/org/thoughtcrime/securesms/crypto/KeyExchangeProcessorV2.java?source=c
 @protocol AxolotlKeyAgreement <NSObject>
 // all relevant database methods set inside these. only gets aloud outside of them
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
@@ -85,8 +83,8 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 @protocol TSProtocol <NSObject,AxolotlKeyAgreement>
 
--(void) sendMessage:(TSMessage*) message onThread:(TSThread*)thread;
--(NSData*) encryptTSMessage:(TSMessage*)message withKeys:(TSWhisperMessageKeys*)messageKeys withCounter:(NSNumber*)ctr;
+-(void) sendMessage:(TSMessage*) message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType;
+-(NSData*) encryptTSMessage:(TSMessage*)message withKeys:(TSWhisperMessageKeys*)messageKeys withCTR:(NSNumber*)ctr;
 -(TSMessage*) decryptReceivedMessageSignal:(TSMessageSignal*)whisperMessage;
 
 -(NSData*) decryptAppleMessagePayload:(NSData*)messagePayload;

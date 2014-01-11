@@ -432,7 +432,12 @@ static TSEncryptedDatabase *messagesDb = nil;
 /* Axolotl Protocol variables. Persistant storage per thread */
 //RK           : 32-byte root key which gets updated by DH ratchet
 +(NSData*) getRK:(TSThread*)thread {
-  return [TSMessagesDatabase getAPSDataField:@"RK"];
+  return [TSMessagesDatabase getAPSDataField:@"RK"  onThread:thread];
+}
+
+
++(void) setRK:(NSData*)key onThread:(TSThread*)thread {
+   [TSMessagesDatabase setAPSDataField:@{@"nameField":@"RK",@"valueField":key,@"threadID":thread.threadID}];
 }
 
 /*
@@ -444,7 +449,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
 +(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"CK" forParty:party]];
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"CK" forParty:party] onThread:thread];
 
 }
 +(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
@@ -452,7 +457,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 //DHIs, DHIr   : DH or ECDH Identity keys
 +(NSData*) getDHI:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHI" forParty:party]];
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHI" forParty:party] onThread:thread];
  
 }
 
@@ -461,18 +466,17 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 //DHRs, DHRr   : DH or ECDH Ratchet keys
-+(NSData*) getEphmeralPublicKeyOfChain:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party]];
++(NSData*) getEphemeralPublicKeyOfChain:(TSThread*)thread forParty:(TSParty)party{
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party ] onThread:thread];
 }
 
-+(void) setEphmeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-#warning implement serialization
++(void) setEphemeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
   [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
 }
 
 //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
 +(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"N" forParty:party]];
+  return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"N" forParty:party] onThread:thread];
   
 }
 
@@ -482,7 +486,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 //PNs          : Previous message numbers (# of msgs sent under prev ratchet)
 +(NSNumber*)getPNs:(TSThread*)thread{
-  return [TSMessagesDatabase getAPSIntField:@"PNs"];
+  return [TSMessagesDatabase getAPSIntField:@"PNs" onThread:thread];
 }
 
 +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{

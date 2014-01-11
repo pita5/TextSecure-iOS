@@ -127,7 +127,7 @@
       NSData* currentMK = [self updateAndGetNextMessageKeyOnThread:thread forParty:TSSender];
       TSWhisperMessageKeys *encryptionKeys = [self deriveTSWhisperMessageKeysFromMessageKey:currentMK];
       TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc] init];
-      encryptedWhisperMessage.ephemeralKey = [TSMessagesDatabase getEphmeralPublicKeyOfChain:thread forParty:TSSender];
+      encryptedWhisperMessage.ephemeralKey = [TSMessagesDatabase getEphemeralPublicKeyOfChain:thread forParty:TSSender];
       encryptedWhisperMessage.previousCounter=[TSMessagesDatabase getPNs:thread];
       encryptedWhisperMessage.counter = [TSMessagesDatabase getNPlusPlus:thread forParty:TSSender];
       encryptedWhisperMessage.message=[self encryptTSMessage:message withKeys:encryptionKeys withCTR:encryptedWhisperMessage.counter];
@@ -203,9 +203,7 @@
 
 #pragma mark - AxolotlKeyAgreement protocol methods
 
-#warning populate this with getters and setters
 -(TSWhisperMessageKeys*)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage onThread:(TSThread*)thread forParty:(TSParty) party {
-#warning just sudo code will have to split this up
   /* Initial Root Key */
   NSData* masterKey;
   switch (party) {
@@ -250,13 +248,6 @@
   
 }
 
-
-/*
- (TSWhisperMessageKeys*)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage forParty:(TSParty) party; // called when someone else initiazes a new session, as is indicated by the receipt of a PreKeyWhisperMessage
- -(void) newRootKeyDerivation:(NSData*)newPublicEphemeral_DHR; //called when new message received in a session, that is not a session initialization
--(NSData*)updatedNextMessageKeyOnThread:(TSThread*)thread forParty:(TSParty)party; // we already have a root key, what
- */
-
 -(NSData*)updateAndGetNextMessageKeyOnThread:(TSThread*)thread forParty:(TSParty)party {
   NSData* currentChainKey_CK = [TSMessagesDatabase getCK:thread forParty:party];
   /* Chain Key Derivation */
@@ -279,8 +270,6 @@
 
 -(void)newRootKeyDerivationFromNewPublicEphemeral:(NSData*)newPublicEphemeral_DHR onThread:(TSThread*)thread forParty:(TSParty)party {
   /* New Root Key Derivation */
-  // each new remote ephemeral key triggers the generation or a new rk and a new sender key chain
-  // obviously move this elsewhere
   NSData* inputKeyMaterial = [self newRootKeyMaterialFromTheirEphermalPublic:newPublicEphemeral_DHR onThread:thread forParty:party];
   NSData* newRkCK  = [TSHKDF deriveKeyFromMaterial:inputKeyMaterial outputLength:64 info:[@"WhisperRatchet" dataUsingEncoding:NSASCIIStringEncoding]];
   NSData* newRootKey_RK = [newRkCK subdataWithRange:NSMakeRange(0, 32)];
@@ -297,12 +286,6 @@
 
 
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
-  /*
-  ECDH (private,public)
-  ECDHE(theirEphemeral, ourIdentity)
-  ECDHE(theirIdentity, ourEphemeral)
-  ECDHE(theirEphemeral, ourEphemeral)
-   */
   NSMutableData *masterKey = [NSMutableData data];
   [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
   [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
@@ -311,11 +294,6 @@
 }
 
 -(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
-  /*
-  ECDHE(theirIdentity, ourEphemeral)
-  ECDHE(theirEphemeral, ourIdentity)
-  ECDHE(theirEphemeral, ourEphemeral)
-   */
   NSMutableData *masterKey = [NSMutableData data];
   [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
   [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];

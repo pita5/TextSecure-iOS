@@ -58,21 +58,13 @@
     
     
   }];
-
-  
-       
-       
-       
-       
-  
-  
+  return YES;
   
   
 }
 
 -(NSString*) retrieveAttachmentUploadLocationForId:(NSString*) attachmentId {
   __block NSString* uploadLocation;
-  NSString* attachmentLocation = [self retrieveNewAttachmentUploadLocation];
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestAttachment alloc] initWithId:attachmentId] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     switch (operation.response.statusCode) {
       case 200:
@@ -94,10 +86,13 @@
   return uploadLocation;
   
 }
--(NSData*) retrieveAttachmentForId:(NSString*)attachmentId {
-  NSString* uploadLoaction = [self retrieveAttachmentUploadLocationForId:attachmentId];
 
-  __block NSData* attachment;
+-(NSData*) retrieveAttachmentForId:(NSString*)attachmentId {
+#warning not implemented
+//  NSString* uploadLoaction = [self retrieveAttachmentUploadLocationForId:attachmentId];
+//
+//  __block NSData* attachment;
+  return nil;
   
 }
 

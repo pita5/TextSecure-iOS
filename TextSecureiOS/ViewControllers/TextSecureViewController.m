@@ -167,19 +167,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [self.tableView reloadData];
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if(alertView.tag == 0) {
-        self.composingMessagePhoneNumber = [alertView textFieldAtIndex:0].text;
-        
-    }
-    else if(alertView.tag==1) {
-        self.composingMessageText=[alertView textFieldAtIndex:0].text;
-#warning send message here
-#warning add message to database here
-        self.composingMessageText = nil;
-        self.composingMessagePhoneNumber = nil;
-    }
-}
 
 - (IBAction) Edit:(id)sender {
     if(self.editing) {
@@ -198,7 +185,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 #pragma mark - SWTableViewCellDelegate
 
 - (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+   // NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     // Remove item here
     

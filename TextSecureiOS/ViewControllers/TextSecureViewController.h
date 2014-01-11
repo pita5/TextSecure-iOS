@@ -19,6 +19,5 @@
 @property (nonatomic, copy) NSString *composingMessageText;
 
 - (IBAction) Edit:(id)sender;
--(void) appInitialSetupComplete;
 @end
 

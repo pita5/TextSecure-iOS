@@ -32,7 +32,7 @@
     // encryption attachment data, write to file, and initialize the attachment
     NSData *randomEncryptionKey;
     NSData *encryptedData = [Cryptography encryptAttachment:UIImagePNGRepresentation([UIImage imageNamed:@"photo.png"]) withRandomKey:&randomEncryptionKey];
-    NSString* filename = [[Cryptography truncatedHMAC:encryptedData withHMACKey:randomEncryptionKey] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSString* filename = [[Cryptography truncatedHMAC:encryptedData withHMACKey:randomEncryptionKey truncation:10] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     NSString* writeToFile = [FilePath pathInDocumentsDirectory:filename];
     [encryptedData writeToFile:writeToFile atomically:YES];
     self.attachmentDecryptionKey = randomEncryptionKey;
