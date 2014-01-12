@@ -167,7 +167,7 @@
   
 }
 
-+(NSData*)decryptCTRMode:(NSData*)cipherTextPlusMac withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr {
++(NSData*)decryptCTRMode:(NSData*)cipherTextPlusMac withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
 
   /* AES256 CTR decrypt then mac
    Returns nil if hmac invalid or decryption fails
@@ -191,7 +191,7 @@
   CCCryptorRef cryptor;
 
   cryptStatus = CCCryptorCreateWithMode(kCCDecrypt, kCCModeCTR, kCCAlgorithmAES128,
-                                                        ccNoPadding, [[Cryptography counterFromNumber:ctr] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
+                                                        ccNoPadding, [[Cryptography counterFromNumber:counter] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
                                                         NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
   
   cryptStatus = CCCryptorUpdate(cryptor, [ciphertext bytes], [ciphertext length], buffer, bufferSize, &bytesDecrypted);
@@ -203,7 +203,7 @@
   return nil;
 
 }
-+(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr  {
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter  {
 
   /* AES256 CTR decrypt then mac
    Returns nil if hmac invalid or decryption fails
@@ -216,7 +216,7 @@
   CCCryptorStatus cryptStatus;
   CCCryptorRef cryptor;
   cryptStatus = CCCryptorCreateWithMode(kCCEncrypt, kCCModeCTR, kCCAlgorithmAES128,
-                                   ccNoPadding, [[Cryptography counterFromNumber:ctr] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
+                                   ccNoPadding, [[Cryptography counterFromNumber:counter] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
                                    NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
   
  
