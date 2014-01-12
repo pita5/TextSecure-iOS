@@ -20,6 +20,11 @@
   return self.message;
 }
 
+// TODO: implement
+// serializedProtocolBufferAsString
 
+-(const std::string) serializedProtocolBufferAsString {
+  return [[[TSPushMessageContent alloc] initWithData:self.message] serializedProtocolBufferAsString];
+}
 
 @end

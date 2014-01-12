@@ -28,36 +28,6 @@
 + (TSWhisperMessage*) getWhisperMessageForData:(NSData*) data ofType:(TSWhisperMessageType)contentType;
 @end
 
-@implementation TSMessageSignal (Test)
-
-+ (textsecure::IncomingPushMessageSignal *)deserialize:(NSData *)data {
-  int len = [data length];
-  char raw[len];
-  textsecure::IncomingPushMessageSignal *messageSignal = new textsecure::IncomingPushMessageSignal;
-  [data getBytes:raw length:len];
-  messageSignal->ParseFromArray(raw, len);
-  return messageSignal;
-}
-
-+ (TSWhisperMessage*) getWhisperMessageForData:(NSData*) data ofType:(TSWhisperMessageType)contentType{
-  switch (contentType) {
-    case TSUnencryptedWhisperMessageType:
-      return [[TSUnencryptedWhisperMessage alloc] initWithData:data];
-      break;
-    case TSEncryptedWhisperMessageType:
-      return [[TSEncryptedWhisperMessage alloc] initWithData:data];
-      break;
-    case TSPreKeyWhisperMessageType:
-      return [[TSPreKeyWhisperMessage alloc] initWithData:data];
-      break;
-    default:
-      return nil;
-      break;
-  }
-}
-
-
-@end
 
 @implementation CryptographyTests
 
