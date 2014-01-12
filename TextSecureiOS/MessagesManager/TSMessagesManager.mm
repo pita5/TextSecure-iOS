@@ -106,7 +106,6 @@
   [TSMessagesDatabase storeMessage:message];
 #warning always sneding a prekey message for testing!
   messageType = TSPreKeyWhisperMessageType;
-  __block NSString *serializedMessage=@"";
   switch (messageType) {
     case TSEncryptedWhisperMessageType: {
       NSData* currentMK = [self updateAndGetNextMessageKeyOnThread:thread forParty:TSSender];
@@ -116,7 +115,9 @@
       encryptedWhisperMessage.previousCounter=[TSMessagesDatabase getPNs:thread];
       encryptedWhisperMessage.counter = [TSMessagesDatabase getNPlusPlus:thread forParty:TSSender];
       encryptedWhisperMessage.message=[self encryptTSMessage:message withKeys:encryptionKeys withCTR:encryptedWhisperMessage.counter];
-      serializedMessage = [[encryptedWhisperMessage serializedProtocolBuffer] base64EncodedString];
+      NSString *serializedMessage = [[encryptedWhisperMessage serializedProtocolBuffer] base64EncodedString];
+
+      [self submitMessageTo:message.recipientId message:serializedMessage ofType:messageType];
       break;
     }
     case TSPreKeyWhisperMessageType:{
@@ -134,10 +135,12 @@
               TSWhisperMessageKeys* encryptionKeys = [self initialRootKeyDerivation:prekeyMessage onThread:thread forParty:TSSender];
               TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc] init];
               encryptedWhisperMessage.ephemeralKey = [[self generateNewEphemeralKeyPairOnThread:thread forParty:TSSender] getPublicKey];
-              encryptedWhisperMessage.previousCounter=0;
-              encryptedWhisperMessage.counter = 0;
+              encryptedWhisperMessage.previousCounter=[NSNumber numberWithInt:0];
+              encryptedWhisperMessage.counter = [NSNumber numberWithInt:0];
               encryptedWhisperMessage.message=[self encryptTSMessage:message withKeys:encryptionKeys withCTR:0];
-              serializedMessage = [[encryptedWhisperMessage serializedProtocolBuffer] base64EncodedString];
+              // TODO: this is crashing!
+              NSString *serializedMessage = [[encryptedWhisperMessage serializedProtocolBuffer] base64EncodedString];
+              [self submitMessageTo:message.recipientId message:serializedMessage ofType:messageType];
               break;
             }
             default:
@@ -152,18 +155,22 @@
       }
       
       break;
-    case TSUnencryptedWhisperMessageType:
-      serializedMessage= [[TSPushMessageContent serializedPushMessageContent:message] base64Encoding];
+    case TSUnencryptedWhisperMessageType: {
+      NSString *serializedMessage= [[TSPushMessageContent serializedPushMessageContent:message] base64Encoding];
+      [self submitMessageTo:message.recipientId message:serializedMessage ofType:messageType];
       break;
+    }
     default:
       break;
   }
   
   
-  
+}
 
 
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+-(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType {
+
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {
       case 200:
@@ -173,19 +180,17 @@
         
       default:
         DLog(@"error sending message");
-#warning Add error handling if not able to get contacts prekey
+  #warning Add error handling if not able to get contacts prekey
         break;
     }
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning right now it is not succesfully processing returned response, but is giving 200
+  #warning right now it is not succesfully processing returned response, but is giving 200
     DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
     [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"send"}];
     
   }];
-  
-  
-}
 
+}
 #pragma mark - AxolotlKeyAgreement protocol methods
 
 -(TSWhisperMessageKeys*)initialRootKeyDerivation:(TSPreKeyWhisperMessage*)keyAgreementMessage onThread:(TSThread*)thread forParty:(TSParty) party {

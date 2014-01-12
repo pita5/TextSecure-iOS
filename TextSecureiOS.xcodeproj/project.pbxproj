@@ -423,6 +423,7 @@
 		A5E6CC8C187D1277002A1735 /* TSAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC8B187D1277002A1735 /* TSAttachment.m */; };
 		A5E6CC90187D1E41002A1735 /* TSWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */; };
 		A5E6CC97187FB7C6002A1735 /* TSWhisperMessageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */; };
+		A5E6CC9B18826005002A1735 /* TSProtocolBufferWrapperTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
@@ -966,6 +967,7 @@
 		A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSWhisperMessage.mm; path = ProtocolBufferWrappers/TSWhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC95187FB7C6002A1735 /* TSWhisperMessageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWhisperMessageKeys.h; path = Model/TSWhisperMessageKeys.h; sourceTree = "<group>"; };
 		A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWhisperMessageKeys.m; path = Model/TSWhisperMessageKeys.m; sourceTree = "<group>"; };
+		A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TSProtocolBufferWrapperTests.mm; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
@@ -1141,6 +1143,7 @@
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
 				8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */,
+				A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */,
 			);
 			path = "TextSecureiOS Tests";
 			sourceTree = "<group>";
@@ -2511,6 +2514,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5E6CC9B18826005002A1735 /* TSProtocolBufferWrapperTests.mm in Sources */,
 				8CF7BD9F187130F80023A781 /* TSStorageMasterKeyTests.m in Sources */,
 				4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */,
 				8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */,

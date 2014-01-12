@@ -30,6 +30,7 @@
 }
 
 #pragma mark boilerplate conversion methods
+#warning need to test this! it is currently crashing under some circumstances
 -(uint64_t) objcDateToCpp:(NSDate*)objcDate {
   return round([objcDate timeIntervalSince1970]);
 }

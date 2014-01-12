@@ -9,7 +9,10 @@
 #import "TSEncryptedWhisperMessage.hh"
 #import "WhisperMessage.pb.hh"
 @implementation TSEncryptedWhisperMessage
-
+@synthesize ephemeralKey;
+@synthesize counter;
+@synthesize previousCounter;
+@synthesize message;
 
 -(id) initWithData:(NSData*) data {
   /*

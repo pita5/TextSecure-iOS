@@ -137,7 +137,7 @@
     
     XCTAssertThrows([TSHKDF deriveKeyFromMaterial:nil outputLength:32 info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)]], @"Nil input did not throw an exception");
     XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] outputLength:32 info:nil salt:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)]], @"Nil info did not throw an exception");
-    XCTAssertThrows([TSHKDF deriveKeyFromMaterial:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer) freeWhenDone:NO] outputLength:32 info:[NSData dataWithBytesNoCopy:buffer length:sizeof(buffer)] salt:nil], @"Nil salt did not throw an exception");
+
 }
 
 
