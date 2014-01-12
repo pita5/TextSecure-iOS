@@ -116,7 +116,8 @@
 #warning write this
   NSString* originalMessage = @"Hawaii is awesome";
   TSWhisperMessageKeys * messageKeys = [[TSWhisperMessageKeys alloc] initWithCipherKey:[Cryptography generateRandomBytes:32] macKey:[Cryptography generateRandomBytes:32]];
-  for(int counter=0;counter<20; counter++) {
+  for(int i=0;i<20; i++) {
+    int counter = arc4random();
     //Encrypt
     NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:[NSNumber numberWithInt:counter]];
     
