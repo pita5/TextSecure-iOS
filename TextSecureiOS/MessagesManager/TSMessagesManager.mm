@@ -60,7 +60,9 @@
   
   NSString *decryptedMessage = [IncomingPushMessageSignal getMessageBody:fullMessageInfoRecieved];
   NSString *decryptedMessageAndInfo = [IncomingPushMessageSignal prettyPrint:fullMessageInfoRecieved];
-  [TSMessagesDatabase storeMessage:[IncomingPushMessageSignal getTSMessageForIncomingPushMessageSignal:fullMessageInfoRecieved]];
+  TSMessage *message = [IncomingPushMessageSignal getTSMessageForIncomingPushMessageSignal:fullMessageInfoRecieved];
+  message.messageTimestamp = [NSDate date]; // this is a receipt. time is now. 
+  [TSMessagesDatabase storeMessage:message];
   
   UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
   [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"receive"}];
