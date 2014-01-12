@@ -167,12 +167,12 @@
   
 }
 
-+(NSData*)decryptCTRMode:(NSData*)cipherTextPlusMac withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
++(NSData*)decryptCTRMode:(NSData*)cipherTextPlusMac withKeys:(TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr {
 
   /* AES256 CTR decrypt then mac
    Returns nil if hmac invalid or decryption fails
    */
-  //verify hmac of version||encrypted data||iv
+
   NSData* ciphertext = [cipherTextPlusMac subdataWithRange:NSMakeRange(0, [cipherTextPlusMac length]-8)];
   NSData* hmac = [cipherTextPlusMac subdataWithRange:NSMakeRange([cipherTextPlusMac length]-8, 8)];
   // verify hmac
@@ -181,8 +181,6 @@
     return nil;
     
   }
-#warning obviously unimplemented
-  return ciphertext;
   // decrypt
   size_t bufferSize           = [ciphertext length] + kCCBlockSizeAES128;
   void* buffer                = malloc(bufferSize);
@@ -191,11 +189,9 @@
   // setting up cryptor
   CCCryptorStatus cryptStatus;
   CCCryptorRef cryptor;
-  int counterInt = [counter intValue];
-  NSData *ctr = [NSData dataWithBytes:&counterInt length:sizeof(counterInt)];
 
   cryptStatus = CCCryptorCreateWithMode(kCCDecrypt, kCCModeCTR, kCCAlgorithmAES128,
-                                                        ccNoPadding, [ctr bytes], [keys.cipherKey bytes], [keys.cipherKey length],
+                                                        ccNoPadding, [[Cryptography counterFromNumber:ctr] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
                                                         NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
   
   cryptStatus = CCCryptorUpdate(cryptor, [ciphertext bytes], [ciphertext length], buffer, bufferSize, &bytesDecrypted);
@@ -207,29 +203,27 @@
   return nil;
 
 }
-+(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter {
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)ctr  {
 
   /* AES256 CTR decrypt then mac
    Returns nil if hmac invalid or decryption fails
    */
+
   size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
   void* buffer                = malloc(bufferSize);
   size_t bytesEncrypted    = 0;
   // setting up cryptor
   CCCryptorStatus cryptStatus;
   CCCryptorRef cryptor;
-  int counterInt = [counter intValue];
-  NSData *ctr = [NSData dataWithBytes:&counterInt length:sizeof(counterInt)];
   cryptStatus = CCCryptorCreateWithMode(kCCEncrypt, kCCModeCTR, kCCAlgorithmAES128,
-                                   ccNoPadding, [ctr bytes], [keys.cipherKey bytes], [keys.cipherKey length],
+                                   ccNoPadding, [[Cryptography counterFromNumber:ctr] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
                                    NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
   
  
   cryptStatus = CCCryptorUpdate(cryptor, [dataToEncrypt bytes], [dataToEncrypt length], buffer, bufferSize, &bytesEncrypted);
   if (cryptStatus == kCCSuccess){
-#warning obviously unimpelemented
-    NSMutableData *encryptedData = [NSMutableData dataWithBytesNoCopy:[dataToEncrypt bytes] length:[dataToEncrypt  length]];
-  //    NSMutableData* encryptedData= [NSMutableData dataWithBytesNoCopy:buffer length:bytesEncrypted];
+  
+    NSMutableData* encryptedData= [NSMutableData dataWithBytesNoCopy:buffer length:bytesEncrypted];
     //compute hmac sha 256 of encrypted data, truncated to 8 bytes
     NSData* hmac = [Cryptography truncatedHMAC:encryptedData withHMACKey:keys.macKey truncation:8];
     [encryptedData appendData:hmac];
@@ -291,6 +285,14 @@
   NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
   return [Cryptography decrypt:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
   
+}
+
++(NSData*) counterFromNumber:(NSNumber*)ctr {
+  int ctrInt = [ctr integerValue];
+  NSString* counter =[NSString stringWithFormat:@"               %d",ctrInt];
+  NSData* iv = [counter dataUsingEncoding:NSASCIIStringEncoding];
+  
+  return iv;
 }
 
 
