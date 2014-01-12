@@ -49,9 +49,11 @@
 
 
 -(const std::string) objcDataToCppString:(NSData*)objcData {
-  NSString* stringFromBytes = [[NSString alloc] initWithData:objcData
-                                                    encoding:NSASCIIStringEncoding];
-  return [self objcStringToCpp:stringFromBytes];
+  int len = [objcData length];
+  char raw[len];
+  [objcData getBytes:raw length:len];
+  const std::string stringFromBytes(raw);
+  return stringFromBytes;
 }
 -(NSData*) cppStringToObjcData:(const std::string)cppString {
   return [NSData dataWithBytes:cppString.c_str() length:cppString.size()];

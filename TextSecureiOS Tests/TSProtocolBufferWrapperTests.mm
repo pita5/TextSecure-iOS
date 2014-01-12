@@ -15,17 +15,14 @@
 
 @implementation TSProtocolBufferWrapperTests
 
-- (void)setUp
-{
-    self.pbWrapper = [[TSProtocolBufferWrapper alloc] init];
-    [super setUp];
-    // Put setup code here; it will be run once, before the first test case.
+- (void)setUp {
+  [super setUp];
+  self.pbWrapper = [[TSProtocolBufferWrapper alloc] init];
+
 }
 
-- (void)tearDown
-{
-    // Put teardown code here; it will be run once, after the last test case.
-    [super tearDown];
+- (void)tearDown {
+  [super tearDown];
 }
 
 
@@ -51,15 +48,13 @@
   XCTAssertTrue([convertedString isEqualToString:string], @"date conversion is off conversion %@ not equal to original %@",convertedString,string);
 }
 
-//segfaults
-
-//-(void) testObjcDataToCppString  {
-//  NSData* data = [Cryptography generateRandomBytes:64];
-//  const std::string cppDataString = [self.pbWrapper objcDataToCppString:data];
-//  NSData* convertedData = [self.pbWrapper cppStringToObjcData:cppDataString];
-//  XCTAssertTrue([convertedData isEqualToData:data], @"date conversion is off conversion %@ not equal to original %@",convertedData,data);
-//  
-//}
+-(void) testObjcDataToCppString  {
+  NSData* data = [Cryptography generateRandomBytes:64];
+  const std::string cppDataString = [self.pbWrapper objcDataToCppString:data];
+  NSData* convertedData = [self.pbWrapper cppStringToObjcData:cppDataString];
+  XCTAssertTrue([convertedData isEqualToData:data], @"date conversion is off conversion %@ not equal to original %@",convertedData,data);
+  
+}
 
 // C++<->Objc ints
 -(void) testObjcNumberToCppUInt32 {
