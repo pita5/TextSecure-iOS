@@ -116,22 +116,20 @@
 #warning write this
   NSString* originalMessage = @"Hawaii is awesome";
   TSWhisperMessageKeys * messageKeys = [[TSWhisperMessageKeys alloc] initWithCipherKey:[Cryptography generateRandomBytes:32] macKey:[Cryptography generateRandomBytes:32]];
-
-  int counter = 0;
-
-  //Encrypt
-  NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:[NSNumber numberWithInt:counter]];
-  
-  NSData* expectedHmac = [Cryptography truncatedHMAC:[encryption subdataWithRange:NSMakeRange(0, [encryption length]-8)] withHMACKey:messageKeys.macKey truncation:8];
-  NSData* mac = [encryption subdataWithRange:NSMakeRange([encryption length]-8,8)];
-  XCTAssertTrue([mac isEqualToData:expectedHmac], @"Hmac of encrypted data %@,  not equal to expected hmac %@", [mac base64EncodedString], [expectedHmac base64EncodedString]);
-  
-  NSData* decryption = [Cryptography decryptCTRMode:encryption withKeys:messageKeys withCounter:[NSNumber numberWithInt:counter]];
-  
-  NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
-  XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
-  XCTAssertFalse([[originalMessage dataUsingEncoding:NSASCIIStringEncoding] isEqualToData:encryption], @"ctr encryption did nothing, as it encrypted data equals the original data. this is to catch that doesn't happen-as it could be disabled for testing/debugging");
-
+  for(int counter=0;counter<20; counter++) {
+    //Encrypt
+    NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:[NSNumber numberWithInt:counter]];
+    
+    NSData* expectedHmac = [Cryptography truncatedHMAC:[encryption subdataWithRange:NSMakeRange(0, [encryption length]-8)] withHMACKey:messageKeys.macKey truncation:8];
+    NSData* mac = [encryption subdataWithRange:NSMakeRange([encryption length]-8,8)];
+    XCTAssertTrue([mac isEqualToData:expectedHmac], @"Hmac of encrypted data %@,  not equal to expected hmac %@", [mac base64EncodedString], [expectedHmac base64EncodedString]);
+    
+    NSData* decryption = [Cryptography decryptCTRMode:encryption withKeys:messageKeys withCounter:[NSNumber numberWithInt:counter]];
+    
+    NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
+    XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
+    XCTAssertFalse([[originalMessage dataUsingEncoding:NSASCIIStringEncoding] isEqualToData:encryption], @"ctr encryption did nothing, as it encrypted data equals the original data. this is to catch that doesn't happen-as it could be disabled for testing/debugging");
+  }
 }
 
 

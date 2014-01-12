@@ -288,11 +288,15 @@
 }
 
 +(NSData*) counterFromNumber:(NSNumber*)ctr {
-  int ctrInt = [ctr integerValue];
-  NSString* counter =[NSString stringWithFormat:@"               %d",ctrInt];
-  NSData* iv = [counter dataUsingEncoding:NSASCIIStringEncoding];
+  uint32_t empty = 0;
+  NSMutableData* counter = [NSMutableData data];
+  for (int i=0; i<3; i++) {
+    [counter appendBytes:(void*)&empty length:4];
+  }
   
-  return iv;
+  uint32_t ctrInt = [ctr integerValue];
+  [counter appendBytes:(void*)&ctrInt length:4];
+  return counter;
 }
 
 
