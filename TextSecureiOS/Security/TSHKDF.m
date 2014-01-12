@@ -7,7 +7,7 @@
 //
 
 #import "TSHKDF.h"
-
+#import "Cryptography.h"
 
 static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
 
@@ -25,11 +25,11 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     char prk[HKDF_HASH_LEN] = {0};
     char *okm = NULL;
     
-    if ((!input) || (!info) || (!salt)) {
+    if ((!input) || (!info) ) {
         @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument was nil" userInfo:nil];
     }
     
-    if (([input length] == 0) || ([salt length] == 0)) {
+    if (([input length] == 0) ) {
         @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument had a length of 0" userInfo:nil];
     }
     
@@ -38,6 +38,8 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     }
     
     // Step 1 - Extract
+  
+  
     [TSHKDF extract:[input bytes] ikmLength:[input length] salt:[salt bytes] saltLength:[salt length] prkOut:prk];
     
     // Step 2 - Expand
@@ -61,6 +63,7 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
  */
 +(void) extract:(const void *)ikm ikmLength:(size_t)ikmLength salt:(const void *)salt saltLength:(size_t)saltLength prkOut:(void *)prkOut {
     // The caller already checked that all arguments are sane
+  
     CCHmac(HKDF_HASH_ALG, salt, saltLength, ikm, ikmLength, prkOut);
 }
 

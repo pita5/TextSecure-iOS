@@ -101,8 +101,6 @@
  
   NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:payload withSignalingKey:signalingKeyString];
 
-  // Now get the protocol buffer message out
-  //textsecure::IncomingPushMessageSignal *fullMessageInfoRecieved = [TSMessageSignal deserialize:decryption];
   TSMessageSignal *tsMessageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
   TSPushMessageContent* tsMessageContent = [[TSPushMessageContent alloc] initWithData:tsMessageSignal.message.message];
   TSMessage* tsMessage =  [tsMessageSignal getTSMessage:tsMessageContent];

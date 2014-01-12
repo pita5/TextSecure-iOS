@@ -8,12 +8,13 @@
 
 #import "TSSubmitMessageRequest.h"
 #import "TSContact.h"
+#import "TSProtocol.h"
 @implementation TSSubmitMessageRequest
 
--(TSRequest*) initWithRecipient:(NSString*) contactRegisteredID message:(NSString*) messageBody {
+-(TSRequest*) initWithRecipient:(NSString*) contactRegisteredID message:(NSString*) messageBody ofType:(TSWhisperMessageType)type {
   NSMutableDictionary *messageDictionary = [[NSMutableDictionary alloc]
                                             initWithObjects:[[NSArray alloc]
-                                                             initWithObjects:[NSNumber numberWithInt:0],
+                                                             initWithObjects:[NSNumber numberWithInt:type],
                                                              contactRegisteredID,
                                                              messageBody,
                                                              [NSNumber numberWithLong:[[NSDate date] timeIntervalSince1970]],

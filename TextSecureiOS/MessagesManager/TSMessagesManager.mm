@@ -82,6 +82,7 @@
     case TSPreKeyWhisperMessageType: {
       
       TSThread* thread =[TSThread threadWithMeAndParticipantsByRegisteredIds: @[messageSignal.source]];
+    // TODO:  // this is nil right now
       TSPreKeyWhisperMessage* preKeyMessage = (TSPreKeyWhisperMessage*)messageSignal.message;
       TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)preKeyMessage.message;
       TSWhisperMessageKeys* decryptionKeys = [self initialRootKeyDerivation:preKeyMessage onThread:thread forParty:TSReceiver];
@@ -103,6 +104,8 @@
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType{
   [TSMessagesDatabase storeMessage:message];
+#warning always sneding a prekey message for testing!
+  messageType = TSPreKeyWhisperMessageType;
   __block NSString *serializedMessage=@"";
   switch (messageType) {
     case TSEncryptedWhisperMessageType: {
@@ -160,7 +163,7 @@
   
 
 
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {
       case 200:
@@ -245,7 +248,7 @@
 -(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK {
   NSData* newCipherKeyAndMacKey  = [TSHKDF deriveKeyFromMaterial:nextMessageKey_MK outputLength:64 info:[@"WhisperMessageKeys" dataUsingEncoding:NSASCIIStringEncoding]];
   NSData* cipherKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(0, 32)];
-  NSData* macKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(32, 64)];
+  NSData* macKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(32, 32)];
   // we want to return something here  or use this locally
   return [[TSWhisperMessageKeys alloc] initWithCipherKey:cipherKey macKey:macKey];
 }
