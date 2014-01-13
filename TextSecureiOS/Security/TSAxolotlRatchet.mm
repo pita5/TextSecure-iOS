@@ -184,11 +184,11 @@
   switch (party) {
     case TSSender: {
       // TSPrekeyWhisperMessage comes pre-populated with their prekey/ephemeral key/base key and their identity key
-      TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
-      TSECKeyPair *ourEphemeralKey = [TSAxolotlRatchet generateNewEphemeralKeyPairOnThread:thread forParty:party];
-      
-      
-      masterKey = [TSAxolotlRatchet masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:keyAgreementMessage.recipientIdentityKey theirEphemeralPublicKey:keyAgreementMessage.recipientPreKey];
+    TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
+    TSECKeyPair *ourEphemeralKey = [TSAxolotlRatchet generateNewEphemeralKeyPairOnThread:thread forParty:party];
+    
+    
+    masterKey = [TSAxolotlRatchet masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:keyAgreementMessage.recipientIdentityKey theirEphemeralPublicKey:keyAgreementMessage.recipientPreKey];
       // TSPrekeyWhisperMessage comes we populate the TSPrekeyWhisperMessage instead with our public ephemeral key/base key and their identity key
       [TSMessagesDatabase setEphemeralPublicKeyOfChain:[ourEphemeralKey getPublicKey]  onThread:thread forParty:party];
       keyAgreementMessage.baseKey = [ourEphemeralKey getPublicKey];

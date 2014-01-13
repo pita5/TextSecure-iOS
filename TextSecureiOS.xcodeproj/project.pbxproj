@@ -402,6 +402,7 @@
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
+		A5C85AEF18839E8C001D2189 /* TSAxolotlRatchetTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5C85AEE18839E8C001D2189 /* TSAxolotlRatchetTests.mm */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5E6CBF91875DC2D002A1735 /* photo.png in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CBF71875DC2D002A1735 /* photo.png */; };
@@ -933,6 +934,7 @@
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A56D31B7180FCA840093D51B /* TSRegisterPrekeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterPrekeysRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.h; sourceTree = "<group>"; };
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeysRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.m; sourceTree = "<group>"; };
+		A5C85AEE18839E8C001D2189 /* TSAxolotlRatchetTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TSAxolotlRatchetTests.mm; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5E6CBF71875DC2D002A1735 /* photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo.png; sourceTree = "<group>"; };
@@ -1141,12 +1143,10 @@
 		8C42C13E18551B8C000DD353 /* TextSecureiOS Tests */ = {
 			isa = PBXGroup;
 			children = (
-				8C4328CB187885FD005F25E2 /* Storage */,
-				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
-				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
-				8C42C13F18551B8C000DD353 /* Supporting Files */,
-				8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */,
 				A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */,
+				A5C85AED18839E68001D2189 /* Security */,
+				8C4328CB187885FD005F25E2 /* Storage */,
+				8C42C13F18551B8C000DD353 /* Supporting Files */,
 			);
 			path = "TextSecureiOS Tests";
 			sourceTree = "<group>";
@@ -1645,6 +1645,17 @@
 				A5E6CC1A187B82AA002A1735 /* Compiled */,
 			);
 			path = ProtocolBuffers;
+			sourceTree = "<group>";
+		};
+		A5C85AED18839E68001D2189 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
+				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
+				8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */,
+				A5C85AEE18839E8C001D2189 /* TSAxolotlRatchetTests.mm */,
+			);
+			name = Security;
 			sourceTree = "<group>";
 		};
 		A5E6CC1A187B82AA002A1735 /* Compiled */ = {
@@ -2523,6 +2534,7 @@
 				8CF7BD9F187130F80023A781 /* TSStorageMasterKeyTests.m in Sources */,
 				4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */,
 				8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */,
+				A5C85AEF18839E8C001D2189 /* TSAxolotlRatchetTests.mm in Sources */,
 				8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */,
 				8CF7BDA1187137640023A781 /* TSEncryptedDatabaseTests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
