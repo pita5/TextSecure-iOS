@@ -424,6 +424,7 @@
 		A5E6CC90187D1E41002A1735 /* TSWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */; };
 		A5E6CC97187FB7C6002A1735 /* TSWhisperMessageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */; };
 		A5E6CC9B18826005002A1735 /* TSProtocolBufferWrapperTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */; };
+		A5E6CC9E18837C31002A1735 /* TSAxolotlRatchet.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC9D18837C31002A1735 /* TSAxolotlRatchet.m */; };
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
@@ -968,6 +969,8 @@
 		A5E6CC95187FB7C6002A1735 /* TSWhisperMessageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWhisperMessageKeys.h; path = Model/TSWhisperMessageKeys.h; sourceTree = "<group>"; };
 		A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWhisperMessageKeys.m; path = Model/TSWhisperMessageKeys.m; sourceTree = "<group>"; };
 		A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TSProtocolBufferWrapperTests.mm; sourceTree = "<group>"; };
+		A5E6CC9C18837C31002A1735 /* TSAxolotlRatchet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAxolotlRatchet.h; path = Security/TSAxolotlRatchet.h; sourceTree = "<group>"; };
+		A5E6CC9D18837C31002A1735 /* TSAxolotlRatchet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAxolotlRatchet.m; path = Security/TSAxolotlRatchet.m; sourceTree = "<group>"; };
 		A5F15A99170280B700856385 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
@@ -1716,6 +1719,8 @@
 				A5169D26170FEB8F00A2CE9E /* Cryptography.m */,
 				8C3C917518544FDF003EA71D /* TSHKDF.h */,
 				8C3C917618544FDF003EA71D /* TSHKDF.m */,
+				A5E6CC9C18837C31002A1735 /* TSAxolotlRatchet.h */,
+				A5E6CC9D18837C31002A1735 /* TSAxolotlRatchet.m */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -2557,6 +2562,7 @@
 				A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */,
 				B635B3CD182181E1003CE732 /* JSMessagesViewController.m in Sources */,
 				B635B3CB182181E1003CE732 /* JSMessageInputView.m in Sources */,
+				A5E6CC9E18837C31002A1735 /* TSAxolotlRatchet.m in Sources */,
 				B635B3E7182181E1003CE732 /* UIButton+JSMessagesView.m in Sources */,
 				B68A2292180AC32C00D93C16 /* TSRegisterForPushRequest.m in Sources */,
 				B635B3CC182181E1003CE732 /* JSMessageSoundEffect.m in Sources */,
