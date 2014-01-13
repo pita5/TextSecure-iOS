@@ -76,7 +76,7 @@
       NSData* messageKey = [self updateAndGetNextMessageKeyOnThread:thread forParty:TSReceiver];
       TSWhisperMessageKeys *decryptionKeys = [self deriveTSWhisperMessageKeysFromMessageKey:messageKey];
       NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
-      return [[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:messageSignal.source recipients:messageSignal.destinations sentOnDate:messageSignal.timestamp];
+      return [[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:messageSignal.source recipient: [TSKeyManager getUsernameToken] sentOnDate:messageSignal.timestamp];
       break;
     }
     case TSPreKeyWhisperMessageType: {
@@ -87,7 +87,7 @@
       TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)preKeyMessage.message;
       TSWhisperMessageKeys* decryptionKeys = [self initialRootKeyDerivation:preKeyMessage onThread:thread forParty:TSReceiver];
       NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
-      return [[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:messageSignal.source recipients:messageSignal.destinations sentOnDate:messageSignal.timestamp];
+      return [[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:messageSignal.source recipient:[TSKeyManager getUsernameToken] sentOnDate:messageSignal.timestamp];
       
       break;
     }

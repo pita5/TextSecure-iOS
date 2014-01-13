@@ -14,6 +14,7 @@
 #import "TSMessageSignal.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSPushMessageContent.hh"
+#import  "TSEncryptedWhisperMessage.hh"
 
 @interface TSProtocolBufferWrapper (Test)
 - (textsecure::IncomingPushMessageSignal *)deserialize:(NSData *)data;
@@ -37,35 +38,62 @@
   [super tearDown];
 }
 
+/*
+ PushMessageSignal.type = {3=PreKeyWhisperMessage,0=Unencrypted,1=WhisperMessage }
+ PushMessageSignal.message = {PreKeyWhisperMessage,PushMessageContent,WhisperMessage}
+ 
+ PreKeyWhisperMessage.message = WhisperMessage
+ PushMessageContent.body = "hey, here's the real message"
+ WhisperMessage.message = PushMessageContent
+ */
+
 
 -(void) testMessageSignalSerialization {
-//  TSMessageSignal* messageSignal = [[TSMessageSignal alloc] init];
-//  messageSignal.contentType = TSUnencryptedWhisperMessageType;
-//  messageSignal.source = @"+11111111";
-//  messageSignal.destinations = @[@"+2222222"];
-//  messageSignal.timestamp = [NSDate date];
-//  
-//  TSUnencryptedWhisperMessage *message = [[TSUnencryptedWhisperMessage alloc] init];
-//  
-//  TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
-//  pushContent.body = @"Surf is up";
-//  message.message = [pushContent serializedProtocolBuffer]; // this is crashing as isn't calling serializedprotocolbuffer on stcring, not available
-//  messageSignal.message = message;
-//
-//
-//  NSData *serializedMessageSignal = [messageSignal serializedProtocolBuffer];
-//  
-//  TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithData:serializedMessageSignal];
-//  
-//  XCTAssertTrue(messageSignal.contentType == deserializedMessageSignal.contentType,@"TSMessageSignal contentType unequal after serialization");
-//  XCTAssertTrue([messageSignal.source isEqualToString:deserializedMessageSignal.source],@"TSMessageSignal source unequal after serialization");
-//  XCTAssertTrue([messageSignal.destinations isEqualToArray:deserializedMessageSignal.destinations],@"TSMessageSignal destinations unequal after serialization");
-//  
-//  XCTAssertTrue([messageSignal.timestamp isEqualToDate:deserializedMessageSignal.timestamp],@"TSMessageSignal source unequal after serialization");
-//  
-//  
-//  
-//  XCTAssertTrue([messageSignal.message.message isEqualToData:message.message],@"TSMessageSignal message unequal after serialization");
+  TSMessageSignal* messageSignal = [[TSMessageSignal alloc] init];
+  messageSignal.contentType = TSUnencryptedWhisperMessageType;
+  messageSignal.source = @"+11111111";
+  messageSignal.timestamp = [NSDate date];
+ 
+  
+  
+  TSUnencryptedWhisperMessage *message = [[TSUnencryptedWhisperMessage alloc] init];
+  TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
+  pushContent.body = @"Surf is up";
+  NSData *serializedMessageContent = [pushContent serializedProtocolBuffer];
+  message.message = serializedMessageContent;
+  
+  
+  messageSignal.message = message;
+  
+
+  
+  NSData *serializedMessageSignal = [messageSignal serializedProtocolBuffer];
+  TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithData:serializedMessageSignal];
+  
+  XCTAssertTrue(messageSignal.contentType == deserializedMessageSignal.contentType,@"TSMessageSignal contentType unequal after serialization");
+  
+  
+  
+  XCTAssertTrue([messageSignal.source isEqualToString:deserializedMessageSignal.source],@"TSMessageSignal source unequal after serialization");
+  
+  
+
+#warning compare with a nstimeinterval
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+  [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+  NSString* nowString = [dateFormatter stringFromDate:messageSignal.timestamp];
+  NSString* convertedNowString  = [dateFormatter stringFromDate:deserializedMessageSignal.timestamp];
+
+  
+  XCTAssertTrue([nowString isEqualToString:convertedNowString],@"TSMessageSignal dates unequal after serialization");
+  
+
+  
+  TSUnencryptedWhisperMessage *unencryptedDeserializedMessage = (TSUnencryptedWhisperMessage*)deserializedMessageSignal.message;
+  
+  TSPushMessageContent *deserializedPushMessageContent = [[TSPushMessageContent alloc] initWithData:unencryptedDeserializedMessage.message];
+  XCTAssertTrue([pushContent.body isEqualToString:deserializedPushMessageContent.body],@"TSMessageSignal message unequal after serialization");
 }
 
 
@@ -84,12 +112,6 @@
 
 }
 
-
--(void)testUnencryptedWhisperMessageSerialization {
-  
-}
-
-
 -(void)testPushMessageContentSerialization {
   TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
   pushContent.body = @"Surf is up";
@@ -97,13 +119,49 @@
   TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
   
   XCTAssertTrue([pushContent.body isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
-  }
+}
+
+
+-(void)testEncryptedWhisperMessageSerialization {
+  TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc] init];
+  encryptedWhisperMessage.ephemeralKey = [Cryptography generateRandomBytes:32];
+  encryptedWhisperMessage.counter = [[NSNumber alloc] initWithInt:0];
+  encryptedWhisperMessage.previousCounter = [[NSNumber alloc] initWithInt:0];
+  
+  TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
+  pushContent.body = @"Surf is up";
+  
+  NSData *serializedPushMessageContent = [pushContent serializedProtocolBuffer];
+  encryptedWhisperMessage.message = serializedPushMessageContent;
+
+  
+  NSData* serializedEncryptedMessage = [encryptedWhisperMessage serializedProtocolBuffer];
+  
+  TSEncryptedWhisperMessage *deserializedEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithData:serializedEncryptedMessage];
+
+  NSLog(@"encrypted whispermessage original vs new %@ vs. %@",encryptedWhisperMessage,deserializedEncryptedMessage);
+  XCTAssertTrue([deserializedEncryptedMessage.previousCounter isEqualToNumber:encryptedWhisperMessage.previousCounter], @"previous counters unequal");
+
+  XCTAssertTrue([deserializedEncryptedMessage.counter isEqualToNumber:encryptedWhisperMessage.counter], @"counters unequal");
+  XCTAssertTrue([deserializedEncryptedMessage.ephemeralKey isEqualToData:encryptedWhisperMessage.ephemeralKey], @"ephemeral keys unequal; deserialization %@, encrypted %@",deserializedEncryptedMessage.ephemeralKey,encryptedWhisperMessage.ephemeralKey);
+  
+  
+  TSPushMessageContent *deserializedPushMessageContet = [[TSPushMessageContent alloc] initWithData:deserializedEncryptedMessage.message];
+  
+  
+  XCTAssertTrue([deserializedPushMessageContet.body isEqualToString:pushContent.body], @"messages not equal");
+  
+
+}
+
+
+
 
 -(void) testObjcDateToCpp {
   NSDate* now = [NSDate date];
   uint64_t cppDate = [self.pbWrapper objcDateToCpp:now];
   NSDate *convertedNow = [self.pbWrapper cppDateToObjc:cppDate];
-  // due to roundoff issues two dates will never be equal to the second but we'll compare via the formatting string we actually use in the app
+#warning compare with a nstimeinterval
   NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
   [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
   [dateFormatter setTimeStyle:NSDateFormatterNoStyle];

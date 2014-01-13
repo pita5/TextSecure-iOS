@@ -195,7 +195,7 @@
         _tokenFieldView = nil;
     }
   
-    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date]];
+    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipient:self.contact.registeredID sentOnDate:[NSDate date]];
   
     [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread ofType:self.messagingType];
     [self finishSend];

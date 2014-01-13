@@ -20,7 +20,6 @@
    optional uint32 counter         = 2;
    optional uint32 previousCounter = 3;
    optional bytes  ciphertext      = 4;
-   //
    */
   if(self = [super init]) {
     // c++

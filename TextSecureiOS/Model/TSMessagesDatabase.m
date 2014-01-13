@@ -212,7 +212,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         while([rs next]) {
             NSString* timestamp = [rs stringForColumn:@"timestamp"];
             NSDate *date = [dateFormatter dateFromString:timestamp];
-            [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipients:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date]];
+            [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipient:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date]];
         }
     }];
     
@@ -245,7 +245,7 @@ static TSEncryptedDatabase *messagesDb = nil;
             TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[rs stringForColumn:@"recipient_id"]];
             TSThread *messageThread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[sender,receiver]]];
             
-            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipients:@[receiver.registeredID] sentOnDate:date];
+            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:sender.registeredID recipient:receiver.registeredID sentOnDate:date];
 
             [threadArray addObject:messageThread];
         }
