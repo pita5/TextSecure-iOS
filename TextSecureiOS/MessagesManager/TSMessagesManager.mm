@@ -7,7 +7,7 @@
 //
 
 #import "TSMessagesManager.h"
-#import "TSAxolotlRatchet.h"
+#import "TSAxolotlRatchet.hh"
 #import "TSMessage.h"
 #import "NSData+Base64.h"
 
