@@ -11,11 +11,10 @@
 
 
 #import <Foundation/Foundation.h>
-#import "TSProtocol.h"
+#import "TSProtocols.h"
 @class TSMessage;
 
-@interface TSMessagesManager : NSObject <TSProtocol>
-
+@interface TSMessagesManager : NSObject
 + (id)sharedManager;
 
 - (void) receiveMessagePush:(NSDictionary*)pushDict;

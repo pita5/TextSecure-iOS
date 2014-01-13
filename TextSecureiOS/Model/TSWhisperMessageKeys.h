@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSProtocol.h"
+#import "TSProtocols.h"
 @interface TSWhisperMessageKeys : NSObject<AxolotlEphemeralStorageMessagingKeys>
 
 -(id)initWithCipherKey:(NSData*)cipherKey macKey:(NSData*)macKey;

@@ -10,7 +10,7 @@
 #import "TITokenField.h"
 #import "JSMessagesViewController.h"
 #import "TSContact.h"
-#import "TSProtocol.h"
+#import "TSProtocols.h"
 @class TSMessage;
 @class TSThread;
 @interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TSProtocolBufferWrapper.hh"
-#import "TSProtocol.h"
+#import "TSProtocols.h"
 @class TSPushMessageContent;
 @class TSWhisperMessage;
 @interface TSMessageSignal : TSProtocolBufferWrapper

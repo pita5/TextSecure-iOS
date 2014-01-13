@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSProtocol.h"
+#import "TSProtocols.h"
 @class TSParticipants;
 @class TSMessage;
 @interface TSThread : NSObject

@@ -7,7 +7,7 @@
 //
 
 #import "TSRequest.h"
-#import "TSProtocol.h"
+#import "TSProtocols.h"
 @class TSContact;
 @interface TSSubmitMessageRequest : TSRequest
 -(TSRequest*) initWithRecipient:(NSString*) contactRegisteredID message:(NSString*) messageBody ofType:(TSWhisperMessageType)type;
