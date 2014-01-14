@@ -36,6 +36,8 @@ static NSString *masterPw = @"1234test";
 
 @interface TSMessagesDatabaseTests : XCTestCase
 @property (nonatomic,strong) TSThread* thread;
+@property (nonatomic,strong) TSMessage* message;
+
 @end
 
 @implementation TSMessagesDatabaseTests
@@ -43,9 +45,12 @@ static NSString *masterPw = @"1234test";
 - (void)setUp
 {
     [super setUp];
+  
     self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc]
-                                                  initWithTSContactsArray:@[[[TSContact alloc] initWithRegisteredID:[[Cryptography generateRandomBytes:32] base64EncodedString]],
-                                                                            [[TSContact alloc] initWithRegisteredID:[[Cryptography generateRandomBytes:32] base64EncodedString]]]]];
+                                                  initWithTSContactsArray:@[[[TSContact alloc] initWithRegisteredID:@"12345"],
+                                                                            [[TSContact alloc] initWithRegisteredID:@"678910"]]]];
+  
+    self.message = [[TSMessage alloc] initWithMessage:@"hey" sender:@"12345" recipient:@"678910" sentOnDate:[NSDate date]];
     // Remove any existing DB
     [TSMessagesDatabase databaseErase];
     
@@ -73,34 +78,46 @@ static NSString *masterPw = @"1234test";
   
 }
 
+-(void) testEmpty {
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  NSArray* threadsFromDb = [TSMessagesDatabase getThreads];
+  NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
+  XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
+  XCTAssertTrue([messages count]==0, @"there are threads in an empty db");
+}
+
 
 -(void) testStoreMessage {
-  TSMessage* message = [[TSMessage alloc] initWithMessage:@"hey" sender:[self.thread.participants.participants objectAtIndex:0] recipient:[self.thread.participants.participants objectAtIndex:1] sentOnDate:[NSDate date]];
-  [TSMessagesDatabase storeMessage:message];
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  [TSMessagesDatabase storeMessage:self.message];
   NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-  XCTAssertEqual([messages count], 1, @"database should just have one message in it, instead has %d",[messages count]);
-  XCTAssertTrue([[[messages objectAtIndex:0] message] isEqualToString:message.message], @"message bodies not equal");
+  XCTAssertTrue([messages count]==1, @"database should just have one message in it, instead has %d",[messages count]);
+  XCTAssertTrue([[[messages objectAtIndex:0] message] isEqualToString:self.message.message], @"message bodies not equal");
 
   
 }
 -(void) testStoreThreadCreation {
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  [TSMessagesDatabase storeMessage:self.message];
   
   NSArray* threadsFromDb = [TSMessagesDatabase getThreads];
-  XCTAssertEqual([threadsFromDb count], 1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
+  XCTAssertTrue([threadsFromDb count]==1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
   XCTAssertTrue([[[threadsFromDb objectAtIndex:0] threadID] isEqualToString:self.thread.threadID], @"thread id of thread retreived and my thread not equal");
 }
 
-                 
-              
-
-
 -(void) testRKStorage {
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  [TSMessagesDatabase storeMessage:self.message];
+
   NSData* RK = [Cryptography generateRandomBytes:20];
   [TSMessagesDatabase setRK:RK onThread:self.thread];
   XCTAssertTrue([RK isEqualToData:[TSMessagesDatabase getRK:self.thread]], @"RK on thread %@ getter not equal to setter %@",[TSMessagesDatabase getRK:self.thread],RK);
 
 }
 -(void) testCKStorage {
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  [TSMessagesDatabase storeMessage:self.message];
+
   NSData* CKSending = [Cryptography generateRandomBytes:20];
   NSData* CKReceiving = [Cryptography generateRandomBytes:20];
   [TSMessagesDatabase setCK:CKSending onThread:self.thread onChain:TSReceivingChain];
@@ -110,6 +127,9 @@ static NSString *masterPw = @"1234test";
 }
 
 -(void) testEphemeralStorageReceiving {
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  [TSMessagesDatabase storeMessage:self.message];
+
   NSData* publicReceiving = [Cryptography generateRandomBytes:32];
   [TSMessagesDatabase setEphemeralOfReceivingChain:publicReceiving onThread:self.thread];
   XCTAssertTrue([publicReceiving isEqualToData:[TSMessagesDatabase getEphemeralOfReceivingChain:self.thread]], @"public receiving ephemeral on thread %@ getter not equal to setter %@",[TSMessagesDatabase getEphemeralOfReceivingChain:self.thread],publicReceiving);
@@ -117,6 +137,9 @@ static NSString *masterPw = @"1234test";
 }
 
 -(void) testEphemeralStorageSending {
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  [TSMessagesDatabase storeMessage:self.message];
+
   TSECKeyPair *pairSending = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   [TSMessagesDatabase setEphemeralOfSendingChain:pairSending onThread:self.thread];
   TSECKeyPair* pairRetreived = [TSMessagesDatabase getEphemeralOfSendingChain:self.thread];
@@ -125,6 +148,8 @@ static NSString *masterPw = @"1234test";
 }
 
 -(void) testEphemeralStorageN {
+  XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:nil], @"message db creation failed");
+  [TSMessagesDatabase storeMessage:self.message];
   
 
   XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSSendingChain] isEqualToNumber:[NSNumber numberWithInt:0] ],@"N doesn't default to 0");
@@ -155,11 +180,6 @@ static NSString *masterPw = @"1234test";
   
   XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSSendingChain] isEqualToNumber:[NSNumber numberWithInt:3] ],@"N set incorrectly on sending chain via Nplusplus");
   XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSReceivingChain] isEqualToNumber:[NSNumber numberWithInt:4] ],@"N set incorrectly on recieving chain via Nplusplus");
-  
-
-  
-
-
   
 }
 
