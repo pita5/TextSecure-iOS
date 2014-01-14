@@ -99,7 +99,7 @@
   XCTAssertTrue([aliceMasterKey isEqualToData:bobMasterKey], @"alice and bob master keys not equal");
 }
 
--(void) testFirstRatchet {
+-(void) testRatchet {
   TSECKeyPair *aliceIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   TSECKeyPair *aliceEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   TSECKeyPair *bobIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
@@ -132,6 +132,11 @@
   // he has A1 public so he's able to then generate the sending chain of Alice's (his receiving chain)
   NSData* bobReceivingRKCK0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeral:[A1 getPublicKey] fromMyNewEphemeral:bobEphemeralKey withExistingRK:[bobReceivingRKCK firstHalfsOfData]]; // ECDH(A1,B0)
   XCTAssertTrue([aliceSendingRKCK0 isEqualToData:bobReceivingRKCK0], @"alice and bob first ratchet RK CK not equal");
+  // Bob's next sending chain will use A1 and his own B1 to generate a message
+  TSECKeyPair *B1 = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+  NSData* bobSendingRKCK0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeral:[A1 getPublicKey] fromMyNewEphemeral:B1 withExistingRK:[bobReceivingRKCK0 firstHalfsOfData]];
+
+  
   
   // CK-A1-B0
   NSData* bobReceivingMKCK0 = [TSAxolotlRatchet nextMessageAndChainKeyFromChainKey:[bobReceivingRKCK0 secondHalfOfData]]; //CK-A1-B0 MK0
@@ -150,7 +155,30 @@
   XCTAssertTrue([aliceSendingKeysMK0.cipherKey length]==32, @"cipher key wrong size");
   XCTAssertTrue([aliceSendingKeysMK0.macKey length]==32, @"mac key wrong size");
   
-  // Bob's next sending chain will use A1 and his own B to generate a message
+  
+  // Alice, on receiving B1 and the message encrypted with it updates her receiving chain with A1,B1 (decrypted the received message on that chain) and her sending chain with a new public ephemeral of hers A2
+  NSData* aliceReceivingRKCK0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeral:[B1 getPublicKey] fromMyNewEphemeral:A1 withExistingRK:[aliceSendingRKCK0 firstHalfsOfData]];
+  XCTAssertTrue([aliceReceivingRKCK0 isEqualToData:bobSendingRKCK0], @"alice and bobs chains are out of sync");
+  
+  // She also updates her sending chain with a new public ephemeral of hers A2
+
+  TSECKeyPair *A2 = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+  NSData* aliceSendingRKCK1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeral:[B1 getPublicKey] fromMyNewEphemeral:A2 withExistingRK:[aliceReceivingRKCK0 firstHalfsOfData]];
+  // She can send this to Bob with a message encrypted on it, and he will be able to decrypt
+  
+  
+  // Bob on receipt of A2 and a message encrypted with A2 can update his receiving chain and generate a new sending chain
+  
+  NSData* bobReceivingRKCK1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeral:[A2 getPublicKey] fromMyNewEphemeral:B1 withExistingRK:[bobSendingRKCK0 firstHalfsOfData]];
+  XCTAssertTrue([bobReceivingRKCK1 isEqualToData:aliceSendingRKCK1], @"alice and bobs chains are out of sync");
+  
+  // He also updates his sending chain with a new public ephemeral of his B2
+  
+  TSECKeyPair *B2 = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+  NSData* bobSendingRKCK1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeral:[A2 getPublicKey] fromMyNewEphemeral:B2 withExistingRK:[bobReceivingRKCK1 firstHalfsOfData]];
+
+  
+
 }
 
 @end
