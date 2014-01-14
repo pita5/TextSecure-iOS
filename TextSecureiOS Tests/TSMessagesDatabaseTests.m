@@ -49,6 +49,7 @@ static NSString *masterPw = @"1234test";
     
     XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:&error], @"message db creation failed");
     XCTAssertNil(error, @"message db creation returned an error");
+    
 }
 
 //TODO : get / set content

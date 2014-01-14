@@ -40,7 +40,9 @@
 }
 
 -(const std::string) objcStringToCpp:(NSString*)objcString {
-  return [objcString cStringUsingEncoding:NSASCIIStringEncoding];
+  const char* cstring = [objcString cStringUsingEncoding:NSASCIIStringEncoding];
+  const std::string stringFromBytes(cstring);
+  return stringFromBytes;
 }
 
 -(NSString*) cppStringToObjc:(const std::string)cppString {

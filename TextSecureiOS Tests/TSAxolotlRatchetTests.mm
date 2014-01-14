@@ -13,7 +13,7 @@
 #import "TSHKDF.h"
 #import "TSWhisperMessageKeys.h"
 @interface TSAxolotlRatchetTests : XCTestCase
-
+@property (nonatomic,strong) TSAxolotlRatchet *ratchet;
 @end
 
 @interface NSData (Split)
@@ -37,9 +37,9 @@
 // To avoid + h files
 @interface TSAxolotlRatchet (Test)
 
-+(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
-+(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
-+(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK;
+-(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
+-(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
+-(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK;
 #pragma mark private test methods
 +(NSData*)nextMessageAndChainKeyTest:(NSData*)CK;
 +(NSData*)newRootKeyAndChainKeyWithTheirPublicEphemeral:(NSData*)theirPublicEphemeral fromMyNewEphemeral:(TSECKeyPair*)newEphemeral withExistingRK:(NSData*)existingRK;
@@ -76,6 +76,7 @@
 
 - (void)setUp
 {
+    self.ratchet = [[TSAxolotlRatchet alloc] init];
     [super setUp];
     // Put setup code here; it will be run once, before the first test case.
 }
@@ -91,11 +92,10 @@
   TSECKeyPair *aliceEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   TSECKeyPair *bobIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   TSECKeyPair *bobEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+  NSData* aliceMasterKey = [self.ratchet masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey getPublicKey] theirEphemeralPublicKey:[bobEphemeralKey getPublicKey]];
   
-  NSData* aliceMasterKey = [TSAxolotlRatchet masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey getPublicKey] theirEphemeralPublicKey:[bobEphemeralKey getPublicKey]];
   
-  
-  NSData* bobMasterKey = [TSAxolotlRatchet masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey getPublicKey] theirEphemeralPublicKey:[aliceEphemeralKey getPublicKey]];
+  NSData* bobMasterKey = [self.ratchet masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey getPublicKey] theirEphemeralPublicKey:[aliceEphemeralKey getPublicKey]];
   XCTAssertTrue([aliceMasterKey isEqualToData:bobMasterKey], @"alice and bob master keys not equal");
 }
 
@@ -105,7 +105,7 @@
   TSECKeyPair *bobIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   TSECKeyPair *bobEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
   // ratchet alice
-  NSData* aliceMasterKey = [TSAxolotlRatchet masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey getPublicKey] theirEphemeralPublicKey:[bobEphemeralKey getPublicKey]]; // ECDH(A0,B0)
+  NSData* aliceMasterKey = [self.ratchet masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey getPublicKey] theirEphemeralPublicKey:[bobEphemeralKey getPublicKey]]; // ECDH(A0,B0)
   
   
   NSData* aliceSendingRKCK = [TSHKDF deriveKeyFromMaterial:aliceMasterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]; // Initial RK
@@ -122,7 +122,7 @@
   NSData* aliceSendingMKCK2 = [TSAxolotlRatchet nextMessageAndChainKeyFromChainKey:[aliceSendingMKCK1 secondHalfOfData]]; //CK-A1-B0 MK2
 
   // Bob gets these messages, and is ready to decrypt
-  NSData* bobMasterKey = [TSAxolotlRatchet masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey getPublicKey] theirEphemeralPublicKey:[aliceEphemeralKey getPublicKey]]; // ECDH(A0,B0)
+  NSData* bobMasterKey = [self.ratchet masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey getPublicKey] theirEphemeralPublicKey:[aliceEphemeralKey getPublicKey]]; // ECDH(A0,B0)
   XCTAssertTrue([aliceMasterKey isEqualToData:bobMasterKey], @"alice and bob master keys not equal");
 
   
@@ -143,8 +143,8 @@
   XCTAssertTrue([aliceSendingMKCK1 isEqualToData:bobReceivingMKCK1], @"alice and bob second message on chain MK CK not equal");
   XCTAssertTrue([aliceSendingMKCK2 isEqualToData:bobReceivingMKCK2], @"alice and bob third message on chain MK CK not equal");
   // Testing the cipher and mac key generation
-  TSWhisperMessageKeys* aliceSendingKeysMK0 = [TSAxolotlRatchet  deriveTSWhisperMessageKeysFromMessageKey:[aliceSendingMKCK0 firstHalfsOfData]];
-  TSWhisperMessageKeys* bobReceivingKeysMK0 = [TSAxolotlRatchet  deriveTSWhisperMessageKeysFromMessageKey:[bobReceivingMKCK0 firstHalfsOfData]];
+  TSWhisperMessageKeys* aliceSendingKeysMK0 = [self.ratchet  deriveTSWhisperMessageKeysFromMessageKey:[aliceSendingMKCK0 firstHalfsOfData]];
+  TSWhisperMessageKeys* bobReceivingKeysMK0 = [self.ratchet  deriveTSWhisperMessageKeysFromMessageKey:[bobReceivingMKCK0 firstHalfsOfData]];
   XCTAssertTrue([aliceSendingKeysMK0.cipherKey isEqualToData:bobReceivingKeysMK0.cipherKey], @"cipher keys alice and bob for MK0 not equal");
   XCTAssertTrue([aliceSendingKeysMK0.macKey isEqualToData:bobReceivingKeysMK0.macKey], @"mac keys alice and bob for MK0 not equal");
   XCTAssertTrue([aliceSendingKeysMK0.cipherKey length]==32, @"cipher key wrong size");

@@ -10,11 +10,11 @@
 #import "PreKeyWhisperMessage.pb.hh"
 @implementation TSPreKeyWhisperMessage
 
--(id)initWithPreKeyId:(NSNumber*)prekeyId  recipientPrekey:(NSData*)prekey recipientIdentityKey:(NSData*)identityKey message:(NSData*)messageContents {
+-(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents {
   if(self=[super init]) {
     self.preKeyId = prekeyId;
-    self.recipientPreKey = prekey;
-    self.recipientIdentityKey = identityKey;
+    self.baseKey = prekey;
+    self.identityKey = identityKey;
     self.message = messageContents;
   }
   return self;
@@ -67,6 +67,22 @@
   [data getBytes:raw length:len];
   messageSignal->ParseFromArray(raw, len);
   return messageSignal;
+}
+
++(NSString*) constructFirstMessage:(NSData*)ciphertext {
+  //            TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
+  //                                                                    initWithEphemeralKey:[myNextEphemeral getPublicKey]
+  //                                                                    previousCounter:[TSMessagesDatabase getPNs:thread]
+  //                                                                    counter:[TSMessagesDatabase getNPlusPlus:thread onChain:TSSendingChain]
+  //                                                                    encryptedMessage:encryptedMessage];
+  //            TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
+  //                                                     initWithPreKeyId:theirPrekeyId
+  //                                                     senderPrekey:[masterEphemeral getPublicKey]
+  //                                                     senderIdentityKey:[[TSUserKeysDatabase getIdentityKeyWithError:nil] getPublicKey]
+  //                                                     message:[encryptedWhisperMessage serializedProtocolBuffer]];
+  //            
+  //
+  return nil;
 }
 
 @end

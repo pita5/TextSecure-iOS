@@ -8,8 +8,9 @@
 
 #import "TSMessagesDatabase.h"
 #import "TSStorageError.h"
-#import "FMDatabase.h"
-#import "FMDatabaseQueue.h"
+#import <FMDB/FMDatabase.h>
+#import <FMDB/FMDatabaseQueue.h>
+
 #import "FilePath.h"
 #import "TSMessage.h"
 #import "TSContact.h"
@@ -79,11 +80,10 @@ static TSEncryptedDatabase *messagesDb = nil;
        */
       
 
-      if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, RK BLOB, HKs BLOB, HKr BLOB, NHKs BLOB, NHKr BLOB, CKs BLOB, CKr BLOB, DHIs BLOB, DHIr BLOB, DHRs BLOB, DHRr BLOB, Ns INT, Nr INT, PNs INT, ratchet_flag BOOL, skipped_HK_MK BLOB)"]) {
+      if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, rk BLOB, cks BLOB, ckr BLOB, dhis BLOB, dhir BLOB, dhrs BLOB, dhrr BLOB, ns INT, nr INT, pns INT)"]) {
           return;
         }
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))"]) {
-          /*corresponds to skipped_HK_MK MK??*/
           return;
         }
 
@@ -96,8 +96,8 @@ static TSEncryptedDatabase *messagesDb = nil;
         }
         
         dbInitSuccess = YES;
-    }
-     ];
+      
+    }];
     
     if (!dbInitSuccess) {
         if (error) {
@@ -206,15 +206,17 @@ static TSEncryptedDatabase *messagesDb = nil;
     // debug why this is returning me, and then you separately.
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         
-        NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
-        FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=\"%@\" ORDER BY timestamp", [thread threadID]]];
+      NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
+      FMResultSet  *rs = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=\"%@\" ORDER BY timestamp", [thread threadID]]];
 
-        while([rs next]) {
-            NSString* timestamp = [rs stringForColumn:@"timestamp"];
-            NSDate *date = [dateFormatter dateFromString:timestamp];
-            [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipient:@[[rs stringForColumn:@"recipient_id"]] sentOnDate:date]];
-        }
+      while([rs next]) {
+          NSString* timestamp = [rs stringForColumn:@"timestamp"];
+          NSDate *date = [dateFormatter dateFromString:timestamp];
+          [messageArray addObject:[[TSMessage alloc] initWithMessage:[rs stringForColumn:@"message"] sender:[rs stringForColumn:@"sender_id"] recipient:[rs stringForColumn:@"recipient_id"] sentOnDate:date]];
+      }
+      [rs close];
     }];
+  
     
     return messageArray;
 }
@@ -249,6 +251,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
             [threadArray addObject:messageThread];
         }
+        [rs close];
     }];
 
     return threadArray;
@@ -332,10 +335,11 @@ static TSEncryptedDatabase *messagesDb = nil;
   __block NSData* apsField = nil;
   [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
     
-    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
     if ([rs next]) {
       apsField= [rs dataForColumn:name];
     }
+    [rs close];
   }];
   return apsField;
 }
@@ -351,10 +355,11 @@ static TSEncryptedDatabase *messagesDb = nil;
   __block NSNumber* apsField = 0;
   [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
     
-    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
     if ([rs next]) {
       apsField= [NSNumber numberWithInt:[rs intForColumn:name]];
     }
+    [rs close];
   }];
   return apsField;
 
@@ -370,10 +375,11 @@ static TSEncryptedDatabase *messagesDb = nil;
   __block int apsField = 0;
   [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
     
-    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
     if ([rs next]) {
       apsField= [rs boolForColumn:name];
     }
+    [rs close];
   }];
   return apsField;
   
@@ -389,10 +395,11 @@ static TSEncryptedDatabase *messagesDb = nil;
   __block NSString* apsField = 0;
   [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
     
-    FMResultSet *rs = [db executeQuery:@"SELECT :fieldName FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"fieldName":name,@"threadID":thread.threadID}];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
     if ([rs next]) {
       apsField= [rs stringForColumn:name];
     }
+    [rs close];
   }];
   return apsField;
   
@@ -439,12 +446,12 @@ static TSEncryptedDatabase *messagesDb = nil;
 /* Axolotl Protocol variables. Persistant storage per thread */
 /* Root key*/
 +(NSData*) getRK:(TSThread*)thread {
-  return [TSMessagesDatabase getAPSDataField:@"RK"  onThread:thread];
+  return [TSMessagesDatabase getAPSDataField:@"rk"  onThread:thread];
 }
 
 
 +(void) setRK:(NSData*)key onThread:(TSThread*)thread {
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":@"RK",@"valueField":key,@"threadID":thread.threadID}];
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":@"rk",@"valueField":key,@"threadID":thread.threadID}];
 }
 /* Chain keys */
 +(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain{
