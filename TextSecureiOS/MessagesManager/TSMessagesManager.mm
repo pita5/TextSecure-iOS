@@ -32,12 +32,12 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-  [TSAxolotlRatchet processIncomingMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
+  [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
 
 }
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType{
-  [TSAxolotlRatchet processOutgoingMessage:message onThread:thread ofType:messageType];
+  [TSAxolotlRatchet sendMessage:message onThread:thread ofType:messageType];
   
 }
 

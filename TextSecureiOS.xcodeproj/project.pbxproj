@@ -1654,6 +1654,7 @@
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */,
 				A5C85AEE18839E8C001D2189 /* TSAxolotlRatchetTests.mm */,
+				B68BFDEC1809853E005CC817 /* Settings */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -1740,7 +1741,6 @@
 			isa = PBXGroup;
 			children = (
 				B613B4D41815CEA900755184 /* Conversation */,
-				B68BFDEC1809853E005CC817 /* Settings */,
 				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
@@ -1928,6 +1928,7 @@
 				B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */,
 			);
 			name = Settings;
+			path = ../TextSecureiOS;
 			sourceTree = "<group>";
 		};
 		B6B478E01809B9B3005DDE12 /* Contacts */ = {

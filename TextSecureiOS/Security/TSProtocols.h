@@ -32,6 +32,9 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 #warning for efficiency, past the prototyping stage we will want to group these requests
 /* Axolotl Protocol variables. Persistant storage per thread. */
 // we have both SENDING and RECEIVING key chains
+//RK           : 32-byte root key which gets updated by DH ratchet
++(NSData*) getRK:(TSThread*)thread;
++(void) setRK:(NSData*)key onThread:(TSThread*)thread;
 //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
 +(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain;
 +(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain;

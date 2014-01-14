@@ -14,8 +14,8 @@
 @property (nonatomic,strong) TSThread* thread;
 -(id) initForThread:(TSThread*)thread;
 #pragma mark public methods
-+(void)processIncomingMessage:(NSData*)data;
-+(void)processOutgoingMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType;
++(void)receiveMessage:(NSData*)data;
++(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType;
 
 
 @end

@@ -436,6 +436,16 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 #pragma mark - AxolotlPersistantStorage protocol methods
 
+/* Axolotl Protocol variables. Persistant storage per thread */
+/* Root key*/
++(NSData*) getRK:(TSThread*)thread {
+  return [TSMessagesDatabase getAPSDataField:@"RK"  onThread:thread];
+}
+
+
++(void) setRK:(NSData*)key onThread:(TSThread*)thread {
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":@"RK",@"valueField":key,@"threadID":thread.threadID}];
+}
 /* Chain keys */
 +(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain{
   return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"CK" onChain:chain] onThread:thread];
