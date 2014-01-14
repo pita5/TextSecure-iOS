@@ -399,7 +399,13 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 +(void) setAPSDataField:(NSDictionary*) parameters {
-  
+  /*
+   parameters
+   nameField : name of db field to set
+   valueField : value of db field to set to
+   threadID" : thread id
+   */
+
   // Decrypt the DB if it hasn't been done yet
   if (!messagesDb) {
     if (![TSMessagesDatabase databaseOpenWithError:nil])
@@ -414,12 +420,12 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 }
 
-+(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party {
-  switch (party) {
-    case TSReceiver:
++(NSString*) getAPSFieldName:(NSString*)name onChain:(TSChainType)chain {
+  switch (chain) {
+    case TSReceivingChain:
       return [name stringByAppendingString:@"r"];
       break;
-    case TSSender:
+    case TSSendingChain:
       return [name stringByAppendingString:@"s"];
     default:
       return name;
@@ -429,76 +435,47 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 
 #pragma mark - AxolotlPersistantStorage protocol methods
-/* Axolotl Protocol variables. Persistant storage per thread */
-//RK           : 32-byte root key which gets updated by DH ratchet
-+(NSData*) getRK:(TSThread*)thread {
-  return [TSMessagesDatabase getAPSDataField:@"RK"  onThread:thread];
-}
 
-
-+(void) setRK:(NSData*)key onThread:(TSThread*)thread {
-   [TSMessagesDatabase setAPSDataField:@{@"nameField":@"RK",@"valueField":key,@"threadID":thread.threadID}];
-}
-
-/*
- parameters
- nameField : name of db field to set
- valueField : value of db field to set to
- threadID" : thread id
- */
-
-//CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
-+(NSData*) getCK:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"CK" forParty:party] onThread:thread];
+/* Chain keys */
++(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain{
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"CK" onChain:chain] onThread:thread];
 
 }
-+(void) setCK:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"CK" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
-}
-//DHIs, DHIr   : DH or ECDH Identity keys
-+(NSData*) getDHI:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHI" forParty:party] onThread:thread];
- 
++(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"CK" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
 }
 
-+(void) setDHI:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHI" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
+/* ephemeral keys of chains */
++(NSData*) getEphemeralPublicKeyOfChain:(TSThread*)thread onChain:(TSChainType)chain{
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:chain ] onThread:thread];
 }
 
-//DHRs, DHRr   : DH or ECDH Ratchet keys
-+(NSData*) getEphemeralPublicKeyOfChain:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party ] onThread:thread];
++(void) setEphemeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
 }
 
-+(void) setEphemeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread forParty:(TSParty)party{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" forParty:party],@"valueField":key,@"threadID":thread.threadID}];
-}
-
-//Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
-+(NSNumber*) getN:(TSThread*)thread forParty:(TSParty)party{
-  return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"N" forParty:party] onThread:thread];
+/* number of messages sent on chains */
++(NSNumber*) getN:(TSThread*)thread onChain:(TSChainType)chain{
+  return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"N" onChain:chain] onThread:thread];
   
 }
-
-+(void) setN:(NSNumber*)num onThread:(TSThread*)thread forParty:(TSParty)party{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"N" forParty:party],@"valueField":num,@"threadID":thread.threadID}];
++(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain{
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"N" onChain:chain],@"valueField":num,@"threadID":thread.threadID}];
 }
 
-//PNs          : Previous message numbers (# of msgs sent under prev ratchet)
+/* number of messages sent on the last chain */
 +(NSNumber*)getPNs:(TSThread*)thread{
   return [TSMessagesDatabase getAPSIntField:@"PNs" onThread:thread];
 }
-
 +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
   [TSMessagesDatabase setAPSDataField:@{@"nameField":@"PNs",@"valueField":num,@"threadID":thread.threadID}];
 }
 
-
 //Ns, Nr       : sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
-+(NSNumber*) getNPlusPlus:(TSThread*)thread forParty:(TSParty)party {
-  NSNumber* N = [TSMessagesDatabase getN:thread forParty:party];
++(NSNumber*) getNPlusPlus:(TSThread*)thread onChain:(TSChainType)chain {
+  NSNumber* N = [TSMessagesDatabase getN:thread onChain:chain];
   
-  [TSMessagesDatabase setN:[NSNumber numberWithInt:[N integerValue]+1] onThread:thread forParty:party];
+  [TSMessagesDatabase setN:[NSNumber numberWithInt:[N integerValue]+1] onThread:thread onChain:chain];
   return N;
   
 }

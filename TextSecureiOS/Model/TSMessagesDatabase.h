@@ -45,7 +45,7 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread;
 +(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
 +(NSString*) getAPSStringField:(NSString*)name  onThread:(TSThread*)thread;
-+(NSString*) getAPSFieldName:(NSString*)name forParty:(TSParty) party;
++(NSString*) getAPSFieldName:(NSString*)name onChain:(TSChainType) chain;
 /*
  parameters
  nameField : name of db field to set
