@@ -14,6 +14,16 @@
 @synthesize previousCounter;
 @synthesize message;
 
+
+-(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext {
+  if(self = [super init]) {
+    self.ephemeralKey = ephemeral;
+    self.previousCounter = prevCounter;
+    self.counter = ctr;
+    self.message=ciphertext;
+  }
+  return self;
+}
 -(id) initWithData:(NSData*) data {
   /*
    optional bytes  ephemeralKey    = 1;

@@ -14,4 +14,5 @@
 @property (nonatomic,strong) NSData* identityKey; //Curve25519 identity key of the sender: A in axolotl
 @property (nonatomic,strong) NSData* recipientPreKey; //not serialized but used in master key derivation
 @property (nonatomic,strong) NSData* recipientIdentityKey; // not serialized but used in master key derivation
+-(id)initWithPreKeyId:(NSNumber*)prekeyId  recipientPrekey:(NSData*)prekey recipientIdentityKey:(NSData*)identityKey message:(NSData*)messageContents;
 @end

@@ -11,7 +11,8 @@
 @class TSMessage;
 @class TSThread;
 @interface TSAxolotlRatchet : NSObject
-
+@property (nonatomic,strong) TSThread* thread;
+-(id) initForThread:(TSThread*)thread;
 #pragma mark public methods
 +(void)processIncomingMessage:(NSData*)data;
 +(void)processOutgoingMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType;

@@ -9,6 +9,16 @@
 #import "TSPrekeyWhisperMessage.hh"
 #import "PreKeyWhisperMessage.pb.hh"
 @implementation TSPreKeyWhisperMessage
+
+-(id)initWithPreKeyId:(NSNumber*)prekeyId  recipientPrekey:(NSData*)prekey recipientIdentityKey:(NSData*)identityKey message:(NSData*)messageContents {
+  if(self=[super init]) {
+    self.preKeyId = prekeyId;
+    self.recipientPreKey = prekey;
+    self.recipientIdentityKey = identityKey;
+    self.message = messageContents;
+  }
+  return self;
+}
 -(id) initWithData:(NSData*) data {
   /*
    optional uint32 preKeyId    = 1;
