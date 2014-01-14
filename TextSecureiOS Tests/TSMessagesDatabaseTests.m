@@ -16,7 +16,21 @@
 #import "TSParticipants.h"
 #import "TSContact.h"
 #import "TSECKeyPair.h"
+
 static NSString *masterPw = @"1234test";
+
+
+
+@interface TSECKeyPair (Test)
+-(NSData*) getPrivateKey;
+@end
+
+
+@implementation TSECKeyPair (Test)
+-(NSData*) getPrivateKey {
+  return [NSData dataWithBytes:self->privateKey length:32];
+}
+@end
 
 
 @interface TSMessagesDatabaseTests : XCTestCase
@@ -28,7 +42,9 @@ static NSString *masterPw = @"1234test";
 - (void)setUp
 {
     [super setUp];
-    self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[[[TSContact alloc] initWithRegisteredID:@"12345"],[[TSContact alloc] initWithRegisteredID:@"678910"]]]];
+    self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc]
+                                                  initWithTSContactsArray:@[[[TSContact alloc] initWithRegisteredID:[[Cryptography generateRandomBytes:32] base64EncodedString]],
+                                                                            [[TSContact alloc] initWithRegisteredID:[[Cryptography generateRandomBytes:32] base64EncodedString]]]]];
     // Remove any existing DB
     [TSMessagesDatabase databaseErase];
     
@@ -53,52 +69,88 @@ static NSString *masterPw = @"1234test";
     
     XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:&error], @"message db creation failed");
     XCTAssertNil(error, @"message db creation returned an error");
-    
+  
 }
 
-//TODO : get / set content
-- (void) testAxolotlPersistantStorage {
-  /*
-   +(NSData*) getRK:(TSThread*)thread;
-   +(void) setRK:(NSData*)key onThread:(TSThread*)thread;
-   //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
-   +(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain;
-   +(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain;
-   //DHIs, DHIr   : DH or ECDH Identity keys
-   +(NSData*) getEphemeralOfReceivingChain:(TSThread*)thread;
-   +(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread;
-   +(TSECKeyPair*) getEphemeralOfSendingChain:(TSThread*)thread;
-   
-   +(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread;
-   //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
-   +(NSNumber*) getN:(TSThread*)thread onChain:(TSChainType)chain;
-   +(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain;
-   // sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
-   +(NSNumber*) getNPlusPlus:(TSThread*)thread onChain:(TSChainType)chain;
-   
-   //PNs          : Previous message numbers (# of msgs sent under prev ratchet) only relevant for sending chain
-   +(NSNumber*)getPNs:(TSThread*)thread;
-   +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread;
-   */
-  
-  
-  NSLog(@"threadid %@",self.thread.threadID);
+
+-(void) testStoreThread {
+  [TSMessagesDatabase storeTSThread:self.thread];
+  NSArray* threadsFromDb = [TSMessagesDatabase getThreads];
+  XCTAssertEqual([threadsFromDb count], 1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
+  XCTAssertTrue([[[threadsFromDb objectAtIndex:0] threadID] isEqualToString:self.thread.threadID], @"thread id of thread retreived and my thread not equal");
+}
+
+                 
+              
+
+
+-(void) testRKStorage {
   NSData* RK = [Cryptography generateRandomBytes:20];
+  [TSMessagesDatabase setRK:RK onThread:self.thread];
+  XCTAssertTrue([RK isEqualToData:[TSMessagesDatabase getRK:self.thread]], @"RK on thread %@ getter not equal to setter %@",[TSMessagesDatabase getRK:self.thread],RK);
+
+}
+-(void) testCKStorage {
   NSData* CKSending = [Cryptography generateRandomBytes:20];
   NSData* CKReceiving = [Cryptography generateRandomBytes:20];
+  [TSMessagesDatabase setCK:CKSending onThread:self.thread onChain:TSReceivingChain];
+  [TSMessagesDatabase setCK:CKReceiving onThread:self.thread onChain:TSSendingChain];
+  XCTAssertTrue([CKSending isEqualToData:[TSMessagesDatabase getCK:self.thread onChain:TSSendingChain]], @"CK sending on thread %@ getter not equal to setter %@",[TSMessagesDatabase getCK:self.thread onChain:TSSendingChain],CKSending);
+   XCTAssertTrue([CKReceiving isEqualToData:[TSMessagesDatabase getCK:self.thread onChain:TSReceivingChain]], @"CK receiving on thread %@ getter not equal to setter %@",[TSMessagesDatabase getCK:self.thread onChain:TSReceivingChain],CKReceiving);
+}
+
+-(void) testEphemeralStorageReceiving {
   NSData* publicReceiving = [Cryptography generateRandomBytes:32];
+  [TSMessagesDatabase setEphemeralOfReceivingChain:publicReceiving onThread:self.thread];
+  XCTAssertTrue([publicReceiving isEqualToData:[TSMessagesDatabase getEphemeralOfReceivingChain:self.thread]], @"public receiving ephemeral on thread %@ getter not equal to setter %@",[TSMessagesDatabase getEphemeralOfReceivingChain:self.thread],publicReceiving);
+  
+}
+
+-(void) testEphemeralStorageSending {
   TSECKeyPair *pairSending = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+  [TSMessagesDatabase setEphemeralOfSendingChain:pairSending onThread:self.thread];
+  TSECKeyPair* pairRetreived = [TSMessagesDatabase getEphemeralOfSendingChain:self.thread];
+  XCTAssertTrue([[pairRetreived getPublicKey] isEqualToData:[pairRetreived getPublicKey]], @"public keys of ephemerals on sending chain not equal");
+  XCTAssertTrue([[pairRetreived getPrivateKey] isEqualToData:[pairRetreived getPrivateKey]], @"private keys of ephemerals on sending chain not equal");
+}
+
+-(void) testEphemeralStorageN {
+  
+
+  XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSSendingChain] isEqualToNumber:[NSNumber numberWithInt:0] ],@"N doesn't default to 0");
+  XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSReceivingChain] isEqualToNumber:[NSNumber numberWithInt:0] ],@"N doesn't default to 0 on receiving chain");
+  
+  XCTAssert([[TSMessagesDatabase getPNs:self.thread] isEqualToNumber:[NSNumber numberWithInt:0] ],@"PNs doesn't default to 0 ");
+  
+  
   NSNumber* NSending = [NSNumber numberWithInt:2];
   NSNumber* NReceiving = [NSNumber numberWithInt:3];
   NSNumber* PNSending = [NSNumber numberWithInt:5];
   
-  [TSMessagesDatabase setRK:RK onThread:self.thread];
-  XCTAssertTrue([RK isEqualToData:[TSMessagesDatabase getRK:self.thread]], @"RK on thread getter not equal to setter");
+  [TSMessagesDatabase setN:NSending onThread:self.thread onChain:TSSendingChain];
+  [TSMessagesDatabase setN:NReceiving onThread:self.thread onChain:TSReceivingChain];
+  [TSMessagesDatabase setPNs:PNSending onThread:self.thread];
   
   
   
+  XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSSendingChain] isEqualToNumber:[NSNumber numberWithInt:2] ],@"N set incorrectly on sending chain");
+  XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSReceivingChain] isEqualToNumber:[NSNumber numberWithInt:3] ],@"N set incorrectly on recieving chain");
+
+  
+  XCTAssert([[TSMessagesDatabase getPNs:self.thread] isEqualToNumber:[NSNumber numberWithInt:5] ],@"PNs set incorrectly on sending chain ");
+  
+  XCTAssertTrue([[TSMessagesDatabase getNPlusPlus:self.thread onChain:TSSendingChain] isEqualToNumber:[NSNumber numberWithInt:2]], @"get Nplusplus on sending chain returns wrong thing");
+  
+  XCTAssertTrue([[TSMessagesDatabase getNPlusPlus:self.thread onChain:TSReceivingChain] isEqualToNumber:[NSNumber numberWithInt:33]], @"get Nplusplus on receiving chain returns wrong thing");
+  
+  XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSSendingChain] isEqualToNumber:[NSNumber numberWithInt:3] ],@"N set incorrectly on sending chain via Nplusplus");
+  XCTAssert([[TSMessagesDatabase getN:self.thread onChain:TSReceivingChain] isEqualToNumber:[NSNumber numberWithInt:4] ],@"N set incorrectly on recieving chain via Nplusplus");
+  
+
+  
+
+
   
 }
-
 
 @end

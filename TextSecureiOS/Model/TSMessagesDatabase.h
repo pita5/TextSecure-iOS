@@ -37,6 +37,7 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(NSArray*) getMessagesOnThread:(TSThread*) thread;
 +(NSArray*) getThreads;
 +(void)storeTSContact:(TSContact*)contact;
++(void)storeTSThread:(TSThread*)thread ;
 
 #pragma mark - AxolotlEphemeralStorage protocol getter/setter helper methods
 
