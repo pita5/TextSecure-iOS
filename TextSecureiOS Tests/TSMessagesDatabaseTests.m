@@ -16,6 +16,7 @@
 #import "TSParticipants.h"
 #import "TSContact.h"
 #import "TSECKeyPair.h"
+#import "TSMessage.h"
 
 static NSString *masterPw = @"1234test";
 
@@ -73,8 +74,17 @@ static NSString *masterPw = @"1234test";
 }
 
 
--(void) testStoreThread {
-  [TSMessagesDatabase storeTSThread:self.thread];
+-(void) testStoreMessage {
+  TSMessage* message = [[TSMessage alloc] initWithMessage:@"hey" sender:[self.thread.participants.participants objectAtIndex:0] recipient:[self.thread.participants.participants objectAtIndex:1] sentOnDate:[NSDate date]];
+  [TSMessagesDatabase storeMessage:message];
+  NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
+  XCTAssertEqual([messages count], 1, @"database should just have one message in it, instead has %d",[messages count]);
+  XCTAssertTrue([[[messages objectAtIndex:0] message] isEqualToString:message.message], @"message bodies not equal");
+
+  
+}
+-(void) testStoreThreadCreation {
+  
   NSArray* threadsFromDb = [TSMessagesDatabase getThreads];
   XCTAssertEqual([threadsFromDb count], 1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
   XCTAssertTrue([[[threadsFromDb objectAtIndex:0] threadID] isEqualToString:self.thread.threadID], @"thread id of thread retreived and my thread not equal");
