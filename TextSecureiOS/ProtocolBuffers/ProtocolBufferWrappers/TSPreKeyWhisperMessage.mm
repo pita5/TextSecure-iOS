@@ -73,7 +73,7 @@
   return messageSignal;
 }
 
-+(NSString*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral{
++(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral{
   TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
                                                           initWithEphemeralKey:[myNextEphemeral getPublicKey]
                                                            previousCounter:[NSNumber numberWithInt:0]
@@ -87,7 +87,7 @@
   
   
   
-  return [[prekeyMessage serializedProtocolBuffer] base64EncodedString];
+  return [prekeyMessage serializedProtocolBuffer];
 }
 
 @end
