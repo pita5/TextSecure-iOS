@@ -150,6 +150,7 @@
   XCTAssertTrue([aliceSendingKeysMK0.cipherKey length]==32, @"cipher key wrong size");
   XCTAssertTrue([aliceSendingKeysMK0.macKey length]==32, @"mac key wrong size");
   
+  // Bob's next sending chain will use A1 and his own B to generate a message
 }
 
 @end

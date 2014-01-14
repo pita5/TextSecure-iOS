@@ -463,13 +463,27 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 /* ephemeral keys of chains */
-+(NSData*) getEphemeralPublicKeyOfChain:(TSThread*)thread onChain:(TSChainType)chain{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:chain ] onThread:thread];
++(NSData*) getEphemeralOfReceivingChain:(TSThread*)thread {
+  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:TSReceivingChain ] onThread:thread];
+  
 }
 
-+(void) setEphemeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
++(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread {
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:TSReceivingChain],@"valueField":key,@"threadID":thread.threadID}];
 }
+
++(TSECKeyPair*) getEphemeralOfSendingChain:(TSThread*)thread {
+  return [NSKeyedUnarchiver unarchiveObjectWithData:[TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:TSSendingChain ] onThread:thread]];
+}
+
++(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread {
+  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"DHR" onChain:TSSendingChain],@"valueField":[NSKeyedArchiver archivedDataWithRootObject:key],@"threadID":thread.threadID}];
+}
+
+
+
+
+
 
 /* number of messages sent on chains */
 +(NSNumber*) getN:(TSThread*)thread onChain:(TSChainType)chain{

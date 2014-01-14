@@ -14,5 +14,5 @@
 @property (nonatomic,strong) NSData* identityKey; //Curve25519 identity key of the sender: A in axolotl
 -(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents;
 
-+(NSString*) constructFirstMessage:(NSData*)ciphertext;
++(NSString*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral;
 @end

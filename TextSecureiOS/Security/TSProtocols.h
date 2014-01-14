@@ -39,8 +39,11 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 +(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain;
 +(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain;
 //DHIs, DHIr   : DH or ECDH Identity keys
-+(NSData*) getEphemeralPublicKeyOfChain:(TSThread*)thread onChain:(TSChainType)chain;
-+(void) setEphemeralPublicKeyOfChain:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain;
++(NSData*) getEphemeralOfReceivingChain:(TSThread*)thread;
++(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread;
++(TSECKeyPair*) getEphemeralOfSendingChain:(TSThread*)thread;
+
++(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread;
 //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
 +(NSNumber*) getN:(TSThread*)thread onChain:(TSChainType)chain;
 +(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain;
