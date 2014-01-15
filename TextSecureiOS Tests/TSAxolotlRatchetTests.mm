@@ -265,12 +265,13 @@ static NSString *masterPw = @"1234test";
   [self.alice ratchetSetupFirstSender:[bobIdentityKey getPublicKey] theirEphemeralKey:[bobEphemeralKey getPublicKey]];
  
   TSECKeyPair* aliceSendingKey = [TSMessagesDatabase getEphemeralOfSendingChain:self.thread1];
-   NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:[self.alice nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
+  XCTAssertNotNil(aliceSendingKey, @"alice sending key is nil");
+  NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:[self.alice nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
   
-  
-  // Clobber's any keys of alices
+
+  // Clobbers any keys of alices
   [TSKeyManager storeUsernameToken:self.bobUserName];
-   [self.bob ratchetSetupFirstReceiver:[aliceIdentityKey getPublicKey] theirEphemeralKey:[aliceInitialEphemeralKey getPublicKey] withMyPrekeyId:[NSNumber numberWithInt:prekeyId]];
+  [self.bob ratchetSetupFirstReceiver:[aliceIdentityKey getPublicKey] theirEphemeralKey:[aliceInitialEphemeralKey getPublicKey] withMyPrekeyId:[NSNumber numberWithInt:prekeyId]];
   
   [self.bob updateChainsOnReceivedMessage:[aliceSendingKey getPublicKey]];
   
@@ -278,7 +279,7 @@ static NSString *masterPw = @"1234test";
   TSWhisperMessageKeys* decryptionKeys =  [self.bob nextMessageKeysOnChain:TSReceivingChain];
   NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:decryptionKeys withCounter:[NSNumber numberWithInt:0]];
   
- TSMessage* decryptedMessage=[[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName sentOnDate:[NSDate date]];
+  TSMessage* decryptedMessage=[[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName sentOnDate:[NSDate date]];
   
   XCTAssertTrue([decryptedMessage.message isEqualToString:self.message1.message], @"message encrypted by alice not equal to that decrypted by bob");
 }
