@@ -402,6 +402,7 @@
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
+		A5873CCB1886F95700FBBDEA /* RKCK.m in Sources */ = {isa = PBXBuildFile; fileRef = A5873CCA1886F95700FBBDEA /* RKCK.m */; };
 		A5C85AEF18839E8C001D2189 /* TSAxolotlRatchetTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5C85AEE18839E8C001D2189 /* TSAxolotlRatchetTests.mm */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
@@ -934,6 +935,8 @@
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A56D31B7180FCA840093D51B /* TSRegisterPrekeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterPrekeysRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.h; sourceTree = "<group>"; };
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeysRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.m; sourceTree = "<group>"; };
+		A5873CC91886F95700FBBDEA /* RKCK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RKCK.h; path = Security/RKCK.h; sourceTree = "<group>"; };
+		A5873CCA1886F95700FBBDEA /* RKCK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RKCK.m; path = Security/RKCK.m; sourceTree = "<group>"; };
 		A5C85AEE18839E8C001D2189 /* TSAxolotlRatchetTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TSAxolotlRatchetTests.mm; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -1733,6 +1736,8 @@
 				8C3C917618544FDF003EA71D /* TSHKDF.m */,
 				A5E6CC9C18837C31002A1735 /* TSAxolotlRatchet.hh */,
 				A5E6CC9D18837C31002A1735 /* TSAxolotlRatchet.mm */,
+				A5873CC91886F95700FBBDEA /* RKCK.h */,
+				A5873CCA1886F95700FBBDEA /* RKCK.m */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -2612,6 +2617,7 @@
 				A5620DEC186BD27F0033483E /* TSMessagesManager.mm in Sources */,
 				8C49FC1018497E86006132F6 /* TSStorageError.m in Sources */,
 				B635B3E8182181E1003CE732 /* UIColor+JSMessagesView.m in Sources */,
+				A5873CCB1886F95700FBBDEA /* RKCK.m in Sources */,
 				B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */,
 				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,

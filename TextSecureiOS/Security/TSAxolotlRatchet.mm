@@ -30,55 +30,7 @@
 #import "TSWhisperMessageKeys.h"
 #import "TSHKDF.h"
 #import "TSParticipants.h"
-
-
-@interface RKCK : NSObject
-@property (nonatomic,strong) NSData* RK;
-@property (nonatomic,strong) NSData* CK;
-@property (nonatomic,strong) id ephemeral;
--(id) initWithData:(NSData*)data;
--(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral;
-+(RKCK*) currentSendingChain:(TSThread*)thread;
-@end
-
-@implementation RKCK
--(id) initWithData:(NSData*)data {
-  if(self = [super init]) {
-    self.RK =  [data subdataWithRange:NSMakeRange(0, 20)];
-    self.CK = [data subdataWithRange:NSMakeRange(20, 20)];
-  }
-  return self;
-}
-
--(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral {
-  NSData* inputKeyMaterial = [myEphemeral generateSharedSecretFromPublicKey:theirPublicEphemeral];
-  return [[RKCK alloc] initWithData:[TSHKDF deriveKeyFromMaterial:inputKeyMaterial outputLength:64 info:[@"WhisperRatchet" dataUsingEncoding:NSASCIIStringEncoding] salt:self.RK]];
-}
-  
-
--(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral {
-  [TSMessagesDatabase setEphemeralOfReceivingChain:ephemeral onThread:thread];
-  [TSMessagesDatabase setRK:self.RK onThread:thread];
-  [TSMessagesDatabase setCK:self.CK onThread:thread onChain:TSReceivingChain];
-  [TSMessagesDatabase setN:[NSNumber numberWithInt:0] onThread:thread onChain:TSReceivingChain];
-}
-
--(void) saveSendingChainOnThread:(TSThread*)thread withMyNewEphemeral:(TSECKeyPair*)ephemeral {
-  [TSMessagesDatabase setEphemeralOfSendingChain:ephemeral onThread:thread];
-  [TSMessagesDatabase setRK:self.RK onThread:thread];
-  [TSMessagesDatabase setCK:self.CK onThread:thread onChain:TSSendingChain];
-  [TSMessagesDatabase setPNs:[TSMessagesDatabase getN:thread onChain:TSSendingChain] onThread:thread];
-  [TSMessagesDatabase setN:[NSNumber numberWithInt:0] onThread:thread onChain:TSSendingChain];
-}
-
-+(RKCK*) currentSendingChain:(TSThread*)thread {
-  RKCK* sendingChain = [[RKCK alloc] init];
-  sendingChain.RK = [TSMessagesDatabase getRK:thread];
-  sendingChain.CK = [TSMessagesDatabase getCK:thread onChain:TSSendingChain];
-  sendingChain.ephemeral = [TSMessagesDatabase getEphemeralOfSendingChain:thread];
-  return sendingChain;
-}
-@end
+#import "RKCK.h"
 
 @implementation TSAxolotlRatchet 
 -(id) initForThread:(TSThread*)threadForRatchet{
@@ -267,7 +219,7 @@
 }
 
 -(RKCK*) initialRootKey:(NSData*)masterKey {
-  return [[RKCK alloc] initWithData:[TSHKDF deriveKeyFromMaterial:masterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]];
+  return [RKCK withData:[TSHKDF deriveKeyFromMaterial:masterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]];
 }
 
 
