@@ -427,7 +427,8 @@ static TSEncryptedDatabase *messagesDb = nil;
 //    UPDATE threads SET
     NSString* query = [NSString stringWithFormat:@"INSERT OR REPLACE INTO threads (thread_id,%@) VALUES (\"%@\",%@)",[parameters objectForKey:@"nameField"],[parameters objectForKey:@"threadID"],[parameters objectForKey:@"valueField"]];
     NSLog(@"query %@ with parameters %@",query,parameters);
-    [db executeQuery:query withParameterDictionary:parameters];
+    FMResultSet *rs = [db executeQuery:query withParameterDictionary:parameters];
+    [rs close];
   }];
 
 }

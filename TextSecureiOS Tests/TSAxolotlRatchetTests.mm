@@ -134,6 +134,8 @@ static NSString *masterPw = @"1234test";
     
   
    // user keys database is bob's
+  // Remove any existing DB
+  [TSUserKeysDatabase databaseErase];
   XCTAssertTrue([TSUserKeysDatabase databaseCreateUserKeysWithError:&error], @"message db creation failed");
 
   
@@ -256,10 +258,14 @@ static NSString *masterPw = @"1234test";
   TSECKeyPair* aliceIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
   TSECKeyPair* aliceInitialEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
 
-  int prekeyId = arc4random() % 50;
-  TSECKeyPair* bobEphemeralKey =  [TSUserKeysDatabase getPreKeyWithId:prekeyId error:nil];
+  
+  XCTAssertTrue([[TSUserKeysDatabase getAllPreKeysWithError:nil] count]>0, @"no prekeys in database");
+  TSECKeyPair* bobEphemeralKey =  [[TSUserKeysDatabase getAllPreKeysWithError:nil] objectAtIndex:0];
   TSECKeyPair* bobIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
-
+  
+  XCTAssertNotNil(bobEphemeralKey, @"bob ephemeral key nil");
+  XCTAssertNotNil(bobIdentityKey, @"bob identity key nil");
+  uint32_t prekeyId = [bobEphemeralKey getPreKeyId];
   // Alice goes first
   [TSKeyManager storeUsernameToken:self.aliceUserName];
   [self.alice ratchetSetupFirstSender:[bobIdentityKey getPublicKey] theirEphemeralKey:[bobEphemeralKey getPublicKey]];
