@@ -15,6 +15,6 @@
 @interface TSMessagesManager : NSObject
 + (id)sharedManager;
 
-- (void) processPushNotification:(NSDictionary*)pushDict;
+-(void) processPushNotification:(NSDictionary*)pushDict;
 -(void) sendMessage:(TSMessage*) message;
 @end
