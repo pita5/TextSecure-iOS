@@ -38,27 +38,10 @@
     self.thread = thread;
   
     [self setupThread];
-    UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
   
-    self.navigationItem.leftBarButtonItem = dismissButton;
-
     return self;
 }
 
--(void) setupThread  {
-#warning hack we will want to change when we support more than one contact
-  NSString* myUsername = [TSKeyManager getUsernameToken];
-  for(TSContact* contact in self.thread.participants.array) {
-    self.title = contact.registeredID;
-    self.contact = contact;
-    if(![contact.registeredID isEqualToString:myUsername] ){
-      // handles edge case where I'm writing myself
-      break;
-    }
-  }
-  [self.tableView reloadData];
-  [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
-}
 
 - (id) initNewConversation {
     self = [super initWithNibName:nil bundle:nil];
@@ -105,12 +88,27 @@
         [_tokenFieldView becomeFirstResponder];
     }];
     
-  
+    
     UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
     
     self.navigationItem.leftBarButtonItem = dismissButton;
     
     return self;
+}
+
+-(void) setupThread  {
+#warning hack we will want to change when we support more than one contact
+  NSString* myUsername = [TSKeyManager getUsernameToken];
+  for(TSContact* contact in self.thread.participants.array) {
+    self.title = contact.registeredID;
+    self.contact = contact;
+    if(![contact.registeredID isEqualToString:myUsername] ){
+      // handles edge case where I'm writing myself
+      break;
+    }
+  }
+  [self.tableView reloadData];
+  [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
 }
 
 - (void) dismissVC {

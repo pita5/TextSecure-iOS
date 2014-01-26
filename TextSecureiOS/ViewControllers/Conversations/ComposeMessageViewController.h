@@ -16,16 +16,14 @@
 @class TSAttachment;
 @interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
-@property (nonatomic, retain) TSContact *contact;
-@property (nonatomic) TSThread *thread;
-@property (nonatomic, strong) TSAttachment *attachment;
-// Need to be initialized with one of those methods
-
 - (instancetype)initWithConversation:(TSThread*)thread;
 - (instancetype)initNewConversation;
 
-
-
 -(void) reloadModel:(NSNotification*)notification ;
+
+@property (nonatomic, retain) TSContact *contact;
+@property (nonatomic) TSThread *thread;
+@property (nonatomic, strong) TSAttachment *attachment;
+
 @end
 

@@ -160,7 +160,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
-  [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc] initWithConversation:thread]] animated:YES completion:nil];
+  [self.navigationController pushViewController:[[ComposeMessageViewController alloc] initWithConversation:thread] animated:YES];
 }
 
 -(void) reloadModel:(NSNotification*)notification {

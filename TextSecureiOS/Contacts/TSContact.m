@@ -11,30 +11,32 @@
 #import "TSMessagesDatabase.h"
 
 @implementation TSContact
+
 -(id) initWithRegisteredID:(NSString*)registeredID {
 #warning added this to use the compute thread ids methods as is, but awkward as there are some db calls that assume TSContact has more fields (see header) that will crash with a TSContact initialized in this manner.
-  if(self=[super init]) {
-    self.registeredID = registeredID;
-  }
-  return self;
-  
+    
+    if(self=[super init]) {
+        self.registeredID = registeredID;
+    }
+    return self;
+    
 }
 - (NSString*) name{
-  if (self.userABID){
-    
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(nil, nil);
-    
-    ABRecordRef currentPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[self userABID] intValue]);
-    NSString *firstName = (__bridge NSString *)ABRecordCopyValue(currentPerson, kABPersonFirstNameProperty) ;
-    NSString *surname = (__bridge NSString *)ABRecordCopyValue(currentPerson, kABPersonLastNameProperty) ;
-    
-    return [NSString stringWithFormat:@"%@ %@", firstName, surname];
-    
-  }else {return nil;}
+    if (self.userABID){
+        
+        ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(nil, nil);
+        
+        ABRecordRef currentPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[self userABID] intValue]);
+        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(currentPerson, kABPersonFirstNameProperty) ;
+        NSString *surname = (__bridge NSString *)ABRecordCopyValue(currentPerson, kABPersonLastNameProperty) ;
+        
+        return [NSString stringWithFormat:@"%@ %@", firstName?firstName:@"", surname?surname:@""];
+        
+    }else {return nil;}
 }
 
 
 -(void) save{
-  [TSMessagesDatabase storeTSContact:self];
+    [TSMessagesDatabase storeTSContact:self];
 }
 @end
