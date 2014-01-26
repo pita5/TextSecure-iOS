@@ -48,7 +48,7 @@
 -(void) setupThread  {
 #warning hack we will want to change when we support more than one contact
   NSString* myUsername = [TSKeyManager getUsernameToken];
-  for(TSContact* contact in self.thread.participants.participants) {
+  for(TSContact* contact in self.thread.participants.array) {
     self.title = contact.registeredID;
     self.contact = contact;
     if(![contact.registeredID isEqualToString:myUsername] ){

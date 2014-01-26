@@ -76,8 +76,6 @@
 
   NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message] base64Encoding];
   
-  
-  
   [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
     switch (operation.response.statusCode) {

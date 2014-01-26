@@ -43,7 +43,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [TSKeyManager removeAllKeychainItems];
         DLog(@"First Launch");
-      
     }
     
 #ifdef DEBUG

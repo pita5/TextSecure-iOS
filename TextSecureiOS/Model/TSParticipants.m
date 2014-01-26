@@ -14,22 +14,18 @@
 
 - (id) initWithTSContactsArray:(NSArray*)tsContacts{
     self = [super init];
-    self.participants = tsContacts;
+    self.array = tsContacts;
     return self;
 }
 
 - (NSString*) threadID{
-
-  return [TSParticipants threadIDForParticipants:self.participants];
+  return [TSParticipants threadIDForParticipants:self.array];
 }
 
 + (NSString*) threadIDForParticipants:(NSArray*)tsContacts {
   NSString *phoneNumbers = [TSParticipants concatenatedPhoneNumbersForPaticipants:tsContacts];
   NSString* threadID= [Cryptography computeSHA1DigestForString:phoneNumbers];
   return threadID;
-
-
-
 }
 
 + (NSString*) concatenatedPhoneNumbersForPaticipants:(NSArray*)tsContacts{

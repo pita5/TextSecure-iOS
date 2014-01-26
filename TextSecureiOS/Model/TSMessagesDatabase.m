@@ -259,8 +259,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     
   [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-#warning thread.participants participants awkward, but TSParticipants being NSArray also awkward.
-    for(TSContact* contact in [thread.participants participants]) {
+    for(TSContact* contact in [thread.participants array]) {
       [contact save];
     }
   }];

@@ -9,10 +9,17 @@
 #import <Foundation/Foundation.h>
 
 @interface TSParticipants : NSObject
-@property (nonatomic,strong) NSArray *participants;
+
+/**
+ *  Returns a NSArray of TSContacts for the given participants
+ */
+@property (nonatomic,strong) NSArray *array;
+
+
 - (id) initWithTSContactsArray:(NSArray*)tsContacts;
 
 - (NSString*) threadID;
+
 + (NSString*) concatenatedPhoneNumbersForPaticipants:(NSArray*)tsContacts;
 + (NSString*) threadIDForParticipants:(NSArray*)tsContacts;
 @end
