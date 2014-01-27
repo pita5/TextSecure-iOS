@@ -16,6 +16,8 @@ It's the eternal debate. We chose to adopt spaces. Please set your default Xcode
 
 ![Tabs vs Spaces](http://cl.ly/TYPZ/Screen%20Shot%202014-01-26%20at%2019.02.28.png)
 
+If you don't agree with us, you can use the [ClangFormat Xcode plugin](https://github.com/travisjeffery/ClangFormat-Xcode) to code with your favorite indentation style!
+
 ## BitHub
 
 Open Whisper Systems is currently [experimenting](https://whispersystems.org/blog/bithub/) with the funding privacy Free and Open Source software. Payements are opt-in for the `TextSecure-iOS` repo and can be enabled by adding `MONEYMONEY` in a commit message string. For example, this is the current Open WhisperSystems payout per commit, rendered dynamically as an image by the Open WhisperSystems BitHub instance:
