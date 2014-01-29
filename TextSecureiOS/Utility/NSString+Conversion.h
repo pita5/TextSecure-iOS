@@ -12,6 +12,5 @@
 #pragma mark - Base 64 Conversion
 
 - (NSString *)base64Encoded;
--(NSString *) rot13String;
 - (NSString *)unformattedPhoneNumber;
 @end
