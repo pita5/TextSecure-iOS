@@ -10,7 +10,6 @@
 #import "Cryptography.h"
 #import "TSKeyManager.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
-#import "NSObject+SBJson.h"
 #import "TSMessagesDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "TSStorageError.h"
