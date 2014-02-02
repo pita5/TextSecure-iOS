@@ -54,12 +54,9 @@
             phoneNumber      = ABMultiValueCopyValueAtIndex(phoneNumbers, i);
             
             NSString *number = (__bridge NSString*) phoneNumber;
-            
-            NSLog(@"Number in database: %@, registeredID: %@", number, self.registeredID);
-            
-            
+
             if ([[TSContactManager cleanPhoneNumber:number] isEqualToString:self.registeredID]) {
-                label = (__bridge NSString*) ABMultiValueCopyLabelAtIndex(phoneNumbers, i);
+                label = (__bridge NSString *)(ABAddressBookCopyLocalizedLabel (ABMultiValueCopyLabelAtIndex(phoneNumbers, i)));
                 break;
             }
             
