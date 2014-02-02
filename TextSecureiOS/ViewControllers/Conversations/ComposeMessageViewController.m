@@ -78,15 +78,6 @@
 	// They both do the same thing.
 	[_tokenFieldView becomeFirstResponder];
     
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
-        _tokenFieldView.hidden = FALSE;
-        
-        [_tokenFieldView setSourceArray:contacts];
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-        
-        [_tokenFieldView becomeFirstResponder];
-    }];
     
     
     UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];

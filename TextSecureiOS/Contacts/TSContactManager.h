@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSContact.h"
 
 @interface TSContactManager : NSObject
 

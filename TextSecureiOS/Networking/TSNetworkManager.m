@@ -33,8 +33,6 @@
         operationManager = [[AFHTTPRequestOperationManager manager] initWithBaseURL:[[NSURL alloc] initWithString:textSecureServer]];
         operationManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
-    
-        
     }
     return self;
 }

@@ -50,13 +50,8 @@
 @implementation JSMessagesViewController
 
 #pragma mark - Initialization
-- (void)setup
-{
-    if([self.view isKindOfClass:[UIScrollView class]]) {
-        // fix for ipad modal form presentations
-        ((UIScrollView *)self.view).scrollEnabled = NO;
-    }
-    
+- (void)setup{
+
     CGSize size = self.view.frame.size;
   
     CGRect tableFrame = CGRectMake(0.0f, 0.0f, size.width, size.height - INPUT_HEIGHT);

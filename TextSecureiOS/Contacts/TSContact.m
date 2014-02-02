@@ -35,6 +35,9 @@
     }else {return nil;}
 }
 
+- (NSString*) labelForRegisteredNumber{
+    
+}
 
 -(void) save{
     [TSMessagesDatabase storeTSContact:self];
