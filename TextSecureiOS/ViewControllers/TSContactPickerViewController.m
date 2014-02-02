@@ -8,6 +8,8 @@
 
 #import "TSContactPickerViewController.h"
 #import "TSContactManager.h"
+#import "ComposeMessageViewController.h"
+#import "TSThread.h"
 
 #define tableViewCellsDequeID @"TSContactCell"
 
@@ -40,6 +42,13 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
+
+#pragma mark Tableview Delegate Methods
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
@@ -62,9 +71,11 @@
     return cell;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithParticipants:[[TSParticipants alloc]initWithTSContactsArray:[NSArray arrayWithObject:[self.whisperContacts objectAtIndex:indexPath.row]]]]] animated:NO];
+    
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
 }
 
 - (void) dismissVC {

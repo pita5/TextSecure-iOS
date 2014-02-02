@@ -7,17 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TITokenField.h"
 #import "JSMessagesViewController.h"
 #import "TSContact.h"
 
 @class TSMessage;
 @class TSThread;
 @class TSAttachment;
-@interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
+@interface ComposeMessageViewController : JSMessagesViewController <UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
 - (instancetype)initWithConversation:(TSThread*)thread;
-- (instancetype)initNewConversation;
 
 -(void) reloadModel:(NSNotification*)notification ;
 
