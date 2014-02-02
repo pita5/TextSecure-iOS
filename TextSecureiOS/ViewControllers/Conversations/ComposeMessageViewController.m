@@ -23,34 +23,23 @@
 @property (nonatomic, retain) NSArray *contacts;
 @end
 
-@implementation ComposeMessageViewController {
-	CGFloat _keyboardHeight;
-}
+@implementation ComposeMessageViewController
 
 - (id) initWithConversation:(TSThread*)thread {
-#warning this isn't supporting group messaging yet, obviously
+    
     self = [super initWithNibName:nil bundle:nil];
     
-    if (!self) return nil;
-    
     self.thread = thread;
+    self.delegate = self;
     
     [self setupThread];
-    
+
     return self;
 }
 
 -(void) setupThread  {
-#warning hack we will want to change when we support more than one contact
-    NSString* myUsername = [TSKeyManager getUsernameToken];
-    for(TSContact* contact in self.thread.participants.array) {
-        self.title = contact.registeredID;
-        self.contact = contact;
-        if(![contact.registeredID isEqualToString:myUsername] ){
-            // handles edge case where I'm writing myself
-            break;
-        }
-    }
+    self.contact = [self.thread.participants.array objectAtIndex:0];
+    self.title = [self.contact name];
     [self.tableView reloadData];
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
 }
@@ -64,15 +53,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
-    self.inputToolBarView.textView.delegate = self;
 	[self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
-}
-
-- (UIButton *)sendButton {
-    // Override to use a custom send button
-    // The button's frame is set automatically for you
-    return [UIButton defaultSendButton];
 }
 
 #pragma mark - Table view data source
@@ -82,7 +64,11 @@
 
 #pragma mark - Messages view delegate
 
-- (void)sendPressed:(UIButton *)sender withText:(NSString *)text {
+- (JSMessageInputViewStyle)inputViewStyle{
+    return JSMessageInputViewStyleFlat;
+}
+
+- (void)didSendText:(NSString *)text {
     
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipients:[[NSArray alloc] initWithObjects:self.contact.registeredID, nil] sentOnDate:[NSDate date] attachment:self.attachment];
     if(message.attachment.attachmentType!=TSAttachmentEmpty) {
@@ -92,7 +78,7 @@
     else {
         [[TSMessagesManager sharedManager] sendMessage:message];
     }
-    [self.inputToolBarView.photoButton setImage:[UIImage imageNamed:@"photo.png"] forState:UIControlStateNormal];
+    //[self.inputToolBarView.photoButton setImage:[UIImage imageNamed:@"photo.png"] forState:UIControlStateNormal];
     self.attachment = nil;
     [self finishSend];
 }
@@ -156,7 +142,6 @@
     [encryptedData writeToFile:writeToFile atomically:YES];
     self.attachment = [[TSAttachment alloc] initWithAttachmentDataPath:writeToFile withType:attachmentType withDecryptionKey:randomEncryptionKey];
     //size of button
-    [self.inputToolBarView.photoButton setImage:[self.attachment getThumbnailOfSize:26] forState:UIControlStateNormal];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -184,10 +169,6 @@
     }
 }
 
-- (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return JSBubbleMessageStyleFlat;
-}
-
 - (JSMessagesViewTimestampPolicy)timestampPolicy {
     return JSMessagesViewTimestampPolicyEveryThree;
 }
@@ -196,13 +177,6 @@
     return JSMessagesViewAvatarPolicyNone;
 }
 
-- (JSAvatarStyle)avatarStyle {
-    return JSAvatarStyleSquare;
-}
-
-- (JSInputBarStyle)inputBarStyle {
-    return JSInputBarStyleFlat;
-}
 
 #pragma mark - Messages view data source
 - (BOOL) shouldHaveThumbnailForRowAtIndexPath:(NSIndexPath*)indexPath {
@@ -235,18 +209,6 @@
 
 - (UIImage *)avatarImageForOutgoingMessage {
     return nil;
-}
-
-#pragma mark UITextViewDelegate (Sending box)
-
--(BOOL)textViewShouldBeginEditing:(UITextView *)textView {
-    if ([textView isEqual:self.inputToolBarView.textView]) {
-        
-        self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
-        
-    }
-    
-    return true;
 }
 
 @end
