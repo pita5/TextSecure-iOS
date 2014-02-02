@@ -54,9 +54,11 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:tableViewCellsDequeID];
     }
+    
+    TSContact *contact = ((TSContact *)[self.whisperContacts objectAtIndex:indexPath.row]);
         
-    cell.textLabel.text = ((TSContact *)[self.whisperContacts objectAtIndex:indexPath.row]).name;
-    cell.detailTextLabel.text = @"Home";
+    cell.textLabel.text = contact.name;
+    cell.detailTextLabel.text = [contact labelForRegisteredNumber];
     return cell;
 }
 

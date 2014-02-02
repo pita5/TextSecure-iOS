@@ -34,6 +34,18 @@
     return self;
 }
 
+/**
+ *  Returns a given phone number in international E.123 format but without any white-spaces
+ *
+ *  @param number phone number to convert to E.123
+ */
+
++ (NSString*) cleanPhoneNumber:(NSString*)number{
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    NBPhoneNumber *phone = [phoneUtil parse:number defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
+    return [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
+}
+
 + (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock{
     
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
@@ -52,7 +64,6 @@
     if (accessGranted) {
         CFArrayRef all = ABAddressBookCopyArrayOfAllPeople(addressBook);
         CFIndex n = ABAddressBookGetPersonCount(addressBook);
-        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
         NSMutableDictionary *hashedAB = [NSMutableDictionary dictionary];
         NSMutableDictionary *originalAB = [NSMutableDictionary dictionary];
         
@@ -69,8 +80,7 @@
                 CFStringRef phoneNumberRef = ABMultiValueCopyValueAtIndex(phones, j);
                 NSString *phoneNumber = (__bridge NSString *)phoneNumberRef;
                 
-                NBPhoneNumber *phone = [phoneUtil parse:phoneNumber defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
-                NSString *cleanedNumber = [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
+                NSString *cleanedNumber = [self cleanPhoneNumber:phoneNumber];
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
                 
                 [hashedAB setObject:contactReferenceID forKey:hashedPhoneNumber];
