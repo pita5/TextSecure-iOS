@@ -2,6 +2,10 @@
 
 Currently in early development stage. Please see [Contributing](https://github.com/WhisperSystems/TextSecure-iOS/blob/master/CONTRIBUTING.md) for details how best to contribute.
 
+## Temporary notice
+
+The main Cocoapods repo got corrupted. Please [follow these instructions](http://blog.cocoapods.org/Repairing-Our-Broken-Specs-Repository/) for your next `pod update`
+
 ## Building
 
 1) Clone the repo to a working directory
