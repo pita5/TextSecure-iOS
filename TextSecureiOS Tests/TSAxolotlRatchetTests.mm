@@ -17,7 +17,6 @@
 #import "Cryptography.h"
 #import "TSStorageMasterKey.h"
 #import "TSThread.h"
-#import "TSParticipants.h"
 #import "TSContact.h"
 #import "TSECKeyPair.h"
 #import "TSMessage.h"
@@ -102,18 +101,16 @@ static NSString *masterPw = @"1234test";
   self.aliceUserName = @"12345";
   self.bobUserName = @"678910";
 
-  self.thread1 = [TSThread threadWithParticipants:[[TSParticipants alloc]
-                                                  initWithTSContactsArray:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
-                                                                            [[TSContact alloc] initWithRegisteredID:self.bobUserName]]]];
+  self.thread1 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
+                                                                            [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
   
   
   self.message1 = [[TSMessage alloc] initWithMessage:@"hey" sender:self.aliceUserName recipient:self.bobUserName sentOnDate:[NSDate date]];
   self.alice = [[TSAxolotlRatchet alloc] initForThread:self.thread1];
 
 
-  self.thread2 = [TSThread threadWithParticipants:[[TSParticipants alloc]
-                                                 initWithTSContactsArray:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
-                                                                           [[TSContact alloc] initWithRegisteredID:self.bobUserName]]]];
+  self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
+                                                                           [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
 
   self.message2 = [[TSMessage alloc] initWithMessage:@"yo" sender:self.bobUserName recipient:self.aliceUserName sentOnDate:[NSDate date]];
   self.bob = [[TSAxolotlRatchet alloc] initForThread:self.thread2];

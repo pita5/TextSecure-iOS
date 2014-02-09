@@ -29,8 +29,8 @@
 #import "TSRecipientPrekeyRequest.h"
 #import "TSWhisperMessageKeys.h"
 #import "TSHKDF.h"
-#import "TSParticipants.h"
 #import "RKCK.h"
+#import "TSContact.h"
 
 @implementation TSAxolotlRatchet 
 -(id) initForThread:(TSThread*)threadForRatchet{
@@ -41,7 +41,7 @@
 }
 #pragma mark public methods
 +(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType {
-  [TSMessagesDatabase storeMessage:message];
+    [TSMessagesDatabase storeMessage:message fromThread:thread];
 #warning always sneding a prekey message for testing!
   messageType = TSPreKeyWhisperMessageType;
   TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:thread];
@@ -50,7 +50,7 @@
     case TSPreKeyWhisperMessageType:{
       // get a contact's prekey
       TSContact* contact = [[TSContact alloc] initWithRegisteredID:message.recipientId];
-      TSThread* thread = [TSThread threadWithMeAndParticipantsByRegisteredIds:@[message.recipientId]];
+      TSThread* thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:message.recipientId]]];
       [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         switch (operation.response.statusCode) {
           case 200:{
@@ -100,7 +100,7 @@
   NSData* decryptedPayload=[Cryptography decryptAppleMessagePayload:data withSignalingKey:[TSKeyManager getSignalingKeyToken]];
   TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
   TSMessage* message;
-  TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:[TSThread threadWithMeAndParticipantsByRegisteredIds: @[messageSignal.source]]];
+  TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:[TSThread threadWithContacts: @[[[TSContact alloc] initWithRegisteredID:messageSignal.source]]]];
   switch (messageSignal.contentType) {
     case TSPreKeyWhisperMessageType: {
       TSPreKeyWhisperMessage* preKeyMessage = (TSPreKeyWhisperMessage*)messageSignal.message;
@@ -136,7 +136,7 @@
       break;
   }
   message.recipientId = [TSKeyManager getUsernameToken];
-  [TSMessagesDatabase storeMessage:message];
+    [TSMessagesDatabase storeMessage:message fromThread:[TSThread threadWithContacts: @[[[TSContact alloc]  initWithRegisteredID:message.senderId]]]];
 }
 
 

@@ -17,8 +17,7 @@
 #import "TSThread.h"
 #import "TSStorageMasterKey.h"
 #import "TSEncryptedDatabase.h"
-#import "TSParticipants.h"
-
+#import "TSKeyManager.h"
 
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
 #define databaseFileName @"TSMessages.db"
@@ -170,7 +169,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 #pragma mark - DB message methods
 
-+(void) storeMessage:(TSMessage*)message {
++(void) storeMessage:(TSMessage*)message fromThread:(TSThread*) thread {
 
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
@@ -180,16 +179,12 @@ static TSEncryptedDatabase *messagesDb = nil;
       }
     }
     
-    TSContact *sender = [[TSContact alloc] initWithRegisteredID:message.senderId];
-    TSContact *reciever = [[TSContact alloc] initWithRegisteredID:message.recipientId];
-    NSString* threadId = [TSParticipants threadIDForParticipants:@[sender,reciever]];
-    
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
         NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
-        [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",threadId];
-        [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.message,threadId,message.senderId,message.recipientId,sqlDate];
+        [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",thread.threadID];
+        [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.message,thread.threadID,message.senderId,message.recipientId,sqlDate];
     }];
 }
 
@@ -243,11 +238,21 @@ static TSEncryptedDatabase *messagesDb = nil;
             NSString* timestamp = [searchInDB stringForColumn:@"timestamp"];
             NSDate *date = [dateFormatter dateFromString:timestamp];
             
-            TSContact *sender = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"sender_id"]];
-            TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"recipient_id"]];
-            TSThread *messageThread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[sender,receiver]]];
+            TSContact *contact;
+            // TODO: temporary hack until TSThread and TSMessage are properly refactored
+            NSString *senderID = [searchInDB stringForColumn:@"sender_id"];
+            NSString *receiverID = [searchInDB stringForColumn:@"recipient_id"];
             
-            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:sender.registeredID recipient:receiver.registeredID sentOnDate:date];
+            NSString *userID = [TSKeyManager getUsernameToken];
+            if ([userID isEqualToString:[searchInDB stringForColumn:@"recipient_id"]]) {
+                contact = [[TSContact alloc] initWithRegisteredID:senderID];
+            }
+            else {
+                contact = [[TSContact alloc] initWithRegisteredID:receiverID];
+            }
+            
+            TSThread *messageThread = [TSThread threadWithContacts:@[contact]];
+            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:senderID recipient:receiverID sentOnDate:date];
 
             [threadArray addObject:messageThread];
         }
@@ -268,8 +273,8 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     
   [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-#warning thread.participants participants awkward, but TSParticipants being NSArray also awkward.
-    for(TSContact* contact in [thread.participants participants]) {
+    for(TSContact* contact in thread.participants) {
+        //TODO: Get rid of the save method
       [contact save];
     }
   }];

@@ -14,7 +14,6 @@
 #import "TSMessage.h"
 #import "TSThread.h"
 #import "TSKeyManager.h"
-#import "TSParticipants.h"
 
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
@@ -45,7 +44,7 @@
 -(void) setupThread  {
 #warning hack we will want to change when we support more than one contact
   NSString* myUsername = [TSKeyManager getUsernameToken];
-  for(TSContact* contact in self.thread.participants.participants) {
+  for(TSContact* contact in self.thread.participants) {
     self.title = contact.registeredID;
     self.contact = contact;
     if(![contact.registeredID isEqualToString:myUsername] ){
@@ -325,8 +324,7 @@
         TSContact* receiver = ((TSContact*) ((TIToken*)[_tokenFieldView.tokenField.tokens objectAtIndex:0]).representedObject);
         [self startedWritingMessage];
         DLog(@"Contact set to : %@", self.contact.name);
-        TSContact* me = [[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken]];
-        self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc] initWithTSContactsArray:@[me,receiver]]];
+        self.thread = [TSThread threadWithContacts:@[receiver]];
         [self setupThread];
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

@@ -33,7 +33,7 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
 
 #pragma mark - DB message functions
-+(void) storeMessage:(TSMessage*)message;
++(void) storeMessage:(TSMessage*)message fromThread:(TSThread*)thread;
 +(NSArray*) getMessagesOnThread:(TSThread*) thread;
 +(NSArray*) getThreads;
 +(void)storeTSContact:(TSContact*)contact;

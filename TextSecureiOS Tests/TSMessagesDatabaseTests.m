@@ -13,7 +13,6 @@
 #import "NSData+Base64.h"
 #import "TSStorageMasterKey.h"
 #import "TSThread.h"
-#import "TSParticipants.h"
 #import "TSContact.h"
 #import "TSECKeyPair.h"
 #import "TSMessage.h"
@@ -46,9 +45,8 @@ static NSString *masterPw = @"1234test";
 {
     [super setUp];
   
-    self.thread = [TSThread threadWithParticipants:[[TSParticipants alloc]
-                                                  initWithTSContactsArray:@[[[TSContact alloc] initWithRegisteredID:@"12345"],
-                                                                            [[TSContact alloc] initWithRegisteredID:@"678910"]]]];
+    self.thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:@"12345"],
+                                                                            [[TSContact alloc] initWithRegisteredID:@"678910"]]];
   
     self.message = [[TSMessage alloc] initWithMessage:@"hey" sender:@"12345" recipient:@"678910" sentOnDate:[NSDate date]];
     // Remove any existing DB
@@ -71,7 +69,7 @@ static NSString *masterPw = @"1234test";
     XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
     XCTAssertTrue([messages count]==0, @"there are threads in an empty db");
 
-    [TSMessagesDatabase storeMessage:self.message];
+    [TSMessagesDatabase storeMessage:self.message fromThread:self.thread];
 }
 
 - (void)tearDown
