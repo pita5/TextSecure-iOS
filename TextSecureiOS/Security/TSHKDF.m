@@ -25,11 +25,13 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
     char prk[HKDF_HASH_LEN] = {0};
     char *okm = NULL;
     
-    if ((!input) || (!info) ) {
+    if ((!input) || (!info) || (!salt)) {
         @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument was nil" userInfo:nil];
     }
     
-    if (([input length] == 0) ) {
+    // A salt of length 0 is most likely a programing error
+    // The method deriveKeyFromMaterial:outputLength:info: should be used when no salt is needed
+    if (([input length] == 0) || ([salt length] == 0)) {
         @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument had a length of 0" userInfo:nil];
     }
     
