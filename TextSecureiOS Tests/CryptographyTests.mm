@@ -28,7 +28,6 @@
 + (TSWhisperMessage*) getWhisperMessageForData:(NSData*) data ofType:(TSWhisperMessageType)contentType;
 @end
 
-
 @implementation CryptographyTests
 
 
@@ -68,7 +67,7 @@
   XCTAssertTrue([[NSData dataFromBase64String:signalingKeyString] length]==52, @"signaling key is not 52 bytes but %d",[[NSData dataFromBase64String:signalingKeyString]  length]);
   NSString* tsServerResponse = @"Aexen2G8XJxCxN9fp6pcCAgepw3dhoGvP1w66L560Z4BKjnh8vInFnde0pPAJe/0y07EyrQwDI9ETGyPM9D3qT5wRu3Y7UWe4J3l";
   NSData *payload = [NSData dataFromBase64String:tsServerResponse];
- 
+
   NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:payload withSignalingKey:signalingKeyString];
 
   TSMessageSignal *tsMessageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
@@ -76,7 +75,6 @@
   TSMessage* tsMessage =  [tsMessageSignal getTSMessage:tsMessageContent];
 
   XCTAssertTrue([tsMessage.message  isEqualToString:originalMessage], @"Decrypted message: %@ is not equal to original: %@",tsMessage.message,originalMessage);
-  
 }
 
 

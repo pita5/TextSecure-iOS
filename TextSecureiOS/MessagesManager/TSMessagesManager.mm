@@ -12,6 +12,16 @@
 #import "NSData+Base64.h"
 #import "TSSubmitMessageRequest.h"
 #import "TSMessagesDatabase.h"
+#import "TSMessagesManager.h"
+#import "TSAttachmentManager.h"
+#import "TSKeyManager.h"
+#import "Cryptography.h"
+#import "TSMessage.h"
+#import "TSMessagesDatabase.h"
+#import "TSAttachment.h"
+#import "IncomingPushMessageSignal.pb.hh"
+#import "TSMessageSignal.hh"
+
 @implementation TSMessagesManager
 
 
@@ -33,14 +43,12 @@
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
   [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
-
 }
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType{
   [TSAxolotlRatchet sendMessage:message onThread:thread ofType:messageType];
   
 }
-
 
 -(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType {
   

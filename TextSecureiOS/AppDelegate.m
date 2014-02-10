@@ -10,7 +10,6 @@
 #import "Cryptography.h"
 #import "TSKeyManager.h"
 #import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
-#import "NSObject+SBJson.h"
 #import "TSMessagesDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "TSStorageError.h"
@@ -18,7 +17,9 @@
 #import "NSString+Conversion.h"
 #import "TSMessagesManager.h"
 #import "NSData+Base64.h"
-
+#import "TSAttachmentManager.h"
+#import "TSMessage.h"
+#import "TSAttachment.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -26,7 +27,9 @@
 #define firstLaunchKey @"FirstLaunch"
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+#warning remove
+
+  
     // UIAppearance proxy setup
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor]} forState:UIControlStateDisabled];
@@ -39,7 +42,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [TSKeyManager removeAllKeychainItems];
         DLog(@"First Launch");
-      
     }
     
 #ifdef DEBUG
@@ -64,6 +66,9 @@
 	return YES;
 
 }
+
+
+
 
 #pragma mark - Push notifications
 

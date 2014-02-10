@@ -20,7 +20,7 @@
 #import "PasswordUnlockViewController.h"
 #import "TSStorageMasterKey.h"
 #import "TSThread.h"
-
+#import "TSContactPickerViewController.h"
 
 static NSString *kCellIdentifier = @"CellIdentifier";
 
@@ -83,7 +83,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 - (void)composeMessage {
-    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc]initNewConversation]] animated:YES completion:nil];
+    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[TSContactPickerViewController alloc]initWithNibName:nil bundle:nil]] animated:YES completion:nil];
 }
 
 - (void)openSettings {
@@ -160,7 +160,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
-  [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc] initWithConversation:thread]] animated:YES completion:nil];
+  [self.navigationController pushViewController:[[ComposeMessageViewController alloc] initWithConversation:thread] animated:YES];
 }
 
 -(void) reloadModel:(NSNotification*)notification {

@@ -80,10 +80,7 @@
 
 +(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey truncation:(int)bytes{
   return [[Cryptography computeHMAC:dataToHMAC withHMACKey:HMACKey] subdataWithRange:NSMakeRange(0, bytes)];
-
 }
-
-
 
 #pragma mark encrypting and decrypting attachments
 +(NSData*) decryptAttachment:(NSData*) dataToDecrypt withKey:(NSData*) key {
@@ -129,6 +126,7 @@
 #pragma mark push payload encryptiong/decryption
 +(NSData*) decrypt:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
   /* AES256 CBC encrypt then mac
+   
    Returns nil if hmac invalid or decryption fails
    */
   //verify hmac of version||encrypted data||iv

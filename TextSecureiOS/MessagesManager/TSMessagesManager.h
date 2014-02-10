@@ -20,4 +20,5 @@
 - (void) receiveMessagePush:(NSDictionary*)pushDict;
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType;
 -(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType;
+
 @end

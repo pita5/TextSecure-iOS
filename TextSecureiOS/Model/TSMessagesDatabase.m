@@ -15,6 +15,7 @@
 #import "TSMessage.h"
 #import "TSContact.h"
 #import "TSThread.h"
+#import "TSAttachment.h"
 #import "TSStorageMasterKey.h"
 #import "TSEncryptedDatabase.h"
 #import "TSKeyManager.h"
@@ -61,41 +62,42 @@ static TSEncryptedDatabase *messagesDb = nil;
             return;
         }
 #warning we will want a subtler format than this, prototype message db format
-      /*
-       RK           : 32-byte root key which gets updated by DH ratchet
-       HKs, HKr     : 32-byte header keys (send and recv versions)
-       NHKs, NHKr   : 32-byte next header keys (")
-       CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
-       DHIs, DHIr   : DH or ECDH Identity keys
-       DHRs, DHRr   : DH or ECDH Ratchet keys
-       Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
-       PNs          : Previous message numbers (# of msgs sent under prev ratchet)
-       ratchet_flag : True if the party will send a new DH ratchet key in next msg
-       skipped_HK_MK : A list of stored message keys and their associated header keys
-       for "skipped" messages, i.e. messages that have not been
-       received despite the reception of more recent messages.
-       Entries may be stored with a timestamp, and deleted after a
-       certain age.
-       */
-      
-
-      if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, rk BLOB, cks BLOB, ckr BLOB, dhis BLOB, dhir BLOB, dhrs BLOB, dhrr BLOB, ns INT, nr INT, pns INT)"]) {
-          return;
+        
+        /*
+         RK           : 32-byte root key which gets updated by DH ratchet
+         HKs, HKr     : 32-byte header keys (send and recv versions)
+         NHKs, NHKr   : 32-byte next header keys (")
+         CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
+         DHIs, DHIr   : DH or ECDH Identity keys
+         DHRs, DHRr   : DH or ECDH Ratchet keys
+         Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
+         PNs          : Previous message numbers (# of msgs sent under prev ratchet)
+         ratchet_flag : True if the party will send a new DH ratchet key in next msg
+         skipped_HK_MK : A list of stored message keys and their associated header keys
+         for "skipped" messages, i.e. messages that have not been
+         received despite the reception of more recent messages.
+         Entries may be stored with a timestamp, and deleted after a
+         certain age.
+         */
+        
+        
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, rk BLOB, cks BLOB, ckr BLOB, dhis BLOB, dhir BLOB, dhrs BLOB, dhrr BLOB, ns INT, nr INT, pns INT)"]) {
+            return;
         }
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))"]) {
-          return;
+            return;
         }
-
+        
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id INT PRIMARY KEY,message TEXT,thread_id TEXT,sender_id TEXT,recipient_id TEXT, timestamp DATE,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))"]) {
-          return;
+            return;
         }
-      
+        
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_phone_number TEXT,relay TEXT, useraddressbookid INTEGER, identitykey TEXT, identityverified INTEGER, supports_sms INTEGER, next_key TEXT)"]){
-          return;
+            return;
         }
         
         dbInitSuccess = YES;
-      
+        
     }];
     
     if (!dbInitSuccess) {
@@ -106,7 +108,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         [TSMessagesDatabase databaseErase];
         return NO;
     }
-
+    
     messagesDb = db;
     return YES;
 }
@@ -123,14 +125,14 @@ static TSEncryptedDatabase *messagesDb = nil;
     if (messagesDb){
         return YES;
     }
-
+    
     if (![TSMessagesDatabase databaseWasCreated]) {
         if (error) {
             *error = [TSStorageError errorDatabaseNotCreated];
         }
         return NO;
     }
-
+    
     messagesDb = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:databaseFileName] error:error];
     if (!messagesDb) {
         return NO;
@@ -148,15 +150,15 @@ static TSEncryptedDatabase *messagesDb = nil;
     }
     
     __block BOOL updateSuccess = YES;
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-    for(id settingName in settingNamesAndValues) {
-      if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",settingName,[settingNamesAndValues objectForKey:settingName]]) {
-        DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-        updateSuccess = NO;
-      }
-    }
-  }];
-  return updateSuccess;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        for(id settingName in settingNamesAndValues) {
+            if (![db executeUpdate:@"INSERT OR REPLACE INTO persistent_settings (setting_name,setting_value) VALUES (?, ?)",settingName,[settingNamesAndValues objectForKey:settingName]]) {
+                DLog(@"Error updating DB: %@", [db lastErrorMessage]);
+                updateSuccess = NO;
+            }
+        }
+    }];
+    return updateSuccess;
 }
 
 
@@ -170,13 +172,13 @@ static TSEncryptedDatabase *messagesDb = nil;
 #pragma mark - DB message methods
 
 +(void) storeMessage:(TSMessage*)message fromThread:(TSThread*) thread {
-
+    
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
-      if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]) {
             // TODO: better error handling
             return;
-      }
+        }
     }
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
@@ -185,6 +187,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
         [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",thread.threadID];
         [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.message,thread.threadID,message.senderId,message.recipientId,sqlDate];
+        
     }];
 }
 
@@ -201,17 +204,23 @@ static TSEncryptedDatabase *messagesDb = nil;
     // debug why this is returning me, and then you separately.
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         
-      NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
-      FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=\"%@\" ORDER BY timestamp", [thread threadID]]];
-
-      while([searchInDB next]) {
-          NSString* timestamp = [searchInDB stringForColumn:@"timestamp"];
-          NSDate *date = [dateFormatter dateFromString:timestamp];
-          [messageArray addObject:[[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:[searchInDB stringForColumn:@"sender_id"] recipient:[searchInDB stringForColumn:@"recipient_id"] sentOnDate:date]];
-      }
-      [searchInDB close];
+        NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
+        FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=\"%@\" ORDER BY timestamp", [thread threadID]]];
+        
+        while([searchInDB next]) {
+            NSString* timestamp = [searchInDB stringForColumn:@"timestamp"];
+            NSDate *date = [dateFormatter dateFromString:timestamp];
+            TSAttachment *attachment = nil;
+            TSAttachmentType attachmentType = [searchInDB intForColumn:@"attachment_type"];
+            if(attachmentType!=TSAttachmentEmpty) {
+                NSString *attachmentDataPath = [searchInDB stringForColumn:@"attachment"];
+                NSData *attachmentDecryptionKey = [searchInDB dataForColumn:@"attachment_decryption_key"];
+                attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withDecryptionKey:attachmentDecryptionKey];
+            }
+            [messageArray addObject:[[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:[searchInDB stringForColumn:@"sender_id"] recipient:[searchInDB stringForColumn:@"recipient_id"] sentOnDate:date attachment:attachment]];
+        }
     }];
-  
+    
     
     return messageArray;
 }
@@ -251,19 +260,30 @@ static TSEncryptedDatabase *messagesDb = nil;
                 contact = [[TSContact alloc] initWithRegisteredID:receiverID];
             }
             
+            TSContact *sender = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"sender_id"]];
+            TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"recipient_id"]];
             TSThread *messageThread = [TSThread threadWithContacts:@[contact]];
-            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:senderID recipient:receiverID sentOnDate:date];
-
+            
+            TSAttachment *attachment = nil;
+            TSAttachmentType attachmentType = [searchInDB intForColumn:@"attachment_type"];
+            if(attachmentType!=TSAttachmentEmpty) {
+                NSString *attachmentDataPath = [searchInDB stringForColumn:@"attachment"];
+                NSData *attachmentDecryptionKey = [searchInDB dataForColumn:@"attachment_decryption_key"];
+                attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withDecryptionKey:attachmentDecryptionKey];
+            }
+            
+            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:sender.registeredID recipient:receiver.registeredID sentOnDate:date attachment:nil];
+            
             [threadArray addObject:messageThread];
         }
         [searchInDB close];
     }];
-
+    
     return threadArray;
 }
 
 +(void)storeTSThread:(TSThread*)thread {
-
+    
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil])
@@ -272,12 +292,12 @@ static TSEncryptedDatabase *messagesDb = nil;
     }
     
     
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-    for(TSContact* contact in thread.participants) {
-        //TODO: Get rid of the save method
-      [contact save];
-    }
-  }];
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        for(TSContact* contact in thread.participants) {
+            //TODO: Get rid of the save method
+            [contact save];
+        }
+    }];
 }
 
 +(void)findTSContactForPhoneNumber:(NSString*)phoneNumber{
@@ -289,21 +309,21 @@ static TSEncryptedDatabase *messagesDb = nil;
             return;
     }
     
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-    
-    FMResultSet *searchInDB = [db executeQuery:@"SELECT registeredID FROM contacts WHERE registered_phone_number = :phoneNumber " withParameterDictionary:@{@"phoneNumber":phoneNumber}];
-    
-    if ([searchInDB next]) {
-      // That was found :)
-      NSLog(@"Entry %@", [searchInDB stringForColumn:@"useraddressbookid"]);
-    }
-    
-    [searchInDB close];
-  }];
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT registeredID FROM contacts WHERE registered_phone_number = :phoneNumber " withParameterDictionary:@{@"phoneNumber":phoneNumber}];
+        
+        if ([searchInDB next]) {
+            // That was found :)
+            NSLog(@"Entry %@", [searchInDB stringForColumn:@"useraddressbookid"]);
+        }
+        
+        [searchInDB close];
+    }];
 }
 
 +(void)storeTSContact:(TSContact*)contact{
-
+    
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil])
@@ -311,144 +331,144 @@ static TSEncryptedDatabase *messagesDb = nil;
             return;
     }
     
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT registeredID FROM contacts WHERE registered_phone_number = :phoneNumber " withParameterDictionary:@{@"phoneNumber":contact.registeredID}];
+        NSDictionary *parameterDictionary = @{@"registeredID": contact.registeredID, @"relay": contact.relay, @"userABID": contact.userABID, @"identityKey": contact.identityKey, @"identityKeyIsVerified":[NSNumber numberWithInt:((contact.identityKeyIsVerified)?1:0)], @"supportsSMS":[NSNumber numberWithInt:((contact.supportsSMS)?1:0)], @"nextKey":contact.nextKey};
+        
+        
+        if ([searchInDB next]) {
+            // the phone number was found, let's now update the contact
+            [db executeUpdate:@"UPDATE contacts SET relay = :relay, useraddressbookid :userABID, identitykey = :identityKey, identityverified = :identityKeyIsVerified, supports_sms = :supportsSMS, next_key = :nextKey WHERE registered_phone_number = :registeredID" withParameterDictionary:parameterDictionary];
+        }
+        else{
+            // the contact doesn't exist, let's create him
+            [db executeUpdate:@"REPLACE INTO contacts (:registeredID,:relay , :userABID, :identityKey, :identityKeyIsVerified, :supportsSMS, :nextKey)" withParameterDictionary:parameterDictionary];
+        }
+        [searchInDB close];
+    }];
     
-    FMResultSet *searchInDB = [db executeQuery:@"SELECT registeredID FROM contacts WHERE registered_phone_number = :phoneNumber " withParameterDictionary:@{@"phoneNumber":contact.registeredID}];
-      NSDictionary *parameterDictionary = @{@"registeredID": contact.registeredID, @"relay": contact.relay, @"userABID": contact.userABID, @"identityKey": contact.identityKey, @"identityKeyIsVerified":[NSNumber numberWithInt:((contact.identityKeyIsVerified)?1:0)], @"supportsSMS":[NSNumber numberWithInt:((contact.supportsSMS)?1:0)], @"nextKey":contact.nextKey};
-      
-    
-    if ([searchInDB next]) {
-      // the phone number was found, let's now update the contact
-      [db executeUpdate:@"UPDATE contacts SET relay = :relay, useraddressbookid :userABID, identitykey = :identityKey, identityverified = :identityKeyIsVerified, supports_sms = :supportsSMS, next_key = :nextKey WHERE registered_phone_number = :registeredID" withParameterDictionary:parameterDictionary];
-    }
-    else{
-      // the contact doesn't exist, let's create him
-      [db executeUpdate:@"REPLACE INTO contacts (:registeredID,:relay , :userABID, :identityKey, :identityKeyIsVerified, :supportsSMS, :nextKey)" withParameterDictionary:parameterDictionary];
-    }
-    [searchInDB close];
-  }];
-  
 }
 
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
 
 +(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread{
-  if (!messagesDb) {
-    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
-      // TODO: better error handling
-      return nil;
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+            // TODO: better error handling
+            return nil;
+        }
     }
-  }
-  __block NSData* apsField = nil;
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-    
-    FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
-    if ([searchInDB next]) {
-      apsField= [searchInDB dataForColumn:name];
-    }
-    [searchInDB close];
-  }];
-  return apsField;
+    __block NSData* apsField = nil;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
+        if ([searchInDB next]) {
+            apsField= [searchInDB dataForColumn:name];
+        }
+        [searchInDB close];
+    }];
+    return apsField;
 }
 
 
 +(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread {
-  if (!messagesDb) {
-    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
-      // TODO: better error handling
-      return 0;
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+            // TODO: better error handling
+            return 0;
+        }
     }
-  }
-  __block NSNumber* apsField = 0;
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-
-    FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
-    if ([searchInDB next]) {
-      
-      apsField= [NSNumber numberWithInt:[searchInDB intForColumn:name]];
-    }
-    [searchInDB close];
-  }];
-  return apsField;
-
+    __block NSNumber* apsField = 0;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
+        if ([searchInDB next]) {
+            
+            apsField= [NSNumber numberWithInt:[searchInDB intForColumn:name]];
+        }
+        [searchInDB close];
+    }];
+    return apsField;
+    
 }
 
 +(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread {
-  if (!messagesDb) {
-    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
-      // TODO: better error handling
-      return 0;
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+            // TODO: better error handling
+            return 0;
+        }
     }
-  }
-  __block int apsField = 0;
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    __block int apsField = 0;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
+        if ([searchInDB next]) {
+            apsField= [searchInDB boolForColumn:name];
+        }
+        [searchInDB close];
+    }];
+    return apsField;
     
-    FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
-    if ([searchInDB next]) {
-      apsField= [searchInDB boolForColumn:name];
-    }
-    [searchInDB close];
-  }];
-  return apsField;
-  
 }
 
 +(NSString*) getAPSStringField:(NSString*)name onThread:(TSThread*)thread {
-  if (!messagesDb) {
-    if (![TSMessagesDatabase databaseOpenWithError:nil]) {
-      // TODO: better error handling
-      return @"";
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]) {
+            // TODO: better error handling
+            return @"";
+        }
     }
-  }
-  __block NSString* apsField = 0;
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    __block NSString* apsField = 0;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
+        if ([searchInDB next]) {
+            apsField= [searchInDB stringForColumn:name];
+        }
+        [searchInDB close];
+    }];
+    return apsField;
     
-    FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
-    if ([searchInDB next]) {
-      apsField= [searchInDB stringForColumn:name];
-    }
-    [searchInDB close];
-  }];
-  return apsField;
-  
 }
 
 +(void) setAPSDataField:(NSDictionary*) parameters {
-  /*
-   parameters
-   nameField : name of db field to set
-   valueField : value of db field to set to
-   threadID" : thread id
-   */
-
-  // Decrypt the DB if it hasn't been done yet
-  if (!messagesDb) {
-    if (![TSMessagesDatabase databaseOpenWithError:nil])
-      // TODO: better error handling
-      return;
-  }
-  
-  [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-//    UPDATE threads SET
-    NSString* query = [NSString stringWithFormat:@"INSERT OR REPLACE INTO threads (thread_id,%@) VALUES (\"%@\",%@)",[parameters objectForKey:@"nameField"],[parameters objectForKey:@"threadID"],[parameters objectForKey:@"valueField"]];
-    NSLog(@"query %@ with parameters %@",query,parameters);
-    FMResultSet *rs = [db executeQuery:query withParameterDictionary:parameters];
-    [rs close];
-  }];
-
+    /*
+     parameters
+     nameField : name of db field to set
+     valueField : value of db field to set to
+     threadID" : thread id
+     */
+    
+    // Decrypt the DB if it hasn't been done yet
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil])
+            // TODO: better error handling
+            return;
+    }
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        //    UPDATE threads SET
+        NSString* query = [NSString stringWithFormat:@"INSERT OR REPLACE INTO threads (thread_id,%@) VALUES (\"%@\",%@)",[parameters objectForKey:@"nameField"],[parameters objectForKey:@"threadID"],[parameters objectForKey:@"valueField"]];
+        NSLog(@"query %@ with parameters %@",query,parameters);
+        FMResultSet *rs = [db executeQuery:query withParameterDictionary:parameters];
+        [rs close];
+    }];
+    
 }
 
 +(NSString*) getAPSFieldName:(NSString*)name onChain:(TSChainType)chain {
-  switch (chain) {
-    case TSReceivingChain:
-      return [name stringByAppendingString:@"r"];
-      break;
-    case TSSendingChain:
-      return [name stringByAppendingString:@"s"];
-    default:
-      return name;
-      break;
-  }
+    switch (chain) {
+        case TSReceivingChain:
+            return [name stringByAppendingString:@"r"];
+            break;
+        case TSSendingChain:
+            return [name stringByAppendingString:@"s"];
+        default:
+            return name;
+            break;
+    }
 }
 
 
@@ -457,38 +477,38 @@ static TSEncryptedDatabase *messagesDb = nil;
 /* Axolotl Protocol variables. Persistant storage per thread */
 /* Root key*/
 +(NSData*) getRK:(TSThread*)thread {
-  return [TSMessagesDatabase getAPSDataField:@"rk"  onThread:thread];
+    return [TSMessagesDatabase getAPSDataField:@"rk"  onThread:thread];
 }
 
 
 +(void) setRK:(NSData*)key onThread:(TSThread*)thread {
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":@"rk",@"valueField":key,@"threadID":thread.threadID}];
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":@"rk",@"valueField":key,@"threadID":thread.threadID}];
 }
 /* Chain keys */
 +(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain{
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"ck" onChain:chain] onThread:thread];
-
+    return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"ck" onChain:chain] onThread:thread];
+    
 }
 +(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"rk" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"rk" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
 }
 
 /* ephemeral keys of chains */
 +(NSData*) getEphemeralOfReceivingChain:(TSThread*)thread {
-  return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain ] onThread:thread];
-  
+    return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain ] onThread:thread];
+    
 }
 
 +(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread {
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain],@"valueField":key,@"threadID":thread.threadID}];
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain],@"valueField":key,@"threadID":thread.threadID}];
 }
 
 +(TSECKeyPair*) getEphemeralOfSendingChain:(TSThread*)thread {
-  return [NSKeyedUnarchiver unarchiveObjectWithData:[TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain ] onThread:thread]];
+    return [NSKeyedUnarchiver unarchiveObjectWithData:[TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain ] onThread:thread]];
 }
 
 +(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread {
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain],@"valueField":[NSKeyedArchiver archivedDataWithRootObject:key],@"threadID":thread.threadID}];
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain],@"valueField":[NSKeyedArchiver archivedDataWithRootObject:key],@"threadID":thread.threadID}];
 }
 
 
@@ -498,32 +518,29 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 /* number of messages sent on chains */
 +(NSNumber*) getN:(TSThread*)thread onChain:(TSChainType)chain{
-  return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain] onThread:thread];
-  
+    return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain] onThread:thread];
+    
 }
 +(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain],@"valueField":num,@"threadID":thread.threadID}];
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain],@"valueField":num,@"threadID":thread.threadID}];
 }
 
 /* number of messages sent on the last chain */
 +(NSNumber*)getPNs:(TSThread*)thread{
-  return [TSMessagesDatabase getAPSIntField:@"pns" onThread:thread];
+    return [TSMessagesDatabase getAPSIntField:@"pns" onThread:thread];
 }
 +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
-  [TSMessagesDatabase setAPSDataField:@{@"nameField":@"pns",@"valueField":num,@"threadID":thread.threadID}];
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":@"pns",@"valueField":num,@"threadID":thread.threadID}];
 }
 
 //Ns, Nr       : sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
 +(NSNumber*) getNPlusPlus:(TSThread*)thread onChain:(TSChainType)chain {
-  NSNumber* N = [TSMessagesDatabase getN:thread onChain:chain];
-  
-  [TSMessagesDatabase setN:[NSNumber numberWithInt:[N integerValue]+1] onThread:thread onChain:chain];
-  return N;
-  
+    NSNumber* N = [TSMessagesDatabase getN:thread onChain:chain];
+    
+    [TSMessagesDatabase setN:[NSNumber numberWithInt:[N integerValue]+1] onThread:thread onChain:chain];
+    return N;
+    
 }
-
-
-
 
 #pragma mark - shared private objects
 

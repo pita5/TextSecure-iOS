@@ -7,24 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TITokenField.h"
 #import "JSMessagesViewController.h"
 #import "TSContact.h"
 #import "TSProtocols.h"
 @class TSMessage;
 @class TSThread;
-@interface ComposeMessageViewController : JSMessagesViewController <TITokenFieldDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
+@class TSAttachment;
+
+@interface ComposeMessageViewController : JSMessagesViewController <UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
+
+
+- (instancetype)initWithConversation:(TSThread*)thread;
+
+-(void) reloadModel:(NSNotification*)notification ;
 
 @property (nonatomic, retain) TSContact *contact;
 @property (nonatomic) TSThread *thread;
+@property (nonatomic, strong) TSAttachment *attachment;
 @property (nonatomic) TSWhisperMessageType messagingType;
-// Need to be initialized with one of those methods
 
-- (instancetype)initWithConversation:(TSThread*)thread;
-- (instancetype)initNewConversation;
-
-
-
--(void) reloadModel:(NSNotification*)notification ;
 @end
 

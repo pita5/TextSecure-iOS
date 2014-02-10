@@ -21,4 +21,5 @@
 -(void) save;
 
 -(id) initWithRegisteredID:(NSString*)registeredID;
+- (NSString*) labelForRegisteredNumber;
 @end

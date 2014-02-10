@@ -54,7 +54,7 @@
 }
 
 -(TSMessage*) getTSMessage:(TSPushMessageContent*) pushMessageContent {
-  return [[TSMessage alloc] initWithMessage:pushMessageContent.body sender:self.source recipient:[TSKeyManager getUsernameToken] sentOnDate:self.timestamp];
+    return [[TSMessage alloc] initWithMessage:pushMessageContent.body sender:self.source recipient:[TSKeyManager getUsernameToken] sentOnDate:self.timestamp attachment:nil];
 }
 
 #pragma mark private methods

@@ -13,6 +13,9 @@
 #import "TSStorageMasterKey.h"
 #import "TSMessagesDatabase.h"
 
+#define pickPassword @"Pick your password"
+#define reenterPassword @"Please re-enter your password"
+
 @interface TSSetMasterPasswordViewController ()
 
 @end
@@ -30,11 +33,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(setupDatabase)];
+    self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextWasTapped:)];
     
     self.navigationItem.rightBarButtonItem = self.nextButton;
     
     self.pass.delegate = self;
+    
+    self.instruction.text = pickPassword;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -43,6 +48,25 @@
     [self.pass becomeFirstResponder];
 }
 
+
+- (void) nextWasTapped:(id)sender{
+    if (self.firstPass == nil) {
+        self.firstPass = self.pass.text;
+        self.instruction.text = reenterPassword;
+        self.pass.text = @"";
+    } else {
+        if ([self.pass.text isEqualToString:self.firstPass]) {
+            [self setupDatabase];
+        } else{
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Passwords don't match" message:@"Both entered passwords don't match. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+            self.firstPass = nil;
+            self.pass.text = @"";
+            [self.pass becomeFirstResponder];
+            self.instruction.text = pickPassword;
+        }
+    }
+}
 
 - (void) setupDatabase {
     NSError *error = nil;

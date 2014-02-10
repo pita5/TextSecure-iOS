@@ -11,6 +11,9 @@
 #import "TSRequest.h"
 #import "TSKeyManager.h"
 #import "TSServerCodeVerificationRequest.h"
+#import "TSUploadAttachment.h"
+#import "TSAttachment.h"
+#import <AFNetworking/AFURLRequestSerialization.h>
 
 @implementation TSNetworkManager
 
@@ -30,18 +33,24 @@
         operationManager = [[AFHTTPRequestOperationManager manager] initWithBaseURL:[[NSURL alloc] initWithString:textSecureServer]];
         operationManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
-        
     }
     return self;
 }
 
 #pragma mark Manager Methods
 
+- (void) queueUnauthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
+  AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+
+  [operation  setCompletionBlockWithSuccess:successCompletionBlock failure:failureCompletionBlock];
+  [operationManager.operationQueue addOperation:operation ];
+}
+
 - (void) queueAuthenticatedRequest:(TSRequest*) request success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))successCompletionBlock failure: (void (^)(AFHTTPRequestOperation *operation, NSError *error)) failureCompletionBlock{
-    
-    // The only unauthenticated request is the initial request for a verification code
-    
-    if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
+  
+   if ([request isKindOfClass:[TSRequestVerificationCodeRequest class]]) {
+      // The only unauthenticated request is the initial request for a verification code
+
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
         [operationManager GET:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
     } else if ([request isKindOfClass:[TSServerCodeVerificationRequest class]]){
@@ -55,7 +64,8 @@
         [request.parameters removeObjectForKey:@"AuthKey"];
         
         [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
-    } else{
+    }
+    else{
         // For all other equests, we do add an authorization header
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
         

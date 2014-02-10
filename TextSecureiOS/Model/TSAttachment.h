@@ -27,4 +27,6 @@ typedef enum {
 -(UIImage*) getImage;
 -(BOOL) readyForUpload;
 
+- (void)testUpload;
+
 @end
