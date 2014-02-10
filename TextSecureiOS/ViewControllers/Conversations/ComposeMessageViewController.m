@@ -33,7 +33,7 @@
     self.delegate = self;
     
     [self setupThread];
-
+    
     return self;
 }
 
@@ -68,6 +68,18 @@
     return JSMessageInputViewStyleFlat;
 }
 
+- (JSMessagesViewSubtitlePolicy)subtitlePolicy{
+    return JSMessagesViewSubtitlePolicyNone;
+}
+
+- (UIImageView *)avatarImageViewForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return nil;
+}
+
+- (NSString *)subtitleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return nil;
+}
+
 - (void)didSendText:(NSString *)text {
     
     TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipient:self.contact.registeredID sentOnDate:[NSDate date] attachment:self.attachment];
@@ -75,7 +87,7 @@
         // this is asynchronous so message will only be send by messages manager when it succeeds
         [TSAttachmentManager uploadAttachment:message];
     }
-  
+    
     [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread ofType:self.messagingType];
     
     [self finishSend];
@@ -150,6 +162,19 @@
     }
     else {
         [JSMessageSoundEffect playMessageReceivedSound];
+    }
+}
+
+- (UIImageView *)bubbleImageViewWithType:(JSBubbleMessageType)type
+                       forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (type == JSBubbleMessageTypeIncoming) {
+        return [JSBubbleImageViewFactory bubbleImageViewForType:type
+                                                          color:[UIColor js_bubbleLightGrayColor]];
+    } else{
+        
+        return [JSBubbleImageViewFactory bubbleImageViewForType:type
+                                                          color:[UIColor js_bubbleBlueColor]];
     }
 }
 

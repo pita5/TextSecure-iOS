@@ -91,9 +91,9 @@
 -(void)sendVerification:(id)sender {
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
-          
-        // Now we store the phone number to which the notification has been sent and generate the appropriate keys
-
+        
+        DLog(@"Requested confirmation code : %@ for code :%i", responseObject, operation.response.statusCode);
+        
         [TSKeyManager storeUsernameToken:self.selectedPhoneNumber];
         
         [TSKeyManager generateNewAccountAuthenticationToken];
