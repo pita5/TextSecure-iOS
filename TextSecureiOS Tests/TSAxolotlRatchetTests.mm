@@ -105,14 +105,14 @@ static NSString *masterPw = @"1234test";
                                                                             [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
   
   
-  self.message1 = [[TSMessage alloc] initWithMessage:@"hey" sender:self.aliceUserName recipient:self.bobUserName sentOnDate:[NSDate date]];
+  self.message1 = [TSMessage messageWithContent:@"hey" sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
   self.alice = [[TSAxolotlRatchet alloc] initForThread:self.thread1];
 
 
   self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
                                                                            [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
 
-  self.message2 = [[TSMessage alloc] initWithMessage:@"yo" sender:self.bobUserName recipient:self.aliceUserName sentOnDate:[NSDate date]];
+  self.message2 = [TSMessage messageWithContent:@"yo" sender:self.bobUserName recipient:self.aliceUserName date:[NSDate date]];
   self.bob = [[TSAxolotlRatchet alloc] initForThread:self.thread2];
 
   // Remove any existing DB
@@ -282,8 +282,8 @@ static NSString *masterPw = @"1234test";
   TSWhisperMessageKeys* decryptionKeys =  [self.bob nextMessageKeysOnChain:TSReceivingChain];
   NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:decryptionKeys withCounter:[NSNumber numberWithInt:0]];
   
-  TSMessage* decryptedMessage=[[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName sentOnDate:[NSDate date]];
+  TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
   
-  XCTAssertTrue([decryptedMessage.message isEqualToString:self.message1.message], @"message encrypted by alice not equal to that decrypted by bob");
+  XCTAssertTrue([decryptedMessage.content isEqualToString:self.message1.content], @"message encrypted by alice not equal to that decrypted by bob");
 }
 @end
