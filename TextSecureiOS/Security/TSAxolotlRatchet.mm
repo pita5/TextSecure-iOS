@@ -93,11 +93,14 @@
 }
 
 +(void)receiveMessage:(NSData*)data {
-    NSData* decryptedPayload=[Cryptography decryptAppleMessagePayload:data withSignalingKey:[TSKeyManager getSignalingKeyToken]];
+    NSData* decryptedPayload = [Cryptography decryptAppleMessagePayload:data withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
-    TSMessage* message;
     TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:[TSThread threadWithContacts: @[[[TSContact alloc] initWithRegisteredID:messageSignal.source]]]];
+    
+    TSMessage* message;
+    
     switch (messageSignal.contentType) {
+            
         case TSPreKeyWhisperMessageType: {
             TSPreKeyWhisperMessage* preKeyMessage = (TSPreKeyWhisperMessage*)messageSignal.message;
             TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)preKeyMessage.message;
@@ -109,8 +112,10 @@
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
             
-            message = [[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:messageSignal.source recipient:[TSKeyManager getUsernameToken] sentOnDate:messageSignal.timestamp attachment:nil];
-            
+            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding]
+                                             sender:messageSignal.source
+                                          recipient:[TSKeyManager getUsernameToken]
+                                               date:messageSignal.timestamp];
             break;
         }
             
@@ -119,19 +124,26 @@
             [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
-            message=[[TSMessage alloc] initWithMessage:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:messageSignal.source recipient:[TSKeyManager getUsernameToken] sentOnDate:messageSignal.timestamp attachment:nil];
             
-            
+            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding]
+                                             sender:messageSignal.source
+                                          recipient:[TSKeyManager getUsernameToken]
+                                               date:messageSignal.timestamp];
+            // TODO: Missing break; here ?
         }
+            
         case TSUnencryptedWhisperMessageType: {
             TSPushMessageContent* messageContent = [[TSPushMessageContent alloc] initWithData:messageSignal.message.message];
             message = [messageSignal getTSMessage:messageContent];
             break;
         }
+            
         default:
+            // TODO: Missing error handling here ? Otherwise we're storing a nil message
+            @throw [NSException exceptionWithName:@"Invalid state" reason:@"This should not happen" userInfo:nil];
             break;
     }
-    message.recipientId = [TSKeyManager getUsernameToken];
+
     [TSMessagesDatabase storeMessage:message fromThread:[TSThread threadWithContacts: @[[[TSContact alloc]  initWithRegisteredID:message.senderId]]]];
 }
 
@@ -179,7 +191,7 @@
 
 
 -(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter{
-    return [Cryptography encryptCTRMode:[message.message dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:counter];
+    return [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:counter];
 }
 
 

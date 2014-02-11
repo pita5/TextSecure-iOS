@@ -82,7 +82,7 @@
 
 - (void)didSendText:(NSString *)text {
     
-    TSMessage *message = [[TSMessage alloc] initWithMessage:text sender:[TSKeyManager getUsernameToken] recipient:self.contact.registeredID sentOnDate:[NSDate date] attachment:self.attachment];
+    TSMessage *message = [TSMessage messageWithContent:text sender:[TSKeyManager getUsernameToken] recipient:self.contact.registeredID date:[NSDate date] attachment:self.attachment];
     if(message.attachment.attachmentType!=TSAttachmentEmpty) {
         // this is asynchronous so message will only be send by messages manager when it succeeds
         [TSAttachmentManager uploadAttachment:message];
@@ -222,7 +222,7 @@
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
     //TODO: error handling
     NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    return [[dbMessages objectAtIndex:indexPath.row]  messageTimestamp];
+    return [ (TSMessage*)[dbMessages objectAtIndex:indexPath.row] timestamp];
 }
 
 - (UIImage *)avatarImageForIncomingMessage {

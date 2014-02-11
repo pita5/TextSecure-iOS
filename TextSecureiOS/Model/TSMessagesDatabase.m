@@ -184,9 +184,9 @@ static TSEncryptedDatabase *messagesDb = nil;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
-        NSString *sqlDate = [dateFormatter stringFromDate:message.messageTimestamp];
+        NSString *sqlDate = [dateFormatter stringFromDate:message.timestamp];
         [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",thread.threadID];
-        [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.message,thread.threadID,message.senderId,message.recipientId,sqlDate];
+        [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.content,thread.threadID,message.senderId,message.recipientId,sqlDate];
         
     }];
 }
@@ -217,7 +217,7 @@ static TSEncryptedDatabase *messagesDb = nil;
                 NSData *attachmentDecryptionKey = [searchInDB dataForColumn:@"attachment_decryption_key"];
                 attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withDecryptionKey:attachmentDecryptionKey];
             }
-            [messageArray addObject:[[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:[searchInDB stringForColumn:@"sender_id"] recipient:[searchInDB stringForColumn:@"recipient_id"] sentOnDate:date attachment:attachment]];
+            [messageArray addObject:[TSMessage messageWithContent:[searchInDB stringForColumn:@"message"] sender:[searchInDB stringForColumn:@"sender_id"] recipient:[searchInDB stringForColumn:@"recipient_id"] date:date attachment:attachment]];
         }
     }];
     
@@ -272,7 +272,7 @@ static TSEncryptedDatabase *messagesDb = nil;
                 attachment = [[TSAttachment alloc] initWithAttachmentDataPath:attachmentDataPath withType:attachmentType withDecryptionKey:attachmentDecryptionKey];
             }
             
-            messageThread.latestMessage = [[TSMessage alloc] initWithMessage:[searchInDB stringForColumn:@"message"] sender:sender.registeredID recipient:receiver.registeredID sentOnDate:date attachment:nil];
+            messageThread.latestMessage = [TSMessage messageWithContent:[searchInDB stringForColumn:@"message"] sender:sender.registeredID recipient:receiver.registeredID date:date attachment:nil];
             
             [threadArray addObject:messageThread];
         }

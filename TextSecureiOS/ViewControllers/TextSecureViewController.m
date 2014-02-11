@@ -104,8 +104,8 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
         TSMessageThreadCell *threadCell = (TSMessageThreadCell *)cell;
         threadCell.titleLabel.text =thread.latestMessage.senderId;
-        threadCell.timestampLabel.text = [dateFormatter stringFromDate:thread.latestMessage.messageTimestamp];
-        threadCell.threadPreviewLabel.text = thread.latestMessage.message;
+        threadCell.timestampLabel.text = [dateFormatter stringFromDate:thread.latestMessage.timestamp];
+        threadCell.threadPreviewLabel.text = thread.latestMessage.content;
         
         UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         threadCell.disclosureImageView.image = disclosureIndicatorImage;

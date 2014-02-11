@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "TSProtocols.h"
-#import "TSParticipants.h"
 
 @class TSMessage;
 
