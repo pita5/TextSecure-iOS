@@ -31,7 +31,7 @@
 //
 - (NSString *)base64EncodedString
 {
-    return [self base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [self base64EncodedStringWithOptions:nil];
 }
 
 @end
