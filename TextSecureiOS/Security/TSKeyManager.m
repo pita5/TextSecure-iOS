@@ -11,6 +11,7 @@
 #import "KeychainWrapper.h"
 #import "NSData+Base64.h"
 #import "NSData+Conversion.h"
+#import "TSStorageMasterKey.h"
 #import "TSStorageError.h"
 
 @implementation TSKeyManager
@@ -95,7 +96,7 @@
 }
 
 +(BOOL) hasVerifiedPhoneNumber{
-  return ([TSKeyManager getUsernameToken] && [TSKeyManager getAuthenticationToken]);
+  return ([TSKeyManager getUsernameToken] && [TSKeyManager getAuthenticationToken] && [TSStorageMasterKey wasStorageMasterKeyCreated]);
 }
 
 

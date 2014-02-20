@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "TSProtocols.h"
 
 @class TSMessage;
 @class TSThread;
 @class TSContact;
+
+typedef void(^dataBaseUpdateCompletionBlock)(BOOL);
 
 /**
  * Posted when the database receives an update
@@ -19,7 +21,7 @@
 extern NSString * const TSDatabaseDidUpdateNotification;
 
 
-@interface TSMessagesDatabase : NSObject
+@interface TSMessagesDatabase : NSObject<AxolotlPersistantStorage>
 
 
 +(BOOL) databaseCreateWithError:(NSError **)error;
@@ -31,15 +33,30 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 
 #pragma mark - settings values
 +(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
-+(BOOL) setDatabaseCreatedPersistantSetting ;
-
 
 #pragma mark - DB message functions
-+(void) storeMessage:(TSMessage*)message;
++(void) storeMessage:(TSMessage*)message fromThread:(TSThread*)thread;
 +(NSArray*) getMessagesOnThread:(TSThread*) thread;
++(void) deleteTSThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block;
 +(NSArray*) getThreads;
 +(void)storeTSContact:(TSContact*)contact;
++(void)storeTSThread:(TSThread*)thread ;
 
+#pragma mark - AxolotlEphemeralStorage protocol getter/setter helper methods
+
+#pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
++(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread;
++(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread;
++(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
++(NSString*) getAPSStringField:(NSString*)name  onThread:(TSThread*)thread;
++(NSString*) getAPSFieldName:(NSString*)name onChain:(TSChainType) chain;
+/*
+ parameters
+ nameField : name of db field to set
+ valueField : value of db field to set to
+ threadID" : thread id
+ */
++(void) setAPSDataField:(NSDictionary*) parameters;
 
 @end
 

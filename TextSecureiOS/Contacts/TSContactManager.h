@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSContact.h"
 
 @interface TSContactManager : NSObject
 
 + (id)sharedManager;
-
++ (NSString*) cleanPhoneNumber:(NSString*)number;
 + (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock;
 
 @end

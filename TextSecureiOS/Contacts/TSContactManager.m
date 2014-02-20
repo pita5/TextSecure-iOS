@@ -12,7 +12,6 @@
 #import <AddressBook/AddressBook.h>
 #import "NSString+Conversion.h"
 #import "Cryptography.h"
-#import "TSContact.h"
 #import "TSNetworkManager.h"
 #import "TSContactsIntersectionRequest.h"
 
@@ -35,33 +34,37 @@
     return self;
 }
 
-+ (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock{
+/**
+ *  Returns a given phone number in international E.123 format but without any white-spaces
+ *
+ *  @param number phone number to convert to E.123
+ */
+
++ (NSString*) cleanPhoneNumber:(NSString*)number{
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
-    // Lookup contacts
+    NBPhoneNumber *phone = [phoneUtil parse:number defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
+    return [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
+}
+
++ (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock{
     
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
     
     __block BOOL accessGranted = NO;
-
-    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-        
-        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-            accessGranted = granted;
-            dispatch_semaphore_signal(sema);
-        });
-        
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    }
-    else { // we're on iOS 5 or older
-        accessGranted = YES;
-    }
     
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    
+    ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+        accessGranted = granted;
+        dispatch_semaphore_signal(sema);
+    });
+    
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
     
     if (accessGranted) {
         CFArrayRef all = ABAddressBookCopyArrayOfAllPeople(addressBook);
         CFIndex n = ABAddressBookGetPersonCount(addressBook);
-        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
         NSMutableDictionary *hashedAB = [NSMutableDictionary dictionary];
         NSMutableDictionary *originalAB = [NSMutableDictionary dictionary];
         
@@ -78,26 +81,23 @@
                 CFStringRef phoneNumberRef = ABMultiValueCopyValueAtIndex(phones, j);
                 NSString *phoneNumber = (__bridge NSString *)phoneNumberRef;
                 
-                NBPhoneNumber *phone = [phoneUtil parse:phoneNumber defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
-                NSString *cleanedNumber = [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
+                NSString *cleanedNumber = [self cleanPhoneNumber:phoneNumber];
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
                 
-                [hashedAB setObject:hashedPhoneNumber forKey:contactReferenceID];
+                [hashedAB setObject:contactReferenceID forKey:hashedPhoneNumber];
                 [originalAB setObject:cleanedNumber forKey:hashedPhoneNumber];
             }
         }
-
+        
         // Send hashes to server
         
-        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[hashedAB allValues]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[hashedAB allKeys]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
-
+            
             NSMutableArray *contacts = [NSMutableArray array];
             for (NSDictionary *contactHash in contactsHashes) {
                 TSContact *contact = [[TSContact alloc]init];
-                // The case where a phone number would be in two contacts sheets is not managed properly yet.
-              
-                contact.userABID = [[hashedAB allKeysForObject:[contactHash objectForKey:@"token"]] objectAtIndex:0];
+                contact.userABID = [hashedAB objectForKey:[contactHash objectForKey:@"token"]];
                 contact.registeredID = [originalAB objectForKey:[contactHash objectForKey:@"token"]];
                 [contacts addObject:contact];
             }

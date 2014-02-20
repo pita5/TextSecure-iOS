@@ -7,8 +7,7 @@
 //
 
 #import "TSRequestAttachmentId.h"
-
-#import "TSRequestAttachmentId.h"
+#import "Constants.h"
 
 @implementation TSRequestAttachmentId
 -(TSRequest*) init {

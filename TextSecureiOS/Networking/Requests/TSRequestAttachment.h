@@ -9,5 +9,5 @@
 #import "TSRequest.h"
 
 @interface TSRequestAttachment : TSRequest
--(TSRequest*) initWithId:(NSString*) attachmentId;
+-(TSRequest*) initWithId:(NSNumber*) attachmentId;
 @end

@@ -10,15 +10,16 @@
 
 @interface TSContact : NSObject
 
-@property (nonatomic, copy) NSNumber *userABID;
-@property (nonatomic, copy) NSString *relay;
-@property (nonatomic, copy) NSString *registeredID;
+@property (nonatomic, strong) NSNumber *userABID;
+@property (nonatomic, strong) NSString *relay;
+@property (nonatomic, strong) NSString *registeredID;
 @property (nonatomic, assign) BOOL supportsSMS;
-@property (nonatomic, copy) NSString *nextKey;
-@property (nonatomic, copy) NSString *identityKey;
+@property (nonatomic, strong) NSString *nextKey;
+@property (nonatomic, strong) NSString *identityKey;
 @property (nonatomic) BOOL identityKeyIsVerified;
 - (NSString*) name;
 -(void) save;
 
 -(id) initWithRegisteredID:(NSString*)registeredID;
+- (NSString*) labelForRegisteredNumber;
 @end

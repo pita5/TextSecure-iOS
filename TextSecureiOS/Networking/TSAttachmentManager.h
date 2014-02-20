@@ -7,14 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class TSMessage;
 @interface TSAttachmentManager : NSObject
+
 #pragma mark uploading files
--(NSString*) retrieveNewAttachmentUploadLocation;
--(BOOL) uploadAttachment:(NSData*) attachement;
++(void) uploadAttachment:(TSMessage*) attachement;
 #pragma mark downloading files
--(NSString*) retrieveAttachmentUploadLocationForId:(NSString*) attachmentId;
--(NSData*) retrieveAttachmentForId:(NSString*)attachmentId;
++(void) downloadAttachment:(TSMessage*)attachment;
 
 
 @end
