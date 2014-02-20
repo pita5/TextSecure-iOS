@@ -33,18 +33,24 @@
 #import "TSContact.h"
 
 @implementation TSAxolotlRatchet
+
 -(id) initForThread:(TSThread*)threadForRatchet{
     if(self = [super init]) {
         self.thread = threadForRatchet;
     }
     return self;
 }
+
 #pragma mark public methods
+
 +(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType {
     [TSMessagesDatabase storeMessage:message fromThread:thread];
 #warning always sending a prekey message for testing!
+    
     messageType = TSPreKeyWhisperMessageType;
+    
     TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:thread];
+    
     switch (messageType) {
             
         case TSPreKeyWhisperMessageType:{
@@ -54,6 +60,8 @@
             [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 switch (operation.response.statusCode) {
                     case 200:{
+                        
+                        NSLog(@"Prekey fetched :) ");
                         
                         NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
                         NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
@@ -95,6 +103,9 @@
 +(void)receiveMessage:(NSData*)data {
     NSData* decryptedPayload = [Cryptography decryptAppleMessagePayload:data withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
+    
+    NSLog(@"Message Signal %@", messageSignal );
+    
     TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:[TSThread threadWithContacts: @[[[TSContact alloc] initWithRegisteredID:messageSignal.source]]]];
     
     TSMessage* message;

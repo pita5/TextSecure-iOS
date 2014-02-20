@@ -48,7 +48,7 @@ static NSString *masterPw = @"1234test";
     self.thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:@"12345"],
                                                                             [[TSContact alloc] initWithRegisteredID:@"678910"]]];
   
-    self.message = [[TSMessage alloc] initWithMessage:@"hey" sender:@"12345" recipient:@"678910" sentOnDate:[NSDate date]];
+    self.message = [TSMessage messageWithContent:@"hey" sender:@"12345" recipient:@"678910" date:[NSDate date]];
     // Remove any existing DB
     [TSMessagesDatabase databaseErase];
     
@@ -86,7 +86,7 @@ static NSString *masterPw = @"1234test";
 -(void) testStoreMessage {
   NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
   XCTAssertTrue([messages count]==1, @"database should just have one message in it, instead has %d",[messages count]);
-  XCTAssertTrue([[[messages objectAtIndex:0] message] isEqualToString:self.message.message], @"message bodies not equal");
+  XCTAssertTrue([[[messages objectAtIndex:0] content] isEqualToString:self.message.content], @"message bodies not equal");
   
 }
 -(void) testStoreThreadCreation {

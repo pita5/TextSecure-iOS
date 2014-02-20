@@ -90,10 +90,9 @@
 
 -(void)sendVerification:(id)sender {
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kPhoneNumberVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
-        DLog(@"Requested confirmation code : %@ for code :%i", responseObject, operation.response.statusCode);
-        
+
         [TSKeyManager storeUsernameToken:self.selectedPhoneNumber];
         
         [TSKeyManager generateNewAccountAuthenticationToken];

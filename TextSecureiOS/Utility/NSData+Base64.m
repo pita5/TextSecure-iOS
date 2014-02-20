@@ -31,7 +31,7 @@
 //
 - (NSString *)base64EncodedString
 {
-    return [self base64EncodedStringWithOptions:nil];
+    return [self base64EncodedStringWithOptions:0];
 }
 
 @end

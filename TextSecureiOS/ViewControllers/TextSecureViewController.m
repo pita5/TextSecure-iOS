@@ -103,6 +103,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
         TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
         TSMessageThreadCell *threadCell = (TSMessageThreadCell *)cell;
+        threadCell.thread = thread;
         threadCell.titleLabel.text =thread.latestMessage.senderId;
         threadCell.timestampLabel.text = [dateFormatter stringFromDate:thread.latestMessage.timestamp];
         threadCell.threadPreviewLabel.text = thread.latestMessage.content;
@@ -150,7 +151,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // TODO: update with ability to delete
         [self Edit:self];
 	}
 	else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -184,12 +184,14 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 #pragma mark - SWTableViewCellDelegate
 
-- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index {
-   // NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    // Remove item here
-    
-    [self animateEnteringEditingMode:NO];
+- (void)swipeableTableViewCell:(TSMessageThreadCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
+    [TSMessagesDatabase deleteTSThread:cell.thread withCompletionBlock:^(BOOL updateCompleted){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
+            [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        });
+    }];
+
 }
 
 // This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,

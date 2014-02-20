@@ -83,10 +83,11 @@
 - (void)didSendText:(NSString *)text {
     
     TSMessage *message = [TSMessage messageWithContent:text sender:[TSKeyManager getUsernameToken] recipient:self.contact.registeredID date:[NSDate date] attachment:self.attachment];
-    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
-        // this is asynchronous so message will only be send by messages manager when it succeeds
-        [TSAttachmentManager uploadAttachment:message];
-    }
+    
+//    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+//        // this is asynchronous so message will only be send by messages manager when it succeeds
+//        [TSAttachmentManager uploadAttachment:message];
+//    }
     
     [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread ofType:self.messagingType];
     
@@ -96,8 +97,6 @@
 - (void)photoPressed:(UIButton *)sender {
     UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo or Video",@"Choose Existing", nil];
     [actionSheet showInView:self.view];
-    
-    
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -216,7 +215,7 @@
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
     //TODO: error handling
     NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    return [[dbMessages objectAtIndex:indexPath.row] message];
+    return [[dbMessages objectAtIndex:indexPath.row] content];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {

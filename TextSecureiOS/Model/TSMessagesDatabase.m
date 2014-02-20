@@ -182,12 +182,11 @@ static TSEncryptedDatabase *messagesDb = nil;
     }
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
         NSString *sqlDate = [dateFormatter stringFromDate:message.timestamp];
         [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",thread.threadID];
         [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.content,thread.threadID,message.senderId,message.recipientId,sqlDate];
-        
+        DLog(@"Thread and message added to database");
     }];
 }
 
@@ -282,7 +281,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     return threadArray;
 }
 
-+(void)storeTSThread:(TSThread*)thread {
++(void) storeTSThread:(TSThread*)thread {
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
@@ -290,7 +289,6 @@ static TSEncryptedDatabase *messagesDb = nil;
             // TODO: better error handling
             return;
     }
-    
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         for(TSContact* contact in thread.participants) {
@@ -300,7 +298,15 @@ static TSEncryptedDatabase *messagesDb = nil;
     }];
 }
 
-+(void)findTSContactForPhoneNumber:(NSString*)phoneNumber{
++(void) deleteTSThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block {
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:@"DELETE FROM messages WHERE thread_id=:threadID" withParameterDictionary:@{@"threadID": thread.threadID}];
+        [db executeUpdate:@"DELETE FROM threads WHERE thread_id=:threadID" withParameterDictionary:@{@"threadID": thread.threadID}];
+        block(true);
+    }];
+}
+
++(void) findTSContactForPhoneNumber:(NSString*)phoneNumber{
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {

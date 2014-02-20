@@ -13,6 +13,8 @@
 @class TSThread;
 @class TSContact;
 
+typedef void(^dataBaseUpdateCompletionBlock)(BOOL);
+
 /**
  * Posted when the database receives an update
  */
@@ -35,6 +37,7 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 #pragma mark - DB message functions
 +(void) storeMessage:(TSMessage*)message fromThread:(TSThread*)thread;
 +(NSArray*) getMessagesOnThread:(TSThread*) thread;
++(void) deleteTSThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block;
 +(NSArray*) getThreads;
 +(void)storeTSContact:(TSContact*)contact;
 +(void)storeTSThread:(TSThread*)thread ;

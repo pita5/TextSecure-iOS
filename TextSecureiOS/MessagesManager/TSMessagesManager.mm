@@ -47,7 +47,6 @@
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType{
   [TSAxolotlRatchet sendMessage:message onThread:thread ofType:messageType];
-  
 }
 
 -(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType {

@@ -28,8 +28,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 #warning remove
-
-  
     // UIAppearance proxy setup
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor]} forState:UIControlStateDisabled];
@@ -64,7 +62,7 @@
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 	}
 	return YES;
-
+    
 }
 
 
@@ -77,7 +75,7 @@
 	stringToken = [stringToken stringByReplacingOccurrencesOfString:@" " withString:@""];
 	
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterForPushRequest alloc] initWithPushIdentifier:stringToken] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-
+        
         switch (operation.response.statusCode) {
             case 200:
                 DLog(@"Device registered for push notifications");
@@ -94,17 +92,17 @@
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
-
     
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-//    [alert show];
+    
+    //    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    //    [alert show];
     
 #ifdef DEBUG
 #warning registering with dummy ID so that we can proceed in the simulator. You'll want to change this!
-  NSData *deviceToken = [NSData dataFromBase64String:[@"christine" base64Encoded]];
-  [self application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    NSData *deviceToken = [NSData dataFromBase64String:[@"christine" base64Encoded]];
+    [self application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 #endif
-  
+    
 }
 
 
@@ -113,7 +111,8 @@
 }
 
 -(void) handlePush:(NSDictionary *)pushInfo {
-  [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
+    DLog(@"We did receive the following push %@", pushInfo);
+    [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
 }
 
 #pragma mark - HockeyApp Delegate Methods
