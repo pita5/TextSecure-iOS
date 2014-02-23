@@ -61,7 +61,6 @@
 		A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718C516FF95DF00C6FCCF /* AppDelegate.m */; };
 		A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
 		A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718F016FF98C100C6FCCF /* MessageUI.framework */; };
-		A537190816FFC45C00C6FCCF /* textsecure.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190616FFC45B00C6FCCF /* textsecure.png */; };
 		A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190716FFC45B00C6FCCF /* textsecure@2x.png */; };
 		A53719251700D71B00C6FCCF /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53719241700D71A00C6FCCF /* CoreTelephony.framework */; };
 		A537294B17011A5200C6FCCF /* ad.png in Resources */ = {isa = PBXBuildFile; fileRef = A53727FE17011A4F00C6FCCF /* ad.png */; };
@@ -556,7 +555,6 @@
 		A53718CE16FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		A53718F016FF98C100C6FCCF /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		A537190616FFC45B00C6FCCF /* textsecure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = textsecure.png; path = TextSecureiOSAssets/MainIcon/textsecure.png; sourceTree = "<group>"; };
 		A537190716FFC45B00C6FCCF /* textsecure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure@2x.png"; path = "TextSecureiOSAssets/MainIcon/textsecure@2x.png"; sourceTree = "<group>"; };
 		A53719241700D71A00C6FCCF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A53727FE17011A4F00C6FCCF /* ad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ad.png; sourceTree = "<group>"; };
@@ -1216,7 +1214,6 @@
 			isa = PBXGroup;
 			children = (
 				A53727FD17011A4E00C6FCCF /* flags */,
-				A537190616FFC45B00C6FCCF /* textsecure.png */,
 				A537190716FFC45B00C6FCCF /* textsecure@2x.png */,
 				A5F15B481703EE2F00856385 /* Default-568h@2x.png */,
 				A5F15B3C1703EB9F00856385 /* Default@2x.png */,
@@ -1910,7 +1907,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */,
-				A537190816FFC45C00C6FCCF /* textsecure.png in Resources */,
 				A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */,
 				A537294B17011A5200C6FCCF /* ad.png in Resources */,
 				A537294C17011A5200C6FCCF /* ae.png in Resources */,
