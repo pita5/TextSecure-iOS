@@ -61,10 +61,38 @@
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 	}
+
+    // we need to create the window here, if we do it in -applicationDidEnterBackground it's too late and it
+    // doesn't get screenshotted.
+    self.blankWindow = ({
+        UIWindow *window = [[UIWindow alloc] initWithFrame:self.window.bounds];
+        window.hidden = YES;
+        window.userInteractionEnabled = NO;
+        window.windowLevel = CGFLOAT_MAX;
+        window;
+    });
+
 	return YES;
-    
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    // obscure the application's windows
+    self.blankWindow.rootViewController = [[UIViewController alloc] init];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.blankWindow.bounds];
+    if (self.blankWindow.bounds.size.height == 568) {
+        imageView.image = [UIImage imageNamed:@"Default-568h"];
+    } else {
+        imageView.image = [UIImage imageNamed:@"Default"];
+    }
+    imageView.opaque = YES;
+    [self.blankWindow.rootViewController.view addSubview:imageView];
+    self.blankWindow.hidden = NO;
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    self.blankWindow.rootViewController = nil;
+    self.blankWindow.hidden = YES;
+}
 
 
 
