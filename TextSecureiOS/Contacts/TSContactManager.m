@@ -78,8 +78,7 @@
             ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
             for(CFIndex j = 0; j < ABMultiValueGetCount(phones); j++)
             {
-                CFStringRef phoneNumberRef = ABMultiValueCopyValueAtIndex(phones, j);
-                NSString *phoneNumber = (__bridge NSString *)phoneNumberRef;
+                NSString *phoneNumber = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(phones, j);
                 
                 NSString *cleanedNumber = [self cleanPhoneNumber:phoneNumber];
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
@@ -87,6 +86,7 @@
                 [hashedAB setObject:contactReferenceID forKey:hashedPhoneNumber];
                 [originalAB setObject:cleanedNumber forKey:hashedPhoneNumber];
             }
+            CFRelease(phones);
         }
         
         // Send hashes to server
@@ -110,7 +110,11 @@
             
         }];
         
+        CFRelease(all);
+        
     }
+
+    CFRelease(addressBook);
 }
 
 - (void)dealloc {
