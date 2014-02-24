@@ -233,7 +233,6 @@
     return [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:counter];
 }
 
-
 #pragma mark helper methods
 
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
@@ -245,11 +244,10 @@
 }
 
 -(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
-    NSLog(@"This must crash the process");
     NSMutableData *masterKey = [NSMutableData data];
     
     if (!(ourEphemeralKeyPair && theirEphemeralPublicKey && ourIdentityKeyPair && theirIdentityPublicKey)) {
-        NSLog(@"Some shit is not defined");
+        DLog(@"Some parameters of are not defined");
     }
     
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
@@ -282,8 +280,5 @@
     // we want to return something here  or use this locally
     return [[TSWhisperMessageKeys alloc] initWithCipherKey:cipherKey macKey:macKey];
 }
-
-
-
 
 @end
