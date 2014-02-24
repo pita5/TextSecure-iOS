@@ -49,16 +49,16 @@
   return [NSString stringWithCString:cppString.c_str() encoding:NSASCIIStringEncoding];
 }
 
-
 -(const std::string) objcDataToCppString:(NSData*)objcData {
   int len = [objcData length];
   char raw[len];
   [objcData getBytes:raw length:len];
-  const std::string stringFromBytes(raw);
+  const std::string stringFromBytes(raw, len);
   return stringFromBytes;
 }
+
 -(NSData*) cppStringToObjcData:(const std::string)cppString {
-  return [NSData dataWithBytes:cppString.c_str() length:cppString.size()];
+  return [NSData dataWithBytes:cppString.data() length:cppString.size()];
 }
 
 -(uint32_t) objcNumberToCppUInt32:(NSNumber*)objcNumber {
@@ -66,7 +66,6 @@
 }
 -(NSNumber*) cppUInt32ToNSNumber:(uint32_t)cppInt {
   return [NSNumber numberWithUnsignedLong:cppInt];
-  
 }
 
 -(uint64_t) objcNumberToCppUInt64:(NSNumber*)objcNumber {
