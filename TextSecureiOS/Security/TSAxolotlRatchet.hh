@@ -15,7 +15,7 @@
 -(id) initForThread:(TSThread*)thread;
 #pragma mark public methods
 +(void)receiveMessage:(NSData*)data;
-+(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType;
++(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread;
 
 
 @end

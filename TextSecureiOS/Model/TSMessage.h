@@ -20,7 +20,6 @@
 @property (nonatomic,strong,readonly) NSString *content;
 @property (nonatomic,strong,readonly) TSAttachment *attachment;
 
-
 +(instancetype) messageWithContent:(NSString *)text sender:(NSString *)senderId recipient:(NSString *)recipientId date:(NSDate *)date;
 +(instancetype) messageWithContent:(NSString *)text sender:(NSString *)senderId recipient:(NSString *)recipientId date:(NSDate *)date attachment:(TSAttachment *)attachment;
 

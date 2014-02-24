@@ -167,7 +167,7 @@ static NSString *masterPw = @"1234test";
   NSData* aliceMasterKey = [self.alice masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey getPublicKey] theirEphemeralPublicKey:[bobEphemeralKey getPublicKey]]; // ECDH(A0,B0)
   
   
-  RKCK* aliceSending0= [RKCK withData:[TSHKDF deriveKeyFromMaterial:aliceMasterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]]; // Initial RK
+  RKCK* aliceSending0 = [RKCK withData:[TSHKDF deriveKeyFromMaterial:aliceMasterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]]; // Initial RK
   
   
   // Now alice will create a sending a few more messages along side the next ratchet key A1. We can already do this as we have Bob's B1

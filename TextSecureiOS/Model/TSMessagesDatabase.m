@@ -186,7 +186,6 @@ static TSEncryptedDatabase *messagesDb = nil;
         NSString *sqlDate = [dateFormatter stringFromDate:message.timestamp];
         [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",thread.threadID];
         [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.content,thread.threadID,message.senderId,message.recipientId,sqlDate];
-        DLog(@"Thread and message added to database");
     }];
 }
 
@@ -259,9 +258,13 @@ static TSEncryptedDatabase *messagesDb = nil;
                 contact = [[TSContact alloc] initWithRegisteredID:receiverID];
             }
             
+            
+            
             TSContact *sender = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"sender_id"]];
             TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"recipient_id"]];
             TSThread *messageThread = [TSThread threadWithContacts:@[contact]];
+            
+            NSLog(@"Thread ID when retreived %@", messageThread.threadID);
             
             TSAttachment *attachment = nil;
             TSAttachmentType attachmentType = [searchInDB intForColumn:@"attachment_type"];
@@ -390,8 +393,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         
         FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
         if ([searchInDB next]) {
-            
-            apsField= [NSNumber numberWithInt:[searchInDB intForColumn:name]];
+            apsField = [NSNumber numberWithInt:[searchInDB intForColumn:name]];
         }
         [searchInDB close];
     }];
@@ -439,6 +441,8 @@ static TSEncryptedDatabase *messagesDb = nil;
     
 }
 
+
+
 +(void) setAPSDataField:(NSDictionary*) parameters {
     /*
      parameters
@@ -454,12 +458,14 @@ static TSEncryptedDatabase *messagesDb = nil;
             return;
     }
     
+    if (!([parameters count] == 3)) {
+        DLog(@"Not all parameters were set! ==>  %@", parameters);
+    }
+    
+    NSString* query = [NSString stringWithFormat:@"INSERT OR REPLACE INTO threads (thread_id,%@) VALUES (?,?)",[parameters objectForKey:@"nameField"]];
+    
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        //    UPDATE threads SET
-        NSString* query = [NSString stringWithFormat:@"INSERT OR REPLACE INTO threads (thread_id,%@) VALUES (\"%@\",%@)",[parameters objectForKey:@"nameField"],[parameters objectForKey:@"threadID"],[parameters objectForKey:@"valueField"]];
-        NSLog(@"query %@ with parameters %@",query,parameters);
-        FMResultSet *rs = [db executeQuery:query withParameterDictionary:parameters];
-        [rs close];
+        [db executeUpdate:query withArgumentsInArray:@[[parameters objectForKey:@"threadID"], [parameters objectForKey:@"valueField"]]];
     }];
     
 }
@@ -516,10 +522,6 @@ static TSEncryptedDatabase *messagesDb = nil;
 +(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread {
     [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain],@"valueField":[NSKeyedArchiver archivedDataWithRootObject:key],@"threadID":thread.threadID}];
 }
-
-
-
-
 
 
 /* number of messages sent on chains */

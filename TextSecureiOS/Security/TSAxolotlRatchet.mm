@@ -43,11 +43,17 @@
 
 #pragma mark public methods
 
-+(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType {
-    [TSMessagesDatabase storeMessage:message fromThread:thread];
-#warning always sending a prekey message for testing!
++(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread{
     
-    messageType = TSPreKeyWhisperMessageType;
+    // Message should be added to the database
+    
+    [TSMessagesDatabase storeMessage:message fromThread:thread];
+    
+    // For a given thread, the Axolotl Ratchet should find out what's the current messaging state to send the message.
+    
+#warning Assuming prekey communication only for now.
+    
+    TSWhisperMessageType messageType = TSPreKeyWhisperMessageType;
     
     TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:thread];
     
@@ -60,18 +66,21 @@
             [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 switch (operation.response.statusCode) {
                     case 200:{
-                        
                         NSLog(@"Prekey fetched :) ");
+                        
+                        // Extracting the recipients keying material from server payload
                         
                         NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
                         NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
                         NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                        TSECKeyPair *currentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
+                        
+                        // Retreiving my keying material to construct message
+                        
+                        TSECKeyPair *myCurrentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
                         NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
                         TSECKeyPair *nextEphemeral = [TSMessagesDatabase getEphemeralOfSendingChain:thread]; // nil
-                        NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:encryptedMessage theirPrekeyId:theirPrekeyId myCurrentEphemeral:currentEphemeral myNextEphemeral:nextEphemeral];
-                        [TSAxolotlRatchet receiveMessage:encodedPreKeyWhisperMessage];
-                        [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[encodedPreKeyWhisperMessage base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                        NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:encryptedMessage theirPrekeyId:theirPrekeyId myCurrentEphemeral:myCurrentEphemeral myNextEphemeral:nextEphemeral];
+                        [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[encodedPreKeyWhisperMessage base64EncodedString] ofType:messageType];
                         break;
                     }
                     default:
@@ -101,10 +110,9 @@
 }
 
 +(void)receiveMessage:(NSData*)data {
+    
     NSData* decryptedPayload = [Cryptography decryptAppleMessagePayload:data withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
-    
-    NSLog(@"Message Signal %@", messageSignal );
     
     TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:[TSThread threadWithContacts: @[[[TSContact alloc] initWithRegisteredID:messageSignal.source]]]];
     
@@ -113,34 +121,42 @@
     switch (messageSignal.contentType) {
             
         case TSPreKeyWhisperMessageType: {
+            
             TSPreKeyWhisperMessage* preKeyMessage = (TSPreKeyWhisperMessage*)messageSignal.message;
             TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)preKeyMessage.message;
-            
+
             [ratchet ratchetSetupFirstReceiver:preKeyMessage.identityKey theirEphemeralKey:preKeyMessage.baseKey withMyPrekeyId:preKeyMessage.preKeyId];
+            
             [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
             
-            
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
+            
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
             
             message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding]
                                              sender:messageSignal.source
                                           recipient:[TSKeyManager getUsernameToken]
                                                date:messageSignal.timestamp];
+            
             break;
         }
             
         case TSEncryptedWhisperMessageType: {
             TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)messageSignal.message;
+            
             [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
+            
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
+            
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
             
             message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding]
                                              sender:messageSignal.source
                                           recipient:[TSKeyManager getUsernameToken]
                                                date:messageSignal.timestamp];
-            // TODO: Missing break; here ?
+            
+            break;
+
         }
             
         case TSUnencryptedWhisperMessageType: {
@@ -161,10 +177,20 @@
 
 #pragma mark private methods
 -(TSECKeyPair*) ratchetSetupFirstSender:(NSData*)theirIdentity theirEphemeralKey:(NSData*)theirEphemeral {
+    
     /* after this we will have the CK of the Sending Chain */
-    TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
-    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    
+    NSError *error = nil;
+    TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:&error];
+    
+    if (error) {
+        // Handle this
+    }
+    
+    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // We generate a new key pair unique to this thread.
+    
     NSData* ourMasterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey   theirIdentityPublicKey:theirIdentity theirEphemeralPublicKey:theirEphemeral];
+    
     RKCK* receivingChain = [self initialRootKey:ourMasterKey];
     
     TSECKeyPair* sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
@@ -172,6 +198,7 @@
     
     [receivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirEphemeral];
     [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:sendingKey];
+    
     return ourEphemeralKey;
     
 }
@@ -195,6 +222,7 @@
     /* after this we will have the CK of the Receiving Chain */
     TSECKeyPair *ourEphemeralKey = [TSUserKeysDatabase getPreKeyWithId:[preKeyId unsignedLongValue] error:nil];
     TSECKeyPair *ourIdentityKey =  [TSUserKeysDatabase getIdentityKeyWithError:nil];
+    
     NSData* ourMasterKey = [self masterKeyBob:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentityKey theirEphemeralPublicKey:theirEphemeralKey];
     RKCK* sendingChain = [self initialRootKey:ourMasterKey];
     [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:ourEphemeralKey];
@@ -217,13 +245,18 @@
 }
 
 -(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
+    NSLog(@"This must crash the process");
     NSMutableData *masterKey = [NSMutableData data];
+    
+    if (!(ourEphemeralKeyPair && theirEphemeralPublicKey && ourIdentityKeyPair && theirIdentityPublicKey)) {
+        NSLog(@"Some shit is not defined");
+    }
+    
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
     [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     return masterKey;
 }
-
 
 -(TSWhisperMessageKeys*)nextMessageKeysOnChain:(TSChainType)chain {
     NSData* CK = [TSMessagesDatabase getCK:self.thread onChain:chain];

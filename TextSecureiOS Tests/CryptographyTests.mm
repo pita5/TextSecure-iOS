@@ -74,7 +74,7 @@
   TSPushMessageContent* tsMessageContent = [[TSPushMessageContent alloc] initWithData:tsMessageSignal.message.message];
   TSMessage* tsMessage =  [tsMessageSignal getTSMessage:tsMessageContent];
 
-  XCTAssertTrue([tsMessage.message  isEqualToString:originalMessage], @"Decrypted message: %@ is not equal to original: %@",tsMessage.message,originalMessage);
+  XCTAssertTrue([tsMessage.content  isEqualToString:originalMessage], @"Decrypted message: %@ is not equal to original: %@",tsMessage.content,originalMessage);
 }
 
 

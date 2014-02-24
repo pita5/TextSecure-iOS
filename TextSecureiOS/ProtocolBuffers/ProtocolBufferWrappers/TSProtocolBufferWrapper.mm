@@ -19,7 +19,7 @@
 
 -(const std::string) serializedProtocolBufferAsString {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:[NSString stringWithFormat:@"'abstract methd' must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                userInfo:nil];
 }
 

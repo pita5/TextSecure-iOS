@@ -42,35 +42,40 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-  [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
+    [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
 }
 
--(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread ofType:(TSWhisperMessageType) messageType{
-  [TSAxolotlRatchet sendMessage:message onThread:thread ofType:messageType];
+-(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread{
+    [TSAxolotlRatchet sendMessage:message onThread:thread];
 }
 
 -(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType {
-  
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     
-    switch (operation.response.statusCode) {
-      case 200:
-        DLog(@"we have some success information %@",responseObject);
-        // So let's encrypt a message using this
-        break;
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-      default:
-        DLog(@"error sending message");
+        switch (operation.response.statusCode) {
+            case 200:{
+                // Awesome! We consider the message as sent! (Improvement: add flag in DB for sent)
+                
+                UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Message was sent" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [message show];
+                
+                break;
+            }
+                
+            default:
+                DLog(@"error sending message");
 #warning Add error handling if not able to get contacts prekey
-        break;
-    }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                // Use last resort key
+                break;
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
-    DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-    [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:nil userInfo:@{@"messageType":@"send"}];
+        DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
+        [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:nil userInfo:@{@"messageType":@"send"}];
+        
+    }];
     
-  }];
-  
 }
 
 

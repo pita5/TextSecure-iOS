@@ -89,7 +89,7 @@
 //        [TSAttachmentManager uploadAttachment:message];
 //    }
     
-    [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread ofType:self.messagingType];
+    [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread];
     
     [self finishSend];
 }

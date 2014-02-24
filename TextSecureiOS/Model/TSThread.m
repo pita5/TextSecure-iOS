@@ -35,6 +35,11 @@
 
 # pragma mark Thread creation method
 + (TSThread*) threadWithContacts:(NSArray*)participants {
+    
+    if (!([participants count] == 1)) {
+        NSLog(@"We currently only support one to one discussions");
+    }
+    
     TSThread *thread = [[TSThread alloc] init];
     
     // Current user is always part of threads they have on their device

@@ -25,12 +25,8 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
 # pragma mark Key pair generation
 
 +(TSECKeyPair*) keyPairGenerateWithPreKeyId:(int32_t)prekeyId {
-    
     TSECKeyPair* keyPair =[[TSECKeyPair alloc] init];
-    if (keyPair == nil) {
-        return nil;
-    }
-    
+
     keyPair->preKeyId = prekeyId;
     
     // Generate key pair as described in https://code.google.com/p/curve25519-donna/
@@ -54,9 +50,6 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
   return [NSData dataWithBytes:self->publicKey length:32];
 }
 
-
-
-
 -(int32_t) getPreKeyId {
     return self->preKeyId;
 }
@@ -66,9 +59,10 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
     unsigned char *sharedSecret = NULL;
     
     if ([theirPublicKey length] != 32) {
+        NSLog(@"Key does not contain 32 bytes");
         @throw [NSException exceptionWithName:@"Invalid argument" reason:@" The supplied public key does not contain 32 bytes" userInfo:nil];
     }
-    
+
     sharedSecret = malloc(32);
     if (sharedSecret == NULL) {
         return nil;

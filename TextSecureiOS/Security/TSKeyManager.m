@@ -71,7 +71,6 @@
   NSMutableData* signalingKeyToken = [Cryptography generateRandomBytes:52];
   NSString* signalingKeyTokenPrint = [[NSData dataWithData:signalingKeyToken] base64EncodedString];
   return signalingKeyTokenPrint;
-  
 }
 
 + (BOOL) storeSignalingKeyToken:(NSString*)token {
@@ -81,8 +80,6 @@
 + (NSString*) getSignalingKeyToken {
   return [KeychainWrapper keychainStringFromMatchingIdentifier:signalingTokenStorageId];
 }
-
-
 
 #pragma mark user defaults
 // Detecting if a user has a verified phone number or not can be done by looking if a phone number is stored or not.
