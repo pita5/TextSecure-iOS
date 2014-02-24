@@ -101,16 +101,14 @@ static NSString *masterPw = @"1234test";
   self.aliceUserName = @"12345";
   self.bobUserName = @"678910";
 
-  self.thread1 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
-                                                                            [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
+  self.thread1 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
   
   
   self.message1 = [TSMessage messageWithContent:@"hey" sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
   self.alice = [[TSAxolotlRatchet alloc] initForThread:self.thread1];
 
 
-  self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
-                                                                           [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
+  self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName]]];
 
   self.message2 = [TSMessage messageWithContent:@"yo" sender:self.bobUserName recipient:self.aliceUserName date:[NSDate date]];
   self.bob = [[TSAxolotlRatchet alloc] initForThread:self.thread2];
