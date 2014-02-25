@@ -63,12 +63,18 @@ static NSString *masterPw = @"1234test";
     XCTAssertNil(error, @"message db creation returned an error");
     
     // tests is empty
-    NSArray* threadsFromDb = [TSMessagesDatabase getThreads];
-    NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
-    XCTAssertTrue([messages count]==0, @"there are threads in an empty db");
+    [TSMessagesDatabase getThreadsWithCompletion:^(NSArray* threadsFromDb) {
+        NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
+            XCTAssertTrue([messages count]==0, @"there are threads in an empty db");
+            
+            [TSMessagesDatabase storeMessage:self.message fromThread:self.thread];
+
+        });
+    }];
     
-    [TSMessagesDatabase storeMessage:self.message fromThread:self.thread];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
 }
 
 - (void)tearDown
@@ -86,10 +92,12 @@ static NSString *masterPw = @"1234test";
     
 }
 -(void) testStoreThreadCreation {
-    NSArray* threadsFromDb = [TSMessagesDatabase getThreads];
-    XCTAssertTrue([threadsFromDb count]==1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
-    
-    XCTAssertTrue([[[threadsFromDb objectAtIndex:0] threadID] isEqualToString:self.thread.threadID], @"thread id %@ of thread retreived and my thread %@ not equal", [[threadsFromDb objectAtIndex:0] threadID], self.thread.threadID);
+    [TSMessagesDatabase getThreadsWithCompletion:^(NSArray *threadsFromDb) {
+        XCTAssertTrue([threadsFromDb count]==1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
+        
+        XCTAssertTrue([[[threadsFromDb objectAtIndex:0] threadID] isEqualToString:self.thread.threadID], @"thread id %@ of thread retreived and my thread %@ not equal", [[threadsFromDb objectAtIndex:0] threadID], self.thread.threadID);
+    }];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
 }
 
 

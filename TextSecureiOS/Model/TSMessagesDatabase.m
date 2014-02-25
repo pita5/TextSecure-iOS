@@ -231,6 +231,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]){
+            NSLog(@"The database is not open.");
             return;
         }
     }
