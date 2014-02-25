@@ -8,7 +8,9 @@
 
 #import "VerificationViewController.h"
 #import "TSKeyManager.h"
+
 @interface VerificationViewController ()
+
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
@@ -49,8 +51,8 @@
         [self.phoneNumber becomeFirstResponder];
     } else {
         // sign up to be notified about the keyboard but only on small screens
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardDidHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
     }
 }
 
@@ -60,6 +62,7 @@
 }
 
 #pragma mark keyboard notifications
+
 - (void) keyboardWasShown:(NSNotification *)notification
 {
     NSDictionary *info = [notification userInfo];
@@ -67,6 +70,10 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0);
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
+    
+    [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height - kbSize.height);
+    } completion:nil];
 }
 
 - (void) keyboardWillBeHidden:(NSNotification *)notification
@@ -74,6 +81,9 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
+    [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
+    } completion:nil];
 }
 
 
