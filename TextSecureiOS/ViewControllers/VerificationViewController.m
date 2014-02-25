@@ -44,15 +44,15 @@
 
 	// Hold off on triggering the keyboard on a small screen because it'll scroll the text up.
 	CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-
+    
 	if (screenSize.height >= 568) {
-    [self.phoneNumber becomeFirstResponder];
+        [self.phoneNumber becomeFirstResponder];
 	} else {
 		// sign up to be notified about the keyboard but only on small screens
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardDidHideNotification object:nil];
 	}
-
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated{
@@ -63,18 +63,18 @@
 #pragma mark keyboard notifications
 - (void) keyboardWasShown:(NSNotification *)notification
 {
-  NSDictionary *info = [notification userInfo];
-  CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-  UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0);
-  self.scrollView.contentInset = contentInsets;
-  self.scrollView.scrollIndicatorInsets = contentInsets;
+    NSDictionary *info = [notification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0);
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 - (void) keyboardWillBeHidden:(NSNotification *)notification
 {
-  UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-  self.scrollView.contentInset = contentInsets;
-  self.scrollView.scrollIndicatorInsets = contentInsets;
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 
