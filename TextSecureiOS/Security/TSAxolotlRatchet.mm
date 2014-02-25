@@ -127,9 +127,9 @@
 
             [ratchet ratchetSetupFirstReceiver:preKeyMessage.identityKey theirEphemeralKey:preKeyMessage.baseKey withMyPrekeyId:preKeyMessage.preKeyId];
             
-            [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
+            [ratchet updateChainsOnReceivedMessage:preKeyMessage.baseKey];
             
-            TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
+            TSWhisperMessageKeys* decryptionKeys = [ratchet nextMessageKeysOnChain:TSReceivingChain];
             
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
             
@@ -137,6 +137,7 @@
                                              sender:messageSignal.source
                                           recipient:[TSKeyManager getUsernameToken]
                                                date:messageSignal.timestamp];
+            NSLog(@"message : %@ ", message.content);
             
             break;
         }
