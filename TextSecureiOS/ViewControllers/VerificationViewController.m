@@ -42,9 +42,9 @@
     
     [self setLocaleCountry];
 
-	// Hold off on triggering the keyboard on a small screen because it'll scroll the text up.
+    // Hold off on triggering the keyboard on a small screen because it'll scroll the text up.
 	CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-    
+
 	if (screenSize.height >= 568) {
         [self.phoneNumber becomeFirstResponder];
 	} else {
@@ -52,7 +52,7 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardDidHideNotification object:nil];
 	}
-    
+
 }
 
 - (void) viewDidAppear:(BOOL)animated{
