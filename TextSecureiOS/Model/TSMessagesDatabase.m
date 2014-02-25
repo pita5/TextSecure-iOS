@@ -502,7 +502,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     
 }
 +(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain{
-    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"rk" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"ck" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
 }
 
 /* ephemeral keys of chains */

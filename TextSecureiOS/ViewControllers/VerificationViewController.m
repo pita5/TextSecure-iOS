@@ -8,7 +8,10 @@
 
 #import "VerificationViewController.h"
 #import "TSKeyManager.h"
+
 @interface VerificationViewController ()
+
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -40,15 +43,49 @@
     self.navigationItem.title = @"Your Phone Number";
     
     [self setLocaleCountry];
-    
-    [self.phoneNumber becomeFirstResponder];
-    
+
+    // Hold off on triggering the keyboard on a small screen because it'll scroll the text up.
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+
+    if (screenSize.height >= 568) {
+        [self.phoneNumber becomeFirstResponder];
+    } else {
+        // sign up to be notified about the keyboard but only on small screens
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated{
     // If user comes back to this page, make him re-enter all data.
     [TSKeyManager removeAllKeychainItems];
 }
+
+#pragma mark keyboard notifications
+
+- (void) keyboardWasShown:(NSNotification *)notification
+{
+    NSDictionary *info = [notification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0);
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+    
+    [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height - kbSize.height);
+    } completion:nil];
+}
+
+- (void) keyboardWillBeHidden:(NSNotification *)notification
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+    [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
+    } completion:nil];
+}
+
 
 #pragma mark Phone number formatting
 // Based on the user's locale we are guessing what his country code would be.
@@ -90,7 +127,7 @@
 
 -(void)sendVerification:(id)sender {
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kPhoneNumberVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
 
         [TSKeyManager storeUsernameToken:self.selectedPhoneNumber];

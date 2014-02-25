@@ -27,8 +27,8 @@
         ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(nil, nil);
         
         ABRecordRef currentPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[self userABID] intValue]);
-        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(currentPerson, kABPersonFirstNameProperty) ;
-        NSString *surname = (__bridge NSString *)ABRecordCopyValue(currentPerson, kABPersonLastNameProperty) ;
+        NSString *firstName = (__bridge_transfer NSString *)ABRecordCopyValue(currentPerson, kABPersonFirstNameProperty) ;
+        NSString *surname = (__bridge_transfer NSString *)ABRecordCopyValue(currentPerson, kABPersonLastNameProperty) ;
         
         CFRelease(addressBook);
     
@@ -56,7 +56,12 @@
             NSString *number = (__bridge NSString*) phoneNumber;
 
             if ([[TSContactManager cleanPhoneNumber:number] isEqualToString:self.registeredID]) {
-                label = (__bridge NSString *)(ABAddressBookCopyLocalizedLabel (ABMultiValueCopyLabelAtIndex(phoneNumbers, i)));
+                CFStringRef raw_label = ABMultiValueCopyLabelAtIndex(phoneNumbers, i);
+                label = (__bridge_transfer NSString *)(ABAddressBookCopyLocalizedLabel(raw_label));
+                
+                CFRelease(raw_label);
+                CFRelease(phoneNumberLabel);
+                CFRelease(phoneNumber);
                 break;
             }
             
@@ -64,6 +69,7 @@
             CFRelease(phoneNumber);
         }
         
+        CFRelease(phoneNumbers);
         CFRelease(addressBook);
         
         return label;

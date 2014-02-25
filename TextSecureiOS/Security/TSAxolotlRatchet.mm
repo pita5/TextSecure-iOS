@@ -74,6 +74,16 @@
                         NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
                         NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
                         
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirEphemeralKey.length == 33) {
+                            theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirIdentityKey.length == 33) {
+                            theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+
                         // Retreiving my keying material to construct message
                         
                         TSECKeyPair *myCurrentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
@@ -127,9 +137,9 @@
 
             [ratchet ratchetSetupFirstReceiver:preKeyMessage.identityKey theirEphemeralKey:preKeyMessage.baseKey withMyPrekeyId:preKeyMessage.preKeyId];
             
-            [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
+            [ratchet updateChainsOnReceivedMessage:preKeyMessage.baseKey];
             
-            TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
+            TSWhisperMessageKeys* decryptionKeys = [ratchet nextMessageKeysOnChain:TSReceivingChain];
             
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
             
@@ -137,6 +147,7 @@
                                              sender:messageSignal.source
                                           recipient:[TSKeyManager getUsernameToken]
                                                date:messageSignal.timestamp];
+            NSLog(@"message : %@ ", message.content);
             
             break;
         }
