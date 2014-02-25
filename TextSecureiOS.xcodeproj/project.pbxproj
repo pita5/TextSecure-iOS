@@ -1578,7 +1578,6 @@
 				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */,
 				A5C85AEE18839E8C001D2189 /* TSAxolotlRatchetTests.mm */,
-				B68BFDEC1809853E005CC817 /* Settings */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -1678,6 +1677,7 @@
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
 				A5169D06170FEA8D00A2CE9E /* CountrySegue.m */,
+				B68BFDEC1809853E005CC817 /* Settings */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1769,7 +1769,6 @@
 				B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */,
 			);
 			name = Settings;
-			path = ../TextSecureiOS;
 			sourceTree = "<group>";
 		};
 		B6B478E01809B9B3005DDE12 /* Contacts */ = {
