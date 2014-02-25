@@ -224,14 +224,15 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 // This is only a temporary stub for fetching the message threads
-// TODO: return the threads containing participants as well
-+(NSArray *) getThreads {
+// Temporarily fix is to make this blocking a blocking method
+
++(void) getThreadsWithCompletion:(dataBaseFetchCompletionBlock) block {
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
-        if (![TSMessagesDatabase databaseOpenWithError:nil])
-            // TODO: better error handling
-            return nil;
+        if (![TSMessagesDatabase databaseOpenWithError:nil]){
+            return;
+        }
     }
     
     __block NSMutableArray *threadArray = [[NSMutableArray alloc] init];
@@ -258,8 +259,6 @@ static TSEncryptedDatabase *messagesDb = nil;
                 contact = [[TSContact alloc] initWithRegisteredID:receiverID];
             }
             
-            
-            
             TSContact *sender = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"sender_id"]];
             TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"recipient_id"]];
             TSThread *messageThread = [TSThread threadWithContacts:@[contact]];
@@ -278,10 +277,11 @@ static TSEncryptedDatabase *messagesDb = nil;
             
             [threadArray addObject:messageThread];
         }
+        
+        block(threadArray);
+        
         [searchInDB close];
     }];
-    
-    return threadArray;
 }
 
 +(void) storeTSThread:(TSThread*)thread {

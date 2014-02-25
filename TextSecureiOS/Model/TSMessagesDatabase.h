@@ -13,6 +13,7 @@
 @class TSThread;
 @class TSContact;
 
+typedef void(^dataBaseFetchCompletionBlock)(NSArray*);
 typedef void(^dataBaseUpdateCompletionBlock)(BOOL);
 
 /**
@@ -38,13 +39,14 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(void) storeMessage:(TSMessage*)message fromThread:(TSThread*)thread;
 +(NSArray*) getMessagesOnThread:(TSThread*) thread;
 +(void) deleteTSThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block;
-+(NSArray*) getThreads;
++(void) getThreadsWithCompletion:(dataBaseFetchCompletionBlock) block;
 +(void)storeTSContact:(TSContact*)contact;
 +(void)storeTSThread:(TSThread*)thread ;
 
 #pragma mark - AxolotlEphemeralStorage protocol getter/setter helper methods
 
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
+
 +(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread;
 +(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread;
 +(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
