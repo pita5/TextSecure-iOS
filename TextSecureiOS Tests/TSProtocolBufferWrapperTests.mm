@@ -14,7 +14,7 @@
 #import "TSMessageSignal.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSPushMessageContent.hh"
-#import  "TSEncryptedWhisperMessage.hh"
+#import "TSEncryptedWhisperMessage.hh"
 
 @interface TSProtocolBufferWrapper (Test)
 - (textsecure::IncomingPushMessageSignal *)deserialize:(NSData *)data;
