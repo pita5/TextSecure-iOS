@@ -2,18 +2,18 @@ platform :ios, '7.0'
 
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 
-pod 'RNCryptor',			'~> 2.1'
-pod 'FMDB', 				'~> 2.1'
-pod 'SBJson', 				'~> 3.2'
-pod 'HockeySDK', 			'~> 3.5.0rc2'
-pod 'libPhoneNumber-iOS',		'~> 0.5.7.1'
+pod 'RNCryptor',				'~> 2.1'
+pod 'FMDB',						'~> 2.1'
+pod 'HockeySDK', 				'~> 3.5.3'
+pod 'libPhoneNumber-iOS',		'~> 0.7.1'
 pod 'AFNetworking', 			'~> 2.0.1'
 pod 'PonyDebugger', 			'~> 0.3.0'
-pod 'SQLCipher', 			'~> 2.1.1'
+pod 'SQLCipher', 				'~> 3.0.1'
 pod 'GoogleProtobuf', 			'~> 2.5.0'
-pod 'TITokenField', 			'~> 0.9.5'
-pod 'SWTableViewCell',       '~> 0.2.1'
-pod 'curve25519-donna',       '~> 1.2.1'
+pod 'SWTableViewCell',       	'~> 0.2.1'
+pod 'curve25519-donna',       	'~> 1.2.1'
+pod 'UIImage-Categories',     	'~> 0.0.1'
+pod 'JSMessagesViewController', '~> 3.4.4'
 
 #pod 'OpenSSL',            '~> 1.0.1'
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']

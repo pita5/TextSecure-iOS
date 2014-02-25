@@ -11,7 +11,5 @@
 @interface TSRequest : NSMutableURLRequest
 
 @property (nonatomic,retain) NSMutableDictionary *parameters;
-
 - (void) makeAuthenticatedRequest;
-
 @end

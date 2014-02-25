@@ -8,7 +8,6 @@
 
 
 @interface TSECKeyPair : NSObject<NSCoding> {
-
     uint8_t publicKey[32];
     uint8_t privateKey[32];
     int32_t preKeyId;
@@ -32,7 +31,6 @@
  * @return The key pair's public key.
  */
 -(NSData*) getPublicKey;
-
 
 /**
  * Return the key pair's preKeyId.

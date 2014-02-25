@@ -20,7 +20,7 @@
 #import "PasswordUnlockViewController.h"
 #import "TSStorageMasterKey.h"
 #import "TSThread.h"
-
+#import "TSContactPickerViewController.h"
 
 static NSString *kCellIdentifier = @"CellIdentifier";
 
@@ -83,7 +83,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 - (void)composeMessage {
-    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc]initNewConversation]] animated:YES completion:nil];
+    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[TSContactPickerViewController alloc]initWithNibName:nil bundle:nil]] animated:YES completion:nil];
 }
 
 - (void)openSettings {
@@ -103,9 +103,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
         TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
         TSMessageThreadCell *threadCell = (TSMessageThreadCell *)cell;
+        threadCell.thread = thread;
         threadCell.titleLabel.text =thread.latestMessage.senderId;
-        threadCell.timestampLabel.text = [dateFormatter stringFromDate:thread.latestMessage.messageTimestamp];
-        threadCell.threadPreviewLabel.text = thread.latestMessage.message;
+        threadCell.timestampLabel.text = [dateFormatter stringFromDate:thread.latestMessage.timestamp];
+        threadCell.threadPreviewLabel.text = thread.latestMessage.content;
         
         UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         threadCell.disclosureImageView.image = disclosureIndicatorImage;
@@ -150,7 +151,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // TODO: update with ability to delete
         [self Edit:self];
 	}
 	else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -160,26 +160,13 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
-  [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[ComposeMessageViewController alloc] initWithConversation:thread]] animated:YES completion:nil];
+  [self.navigationController pushViewController:[[ComposeMessageViewController alloc] initWithConversation:thread] animated:YES];
 }
 
 -(void) reloadModel:(NSNotification*)notification {
     [self.tableView reloadData];
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if(alertView.tag == 0) {
-        self.composingMessagePhoneNumber = [alertView textFieldAtIndex:0].text;
-        
-    }
-    else if(alertView.tag==1) {
-        self.composingMessageText=[alertView textFieldAtIndex:0].text;
-#warning send message here
-#warning add message to database here
-        self.composingMessageText = nil;
-        self.composingMessagePhoneNumber = nil;
-    }
-}
 
 - (IBAction) Edit:(id)sender {
     if(self.editing) {
@@ -197,12 +184,14 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 #pragma mark - SWTableViewCellDelegate
 
-- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    // Remove item here
-    
-    [self animateEnteringEditingMode:NO];
+- (void)swipeableTableViewCell:(TSMessageThreadCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
+    [TSMessagesDatabase deleteTSThread:cell.thread withCompletionBlock:^(BOOL updateCompleted){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
+            [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        });
+    }];
+
 }
 
 // This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,

@@ -7,18 +7,23 @@
 //
 
 #import "TSMessagesManager.h"
-#import "IncomingPushMessageSignal.hh"
-#import "TSContact.h"
+#import "TSAxolotlRatchet.hh"
+#import "TSMessage.h"
 #import "NSData+Base64.h"
 #import "TSSubmitMessageRequest.h"
+#import "TSMessagesDatabase.h"
 #import "TSMessagesManager.h"
+#import "TSAttachmentManager.h"
 #import "TSKeyManager.h"
 #import "Cryptography.h"
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
-
+#import "TSAttachment.h"
+#import "IncomingPushMessageSignal.pb.hh"
+#import "TSMessageSignal.hh"
 
 @implementation TSMessagesManager
+
 
 + (id)sharedManager {
     static TSMessagesManager *sharedMyManager = nil;
@@ -36,65 +41,42 @@
     return self;
 }
 
-- (void)processPushNotification:(NSDictionary *)pushInfo{
-  // obviously
-  NSData *payload = [NSData dataFromBase64String:[pushInfo objectForKey:@"m"]];
-  unsigned char version[1];
-  unsigned char iv[16];
-  int ciphertext_length=([payload length]-10-17)*sizeof(char);
-  unsigned char *ciphertext =  (unsigned char*)malloc(ciphertext_length);
-  unsigned char mac[10];
-  [payload getBytes:version range:NSMakeRange(0, 1)];
-  [payload getBytes:iv range:NSMakeRange(1, 16)];
-  [payload getBytes:ciphertext range:NSMakeRange(17, [payload length]-10-17)];
-  [payload getBytes:mac range:NSMakeRange([payload length]-10, 10)];
-  
-  
-  NSData* signalingKey = [NSData dataFromBase64String:[TSKeyManager getSignalingKeyToken]];
-  // Actually only the first 32 bits of this are the crypto key
-  NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
-  NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
-  NSData* decryption=[Cryptography decryptPushPayload:[NSData dataWithBytes:ciphertext length:ciphertext_length] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
-  // Now get the protocol buffer message out
-  textsecure::IncomingPushMessageSignal *fullMessageInfoRecieved = [IncomingPushMessageSignal getIncomingPushMessageSignalForData:decryption];
-  
-  NSString *decryptedMessage = [IncomingPushMessageSignal getMessageBody:fullMessageInfoRecieved];
-  NSString *decryptedMessageAndInfo = [IncomingPushMessageSignal prettyPrint:fullMessageInfoRecieved];
-  TSMessage *message = [IncomingPushMessageSignal getTSMessageForIncomingPushMessageSignal:fullMessageInfoRecieved];
-  message.messageTimestamp = [NSDate date]; // this is a receipt. time is now. 
-  [TSMessagesDatabase storeMessage:message];
-  
-  UIAlertView *pushAlert = [[UIAlertView alloc] initWithTitle:@"you have a new message" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-  [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"receive"}];
-  [pushAlert show];
-
+- (void)receiveMessagePush:(NSDictionary *)pushInfo{
+    [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
 }
 
+-(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread{
+    [TSAxolotlRatchet sendMessage:message onThread:thread];
+}
 
--(void) sendMessage:(TSMessage*)message {
-  [TSMessagesDatabase storeMessage:message];
-  NSString *serializedMessage = [[IncomingPushMessageSignal createSerializedPushMessageContent:message.message withAttachments:nil] base64Encoding];
-  [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:message.recipientId message:serializedMessage] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+-(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType {
     
-    switch (operation.response.statusCode) {
-      case 200:
-        DLog(@"we have some success information %@",responseObject);
-        // So let's encrypt a message using this
-        break;
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-      default:
-        DLog(@"error sending message");
+        switch (operation.response.statusCode) {
+            case 200:{
+                // Awesome! We consider the message as sent! (Improvement: add flag in DB for sent)
+                
+                UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Message was sent" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [message show];
+                
+                break;
+            }
+                
+            default:
+                DLog(@"error sending message");
 #warning Add error handling if not able to get contacts prekey
-        break;
-    }
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                // Use last resort key
+                break;
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
-    DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-      [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self userInfo:@{@"messageType":@"send"}];
+        DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
+        [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:nil userInfo:@{@"messageType":@"send"}];
+        
+    }];
     
-  }];
-  
-  
 }
+
 
 @end

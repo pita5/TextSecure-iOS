@@ -8,6 +8,9 @@
 
 #import "IncomingPushMessageSignal.hh"
 #import "TSMessage.h"
+#import "TSAttachment.h"
+#import "NSData+Base64.h"
+#include <stdlib.h>
 
 @implementation IncomingPushMessageSignal
 
@@ -29,6 +32,10 @@
   return incomingPushMessage;
 }
 
+// Serialize TSAttachment to AttachmentPointer
+
+// De-Serialize AttachmentPointer to TSAttachment
+
 // Serialize PushMessageContent to NSData.
 + (NSData *)getDataForPushMessageContent:(textsecure::PushMessageContent *)pushMessageContent {
   std::string ps = pushMessageContent->SerializeAsString();
@@ -47,12 +54,22 @@
 }
 
 // Create PushMessageContent from it's Objective C contents
-+ (NSData *)createSerializedPushMessageContent:(NSString*) message withAttachments:(NSArray*) attachments {
++ (NSData *)createSerializedPushMessageContent:(TSMessage*) message  {
 #warning no attachments suppoart yet
   textsecure::PushMessageContent *pushMessageContent = new textsecure::PushMessageContent();
-  const std::string body([message cStringUsingEncoding:NSASCIIStringEncoding]);
-  pushMessageContent->set_body(body);
+  const std::string body([message.message cStringUsingEncoding:NSASCIIStringEncoding]);
 
+  pushMessageContent->set_body(body);
+  if([message.attachment readyForUpload]) {
+    textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
+    const uint64_t attachment_id =  [message.attachment.attachmentId unsignedLongLongValue];
+    
+    attachmentPointer->set_id(attachment_id);
+    const std::string attachment_encryption_key([[message.attachment.attachmentDecryptionKey base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] cStringUsingEncoding:NSASCIIStringEncoding]);
+    attachmentPointer->set_key(attachment_encryption_key);
+    std::string attachment_contenttype([[message.attachment getMIMEContentType]  cStringUsingEncoding:NSASCIIStringEncoding]);
+    attachmentPointer->set_contenttype(attachment_contenttype);
+  }
   NSData *serializedPushMessageContent = [IncomingPushMessageSignal getDataForPushMessageContent:pushMessageContent];
   delete pushMessageContent;
   return serializedPushMessageContent;
@@ -66,6 +83,29 @@
   return [IncomingPushMessageSignal prettyPrintPushMessageContent:messageContent];
 }
 
++ (TSAttachment*) getMessageAttachmentData:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal {
+  const std::string cppMessage = incomingPushMessageSignal->message();
+  NSData *messageData =[NSData dataWithBytes:cppMessage.c_str() length:cppMessage.size()];
+  textsecure::PushMessageContent *messageContent = [IncomingPushMessageSignal getPushMessageContentForData:messageData];
+  if(messageContent->attachments_size()>0) {
+    const textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = messageContent->mutable_attachments(0);
+
+    const std::string cppContentType = attachmentPointer->contenttype();
+    NSString *contentType = [NSString stringWithCString:cppContentType.c_str() encoding:NSASCIIStringEncoding];
+    const std::string cppKey = attachmentPointer->key();
+    NSData *decryptionKey = [NSData dataFromBase64String:[NSString stringWithCString:cppKey.c_str() encoding:NSASCIIStringEncoding]];
+    const uint64_t cppId = attachmentPointer->id();
+
+#warning retrieve attachment here
+    
+    return [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithUnsignedLongLong:cppId] contentMIMEType:contentType decryptionKey:decryptionKey];
+
+  }
+  else {
+    return nil;
+  }
+
+}
 + (NSString*)prettyPrint:(textsecure::IncomingPushMessageSignal *)incomingPushMessageSignal {
   /*
    Type
@@ -109,8 +149,9 @@
   //[[NSDate alloc] initWithTimeIntervalSince1970:[timestamp longLongValue]]
   NSString* message = [IncomingPushMessageSignal getMessageBody:incomingPushMessageSignal];
 #warning ignoring timestamp sent, setting to now, fix issue with timestamp received being incorrectly interpreted (a few years off). currently behavior is when received.
+  TSAttachment *tsAttachment = [IncomingPushMessageSignal getMessageAttachmentData:incomingPushMessageSignal]; // not implemented
   // this phone is the recipient of the message
-  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:[TSKeyManager getUsernameToken], nil] sentOnDate:[NSDate date]];
+  TSMessage *tsMessage = [[TSMessage alloc] initWithMessage:message sender:source recipients:[[NSArray alloc] initWithObjects:[TSKeyManager getUsernameToken], nil] sentOnDate:[NSDate date] attachment:tsAttachment];
   return tsMessage;
 }
 

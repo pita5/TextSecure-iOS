@@ -14,6 +14,8 @@
 - (id)initWithURL:(NSURL *)URL{
     self = [super initWithURL:URL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:timeOutForRequests];
     self.parameters = [NSMutableDictionary dictionary];
+  
+
     return self;
 }
 
@@ -33,4 +35,7 @@
     [self.parameters addEntriesFromDictionary:@{@"Authorization":[TSKeyManager getAuthorizationToken]}];
 }
 
+- (BOOL) usingExternalServer {
+  return NO;
+}
 @end

@@ -7,15 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSParticipants.h"
-#import "TSMessage.h"
+#import "TSProtocols.h"
+
+@class TSMessage;
+
 
 @interface TSThread : NSObject
 
-@property (nonatomic, copy) NSString *threadID;
-@property (nonatomic, retain) TSParticipants *participants;
+@property (nonatomic, copy) NSString *threadID;         // A hash of all the participants' phone numbers
+@property (nonatomic,strong) NSArray *participants;     // An array of TSContact objects
 @property (nonatomic, retain) TSMessage *latestMessage;
+//@property (nonatomic, retain) TSAxolotlThreadState *axolotlVariables;
 
-+ (TSThread*) threadWithParticipants:(TSParticipants*)participants;
+
++ (TSThread*) threadWithContacts:(NSArray*)participants;
+
 
 @end

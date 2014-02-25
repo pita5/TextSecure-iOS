@@ -186,7 +186,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
-+(NSArray*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **) error {
++(TSECKeyPair*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **) error {
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {

@@ -10,7 +10,6 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>textsecure.png</string>
 		<string>textsecure@2x.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
