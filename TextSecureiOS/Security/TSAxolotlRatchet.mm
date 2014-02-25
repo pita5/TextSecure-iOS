@@ -74,6 +74,16 @@
                         NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
                         NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
                         
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirEphemeralKey.length == 33) {
+                            theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirIdentityKey.length == 33) {
+                            theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+
                         // Retreiving my keying material to construct message
                         
                         TSECKeyPair *myCurrentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
