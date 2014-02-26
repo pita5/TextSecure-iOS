@@ -24,3 +24,7 @@ NSString* const textSecureAttachmentsAPI= @"v1/attachments";
 
 NSTimeInterval const timeOutForRequests = 10;
 
+// CountryCodes.plist constants
+NSString* const countryInfoPathInMainBundle = @"CountryCodes";
+NSString* const countryInfoKeyCountryCode = @"country_code";
+NSString* const countryInfoKeyName = @"name";
