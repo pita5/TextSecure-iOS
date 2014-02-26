@@ -46,9 +46,9 @@ static NSString *masterPw = @"1234test";
 
 #pragma mark private methods
 -(TSECKeyPair*) ratchetSetupFirstSender:(NSData*)theirIdentity theirEphemeralKey:(NSData*)theirEphemeral;
--(void) ratchetSetupFirstReceiver:(NSData*)theirIdentityKey theirEphemeralKey:(NSData*)theirEphemeralKey withMyPrekeyId:(NSNumber*)preKeyId;
+-(void) ratchetSetupFirstReceiver:(NSData*)theirIdentityKey theirEphemeralKey:(NSData*)theirEphemeralKey withMyPrekeyId:(NSNumber*)preKeyId withCompletion:(performSaveOnChainCompletionBlock) block;
 -(TSECKeyPair*)updateChainsOnReceivedMessage:(NSData*)theirNewEphemeral;
--(TSWhisperMessageKeys*)nextMessageKeysOnChain:(TSChainType)chain;
+-(void)nextMessageKeysOnChain:(TSChainType)chain withCompletion:(getNextMessageKeyOnChain)block;
 -(RKCK*) initialRootKey:(NSData*)masterKey;
 -(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK;
 
@@ -245,12 +245,12 @@ static NSString *masterPw = @"1234test";
     TSECKeyPair *B2 = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     RKCK* bobSending1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A2 getPublicKey] fromMyNewEphemeral:B2 withExistingRK:bobReceiving1.RK];
     
-    // and so on....
-    
 }
 
 -(void) testFirstMessageExchange {
     // note in this test alice's identity key = bob's as they are sharing the same keydb. their ephemeral keys will be different.
+    
+    __block BOOL done = FALSE;
     TSECKeyPair* aliceIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
     TSECKeyPair* aliceInitialEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     
@@ -269,22 +269,31 @@ static NSString *masterPw = @"1234test";
     [TSMessagesDatabase getEphemeralOfSendingChain:self.thread1 withCompletionBlock:^(TSECKeyPair *keyPair) {
         TSECKeyPair* aliceSendingKey =  keyPair;
         XCTAssertNotNil(aliceSendingKey, @"alice sending key is nil");
-        NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:[self.alice nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
         
+        [self.alice nextMessageKeysOnChain:TSSendingChain withCompletion:^(TSWhisperMessageKeys *messageKeys) {
+            NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:messageKeys withCTR:[NSNumber numberWithInt:0]];
+            // Clobbers any keys of alices
+            [TSKeyManager storeUsernameToken:self.bobUserName];
+            [self.bob ratchetSetupFirstReceiver:[aliceIdentityKey getPublicKey] theirEphemeralKey:[aliceInitialEphemeralKey getPublicKey] withMyPrekeyId:[NSNumber numberWithInt:prekeyId] withCompletion:^(BOOL success) {
+                [self.bob updateChainsOnReceivedMessage:[aliceSendingKey getPublicKey]];
+                
+                
+                [self.bob nextMessageKeysOnChain:TSReceivingChain withCompletion:^(TSWhisperMessageKeys *decryptionKeys) {
+                    NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:decryptionKeys withCounter:[NSNumber numberWithInt:0]];
+                    
+                    TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
+                    
+                    XCTAssertTrue([decryptedMessage.content isEqualToString:self.message1.content], @"message encrypted by alice not equal to that decrypted by bob");
+                    
+                    done = YES;
+                }];
+
+            }];
+        }];
         
-        // Clobbers any keys of alices
-        [TSKeyManager storeUsernameToken:self.bobUserName];
-        [self.bob ratchetSetupFirstReceiver:[aliceIdentityKey getPublicKey] theirEphemeralKey:[aliceInitialEphemeralKey getPublicKey] withMyPrekeyId:[NSNumber numberWithInt:prekeyId]];
-        
-        [self.bob updateChainsOnReceivedMessage:[aliceSendingKey getPublicKey]];
-        
-        
-        TSWhisperMessageKeys* decryptionKeys =  [self.bob nextMessageKeysOnChain:TSReceivingChain];
-        NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:decryptionKeys withCounter:[NSNumber numberWithInt:0]];
-        
-        TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
-        
-        XCTAssertTrue([decryptedMessage.content isEqualToString:self.message1.content], @"message encrypted by alice not equal to that decrypted by bob");
     }];
+    while(!done) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
 }
 @end
