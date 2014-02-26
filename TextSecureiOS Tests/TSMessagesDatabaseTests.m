@@ -72,7 +72,6 @@ static NSString *masterPw = @"1234test";
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     [TSMessagesDatabase storeMessage:self.message fromThread:self.thread withCompletionBlock:^(BOOL success) {
                         done = YES;
-                        NSLog(@"Initialization done");
                     }];
                     
                 });
@@ -139,6 +138,7 @@ static NSString *masterPw = @"1234test";
     [TSMessagesDatabase setRK:RK onThread:self.thread withCompletionBlock:^(BOOL success) {
         [TSMessagesDatabase getRK:self.thread withCompletionBlock:^(NSData *data) {
             XCTAssertTrue([RK isEqualToData:data], @"Storing and retreiving RK doesn't give the right value.");
+            done = YES;
         }];
     }];
     while(!done) {
@@ -150,14 +150,13 @@ static NSString *masterPw = @"1234test";
     __block BOOL done = NO;
     NSData* CKSending = [Cryptography generateRandomBytes:20];
     NSData* CKReceiving = [Cryptography generateRandomBytes:20];
-    NSLog(@"Launching CK Storage tests");
-    [TSMessagesDatabase setCK:CKSending onThread:self.thread onChain:TSReceivingChain withCompletionBlock:^(BOOL success) {
-        NSLog(@"First block completed");
-        [TSMessagesDatabase setCK:CKReceiving onThread:self.thread onChain:TSSendingChain withCompletionBlock:^(BOOL success) {
-            [TSMessagesDatabase getCK:self.thread onChain:TSSendingChain withCompletionBlock:^(NSData *data) {
-                XCTAssertTrue([CKSending isEqualToData:data], @"CK sending on thread %@ getter not equal to setter %@", data,CKSending);
-                [TSMessagesDatabase getCK:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSData *data) {
-                    XCTAssertTrue([CKReceiving isEqualToData:data], @"CK receiving on thread %@ getter not equal to setter %@",CKReceiving ,data);
+    
+    [TSMessagesDatabase setCK:CKReceiving onThread:self.thread onChain:TSReceivingChain withCompletionBlock:^(BOOL success) {
+        [TSMessagesDatabase setCK:CKSending onThread:self.thread onChain:TSSendingChain withCompletionBlock:^(BOOL success) {
+            [TSMessagesDatabase getCK:self.thread onChain:TSSendingChain withCompletionBlock:^(NSData *sendingChainData) {
+                XCTAssertTrue([CKSending isEqualToData:sendingChainData], @"CK sending on thread %@ getter not equal to setter %@", sendingChainData,CKSending);
+                [TSMessagesDatabase getCK:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSData *receivingChainData) {
+                    XCTAssertTrue([CKReceiving isEqualToData:receivingChainData], @"CK receiving on thread %@ getter not equal to setter %@",receivingChainData, CKReceiving);
                     done = YES;
                 }];
             }];
@@ -177,6 +176,7 @@ static NSString *masterPw = @"1234test";
         if (success) {
             [TSMessagesDatabase getEphemeralOfReceivingChain:self.thread withCompletionBlock:^(NSData *data) {
                 XCTAssertTrue([publicReceiving isEqualToData: data], @"public receiving ephemeral on thread %@ getter not equal to setter %@",data,publicReceiving);
+                done = YES;
             }];
         }
     }];
@@ -187,13 +187,13 @@ static NSString *masterPw = @"1234test";
 
 -(void) testEphemeralStorageSending {
     __block BOOL done = NO;
+    
     TSECKeyPair *pairSending = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     [TSMessagesDatabase setEphemeralOfSendingChain:pairSending onThread:self.thread withCompletionBlock:^(BOOL success) {
         if (success) {
             [TSMessagesDatabase getEphemeralOfSendingChain:self.thread withCompletionBlock:^(TSECKeyPair *keyPair) {
                 XCTAssertTrue([[keyPair getPublicKey] isEqualToData:[pairSending getPublicKey]], @"public keys of ephemerals on sending chain not equal");
                 XCTAssertTrue([[keyPair getPrivateKey] isEqualToData:[pairSending getPrivateKey]], @"private keys of ephemerals on sending chain not equal");
-                
                 done = YES;
             }];
         }
@@ -229,40 +229,39 @@ static NSString *masterPw = @"1234test";
                         XCTAssert([PNSending isEqualToNumber:number], @"PNs are not set correctly");
                         
                         [TSMessagesDatabase setN:NSending onThread:self.thread onChain:TSSendingChain withCompletionBlock:^(BOOL success) {
-                            if (success) {
-                                [TSMessagesDatabase getN:self.thread onChain:TSSendingChain withCompletionBlock:^(NSNumber *number) {
-                                    XCTAssert([number isEqualToNumber:NSending], @"Ns are not set correctly on the sending chain");
-                                    
-                                    [TSMessagesDatabase setN:NReceiving onThread:self.thread onChain:TSReceivingChain withCompletionBlock:^(BOOL success) {
-                                        if (success) {
-                                            [TSMessagesDatabase getN:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSNumber *number) {
+                            [TSMessagesDatabase setN:NReceiving onThread:self.thread onChain:TSReceivingChain withCompletionBlock:^(BOOL success) {
+                                if (success) {
+                                    [TSMessagesDatabase getNPlusPlus:self.thread onChain:TSSendingChain withCompletionBlock:^(NSNumber *number) {
+                                        XCTAssert([number isEqualToNumber:NSending], @"Ns are not set correctly on the sending chain");
+                                        [TSMessagesDatabase getN:self.thread onChain:TSSendingChain withCompletionBlock:^(NSNumber *number) {
+                                            XCTAssert([number isEqualToNumber:[NSNumber numberWithInt:3]], @"The N incrementation on the sending chain return wrong results");
+                                            
+                                            [TSMessagesDatabase getNPlusPlus:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSNumber *number) {
                                                 XCTAssert([number isEqualToNumber:NReceiving], @"Ns are not set correctly on the receiving chain");
                                                 
-                                                [TSMessagesDatabase getNPlusPlus:self.thread onChain:TSSendingChain withCompletionBlock:^(NSNumber *number) {
+                                                
+                                                
+                                                
+                                                
+                                                [TSMessagesDatabase getN:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSNumber *number) {
+                                                    XCTAssert([number isEqualToNumber:[NSNumber numberWithInt:4]], @"The N incrementation on the receiving chain return wrong results");
                                                     
-                                                    XCTAssert([number isEqualToNumber:[NSNumber numberWithInt:3]], @"The N incrementation on the sending chain return wrong results");
-                                                    
-                                                    
-                                                    [TSMessagesDatabase getNPlusPlus:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSNumber *number) {
-                                                    
-                                                        XCTAssert([number isEqualToNumber:[NSNumber numberWithInt:4]], @"The N incrementation on the receiving chain return wrong results");
-                                                        
-                                                        done = YES;
-                                                    
-                                                    }];
-                                                    
+                                                    done = YES;
                                                 }];
                                                 
+                                                
                                             }];
-                                        }
+                                            
+                                        }];
+                                        
                                     }];
-                                }];
-                            }
+                                }
+                            }];
                         }];
-                        
                     }];
                 }];
             }];
+            
         }];
     }];
     

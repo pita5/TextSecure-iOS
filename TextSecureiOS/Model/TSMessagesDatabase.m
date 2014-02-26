@@ -378,15 +378,19 @@ static TSEncryptedDatabase *messagesDb = nil;
 +(void) getAPSDataField:(NSString*)name onThread:(TSThread*)thread withCompletion:(dataBaseFetchDataCompletionBlock)block{
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]) {
-            // TODO: better error handling
+            NSLog(@"Database locked");
             return;
         }
+        NSLog(@"Failed to return database");
     }
-    __block NSData* apsField = nil;
+    
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
+        NSData * apsField;
         if ([searchInDB next]) {
             apsField= [searchInDB dataForColumn:name];
+        } else{
+            DLog(@"No results found!")
         }
         [searchInDB close];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -429,7 +433,6 @@ static TSEncryptedDatabase *messagesDb = nil;
     }
     __block int apsField = 0;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        
         FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
         if ([searchInDB next]) {
             apsField= [searchInDB boolForColumn:name];
@@ -488,13 +491,13 @@ static TSEncryptedDatabase *messagesDb = nil;
         DLog(@"Not all parameters were set! ==>  %@", parameters);
     }
     
-    NSString* query = [NSString stringWithFormat:@"INSERT OR REPLACE INTO threads (thread_id,%@) VALUES (?,?)",[parameters objectForKey:@"nameField"]];
+    NSString* query = [NSString stringWithFormat:@"UPDATE threads SET %@ = ? WHERE thread_id = ?",[parameters objectForKey:@"nameField"]];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:query withArgumentsInArray:@[[parameters objectForKey:@"threadID"], [parameters objectForKey:@"valueField"]]];
-        NSLog(@"Query executed");
+        [db executeUpdate:query withArgumentsInArray:@[[parameters objectForKey:@"valueField"], [parameters objectForKey:@"threadID"]]];
+        NSLog(@"Query excuted :) ");
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSLog(@"Executing callback");
+            NSLog(@"Block");
             block(TRUE);
         });
     }];
@@ -547,7 +550,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 +(void) getEphemeralOfSendingChain:(TSThread*)thread withCompletionBlock:(keyStoreFetchKeyPairCompletionBlock)block{
     [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain ] onThread:thread withCompletion:^(NSData *data) {
-        block([NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedUnarchiver unarchiveObjectWithData:data]]);
+        block([NSKeyedUnarchiver unarchiveObjectWithData:data]);
     }];
 }
 

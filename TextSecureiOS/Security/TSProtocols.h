@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, TSChainType) {
   TSSendingChain=0,
   TSReceivingChain
 };
+
 typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
   TSUnencryptedWhisperMessageType = 0,
   TSEncryptedWhisperMessageType = 1,
