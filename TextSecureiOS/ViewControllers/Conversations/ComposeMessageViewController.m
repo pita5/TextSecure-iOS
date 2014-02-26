@@ -21,6 +21,7 @@
 
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
+@property (nonatomic, retain) NSArray *messages;
 @end
 
 @implementation ComposeMessageViewController
@@ -40,7 +41,6 @@
 -(void) setupThread  {
     self.contact = [self.thread.participants objectAtIndex:0];
     self.title = [self.contact name];
-    [self.tableView reloadData];
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
 }
 
@@ -50,16 +50,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [TSMessagesDatabase getMessagesOnThread:self.thread withCompletion:^(NSArray* messages) {
+        self.messages = messages;
+        [self.tableView reloadData];
+    }];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
-	[self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
 }
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[TSMessagesDatabase getMessagesOnThread:self.thread] count];
+    return [self.messages count];
 }
 
 #pragma mark - Messages view delegate
@@ -84,10 +90,10 @@
     
     TSMessage *message = [TSMessage messageWithContent:text sender:[TSKeyManager getUsernameToken] recipient:self.contact.registeredID date:[NSDate date] attachment:self.attachment];
     
-//    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
-//        // this is asynchronous so message will only be send by messages manager when it succeeds
-//        [TSAttachmentManager uploadAttachment:message];
-//    }
+    //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+    //        // this is asynchronous so message will only be send by messages manager when it succeeds
+    //        [TSAttachmentManager uploadAttachment:message];
+    //    }
     
     [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread];
     
@@ -123,7 +129,6 @@
     [self presentViewController:imagePicker animated:YES completion:nil];
     
 }
-
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
@@ -178,11 +183,7 @@
 }
 
 - (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    //TODO: error handling
-    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    
-    if([[[dbMessages objectAtIndex:indexPath.row] senderId] isEqualToString:[TSKeyManager getUsernameToken]]) {
+    if([[[self.messages objectAtIndex:indexPath.row] senderId] isEqualToString:[TSKeyManager getUsernameToken]]) {
         return JSBubbleMessageTypeOutgoing;
     }
     else {
@@ -198,30 +199,22 @@
     return JSMessagesViewAvatarPolicyNone;
 }
 
-
 #pragma mark - Messages view data source
 - (BOOL) shouldHaveThumbnailForRowAtIndexPath:(NSIndexPath*)indexPath {
-    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    TSAttachment *attachment = [[dbMessages objectAtIndex:indexPath.row] attachment];
+    TSAttachment *attachment = [[self.messages objectAtIndex:indexPath.row] attachment];
     return attachment.attachmentType != TSAttachmentEmpty;
 }
 - (UIImage *)thumbnailForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    TSAttachment *attachment = [[dbMessages objectAtIndex:indexPath.row] attachment];
+    TSAttachment *attachment = [[self.messages objectAtIndex:indexPath.row] attachment];
     return [attachment getThumbnailOfSize:100];
-    
 }
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //TODO: error handling
-    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    return [[dbMessages objectAtIndex:indexPath.row] content];
+    return [[self.messages objectAtIndex:indexPath.row] content];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //TODO: error handling
-    NSArray *dbMessages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    return [ (TSMessage*)[dbMessages objectAtIndex:indexPath.row] timestamp];
+    return [(TSMessage*)[self.messages objectAtIndex:indexPath.row] timestamp];
 }
 
 - (UIImage *)avatarImageForIncomingMessage {

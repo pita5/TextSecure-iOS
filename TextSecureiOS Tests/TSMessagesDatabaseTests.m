@@ -19,8 +19,6 @@
 
 static NSString *masterPw = @"1234test";
 
-
-
 @interface TSECKeyPair (Test)
 -(NSData*) getPrivateKey;
 @end
@@ -51,7 +49,6 @@ static NSString *masterPw = @"1234test";
     // Remove any existing DB
     [TSMessagesDatabase databaseErase];
     
-    
     [TSStorageMasterKey eraseStorageMasterKey];
     [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     
@@ -62,19 +59,31 @@ static NSString *masterPw = @"1234test";
     XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:&error], @"message db creation failed");
     XCTAssertNil(error, @"message db creation returned an error");
     
-    // tests is empty
+    __block BOOL done = NO;
+    
     [TSMessagesDatabase getThreadsWithCompletion:^(NSArray* threadsFromDb) {
-        NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
-            XCTAssertTrue([messages count]==0, @"there are threads in an empty db");
-            
-            [TSMessagesDatabase storeMessage:self.message fromThread:self.thread];
-
+        
+        // Because we are going to run updates/fetch from the database inside a completion block, we need to dispatch that to another thread because FMDB locks the DB if it's run on the same thread (which is as it should be to avoid race conditions).
+        
+        dispatch_queue_t queue = dispatch_queue_create("getMessages", NULL);
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [TSMessagesDatabase getMessagesOnThread:self.thread withCompletion:^(NSArray* messages) {
+                XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
+                XCTAssertTrue([messages count]==0, @"there are threads in an empty db");
+                dispatch_queue_t queue = dispatch_queue_create("storeMessage", NULL);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [TSMessagesDatabase storeMessage:self.message fromThread:self.thread];
+                    done = YES;
+                });
+            }];
         });
+        
     }];
     
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+    while(!done) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
 }
 
 - (void)tearDown
@@ -84,39 +93,44 @@ static NSString *masterPw = @"1234test";
     [TSStorageMasterKey eraseStorageMasterKey];
 }
 
-
 -(void) testStoreMessage {
-    NSArray *messages = [TSMessagesDatabase getMessagesOnThread:self.thread];
-    XCTAssertTrue([messages count]==1, @"database should just have one message in it, instead has %d",[messages count]);
-    XCTAssertTrue([[[messages objectAtIndex:0] content] isEqualToString:self.message.content], @"message bodies not equal");
-    
+    __block BOOL done = NO;
+    [TSMessagesDatabase getMessagesOnThread:self.thread withCompletion:^(NSArray* messages) {
+        XCTAssertTrue([messages count]==1, @"database should just have one message in it, instead has %d",[messages count]);
+        XCTAssertTrue([[[messages objectAtIndex:0] content] isEqualToString:self.message.content], @"message bodies not equal");
+        done = YES;
+    }];
+    while(!done) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
 }
+
 -(void) testStoreThreadCreation {
+    __block BOOL done = NO;
     [TSMessagesDatabase getThreadsWithCompletion:^(NSArray *threadsFromDb) {
         XCTAssertTrue([threadsFromDb count]==1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
         
         XCTAssertTrue([[[threadsFromDb objectAtIndex:0] threadID] isEqualToString:self.thread.threadID], @"thread id %@ of thread retreived and my thread %@ not equal", [[threadsFromDb objectAtIndex:0] threadID], self.thread.threadID);
+        done = YES;
     }];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+    
+    while(!done) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
 }
 
-
-/*
- +(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread;
- +(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread;
- +(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread;
- +(NSString*) getAPSStringField:(NSString*)name  onThread:(TSThread*)thread;
- +(NSString*) getAPSFieldName:(NSString*)name onChain:(TSChainType) chain;
- */
 -(void)testAPSDataStorage {
     NSData *data = [Cryptography generateRandomBytes:100];
+    
     [TSMessagesDatabase setAPSDataField:@{@"valueField":data,@"threadID":self.thread.threadID, @"nameField": @"cks"}];
+    
     XCTAssertTrue([[TSMessagesDatabase getAPSDataField:@"cks" onThread:self.thread] isEqualToData:data], @"data field retreived  %@ not equal to the randomly generated data and set into the database ",[TSMessagesDatabase getAPSDataField:@"cks" onThread:self.thread]);
 }
 
 -(void) testRKStorage {
     NSData* RK = [Cryptography generateRandomBytes:20];
     [TSMessagesDatabase setRK:RK onThread:self.thread];
+    // ASSERT SHOULD BE DONE HERE.
 }
 
 -(void) testCKStorage {

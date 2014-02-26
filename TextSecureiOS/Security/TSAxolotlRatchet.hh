@@ -7,16 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSWhisperMessageKeys.h"
 #import "TSProtocols.h"
+
 @class TSMessage;
 @class TSThread;
+
+typedef void(^getNextMessageKeyOnChain)(TSWhisperMessageKeys *messageKeys);
+typedef void(^decryptMessageCompletion)(TSMessage *decryptedMessage);
+
 @interface TSAxolotlRatchet : NSObject
-@property (nonatomic,strong) TSThread* thread;
+@property (nonatomic,strong) TSThread *thread;
 -(id) initForThread:(TSThread*)thread;
 #pragma mark public methods
-+(void)receiveMessage:(NSData*)data;
++(void)receiveMessage:(NSData*)data withCompletion:(decryptMessageCompletion)block;
 +(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread;
-
 
 @end
 

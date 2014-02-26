@@ -80,6 +80,8 @@
 }
 
 -(void) save{
-    [TSMessagesDatabase storeTSContact:self];
+    [TSMessagesDatabase storeTSContact:self withCompletionBlock:^(BOOL contact) {
+        // TODO: Perform any kind of feedback if failure?
+    }];
 }
 @end

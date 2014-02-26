@@ -171,7 +171,7 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 #pragma mark - DB message methods
 
-+(void) storeMessage:(TSMessage*)message fromThread:(TSThread*) thread {
++(void) storeMessage:(TSMessage*)message fromThread:(TSThread*) thread withCompletionBlock:(dataBaseUpdateCompletionBlock)block{
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
@@ -186,22 +186,25 @@ static TSEncryptedDatabase *messagesDb = nil;
         NSString *sqlDate = [dateFormatter stringFromDate:message.timestamp];
         [db executeUpdate:@"INSERT OR REPLACE INTO threads (thread_id) VALUES (?)",thread.threadID];
         [db executeUpdate:@"INSERT INTO messages (message,thread_id,sender_id,recipient_id,timestamp) VALUES (?, ?, ?, ?, ?)",message.content,thread.threadID,message.senderId,message.recipientId,sqlDate];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(TRUE);
+        });
     }];
 }
 
-+(NSArray*) getMessagesOnThread:(TSThread*) thread {
++(void) getMessagesOnThread:(TSThread*) thread withCompletion:(dataBaseFetchCompletionBlock) block {
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
-        if (![TSMessagesDatabase databaseOpenWithError:nil])
-            // TODO: better error handling
-            return nil;
+        if (![TSMessagesDatabase databaseOpenWithError:nil]){
+            NSLog(@"The database is locked!");
+            return;
+        }
     }
     
     __block NSMutableArray *messageArray = [[NSMutableArray alloc] init];
-    // debug why this is returning me, and then you separately.
+    
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        
         NSDateFormatter *dateFormatter = [[self class] sharedDateFormatter];
         FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM messages WHERE thread_id=\"%@\" ORDER BY timestamp", [thread threadID]]];
         
@@ -217,21 +220,25 @@ static TSEncryptedDatabase *messagesDb = nil;
             }
             [messageArray addObject:[TSMessage messageWithContent:[searchInDB stringForColumn:@"message"] sender:[searchInDB stringForColumn:@"sender_id"] recipient:[searchInDB stringForColumn:@"recipient_id"] date:date attachment:attachment]];
         }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(messageArray);
+        });
+        
+        [searchInDB close];
     }];
     
-    
-    return messageArray;
 }
 
 // This is only a temporary stub for fetching the message threads
 // Temporarily fix is to make this blocking a blocking method
 
 +(void) getThreadsWithCompletion:(dataBaseFetchCompletionBlock) block {
-    
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]){
             NSLog(@"The database is not open.");
+            block(nil);
             return;
         }
     }
@@ -280,12 +287,12 @@ static TSEncryptedDatabase *messagesDb = nil;
         }
         
         block(threadArray);
-        
+                
         [searchInDB close];
     }];
 }
 
-+(void) storeTSThread:(TSThread*)thread {
++(void) storeTSThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock)block{
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
@@ -296,17 +303,17 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         for(TSContact* contact in thread.participants) {
-            //TODO: Get rid of the save method
             [contact save];
         }
     }];
+    
 }
 
 +(void) deleteTSThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block {
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         [db executeUpdate:@"DELETE FROM messages WHERE thread_id=:threadID" withParameterDictionary:@{@"threadID": thread.threadID}];
         [db executeUpdate:@"DELETE FROM threads WHERE thread_id=:threadID" withParameterDictionary:@{@"threadID": thread.threadID}];
-        block(true);
+        block(TRUE);
     }];
 }
 
@@ -332,7 +339,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     }];
 }
 
-+(void)storeTSContact:(TSContact*)contact{
++(void)storeTSContact:(TSContact*)contact withCompletionBlock:(dataBaseUpdateCompletionBlock)block{
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
@@ -355,6 +362,11 @@ static TSEncryptedDatabase *messagesDb = nil;
             // the contact doesn't exist, let's create him
             [db executeUpdate:@"REPLACE INTO contacts (:registeredID,:relay , :userABID, :identityKey, :identityKeyIsVerified, :supportsSMS, :nextKey)" withParameterDictionary:parameterDictionary];
         }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(TRUE);
+        });
+        
         [searchInDB close];
     }];
     
@@ -362,32 +374,34 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
 
-+(NSData*) getAPSDataField:(NSString*)name onThread:(TSThread*)thread{
++(void) getAPSDataField:(NSString*)name onThread:(TSThread*)thread withCompletion:(dataBaseFetchDataCompletionBlock)block{
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]) {
             // TODO: better error handling
-            return nil;
+            return;
         }
     }
     __block NSData* apsField = nil;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        
         FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
         if ([searchInDB next]) {
             apsField= [searchInDB dataForColumn:name];
         }
         [searchInDB close];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(apsField);
+        });
     }];
-    return apsField;
 }
 
 
-+(NSNumber*) getAPSIntField:(NSString*)name onThread:(TSThread*)thread {
++(void) getAPSIntField:(NSString*)name onThread:(TSThread*)thread withCompletion:(dataBaseFetchIntCompletionBlock)block {
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]) {
-            // TODO: better error handling
-            return 0;
+            block(nil);
+            return;
         }
+        return;
     }
     __block NSNumber* apsField = 0;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
@@ -396,18 +410,21 @@ static TSEncryptedDatabase *messagesDb = nil;
         if ([searchInDB next]) {
             apsField = [NSNumber numberWithInt:[searchInDB intForColumn:name]];
         }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(apsField);
+        });
         [searchInDB close];
     }];
-    return apsField;
-    
 }
 
-+(BOOL) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread {
++(void) getAPSBoolField:(NSString*)name onThread:(TSThread*)thread withCompletion:(dataBaseFetchBOOLCompletionBlock)block {
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]) {
-            // TODO: better error handling
-            return 0;
+            
+            return;
         }
+        return;
     }
     __block int apsField = 0;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
@@ -417,17 +434,19 @@ static TSEncryptedDatabase *messagesDb = nil;
             apsField= [searchInDB boolForColumn:name];
         }
         [searchInDB close];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(apsField);
+        });
     }];
-    return apsField;
-    
 }
 
-+(NSString*) getAPSStringField:(NSString*)name onThread:(TSThread*)thread {
++(void) getAPSStringField:(NSString*)name onThread:(TSThread*)thread withCompletion:(dataBaseFetchStringCompletionBlock)block{
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]) {
             // TODO: better error handling
-            return @"";
+            return;
         }
+        return;
     }
     __block NSString* apsField = 0;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
@@ -436,15 +455,16 @@ static TSEncryptedDatabase *messagesDb = nil;
         if ([searchInDB next]) {
             apsField= [searchInDB stringForColumn:name];
         }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(apsField);
+        });
         [searchInDB close];
     }];
-    return apsField;
-    
 }
 
 
 
-+(void) setAPSDataField:(NSDictionary*) parameters {
++(void) setAPSDataField:(NSDictionary*) parameters withCompletion:(dataBaseUpdateCompletionBlock)block{
     /*
      parameters
      nameField : name of db field to set
@@ -458,6 +478,7 @@ static TSEncryptedDatabase *messagesDb = nil;
             // TODO: better error handling
             return;
     }
+    return;
     
     if (!([parameters count] == 3)) {
         DLog(@"Not all parameters were set! ==>  %@", parameters);
@@ -467,11 +488,14 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         [db executeUpdate:query withArgumentsInArray:@[[parameters objectForKey:@"threadID"], [parameters objectForKey:@"valueField"]]];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            block(TRUE);
+        });
     }];
     
 }
 
-+(NSString*) getAPSFieldName:(NSString*)name onChain:(TSChainType)chain {
++(NSString*) getAPSFieldName:(NSString*)name onChain:(TSChainType)chain{
     switch (chain) {
         case TSReceivingChain:
             return [name stringByAppendingString:@"r"];
@@ -489,66 +513,69 @@ static TSEncryptedDatabase *messagesDb = nil;
 
 /* Axolotl Protocol variables. Persistant storage per thread */
 /* Root key*/
-+(NSData*) getRK:(TSThread*)thread {
-    return [TSMessagesDatabase getAPSDataField:@"rk"  onThread:thread];
++(void) getRK:(TSThread*)thread withCompletionBlock:(keyStoreFetchDataCompletionBlock)block {
+    [TSMessagesDatabase getAPSDataField:@"rk"  onThread:thread withCompletion:block];
 }
 
 
-+(void) setRK:(NSData*)key onThread:(TSThread*)thread {
-    [TSMessagesDatabase setAPSDataField:@{@"nameField":@"rk",@"valueField":key,@"threadID":thread.threadID}];
++(void) setRK:(NSData*)key onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock)block{
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":@"rk",@"valueField":key,@"threadID":thread.threadID} withCompletion:block];
 }
 /* Chain keys */
-+(NSData*) getCK:(TSThread*)thread onChain:(TSChainType)chain{
-    return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"ck" onChain:chain] onThread:thread];
++(void) getCK:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreFetchDataCompletionBlock)block{
+    [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"ck" onChain:chain] onThread:thread withCompletion:block];
     
 }
-+(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain{
-    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"ck" onChain:chain],@"valueField":key,@"threadID":thread.threadID}];
++(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreSetDataCompletionBlock)block{
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"ck" onChain:chain],@"valueField":key,@"threadID":thread.threadID} withCompletion:block];
 }
 
 /* ephemeral keys of chains */
-+(NSData*) getEphemeralOfReceivingChain:(TSThread*)thread {
-    return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain ] onThread:thread];
-    
++(void) getEphemeralOfReceivingChain:(TSThread*)thread withCompletionBlock:(keyStoreFetchDataCompletionBlock)block{
+    return [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain ] onThread:thread withCompletion:block];
 }
 
-+(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread {
-    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain],@"valueField":key,@"threadID":thread.threadID}];
++(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock)block{
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSReceivingChain],@"valueField":key,@"threadID":thread.threadID}withCompletion:block];
 }
 
-+(TSECKeyPair*) getEphemeralOfSendingChain:(TSThread*)thread {
-    return [NSKeyedUnarchiver unarchiveObjectWithData:[TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain ] onThread:thread]];
++(void) getEphemeralOfSendingChain:(TSThread*)thread withCompletionBlock:(keyStoreFetchKeyPairCompletionBlock)block{
+    [TSMessagesDatabase getAPSDataField:[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain ] onThread:thread withCompletion:^(NSData *data) {
+        block([NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedUnarchiver unarchiveObjectWithData:data]]);
+    }];
 }
 
-+(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread {
-    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain],@"valueField":[NSKeyedArchiver archivedDataWithRootObject:key],@"threadID":thread.threadID}];
++(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock)block{
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"dhr" onChain:TSSendingChain],@"valueField":[NSKeyedArchiver archivedDataWithRootObject:key],@"threadID":thread.threadID} withCompletion:block];
 }
 
 
 /* number of messages sent on chains */
-+(NSNumber*) getN:(TSThread*)thread onChain:(TSChainType)chain{
-    return [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain] onThread:thread];
++(void) getN:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreFetchNumberCompletionBlock)block{
+    [TSMessagesDatabase getAPSIntField:[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain] onThread:thread withCompletion:block];
     
 }
-+(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain{
-    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain],@"valueField":num,@"threadID":thread.threadID}];
++(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreSetDataCompletionBlock)block{
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":[TSMessagesDatabase getAPSFieldName:@"n" onChain:chain],@"valueField":num,@"threadID":thread.threadID} withCompletion:block];
 }
 
 /* number of messages sent on the last chain */
-+(NSNumber*)getPNs:(TSThread*)thread{
-    return [TSMessagesDatabase getAPSIntField:@"pns" onThread:thread];
++(void)getPNs:(TSThread*)thread withCompletionBlock:(keyStoreFetchNumberCompletionBlock)block{
+    [TSMessagesDatabase getAPSIntField:@"pns" onThread:thread withCompletion:block];
 }
-+(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
-    [TSMessagesDatabase setAPSDataField:@{@"nameField":@"pns",@"valueField":num,@"threadID":thread.threadID}];
++(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock)block{
+    [TSMessagesDatabase setAPSDataField:@{@"nameField":@"pns",@"valueField":num,@"threadID":thread.threadID} withCompletion:block];
 }
 
 //Ns, Nr       : sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
-+(NSNumber*) getNPlusPlus:(TSThread*)thread onChain:(TSChainType)chain {
-    NSNumber* N = [TSMessagesDatabase getN:thread onChain:chain];
-    
-    [TSMessagesDatabase setN:[NSNumber numberWithInt:[N integerValue]+1] onThread:thread onChain:chain];
-    return N;
-    
++(void) getNPlusPlus:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreFetchNumberCompletionBlock)block{
+    [TSMessagesDatabase getN:thread onChain:chain withCompletionBlock:^(NSNumber *number) {
+        [TSMessagesDatabase setN:[NSNumber numberWithInt:[number integerValue]+1] onThread:thread onChain:chain withCompletionBlock:^(BOOL success) {
+            if (success) {
+                block(number);
+            }
+        }];
+    }];
 }
 
 #pragma mark - shared private objects
