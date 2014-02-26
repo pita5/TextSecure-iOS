@@ -42,7 +42,8 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-    [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
+    [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]withCompletion:nil];
+    // TO-DO Save message here if works.
 }
 
 -(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread{

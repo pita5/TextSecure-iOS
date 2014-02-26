@@ -34,12 +34,19 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 @property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *settingsBarButtonItem;
 @property (nonatomic, strong) UIView *searchBarCoverView;
+@property (nonatomic, strong) NSArray *threads;
 @end
 
 @implementation TextSecureViewController
 
 - (void)viewDidLoad {
+    self.threads = @[];
     [super viewDidLoad];
+    
+    [TSMessagesDatabase getThreadsWithCompletion:^(NSArray* threads) {
+        self.threads = threads;
+        [self.tableView reloadData];
+    }];
     
     self.title = @"Messages";
     self.navigationController.navigationBarHidden = NO;
@@ -100,8 +107,8 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
  	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:kCellIdentifier];
     
     if ([cell isKindOfClass:[TSMessageThreadCell class]]) {
-
-        TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
+        
+        TSThread* thread = [self.threads objectAtIndex:indexPath.row];
         TSMessageThreadCell *threadCell = (TSMessageThreadCell *)cell;
         threadCell.thread = thread;
         threadCell.titleLabel.text =thread.latestMessage.senderId;
@@ -127,7 +134,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
     if([TSMessagesDatabase databaseWasCreated]) {
         // don't display until db is unlocked (we have "dummy data" right now, but this better mimics UX behavior)
-        return [[TSMessagesDatabase getThreads] count];
+        return [_threads count];
     }
     else {
         return 0;
@@ -159,7 +166,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  TSThread* thread = [[TSMessagesDatabase getThreads] objectAtIndex:indexPath.row];
+  TSThread* thread = [self.threads objectAtIndex:indexPath.row];
   [self.navigationController pushViewController:[[ComposeMessageViewController alloc] initWithConversation:thread] animated:YES];
 }
 

@@ -89,7 +89,6 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
     if (self) {
         unsigned int returnedLength = 0;
         const uint8_t *returnedBuffer = NULL;
-        
         // De-serialize public key
         returnedBuffer = [coder decodeBytesForKey:TSECKeyPairPublicKey returnedLength:&returnedLength];
         if (returnedLength != 32) {
@@ -103,7 +102,6 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
             return nil;
         }
         memcpy(self->privateKey, returnedBuffer, 32);
-        
         // De-serialize preKeyId
         self->preKeyId = [coder decodeInt32ForKey:TSECKeyPairPreKeyId];
     }
