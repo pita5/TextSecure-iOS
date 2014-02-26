@@ -237,10 +237,12 @@ static TSEncryptedDatabase *messagesDb = nil;
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
         if (![TSMessagesDatabase databaseOpenWithError:nil]){
-            NSLog(@"The database is not open.");
+            DLog(@"The database is not open.");
             block(nil);
             return;
         }
+        DLog(@"The messages database could not be found");
+        return;
     }
     
     __block NSMutableArray *threadArray = [[NSMutableArray alloc] init];
@@ -255,7 +257,6 @@ static TSEncryptedDatabase *messagesDb = nil;
             NSDate *date = [dateFormatter dateFromString:timestamp];
             
             TSContact *contact;
-            // TODO: temporary hack until TSThread and TSMessage are properly refactored
             NSString *senderID = [searchInDB stringForColumn:@"sender_id"];
             NSString *receiverID = [searchInDB stringForColumn:@"recipient_id"];
             
@@ -287,7 +288,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         }
         
         block(threadArray);
-                
+        
         [searchInDB close];
     }];
 }
@@ -474,11 +475,14 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
-        if (![TSMessagesDatabase databaseOpenWithError:nil])
-            // TODO: better error handling
+        if (![TSMessagesDatabase databaseOpenWithError:nil]){
+            DLog(@"Database is not open");
             return;
+        }
+        DLog(@"No Database found");
+        return;
+        
     }
-    return;
     
     if (!([parameters count] == 3)) {
         DLog(@"Not all parameters were set! ==>  %@", parameters);
@@ -488,7 +492,9 @@ static TSEncryptedDatabase *messagesDb = nil;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         [db executeUpdate:query withArgumentsInArray:@[[parameters objectForKey:@"threadID"], [parameters objectForKey:@"valueField"]]];
+        NSLog(@"Query executed");
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"Executing callback");
             block(TRUE);
         });
     }];

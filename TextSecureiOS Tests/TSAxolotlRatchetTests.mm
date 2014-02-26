@@ -266,7 +266,12 @@ static NSString *masterPw = @"1234test";
     [TSKeyManager storeUsernameToken:self.aliceUserName];
     [self.alice ratchetSetupFirstSender:[bobIdentityKey getPublicKey] theirEphemeralKey:[bobEphemeralKey getPublicKey]];
     
-    TSECKeyPair* aliceSendingKey = [TSMessagesDatabase getEphemeralOfSendingChain:self.thread1];
+    [TSMessagesDatabase getEphemeralOfSendingChain:self.thread1 withCompletionBlock:^(TSECKeyPair *keyPair) {
+        TSECKeyPair* aliceSendingKey =  keyPair;
+        
+    }];
+    
+    TSECKeyPair* aliceSendingKey = nil;
     XCTAssertNotNil(aliceSendingKey, @"alice sending key is nil");
     NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:[self.alice nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
     
