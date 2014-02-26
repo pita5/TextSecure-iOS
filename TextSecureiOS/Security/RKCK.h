@@ -19,12 +19,15 @@
 
 
 @interface RKCK : NSObject
+typedef void(^performSaveOnChainCompletionBlock) (BOOL success);
+typedef void(^fetchCurrentSendingChainCompletionBlock) (RKCK* keypair);
+
 @property (nonatomic,strong) NSData* RK;
 @property (nonatomic,strong) NSData* CK;
 @property (nonatomic,strong) id ephemeral;
 +(id) withData:(NSData*)data;
 -(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral;
-+(RKCK*) currentSendingChain:(TSThread*)thread;
--(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral;
--(void) saveSendingChainOnThread:(TSThread*)thread withMyNewEphemeral:(TSECKeyPair*)ephemeral;
++(void) currentSendingChain:(TSThread*)thread withCompletionHandler:(fetchCurrentSendingChainCompletionBlock)block;
+-(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral withCompletionHandler:(performSaveOnChainCompletionBlock)block;
+-(void) saveSendingChainOnThread:(TSThread*)thread withMyNewEphemeral:(TSECKeyPair *)ephemeral withCompletionHandler:(performSaveOnChainCompletionBlock)block;
 @end

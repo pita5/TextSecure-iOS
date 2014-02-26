@@ -9,12 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "TSWhisperMessageKeys.h"
 #import "TSProtocols.h"
+#import "TSECKeyPair.h"
 
 @class TSMessage;
 @class TSThread;
 
 typedef void(^getNextMessageKeyOnChain)(TSWhisperMessageKeys *messageKeys);
 typedef void(^decryptMessageCompletion)(TSMessage *decryptedMessage);
+
+typedef void(^getNewReceiveDecryptKey)(TSECKeyPair *decryptionKey);
 
 @interface TSAxolotlRatchet : NSObject
 @property (nonatomic,strong) TSThread *thread;

@@ -14,9 +14,6 @@
 
 @implementation MKCK
 
-typedef void(^performSaveOnChainCompletionBlock) (BOOL success);
-typedef void(^fetchCurrentSendingChainCompletionBlock) (RKCK* keypair);
-
 +(id) withData:(NSData*)data {
     
     MKCK* mkck = [[MKCK alloc] init];
