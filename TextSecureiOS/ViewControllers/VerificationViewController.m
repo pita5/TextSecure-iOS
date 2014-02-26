@@ -13,6 +13,8 @@
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property (strong, nonatomic) NSString *preservedCountryCodeText;
+
 @end
 
 @implementation VerificationViewController
@@ -91,6 +93,8 @@
 // Based on the user's locale we are guessing what his country code would be.
 
 -(void) initNumberFormatter{
+    NSAssert(self.countryCodeInput.text.length > 0, @"Cannot initialize numberFormatter without a country code.");
+    
     self.numberFormatter = [[NBAsYouTypeFormatter alloc]initWithRegionCode:[NSLocale localizedCodeNameForPhonePrefix:[self.countryCodeInput.text removeAllFormattingButNumbers]]];
     
     NSString *charString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
@@ -147,6 +151,10 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     
     if ([textField isEqual:self.countryCodeInput]) {
+        if (self.countryCodeInput.text.length > 1)
+        {
+            self.preservedCountryCodeText = self.countryCodeInput.text;
+        }
         self.countryCodeInput.text = @"+";
         [self updateCountryCode:nil];
     } else if ([textField isEqual:self.phoneNumber]){
@@ -276,6 +284,18 @@
         }
     }
     return cleanedStringIndex;
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.countryCodeInput isEqual:textField])
+    {
+        if ([self.countryCodeInput.text isEqualToString:@"+"] || [self.countryCodeInput.text isEqualToString:@""])
+        {
+            self.countryCodeInput.text = self.preservedCountryCodeText;
+            [self updateCountryCode:nil];
+        }
+    }
 }
 
 #pragma mark Memory allocations

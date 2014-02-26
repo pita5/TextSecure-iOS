@@ -60,4 +60,35 @@
     XCTAssert([phoneNumber.text isEqualToString:expectedPhoneNUmber], @"phoneNumber does not match expected value");
 }
 
+// This test is to ensure that the countryCodeInput is never empty.  This is
+// a related, but separate issue to the -(void)testEmptyCountryCodeCrash
+// test.
+- (void)testEmptyCountryCodeInputPrevention
+{
+    // First, pretend that the view controller became visible.
+    [self.controller setLocaleCountry];
+    
+    // First, focus on the countryCodeInput.  This causes the existing text
+    // to be cleared.
+    UITextField *countryCodeInput = self.controller.countryCodeInput;
+    [self.controller textFieldShouldBeginEditing:countryCodeInput];
+    
+    // Verify that the countryCodeInput text field has only a +.
+    XCTAssert([countryCodeInput.text isEqualToString:@"+"], @"countryCodeInput text is not only a +");
+    
+    // Next, stop editing the text field.
+    [self.controller textFieldDidEndEditing:countryCodeInput];
+
+    // The countryCodeInput text must not be @"" or @"+".
+    XCTAssert(countryCodeInput.text.length > 1, @"countryCodeInput text is too short.");
+    XCTAssert([[countryCodeInput.text substringToIndex:1] isEqualToString:@"+"], @"countryCodeInput text does not start with +");
+
+    NSString *numbersPart = [countryCodeInput.text substringFromIndex:1];
+    NSCharacterSet *numbers = [NSCharacterSet decimalDigitCharacterSet];
+    NSRange range = [numbersPart rangeOfCharacterFromSet:numbers];
+
+    XCTAssert(range.location != NSNotFound, @"countryCodeInput text does not contain a digit");
+}
+
+
 @end
