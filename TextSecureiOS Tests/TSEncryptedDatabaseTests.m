@@ -106,7 +106,6 @@ static NSString *dbPreference = @"WasTestDbCreated";
     XCTAssertNil(error, @"database decryption returned an error");
 }
 
-
 - (void)testDatabaseDecryptWithCorruptedStorageKey
 {
     NSError *error = nil;

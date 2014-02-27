@@ -16,6 +16,7 @@
 #import "TSContact.h"
 #import "TSECKeyPair.h"
 #import "TSMessage.h"
+#import "TSKeyManager.h"
 
 static NSString *masterPw = @"1234test";
 
@@ -42,11 +43,14 @@ static NSString *masterPw = @"1234test";
 {
     [super setUp];
     
-    self.thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:@"12345"]]];
+    [TSKeyManager storeUsernameToken:@"56789"];
     
-    self.message = [TSMessage messageWithContent:@"hey" sender:@"12345" recipient:@"678910" date:[NSDate date]];
+    self.thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:@"12345"]]save:YES];
+    
+    self.message = [TSMessage messageWithContent:@"hey" sender:@"56789" recipient:@"12345" date:[NSDate date]];
     // Remove any existing DB
     [TSMessagesDatabase databaseErase];
+
     
     [TSStorageMasterKey eraseStorageMasterKey];
     [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
@@ -84,17 +88,14 @@ static NSString *masterPw = @"1234test";
 }
 
 -(void) testStoreThreadCreation {
-    
     NSArray* threadsFromDb = [TSMessagesDatabase threads];
     XCTAssertTrue([threadsFromDb count]==1, @"database should just have one thread in it, instead has %d",[threadsFromDb count]);
     XCTAssertTrue([[[threadsFromDb objectAtIndex:0] threadID] isEqualToString:self.thread.threadID], @"thread id of thread retreived and my thread not equal");
 }
 
 -(void)testAPSIntStorage {
-    
     [TSMessagesDatabase setAPSDataField:@{@"nameField":@"ns",@"valueField":[NSNumber numberWithInt:3],@"threadID":self.thread.threadID}];
     XCTAssertTrue([[TSMessagesDatabase APSIntField:@"ns" onThread:self.thread] intValue]==3, @"int field retreived  %@ not equal to 3",[TSMessagesDatabase APSIntField:@"ns" onThread:self.thread]);
-    
 }
 
 -(void) testRKStorage {

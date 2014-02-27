@@ -42,7 +42,7 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-    [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]withCompletion:nil];
+    [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
     // TO-DO Save message here if works.
 }
 

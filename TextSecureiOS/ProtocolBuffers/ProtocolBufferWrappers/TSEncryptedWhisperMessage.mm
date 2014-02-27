@@ -41,7 +41,6 @@
         const std::string cppMessage = whisperMessage->ciphertext();
         // c++->objective C
         self.ephemeralKey = [self cppStringToObjcData:cppEphemeralKey];
-        NSLog(@"Result of ephemeral key : %lu ", (unsigned long)[self.ephemeralKey length]);
         self.counter = [self cppUInt32ToNSNumber:cppCounter];
         self.previousCounter = [self cppUInt32ToNSNumber:cppPreviousCounter];
         self.message = [self cppStringToObjcData:cppMessage];
@@ -53,7 +52,6 @@
 -(const std::string) serializedProtocolBufferAsString {
     textsecure::WhisperMessage *whisperMessage = new textsecure::WhisperMessage;
     // objective c->c++
-    NSLog(@"Ephemeral key size %lu", (unsigned long)[self.ephemeralKey length]);
     const std::string cppEphemeralKey = [self objcDataToCppString:self.ephemeralKey];
     const uint32_t cppCounter = [self objcNumberToCppUInt32:self.counter];
     const uint32_t cppPreviousCounter = [self objcNumberToCppUInt32:self.previousCounter];

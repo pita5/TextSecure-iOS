@@ -18,8 +18,8 @@
     
     MKCK* mkck = [[MKCK alloc] init];
     
-    mkck.MK =  [data subdataWithRange:NSMakeRange(0, 20)];
-    mkck.CK = [data subdataWithRange:NSMakeRange(20, 20)];
+    mkck.MK =  [data subdataWithRange:NSMakeRange(0, 31)];
+    mkck.CK = [data subdataWithRange:NSMakeRange(32, 32)];
     
     return mkck;
 }
@@ -33,14 +33,8 @@
     
     RKCK* rkck = [[RKCK alloc] init];
     
-    // We expect 40 bytes.
-    
-    if ([data length] != 40) {
-        NSLog(@"RKCK data should be 40 bytes!");
-    }
-    
-    rkck.RK =  [data subdataWithRange:NSMakeRange(0, 20)];
-    rkck.CK = [data subdataWithRange:NSMakeRange(20, 20)];
+    rkck.RK =  [data subdataWithRange:NSMakeRange(0, 31)];
+    rkck.CK = [data subdataWithRange:NSMakeRange(32, 32)];
     
     return rkck;
 }
@@ -49,9 +43,6 @@
     NSData* inputKeyMaterial = [myEphemeral generateSharedSecretFromPublicKey:theirPublicEphemeral];
     return [RKCK withData:[TSHKDF deriveKeyFromMaterial:inputKeyMaterial outputLength:64 info:[@"WhisperRatchet" dataUsingEncoding:NSASCIIStringEncoding] salt:self.RK]];
 }
-
-
-
 
 -(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral {
     [TSMessagesDatabase setEphemeralOfReceivingChain:ephemeral onThread:thread];

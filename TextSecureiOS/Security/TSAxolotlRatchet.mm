@@ -61,7 +61,7 @@
         case TSPreKeyWhisperMessageType:{
             // get a contact's prekey
             TSContact* contact = [[TSContact alloc] initWithRegisteredID:message.recipientId];
-            TSThread* thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:message.recipientId]]];
+            TSThread* thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:message.recipientId]]save:YES];
             [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 switch (operation.response.statusCode) {
                     case 200:{
@@ -128,7 +128,9 @@
     NSData* decryptedPayload = [Cryptography decryptAppleMessagePayload:data withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
     
-    TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:[TSThread threadWithContacts: @[[[TSContact alloc] initWithRegisteredID:messageSignal.source]]]];
+    TSThread *thread = [TSThread threadWithContacts: @[[[TSContact alloc] initWithRegisteredID:messageSignal.source]]save:YES];
+    
+    TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:thread];
     
     TSMessage* message;
     
@@ -146,7 +148,7 @@
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
             
-            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding]
+            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSUTF8StringEncoding]
                                              sender:messageSignal.source
                                           recipient:[TSKeyManager getUsernameToken]
                                                date:messageSignal.timestamp];
@@ -160,7 +162,7 @@
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
             NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
             
-            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding]
+            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSUTF8StringEncoding]
                                              sender:messageSignal.source
                                           recipient:[TSKeyManager getUsernameToken]
                                                date:messageSignal.timestamp];
@@ -180,26 +182,23 @@
             break;
     }
     
-    [TSMessagesDatabase storeMessage:message fromThread:[TSThread threadWithContacts: @[[[TSContact alloc]  initWithRegisteredID:message.senderId]]]];
+    [TSMessagesDatabase storeMessage:message fromThread:[TSThread threadWithContacts: @[[[TSContact alloc]  initWithRegisteredID:message.senderId]]save:YES]];
 }
 
 
 #pragma mark private methods
 -(TSECKeyPair*) ratchetSetupFirstSender:(NSData*)theirIdentity theirEphemeralKey:(NSData*)theirEphemeral{
     
-    /* after this we will have the CK of the Sending Chain */
-    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    
     TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase identityKey];
-    // We generate a new key pair unique to this thread.
+    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    NSData* ourMasterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey   theirIdentityPublicKey:theirIdentity theirEphemeralPublicKey:theirEphemeral];
+    RKCK* receivingChain = [self initialRootKey:ourMasterKey];
     
-    NSData* ourMasterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentity theirEphemeralPublicKey:theirEphemeral];
+    TSECKeyPair* sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    RKCK* sendingChain = [receivingChain createChainWithNewEphemeral:sendingKey fromTheirProvideEphemeral:theirEphemeral]; // This will be used
     
-    RKCK* receivingChain = [self initialRootKey:ourMasterKey];    
-    RKCK* sendingChain = [receivingChain createChainWithNewEphemeral:ourEphemeralKey fromTheirProvideEphemeral:theirEphemeral]; // This will be used
     [receivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirEphemeral];
-    [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:ourEphemeralKey];
-    
+    [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:sendingKey];
     return ourEphemeralKey;
 }
 
@@ -215,18 +214,16 @@
 
 -(void) ratchetSetupFirstReceiver:(NSData*)theirIdentityKey theirEphemeralKey:(NSData*)theirEphemeralKey withMyPrekeyId:(NSNumber*)preKeyId{
     /* after this we will have the CK of the Receiving Chain */
-    
     TSECKeyPair *ourEphemeralKey = [TSUserKeysDatabase preKeyWithId:[preKeyId unsignedLongValue]];
     TSECKeyPair *ourIdentityKey =  [TSUserKeysDatabase identityKey];
     NSData* ourMasterKey = [self masterKeyBob:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentityKey theirEphemeralPublicKey:theirEphemeralKey];
     RKCK* sendingChain = [self initialRootKey:ourMasterKey];
     [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:ourEphemeralKey];
-    
 }
 
 
 -(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter{
-    return [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys withCounter:counter];
+    return [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys withCounter:counter];
 }
 
 #pragma mark helper methods
@@ -264,11 +261,11 @@
 }
 
 -(RKCK*) initialRootKey:(NSData*)masterKey {
-    return [RKCK withData:[TSHKDF deriveKeyFromMaterial:masterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding]]];
+    return [RKCK withData:[TSHKDF deriveKeyFromMaterial:masterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSUTF8StringEncoding]]];
 }
 
 -(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK {
-    NSData* newCipherKeyAndMacKey  = [TSHKDF deriveKeyFromMaterial:nextMessageKey_MK outputLength:64 info:[@"WhisperMessageKeys" dataUsingEncoding:NSASCIIStringEncoding]];
+    NSData* newCipherKeyAndMacKey  = [TSHKDF deriveKeyFromMaterial:nextMessageKey_MK outputLength:64 info:[@"WhisperMessageKeys" dataUsingEncoding:NSUTF8StringEncoding]];
     NSData* cipherKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(0, 32)];
     NSData* macKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(32, 32)];
     // we want to return something here  or use this locally

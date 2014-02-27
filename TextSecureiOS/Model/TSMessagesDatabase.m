@@ -158,6 +158,7 @@ static TSEncryptedDatabase *messagesDb = nil;
             }
         }
     }];
+    
     return updateSuccess;
 }
 
@@ -263,7 +264,7 @@ static TSEncryptedDatabase *messagesDb = nil;
             
             TSContact *sender = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"sender_id"]];
             TSContact *receiver = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"recipient_id"]];
-            TSThread *messageThread = [TSThread threadWithContacts:@[contact]];
+            TSThread *messageThread = [TSThread threadWithContacts:@[contact] save:FALSE];
             
             TSAttachment *attachment = nil;
             TSAttachmentType attachmentType = [searchInDB intForColumn:@"attachment_type"];
@@ -280,7 +281,7 @@ static TSEncryptedDatabase *messagesDb = nil;
         
         [searchInDB close];
     }];
-    
+
     return threadArray;
 }
 
@@ -294,15 +295,38 @@ static TSEncryptedDatabase *messagesDb = nil;
     }
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+    
+        NSDictionary *threadIDDict = @{@"threadID":thread.threadID};
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT thread_id FROM threads WHERE thread_id=:threadID" withParameterDictionary:threadIDDict];
+
+        if ([searchInDB next]) {
+            // We don't perform any specific task if the thread does already exist.
+        }
+        else{
+            // the contact doesn't exist, let's create him
+            [db executeUpdate:@"INSERT INTO threads (thread_id) VALUES (:threadID)" withParameterDictionary:threadIDDict];
+        }
+        [searchInDB close];
+    }];
+}
+
+-(void) storeParticipantsOfThread:(TSThread*)thread{
+    if (thread.participants) {
         for(TSContact* contact in thread.participants) {
             [contact save];
         }
-    }];
-    
+    }
 }
 
 +(void) deleteThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block {
     // We delete the threads on a random thread and then return back to the main one to operate callback
+    // Decrypt the DB if it hasn't been done yet
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil])
+            // TODO: better error handling
+            return;
+    }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
             [db executeUpdate:@"DELETE FROM messages WHERE thread_id=:threadID" withParameterDictionary:@{@"threadID": thread.threadID}];
@@ -370,6 +394,13 @@ static TSEncryptedDatabase *messagesDb = nil;
 #pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
 
 + (NSData *)APSDataField:(NSString *)name onThread:(TSThread *)thread{
+    // Decrypt the DB if it hasn't been done yet
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]){
+            
+        }
+    }
+    
     __block NSData * apsField;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM threads WHERE thread_id = :threadID " withParameterDictionary:@{@"threadID":thread.threadID}];
@@ -442,7 +473,9 @@ static TSEncryptedDatabase *messagesDb = nil;
     if (!([parameters count] == 3)) {
         DLog(@"Not all parameters were set! ==>  %@", parameters);
     }
-  
+    
+    NSArray *threads = [self threads];
+
     NSString* query = [NSString stringWithFormat:@"UPDATE threads SET %@ = ? WHERE thread_id = ?",[parameters objectForKey:@"nameField"]];
                     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {

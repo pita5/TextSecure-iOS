@@ -42,8 +42,9 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 +(void) deleteThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block; // deleting a thread is done by user activity -
 +(void) storeMessage:(TSMessage*)message fromThread:(TSThread*)thread;
 
-+(void)storeContact:(TSContact*)contact;
-+(void)storeThread:(TSThread*)thread;
++(void) storeContact:(TSContact*)contact;
++(void) storeThread:(TSThread*)thread;
++(void) storeParticipantsOfThread:(TSThread*)thread;
 
 #pragma mark - AxolotlEphemeralStorage protocol getter/setter helper methods
 

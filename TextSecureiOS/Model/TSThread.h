@@ -20,7 +20,6 @@
 //@property (nonatomic, retain) TSAxolotlThreadState *axolotlVariables;
 
 
-+ (TSThread*) threadWithContacts:(NSArray*)participants;
-
++ (TSThread*) threadWithContacts:(NSArray*)participants save:(BOOL)save;
 
 @end

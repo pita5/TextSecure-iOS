@@ -10,6 +10,7 @@
 #import "TSMessage.h"
 #import "TSContact.h"
 #import "Cryptography.h"
+#import "TSMessagesDatabase.h"
 
 
 @implementation TSThread
@@ -34,7 +35,7 @@
 
 
 # pragma mark Thread creation method
-+ (TSThread*) threadWithContacts:(NSArray*)participants {
++ (TSThread*) threadWithContacts:(NSArray*)participants save:(BOOL)save {
     
     if (!([participants count] == 1)) {
         NSLog(@"We currently only support one to one discussions");
@@ -51,8 +52,11 @@
     NSString *phoneNumbers = [TSThread concatenatedPhoneNumbersForContacts:participants];
     thread.threadID = [Cryptography computeSHA1DigestForString:phoneNumbers];
     
+    if (save) {
+        [TSMessagesDatabase storeThread:thread];
+    }
+    
     return thread;
 }
-
 
 @end

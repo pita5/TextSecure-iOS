@@ -29,10 +29,9 @@ static const char *HKDFDefaultSalt[HKDF_HASH_LEN] = {0};
         @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument was nil" userInfo:nil];
     }
     
-    // A salt of length 0 is most likely a programing error
     // The method deriveKeyFromMaterial:outputLength:info: should be used when no salt is needed
-    if (([input length] == 0) || ([salt length] == 0)) {
-        @throw [NSException exceptionWithName:@"Invalid argument" reason:@"A supplied argument had a length of 0" userInfo:nil];
+    if ([input length] == 0) {
+        @throw [NSException exceptionWithName:@"Invalid argument" reason:@"The input is 0 bytes" userInfo:nil];
     }
     
     if (ceil((float)outputLength/HKDF_HASH_LEN) > 255) {

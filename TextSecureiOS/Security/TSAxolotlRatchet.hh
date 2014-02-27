@@ -24,7 +24,7 @@ typedef void(^getNewReceiveDecryptKey)(TSECKeyPair *decryptionKey);
 @property (nonatomic,strong) TSThread *thread;
 -(id) initForThread:(TSThread*)thread;
 #pragma mark public methods
-+(void)receiveMessage:(NSData*)data withCompletion:(decryptMessageCompletion)block;
++(void)receiveMessage:(NSData*)data;
 +(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread;
 
 @end
