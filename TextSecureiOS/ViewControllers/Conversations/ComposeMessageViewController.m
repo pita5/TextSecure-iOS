@@ -51,11 +51,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [TSMessagesDatabase getMessagesOnThread:self.thread withCompletion:^(NSArray* messages) {
-        self.messages = messages;
-        [self.tableView reloadData];
-    }];
-    
+    self.messages = [TSMessagesDatabase messagesOnThread:self.thread];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;

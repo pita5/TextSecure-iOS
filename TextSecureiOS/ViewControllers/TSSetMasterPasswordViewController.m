@@ -12,6 +12,7 @@
 #import "TSUserKeysDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "TSMessagesDatabase.h"
+#import "TSECKeyPair.h"
 
 #define pickPassword @"Pick your password"
 #define reenterPassword @"Please re-enter your password"
@@ -25,7 +26,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-    
+        
     }
     return self;
 }
@@ -85,23 +86,26 @@
     
     // Create the user keys DB and generate the user's identity key and prekeys
     if (![TSUserKeysDatabase databaseCreateUserKeysWithError:&error]) {
-      @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
+        @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
     }
-  
+    
     // Send the user's newly generated keys to the API
     // TODO: Error handling & retry if network error
-    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:[TSUserKeysDatabase getAllPreKeysWithError:nil] identityKey:[TSUserKeysDatabase getIdentityKeyWithError:nil]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+    
+    NSArray *preKeys = [TSUserKeysDatabase allPreKeys];
+    TSECKeyPair *identityKey = [TSUserKeysDatabase identityKey];
+    
+    [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterPrekeysRequest alloc] initWithPrekeyArray:preKeys identityKey:identityKey] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         switch (operation.response.statusCode) {
             case 200:
             case 204:
-            DLog(@"Device registered prekeys");
-            break;
-            
+                DLog(@"Device registered prekeys");
+                break;
+                
             default:
-            DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
+                DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
 #warning Add error handling if not able to send the prekeys
-            break;
+                break;
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token

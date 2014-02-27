@@ -7,17 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSProtocols.h"
 @class TSECKeyPair;
+
 
 @interface TSUserKeysDatabase : NSObject
 
 +(BOOL) databaseCreateUserKeysWithError:(NSError **)error;
-+(BOOL) databaseWasCreated;
 +(void) databaseErase;
 
 // Calling the following functions will fail if the storage master key is in a "locked" state; see TSStorageMasterKey
-+(TSECKeyPair*) getIdentityKeyWithError:(NSError **)error;
-+(NSArray*) getAllPreKeysWithError:(NSError **)error;
-+(TSECKeyPair*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **)error;
++(TSECKeyPair*) identityKey;
++(NSArray*) allPreKeys;
++(TSECKeyPair*) preKeyWithId:(int32_t)preKeyId;
 
 @end
