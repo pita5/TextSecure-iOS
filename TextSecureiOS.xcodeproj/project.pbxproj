@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05B94BF218BD28E400708011 /* VerificationViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */; };
+		05B94BF418BD2EA000708011 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
 		4C0ACB4B186C876200B328D5 /* TSMessageThreadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0ACB4A186C876200B328D5 /* TSMessageThreadCell.m */; };
 		4C0ACB7C186CF2F100B328D5 /* avatar_bonnot.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB6E186CF2F100B328D5 /* avatar_bonnot.png */; };
 		4C0ACB7D186CF2F100B328D5 /* avatar_bonnot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB6F186CF2F100B328D5 /* avatar_bonnot@2x.png */; };
@@ -465,6 +467,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationViewControllerTests.m; sourceTree = "<group>"; wrapsLines = 1; };
 		4C0ACB49186C876200B328D5 /* TSMessageThreadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageThreadCell.h; path = Views/Cells/TSMessageThreadCell.h; sourceTree = "<group>"; };
 		4C0ACB4A186C876200B328D5 /* TSMessageThreadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageThreadCell.m; path = Views/Cells/TSMessageThreadCell.m; sourceTree = "<group>"; };
 		4C0ACB6E186CF2F100B328D5 /* avatar_bonnot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_bonnot.png; sourceTree = "<group>"; };
@@ -1025,6 +1028,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05B94BF018BD286100708011 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				05B94BF318BD28EB00708011 /* Sign up */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		05B94BF318BD28EB00708011 /* Sign up */ = {
+			isa = PBXGroup;
+			children = (
+				05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */,
+			);
+			name = "Sign up";
+			sourceTree = "<group>";
+		};
 		4C0ACB47186C86DE00B328D5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -1071,6 +1090,7 @@
 				A5C85AED18839E68001D2189 /* Security */,
 				8C4328CB187885FD005F25E2 /* Storage */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
+				05B94BF018BD286100708011 /* ViewControllers */,
 			);
 			path = "TextSecureiOS Tests";
 			sourceTree = "<group>";
@@ -1898,6 +1918,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05B94BF418BD2EA000708011 /* MainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2347,6 +2368,7 @@
 				A5E6CC9B18826005002A1735 /* TSProtocolBufferWrapperTests.mm in Sources */,
 				8CF7BD9F187130F80023A781 /* TSStorageMasterKeyTests.m in Sources */,
 				4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */,
+				05B94BF218BD28E400708011 /* VerificationViewControllerTests.m in Sources */,
 				8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */,
 				A5C85AEF18839E8C001D2189 /* TSAxolotlRatchetTests.mm in Sources */,
 				8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */,

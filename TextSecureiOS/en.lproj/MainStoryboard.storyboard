@@ -426,7 +426,7 @@
         <!--Verification View Controller - Title-->
         <scene sceneID="m14-Pz-4bb">
             <objects>
-                <viewController id="qFz-tn-qz1" customClass="VerificationViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VerificationViewController" id="qFz-tn-qz1" customClass="VerificationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CY4-r5-bBd"/>
                         <viewControllerLayoutGuide type="bottom" id="7TC-oW-5PJ"/>

@@ -259,7 +259,7 @@
     return [formattedText substringWithRange:NSMakeRange(lastCharLoc+1, formattedText.length-(lastCharLoc+1))];
 }
 
--(int) location:(int)loc ofCleanedStringOf:(NSString*)string{
+-(int) location:(int)loc ofCleanedStringOf:(NSString*)string {
     NSString *cleanedString = [string removeAllFormattingButNumbers];
     
     NSMutableArray *prefix = [NSMutableArray array];
