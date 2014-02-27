@@ -442,8 +442,8 @@ static TSEncryptedDatabase *messagesDb = nil;
     if (!([parameters count] == 3)) {
         DLog(@"Not all parameters were set! ==>  %@", parameters);
     }
-    
-    NSString* query = [[NSString stringWithFormat:@"UPDATE threads SET %@ = ? WHERE thread_id = ?",[parameters objectForKey:@"nameField"]];
+  
+    NSString* query = [NSString stringWithFormat:@"UPDATE threads SET %@ = ? WHERE thread_id = ?",[parameters objectForKey:@"nameField"]];
                     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         [db executeUpdate:query withArgumentsInArray:@[[parameters objectForKey:@"valueField"], [parameters objectForKey:@"threadID"]]];
