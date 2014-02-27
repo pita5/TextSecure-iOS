@@ -128,8 +128,8 @@ static NSString *masterPw = @"1234test";
     TSECKeyPair *pairSending = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     [TSMessagesDatabase setEphemeralOfSendingChain:pairSending onThread:self.thread];
     TSECKeyPair* pairRetreived = [TSMessagesDatabase ephemeralOfSendingChain:self.thread];
-    XCTAssertTrue([[pairRetreived publicKey] isEqualToData:[pairRetreived publicKey]], @"public keys of ephemerals on sending chain not equal");
-    XCTAssertTrue([[pairRetreived getPrivateKey] isEqualToData:[pairRetreived getPrivateKey]], @"private keys of ephemerals on sending chain not equal");
+    XCTAssertTrue([[pairSending publicKey] isEqualToData:[pairRetreived publicKey]], @"public keys of ephemerals on sending chain not equal");
+    XCTAssertTrue([[pairSending getPrivateKey] isEqualToData:[pairRetreived getPrivateKey]], @"private keys of ephemerals on sending chain not equal");
     
 }
 
