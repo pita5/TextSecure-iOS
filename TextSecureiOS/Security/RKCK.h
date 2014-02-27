@@ -23,7 +23,7 @@
 @property (nonatomic,strong) NSData* RK;
 @property (nonatomic,strong) NSData* CK;
 @property (nonatomic,strong) id ephemeral;
-+(id) withData:(NSData*)data;
++(instancetype) withData:(NSData*)data;
 -(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral;
 +(RKCK*) currentSendingChain:(TSThread*)thread;
 -(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral;
