@@ -46,9 +46,9 @@ static NSString *masterPw = @"1234test";
 
 #pragma mark private methods
 -(TSECKeyPair*) ratchetSetupFirstSender:(NSData*)theirIdentity theirEphemeralKey:(NSData*)theirEphemeral;
--(void) ratchetSetupFirstReceiver:(NSData*)theirIdentityKey theirEphemeralKey:(NSData*)theirEphemeralKey withMyPrekeyId:(NSNumber*)preKeyId withCompletion:(performSaveOnChainCompletionBlock) block;
+-(void) ratchetSetupFirstReceiver:(NSData*)theirIdentityKey theirEphemeralKey:(NSData*)theirEphemeralKey withMyPrekeyId:(NSNumber*)preKeyId;
 -(TSECKeyPair*)updateChainsOnReceivedMessage:(NSData*)theirNewEphemeral;
--(void)nextMessageKeysOnChain:(TSChainType)chain withCompletion:(getNextMessageKeyOnChain)block;
+-(TSWhisperMessageKeys*)nextMessageKeysOnChain:(TSChainType)chain;
 -(RKCK*) initialRootKey:(NSData*)masterKey;
 -(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK;
 
@@ -101,14 +101,16 @@ static NSString *masterPw = @"1234test";
     self.aliceUserName = @"12345";
     self.bobUserName = @"678910";
     
-    self.thread1 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
+    self.thread1 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
+                                                  [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
     
     
     self.message1 = [TSMessage messageWithContent:@"hey" sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
     self.alice = [[TSAxolotlRatchet alloc] initForThread:self.thread1];
     
     
-    self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName]]];
+    self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
+                                                  [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
     
     self.message2 = [TSMessage messageWithContent:@"yo" sender:self.bobUserName recipient:self.aliceUserName date:[NSDate date]];
     self.bob = [[TSAxolotlRatchet alloc] initForThread:self.thread2];
@@ -148,31 +150,30 @@ static NSString *masterPw = @"1234test";
     TSECKeyPair *aliceEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     TSECKeyPair *bobIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     TSECKeyPair *bobEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    NSData* aliceMasterKey = [self.alice masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey getPublicKey] theirEphemeralPublicKey:[bobEphemeralKey getPublicKey]];
+    NSData* aliceMasterKey = [self.alice masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey publicKey] theirEphemeralPublicKey:[bobEphemeralKey publicKey]];
     
     
-    NSData* bobMasterKey = [self.bob masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey getPublicKey] theirEphemeralPublicKey:[aliceEphemeralKey getPublicKey]];
+    NSData* bobMasterKey = [self.bob masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey publicKey] theirEphemeralPublicKey:[aliceEphemeralKey publicKey]];
     XCTAssertTrue([aliceMasterKey isEqualToData:bobMasterKey], @"alice and bob master keys not equal");
 }
 
 -(void) testDemoRatchet {
     // more of a demonstration of the protocol than a test of the implementation
-    
     TSECKeyPair *aliceIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     TSECKeyPair *aliceEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     TSECKeyPair *bobIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     TSECKeyPair *bobEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    // ratchet alice
+    NSData* aliceMasterKey = [self.alice masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey publicKey] theirEphemeralPublicKey:[bobEphemeralKey publicKey]]; // ECDH(A0,B0)
     
     
-    NSData* aliceMasterKey = [self.alice masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey getPublicKey] theirEphemeralPublicKey:[bobEphemeralKey getPublicKey]]; // ECDH(A0,B0)
-    
-    RKCK* aliceSending0 = [RKCK withData:[TSHKDF deriveKeyFromMaterial:aliceMasterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]]; // Initial RK
+    RKCK* aliceSending0= [RKCK withData:[TSHKDF deriveKeyFromMaterial:aliceMasterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]]; // Initial RK
     
     
     // Now alice will create a sending a few more messages along side the next ratchet key A1. We can already do this as we have Bob's B1
     // She generates a future ratchet chain
     TSECKeyPair *A1 = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // generate A1 for ratchet on sending chain
-    RKCK* aliceSendingChain0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[bobEphemeralKey getPublicKey] fromMyNewEphemeral:A1 withExistingRK:aliceSending0.RK]; // ECDH(A1,B0)
+    RKCK* aliceSendingChain0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[bobEphemeralKey publicKey] fromMyNewEphemeral:A1 withExistingRK:aliceSending0.RK]; // ECDH(A1,B0)
     
     MKCK* aliceSendingChain0Message0 = [TSAxolotlRatchet nextMessageAndChainKeyFromChainKeyTCO:aliceSendingChain0.CK]; //CK-A1-B0 MK0
     // She sends messages on the current chain, along with A1 to be used on her next receiving chain
@@ -180,7 +181,7 @@ static NSString *masterPw = @"1234test";
     MKCK* aliceSendingChain0Message2 =[TSAxolotlRatchet nextMessageAndChainKeyFromChainKeyTCO:aliceSendingChain0Message1.CK]; //CK-A1-B0 MK2
     
     // Bob gets these messages, and is ready to decrypt
-    NSData* bobMasterKey = [self.alice masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey getPublicKey] theirEphemeralPublicKey:[aliceEphemeralKey getPublicKey]]; // ECDH(A0,B0)
+    NSData* bobMasterKey = [self.alice masterKeyBob:bobIdentityKey ourEphemeral:bobEphemeralKey theirIdentityPublicKey:[aliceIdentityKey publicKey] theirEphemeralPublicKey:[aliceEphemeralKey publicKey]]; // ECDH(A0,B0)
     XCTAssertTrue([aliceMasterKey isEqualToData:bobMasterKey], @"alice and bob master keys not equal");
     
     
@@ -189,12 +190,12 @@ static NSString *masterPw = @"1234test";
     XCTAssertTrue([aliceSending0.CK isEqualToData:bobReceiving0.CK], @"alice and bob initial RK and CK not equal");
     
     // he has A1 public so he's able to then generate the sending chain of Alice's (his receiving chain)
-    RKCK* bobReceivingChain0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A1 getPublicKey] fromMyNewEphemeral:bobEphemeralKey withExistingRK:bobReceiving0.RK]; // ECDH(A1,B0)
+    RKCK* bobReceivingChain0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A1 publicKey] fromMyNewEphemeral:bobEphemeralKey withExistingRK:bobReceiving0.RK]; // ECDH(A1,B0)
     XCTAssertTrue([aliceSendingChain0.RK isEqualToData:bobReceivingChain0.RK], @"alice and bob first ratchet RK CK not equal");
     XCTAssertTrue([aliceSendingChain0.CK isEqualToData:bobReceivingChain0.CK], @"alice and bob first ratchet RK CK not equal");
     // Bob's next sending chain will use A1 and his own B1 to generate a message
     TSECKeyPair *B1 = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    RKCK* bobSending0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A1 getPublicKey] fromMyNewEphemeral:B1 withExistingRK:bobReceivingChain0.RK];
+    RKCK* bobSending0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A1 publicKey] fromMyNewEphemeral:B1 withExistingRK:bobReceivingChain0.RK];
     
     
     
@@ -223,77 +224,66 @@ static NSString *masterPw = @"1234test";
     
     
     // Alice, on receiving B1 and the message encrypted with it updates her receiving chain with A1,B1 (decrypted the received message on that chain) and her sending chain with a new public ephemeral of hers A2
-    RKCK* aliceReceiving0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[B1 getPublicKey] fromMyNewEphemeral:A1 withExistingRK:aliceSendingChain0.RK];
+    RKCK* aliceReceiving0 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[B1 publicKey] fromMyNewEphemeral:A1 withExistingRK:aliceSendingChain0.RK];
     XCTAssertTrue([aliceReceiving0.RK isEqualToData:bobSending0.RK], @"alice and bobs chains are out of sync");
     XCTAssertTrue([aliceReceiving0.CK isEqualToData:bobSending0.CK], @"alice and bobs chains are out of sync");
     
     // She also updates her sending chain with a new public ephemeral of hers A2
     
     TSECKeyPair *A2 = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    RKCK* aliceSending1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[B1 getPublicKey] fromMyNewEphemeral:A2 withExistingRK:aliceReceiving0.RK];
+    RKCK* aliceSending1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[B1 publicKey] fromMyNewEphemeral:A2 withExistingRK:aliceReceiving0.RK];
     // She can send this to Bob with a message encrypted on it, and he will be able to decrypt
     
     
     // Bob on receipt of A2 and a message encrypted with A2 can update his receiving chain and generate a new sending chain
     
-    RKCK* bobReceiving1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A2 getPublicKey] fromMyNewEphemeral:B1 withExistingRK:bobSending0.RK];
+    RKCK* bobReceiving1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A2 publicKey] fromMyNewEphemeral:B1 withExistingRK:bobSending0.RK];
     XCTAssertTrue([bobReceiving1.RK isEqualToData:aliceSending1.RK], @"alice and bobs chains are out of sync");
     XCTAssertTrue([bobReceiving1.CK isEqualToData:aliceSending1.CK], @"alice and bobs chains are out of sync");
     
     // He also updates his sending chain with a new public ephemeral of his B2
     
     TSECKeyPair *B2 = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    RKCK* bobSending1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A2 getPublicKey] fromMyNewEphemeral:B2 withExistingRK:bobReceiving1.RK];
+    RKCK* bobSending1 = [TSAxolotlRatchet newRootKeyAndChainKeyWithTheirPublicEphemeralTCO:[A2 publicKey] fromMyNewEphemeral:B2 withExistingRK:bobReceiving1.RK];
+    
+    // and so on....
     
 }
 
 -(void) testFirstMessageExchange {
     // note in this test alice's identity key = bob's as they are sharing the same keydb. their ephemeral keys will be different.
-    
-    __block BOOL done = FALSE;
-    TSECKeyPair* aliceIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
+    TSECKeyPair* aliceIdentityKey = [TSUserKeysDatabase identityKey];
     TSECKeyPair* aliceInitialEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     
     
-    XCTAssertTrue([[TSUserKeysDatabase getAllPreKeysWithError:nil] count]>0, @"no prekeys in database");
-    TSECKeyPair* bobEphemeralKey =  [[TSUserKeysDatabase getAllPreKeysWithError:nil] objectAtIndex:0];
-    TSECKeyPair* bobIdentityKey = [TSUserKeysDatabase getIdentityKeyWithError:nil];
+    XCTAssertTrue([[TSUserKeysDatabase allPreKeys] count]>0, @"no prekeys in database");
+    TSECKeyPair* bobEphemeralKey =  [[TSUserKeysDatabase allPreKeys] objectAtIndex:0];
+    TSECKeyPair* bobIdentityKey = [TSUserKeysDatabase identityKey];
     
     XCTAssertNotNil(bobEphemeralKey, @"bob ephemeral key nil");
     XCTAssertNotNil(bobIdentityKey, @"bob identity key nil");
-    uint32_t prekeyId = [bobEphemeralKey getPreKeyId];
+    uint32_t prekeyId = [bobEphemeralKey preKeyId];
     // Alice goes first
     [TSKeyManager storeUsernameToken:self.aliceUserName];
-    [self.alice ratchetSetupFirstSender:[bobIdentityKey getPublicKey] theirEphemeralKey:[bobEphemeralKey getPublicKey]];
+    [self.alice ratchetSetupFirstSender:[bobIdentityKey publicKey] theirEphemeralKey:[bobEphemeralKey publicKey]];
     
-    [TSMessagesDatabase getEphemeralOfSendingChain:self.thread1 withCompletionBlock:^(TSECKeyPair *keyPair) {
-        TSECKeyPair* aliceSendingKey =  keyPair;
-        XCTAssertNotNil(aliceSendingKey, @"alice sending key is nil");
-        
-        [self.alice nextMessageKeysOnChain:TSSendingChain withCompletion:^(TSWhisperMessageKeys *messageKeys) {
-            NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:messageKeys withCTR:[NSNumber numberWithInt:0]];
-            // Clobbers any keys of alices
-            [TSKeyManager storeUsernameToken:self.bobUserName];
-            [self.bob ratchetSetupFirstReceiver:[aliceIdentityKey getPublicKey] theirEphemeralKey:[aliceInitialEphemeralKey getPublicKey] withMyPrekeyId:[NSNumber numberWithInt:prekeyId] withCompletion:^(BOOL success) {
-                [self.bob updateChainsOnReceivedMessage:[aliceSendingKey getPublicKey]];
-                
-                
-                [self.bob nextMessageKeysOnChain:TSReceivingChain withCompletion:^(TSWhisperMessageKeys *decryptionKeys) {
-                    NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:decryptionKeys withCounter:[NSNumber numberWithInt:0]];
-                    
-                    TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
-                    
-                    XCTAssertTrue([decryptedMessage.content isEqualToString:self.message1.content], @"message encrypted by alice not equal to that decrypted by bob");
-                    
-                    done = YES;
-                }];
-
-            }];
-        }];
-        
-    }];
-    while(!done) {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-    }
+    TSECKeyPair* aliceSendingKey = [TSMessagesDatabase ephemeralOfSendingChain:self.thread1];
+    XCTAssertNotNil(aliceSendingKey, @"alice sending key is nil");
+    NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:[self.alice nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
+    
+    
+    // Clobbers any keys of alices
+    [TSKeyManager storeUsernameToken:self.bobUserName];
+    [self.bob ratchetSetupFirstReceiver:[aliceIdentityKey publicKey] theirEphemeralKey:[aliceInitialEphemeralKey publicKey] withMyPrekeyId:[NSNumber numberWithInt:prekeyId]];
+    
+    [self.bob updateChainsOnReceivedMessage:[aliceSendingKey publicKey]];
+    
+    
+    TSWhisperMessageKeys* decryptionKeys =  [self.bob nextMessageKeysOnChain:TSReceivingChain];
+    NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:decryptionKeys withCounter:[NSNumber numberWithInt:0]];
+    
+    TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
+    
+    XCTAssertTrue([decryptedMessage.content isEqualToString:self.message1.content], @"message encrypted by alice not equal to that decrypted by bob");
 }
 @end

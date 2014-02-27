@@ -173,7 +173,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }
 }
 
-+(TSECKeyPair*) getPreKeyWithId:(int32_t)preKeyId{
++(TSECKeyPair*) preKeyWithId:(int32_t)preKeyId{
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
         if (![TSUserKeysDatabase databaseOpenWithError:nil])

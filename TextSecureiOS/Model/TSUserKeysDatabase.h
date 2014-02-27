@@ -14,6 +14,7 @@
 @interface TSUserKeysDatabase : NSObject
 
 +(BOOL) databaseCreateUserKeysWithError:(NSError **)error;
++(void) databaseErase;
 
 // Calling the following functions will fail if the storage master key is in a "locked" state; see TSStorageMasterKey
 +(TSECKeyPair*) identityKey;

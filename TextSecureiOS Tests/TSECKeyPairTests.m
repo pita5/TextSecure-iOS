@@ -34,7 +34,7 @@
     TSECKeyPair *keyPair = [TSECKeyPair keyPairGenerateWithPreKeyId:1];
     XCTAssertNotNil(keyPair, @"Key pair generation returned a nil key pair.");
     
-    NSData *publicKey = [keyPair getPublicKey];
+    NSData *publicKey = [keyPair publicKey];
     XCTAssertNotNil(publicKey, @"Key pair generation returned a nil public key.");
 }
 
@@ -44,7 +44,7 @@
     TSECKeyPair *keyPair1 = [TSECKeyPair keyPairGenerateWithPreKeyId:1];
     TSECKeyPair *keyPair2 = [TSECKeyPair keyPairGenerateWithPreKeyId:2];
     
-    NSData *publicKey = [keyPair1 getPublicKey];
+    NSData *publicKey = [keyPair1 publicKey];
     NSData *sharedSecret = [keyPair2 generateSharedSecretFromPublicKey:publicKey];
     XCTAssertNotNil(sharedSecret, @"Shared secret generation returned a nil shared secret.");
 }
@@ -59,7 +59,7 @@
     TSECKeyPair *keyPair2 = [NSKeyedUnarchiver unarchiveObjectWithData:serializedKeyPair];
     XCTAssertNotNil(keyPair2, @"Key pair de-serialization returned a nil key pair.");
     
-    XCTAssertEqualObjects([keyPair1 getPublicKey], [keyPair2 getPublicKey], @"Key pair de-serialization returned a different public key");
+    XCTAssertEqualObjects([keyPair1 publicKey], [keyPair2 publicKey], @"Key pair de-serialization returned a different public key");
 }
 
 

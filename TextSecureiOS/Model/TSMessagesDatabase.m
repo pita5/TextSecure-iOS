@@ -284,7 +284,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     return threadArray;
 }
 
-+(void) storeTSThread:(TSThread*)thread{
++(void) storeThread:(TSThread*)thread{
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
@@ -316,7 +316,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     });
 }
 
-+(void) findTSContactForPhoneNumber:(NSString*)phoneNumber{
++(void) findContactForPhoneNumber:(NSString*)phoneNumber{
     
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
@@ -489,7 +489,7 @@ static TSEncryptedDatabase *messagesDb = nil;
     return [TSMessagesDatabase APSDataField:[TSMessagesDatabase APSFieldName:@"dhr" onChain:TSReceivingChain ] onThread:thread];
 }
 
-+(TSECKeyPair*) getEphemeralOfSendingChain:(TSThread*)thread {
++(TSECKeyPair*) ephemeralOfSendingChain:(TSThread*)thread {
     return [NSKeyedUnarchiver unarchiveObjectWithData:[TSMessagesDatabase APSDataField:[TSMessagesDatabase APSFieldName:@"dhr" onChain:TSSendingChain ] onThread:thread]];
 }
 
@@ -515,15 +515,15 @@ static TSEncryptedDatabase *messagesDb = nil;
 }
 
 /* number of messages sent on the last chain */
-+(void)getPNs:(TSThread*)thread {
-    [TSMessagesDatabase APSIntField:@"pns" onThread:thread];
++(NSNumber*)PNs:(TSThread*)thread {
+    return [TSMessagesDatabase APSIntField:@"pns" onThread:thread];
 }
 +(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread{
     [TSMessagesDatabase setAPSDataField:@{@"nameField":@"pns",@"valueField":num,@"threadID":thread.threadID}];
 }
 
 //Ns, Nr       : sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
-+(NSNumber*) getNThenPlusPlus:(TSThread*)thread onChain:(TSChainType)chain{
++(NSNumber*) NThenPlusPlus:(TSThread*)thread onChain:(TSChainType)chain{
     NSNumber *n =[TSMessagesDatabase N:thread onChain:chain];
     
     if ([n intValue] < INT32_MAX) {
