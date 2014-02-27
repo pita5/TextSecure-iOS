@@ -105,7 +105,6 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
         // De-serialize preKeyId
         self->preKeyId = [coder decodeInt32ForKey:TSECKeyPairPreKeyId];
     }
-    
     return self;
 }
 

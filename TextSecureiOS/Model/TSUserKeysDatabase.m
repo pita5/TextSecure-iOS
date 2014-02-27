@@ -129,6 +129,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
         if([rs next]) {
             serializedKeyPair = [rs dataForColumn:@"serialized_keypair"];
         }
+        [rs close];
     }];
     return [NSKeyedUnarchiver unarchiveObjectWithData:serializedKeyPair];
 }

@@ -191,19 +191,16 @@
     TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     
     TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase identityKey];
-        // We generate a new key pair unique to this thread.
-        
-        NSData* ourMasterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentity theirEphemeralPublicKey:theirEphemeral];
-        
-        RKCK* receivingChain = [self initialRootKey:ourMasterKey];
-        
-        TSECKeyPair* sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        RKCK* sendingChain = [receivingChain createChainWithNewEphemeral:sendingKey fromTheirProvideEphemeral:theirEphemeral]; // This will be used
-        
-        [receivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirEphemeral];
-        [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:sendingKey];
-        
-        return ourEphemeralKey;
+    // We generate a new key pair unique to this thread.
+    
+    NSData* ourMasterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentity theirEphemeralPublicKey:theirEphemeral];
+    
+    RKCK* receivingChain = [self initialRootKey:ourMasterKey];    
+    RKCK* sendingChain = [receivingChain createChainWithNewEphemeral:ourEphemeralKey fromTheirProvideEphemeral:theirEphemeral]; // This will be used
+    [receivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirEphemeral];
+    [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:ourEphemeralKey];
+    
+    return ourEphemeralKey;
 }
 
 -(void) updateChainsOnReceivedMessage:(NSData*)theirNewEphemeral{
@@ -224,7 +221,7 @@
     NSData* ourMasterKey = [self masterKeyBob:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentityKey theirEphemeralPublicKey:theirEphemeralKey];
     RKCK* sendingChain = [self initialRootKey:ourMasterKey];
     [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:ourEphemeralKey];
-
+    
 }
 
 

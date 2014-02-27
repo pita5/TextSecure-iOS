@@ -101,16 +101,14 @@ static NSString *masterPw = @"1234test";
     self.aliceUserName = @"12345";
     self.bobUserName = @"678910";
     
-    self.thread1 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
-                                                  [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
+    self.thread1 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
     
     
     self.message1 = [TSMessage messageWithContent:@"hey" sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
     self.alice = [[TSAxolotlRatchet alloc] initForThread:self.thread1];
     
     
-    self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName],
-                                                  [[TSContact alloc] initWithRegisteredID:self.bobUserName]]];
+    self.thread2 = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:self.aliceUserName]]];
     
     self.message2 = [TSMessage messageWithContent:@"yo" sender:self.bobUserName recipient:self.aliceUserName date:[NSDate date]];
     self.bob = [[TSAxolotlRatchet alloc] initForThread:self.thread2];
@@ -135,8 +133,6 @@ static NSString *masterPw = @"1234test";
     [TSUserKeysDatabase databaseErase];
     XCTAssertTrue([TSUserKeysDatabase databaseCreateUserKeysWithError:&error], @"message db creation failed");
     
-    
-    
 }
 
 - (void)tearDown
@@ -157,6 +153,17 @@ static NSString *masterPw = @"1234test";
     XCTAssertTrue([aliceMasterKey isEqualToData:bobMasterKey], @"alice and bob master keys not equal");
 }
 
+//-(void) testEphemeralStorage{
+//    TSECKeyPair *key = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+//    
+//    [TSMessagesDatabase setEphemeralOfSendingChain:key onThread:self.thread1];
+//    
+//    XCTAssertTrue([[[TSMessagesDatabase ephemeralOfSendingChain:self.thread1] publicKey] isEqualToData:[key publicKey]], @"fail!");
+//    
+//}
+//
+
+
 -(void) testDemoRatchet {
     // more of a demonstration of the protocol than a test of the implementation
     TSECKeyPair *aliceIdentityKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
@@ -165,7 +172,7 @@ static NSString *masterPw = @"1234test";
     TSECKeyPair *bobEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     // ratchet alice
     NSData* aliceMasterKey = [self.alice masterKeyAlice:aliceIdentityKey ourEphemeral:aliceEphemeralKey   theirIdentityPublicKey:[bobIdentityKey publicKey] theirEphemeralPublicKey:[bobEphemeralKey publicKey]]; // ECDH(A0,B0)
-    
+    NSLog(@"NSData : %@", aliceMasterKey);
     
     RKCK* aliceSending0= [RKCK withData:[TSHKDF deriveKeyFromMaterial:aliceMasterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSASCIIStringEncoding] salt:[NSData data]]]; // Initial RK
     
