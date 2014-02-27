@@ -30,7 +30,7 @@
  *
  * @return The key pair's public key.
  */
--(NSData*) getPublicKey;
+-(NSData*) publicKey;
 
 /**
  * Return the key pair's preKeyId.
@@ -38,7 +38,7 @@
  *
  * @return The key pair's preKeyId.
  */
--(int32_t) getPreKeyId;
+-(int32_t) preKeyId;
 
 
 /**

@@ -43,14 +43,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.threads = @[];
     [super viewDidLoad];
     
-    [TSMessagesDatabase getThreadsWithCompletion:^(NSArray* threads) {
-        self.threads = threads;
-        [self.tableView reloadData];
-    }];
-    
+    self.threads = [TSMessagesDatabase threads];
     self.title = @"Messages";
     self.navigationController.navigationBarHidden = NO;
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     
     self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
@@ -65,8 +61,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.searchBarCoverView.userInteractionEnabled = NO;
     [self.searchBar addSubview:self.searchBarCoverView];
     
-
-    
     [self.tableView registerClass:[TSMessageThreadCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = [UIColor lightGrayColor];
@@ -77,7 +71,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [super viewDidAppear:animated];
     
     self.navigationController.navigationBarHidden = NO;
-
+    
     if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -100,10 +94,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 #pragma mark - UITableViewDataSource methods
 
 - (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  
-  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-  [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-  [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
  	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:kCellIdentifier];
     
     if ([cell isKindOfClass:[TSMessageThreadCell class]]) {
@@ -127,7 +121,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         threadCell.containingTableView = tv;
         threadCell.cellHeight = [self tableView:tv heightForRowAtIndexPath:indexPath];
     }
-        
+    
     return cell;
 }
 
@@ -166,8 +160,8 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  TSThread* thread = [self.threads objectAtIndex:indexPath.row];
-  [self.navigationController pushViewController:[[ComposeMessageViewController alloc] initWithConversation:thread] animated:YES];
+    TSThread* thread = [self.threads objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:[[ComposeMessageViewController alloc] initWithConversation:thread] animated:YES];
 }
 
 -(void) reloadModel:(NSNotification*)notification {
@@ -192,13 +186,11 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 #pragma mark - SWTableViewCellDelegate
 
 - (void)swipeableTableViewCell:(TSMessageThreadCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
-    [TSMessagesDatabase deleteTSThread:cell.thread withCompletionBlock:^(BOOL updateCompleted){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
-            [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        });
+    [TSMessagesDatabase deleteThread:[self.threads objectAtIndex:index] withCompletionBlock:^(BOOL success) {
+        [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
+        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
     }];
-
 }
 
 // This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,

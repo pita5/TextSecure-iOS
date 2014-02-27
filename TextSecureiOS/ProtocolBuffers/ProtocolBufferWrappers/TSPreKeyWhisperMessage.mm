@@ -81,24 +81,23 @@
     return messageSignal;
 }
 
+
+
+
 +(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral{
     
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
-                                                          initWithEphemeralKey:[myNextEphemeral getPublicKey]
+                                                          initWithEphemeralKey:[myNextEphemeral publicKey]
                                                           previousCounter:[NSNumber numberWithInt:0]
                                                           counter:[NSNumber numberWithInt:0]
                                                           encryptedMessage:ciphertext];
-    
-    
-    NSLog(@"Public key : %@", [[TSUserKeysDatabase getIdentityKeyWithError:nil] getPublicKey]);
+    TSECKeyPair *identityKey = [TSUserKeysDatabase identityKey];
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
                                              initWithPreKeyId:theirPrekeyId
-                                             senderPrekey:[currentEphemeral getPublicKey]
-                                             senderIdentityKey:[[TSUserKeysDatabase getIdentityKeyWithError:nil] getPublicKey]
+                                             senderPrekey:[currentEphemeral publicKey]
+                                             senderIdentityKey:[identityKey publicKey]
                                              message:[encryptedWhisperMessage serializedProtocolBuffer]];
-    
-    
     
     return [prekeyMessage serializedProtocolBuffer];
 }

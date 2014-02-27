@@ -17,7 +17,6 @@
 // This would close opened DB handles when we lock the key
 @property (nonatomic, retain) FMDatabaseQueue *dbQueue;
 
-
 /**
  * Create an encrypted database and update the corresponding preference.
  * @author Alban Diquet

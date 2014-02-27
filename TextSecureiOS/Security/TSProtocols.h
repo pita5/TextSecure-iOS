@@ -12,13 +12,14 @@
 @class TSMessageSignal;
 @class TSECKeyPair;
 @class TSEncryptedWhisperMessage;
-@class TSPreKeyWhisperMessage;
 @class TSWhisperMessageKeys;
+@class TSPreKeyWhisperMessage;
 
 typedef void(^keyStoreFetchNumberCompletionBlock) (NSNumber* number);
 typedef void(^keyStoreFetchDataCompletionBlock) (NSData* data);
 typedef void(^keyStoreSetDataCompletionBlock) (BOOL success);
-typedef void(^keyStoreFetchKeyPairCompletionBlock)(TSECKeyPair* keyPair);
+typedef void(^keyStoreFetchArrayCompletionBlock)(NSError **error, NSArray* array);
+typedef void(^keyStoreFetchKeyPairCompletionBlock)(NSError **error, TSECKeyPair* keyPair);
 
 typedef NS_ENUM(NSInteger, TSChainType) {
   TSSendingChain=0,
@@ -37,31 +38,33 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 /* Axolotl Protocol variables. Persistant storage per thread. */
 // we have both SENDING and RECEIVING key chains
 //RK           : 32-byte root key which gets updated by DH ratchet
-+(void) getRK:(TSThread*)thread withCompletionBlock:(keyStoreFetchDataCompletionBlock) block;
 
-+(void) setRK:(NSData*)key onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock) block;
++(NSData*) RK:(TSThread*)thread;
++(void) setRK:(NSData*)key onThread:(TSThread*)thread;
+
 //CKs, CKr     : 32-byte chain keys (used for forward-secrecy updating)
-+(void) getCK:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreFetchDataCompletionBlock) block;
-+(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreSetDataCompletionBlock) block;
+
++(NSData*) CK:(TSThread*)thread onChain:(TSChainType)chain;
++(void) setCK:(NSData*)key onThread:(TSThread*)thread onChain:(TSChainType)chain;
+
 //DHIs, DHIr   : DH or ECDH Identity keys
-+(void) getEphemeralOfReceivingChain:(TSThread*)thread withCompletionBlock:(keyStoreFetchDataCompletionBlock) block;
-+(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock) block;
++(NSData*) ephemeralOfReceivingChain:(TSThread*)thread;
++(void) setEphemeralOfReceivingChain:(NSData*)key onThread:(TSThread*)thread;
 
-+(void) getEphemeralOfSendingChain:(TSThread*)thread withCompletionBlock:(keyStoreFetchKeyPairCompletionBlock) block;
 
-+(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock) block;
++(TSECKeyPair*) ephemeralOfSendingChain:(TSThread*)thread;
++(void) setEphemeralOfSendingChain:(TSECKeyPair*)key onThread:(TSThread*)thread;
+
 //Ns, Nr       : Message numbers (reset to 0 with each new ratchet)
-+(void) getN:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreFetchNumberCompletionBlock) block;
-;
-+(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreSetDataCompletionBlock) block;
-// sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
-+(void) getNPlusPlus:(TSThread*)thread onChain:(TSChainType)chain withCompletionBlock:(keyStoreFetchNumberCompletionBlock) block;
++(NSNumber*) N:(TSThread*)thread onChain:(TSChainType)chain;
++(void) setN:(NSNumber*)num onThread:(TSThread*)thread onChain:(TSChainType)chain;
 
+// sets N to N+1 returns value of N prior to setting,  Message numbers (reset to 0 with each new ratchet)
++(NSNumber*) NThenPlusPlus:(TSThread*)thread onChain:(TSChainType)chain;
 
 //PNs          : Previous message numbers (# of msgs sent under prev ratchet) only relevant for sending chain
-+(void)getPNs:(TSThread*)thread withCompletionBlock:(keyStoreFetchNumberCompletionBlock) block;
-;
-+(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread withCompletionBlock:(keyStoreSetDataCompletionBlock) block;
++(NSNumber*)PNs:(TSThread*)thread;
++(void)setPNs:(NSNumber*)num onThread:(TSThread*)thread;
 
 #warning update a queue of last chain keys... in case a message is delayed in transit.
 

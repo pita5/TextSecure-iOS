@@ -10,6 +10,7 @@
 #import "TSWhisperMessageKeys.h"
 #import "TSProtocols.h"
 #import "TSECKeyPair.h"
+#import "RKCK.h"
 
 @class TSMessage;
 @class TSThread;

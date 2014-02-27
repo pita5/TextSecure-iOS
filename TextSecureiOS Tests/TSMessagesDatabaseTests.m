@@ -61,11 +61,12 @@ static NSString *masterPw = @"1234test";
     
     __block BOOL done = NO;
     
-    [TSMessagesDatabase getThreadsWithCompletion:^(NSArray* threadsFromDb) {
-        
-        // Because we are going to run updates/fetch from the database inside a completion block, we need to dispatch that to another thread because FMDB locks the DB if it's run on the same thread (which is as it should be to avoid race conditions).
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    NSArray *threadsFromDb = [TSMessagesDatabase threads];
+    NSArray *messages = [TSMessagesDatabase messagesOnThread:self.thread];
+    
+    
+    
+    
             [TSMessagesDatabase getMessagesOnThread:self.thread withCompletion:^(NSArray* messages) {
                 XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
                 XCTAssertTrue([messages count]==0, @"there are threads in an empty db");
@@ -191,7 +192,7 @@ static NSString *masterPw = @"1234test";
     TSECKeyPair *pairSending = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
     [TSMessagesDatabase setEphemeralOfSendingChain:pairSending onThread:self.thread withCompletionBlock:^(BOOL success) {
         if (success) {
-            [TSMessagesDatabase getEphemeralOfSendingChain:self.thread withCompletionBlock:^(TSECKeyPair *keyPair) {
+            [TSMessagesDatabase getEphemeralOfSendingChain:self.thread]) {
                 XCTAssertTrue([[keyPair getPublicKey] isEqualToData:[pairSending getPublicKey]], @"public keys of ephemerals on sending chain not equal");
                 XCTAssertTrue([[keyPair getPrivateKey] isEqualToData:[pairSending getPrivateKey]], @"private keys of ephemerals on sending chain not equal");
                 done = YES;
@@ -237,12 +238,7 @@ static NSString *masterPw = @"1234test";
                                             XCTAssert([number isEqualToNumber:[NSNumber numberWithInt:3]], @"The N incrementation on the sending chain return wrong results");
                                             
                                             [TSMessagesDatabase getNPlusPlus:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSNumber *number) {
-                                                XCTAssert([number isEqualToNumber:NReceiving], @"Ns are not set correctly on the receiving chain");
-                                                
-                                                
-                                                
-                                                
-                                                
+                                                XCTAssert([number isEqualToNumber:NReceiving], @"Ns are not set correctly on the receiving chain"); 
                                                 [TSMessagesDatabase getN:self.thread onChain:TSReceivingChain withCompletionBlock:^(NSNumber *number) {
                                                     XCTAssert([number isEqualToNumber:[NSNumber numberWithInt:4]], @"The N incrementation on the receiving chain return wrong results");
                                                     

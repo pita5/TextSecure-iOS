@@ -19,9 +19,7 @@
 #define USER_KEYS_DB_FILE_NAME @"TSUserKeys.db"
 #define USER_KEYS_DB_PREFERENCE @"TSUserKeysDbWasCreated"
 
-
 static TSEncryptedDatabase *userKeysDb = nil;
-
 
 @interface TSUserKeysDatabase(Private)
 
@@ -30,10 +28,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
 +(BOOL) generateAndStorePreKeys;
 +(BOOL) generateAndStoreIdentityKey;
 
-
 @end
-
-
 
 @implementation TSUserKeysDatabase
 
@@ -52,7 +47,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     userKeysDb = db;
     __block BOOL querySuccess = NO;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
-
+        
         if (![db executeUpdate:@"CREATE TABLE user_identity_key (serialized_keypair BLOB)"]) {
             return;
         }
@@ -126,14 +121,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
 
 #pragma Keys access
 
-+(TSECKeyPair*) getIdentityKeyWithError:(NSError **)error {
-    
-    // Decrypt the DB if it hasn't been done yet
-    if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:error])
-        return nil;
-    }
-    
++(TSECKeyPair*) identityKey{
     // Fetch the key from the DB
     __block NSData *serializedKeyPair = nil;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
@@ -141,25 +129,20 @@ static TSEncryptedDatabase *userKeysDb = nil;
         if([rs next]) {
             serializedKeyPair = [rs dataForColumn:@"serialized_keypair"];
         }
-        [rs close];
     }];
-    if (!serializedKeyPair) {
-        if (error) {
-            *error = [TSStorageError errorDatabaseCorrupted];
-        }
-        return nil;
-    }
-    
     return [NSKeyedUnarchiver unarchiveObjectWithData:serializedKeyPair];
 }
 
 
-+(NSArray*) getAllPreKeysWithError:(NSError **)error {
++(NSArray *)allPreKeys {
+    __block NSError *error;
     
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:error])
+        if (![TSUserKeysDatabase databaseOpenWithError:&error]){
+            DLog(@"We had issues opening the user keys database");
             return nil;
+        }
     }
     
     // Fetch all keys from the DB
@@ -174,23 +157,26 @@ static TSEncryptedDatabase *userKeysDb = nil;
             [preKeys addObject:[NSKeyedUnarchiver unarchiveObjectWithData:serializedKeyPair]];
         }
         [rs close];
-    }];
-    if (preKeysNb != PREKEYS_NUMBER+1) {
-        if (error) {
-            *error = [TSStorageError errorDatabaseCorrupted];
+        
+        if (preKeysNb != PREKEYS_NUMBER+1) {
+            if (error) {
+                error = [TSStorageError errorDatabaseCorrupted];
+            }
         }
+    }];
+    
+    if (!error) {
+        return preKeys;
+    } else{
+        DLog(@"We had issues with the prekeys");
         return nil;
     }
-    
-    return preKeys;
 }
 
-
-+(TSECKeyPair*) getPreKeyWithId:(int32_t)preKeyId error:(NSError **) error {
-    
++(TSECKeyPair*) getPreKeyWithId:(int32_t)preKeyId{
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
-        if (![TSUserKeysDatabase databaseOpenWithError:error])
+        if (![TSUserKeysDatabase databaseOpenWithError:nil])
             return nil;
     }
     
@@ -204,9 +190,6 @@ static TSEncryptedDatabase *userKeysDb = nil;
         [rs close];
     }];
     if (!serializedKeyPair) {
-        if (error) {
-            *error = [TSStorageError errorDatabaseCorrupted];
-        }
         return nil;
     }
     
@@ -224,7 +207,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
      */
     
     NSData *serializedKey  = [NSKeyedArchiver archivedDataWithRootObject:[TSECKeyPair keyPairGenerateWithPreKeyId:0]];
-
+    
     __block BOOL updateSuccess;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
         if ([db executeUpdate:@"INSERT INTO user_identity_key (serialized_keypair) VALUES (?)", serializedKey]) {
@@ -236,8 +219,6 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }
     return YES;
 }
-
-
 
 +(BOOL) generateAndStorePreKeys {
     
@@ -260,7 +241,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     for(int i=0; i<PREKEYS_NUMBER; i++) {
         prekeyCounter++;
         serializedPreKey = [NSKeyedArchiver archivedDataWithRootObject:[TSECKeyPair keyPairGenerateWithPreKeyId:prekeyCounter]];
-
+        
         __block BOOL updateSuccess;
         [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
             if ([db executeUpdate:@"INSERT INTO user_prekeys (prekey_id, serialized_keypair) VALUES (?,?)",[NSNumber numberWithInt:prekeyCounter], serializedPreKey]) {
@@ -273,7 +254,5 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }
     return YES;
 }
-
-
 
 @end
