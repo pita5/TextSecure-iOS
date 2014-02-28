@@ -22,4 +22,7 @@ extern NSString* const encryptedMasterSecretKeyStorageId;
 extern NSString* const textSecureAttachmentsAPI;
 extern NSTimeInterval const timeOutForRequests;
 
-
+// CountryCodes.plist constants
+extern NSString* const countryInfoPathInMainBundle;
+extern NSString* const countryInfoKeyCountryCode;
+extern NSString* const countryInfoKeyName;

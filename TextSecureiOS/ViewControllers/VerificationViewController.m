@@ -13,6 +13,9 @@
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property (strong, nonatomic) NSString *preservedCountryCodeText;
+@property (nonatomic) BOOL userSelectedCountry;
+
 @end
 
 @implementation VerificationViewController
@@ -91,6 +94,9 @@
 // Based on the user's locale we are guessing what his country code would be.
 
 -(void) initNumberFormatter{
+    // The first character is '+'.
+    NSAssert(self.countryCodeInput.text.length > 1, @"Cannot initialize numberFormatter without a country code.");
+    
     self.numberFormatter = [[NBAsYouTypeFormatter alloc]initWithRegionCode:[NSLocale localizedCodeNameForPhonePrefix:[self.countryCodeInput.text removeAllFormattingButNumbers]]];
     
     NSString *charString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
@@ -105,22 +111,24 @@
     
     self.countryCodeInput.text = [NSLocale currentCountryPhonePrefix];
     [self updateCountryCode:nil];
+    self.userSelectedCountry = FALSE;
 }
 
 -(void)updateCountryCode:(id)sender {
     NSString *enteredCountryCode = self.countryCodeInput.text;
     enteredCountryCode = [enteredCountryCode removeAllFormattingButNumbers];
     
-    [self updateCountry:@{@"country_code":enteredCountryCode, @"name":[[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[NSLocale localizedCodeNameForPhonePrefix:enteredCountryCode]]}];
+    [self updateCountry:@{countryInfoKeyCountryCode:enteredCountryCode, countryInfoKeyName:[[NSLocale currentLocale] displayNameForKey:NSLocaleCountryCode value:[NSLocale localizedCodeNameForPhonePrefix:enteredCountryCode]]}];
 }
 
 -(void)updateCountry:(NSDictionary*)countryInfo {
-	self.countryCodeInput.text = [[countryInfo objectForKey:@"country_code"] prependPlus];
-	self.countryName.text=[countryInfo objectForKey:@"name"];
+	self.countryCodeInput.text = [[countryInfo objectForKey:countryInfoKeyCountryCode] prependPlus];
+	self.countryName.text=[countryInfo objectForKey:countryInfoKeyName];
 }
 
 -(void) countryChosen:(NSNotification*)notification {
 	[self updateCountry:[notification userInfo]];
+    self.userSelectedCountry = TRUE;
 }
 
 #pragma mark - Verification Action
@@ -147,11 +155,27 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     
     if ([textField isEqual:self.countryCodeInput]) {
-        self.countryCodeInput.text = @"+";
-        [self updateCountryCode:nil];
-    } else if ([textField isEqual:self.phoneNumber]){
+        if (self.countryCodeInput.text.length > 1) {
+            self.preservedCountryCodeText = self.countryCodeInput.text;
+        }
+        // If the user just selected a country, then focus the phoneNumber
+        // UITextInput.
+        if (self.userSelectedCountry) {
+            [self.phoneNumber becomeFirstResponder];
+        }
+        else {
+            self.countryCodeInput.text = @"+";
+            [self updateCountryCode:nil];
+        }
+    } else if ([textField isEqual:self.phoneNumber]) {
+        // restorePreservedCountryCodeText: works around a race condition
+        // between textFieldShouldBeginEditing: and textFieldDidEndEditing:
+        [self restorePreservedCountryCodeText];
         [self initNumberFormatter];
     }
+    // Only prevent emptying the countryCodeInput on the first selection of a
+    // text field.
+    self.userSelectedCountry = FALSE;
     
     return YES;
 }
@@ -259,7 +283,7 @@
     return [formattedText substringWithRange:NSMakeRange(lastCharLoc+1, formattedText.length-(lastCharLoc+1))];
 }
 
--(int) location:(int)loc ofCleanedStringOf:(NSString*)string{
+-(int) location:(int)loc ofCleanedStringOf:(NSString*)string {
     NSString *cleanedString = [string removeAllFormattingButNumbers];
     
     NSMutableArray *prefix = [NSMutableArray array];
@@ -276,6 +300,22 @@
         }
     }
     return cleanedStringIndex;
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.countryCodeInput isEqual:textField]) {
+        [self restorePreservedCountryCodeText];
+    }
+}
+
+-(void)restorePreservedCountryCodeText
+{
+    if (self.preservedCountryCodeText != nil && ([self.countryCodeInput.text isEqualToString:@"+"] || [self.countryCodeInput.text isEqualToString:@""])) {
+        self.countryCodeInput.text = self.preservedCountryCodeText;
+        self.preservedCountryCodeText = nil;
+        [self updateCountryCode:nil];
+    }
 }
 
 #pragma mark Memory allocations

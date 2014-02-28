@@ -7,7 +7,6 @@
 //
 
 #import "CountryViewController.h"
-#import "VerificationViewController.h"
 
 @implementation CountryViewController
 
@@ -21,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *plistFile = [[NSBundle mainBundle] pathForResource:@"CountryCodes" ofType:@"plist"];
+    NSString *plistFile = [[NSBundle mainBundle] pathForResource:countryInfoPathInMainBundle ofType:@"plist"];
     
     self.countryDict = [[NSMutableDictionary alloc] initWithContentsOfFile:plistFile];
     self.countryList = [[self.countryDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];

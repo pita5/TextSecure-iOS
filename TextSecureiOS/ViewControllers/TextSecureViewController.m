@@ -1,5 +1,5 @@
 //
-//  ViewController.m
+//  TextSecureViewController.m
 //  TextSecureiOS
 //
 //  Created by Christine Corbett Moran on 3/24/13.
