@@ -241,6 +241,19 @@ static NSString *masterPw = @"1234test";
 }
 
 -(void) testFirstMessageExchange {
+    
+    /*
+     
+     
+     
+     
+     NOTE : IN THIS TEST THE IDENTITY KEY OF BOB ans alice appear to be the same! 
+     
+     
+     
+    */
+    
+    
     // note in this test alice's identity key = bob's as they are sharing the same keydb. their ephemeral keys will be different.
     TSECKeyPair* aliceIdentityKey = [TSUserKeysDatabase identityKey];
     TSECKeyPair* aliceInitialEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];

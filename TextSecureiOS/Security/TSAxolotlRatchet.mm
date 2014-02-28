@@ -194,7 +194,8 @@
     NSData* ourMasterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey   theirIdentityPublicKey:theirIdentity theirEphemeralPublicKey:theirEphemeral];
     RKCK* receivingChain = [self initialRootKey:ourMasterKey];
     
-    TSECKeyPair* sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    TSECKeyPair* sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // <======== Why do we generate another "sending key", shouldn't we use the ephemeral key here?
+    
     RKCK* sendingChain = [receivingChain createChainWithNewEphemeral:sendingKey fromTheirProvideEphemeral:theirEphemeral]; // This will be used
     
     [receivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirEphemeral];
