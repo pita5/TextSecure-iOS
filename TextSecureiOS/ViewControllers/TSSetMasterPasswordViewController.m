@@ -116,7 +116,8 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if ([textField.text isEqualToString:@""]) {
+    NSString *replacedText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    if ([replacedText isEqualToString:@""]) {
         // Application password shouldn't be empty
         self.nextButton.enabled = NO;
     } else{
