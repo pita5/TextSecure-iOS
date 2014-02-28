@@ -177,7 +177,6 @@
   NSData* ourHmacData = [Cryptography truncatedHMAC:ciphertext withHMACKey:keys.macKey truncation:8];
   if(![ourHmacData isEqualToData:hmac]) {
     return nil;
-    
   }
   // decrypt
   size_t bufferSize           = [ciphertext length] + kCCBlockSizeAES128;
