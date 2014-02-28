@@ -26,6 +26,7 @@
 +(instancetype) withData:(NSData*)data;
 -(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral;
 +(RKCK*) currentSendingChain:(TSThread*)thread;
++(RKCK*) currentReceivingChain:(TSThread*)thread;
 -(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral;
 -(void) saveSendingChainOnThread:(TSThread*)thread withMyNewEphemeral:(TSECKeyPair *)ephemeral;
 @end

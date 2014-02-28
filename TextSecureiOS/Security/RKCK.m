@@ -69,4 +69,14 @@
     return sendingChain;
 }
 
+
++(RKCK*) currentReceivingChain:(TSThread*)thread{
+    RKCK* receivingChain = [[RKCK alloc] init];
+    receivingChain.RK = [TSMessagesDatabase RK:thread];
+    receivingChain.CK = [TSMessagesDatabase CK:thread onChain:TSReceivingChain];
+    receivingChain.ephemeral = [TSMessagesDatabase ephemeralOfReceivingChain:thread];
+    return receivingChain;
+}
+
+
 @end
