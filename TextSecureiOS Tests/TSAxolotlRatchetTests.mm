@@ -248,8 +248,8 @@ static NSString *masterPw = @"1234test";
      
      
      NOTE : IN THIS TEST THE IDENTITY KEY OF BOB ans alice appear to be the same! 
-     
-     
+     corbett: yes it's a hack to use the same database, generically we should setup two dbs, or actually make the pointer to the db a property of the axolotl ratchet code itsel.
+     corbett: I'm not sure that the bug here isn't just the test case itself.
      
     */
     
@@ -272,16 +272,30 @@ static NSString *masterPw = @"1234test";
     
     TSECKeyPair* aliceSendingKey = [TSMessagesDatabase ephemeralOfSendingChain:self.thread1];
     XCTAssertNotNil(aliceSendingKey, @"alice sending key is nil");
-    NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:[self.alice nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
+    TSWhisperMessageKeys* aliceEncryptionKeys =  [self.alice nextMessageKeysOnChain:TSSendingChain];
+
+    NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:aliceEncryptionKeys withCTR:[NSNumber numberWithInt:0]];
     
+    // This is to test our helper methods using the same encryption/decryption keys, and not going through Bob.
+    NSData* tsMessageTrivialEncryptAndDecryptWithAlice = [Cryptography decryptCTRMode:encryptedMessage withKeys:aliceEncryptionKeys withCounter:[NSNumber numberWithInt:0]]; // since we are decrypting with the same keys we encrypted with by definition this should pass
+    TSMessage* trivialDecryptedWithAliceMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageTrivialEncryptAndDecryptWithAlice encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
+    XCTAssertTrue([trivialDecryptedWithAliceMessage.content isEqualToString:self.message1.content], @"message encrypted by alice not equal to that decrypted by alice with the same keys. something is really wrong");
+
+    
+    /* Now for Bob */
     // Clobbers any keys of alices
     [TSKeyManager storeUsernameToken:self.bobUserName];
     [self.bob ratchetSetupFirstReceiver:[aliceIdentityKey publicKey] theirEphemeralKey:[aliceInitialEphemeralKey publicKey] withMyPrekeyId:[NSNumber numberWithInt:prekeyId]];
     
     [self.bob updateChainsOnReceivedMessage:[aliceSendingKey publicKey]];
     
-    TSWhisperMessageKeys* decryptionKeys =  [self.bob nextMessageKeysOnChain:TSReceivingChain];
-    NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:decryptionKeys withCounter:[NSNumber numberWithInt:0]];
+    TSWhisperMessageKeys* bobDecryptionKeys =  [self.bob nextMessageKeysOnChain:TSReceivingChain];
+    XCTAssert([aliceEncryptionKeys.cipherKey isEqualToData:bobDecryptionKeys.cipherKey], @"alice %@ and bob's %@ cipher keys are not equal",aliceEncryptionKeys.cipherKey ,bobDecryptionKeys.cipherKey);
+    XCTAssert([aliceEncryptionKeys.macKey isEqualToData:bobDecryptionKeys.macKey], @"alice %@ and bob's mac keys %@ are not equal",aliceEncryptionKeys.macKey,bobDecryptionKeys.macKey);
+    
+    
+    NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:bobDecryptionKeys withCounter:[NSNumber numberWithInt:0]]; // This is null
+    
     
     TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
     

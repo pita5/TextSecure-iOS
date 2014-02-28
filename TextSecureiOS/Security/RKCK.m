@@ -18,7 +18,7 @@
     
     MKCK* mkck = [[MKCK alloc] init];
     
-    mkck.MK =  [data subdataWithRange:NSMakeRange(0, 31)];
+    mkck.MK =  [data subdataWithRange:NSMakeRange(0, 32)];
     mkck.CK = [data subdataWithRange:NSMakeRange(32, 32)];
     
     return mkck;
@@ -33,7 +33,7 @@
     
     RKCK* rkck = [[RKCK alloc] init];
     
-    rkck.RK =  [data subdataWithRange:NSMakeRange(0, 31)];
+    rkck.RK =  [data subdataWithRange:NSMakeRange(0, 32)];
     rkck.CK = [data subdataWithRange:NSMakeRange(32, 32)];
     
     return rkck;
