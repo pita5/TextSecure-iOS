@@ -6,31 +6,30 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import "ComposeMessageViewController.h"
+#import "TSMessageViewController.h"
 #import "TSMessagesManager.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
 #import "TSMessagesDatabase.h"
 #import "TSMessage.h"
-#import "TSThread.h"
 #import "TSKeyManager.h"
 #import "TSAttachment.h"
 #import "TSAttachmentManager.h"
 #import "Cryptography.h"
 #import "FilePath.h"
 
-@interface ComposeMessageViewController ()
+@interface TSMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
 @property (nonatomic, retain) NSArray *messages;
 @end
 
-@implementation ComposeMessageViewController
+@implementation TSMessageViewController
 
-- (id) initWithConversation:(TSThread*)thread {
+- (id) initWithConversation:(TSContact*)contact {
     
     self = [super initWithNibName:nil bundle:nil];
     
-    self.thread = thread;
+    self.contact = contact;
     self.delegate = self;
     
     [self setupThread];
@@ -39,7 +38,6 @@
 }
 
 -(void) setupThread  {
-    self.contact = [self.thread.participants objectAtIndex:0];
     self.title = [self.contact name];
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
 }
@@ -52,7 +50,6 @@
     [super viewDidLoad];
     
     self.messages = [TSMessagesDatabase messagesOnThread:self.thread];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
     [self.view setBackgroundColor:[UIColor whiteColor]];

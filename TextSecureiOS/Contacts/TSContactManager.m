@@ -47,6 +47,54 @@
     return [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
 }
 
++ (NSNumber*) getContactIDForNumber:(NSString*) phoneNumber{
+    NSNumber *abID = nil;
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
+    
+    __block BOOL accessGranted = NO;
+    
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    
+    ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+        accessGranted = granted;
+        dispatch_semaphore_signal(sema);
+    });
+    
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    
+    if (accessGranted) {
+        CFArrayRef all = ABAddressBookCopyArrayOfAllPeople(addressBook);
+        CFIndex n = ABAddressBookGetPersonCount(addressBook);
+        NSMutableDictionary *ab = [NSMutableDictionary dictionary];
+        
+        for( int i = 0 ; i < n ; i++ )
+        {
+            ABRecordRef ref = CFArrayGetValueAtIndex(all, i);
+            int referenceID = ABRecordGetRecordID(ref);
+            NSNumber *contactReferenceID = [NSNumber numberWithInt:referenceID];
+            // We iterate through users
+            
+            ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
+            for(CFIndex j = 0; j < ABMultiValueGetCount(phones); j++)
+            {
+                NSString *phoneNumber = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(phones, j);
+                
+                NSString *cleanedNumber = [self cleanPhoneNumber:phoneNumber];
+                
+                [ab setObject:contactReferenceID forKey:cleanedNumber];
+            }
+            
+            return [ab objectForKey:phoneNumber];
+            
+            CFRelease(phones);
+        }
+        CFRelease(all);
+    }
+    CFRelease(addressBook);
+    
+    return abID;
+}
+
 + (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock{
     
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
@@ -65,8 +113,8 @@
     if (accessGranted) {
         CFArrayRef all = ABAddressBookCopyArrayOfAllPeople(addressBook);
         CFIndex n = ABAddressBookGetPersonCount(addressBook);
-        NSMutableDictionary *hashedAB = [NSMutableDictionary dictionary];
-        NSMutableDictionary *originalAB = [NSMutableDictionary dictionary];
+        NSMutableDictionary *abIdLookup = [NSMutableDictionary dictionary];
+        NSMutableDictionary *phoneNumberLookup = [NSMutableDictionary dictionary];
         
         for( int i = 0 ; i < n ; i++ )
         {
@@ -83,22 +131,27 @@
                 NSString *cleanedNumber = [self cleanPhoneNumber:phoneNumber];
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
                 
-                [hashedAB setObject:contactReferenceID forKey:hashedPhoneNumber];
-                [originalAB setObject:cleanedNumber forKey:hashedPhoneNumber];
+                // Not showing the user himself in the buddy list.
+                
+                if (![cleanedNumber isEqualToString:[TSKeyManager getUsernameToken]]) {
+                    [abIdLookup setObject:contactReferenceID forKey:hashedPhoneNumber];
+                    [phoneNumberLookup setObject:cleanedNumber forKey:hashedPhoneNumber];
+                }
             }
+            
             CFRelease(phones);
         }
         
         // Send hashes to server
         
-        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[hashedAB allKeys]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[abIdLookup allKeys]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
             
             NSMutableArray *contacts = [NSMutableArray array];
             for (NSDictionary *contactHash in contactsHashes) {
-                TSContact *contact = [[TSContact alloc]init];
-                contact.userABID = [hashedAB objectForKey:[contactHash objectForKey:@"token"]];
-                contact.registeredID = [originalAB objectForKey:[contactHash objectForKey:@"token"]];
+                
+                TSContact *contact = [[TSContact alloc]initWithRegisteredID:[phoneNumberLookup objectForKey:[contactHash objectForKey:@"token"]] relay:[phoneNumberLookup objectForKey:[contactHash objectForKey:@"relay"]] addressBookID:[abIdLookup objectForKey:[contactHash objectForKey:@"token"]]];
+                
                 [contacts addObject:contact];
             }
             

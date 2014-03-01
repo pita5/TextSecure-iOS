@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "TSStorageError.h"
-#import "TSEncryptedDatabase.h"
+#import "TSDatabaseManager.h"
 #import "TSStorageMasterKey.h"
 #import "FilePath.h"
 #import "FMDatabase.h"
@@ -34,7 +34,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
     [TSStorageMasterKey eraseStorageMasterKey];
     [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     
-    [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference];
+    [TSDatabaseManager databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference];
 }
 
 - (void)tearDown
@@ -48,7 +48,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
 - (void)testDatabaseCreate
 {
     NSError *error = nil;
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSDatabaseManager *encDb = [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     
     XCTAssertNotNil(encDb, @"database creation returned nil");
     XCTAssertNil(error, @"database creation returned an error");
@@ -58,9 +58,9 @@ static NSString *dbPreference = @"WasTestDbCreated";
 - (void)testDatabaseCreateWithPreviousDatabaseRemnants
 {
     NSError *error = nil;
-    [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:@"" error:nil];
+    [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:@"" error:nil];
     
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSDatabaseManager *encDb = [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
 
     XCTAssertNil(error, @"database creation returned an error");
     XCTAssertNotNil(encDb, @"database creation failed");
@@ -71,7 +71,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
 {
     [TSStorageMasterKey eraseStorageMasterKey];
     NSError *error = nil;
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSDatabaseManager *encDb = [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     
     XCTAssertNotNil(error, @"database creation succeeded with no master key");
     XCTAssertTrue([[error domain] isEqualToString:TSStorageErrorDomain], @"database creation succeeded with no master key returned an unexpected error");
@@ -84,9 +84,9 @@ static NSString *dbPreference = @"WasTestDbCreated";
 - (void)testDatabaseCreateAndOverwrite
 {
     NSError *error = nil;
-    [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
+    TSDatabaseManager *encDb = [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:&error];
     
     XCTAssertNotNil(error, @"database overwrite did not return an error");
     XCTAssertTrue([[error domain] isEqualToString:TSStorageErrorDomain], @"database overwrite returned an unexpected error");
@@ -97,10 +97,10 @@ static NSString *dbPreference = @"WasTestDbCreated";
 
 - (void)testDatabaseDecrypt
 {
-    [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:nil];
+    [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:nil];
     
     NSError *error = nil;
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] error:&error];
+    TSDatabaseManager *encDb = [TSDatabaseManager databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] error:&error];
     
     XCTAssertNotNil(encDb, @"database decryption returned nil");
     XCTAssertNil(error, @"database decryption returned an error");
@@ -109,7 +109,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
 - (void)testDatabaseDecryptWithCorruptedStorageKey
 {
     NSError *error = nil;
-    TSEncryptedDatabase *encDb = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:nil];
+    TSDatabaseManager *encDb = [TSDatabaseManager  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] updateBoolPreference:dbPreference error:nil];
     
     // Write something to the DB
     [encDb.dbQueue inDatabase: ^(FMDatabase *db) {
@@ -120,7 +120,7 @@ static NSString *dbPreference = @"WasTestDbCreated";
     [TSStorageMasterKey eraseStorageMasterKey];
     [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:&error];
 
-    encDb = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] error:&error];
+    encDb = [TSDatabaseManager databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:dbFileName] error:&error];
     
     XCTAssertNotNil(error, @"database decryption with invalid storage key did not return an error");
     XCTAssertTrue([[error domain] isEqualToString:TSStorageErrorDomain], @"database decryption with invalid storage key returned an unexpected error");

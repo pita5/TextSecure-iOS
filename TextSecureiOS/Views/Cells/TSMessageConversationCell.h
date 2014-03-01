@@ -7,15 +7,12 @@
 //
 
 #import <SWTableViewCell.h>
-#import "TSThread.h"
 
-@interface TSMessageThreadCell : SWTableViewCell
+@interface TSMessageConversationCell : SWTableViewCell
 
 @property(nonatomic, readwrite, strong) UILabel *titleLabel;
 @property(nonatomic, readwrite, strong) UILabel *timestampLabel;
-@property(nonatomic, readwrite, strong) UILabel *threadPreviewLabel;
+@property(nonatomic, readwrite, strong) UILabel *conversationPreviewLabel;
 @property(nonatomic, readwrite, strong) UIImageView *disclosureImageView;
-
-@property(nonatomic, retain) TSThread *thread;
 
 @end

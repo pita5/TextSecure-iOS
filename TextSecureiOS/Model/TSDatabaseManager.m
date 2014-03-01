@@ -1,19 +1,19 @@
 //
-//  TSEncryptedDatabase.m
+//  TSDatabaseManager.m
 //  TextSecureiOS
 //
-//  Created by Alban Diquet on 12/29/13.
-//  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
+//  Created by Frederic Jacobs on 01/03/14.
+//  Copyright (c) 2014 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSEncryptedDatabase.h"
+#import "TSDatabaseManager.h"
 #import "FMDatabaseQueue.h"
 #import "FMDatabase.h"
 #import "TSStorageError.h"
 #import "TSStorageMasterKey.h"
 
 
-@interface TSEncryptedDatabase(Private)
+@interface TSDatabaseManager(Private)
 
 -(instancetype) initWithDatabaseQueue:(FMDatabaseQueue *)queue;
 
@@ -21,9 +21,7 @@
 
 
 
-@implementation TSEncryptedDatabase {
-}
-
+@implementation TSDatabaseManager
 
 +(instancetype) databaseCreateAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName error:(NSError **)error {
     
@@ -36,7 +34,7 @@
     }
     
     // Cleanup remnants of a previous DB
-    [TSEncryptedDatabase databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
+    [TSDatabaseManager databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
     
     // Retrieve storage master key
     NSData *dbMasterKey = [TSStorageMasterKey getStorageMasterKeyWithError:error];
@@ -65,11 +63,11 @@
             *error = [TSStorageError errorDatabaseCreationFailed];
         }
         // Cleanup
-        [TSEncryptedDatabase databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
+        [TSDatabaseManager databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
         return nil;
     }
     
-    TSEncryptedDatabase *encryptedDB = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
+    TSDatabaseManager *encryptedDB = [[TSDatabaseManager alloc] initWithDatabaseQueue:dbQueue];
     
     // Success - store in the preferences that the DB has been successfully created
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:preferenceName];
@@ -112,7 +110,7 @@
         return nil;
     }
     
-    TSEncryptedDatabase *encryptedDB = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
+    TSDatabaseManager *encryptedDB = [[TSDatabaseManager alloc] initWithDatabaseQueue:dbQueue];
     return encryptedDB;
 }
 

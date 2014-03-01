@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 @class TSMessage;
-@class TSThread;
 @class TSMessageSignal;
 @class TSECKeyPair;
 @class TSEncryptedWhisperMessage;

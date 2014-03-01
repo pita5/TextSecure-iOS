@@ -10,37 +10,55 @@
 #import <AddressBook/AddressBook.h>
 #import "TSMessagesDatabase.h"
 
+@interface TSContact ()
+@property (copy) NSNumber *abID;
+@end
+
 @implementation TSContact
 
--(id) initWithRegisteredID:(NSString*)registeredID {
-#warning added this to use the compute thread ids methods as is, but awkward as there are some db calls that assume TSContact has more fields (see header) that will crash with a TSContact initialized in this manner.
-    
-    if(self=[super init]) {
-        self.registeredID = registeredID;
+-(instancetype) initWithRegisteredID:(NSString*)registeredID relay:(NSString*)relay{
+    self=[super init];
+    if(self) {
+        _registeredID = registeredID;
+        _relay = relay;
     }
     return self;
-    
 }
+
+-(instancetype) initWithRegisteredID:(NSString*)registeredID relay:(NSString*)relay addressBookID:(NSNumber *)abId{
+    self = [self initWithRegisteredID:registeredID relay:relay];
+    if (self) {
+        _abID = abId;
+    }
+    return self;
+}
+
+
+- (NSNumber*) addressBookID{
+    // Looking up a AddressBook Token might take time if user has a lot of contacts, let's cache it to avoid doing unecessary calls to the AdressBook.
+    if (!self.abID) {
+        self.abID = [TSContactManager getContactIDForNumber:self.registeredID];
+    }
+    return self.abID;
+}
+
 - (NSString*) name{
-    if (self.userABID){
-        
+    if ([self addressBookID]){
         ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(nil, nil);
-        
-        ABRecordRef currentPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[self userABID] intValue]);
+        ABRecordRef currentPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[self addressBookID] intValue]);
         NSString *firstName = (__bridge_transfer NSString *)ABRecordCopyValue(currentPerson, kABPersonFirstNameProperty) ;
         NSString *surname = (__bridge_transfer NSString *)ABRecordCopyValue(currentPerson, kABPersonLastNameProperty) ;
-        
         CFRelease(addressBook);
-    
         return [NSString stringWithFormat:@"%@ %@", firstName?firstName:@"", surname?surname:@""];
-        
-    }else {return nil;}
+    }else{
+        return [self registeredID];
+    }
 }
 
 - (NSString*) labelForRegisteredNumber{
-    if (self.userABID && self.registeredID) {
+    if ([self addressBookID] && self.registeredID) {
         ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(nil, nil);
-        ABRecordRef currentPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[self userABID] intValue]);
+        ABRecordRef currentPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[self addressBookID] intValue]);
         
         ABMutableMultiValueRef phoneNumbers = ABRecordCopyValue(currentPerson, kABPersonPhoneProperty);
         
@@ -56,15 +74,14 @@
             NSString *number = (__bridge NSString*) phoneNumber;
 
             if ([[TSContactManager cleanPhoneNumber:number] isEqualToString:self.registeredID]) {
+                
                 CFStringRef raw_label = ABMultiValueCopyLabelAtIndex(phoneNumbers, i);
                 label = (__bridge_transfer NSString *)(ABAddressBookCopyLocalizedLabel(raw_label));
-                
                 CFRelease(raw_label);
                 CFRelease(phoneNumberLabel);
                 CFRelease(phoneNumber);
                 break;
             }
-            
             CFRelease(phoneNumberLabel);
             CFRelease(phoneNumber);
         }

@@ -15,12 +15,12 @@
 #import "TSContactManager.h"
 #import "TSContact.h"
 #import "TSMessage.h"
-#import "ComposeMessageViewController.h"
-#import "TSMessageThreadCell.h"
+#import "TSMessageViewController.h"
+#import "TSMessageConversationCell.h"
 #import "PasswordUnlockViewController.h"
 #import "TSStorageMasterKey.h"
-#import "TSThread.h"
 #import "TSContactPickerViewController.h"
+#import "TSConversation.h"
 
 static NSString *kCellIdentifier = @"CellIdentifier";
 
@@ -33,21 +33,20 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *settingsBarButtonItem;
-@property (nonatomic, strong) UIView *searchBarCoverView;
-@property (nonatomic, strong) NSArray *threads;
+//@property (nonatomic, strong) UIView *searchBarCoverView;
+@property (nonatomic, strong) NSArray *conversations;
 @end
 
 @implementation TextSecureViewController
 
 - (void)viewDidLoad {
-    self.threads = @[];
     [super viewDidLoad];
-    
-    self.threads = [TSMessagesDatabase threads];
     self.title = @"Messages";
-    self.navigationController.navigationBarHidden = NO;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
+#warning   // FETCH CONVERSATIONS WITH COMPLETION BLOCK
+    
+    UIEdgeInsets inset = UIEdgeInsetsMake(44, 0, 0, 0);
+    self.tableView.contentInset = inset;
     
     self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
     self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
@@ -55,13 +54,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
     self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
     
-    self.searchBarCoverView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-    self.searchBarCoverView.backgroundColor = [UIColor grayColor];
-    self.searchBarCoverView.alpha = 0;
-    self.searchBarCoverView.userInteractionEnabled = NO;
-    [self.searchBar addSubview:self.searchBarCoverView];
-    
-    [self.tableView registerClass:[TSMessageThreadCell class] forCellReuseIdentifier:kCellIdentifier];
+    [self.tableView registerClass:[TSMessageConversationCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = [UIColor lightGrayColor];
 }
@@ -100,14 +93,13 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
  	UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:kCellIdentifier];
     
-    if ([cell isKindOfClass:[TSMessageThreadCell class]]) {
+    if ([cell isKindOfClass:[TSMessageConversationCell class]]) {
         
-        TSThread* thread = [self.threads objectAtIndex:indexPath.row];
-        TSMessageThreadCell *threadCell = (TSMessageThreadCell *)cell;
-        threadCell.thread = thread;
-        threadCell.titleLabel.text =thread.latestMessage.senderId;
-        threadCell.timestampLabel.text = [dateFormatter stringFromDate:thread.latestMessage.timestamp];
-        threadCell.threadPreviewLabel.text = thread.latestMessage.content;
+        TSConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
+        TSMessageConversationCell *threadCell = (TSMessageConversationCell *)cell;
+        threadCell.titleLabel.text = [conversation.contact name];
+        threadCell.timestampLabel.text = [dateFormatter stringFromDate:conversation.lastMessageDate];
+        threadCell.conversationPreviewLabel.text = [conversation lastMessage];
         
         UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         threadCell.disclosureImageView.image = disclosureIndicatorImage;
@@ -128,7 +120,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)section{
     if([TSMessagesDatabase databaseWasCreated]) {
         // don't display until db is unlocked (we have "dummy data" right now, but this better mimics UX behavior)
-        return [_threads count];
+        return [self.conversations count];
     }
     else {
         return 0;
@@ -160,8 +152,8 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    TSThread* thread = [self.threads objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:[[ComposeMessageViewController alloc] initWithConversation:thread] animated:YES];
+    TSConversation* conversation = [self.conversations objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:[[TSMessageViewController alloc] initWithConversation:conversation.contact] animated:YES];
 }
 
 -(void) reloadModel:(NSNotification*)notification {
@@ -185,12 +177,14 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 #pragma mark - SWTableViewCellDelegate
 
-- (void)swipeableTableViewCell:(TSMessageThreadCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
-    [TSMessagesDatabase deleteThread:[self.threads objectAtIndex:index] withCompletionBlock:^(BOOL success) {
-        [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
-        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        
-    }];
+- (void)swipeableTableViewCell:(TSMessageConversationCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
+
+#warning currently not supported
+    
+    //    [TSMessagesDatabase deleteThread:[self.conversations objectAtIndex:index] withCompletionBlock:^(BOOL success) {
+//        [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
+//        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    }];
 }
 
 // This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,
@@ -202,29 +196,19 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 - (void)animateEnteringEditingMode:(BOOL)isEditing {
-    __weak typeof(self) weakSelf = self;
-    CGFloat animationDuration = 0.3f;
+    //    __weak typeof(self) weakSelf = self;
+    //    CGFloat animationDuration = 0.3f;
     
     if (!isEditing) {
+        
         [self.navigationItem setRightBarButtonItem:self.composeBarButtonItem animated:YES];
         [self.navigationItem setLeftBarButtonItem:self.settingsBarButtonItem animated:YES];
         
-        [UIView animateWithDuration:animationDuration animations:^{
-            weakSelf.searchBarCoverView.alpha = 0;
-        } completion:^(BOOL finished) {
-            weakSelf.searchBarCoverView.alpha = 0;
-            weakSelf.searchBar.userInteractionEnabled = YES;
-        }];
     } else {
+        
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-        
-        [UIView animateWithDuration:animationDuration animations:^{
-            weakSelf.searchBarCoverView.alpha = 0.3;
-        } completion:^(BOOL finished) {
-            weakSelf.searchBarCoverView.alpha = 0.3;
-            weakSelf.searchBar.userInteractionEnabled = NO;
-        }];
+    
     }
 }
 

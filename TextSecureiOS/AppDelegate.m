@@ -27,7 +27,6 @@
 #define firstLaunchKey @"FirstLaunch"
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-#warning remove
     // UIAppearance proxy setup
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor]} forState:UIControlStateDisabled];
@@ -69,28 +68,29 @@
         window.hidden = YES;
         window.userInteractionEnabled = NO;
         window.windowLevel = CGFLOAT_MAX;
+        self.blankWindow.rootViewController = [[UIViewController alloc] init];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.blankWindow.bounds];
+        if (self.blankWindow.bounds.size.height == 568) {
+            imageView.image = [UIImage imageNamed:@"Default-568h"];
+        } else {
+            imageView.image = [UIImage imageNamed:@"Default"];
+        }
+        imageView.opaque = YES;
+        [self.blankWindow.rootViewController.view addSubview:imageView];
         window;
     });
-
+    
+    
 	return YES;
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // obscure the application's windows
-    self.blankWindow.rootViewController = [[UIViewController alloc] init];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.blankWindow.bounds];
-    if (self.blankWindow.bounds.size.height == 568) {
-        imageView.image = [UIImage imageNamed:@"Default-568h"];
-    } else {
-        imageView.image = [UIImage imageNamed:@"Default"];
-    }
-    imageView.opaque = YES;
-    [self.blankWindow.rootViewController.view addSubview:imageView];
+    
     self.blankWindow.hidden = NO;
+    
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    self.blankWindow.rootViewController = nil;
     self.blankWindow.hidden = YES;
 }
 

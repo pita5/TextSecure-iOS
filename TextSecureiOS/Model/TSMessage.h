@@ -9,18 +9,20 @@
 
 #import <Foundation/Foundation.h>
 @class TSContact;
-@class TSAttachment;
+@class TSGroup;
 
+typedef void (^TSMessageChangeState)(BOOL success);
 
 @interface TSMessage : NSObject
 
-@property (nonatomic,strong,readonly) NSString *senderId;
-@property (nonatomic,strong,readonly) NSString *recipientId;
-@property (nonatomic,strong,readonly) NSDate *timestamp;
-@property (nonatomic,strong,readonly) NSString *content;
-@property (nonatomic,strong,readonly) TSAttachment *attachment;
+@property (nonatomic, readonly) NSString *senderId;
+@property (nonatomic, readonly) NSString *recipientId;
+@property (nonatomic, readonly) NSDate *timestamp;
+@property (nonatomic, readonly) NSString *content;
+@property (nonatomic, readonly) NSArray *attachments;
+@property (nonatomic, readonly) TSGroup *group;
+@property (nonatomic, readonly) int *state;
 
-+(instancetype) messageWithContent:(NSString *)text sender:(NSString *)senderId recipient:(NSString *)recipientId date:(NSDate *)date;
-+(instancetype) messageWithContent:(NSString *)text sender:(NSString *)senderId recipient:(NSString *)recipientId date:(NSDate *)date attachment:(TSAttachment *)attachment;
+-(BOOL) isUnread;
 
 @end

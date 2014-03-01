@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSMessageThreadCell.h"
+#import "TSMessageConversationCell.h"
 
-@implementation TSMessageThreadCell
+@implementation TSMessageConversationCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

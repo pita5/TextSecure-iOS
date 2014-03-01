@@ -11,4 +11,5 @@
 @interface TSWhisperMessageKeys : NSObject<AxolotlEphemeralStorageMessagingKeys>
 
 -(id)initWithCipherKey:(NSData*)cipherKey macKey:(NSData*)macKey;
+
 @end

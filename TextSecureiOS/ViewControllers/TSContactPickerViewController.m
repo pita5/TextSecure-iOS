@@ -8,7 +8,7 @@
 
 #import "TSContactPickerViewController.h"
 #import "TSContactManager.h"
-#import "ComposeMessageViewController.h"
+#import "TSMessageViewController.h"
 #import "TSThread.h"
 
 #define tableViewCellsDequeID @"TSContactCell"
@@ -72,7 +72,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:[NSArray arrayWithObject:[self.whisperContacts objectAtIndex:indexPath.row]]save:true]] animated:NO];
+    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[TSMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:[NSArray arrayWithObject:[self.whisperContacts objectAtIndex:indexPath.row]]save:true]] animated:NO];
     [self dismissViewControllerAnimated:YES
                              completion:nil];
 }

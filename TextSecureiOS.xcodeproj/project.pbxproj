@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		05B94BF218BD28E400708011 /* VerificationViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */; };
 		05B94BF418BD2EA000708011 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
-		4C0ACB4B186C876200B328D5 /* TSMessageThreadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0ACB4A186C876200B328D5 /* TSMessageThreadCell.m */; };
+		4C0ACB4B186C876200B328D5 /* TSMessageConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */; };
 		4C0ACB7C186CF2F100B328D5 /* avatar_bonnot.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB6E186CF2F100B328D5 /* avatar_bonnot.png */; };
 		4C0ACB7D186CF2F100B328D5 /* avatar_bonnot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB6F186CF2F100B328D5 /* avatar_bonnot@2x.png */; };
 		4C0ACB7E186CF2F100B328D5 /* avatar_duval.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB70186CF2F100B328D5 /* avatar_duval.png */; };
@@ -32,7 +32,7 @@
 		8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8B187088D80023A781 /* TSECKeyPair.m */; };
 		8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */; };
 		8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */; };
-		8CF7BD981870D9450023A781 /* TSEncryptedDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */; };
+		8CF7BD981870D9450023A781 /* TSDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD971870D9450023A781 /* TSDatabaseManager.m */; };
 		8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */; };
 		8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */; };
 		8CF7BD9F187130F80023A781 /* TSStorageMasterKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */; };
@@ -408,7 +408,6 @@
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5E6CBFC187629D4002A1735 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */; };
-		A5E6CBFF18762BDB002A1735 /* TSAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CBFE18762BDB002A1735 /* TSAttachment.m */; };
 		A5E6CC09187AC6D5002A1735 /* TSDownloadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC08187AC6D5002A1735 /* TSDownloadAttachment.m */; };
 		A5E6CC6D187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC62187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm */; };
 		A5E6CC6E187D0F4B002A1735 /* IncomingPushMessageSignal.proto in Resources */ = {isa = PBXBuildFile; fileRef = A5E6CC63187D0F4B002A1735 /* IncomingPushMessageSignal.proto */; };
@@ -431,8 +430,14 @@
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
-		B60CEE75184B4971006A8256 /* TSThread.m in Sources */ = {isa = PBXBuildFile; fileRef = B60CEE74184B4971006A8256 /* TSThread.m */; };
-		B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* ComposeMessageViewController.m */; };
+		B61E059918C15C5E00AC49CA /* TSMessageOutgoing.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E059818C15C5E00AC49CA /* TSMessageOutgoing.m */; };
+		B61E059C18C15C7B00AC49CA /* TSMessageIncoming.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E059B18C15C7B00AC49CA /* TSMessageIncoming.m */; };
+		B61E05A218C1693400AC49CA /* TSAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05A118C1693400AC49CA /* TSAttachment.m */; };
+		B61E05A918C1748A00AC49CA /* TSSessionID.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05A818C1748A00AC49CA /* TSSessionID.m */; };
+		B61E05AF18C1884500AC49CA /* TSConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05AE18C1884500AC49CA /* TSConversation.m */; };
+		B61E05B218C1889500AC49CA /* TSGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05B118C1889500AC49CA /* TSGroup.m */; };
+		B61E05B618C254CA00AC49CA /* TSSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05B518C254CA00AC49CA /* TSSession.m */; };
+		B635B3C7182181E1003CE732 /* TSMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* TSMessageViewController.m */; };
 		B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EC18218456003CE732 /* CoreAudio.framework */; };
 		B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EE18218481003CE732 /* AudioToolbox.framework */; };
 		B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B639AF0C17F5A68100B2244D /* TSNetworkManager.m */; };
@@ -468,8 +473,8 @@
 
 /* Begin PBXFileReference section */
 		05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationViewControllerTests.m; sourceTree = "<group>"; wrapsLines = 1; };
-		4C0ACB49186C876200B328D5 /* TSMessageThreadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageThreadCell.h; path = Views/Cells/TSMessageThreadCell.h; sourceTree = "<group>"; };
-		4C0ACB4A186C876200B328D5 /* TSMessageThreadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageThreadCell.m; path = Views/Cells/TSMessageThreadCell.m; sourceTree = "<group>"; };
+		4C0ACB49186C876200B328D5 /* TSMessageConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageConversationCell.h; path = Views/Cells/TSMessageConversationCell.h; sourceTree = "<group>"; };
+		4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageConversationCell.m; path = Views/Cells/TSMessageConversationCell.m; sourceTree = "<group>"; };
 		4C0ACB6E186CF2F100B328D5 /* avatar_bonnot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_bonnot.png; sourceTree = "<group>"; };
 		4C0ACB6F186CF2F100B328D5 /* avatar_bonnot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_bonnot@2x.png"; sourceTree = "<group>"; };
 		4C0ACB70186CF2F100B328D5 /* avatar_duval.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_duval.png; sourceTree = "<group>"; };
@@ -502,8 +507,8 @@
 		8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSECKeyPairTests.m; sourceTree = "<group>"; };
 		8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStorageMasterKey.h; path = Security/TSStorageMasterKey.h; sourceTree = "<group>"; };
 		8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStorageMasterKey.m; path = Security/TSStorageMasterKey.m; sourceTree = "<group>"; };
-		8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSEncryptedDatabase.h; path = Model/TSEncryptedDatabase.h; sourceTree = "<group>"; };
-		8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSEncryptedDatabase.m; path = Model/TSEncryptedDatabase.m; sourceTree = "<group>"; };
+		8CF7BD961870D9450023A781 /* TSDatabaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSDatabaseManager.h; path = Model/TSDatabaseManager.h; sourceTree = "<group>"; };
+		8CF7BD971870D9450023A781 /* TSDatabaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSDatabaseManager.m; path = Model/TSDatabaseManager.m; sourceTree = "<group>"; };
 		8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUserKeysDatabase.h; path = Model/TSUserKeysDatabase.h; sourceTree = "<group>"; };
 		8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUserKeysDatabase.m; path = Model/TSUserKeysDatabase.m; sourceTree = "<group>"; };
 		8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUserKeysDatabaseTests.m; path = "TextSecureiOS Tests/TSUserKeysDatabaseTests.m"; sourceTree = SOURCE_ROOT; };
@@ -907,8 +912,6 @@
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		A5E6CBFD18762BDB002A1735 /* TSAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachment.h; path = Model/TSAttachment.h; sourceTree = "<group>"; };
-		A5E6CBFE18762BDB002A1735 /* TSAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachment.m; path = Model/TSAttachment.m; sourceTree = "<group>"; };
 		A5E6CC07187AC6D5002A1735 /* TSDownloadAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSDownloadAttachment.h; path = TextSecureiOS/Networking/Requests/TSDownloadAttachment.h; sourceTree = "<group>"; };
 		A5E6CC08187AC6D5002A1735 /* TSDownloadAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSDownloadAttachment.m; path = TextSecureiOS/Networking/Requests/TSDownloadAttachment.m; sourceTree = "<group>"; };
 		A5E6CC44187BFCB6002A1735 /* TSProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSProtocols.h; path = Security/TSProtocols.h; sourceTree = "<group>"; };
@@ -937,8 +940,6 @@
 		A5E6CC7F187D0FF1002A1735 /* TSUnencryptedWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSUnencryptedWhisperMessage.hh; path = ProtocolBufferWrappers/TSUnencryptedWhisperMessage.hh; sourceTree = "<group>"; };
 		A5E6CC80187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSUnencryptedWhisperMessage.mm; path = ProtocolBufferWrappers/TSUnencryptedWhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC81187D0FF1002A1735 /* TSWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSWhisperMessage.hh; path = ProtocolBufferWrappers/TSWhisperMessage.hh; sourceTree = "<group>"; };
-		A5E6CC8A187D1277002A1735 /* TSAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachment.h; path = Model/TSAttachment.h; sourceTree = "<group>"; };
-		A5E6CC8B187D1277002A1735 /* TSAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachment.m; path = Model/TSAttachment.m; sourceTree = "<group>"; };
 		A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSWhisperMessage.mm; path = ProtocolBufferWrappers/TSWhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC95187FB7C6002A1735 /* TSWhisperMessageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWhisperMessageKeys.h; path = Model/TSWhisperMessageKeys.h; sourceTree = "<group>"; };
 		A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWhisperMessageKeys.m; path = Model/TSWhisperMessageKeys.m; sourceTree = "<group>"; };
@@ -953,10 +954,22 @@
 		A5FBAB93184E980E0012E9A5 /* TSUploadAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUploadAttachment.h; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.h; sourceTree = "<group>"; };
 		A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUploadAttachment.m; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.m; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B60CEE73184B4971006A8256 /* TSThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSThread.h; path = Model/TSThread.h; sourceTree = "<group>"; };
-		B60CEE74184B4971006A8256 /* TSThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSThread.m; path = Model/TSThread.m; sourceTree = "<group>"; };
-		B635B38F182181E1003CE732 /* ComposeMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComposeMessageViewController.h; path = ViewControllers/Conversations/ComposeMessageViewController.h; sourceTree = "<group>"; };
-		B635B390182181E1003CE732 /* ComposeMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComposeMessageViewController.m; path = ViewControllers/Conversations/ComposeMessageViewController.m; sourceTree = "<group>"; };
+		B61E059718C15C5E00AC49CA /* TSMessageOutgoing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageOutgoing.h; path = Model/TSMessageOutgoing.h; sourceTree = "<group>"; };
+		B61E059818C15C5E00AC49CA /* TSMessageOutgoing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageOutgoing.m; path = Model/TSMessageOutgoing.m; sourceTree = "<group>"; };
+		B61E059A18C15C7B00AC49CA /* TSMessageIncoming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageIncoming.h; path = Model/TSMessageIncoming.h; sourceTree = "<group>"; };
+		B61E059B18C15C7B00AC49CA /* TSMessageIncoming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageIncoming.m; path = Model/TSMessageIncoming.m; sourceTree = "<group>"; };
+		B61E05A018C1693400AC49CA /* TSAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachment.h; path = Model/TSAttachment.h; sourceTree = "<group>"; };
+		B61E05A118C1693400AC49CA /* TSAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachment.m; path = Model/TSAttachment.m; sourceTree = "<group>"; };
+		B61E05A718C1748A00AC49CA /* TSSessionID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSessionID.h; path = Model/TSSessionID.h; sourceTree = "<group>"; };
+		B61E05A818C1748A00AC49CA /* TSSessionID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSessionID.m; path = Model/TSSessionID.m; sourceTree = "<group>"; };
+		B61E05AD18C1884500AC49CA /* TSConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSConversation.h; path = Model/TSConversation.h; sourceTree = "<group>"; };
+		B61E05AE18C1884500AC49CA /* TSConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSConversation.m; path = Model/TSConversation.m; sourceTree = "<group>"; };
+		B61E05B018C1889500AC49CA /* TSGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroup.h; path = Model/TSGroup.h; sourceTree = "<group>"; };
+		B61E05B118C1889500AC49CA /* TSGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroup.m; path = Model/TSGroup.m; sourceTree = "<group>"; };
+		B61E05B418C254CA00AC49CA /* TSSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSession.h; path = Model/TSSession.h; sourceTree = "<group>"; };
+		B61E05B518C254CA00AC49CA /* TSSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSession.m; path = Model/TSSession.m; sourceTree = "<group>"; };
+		B635B38F182181E1003CE732 /* TSMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageViewController.h; path = ViewControllers/Conversations/TSMessageViewController.h; sourceTree = "<group>"; };
+		B635B390182181E1003CE732 /* TSMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageViewController.m; path = ViewControllers/Conversations/TSMessageViewController.m; sourceTree = "<group>"; };
 		B635B3EC18218456003CE732 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		B635B3EE18218481003CE732 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		B639AF0B17F5A68100B2244D /* TSNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSNetworkManager.h; path = TextSecureiOS/Networking/TSNetworkManager.h; sourceTree = "<group>"; };
@@ -1055,8 +1068,8 @@
 		4C0ACB48186C86E600B328D5 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				4C0ACB49186C876200B328D5 /* TSMessageThreadCell.h */,
-				4C0ACB4A186C876200B328D5 /* TSMessageThreadCell.m */,
+				4C0ACB49186C876200B328D5 /* TSMessageConversationCell.h */,
+				4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1116,37 +1129,13 @@
 			name = Storage;
 			sourceTree = "<group>";
 		};
-		8CCC26381872A3CB00E521A1 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				8C49FC0E18497E86006132F6 /* TSStorageError.h */,
-				8C49FC0F18497E86006132F6 /* TSStorageError.m */,
-				8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */,
-				8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */,
-				8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */,
-				8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */,
-				A515AFD9180966E30084ABA5 /* TSMessagesDatabase.h */,
-				A515AFDA180966E30084ABA5 /* TSMessagesDatabase.m */,
-				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
-				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
-			);
-			name = Storage;
-			sourceTree = "<group>";
-		};
 		A51B779B17050EDB002B8E53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				8CCC26381872A3CB00E521A1 /* Storage */,
-				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
-				A5145B30184AAD51007BDC73 /* TSMessage.m */,
-				A5E6CC8A187D1277002A1735 /* TSAttachment.h */,
-				A5E6CC8B187D1277002A1735 /* TSAttachment.m */,
-				B60CEE73184B4971006A8256 /* TSThread.h */,
-				B60CEE74184B4971006A8256 /* TSThread.m */,
-				A5E6CC95187FB7C6002A1735 /* TSWhisperMessageKeys.h */,
-				A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */,
-				A5E6CBFD18762BDB002A1735 /* TSAttachment.h */,
-				A5E6CBFE18762BDB002A1735 /* TSAttachment.m */,
+				B61E05AA18C1754D00AC49CA /* Cryptography */,
+				B61E05B318C188A300AC49CA /* Conversations */,
+				B61E059618C15C2800AC49CA /* Messages */,
+				B61E05A618C169E300AC49CA /* Users */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1204,11 +1193,11 @@
 				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
 				B6F10B1417EF49D700723719 /* Categories */,
-				B6B478E01809B9B3005DDE12 /* Contacts */,
 				A51B779B17050EDB002B8E53 /* Model */,
 				B639AF0A17F5A53700B2244D /* Networking */,
 				A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */,
 				A5F15AA117029BB400856385 /* Security */,
+				B61E05AB18C179F300AC49CA /* Storage */,
 				4C0ACB47186C86DE00B328D5 /* Views */,
 				A5F15AA217029BCF00856385 /* ViewControllers */,
 				A5F15AA317029C5300856385 /* Utility */,
@@ -1668,16 +1657,12 @@
 				A538A27D1869DC6500CD0A3D /* TSKeyManager.m */,
 				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,
 				A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */,
-				8CF7BD8A187088D80023A781 /* TSECKeyPair.h */,
-				8CF7BD8B187088D80023A781 /* TSECKeyPair.m */,
 				A5169D27170FEB8F00A2CE9E /* Cryptography.h */,
 				A5169D26170FEB8F00A2CE9E /* Cryptography.m */,
 				8C3C917518544FDF003EA71D /* TSHKDF.h */,
 				8C3C917618544FDF003EA71D /* TSHKDF.m */,
 				A5E6CC9C18837C31002A1735 /* TSAxolotlRatchet.hh */,
 				A5E6CC9D18837C31002A1735 /* TSAxolotlRatchet.mm */,
-				A5873CC91886F95700FBBDEA /* RKCK.h */,
-				A5873CCA1886F95700FBBDEA /* RKCK.m */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -1685,9 +1670,12 @@
 		A5F15AA217029BCF00856385 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */,
+				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
+				B635B38F182181E1003CE732 /* TSMessageViewController.h */,
+				B635B390182181E1003CE732 /* TSMessageViewController.m */,
 				B643D7DC189EB9020025C6F3 /* TSContactPickerViewController.h */,
 				B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */,
-				B613B4D41815CEA900755184 /* Conversation */,
 				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
@@ -1713,15 +1701,83 @@
 			name = Utility;
 			sourceTree = "<group>";
 		};
-		B613B4D41815CEA900755184 /* Conversation */ = {
+		B61E059618C15C2800AC49CA /* Messages */ = {
 			isa = PBXGroup;
 			children = (
-				A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */,
-				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
-				B635B38F182181E1003CE732 /* ComposeMessageViewController.h */,
-				B635B390182181E1003CE732 /* ComposeMessageViewController.m */,
+				B61E05A018C1693400AC49CA /* TSAttachment.h */,
+				B61E05A118C1693400AC49CA /* TSAttachment.m */,
+				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
+				A5145B30184AAD51007BDC73 /* TSMessage.m */,
+				B61E059718C15C5E00AC49CA /* TSMessageOutgoing.h */,
+				B61E059818C15C5E00AC49CA /* TSMessageOutgoing.m */,
+				B61E059A18C15C7B00AC49CA /* TSMessageIncoming.h */,
+				B61E059B18C15C7B00AC49CA /* TSMessageIncoming.m */,
 			);
-			name = Conversation;
+			name = Messages;
+			sourceTree = "<group>";
+		};
+		B61E05A618C169E300AC49CA /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				B6B478E11809BB3E005DDE12 /* TSContactManager.h */,
+				B6B478E21809BB3E005DDE12 /* TSContactManager.m */,
+				B693C5A618147CED007E8360 /* TSContact.h */,
+				B693C5A718147CED007E8360 /* TSContact.m */,
+				B61E05A718C1748A00AC49CA /* TSSessionID.h */,
+				B61E05A818C1748A00AC49CA /* TSSessionID.m */,
+			);
+			name = Users;
+			sourceTree = "<group>";
+		};
+		B61E05AA18C1754D00AC49CA /* Cryptography */ = {
+			isa = PBXGroup;
+			children = (
+				B61E05B418C254CA00AC49CA /* TSSession.h */,
+				B61E05B518C254CA00AC49CA /* TSSession.m */,
+				8CF7BD8A187088D80023A781 /* TSECKeyPair.h */,
+				8CF7BD8B187088D80023A781 /* TSECKeyPair.m */,
+				A5873CC91886F95700FBBDEA /* RKCK.h */,
+				A5873CCA1886F95700FBBDEA /* RKCK.m */,
+				A5E6CC95187FB7C6002A1735 /* TSWhisperMessageKeys.h */,
+				A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */,
+			);
+			name = Cryptography;
+			sourceTree = "<group>";
+		};
+		B61E05AB18C179F300AC49CA /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				B61E05AC18C17B1600AC49CA /* Tables */,
+				8C49FC0E18497E86006132F6 /* TSStorageError.h */,
+				8C49FC0F18497E86006132F6 /* TSStorageError.m */,
+				8CF7BD961870D9450023A781 /* TSDatabaseManager.h */,
+				8CF7BD971870D9450023A781 /* TSDatabaseManager.m */,
+				8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */,
+				8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */,
+				A515AFD9180966E30084ABA5 /* TSMessagesDatabase.h */,
+				A515AFDA180966E30084ABA5 /* TSMessagesDatabase.m */,
+				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
+				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
+			);
+			name = Storage;
+			sourceTree = "<group>";
+		};
+		B61E05AC18C17B1600AC49CA /* Tables */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Tables;
+			sourceTree = "<group>";
+		};
+		B61E05B318C188A300AC49CA /* Conversations */ = {
+			isa = PBXGroup;
+			children = (
+				B61E05AD18C1884500AC49CA /* TSConversation.h */,
+				B61E05AE18C1884500AC49CA /* TSConversation.m */,
+				B61E05B018C1889500AC49CA /* TSGroup.h */,
+				B61E05B118C1889500AC49CA /* TSGroup.m */,
+			);
+			name = Conversations;
 			sourceTree = "<group>";
 		};
 		B639AF0A17F5A53700B2244D /* Networking */ = {
@@ -1789,17 +1845,6 @@
 				B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */,
 			);
 			name = Settings;
-			sourceTree = "<group>";
-		};
-		B6B478E01809B9B3005DDE12 /* Contacts */ = {
-			isa = PBXGroup;
-			children = (
-				B6B478E11809BB3E005DDE12 /* TSContactManager.h */,
-				B6B478E21809BB3E005DDE12 /* TSContactManager.m */,
-				B693C5A618147CED007E8360 /* TSContact.h */,
-				B693C5A718147CED007E8360 /* TSContact.m */,
-			);
-			name = Contacts;
 			sourceTree = "<group>";
 		};
 		B6E2CFB717F7A89000200B69 /* Certificate */ = {
@@ -2383,6 +2428,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5E6CC71187D0F4B002A1735 /* PushMessageContent.pb.mm in Sources */,
+				B61E05AF18C1884500AC49CA /* TSConversation.m in Sources */,
 				B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */,
 				B6B478E61809E7F5005DDE12 /* TSContactsIntersectionRequest.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
@@ -2392,38 +2438,40 @@
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
 				A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
+				B61E05B618C254CA00AC49CA /* TSSession.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
-				B60CEE75184B4971006A8256 /* TSThread.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */,
+				B61E05B218C1889500AC49CA /* TSGroup.m in Sources */,
 				A5E6CC97187FB7C6002A1735 /* TSWhisperMessageKeys.m in Sources */,
 				8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				A5E6CC90187D1E41002A1735 /* TSWhisperMessage.mm in Sources */,
 				A5E6CC85187D0FF1002A1735 /* TSProtocolBufferWrapper.mm in Sources */,
 				A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */,
-				4C0ACB4B186C876200B328D5 /* TSMessageThreadCell.m in Sources */,
+				4C0ACB4B186C876200B328D5 /* TSMessageConversationCell.m in Sources */,
 				A5145B3A184B68EA007BDC73 /* TSRequestAttachment.m in Sources */,
 				A5E6CC9E18837C31002A1735 /* TSAxolotlRatchet.mm in Sources */,
 				A5E6CC73187D0F4B002A1735 /* WhisperMessage.pb.mm in Sources */,
 				A5E6CC09187AC6D5002A1735 /* TSDownloadAttachment.m in Sources */,
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
 				B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */,
-				8CF7BD981870D9450023A781 /* TSEncryptedDatabase.m in Sources */,
+				8CF7BD981870D9450023A781 /* TSDatabaseManager.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				A5E6CC6D187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm in Sources */,
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
-				A5E6CBFF18762BDB002A1735 /* TSAttachment.m in Sources */,
 				A515AFDB180966E30084ABA5 /* TSMessagesDatabase.m in Sources */,
 				8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */,
 				A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */,
-				B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */,
+				B61E059C18C15C7B00AC49CA /* TSMessageIncoming.m in Sources */,
+				B635B3C7182181E1003CE732 /* TSMessageViewController.m in Sources */,
 				A5E6CC6F187D0F4B002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */,
 				B6D23DAF18A91E9800F7E932 /* TSRegisterForPushRequest.m in Sources */,
 				A5E6CC83187D0FF1002A1735 /* TSMessageSignal.mm in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
+				B61E05A218C1693400AC49CA /* TSAttachment.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
@@ -2437,11 +2485,13 @@
 				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */,
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
+				B61E05A918C1748A00AC49CA /* TSSessionID.m in Sources */,
 				A5620DEC186BD27F0033483E /* TSMessagesManager.mm in Sources */,
 				8C49FC1018497E86006132F6 /* TSStorageError.m in Sources */,
 				A5873CCB1886F95700FBBDEA /* RKCK.m in Sources */,
 				B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */,
 				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
+				B61E059918C15C5E00AC49CA /* TSMessageOutgoing.m in Sources */,
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
 				4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */,
@@ -2624,7 +2674,7 @@
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "F6107428-6DD2-4184-B965-C80E88D4D42B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2646,7 +2696,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "F6107428-6DD2-4184-B965-C80E88D4D42B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};

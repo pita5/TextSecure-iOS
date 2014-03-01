@@ -16,7 +16,6 @@
 #import "TSStorageError.h"
 #import "Cryptography.h"
 #import "TSStorageMasterKey.h"
-#import "TSThread.h"
 #import "TSContact.h"
 #import "TSECKeyPair.h"
 #import "TSMessage.h"
@@ -74,7 +73,6 @@ static NSString *masterPw = @"1234test";
     int hmacKeyMK = 0x01;
     int hmacKeyCK = 0x02;
     NSData* nextMK = [Cryptography computeHMAC:CK withHMACKey:[NSData dataWithBytes:&hmacKeyMK length:sizeof(hmacKeyMK)]];
-    
     NSData* nextCK = [Cryptography computeHMAC:CK  withHMACKey:[NSData dataWithBytes:&hmacKeyCK length:sizeof(hmacKeyCK)]];
     MKCK *mkCK = [[MKCK alloc] init];
     mkCK.MK = nextMK;
@@ -289,9 +287,7 @@ static NSString *masterPw = @"1234test";
     XCTAssert([aliceEncryptionKeys.cipherKey isEqualToData:bobDecryptionKeys.cipherKey], @"alice %@ and bob's %@ cipher keys are not equal",aliceEncryptionKeys.cipherKey ,bobDecryptionKeys.cipherKey);
     XCTAssert([aliceEncryptionKeys.macKey isEqualToData:bobDecryptionKeys.macKey], @"alice %@ and bob's mac keys %@ are not equal",aliceEncryptionKeys.macKey,bobDecryptionKeys.macKey);
     
-    
     NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:bobDecryptionKeys withCounter:[NSNumber numberWithInt:0]]; // This is null
-    
     
     TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
     

@@ -10,26 +10,24 @@
 
 @implementation TSMessage
 
-
-+(instancetype) messageWithContent:(NSString *)text sender:(NSString *)senderId recipient:(NSString *)recipientId date:(NSDate *)date {
-    return [TSMessage messageWithContent:text sender:senderId recipient:(NSString *)recipientId date:date attachment:nil];
-}
-
-
-+(instancetype) messageWithContent:(NSString *)text sender:(NSString *)senderId recipient:(NSString *)recipientId date:(NSDate *)date attachment:(TSAttachment *)attachment{
+- (instancetype)initWithSenderId:(NSString*)senderId recipientId:(NSString*)recipientId date:(NSDate*)date content:(NSString*)content attachements:(NSArray*)attachements groupId:(TSGroup*)group{
+    self = [super init];
     
-    TSMessage *message = [[TSMessage alloc] init];
-    if (message == nil) {
-        return nil;
+    if (self) {
+        _senderId = senderId;
+        _recipientId = recipientId;
+        _timestamp = date;
+        _content = content;
+        _attachments = attachements;
+        _group = group;
     }
-    message->_content = text;
-    message->_senderId = senderId;
-    message->_recipientId = recipientId;
-    message->_timestamp = date;
-    message->_attachment = attachment;
     
-    return message;
+    return self;
 }
 
+- (BOOL)isUnread{
+    NSLog(@"TSMessage can't be instantiated!");
+    exit(1);
+}
 
 @end

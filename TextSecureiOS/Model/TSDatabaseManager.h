@@ -1,9 +1,9 @@
 //
-//  TSEncryptedDatabase.h
+//  TSDatabaseManager.h
 //  TextSecureiOS
 //
-//  Created by Alban Diquet on 12/29/13.
-//  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
+//  Created by Frederic Jacobs on 01/03/14.
+//  Copyright (c) 2014 Open Whisper Systems. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,7 +12,7 @@
 @class FMDatabaseQueue;
 
 
-@interface TSEncryptedDatabase : NSObject
+@interface TSDatabaseManager : NSObject
 // TODO: Use notifications to set dbQueue to nil when [TSStorageMasterKey lockStorageMasterKey] gets called
 // This would close opened DB handles when we lock the key
 @property (nonatomic, retain) FMDatabaseQueue *dbQueue;
@@ -48,6 +48,5 @@
  * @param preferenceName A BOOL preference that should be set to FALSE upon deletion of the database.
  */
 +(void) databaseEraseAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName;
-
 
 @end

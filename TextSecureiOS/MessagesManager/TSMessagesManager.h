@@ -12,13 +12,18 @@
 
 #import <Foundation/Foundation.h>
 #import "TSProtocols.h"
+#import "TSContact.h"
+#import "TSGroup.h"
 @class TSMessage;
 
 @interface TSMessagesManager : NSObject
 + (id)sharedManager;
 
 - (void) receiveMessagePush:(NSDictionary*)pushDict;
--(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread;
+
+-(void) sendMessage:(TSMessage*)message toContact:(TSContact*)contact;
+-(void) sendMessage:(TSMessage *)message toGroup:(TSGroup*)group;
+
 -(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType;
 
 @end

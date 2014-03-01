@@ -40,7 +40,6 @@
     BOOL didUnlock = ![TSStorageMasterKey isStorageMasterKeyLocked];
     
     if (didUnlock) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self];
         [self dismissViewControllerAnimated:YES completion:nil];
         
     } else {

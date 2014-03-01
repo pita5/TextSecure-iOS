@@ -9,7 +9,6 @@
 #import "TSAxolotlRatchet.hh"
 
 #import "TSMessage.h"
-#import "TSThread.h"
 #import "TSContact.h"
 #import "NSData+Base64.h"
 #import "TSSubmitMessageRequest.h"
@@ -19,7 +18,6 @@
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
 #import "TSUserKeysDatabase.h"
-#import "TSThread.h"
 #import "TSMessageSignal.hh"
 #import "TSPushMessageContent.hh"
 #import "TSWhisperMessage.hh"
@@ -46,6 +44,8 @@
     
     // Message should be added to the database
     
+    NSLog(@"Recepient ID: %@", message.recipientId);
+    
     [TSMessagesDatabase storeMessage:message fromThread:thread];
     
     // For a given thread, the Axolotl Ratchet should find out what's the current messaging state to send the message.
@@ -60,8 +60,7 @@
             
         case TSPreKeyWhisperMessageType:{
             // get a contact's prekey
-            TSContact* contact = [[TSContact alloc] initWithRegisteredID:message.recipientId];
-            TSThread* thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:message.recipientId]]save:YES];
+            TSContact* contact = [ratchet.thread.participants objectAtIndex:0];
             [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 switch (operation.response.statusCode) {
                     case 200:{
@@ -73,6 +72,8 @@
                         NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
                         NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
                         NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
+                        
+                        NSLog(@"We got the prekeys! %@", responseObject);
                         
                         // remove the leading "0x05" byte as per protocol specs
                         if (theirEphemeralKey.length == 33) {

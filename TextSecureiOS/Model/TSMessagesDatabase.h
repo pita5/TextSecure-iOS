@@ -10,21 +10,17 @@
 #import "TSProtocols.h"
 
 @class TSMessage;
-@class TSThread;
 @class TSContact;
 
 typedef void(^dataBaseFetchCompletionBlock)(NSArray* array);
 typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of arrays
 
-
 /**
- * Posted when the database receives an update
+ *  The TSMessagesDatabase contains everything used for messaging
+ *  It contains 6 tables - contacts, sessions, messages, groups, attachements, settings
  */
-extern NSString * const TSDatabaseDidUpdateNotification;
-
 
 @interface TSMessagesDatabase : NSObject<AxolotlPersistantStorage>
-
 
 +(BOOL) databaseCreateWithError:(NSError **)error;
 +(void) databaseErase;
@@ -35,16 +31,11 @@ extern NSString * const TSDatabaseDidUpdateNotification;
 #pragma mark - settings values
 +(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
 
-#pragma mark - DB message functions
-+(NSArray*) threads;
-+(NSArray*) messagesOnThread:(TSThread*) thread;
++(BOOL) storeContact:(TSContact*)contact;
 
-+(void) deleteThread:(TSThread*)thread withCompletionBlock:(dataBaseUpdateCompletionBlock) block; // deleting a thread is done by user activity -
-+(void) storeMessage:(TSMessage*)message fromThread:(TSThread*)thread;
+#pragma mark Messages
 
-+(void) storeContact:(TSContact*)contact;
-+(void) storeThread:(TSThread*)thread;
-+(void) storeParticipantsOfThread:(TSThread*)thread;
++ (NSArray*)messagesWithContact:(TSContact*)contact;
 
 #pragma mark - AxolotlEphemeralStorage protocol getter/setter helper methods
 

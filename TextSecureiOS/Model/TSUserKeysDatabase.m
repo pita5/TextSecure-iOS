@@ -7,7 +7,7 @@
 //
 
 #import "TSUserKeysDatabase.h"
-#import "TSEncryptedDatabase.h"
+#import "TSDatabaseManager.h"
 #import "TSStorageError.h"
 #import "TSECKeyPair.h"
 #import "FilePath.h"
@@ -19,7 +19,7 @@
 #define USER_KEYS_DB_FILE_NAME @"TSUserKeys.db"
 #define USER_KEYS_DB_PREFERENCE @"TSUserKeysDbWasCreated"
 
-static TSEncryptedDatabase *userKeysDb = nil;
+static TSDatabaseManager *userKeysDb = nil;
 
 @interface TSUserKeysDatabase(Private)
 
@@ -34,10 +34,14 @@ static TSEncryptedDatabase *userKeysDb = nil;
 
 #pragma mark DB creation
 
-+(BOOL) databaseCreateUserKeysWithError:(NSError **)error {
++ (NSString*)pathToDatabase{
+    return [FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME];
+}
+
++ (BOOL)databaseCreateUserKeysWithError:(NSError **)error {
     
     // Create the database
-    TSEncryptedDatabase *db = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] updateBoolPreference:USER_KEYS_DB_PREFERENCE error:error];
+    TSDatabaseManager *db = [TSDatabaseManager  databaseCreateAtFilePath:[self pathToDatabase] updateBoolPreference:USER_KEYS_DB_PREFERENCE error:error];
     if (!db) {
         return NO;
     }
@@ -84,19 +88,18 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
-+(void) databaseErase {
-    [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] updateBoolPreference:USER_KEYS_DB_PREFERENCE];
++(void)databaseErase {
+    [TSDatabaseManager databaseEraseAtFilePath:[self pathToDatabase] updateBoolPreference:USER_KEYS_DB_PREFERENCE];
 }
 
-
-+(BOOL) databaseWasCreated {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:USER_KEYS_DB_PREFERENCE];
++ (BOOL)databaseWasCreated {
+    return [[NSFileManager defaultManager] fileExistsAtPath:[self pathToDatabase]];
 }
 
 
 #pragma mark DB access - private
 
-+(BOOL) databaseOpenWithError:(NSError **)error {
++(BOOL)databaseOpenWithError:(NSError **)error {
     
     // DB was already unlocked
     if (userKeysDb){
@@ -110,7 +113,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
         return NO;
     }
     
-    TSEncryptedDatabase *db = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:USER_KEYS_DB_FILE_NAME] error:error];
+    TSDatabaseManager *db = [TSDatabaseManager databaseOpenAndDecryptAtFilePath:[self pathToDatabase] error:error];
     if (!db) {
         return NO;
     }
@@ -121,7 +124,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
 
 #pragma Keys access
 
-+(TSECKeyPair*) identityKey{
++ (TSECKeyPair*)identityKey{
     // Fetch the key from the DB
     __block NSData *serializedKeyPair = nil;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
@@ -135,7 +138,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
 }
 
 
-+(NSArray *)allPreKeys {
++ (NSArray *)allPreKeys {
     __block NSError *error;
     
     // Decrypt the DB if it hasn't been done yet
@@ -174,7 +177,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     }
 }
 
-+(TSECKeyPair*) preKeyWithId:(int32_t)preKeyId{
++ (TSECKeyPair*)preKeyWithId:(int32_t)preKeyId{
     // Decrypt the DB if it hasn't been done yet
     if (!userKeysDb) {
         if (![TSUserKeysDatabase databaseOpenWithError:nil])
@@ -200,7 +203,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
 
 #pragma mark User keys generation - private
 
-+(BOOL) generateAndStoreIdentityKey {
++ (BOOL)generateAndStoreIdentityKey {
     /*
      An identity key is an ECC key pair that you generate at install time. It never changes, and is used to certify your identity (clients remember it whenever they see it communicated from other clients and ensure that it's always the same).
      
@@ -221,7 +224,7 @@ static TSEncryptedDatabase *userKeysDb = nil;
     return YES;
 }
 
-+(BOOL) generateAndStorePreKeys {
++ (BOOL)generateAndStorePreKeys {
     
     // Generate and store key of last resort
     NSData *serializedPreKey  = [NSKeyedArchiver archivedDataWithRootObject:[TSECKeyPair keyPairGenerateWithPreKeyId:0xFFFFFF]];

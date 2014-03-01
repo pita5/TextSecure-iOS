@@ -69,7 +69,6 @@
   tsPushMessageContent.attachments = @[message.attachment];
   textsecure::PushMessageContent *pushMessageContent = new textsecure::PushMessageContent();
   pushMessageContent->set_body([tsPushMessageContent objcStringToCpp:tsPushMessageContent.body]);
-
   for(TSAttachment* attachment in tsPushMessageContent.attachments) {
     textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
     const uint64_t attachment_id =  [tsPushMessageContent objcNumberToCppUInt64:attachment.attachmentId];
