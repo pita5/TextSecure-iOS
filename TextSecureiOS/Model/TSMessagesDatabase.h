@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TSProtocols.h"
 
+@class TSSession;
 @class TSMessage;
 @class TSContact;
 
@@ -28,33 +29,28 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 
 // Calling the following functions will fail if the storage master key hasn't been unlocked
 
-#pragma mark - settings values
+#pragma mark Settings
 +(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
 
+#pragma mark Contacts
+
 +(BOOL) storeContact:(TSContact*)contact;
+
+#pragma mark Sessions
+
+/**
+ *  A session contains all information required by the Axolotl ratchet. It is unique to a registeredID and a deviceID. Because in the future, TS users will be able to add many devices to a single identity key/registered ID, we have to make sure that we can support multiple sessions with a TSContact.
+ */
+
++(BOOL) deleteSession:(TSSession*)session;
++(BOOL) storeSession:(TSSession*)session;
++(TSSession*) sessionForRegisteredId:(NSString*)registeredId;
++(TSSession*) sessionForRegisteredId:(NSString*)registeredId deviceId:(int)deviceId;
 
 #pragma mark Messages
 
 + (NSArray*)messagesWithContact:(TSContact*)contact;
-
-#pragma mark - AxolotlEphemeralStorage protocol getter/setter helper methods
-
-#pragma mark - AxolotlPersistantStorage protocol getter/setter helper methods
-
-+(NSData*) APSDataField:(NSString*)name onThread:(TSThread*)thread;
-+(NSNumber*) APSIntField:(NSString*)name onThread:(TSThread*)thread;
-+(BOOL) APSBoolField:(NSString*)name onThread:(TSThread*)thread;
-+(NSString*) APSStringField:(NSString*)name  onThread:(TSThread*)thread;
-+(NSString*) APSFieldName:(NSString*)name onChain:(TSChainType) chain;
-
-/*
- parameters
- nameField : name of db field to set
- valueField : value of db field to set to
- threadID" : thread id
- */
-
-+(void) setAPSDataField:(NSDictionary*) parameters;
++ (BOOL)storeMessage:(TSMessage*)msg;
 
 @end
 

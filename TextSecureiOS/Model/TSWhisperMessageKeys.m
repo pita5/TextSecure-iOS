@@ -9,12 +9,11 @@
 #import "TSWhisperMessageKeys.h"
 
 @implementation TSWhisperMessageKeys
-@synthesize cipherKey;
-@synthesize macKey;
+
 -(id)initWithCipherKey:(NSData*)encryptionKey macKey:(NSData*)hmacKey {
-  if(self=[super init] ) {
-    self.cipherKey = encryptionKey;
-    self.macKey = hmacKey;
+  if(self=[super init] ){
+    _cipherKey = encryptionKey;
+    _macKey = hmacKey;
   }
   return self;
 }

@@ -77,7 +77,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (FOREIGN KEY(sender_id) REFERENCES contacts(registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups(group_id), message TEXT, timestamp DATE, attachements BLOB, state INTEGER)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id), message TEXT, timestamp DATE, attachements BLOB, state INTEGER)"]) {
             return;
         }
         
@@ -85,17 +85,14 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS threads (thread_id TEXT PRIMARY KEY, rk BLOB, cks BLOB, ckr BLOB, dhis BLOB, dhir BLOB, dhrs BLOB, dhrr BLOB, ns INT, nr INT, pns INT)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS sessions (FOREIGN KEY(registered_id) REFERENCES contacts (registered_id) PRIMARY KEY, device_id TEXT PRIMARY KEY, rk BLOB, cks BLOB, ckr BLOB, dhis BLOB, dhir BLOB, dhrs BLOB, dhrr BLOB, ns INT, nr INT, pns INT)"]) {
             return;
         }
+        
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))"]) {
             return;
         }
-        
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_phone_number TEXT,relay TEXT, useraddressbookid INTEGER, identitykey TEXT, identityverified INTEGER, supports_sms INTEGER, next_key TEXT)"]){
-            return;
-        }
-        
+    
         dbInitSuccess = YES;
         
     }];

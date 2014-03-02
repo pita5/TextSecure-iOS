@@ -18,7 +18,7 @@
   NSMutableArray *serializedPrekeyList = [[NSMutableArray alloc] init];
   NSMutableDictionary *serializedKeyRegistrationParameters = [[NSMutableDictionary alloc] init];
   for(TSECKeyPair *pk in prekeys) {
-    if([pk preKeyId]==0xFFFFFF){
+    if([pk preKeyId]==kLastResortKeyId){
       [serializedKeyRegistrationParameters addEntriesFromDictionary:
         [NSDictionary dictionaryWithObjects:@[[NSDictionary dictionaryWithObjects:@[[NSNumber numberWithInt:[pk preKeyId]], [[pk publicKey] base64EncodedStringWithOptions:0], publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]]
                                     forKeys:@[@"lastResortKey"]]];

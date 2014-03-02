@@ -227,11 +227,11 @@ static TSDatabaseManager *userKeysDb = nil;
 + (BOOL)generateAndStorePreKeys {
     
     // Generate and store key of last resort
-    NSData *serializedPreKey  = [NSKeyedArchiver archivedDataWithRootObject:[TSECKeyPair keyPairGenerateWithPreKeyId:0xFFFFFF]];
+    NSData *serializedPreKey  = [NSKeyedArchiver archivedDataWithRootObject:[TSECKeyPair keyPairGenerateWithPreKeyId:kLastResortKeyId]];
     
     __block BOOL updateSuccess;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {
-        if ([db executeUpdate:@"INSERT INTO user_prekeys (prekey_id, serialized_keypair) VALUES (?,?)",[NSNumber numberWithInt:0xFFFFFF], serializedPreKey]) {
+        if ([db executeUpdate:@"INSERT INTO user_prekeys (prekey_id, serialized_keypair) VALUES (?,?)",[NSNumber numberWithInt:kLastResortKeyId], serializedPreKey]) {
             updateSuccess = YES;
         }
     }];
@@ -240,7 +240,7 @@ static TSDatabaseManager *userKeysDb = nil;
     }
     
     // Generate and store other pre keys
-    int prekeyCounter = arc4random() % 0xFFFFFF;
+    int prekeyCounter = arc4random() % kLastResortKeyId;
     
     for(int i=0; i<PREKEYS_NUMBER; i++) {
         prekeyCounter++;

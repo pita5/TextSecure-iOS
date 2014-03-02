@@ -8,13 +8,12 @@
 
 #import "RKCK.h"
 #import "TSECKeyPair.h"
-#import "TSThread.h"
 #import "TSHKDF.h"
 #import "TSMessagesDatabase.h"
 
 @implementation MKCK
 
-+(id) withData:(NSData*)data {
++(instancetype) initWithData:(NSData*)data {
     
     MKCK* mkck = [[MKCK alloc] init];
     
@@ -27,12 +26,10 @@
 
 @end
 
-
 @implementation RKCK
-+(instancetype) withData:(NSData*)data {
-    
+
++(instancetype) initWithData:(NSData*)data {
     RKCK* rkck = [[RKCK alloc] init];
-    
     rkck.RK =  [data subdataWithRange:NSMakeRange(0, 32)];
     rkck.CK = [data subdataWithRange:NSMakeRange(32, 32)];
     

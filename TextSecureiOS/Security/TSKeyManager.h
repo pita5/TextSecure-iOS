@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@class ECKeyPair;
+#import "TSECKeyPair.h"
+
 @interface TSKeyManager : NSObject
 
 

@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSWhisperMessage.hh"
+#import "TSEncryptedWhisperMessage.hh"
 #import "TSMessagesDatabase.h"
 @class TSECKeyPair;
 
-@interface TSPreKeyWhisperMessage : TSWhisperMessage
+@interface TSPreKeyWhisperMessage : TSEncryptedWhisperMessage
 
 @property (nonatomic,strong) NSNumber* preKeyId;
 @property (nonatomic,strong) NSData* baseKey; // base Curve25519 key exchange ephemeral: A0 in axolotl

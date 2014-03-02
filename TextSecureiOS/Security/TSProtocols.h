@@ -14,12 +14,6 @@
 @class TSWhisperMessageKeys;
 @class TSPreKeyWhisperMessage;
 
-typedef void(^keyStoreFetchNumberCompletionBlock) (NSNumber* number);
-typedef void(^keyStoreFetchDataCompletionBlock) (NSData* data);
-typedef void(^keyStoreSetDataCompletionBlock) (BOOL success);
-typedef void(^keyStoreFetchArrayCompletionBlock)(NSError **error, NSArray* array);
-typedef void(^keyStoreFetchKeyPairCompletionBlock)(NSError **error, TSECKeyPair* keyPair);
-
 typedef NS_ENUM(NSInteger, TSChainType) {
   TSSendingChain=0,
   TSReceivingChain

@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSSession.h"
+
 @class TSECKeyPair;
-@class TSThread;
 
 @interface MKCK : NSObject
 @property (nonatomic,strong) NSData* MK;
 @property (nonatomic,strong) NSData* CK;
-+(id) withData:(NSData*)data;
-
++(instancetype) initWithData:(NSData*)data;
 @end
 
 
@@ -22,11 +22,13 @@
 
 @property (nonatomic,strong) NSData* RK;
 @property (nonatomic,strong) NSData* CK;
-@property (nonatomic,strong) id ephemeral;
-+(instancetype) withData:(NSData*)data;
+
++(instancetype) initWithData:(NSData*)data;
+
+
 -(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral;
-+(RKCK*) currentSendingChain:(TSThread*)thread;
-+(RKCK*) currentReceivingChain:(TSThread*)thread;
--(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral;
--(void) saveSendingChainOnThread:(TSThread*)thread withMyNewEphemeral:(TSECKeyPair *)ephemeral;
++(RKCK*) currentSendingChain:(TSSession*)thread;
++(RKCK*) currentReceivingChain:(TSSession*)thread;
+-(void) saveReceivingChainOnThread:(TSSession*)thread withTheirEphemeral:(NSData*)ephemeral;
+-(void) saveSendingChainOnThread:(TSSession*)thread withMyNewEphemeral:(TSECKeyPair *)ephemeral;
 @end

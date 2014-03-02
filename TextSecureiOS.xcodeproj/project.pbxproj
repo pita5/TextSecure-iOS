@@ -10,20 +10,6 @@
 		05B94BF218BD28E400708011 /* VerificationViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */; };
 		05B94BF418BD2EA000708011 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
 		4C0ACB4B186C876200B328D5 /* TSMessageConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */; };
-		4C0ACB7C186CF2F100B328D5 /* avatar_bonnot.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB6E186CF2F100B328D5 /* avatar_bonnot.png */; };
-		4C0ACB7D186CF2F100B328D5 /* avatar_bonnot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB6F186CF2F100B328D5 /* avatar_bonnot@2x.png */; };
-		4C0ACB7E186CF2F100B328D5 /* avatar_duval.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB70186CF2F100B328D5 /* avatar_duval.png */; };
-		4C0ACB7F186CF2F100B328D5 /* avatar_duval@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB71186CF2F100B328D5 /* avatar_duval@2x.png */; };
-		4C0ACB80186CF2F100B328D5 /* avatar_gurdjieff.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB72186CF2F100B328D5 /* avatar_gurdjieff.png */; };
-		4C0ACB81186CF2F100B328D5 /* avatar_gurdjieff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB73186CF2F100B328D5 /* avatar_gurdjieff@2x.png */; };
-		4C0ACB82186CF2F100B328D5 /* avatar_kolenkina.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB74186CF2F100B328D5 /* avatar_kolenkina.png */; };
-		4C0ACB83186CF2F100B328D5 /* avatar_kolenkina@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB75186CF2F100B328D5 /* avatar_kolenkina@2x.png */; };
-		4C0ACB84186CF2F100B328D5 /* avatar_makhno.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB76186CF2F100B328D5 /* avatar_makhno.png */; };
-		4C0ACB85186CF2F100B328D5 /* avatar_makhno@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB77186CF2F100B328D5 /* avatar_makhno@2x.png */; };
-		4C0ACB86186CF2F100B328D5 /* avatar_reich.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB78186CF2F100B328D5 /* avatar_reich.png */; };
-		4C0ACB87186CF2F100B328D5 /* avatar_reich@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB79186CF2F100B328D5 /* avatar_reich@2x.png */; };
-		4C0ACB88186CF2F100B328D5 /* disclosure_indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB7A186CF2F100B328D5 /* disclosure_indicator.png */; };
-		4C0ACB89186CF2F100B328D5 /* disclosure_indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0ACB7B186CF2F100B328D5 /* disclosure_indicator@2x.png */; };
 		4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */; };
 		4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */; };
 		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
@@ -433,7 +419,6 @@
 		B61E059918C15C5E00AC49CA /* TSMessageOutgoing.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E059818C15C5E00AC49CA /* TSMessageOutgoing.m */; };
 		B61E059C18C15C7B00AC49CA /* TSMessageIncoming.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E059B18C15C7B00AC49CA /* TSMessageIncoming.m */; };
 		B61E05A218C1693400AC49CA /* TSAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05A118C1693400AC49CA /* TSAttachment.m */; };
-		B61E05A918C1748A00AC49CA /* TSSessionID.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05A818C1748A00AC49CA /* TSSessionID.m */; };
 		B61E05AF18C1884500AC49CA /* TSConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05AE18C1884500AC49CA /* TSConversation.m */; };
 		B61E05B218C1889500AC49CA /* TSGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05B118C1889500AC49CA /* TSGroup.m */; };
 		B61E05B618C254CA00AC49CA /* TSSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05B518C254CA00AC49CA /* TSSession.m */; };
@@ -451,6 +436,7 @@
 		B693C5A818147CED007E8360 /* TSContact.m in Sources */ = {isa = PBXBuildFile; fileRef = B693C5A718147CED007E8360 /* TSContact.m */; };
 		B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B478E21809BB3E005DDE12 /* TSContactManager.m */; };
 		B6B478E61809E7F5005DDE12 /* TSContactsIntersectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B478E51809E7F5005DDE12 /* TSContactsIntersectionRequest.m */; };
+		B6BA700218C3092A006E303E /* TSChainKey.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA700118C3092A006E303E /* TSChainKey.m */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
 		B6D23DAF18A91E9800F7E932 /* TSRegisterForPushRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */; };
 		B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */; };
@@ -475,20 +461,6 @@
 		05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerificationViewControllerTests.m; sourceTree = "<group>"; wrapsLines = 1; };
 		4C0ACB49186C876200B328D5 /* TSMessageConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageConversationCell.h; path = Views/Cells/TSMessageConversationCell.h; sourceTree = "<group>"; };
 		4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageConversationCell.m; path = Views/Cells/TSMessageConversationCell.m; sourceTree = "<group>"; };
-		4C0ACB6E186CF2F100B328D5 /* avatar_bonnot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_bonnot.png; sourceTree = "<group>"; };
-		4C0ACB6F186CF2F100B328D5 /* avatar_bonnot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_bonnot@2x.png"; sourceTree = "<group>"; };
-		4C0ACB70186CF2F100B328D5 /* avatar_duval.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_duval.png; sourceTree = "<group>"; };
-		4C0ACB71186CF2F100B328D5 /* avatar_duval@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_duval@2x.png"; sourceTree = "<group>"; };
-		4C0ACB72186CF2F100B328D5 /* avatar_gurdjieff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_gurdjieff.png; sourceTree = "<group>"; };
-		4C0ACB73186CF2F100B328D5 /* avatar_gurdjieff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_gurdjieff@2x.png"; sourceTree = "<group>"; };
-		4C0ACB74186CF2F100B328D5 /* avatar_kolenkina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_kolenkina.png; sourceTree = "<group>"; };
-		4C0ACB75186CF2F100B328D5 /* avatar_kolenkina@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_kolenkina@2x.png"; sourceTree = "<group>"; };
-		4C0ACB76186CF2F100B328D5 /* avatar_makhno.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_makhno.png; sourceTree = "<group>"; };
-		4C0ACB77186CF2F100B328D5 /* avatar_makhno@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_makhno@2x.png"; sourceTree = "<group>"; };
-		4C0ACB78186CF2F100B328D5 /* avatar_reich.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar_reich.png; sourceTree = "<group>"; };
-		4C0ACB79186CF2F100B328D5 /* avatar_reich@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatar_reich@2x.png"; sourceTree = "<group>"; };
-		4C0ACB7A186CF2F100B328D5 /* disclosure_indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure_indicator.png; sourceTree = "<group>"; };
-		4C0ACB7B186CF2F100B328D5 /* disclosure_indicator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure_indicator@2x.png"; sourceTree = "<group>"; };
 		4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordUnlockViewController.h; path = ViewControllers/PasswordUnlockViewController.h; sourceTree = "<group>"; };
 		4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordUnlockViewController.m; path = ViewControllers/PasswordUnlockViewController.m; sourceTree = "<group>"; };
 		4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSMessagesDatabaseTests.m; sourceTree = "<group>"; };
@@ -899,7 +871,7 @@
 		A537294A17011A5200C6FCCF /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zw.png; sourceTree = "<group>"; };
 		A538A27C1869DC6500CD0A3D /* TSKeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSKeyManager.h; path = Security/TSKeyManager.h; sourceTree = "<group>"; };
 		A538A27D1869DC6500CD0A3D /* TSKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSKeyManager.m; path = Security/TSKeyManager.m; sourceTree = "<group>"; };
-		A5620DEB186BD27F0033483E /* TSMessagesManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessagesManager.mm; path = MessagesManager/TSMessagesManager.mm; sourceTree = "<group>"; };
+		A5620DEB186BD27F0033483E /* TSMessagesManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessagesManager.mm; path = TextSecureiOS/MessagesManager/TSMessagesManager.mm; sourceTree = "<group>"; };
 		A5620DED186BD4FA0033483E /* TSSubmitMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSubmitMessageRequest.h; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.h; sourceTree = "<group>"; };
 		A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSubmitMessageRequest.m; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.m; sourceTree = "<group>"; };
 		A568910017E2F37000C360A1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -950,7 +922,7 @@
 		A5F15B3C1703EB9F00856385 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "TextSecureiOSAssets/Default@2x.png"; sourceTree = "<group>"; };
 		A5F15B3D1703EB9F00856385 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = TextSecureiOSAssets/Default.png; sourceTree = "<group>"; };
 		A5F15B481703EE2F00856385 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "TextSecureiOSAssets/Default-568h@2x.png"; sourceTree = "<group>"; };
-		A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessagesManager.h; path = MessagesManager/TSMessagesManager.h; sourceTree = "<group>"; };
+		A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessagesManager.h; path = TextSecureiOS/MessagesManager/TSMessagesManager.h; sourceTree = "<group>"; };
 		A5FBAB93184E980E0012E9A5 /* TSUploadAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUploadAttachment.h; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.h; sourceTree = "<group>"; };
 		A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUploadAttachment.m; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.m; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -960,8 +932,6 @@
 		B61E059B18C15C7B00AC49CA /* TSMessageIncoming.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageIncoming.m; path = Model/TSMessageIncoming.m; sourceTree = "<group>"; };
 		B61E05A018C1693400AC49CA /* TSAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachment.h; path = Model/TSAttachment.h; sourceTree = "<group>"; };
 		B61E05A118C1693400AC49CA /* TSAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachment.m; path = Model/TSAttachment.m; sourceTree = "<group>"; };
-		B61E05A718C1748A00AC49CA /* TSSessionID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSessionID.h; path = Model/TSSessionID.h; sourceTree = "<group>"; };
-		B61E05A818C1748A00AC49CA /* TSSessionID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSessionID.m; path = Model/TSSessionID.m; sourceTree = "<group>"; };
 		B61E05AD18C1884500AC49CA /* TSConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSConversation.h; path = Model/TSConversation.h; sourceTree = "<group>"; };
 		B61E05AE18C1884500AC49CA /* TSConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSConversation.m; path = Model/TSConversation.m; sourceTree = "<group>"; };
 		B61E05B018C1889500AC49CA /* TSGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroup.h; path = Model/TSGroup.h; sourceTree = "<group>"; };
@@ -995,6 +965,8 @@
 		B6B478E21809BB3E005DDE12 /* TSContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactManager.m; path = Contacts/TSContactManager.m; sourceTree = "<group>"; };
 		B6B478E41809E7F5005DDE12 /* TSContactsIntersectionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactsIntersectionRequest.h; path = TextSecureiOS/Networking/Requests/TSContactsIntersectionRequest.h; sourceTree = "<group>"; };
 		B6B478E51809E7F5005DDE12 /* TSContactsIntersectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactsIntersectionRequest.m; path = TextSecureiOS/Networking/Requests/TSContactsIntersectionRequest.m; sourceTree = "<group>"; };
+		B6BA700018C3092A006E303E /* TSChainKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSChainKey.h; path = Security/TSChainKey.h; sourceTree = "<group>"; };
+		B6BA700118C3092A006E303E /* TSChainKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSChainKey.m; path = Security/TSChainKey.m; sourceTree = "<group>"; };
 		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequestVerificationCodeRequest.h; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.h; sourceTree = "<group>"; };
 		B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequestVerificationCodeRequest.m; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.m; sourceTree = "<group>"; };
@@ -1072,28 +1044,6 @@
 				4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */,
 			);
 			name = Cells;
-			sourceTree = "<group>";
-		};
-		4C0ACB6D186CF2F100B328D5 /* TestAssets */ = {
-			isa = PBXGroup;
-			children = (
-				4C0ACB6E186CF2F100B328D5 /* avatar_bonnot.png */,
-				4C0ACB6F186CF2F100B328D5 /* avatar_bonnot@2x.png */,
-				4C0ACB70186CF2F100B328D5 /* avatar_duval.png */,
-				4C0ACB71186CF2F100B328D5 /* avatar_duval@2x.png */,
-				4C0ACB72186CF2F100B328D5 /* avatar_gurdjieff.png */,
-				4C0ACB73186CF2F100B328D5 /* avatar_gurdjieff@2x.png */,
-				4C0ACB74186CF2F100B328D5 /* avatar_kolenkina.png */,
-				4C0ACB75186CF2F100B328D5 /* avatar_kolenkina@2x.png */,
-				4C0ACB76186CF2F100B328D5 /* avatar_makhno.png */,
-				4C0ACB77186CF2F100B328D5 /* avatar_makhno@2x.png */,
-				4C0ACB78186CF2F100B328D5 /* avatar_reich.png */,
-				4C0ACB79186CF2F100B328D5 /* avatar_reich@2x.png */,
-				4C0ACB7A186CF2F100B328D5 /* disclosure_indicator.png */,
-				4C0ACB7B186CF2F100B328D5 /* disclosure_indicator@2x.png */,
-			);
-			name = TestAssets;
-			path = TextSecureiOSAssets/TestAssets;
 			sourceTree = "<group>";
 		};
 		8C42C13E18551B8C000DD353 /* TextSecureiOS Tests */ = {
@@ -1202,7 +1152,6 @@
 				A5F15AA217029BCF00856385 /* ViewControllers */,
 				A5F15AA317029C5300856385 /* Utility */,
 				A53718BC16FF95DF00C6FCCF /* Supporting Files */,
-				4C0ACB6D186CF2F100B328D5 /* TestAssets */,
 			);
 			path = TextSecureiOS;
 			sourceTree = "<group>";
@@ -1670,8 +1619,6 @@
 		A5F15AA217029BCF00856385 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */,
-				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
 				B635B38F182181E1003CE732 /* TSMessageViewController.h */,
 				B635B390182181E1003CE732 /* TSMessageViewController.m */,
 				B643D7DC189EB9020025C6F3 /* TSContactPickerViewController.h */,
@@ -1723,8 +1670,6 @@
 				B6B478E21809BB3E005DDE12 /* TSContactManager.m */,
 				B693C5A618147CED007E8360 /* TSContact.h */,
 				B693C5A718147CED007E8360 /* TSContact.m */,
-				B61E05A718C1748A00AC49CA /* TSSessionID.h */,
-				B61E05A818C1748A00AC49CA /* TSSessionID.m */,
 			);
 			name = Users;
 			sourceTree = "<group>";
@@ -1734,6 +1679,8 @@
 			children = (
 				B61E05B418C254CA00AC49CA /* TSSession.h */,
 				B61E05B518C254CA00AC49CA /* TSSession.m */,
+				B6BA700018C3092A006E303E /* TSChainKey.h */,
+				B6BA700118C3092A006E303E /* TSChainKey.m */,
 				8CF7BD8A187088D80023A781 /* TSECKeyPair.h */,
 				8CF7BD8B187088D80023A781 /* TSECKeyPair.m */,
 				A5873CC91886F95700FBBDEA /* RKCK.h */,
@@ -1747,7 +1694,6 @@
 		B61E05AB18C179F300AC49CA /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				B61E05AC18C17B1600AC49CA /* Tables */,
 				8C49FC0E18497E86006132F6 /* TSStorageError.h */,
 				8C49FC0F18497E86006132F6 /* TSStorageError.m */,
 				8CF7BD961870D9450023A781 /* TSDatabaseManager.h */,
@@ -1760,13 +1706,6 @@
 				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
 			);
 			name = Storage;
-			sourceTree = "<group>";
-		};
-		B61E05AC18C17B1600AC49CA /* Tables */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Tables;
 			sourceTree = "<group>";
 		};
 		B61E05B318C188A300AC49CA /* Conversations */ = {
@@ -1783,6 +1722,8 @@
 		B639AF0A17F5A53700B2244D /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */,
+				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
 				B6E2CFB717F7A89000200B69 /* Certificate */,
 				B639AF0E17F5AA6000B2244D /* Request Types */,
 				B639AF0B17F5A68100B2244D /* TSNetworkManager.h */,
@@ -2052,7 +1993,6 @@
 				A537299617011A5200C6FCCF /* dj.png in Resources */,
 				A537299717011A5200C6FCCF /* dm.png in Resources */,
 				A537299817011A5200C6FCCF /* do.png in Resources */,
-				4C0ACB84186CF2F100B328D5 /* avatar_makhno.png in Resources */,
 				A537299917011A5200C6FCCF /* dz.png in Resources */,
 				A537299A17011A5200C6FCCF /* ec.png in Resources */,
 				A537299B17011A5200C6FCCF /* ee.png in Resources */,
@@ -2069,7 +2009,6 @@
 				A53729A617011A5200C6FCCF /* fam.png in Resources */,
 				A53729A717011A5200C6FCCF /* fi.png in Resources */,
 				A53729A817011A5200C6FCCF /* fj.png in Resources */,
-				4C0ACB7F186CF2F100B328D5 /* avatar_duval@2x.png in Resources */,
 				A53729A917011A5200C6FCCF /* fk.png in Resources */,
 				A53729AA17011A5200C6FCCF /* fm.png in Resources */,
 				A53729AB17011A5200C6FCCF /* fo.png in Resources */,
@@ -2100,7 +2039,6 @@
 				A53729C217011A5200C6FCCF /* gy.png in Resources */,
 				A53729C317011A5200C6FCCF /* he.png in Resources */,
 				A53729C417011A5200C6FCCF /* he@2x.png in Resources */,
-				4C0ACB83186CF2F100B328D5 /* avatar_kolenkina@2x.png in Resources */,
 				A53729C517011A5200C6FCCF /* hi.png in Resources */,
 				A53729C617011A5200C6FCCF /* hk.png in Resources */,
 				A53729C717011A5200C6FCCF /* hm.png in Resources */,
@@ -2154,9 +2092,7 @@
 				A53729F717011A5200C6FCCF /* lt@2x.png in Resources */,
 				A53729F817011A5200C6FCCF /* lu.png in Resources */,
 				A53729F917011A5200C6FCCF /* lv.png in Resources */,
-				4C0ACB89186CF2F100B328D5 /* disclosure_indicator@2x.png in Resources */,
 				A53729FA17011A5200C6FCCF /* lv@2x.png in Resources */,
-				4C0ACB87186CF2F100B328D5 /* avatar_reich@2x.png in Resources */,
 				A53729FB17011A5200C6FCCF /* ly.png in Resources */,
 				A53729FC17011A5200C6FCCF /* ma.png in Resources */,
 				A53729FD17011A5200C6FCCF /* mc.png in Resources */,
@@ -2174,7 +2110,6 @@
 				A5372A0917011A5200C6FCCF /* mp.png in Resources */,
 				A5372A0A17011A5200C6FCCF /* mq.png in Resources */,
 				A5372A0B17011A5300C6FCCF /* mr.png in Resources */,
-				4C0ACB85186CF2F100B328D5 /* avatar_makhno@2x.png in Resources */,
 				A5372A0C17011A5300C6FCCF /* ms.png in Resources */,
 				A5372A0D17011A5300C6FCCF /* ms@2x.png in Resources */,
 				A5372A0E17011A5300C6FCCF /* mt.png in Resources */,
@@ -2182,7 +2117,6 @@
 				A5372A1017011A5300C6FCCF /* mv.png in Resources */,
 				A5372A1117011A5300C6FCCF /* mw.png in Resources */,
 				A5372A1217011A5300C6FCCF /* mx.png in Resources */,
-				4C0ACB7E186CF2F100B328D5 /* avatar_duval.png in Resources */,
 				A5372A1317011A5300C6FCCF /* my.png in Resources */,
 				A5E6CC70187D0F4B002A1735 /* PreKeyWhisperMessage.proto in Resources */,
 				A5372A1417011A5300C6FCCF /* mz.png in Resources */,
@@ -2228,7 +2162,6 @@
 				A5372A3C17011A5300C6FCCF /* qa.png in Resources */,
 				A5372A3D17011A5300C6FCCF /* qu.png in Resources */,
 				A5372A3E17011A5300C6FCCF /* qu@2x.png in Resources */,
-				4C0ACB80186CF2F100B328D5 /* avatar_gurdjieff.png in Resources */,
 				A5372A3F17011A5300C6FCCF /* re.png in Resources */,
 				A5372A4117011A5300C6FCCF /* ro.png in Resources */,
 				A5372A4217011A5300C6FCCF /* ro@2x.png in Resources */,
@@ -2241,7 +2174,6 @@
 				A5372A4917011A5300C6FCCF /* scn.png in Resources */,
 				A5372A4A17011A5300C6FCCF /* scn@2x.png in Resources */,
 				A5372A4B17011A5300C6FCCF /* scotland.png in Resources */,
-				4C0ACB88186CF2F100B328D5 /* disclosure_indicator.png in Resources */,
 				A5372A4C17011A5300C6FCCF /* sd.png in Resources */,
 				A5372A4D17011A5300C6FCCF /* se.png in Resources */,
 				A5372A4E17011A5300C6FCCF /* sg.png in Resources */,
@@ -2252,14 +2184,12 @@
 				A5372A5317011A5300C6FCCF /* sk.png in Resources */,
 				A5372A5417011A5300C6FCCF /* sl.png in Resources */,
 				A5372A5517011A5300C6FCCF /* sl@2x.png in Resources */,
-				4C0ACB82186CF2F100B328D5 /* avatar_kolenkina.png in Resources */,
 				A5372A5617011A5300C6FCCF /* sm.png in Resources */,
 				A5372A5717011A5300C6FCCF /* sn.png in Resources */,
 				A5372A5817011A5300C6FCCF /* so.png in Resources */,
 				A5372A5917011A5300C6FCCF /* sq.png in Resources */,
 				A5372A5A17011A5300C6FCCF /* sq@2x.png in Resources */,
 				A5372A5B17011A5300C6FCCF /* sr.png in Resources */,
-				4C0ACB7C186CF2F100B328D5 /* avatar_bonnot.png in Resources */,
 				A5372A5C17011A5300C6FCCF /* st.png in Resources */,
 				A5372A5D17011A5300C6FCCF /* su.png in Resources */,
 				A5372A5E17011A5300C6FCCF /* sv.png in Resources */,
@@ -2285,7 +2215,6 @@
 				A5372A7217011A5300C6FCCF /* to.png in Resources */,
 				A5372A7317011A5300C6FCCF /* tr.png in Resources */,
 				A5372A7417011A5300C6FCCF /* travel.png in Resources */,
-				4C0ACB81186CF2F100B328D5 /* avatar_gurdjieff@2x.png in Resources */,
 				A5372A7517011A5300C6FCCF /* travel@2x.png in Resources */,
 				A5372A7617011A5300C6FCCF /* travel_france.png in Resources */,
 				A5372A7717011A5300C6FCCF /* tt.png in Resources */,
@@ -2318,10 +2247,8 @@
 				A5372A9217011A5300C6FCCF /* ye.png in Resources */,
 				A5372A9317011A5300C6FCCF /* yt.png in Resources */,
 				B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */,
-				4C0ACB86186CF2F100B328D5 /* avatar_reich.png in Resources */,
 				A5372A9417011A5300C6FCCF /* za.png in Resources */,
 				A5372A9517011A5300C6FCCF /* zh.png in Resources */,
-				4C0ACB7D186CF2F100B328D5 /* avatar_bonnot@2x.png in Resources */,
 				A5372A9617011A5300C6FCCF /* zm.png in Resources */,
 				A5372A9717011A5300C6FCCF /* zw.png in Resources */,
 				B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */,
@@ -2443,6 +2370,7 @@
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
+				B6BA700218C3092A006E303E /* TSChainKey.m in Sources */,
 				8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */,
 				B61E05B218C1889500AC49CA /* TSGroup.m in Sources */,
 				A5E6CC97187FB7C6002A1735 /* TSWhisperMessageKeys.m in Sources */,
@@ -2485,7 +2413,6 @@
 				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */,
 				A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */,
-				B61E05A918C1748A00AC49CA /* TSSessionID.m in Sources */,
 				A5620DEC186BD27F0033483E /* TSMessagesManager.mm in Sources */,
 				8C49FC1018497E86006132F6 /* TSStorageError.m in Sources */,
 				A5873CCB1886F95700FBBDEA /* RKCK.m in Sources */,

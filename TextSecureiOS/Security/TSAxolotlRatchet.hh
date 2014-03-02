@@ -11,21 +11,14 @@
 #import "TSProtocols.h"
 #import "TSECKeyPair.h"
 #import "RKCK.h"
-
+#import "TSSession.h"
 @class TSMessage;
-@class TSThread;
-
-typedef void(^getNextMessageKeyOnChain)(TSWhisperMessageKeys *messageKeys);
-typedef void(^decryptMessageCompletion)(TSMessage *decryptedMessage);
-
-typedef void(^getNewReceiveDecryptKey)(TSECKeyPair *decryptionKey);
 
 @interface TSAxolotlRatchet : NSObject
-@property (nonatomic,strong) TSThread *thread;
--(id) initForThread:(TSThread*)thread;
-#pragma mark public methods
-+(void)receiveMessage:(NSData*)data;
-+(void)sendMessage:(TSMessage*)message onThread:(TSThread*)thread;
+
++ (TSWhisperMessageKeys*)decryptionKeysForSession:(TSSession*)session ephemeral:(NSData*)ephemeral counter:(int)counter;
++ (TSWhisperMessageKeys*)encryptionKeyForSession:(TSSession*)session;
+
 
 @end
 

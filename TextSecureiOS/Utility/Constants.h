@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
+#define kLastResortKeyId 0xFFFFFF
+
 extern NSString* const textSecureServer;
 extern NSString* const textSecureAccountsAPI;
 extern NSString* const textSecureKeysAPI;

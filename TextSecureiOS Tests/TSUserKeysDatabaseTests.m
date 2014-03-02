@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "TSUserKeysDatabase.h"
 #import "TSStorageMasterKey.h"
-
+#import "Constants.h"
 @interface TSUserKeysDatabaseTests : XCTestCase
 
 @end
@@ -49,7 +49,7 @@ static NSString *storageKeyPw = @"1234test";
     XCTAssertNotNil([TSUserKeysDatabase allPreKeys], @"database creation returned nil prekeys");
     XCTAssertNotNil([TSUserKeysDatabase identityKey], @"database creation returned nil identity key");
     // Check for key of last resort
-    XCTAssertNotNil([TSUserKeysDatabase preKeyWithId:0xFFFFFF], @"database creation returned nil for key of last resort");
+    XCTAssertNotNil([TSUserKeysDatabase preKeyWithId:kLastResortKeyId], @"database creation returned nil for key of last resort");
 }
 
 
