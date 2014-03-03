@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PasswordUnlockViewController : UIViewController
+@interface PasswordUnlockViewController : UIViewController <UITextFieldDelegate>
 
 @end

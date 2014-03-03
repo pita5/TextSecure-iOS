@@ -454,6 +454,7 @@
 		B6F10B1C17EF61FE00723719 /* CountryCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6F10B1B17EF61FE00723719 /* CountryCodes.plist */; };
 		B6F10B1F17EF8F3C00723719 /* NSString+PhoneFormating.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */; };
 		CE74D2F57964464494640956 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
+		F8694B5E18C5268500A44474 /* padlock_prompt.png in Resources */ = {isa = PBXBuildFile; fileRef = F8694B5D18C5268500A44474 /* padlock_prompt.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -992,6 +993,7 @@
 		B6F10B1B17EF61FE00723719 /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
 		B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+PhoneFormating.h"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.h"; sourceTree = "<group>"; };
 		B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+PhoneFormating.m"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.m"; sourceTree = "<group>"; };
+		F8694B5D18C5268500A44474 /* padlock_prompt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = padlock_prompt.png; path = TextSecureiOSAssets/padlock_prompt.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1238,6 +1240,7 @@
 				A5F15B481703EE2F00856385 /* Default-568h@2x.png */,
 				A5F15B3C1703EB9F00856385 /* Default@2x.png */,
 				A5F15B3D1703EB9F00856385 /* Default.png */,
+				F8694B5D18C5268500A44474 /* padlock_prompt.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -1886,7 +1889,6 @@
 						TestTargetID = A53718B116FF95DF00C6FCCF;
 					};
 					A53718B116FF95DF00C6FCCF = {
-						DevelopmentTeam = U68MSDN6DR;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -2194,6 +2196,7 @@
 				A5372A4717011A5300C6FCCF /* sb.png in Resources */,
 				A5372A4817011A5300C6FCCF /* sc.png in Resources */,
 				A5372A4917011A5300C6FCCF /* scn.png in Resources */,
+				F8694B5E18C5268500A44474 /* padlock_prompt.png in Resources */,
 				A5372A4A17011A5300C6FCCF /* scn@2x.png in Resources */,
 				A5372A4B17011A5300C6FCCF /* scotland.png in Resources */,
 				4C0ACB88186CF2F100B328D5 /* disclosure_indicator.png in Resources */,
@@ -2624,7 +2627,7 @@
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2646,7 +2649,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
