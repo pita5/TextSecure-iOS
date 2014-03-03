@@ -37,11 +37,11 @@
 -(const std::string) serializedProtocolBufferAsString {
   textsecure::IncomingPushMessageSignal *messageSignal = new textsecure::IncomingPushMessageSignal;
   // objective c->c++
+
   const uint32_t cppType = self.contentType;
   const std::string cppSource = [self objcStringToCpp:self.source];
   const uint64_t cppTimestamp = [self objcDateToCpp:self.timestamp];
-  const std::string cppMessage = [self.message serializedProtocolBufferAsString];
-
+  const std::string cppMessage = (cppType == TSEncryptedWhisperMessageType) ? [self objcDataToCppString:[(TSEncryptedWhisperMessage*)self.message getTextSecure_WhisperMessage]] :  [self objcDataToCppString:[(TSPreKeyWhisperMessage*)self.message getTextSecure_PreKeyWhisperMessage]];
   // c++->protocol buffer
   messageSignal->set_type(cppType);
   messageSignal->set_source(cppSource);
@@ -50,10 +50,6 @@
   
   std::string ps = messageSignal->SerializeAsString();
   return ps;
-}
-
--(TSMessage*) getTSMessage:(TSPushMessageContent*) pushMessageContent {
-    return [TSMessage messageWithContent:pushMessageContent.body sender:self.source recipient:[TSKeyManager getUsernameToken] date:self.timestamp attachment:nil];
 }
 
 #pragma mark private methods

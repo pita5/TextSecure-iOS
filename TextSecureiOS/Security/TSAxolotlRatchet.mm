@@ -90,7 +90,7 @@
                         TSECKeyPair *currentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
                         NSData* computedHMAC;
                         NSData* version = [NSData dataWithBytes:&textSecureVersion length:sizeof(textSecureVersion)];
-                        NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0] forVersion:version computedMac:&computedHMAC];
+                        NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0] forVersion:version computedHMAC:&computedHMAC];
                         TSECKeyPair *nextEphemeral = [TSMessagesDatabase ephemeralOfSendingChain:thread]; // nil
                         NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:encryptedMessage theirPrekeyId:theirPrekeyId myCurrentEphemeral:currentEphemeral myNextEphemeral:nextEphemeral forVersion:version  withHMAC:computedHMAC];
                         [TSAxolotlRatchet receiveMessage:encodedPreKeyWhisperMessage];
@@ -212,7 +212,7 @@
 }
 
 
--(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter forVersion:(NSData*)version computedMac:(NSData**)computedMac{
+-(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter forVersion:(NSData*)version computedHMAC:(NSData**)computedMac{
     return [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys withCounter:counter forVersion:version computedHMAC:computedMac];
 }
 

@@ -13,7 +13,6 @@
 #import "NSString+Conversion.h"
 #import "TSMessageSignal.hh"
 #import "IncomingPushMessageSignal.pb.hh"
-#import "TSUnencryptedWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSPushMessageContent.hh"
@@ -62,6 +61,8 @@
 }
 
 -(void) testDecryptionFromServer {
+    XCTAssertTrue(0, @"rewrite this test with a TSEncryptedWhisperMessage and TSPrekeyWhisperMessage as unencrypted pipeline support removed");
+    /*
     NSString* originalMessage = @"Hawaii is awesome";
     NSString* signalingKeyString = @"VJuRzZcwuY/6VjGw+QSPy5ROzHo8xE36mKwHNvkfyZ+mSPaDlSDcenUqavIX1Vwn\nRRIdrg==";
     XCTAssertTrue([[NSData dataFromBase64String:signalingKeyString] length]==52, @"signaling key is not 52 bytes but %d",[[NSData dataFromBase64String:signalingKeyString]  length]);
@@ -75,6 +76,7 @@
     TSMessage* tsMessage =  [tsMessageSignal getTSMessage:tsMessageContent];
     
     XCTAssertTrue([tsMessage.content  isEqualToString:originalMessage], @"Decrypted message: %@ is not equal to original: %@",tsMessage.content,originalMessage);
+     */
 }
 
 
