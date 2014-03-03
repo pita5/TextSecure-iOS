@@ -29,6 +29,8 @@
     [super viewDidLoad];
 
     self.passwordTextField.placeholder = @"Please enter your password";
+    self.passwordTextField.returnKeyType = UIReturnKeyGo;
+    self.passwordTextField.delegate = self;
 }
 
 - (IBAction)unlockPressed:(id)sender {

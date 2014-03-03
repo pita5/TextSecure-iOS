@@ -10,3 +10,4 @@ Libraries/src/*
 xcuserdata
 Libraries/lib/*
 *.xccheckout
+Build/*
