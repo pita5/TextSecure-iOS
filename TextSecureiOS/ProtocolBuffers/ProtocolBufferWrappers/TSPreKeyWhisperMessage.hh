@@ -19,5 +19,8 @@
 @property (nonatomic,strong) NSData* version;
 -(id) initWithTextSecure_PreKeyWhisperMessage:(NSData*) data;
 -(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)version;
+-(NSData*) getTextSecure_PreKeyWhisperMessage;
+
 +(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac;
+
 @end

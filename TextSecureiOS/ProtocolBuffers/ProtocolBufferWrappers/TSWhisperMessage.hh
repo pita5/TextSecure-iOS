@@ -14,6 +14,5 @@
 @property (nonatomic,strong) NSData* version;
 
 
--(NSData*) serializedTextSecureBuffer;
 
 @end

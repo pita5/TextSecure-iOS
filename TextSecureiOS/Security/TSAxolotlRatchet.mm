@@ -90,7 +90,7 @@
                         TSECKeyPair *currentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
                         NSData* computedHMAC;
                         NSData* version = [NSData dataWithBytes:&textSecureVersion length:sizeof(textSecureVersion)];
-                        NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0] forVersion:version computedHMAC:&computedHMAC];
+                        NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0] forVersion:version computedMac:&computedHMAC];
                         TSECKeyPair *nextEphemeral = [TSMessagesDatabase ephemeralOfSendingChain:thread]; // nil
                         NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:encryptedMessage theirPrekeyId:theirPrekeyId myCurrentEphemeral:currentEphemeral myNextEphemeral:nextEphemeral forVersion:version  withHMAC:computedHMAC];
                         [TSAxolotlRatchet receiveMessage:encodedPreKeyWhisperMessage];
@@ -113,12 +113,8 @@
             break;
         }
         case TSEncryptedWhisperMessageType: {
+#warning clearly this needs filled in
             // unsupported
-            break;
-        }
-        case TSUnencryptedWhisperMessageType: {
-            NSString *serializedMessage= [[TSPushMessageContent serializedPushMessageContent:message] base64EncodedStringWithOptions:0];
-            [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:serializedMessage ofType:messageType];
             break;
         }
         default:
@@ -140,8 +136,6 @@
     switch (messageSignal.contentType) {
             
         case TSPreKeyWhisperMessageType: {
-#warning ADD VERSION
-
             TSPreKeyWhisperMessage* preKeyMessage = (TSPreKeyWhisperMessage*)messageSignal.message;
             TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)preKeyMessage.message;
             
@@ -150,7 +144,7 @@
             
             
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
-            NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage withKeys:decryptionKeys];
+            NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withCounter:whisperMessage.counter withKeys:decryptionKeys forVersion:whisperMessage.version withHMAC:whisperMessage.hmac];
             
             message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSUTF8StringEncoding]
                                              sender:messageSignal.source
@@ -164,21 +158,13 @@
             TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)messageSignal.message;
             [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
             TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
-#warning ADD VERSION
 
-            NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
-            
+            NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withCounter:whisperMessage.counter withKeys:decryptionKeys forVersion:whisperMessage.version withHMAC:whisperMessage.hmac];
             message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSUTF8StringEncoding]
                                              sender:messageSignal.source
                                           recipient:[TSKeyManager getUsernameToken]
                                                date:messageSignal.timestamp];
             
-            break;
-        }
-            
-        case TSUnencryptedWhisperMessageType: {
-            TSPushMessageContent* messageContent = [[TSPushMessageContent alloc] initWithData:messageSignal.message.message];
-            message = [messageSignal getTSMessage:messageContent];
             break;
         }
             
@@ -226,8 +212,8 @@
 }
 
 
--(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter withVersion:(NSData*)version computedMac:(NSData**)computedMac{
-    return [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys withCounter:counter withVersion:version computedMac:computedMac];
+-(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter forVersion:(NSData*)version computedMac:(NSData**)computedMac{
+    return [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys withCounter:counter forVersion:version computedHMAC:computedMac];
 }
 
 #pragma mark helper methods

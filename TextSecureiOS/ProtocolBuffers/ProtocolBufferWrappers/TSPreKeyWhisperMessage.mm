@@ -86,6 +86,13 @@
 
 
 
+-(NSData*) getTextSecure_PreKeyWhisperMessage {
+    NSMutableData *serialized = [NSMutableData data];
+    [serialized appendData:self.version];
+    [serialized appendData:[self serializedProtocolBuffer]];
+    return serialized;
+}
+
 
 +(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
@@ -101,7 +108,11 @@
                                              senderPrekey:[currentEphemeral publicKey]
                                              senderIdentityKey:[identityKey publicKey]
                                              message:[encryptedWhisperMessage serializedProtocolBuffer] forVersion:version];
+    return [prekeyMessage getTextSecure_PreKeyWhisperMessage];
     
 }
+
+
+
 
 @end

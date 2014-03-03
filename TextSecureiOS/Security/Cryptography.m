@@ -16,7 +16,6 @@
 #import "Constants.h"
 #import "TSWhisperMessageKeys.h"
 #include "NSString+Conversion.h"
-#import "TSEncryptedWhisperMessage.hh"
 #include "NSData+Base64.h"
 #import "FilePath.h"
 
@@ -166,18 +165,18 @@
   
 }
 
-+(NSData*)decryptCTRMode:(TSEncryptedWhisperMessage*)message withKeys:(TSWhisperMessageKeys*)keys{
++(NSData*)decryptCTRMode:(NSData*)ciphertext withCounter:(NSNumber*) counter  withKeys:(TSWhisperMessageKeys*)keys forVersion:(NSData*) version withHMAC:(NSData*)hmac {
 
     /* AES256 CTR encrypt then mac / validate mac then decrypt
      Returns nil if hmac invalid or decryption fails
     */
     NSMutableData* dataToHMAC = [NSMutableData data];
-    [dataToHMAC appendData:message.version];
-    [dataToHMAC appendData:message.message];
+    [dataToHMAC appendData:version];
+    [dataToHMAC appendData:ciphertext];
 
       // verify hmac
     NSData* ourHmacData = [Cryptography truncatedHMAC:dataToHMAC withHMACKey:keys.macKey truncation:8];
-    if(![ourHmacData isEqualToData:message.hmac]) {
+    if(![ourHmacData isEqualToData:hmac]) {
         return nil;
     }
     // decrypt
