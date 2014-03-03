@@ -15,7 +15,11 @@
 -(const std::string) serializedProtocolBufferAsString;
 
 #pragma mark boilerplate code
+// raw protocol buffer
 -(NSData*) serializedProtocolBuffer;
+// these pre or post pend version and hmac info to serialized protocol buffer
+-(NSData*) serializedTextSecureBufferForVersion:(NSData*) version;
+-(NSData*) serializedTextSecureBufferForVersion:(NSData*) version withHMAC:hmac;
 // C++<->Objc dates
 -(uint64_t) objcDateToCpp:(NSDate*)objcDate;
 -(NSDate*) cppDateToObjc:(uint64_t)cppDate;

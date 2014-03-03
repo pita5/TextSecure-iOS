@@ -12,6 +12,6 @@
 @property (nonatomic,strong) NSData* ephemeralKey;
 @property (nonatomic,strong) NSNumber* counter;
 @property (nonatomic,strong) NSNumber* previousCounter;
-@property (nonatomic,strong) NSData* mac;
--(id) initWithEphemeralKey:(NSData*)ephemeralKey previousCounter:(NSNumber*)previousCounter counter:(NSNumber*)counter encryptedMessage:(NSData*)ciphertext withVersion:(NSData*)version withMac:(NSData*)mac;
+@property (nonatomic,strong) NSData* hmac;
+-(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext withVersion:(NSData*)version withHMAC:(NSData*)mac;
 @end

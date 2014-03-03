@@ -14,9 +14,7 @@
 #import "NSData+Base64.h"
 @implementation TSPreKeyWhisperMessage
 
--(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey
-    senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents
-          withVersion:(NSData*)version{
+-(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents withVersion:(NSData*)version{
     if(self=[super init]) {
         self.preKeyId = prekeyId;
         self.baseKey = prekey;
@@ -26,8 +24,13 @@
     }
     return self;
 }
--(id) initWithData:(NSData*) data {
+-(id) initWithTextSecure_PreKeyWhisperMessage:(NSData*) data {
     /*
+     struct {
+     opaque version[1];
+     opaque PreKeyWhisperMessage[...];
+     } TextSecure_PreKeyWhisperMessage;
+
      # ProtocolBuffer
      message PreKeyWhisperMessage {
      optional uint32 preKeyId    = 1;
@@ -36,15 +39,11 @@
      optional bytes  message     = 4;
      }
      
-     struct {
-     opaque version[1];
-     opaque PreKeyWhisperMessage[...];
-     } TextSecure_PreKeyWhisperMessage;
      */
     if(self = [super init]) {
         self.version = [data subdataWithRange:NSMakeRange(0, 1)];
         // c++
-        textsecure::PreKeyWhisperMessage *prekeyWhisperMessage = [self deserialize:[data subdataWithRange:NSMakeRange(1, [data length]-1)]];
+        textsecure::PreKeyWhisperMessage *prekeyWhisperMessage = [self deserializeProtocolBuffer:[data subdataWithRange:NSMakeRange(1, [data length]-1)]];
         uint32_t cppPreKeyId =  prekeyWhisperMessage->prekeyid();
         const std::string cppBaseKey = prekeyWhisperMessage->basekey();
         const std::string cppIdentityKey = prekeyWhisperMessage->identitykey();
@@ -60,7 +59,6 @@
 
 
 -(const std::string) serializedProtocolBufferAsString {
-#warning ADD VERSION
     textsecure::PreKeyWhisperMessage *preKeyMessage = new textsecure::PreKeyWhisperMessage;
     // objective c->c++
     uint32_t cppPreKeyId =  [self objcNumberToCppUInt32:self.preKeyId];
@@ -77,7 +75,7 @@
 }
 
 #pragma mark private methods
-- (textsecure::PreKeyWhisperMessage *)deserialize:(NSData *)data {
+- (textsecure::PreKeyWhisperMessage *)deserializeProtocolBuffer:(NSData *)data {
     int len = [data length];
     char raw[len];
     textsecure::PreKeyWhisperMessage *messageSignal = new textsecure::PreKeyWhisperMessage;

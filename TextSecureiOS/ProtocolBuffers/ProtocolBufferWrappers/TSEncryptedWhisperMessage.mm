@@ -13,24 +13,27 @@
 @synthesize counter;
 @synthesize previousCounter;
 @synthesize message;
-@synthesize mac;
+@synthesize hmac;
 
--(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter
-                   counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext
-                    withVersion:(NSData*)version withMac:(NSData*)mac{
+-(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext withVersion:(NSData*)version withHMAC:(NSData*)mac{
     if(self = [super init]) {
         self.ephemeralKey = ephemeral;
         self.previousCounter = prevCounter;
         self.counter = ctr;
         self.message=ciphertext;
         self.version = version;
-        self.mac = mac;
+        self.hmac = mac;
     }
     return self;
 }
 
--(id) initWithData:(NSData*) data {
+-(id) initWithTextSecure_WhisperMessage:(NSData*) data {
     /* Protocol v2
+     struct {
+         opaque version[1];
+         opaque WhisperMessage[...];
+         opaque mac[8];
+     } TextSecure_WhisperMessage;
     message WhisperMessage {
         optional bytes  ephemeralKey    = 1;
         optional uint32 counter         = 2;
@@ -38,19 +41,14 @@
         optional bytes  ciphertext      = 4;
     }
     
-    struct {
-        opaque version[1];
-        opaque WhisperMessage[...];
-        opaque mac[8];
-    } TextSecure_WhisperMessage;
     */
     if(self = [super init]) {
         // 1st extract out version and mac
         self.version = [data subdataWithRange:NSMakeRange(0, 1)];
-        self.mac = [data subdataWithRange:NSMakeRange([data length]-8, 8)];
+        self.hmac = [data subdataWithRange:NSMakeRange([data length]-8, 8)];
         NSData* whisperMessageProtobuf = [data subdataWithRange:NSMakeRange(1, [data length] -8-1)];
         // c++
-        textsecure::WhisperMessage *whisperMessage = [self deserialize:whisperMessageProtobuf];
+        textsecure::WhisperMessage *whisperMessage = [self deserializeProtocolBuffer:whisperMessageProtobuf];
         const std::string cppEphemeralKey =  whisperMessage->ephemeralkey();
         
         const uint32_t cppCounter = whisperMessage->counter();
@@ -67,7 +65,6 @@
 
 
 -(const std::string) serializedProtocolBufferAsString {
-#warning ADD VERSION
     textsecure::WhisperMessage *whisperMessage = new textsecure::WhisperMessage;
     // objective c->c++
     const std::string cppEphemeralKey = [self objcDataToCppString:self.ephemeralKey];
@@ -87,7 +84,7 @@
 }
 
 #pragma mark private methods
-- (textsecure::WhisperMessage *)deserialize:(NSData *)data {
+- (textsecure::WhisperMessage *)deserializeProtocolBuffer:(NSData *)data {
     int len = [data length];
     char raw[len];
     textsecure::WhisperMessage *messageSignal = new textsecure::WhisperMessage;

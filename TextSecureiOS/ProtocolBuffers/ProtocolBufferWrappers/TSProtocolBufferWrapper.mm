@@ -29,6 +29,21 @@
   return [NSData dataWithBytes:ps.c_str() length:ps.size()];
 }
 
+-(NSData*) serializedTextSecureBufferForVersion:(NSData*) version {
+    NSMutableData *serialized = [NSMutableData data];
+    [serialized appendData:version];
+    [serialized appendData:[self serializedProtocolBuffer]];
+    return serialized;
+}
+
+
+-(NSData*) serializedTextSecureBufferForVersion:(NSData*) version withHMAC:hmac{
+    NSMutableData *serialized = [NSMutableData data];
+    [serialized appendData:[self serializedTextSecureBufferForVersion:version]];
+    [serialized appendData:hmac];
+    return serialized;
+}
+
 #pragma mark boilerplate conversion methods
 #warning need to test this! it is currently crashing under some circumstances
 -(uint64_t) objcDateToCpp:(NSDate*)objcDate {
