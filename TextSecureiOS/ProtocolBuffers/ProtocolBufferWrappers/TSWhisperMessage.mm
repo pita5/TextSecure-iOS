@@ -10,4 +10,14 @@
 
 @implementation TSWhisperMessage
 
+
+
+-(NSData*) serializedTextSecureBuffer {
+    NSMutableData *serialized = [NSMutableData data];
+    [serialized appendData:self.version];
+    [serialized appendData:[self serializedProtocolBuffer]];
+    return serialized;
+}
+
+
 @end

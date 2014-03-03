@@ -13,4 +13,7 @@
 @property (nonatomic,strong) NSData* message;
 @property (nonatomic,strong) NSData* version;
 
+
+-(NSData*) serializedTextSecureBuffer;
+
 @end

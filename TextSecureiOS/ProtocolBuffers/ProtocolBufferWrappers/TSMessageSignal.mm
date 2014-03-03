@@ -8,7 +8,6 @@
 
 #import "TSMessageSignal.hh"
 
-#import "TSUnencryptedWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSPushMessageContent.hh"
@@ -69,14 +68,11 @@
 
 -(TSWhisperMessage*) getWhisperMessageForData:(NSData*) data {
   switch (self.contentType) {
-    case TSUnencryptedWhisperMessageType:
-      return [[TSUnencryptedWhisperMessage alloc] initWithData:data];
-      break;
     case TSEncryptedWhisperMessageType:
-      return [[TSEncryptedWhisperMessage alloc] initWithData:data];
+          return [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:data];
       break;
     case TSPreKeyWhisperMessageType:
-      return [[TSPreKeyWhisperMessage alloc] initWithData:data];
+          return [[TSPreKeyWhisperMessage alloc] initWithTextSecure_PreKeyWhisperMessage:data];
       break;
     default:
       return nil;

@@ -13,5 +13,6 @@
 @property (nonatomic,strong) NSNumber* counter;
 @property (nonatomic,strong) NSNumber* previousCounter;
 @property (nonatomic,strong) NSData* hmac;
--(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext withVersion:(NSData*)version withHMAC:(NSData*)mac;
+-(id) initWithTextSecure_WhisperMessage:(NSData*) data;
+-(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version withHMAC:(NSData*)mac;
 @end

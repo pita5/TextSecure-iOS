@@ -14,7 +14,7 @@
 #import "NSData+Base64.h"
 @implementation TSPreKeyWhisperMessage
 
--(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents withVersion:(NSData*)version{
+-(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)version{
     if(self=[super init]) {
         self.preKeyId = prekeyId;
         self.baseKey = prekey;
@@ -87,23 +87,21 @@
 
 
 
-+(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral  withVersion:(NSData*)version withMac:(NSData*)mac{
-    
++(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
                                                           initWithEphemeralKey:[myNextEphemeral publicKey]
                                                           previousCounter:[NSNumber numberWithInt:0]
                                                           counter:[NSNumber numberWithInt:0]
                                                           encryptedMessage:ciphertext
-                                                          withVersion:version withMac:mac];
+                                                          forVersion:version withHMAC:hmac];
     TSECKeyPair *identityKey = [TSUserKeysDatabase identityKey];
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
                                              initWithPreKeyId:theirPrekeyId
                                              senderPrekey:[currentEphemeral publicKey]
                                              senderIdentityKey:[identityKey publicKey]
-                                             message:[encryptedWhisperMessage serializedProtocolBuffer]];
+                                             message:[encryptedWhisperMessage serializedProtocolBuffer] forVersion:version];
     
-    return [prekeyMessage serializedProtocolBuffer];
 }
 
 @end

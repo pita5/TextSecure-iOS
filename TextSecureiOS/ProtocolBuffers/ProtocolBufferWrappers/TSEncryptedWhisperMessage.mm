@@ -15,7 +15,7 @@
 @synthesize message;
 @synthesize hmac;
 
--(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext withVersion:(NSData*)version withHMAC:(NSData*)mac{
+-(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version withHMAC:(NSData*)mac{
     if(self = [super init]) {
         self.ephemeralKey = ephemeral;
         self.previousCounter = prevCounter;
@@ -62,6 +62,16 @@
     }
     return self; // super is abstract class
 }
+
+
+
+-(NSData*) serializedTextSecureBuffer{
+    NSMutableData *serialized = [NSMutableData data];
+    [serialized appendData:[super serializedTextSecureBuffer:self.version]];
+    [serialized appendData:self.hmac];
+    return serialized;
+}
+
 
 
 -(const std::string) serializedProtocolBufferAsString {
