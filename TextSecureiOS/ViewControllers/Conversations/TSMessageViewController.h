@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "JSMessagesViewController.h"
 #import "TSContact.h"
-#import "TSProtocols.h"
 @class TSMessage;
 @class TSAttachment;
 
@@ -17,7 +16,7 @@
  *  ComposeMessageViewController has two constructors, one for 1-to-1 discussions and the other one for group discussions.
  */
 
-@interface TSMessageViewController : JSMessagesViewController <UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
+@interface TSMessageViewController : JSMessagesViewController <UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource, UINavigationControllerDelegate>
 
 /**
  *  Constructor for 1-to-1 discussions

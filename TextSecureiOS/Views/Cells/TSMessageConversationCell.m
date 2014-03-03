@@ -30,7 +30,7 @@
     threadPreviewLabel.textColor = [UIColor lightGrayColor];
     threadPreviewLabel.numberOfLines = 2;
     threadPreviewLabel.font = [UIFont systemFontOfSize:14.0f];
-    self.threadPreviewLabel = threadPreviewLabel;
+    self.conversationPreviewLabel = threadPreviewLabel;
         
     UIImageView *disclosureImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     disclosureImageView.tintColor = [UIColor lightGrayColor];
@@ -39,7 +39,7 @@
     [self.contentView addSubview:self.timestampLabel];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.disclosureImageView];
-    [self.contentView addSubview:self.threadPreviewLabel];
+    [self.contentView addSubview:self.conversationPreviewLabel];
 
     return self;
 }
@@ -64,7 +64,7 @@
     self.titleLabel.frame = CGRectMake(leftPadding, yPadding, titleLabelSize.width, titleLabelSize.height);
     
     CGSize threadPreviewLabelSize = CGSizeMake(CGRectGetWidth(contentViewBounds), CGRectGetHeight(contentViewBounds) - 2*yPadding - CGRectGetHeight(self.titleLabel.frame));
-    self.threadPreviewLabel.frame = CGRectMake(leftPadding, CGRectGetMaxY(self.titleLabel.frame), threadPreviewLabelSize.width - rightPadding - leftPadding, threadPreviewLabelSize.height);
+    self.conversationPreviewLabel.frame = CGRectMake(leftPadding, CGRectGetMaxY(self.titleLabel.frame), threadPreviewLabelSize.width - rightPadding - leftPadding, threadPreviewLabelSize.height);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

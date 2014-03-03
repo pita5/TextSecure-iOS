@@ -8,10 +8,11 @@
 
 #import "TSUserKeysDatabase.h"
 #import "TSSession.h"
+#import "TSMessage.h"
 
 @interface TSSession(){
     NSData *theirBaseKey;
-    TSECKeyPair *ourEphemeral;
+   // TSECKeyPair *ourEphemeral;
     NSArray *receivingChains; // 5 last receiving chains
     NSArray *sendingChains; // 5 last sending chains
 }
@@ -43,12 +44,14 @@
     return self;
 }
 
-- (void)decrypt:(TSEncryptedWhisperMessage*)message{
+- (NSData*)decrypt:(TSEncryptedWhisperMessage*)message{
     NSData *cipherText = message.message; // WHY NO CIPHERTEXT PROPERTY?
 #warning Where is the cipherText?
     
     
 }
+
+- (NSData*)encrypt:(TSMessage*)message
 
 #pragma mark PreKey utils
 
@@ -93,7 +96,7 @@
         TSECKeyPair *ourEphemeral = [self senderEphemeral];
         TSChainKey *receiverChain = [self createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
         TSECKeyPair *ourNewEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        TSChain
+        TSChain *senderChain = [self createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
         
 
             RootKey                 rootKey         = sessionRecord.getRootKey();

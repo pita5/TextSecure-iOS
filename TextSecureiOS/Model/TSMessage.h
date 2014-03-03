@@ -25,4 +25,5 @@ typedef void (^TSMessageChangeState)(BOOL success);
 
 -(BOOL) isUnread;
 
+
 @end

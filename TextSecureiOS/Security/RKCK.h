@@ -31,4 +31,5 @@
 +(RKCK*) currentReceivingChain:(TSSession*)thread;
 -(void) saveReceivingChainOnThread:(TSSession*)thread withTheirEphemeral:(NSData*)ephemeral;
 -(void) saveSendingChainOnThread:(TSSession*)thread withMyNewEphemeral:(TSECKeyPair *)ephemeral;
+
 @end

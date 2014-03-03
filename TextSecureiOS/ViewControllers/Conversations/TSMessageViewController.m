@@ -11,7 +11,7 @@
 #import "TSContactManager.h"
 #import "TSContact.h"
 #import "TSMessagesDatabase.h"
-#import "TSMessage.h"
+#import "TSMessageOutgoing.h"
 #import "TSKeyManager.h"
 #import "TSAttachment.h"
 #import "TSAttachmentManager.h"
@@ -48,8 +48,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.messages = [TSMessagesDatabase messagesOnThread:self.thread];
+
+    self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
     self.delegate = self;
     self.dataSource = self;
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -81,14 +81,14 @@
 
 - (void)didSendText:(NSString *)text {
     
-    TSMessage *message = [TSMessage messageWithContent:text sender:[TSKeyManager getUsernameToken] recipient:self.contact.registeredID date:[NSDate date] attachment:self.attachment];
+    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initWithMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
     
     //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
     //        // this is asynchronous so message will only be send by messages manager when it succeeds
     //        [TSAttachmentManager uploadAttachment:message];
     //    }
     
-    [[TSMessagesManager sharedManager] sendMessage:message onThread:self.thread];
+    [[TSMessagesManager sharedManager] scheduleMessageSend:message];
     
     [self finishSend];
 }
@@ -146,7 +146,7 @@
     NSString* filename = [[Cryptography truncatedHMAC:encryptedData withHMACKey:randomEncryptionKey truncation:10] base64EncodedStringWithOptions:0];
     NSString* writeToFile = [FilePath pathInDocumentsDirectory:filename];
     [encryptedData writeToFile:writeToFile atomically:YES];
-    self.attachment = [[TSAttachment alloc] initWithAttachmentDataPath:writeToFile withType:attachmentType withDecryptionKey:randomEncryptionKey];
+    //self.attachment = [[TSAttachment alloc] initWithAttachmentDataPath:writeToFile withType:attachmentType withDecryptionKey:randomEncryptionKey];
     //size of button
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -193,14 +193,14 @@
 }
 
 #pragma mark - Messages view data source
-- (BOOL) shouldHaveThumbnailForRowAtIndexPath:(NSIndexPath*)indexPath {
-    TSAttachment *attachment = [[self.messages objectAtIndex:indexPath.row] attachment];
-    return attachment.attachmentType != TSAttachmentEmpty;
-}
-- (UIImage *)thumbnailForRowAtIndexPath:(NSIndexPath *)indexPath {
-    TSAttachment *attachment = [[self.messages objectAtIndex:indexPath.row] attachment];
-    return [attachment getThumbnailOfSize:100];
-}
+//- (BOOL) shouldHaveThumbnailForRowAtIndexPath:(NSIndexPath*)indexPath {
+//    TSAttachment *attachment = [[self.messages objectAtIndex:indexPath.row] attachment];
+//    return attachment.attachmentType != TSAttachmentEmpty;
+//}
+//- (UIImage *)thumbnailForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    TSAttachment *attachment = [[self.messages objectAtIndex:indexPath.row] attachment];
+//    return [attachment getThumbnailOfSize:100];
+//}
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [[self.messages objectAtIndex:indexPath.row] content];

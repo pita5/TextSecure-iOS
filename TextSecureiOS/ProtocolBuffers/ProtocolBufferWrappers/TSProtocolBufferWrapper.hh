@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <string>
 
-@interface TSProtocolBufferWrapper : NSObject 
+@interface TSProtocolBufferWrapper : NSObject
+
 #pragma mark these must be overridden by subclass
 -(id) initWithData:(NSData*) buffer;
 -(const std::string) serializedProtocolBufferAsString;

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "TSWhisperMessageKeys.h"
-#import "TSProtocols.h"
 #import "TSECKeyPair.h"
 #import "RKCK.h"
 #import "TSSession.h"

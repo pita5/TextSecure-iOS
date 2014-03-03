@@ -28,3 +28,10 @@ extern NSTimeInterval const timeOutForRequests;
 extern NSString* const countryInfoPathInMainBundle;
 extern NSString* const countryInfoKeyCountryCode;
 extern NSString* const countryInfoKeyName;
+
+typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
+    TSUnencryptedWhisperMessageType = 0,
+    TSEncryptedWhisperMessageType = 1,
+    TSIgnoreOnIOSWhisperMessageType=2, // on droid this is the prekey bundle message irrelevant for us
+    TSPreKeyWhisperMessageType = 3
+};

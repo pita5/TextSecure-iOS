@@ -8,7 +8,7 @@
 
 #import "TSSubmitMessageRequest.h"
 #import "TSContact.h"
-#import "TSProtocols.h"
+
 @implementation TSSubmitMessageRequest
 
 -(TSRequest*) initWithRecipient:(NSString*) contactRegisteredID message:(NSString*) messageBody ofType:(TSWhisperMessageType)type {

@@ -886,7 +886,6 @@
 		A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		A5E6CC07187AC6D5002A1735 /* TSDownloadAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSDownloadAttachment.h; path = TextSecureiOS/Networking/Requests/TSDownloadAttachment.h; sourceTree = "<group>"; };
 		A5E6CC08187AC6D5002A1735 /* TSDownloadAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSDownloadAttachment.m; path = TextSecureiOS/Networking/Requests/TSDownloadAttachment.m; sourceTree = "<group>"; };
-		A5E6CC44187BFCB6002A1735 /* TSProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSProtocols.h; path = Security/TSProtocols.h; sourceTree = "<group>"; };
 		A5E6CC61187D0F4B002A1735 /* IncomingPushMessageSignal.pb.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IncomingPushMessageSignal.pb.hh; sourceTree = "<group>"; };
 		A5E6CC62187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IncomingPushMessageSignal.pb.mm; sourceTree = "<group>"; };
 		A5E6CC63187D0F4B002A1735 /* IncomingPushMessageSignal.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = IncomingPushMessageSignal.proto; sourceTree = "<group>"; };
@@ -1601,7 +1600,6 @@
 		A5F15AA117029BB400856385 /* Security */ = {
 			isa = PBXGroup;
 			children = (
-				A5E6CC44187BFCB6002A1735 /* TSProtocols.h */,
 				A538A27C1869DC6500CD0A3D /* TSKeyManager.h */,
 				A538A27D1869DC6500CD0A3D /* TSKeyManager.m */,
 				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,

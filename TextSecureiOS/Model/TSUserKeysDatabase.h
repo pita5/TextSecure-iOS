@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSProtocols.h"
 @class TSECKeyPair;
 
 

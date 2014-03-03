@@ -20,7 +20,7 @@
 
 @implementation TSMessageOutgoing
 
--(instancetype) initWithMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state{
+- (instancetype)initWithMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state{
     
     self = [super init];
     if (self) {
@@ -30,10 +30,10 @@
         self.timestamp = timestamp;
         self.group = group;
         self.attachments = attachements;
-        self.state =
+        self.state = state;
         return self;
     }
-    return  nil;
+    return nil;
 }
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{
@@ -43,7 +43,7 @@
     block(YES);
 }
 
--(BOOL) isUnread{
+- (BOOL)isUnread{
     return false;
 }
 

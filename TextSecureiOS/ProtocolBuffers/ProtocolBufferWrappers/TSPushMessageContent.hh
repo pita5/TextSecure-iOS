@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TSProtocolBufferWrapper.hh"
+
 @class TSMessage;
 @interface TSPushMessageContent :  TSProtocolBufferWrapper
 @property (nonatomic,strong) NSString* body;

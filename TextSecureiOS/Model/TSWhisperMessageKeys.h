@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSProtocols.h"
 @interface TSWhisperMessageKeys : NSObject
 
 -(id)initWithCipherKey:(NSData*)cipherKey macKey:(NSData*)macKey;

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "TSContact.h"
-#import "TSPreKeyWhisperMessage.hh"
 #import "RKCK.h"
 #import "TSChainKey.h"
 #import "TSWhisperMessageKeys.h"
@@ -68,7 +67,7 @@
 
 // HAS MESSAGE KEYS
 
-- (TSWhisperMessage*)messageKeys;
+- (TSWhisperMessageKeys*)messageKeys;
 
 // REMOVE MESSAGE KEYS
 

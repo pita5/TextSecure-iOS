@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSProtocols.h"
 
 @class TSSession;
 @class TSMessage;
@@ -21,7 +20,7 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
  *  It contains 6 tables - contacts, sessions, messages, groups, attachements, settings
  */
 
-@interface TSMessagesDatabase : NSObject<AxolotlPersistantStorage>
+@interface TSMessagesDatabase : NSObject
 
 +(BOOL) databaseCreateWithError:(NSError **)error;
 +(void) databaseErase;
