@@ -14,17 +14,23 @@
 #import "NSData+Base64.h"
 @implementation TSPreKeyWhisperMessage
 
--(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents {
+-(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)version{
     if(self=[super init]) {
         self.preKeyId = prekeyId;
         self.baseKey = prekey;
         self.identityKey = identityKey;
         self.message = messageContents;
+        self.version = version;
     }
     return self;
 }
--(id) initWithData:(NSData*) data {
+-(id) initWithTextSecure_PreKeyWhisperMessage:(NSData*) data {
     /*
+     struct {
+     opaque version[1];
+     opaque PreKeyWhisperMessage[...];
+     } TextSecure_PreKeyWhisperMessage;
+
      # ProtocolBuffer
      message PreKeyWhisperMessage {
      optional uint32 preKeyId    = 1;
@@ -33,14 +39,11 @@
      optional bytes  message     = 4;
      }
      
-     struct {
-     opaque version[1];
-     opaque PreKeyWhisperMessage[...];
-     } TextSecure_PreKeyWhisperMessage;
      */
     if(self = [super init]) {
+        self.version = [data subdataWithRange:NSMakeRange(0, 1)];
         // c++
-        textsecure::PreKeyWhisperMessage *prekeyWhisperMessage = [self deserialize:data];
+        textsecure::PreKeyWhisperMessage *prekeyWhisperMessage = [self deserializeProtocolBuffer:[data subdataWithRange:NSMakeRange(1, [data length]-1)]];
         uint32_t cppPreKeyId =  prekeyWhisperMessage->prekeyid();
         const std::string cppBaseKey = prekeyWhisperMessage->basekey();
         const std::string cppIdentityKey = prekeyWhisperMessage->identitykey();
@@ -72,7 +75,7 @@
 }
 
 #pragma mark private methods
-- (textsecure::PreKeyWhisperMessage *)deserialize:(NSData *)data {
+- (textsecure::PreKeyWhisperMessage *)deserializeProtocolBuffer:(NSData *)data {
     int len = [data length];
     char raw[len];
     textsecure::PreKeyWhisperMessage *messageSignal = new textsecure::PreKeyWhisperMessage;
@@ -83,23 +86,33 @@
 
 
 
+-(NSData*) getTextSecure_PreKeyWhisperMessage {
+    NSMutableData *serialized = [NSMutableData data];
+    [serialized appendData:self.version];
+    [serialized appendData:[self serializedProtocolBuffer]];
+    return serialized;
+}
 
-+(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral{
-    
+
++(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
                                                           initWithEphemeralKey:[myNextEphemeral publicKey]
                                                           previousCounter:[NSNumber numberWithInt:0]
                                                           counter:[NSNumber numberWithInt:0]
-                                                          encryptedMessage:ciphertext];
+                                                          encryptedMessage:ciphertext
+                                                          forVersion:version withHMAC:hmac];
     TSECKeyPair *identityKey = [TSUserKeysDatabase identityKey];
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
                                              initWithPreKeyId:theirPrekeyId
                                              senderPrekey:[currentEphemeral publicKey]
                                              senderIdentityKey:[identityKey publicKey]
-                                             message:[encryptedWhisperMessage serializedProtocolBuffer]];
+                                             message:[encryptedWhisperMessage serializedProtocolBuffer] forVersion:version];
+    return [prekeyMessage getTextSecure_PreKeyWhisperMessage];
     
-    return [prekeyMessage serializedProtocolBuffer];
 }
+
+
+
 
 @end

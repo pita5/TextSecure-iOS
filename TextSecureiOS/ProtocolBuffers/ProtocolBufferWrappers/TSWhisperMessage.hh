@@ -12,15 +12,6 @@
 
 @interface TSWhisperMessage : TSProtocolBufferWrapper
 @property (nonatomic,strong) NSData* message;
-
-//A TextSecure_WhisperMessage is actually
-
-/**
- *  struct {
-        opaque version[1];
-        opaque WhisperMessage[...];
-        opaque mac[8];
-    } TextSecure_WhisperMessage;
- */
+@property (nonatomic,strong) NSData* version;
 
 @end

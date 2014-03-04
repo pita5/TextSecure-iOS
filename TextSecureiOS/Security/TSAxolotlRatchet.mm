@@ -28,6 +28,7 @@
 #import "TSHKDF.h"
 #import "RKCK.h"
 #import "TSContact.h"
+#import "Constants.h"
 
 @interface TSAxolotlRatchet ()
 
@@ -41,8 +42,6 @@
 + (TSWhisperMessageKeys*)decryptionKeysForSession:(TSSession*)session ephemeral:(NSData*)ephemeral counter:(int)counter{
     TSChainKey *chainKey = [self getOrCreateChainKey:session ephemeral:ephemeral];
     
-    
-    
 }
 
 + (TSWhisperMessageKeys*)encryptionKeyForSession:(TSSession*)session{
@@ -54,7 +53,69 @@
 
 + (TSChainKey*)getOrCreateChainKey:(TSSession*)session ephemeral:(NSData*)ephemeral{
     if ([session ]) {
-        <#statements#>
+        
+    switch (messageType) {
+            
+        case TSPreKeyWhisperMessageType:{
+            // get a contact's prekey
+            TSContact* contact = [[TSContact alloc] initWithRegisteredID:message.recipientId];
+            TSThread* thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:message.recipientId]]save:YES];
+            [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                switch (operation.response.statusCode) {
+                    case 200:{
+                        
+                        NSLog(@"Prekey fetched :) ");
+                        
+                        // Extracting the recipients keying material from server payload
+                        
+                        NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+                        NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
+                        NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
+                        
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirEphemeralKey.length == 33) {
+                            theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+                        
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirIdentityKey.length == 33) {
+                            theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+                        
+                        // Retreiving my keying material to construct message
+                        
+                        TSECKeyPair *currentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
+                        NSData* computedHMAC;
+                        NSData* version = [NSData dataWithBytes:&textSecureVersion length:sizeof(textSecureVersion)];
+                        NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0] forVersion:version computedHMAC:&computedHMAC];
+                        TSECKeyPair *nextEphemeral = [TSMessagesDatabase ephemeralOfSendingChain:thread]; // nil
+                        NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:encryptedMessage theirPrekeyId:theirPrekeyId myCurrentEphemeral:currentEphemeral myNextEphemeral:nextEphemeral forVersion:version  withHMAC:computedHMAC];
+                        [TSAxolotlRatchet receiveMessage:encodedPreKeyWhisperMessage];
+                        [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[encodedPreKeyWhisperMessage base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                        
+                        // nil
+                        break;
+                    }
+                    default:
+                        DLog(@"error sending message");
+#warning Add error handling if not able to get contacts prekey
+                        break;
+                }
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning right now it is not succesfully processing returned response, but is giving 200
+                DLog(@"Not a 200");
+                
+            }];
+            
+            break;
+        }
+        case TSEncryptedWhisperMessageType: {
+#warning clearly this needs filled in
+            // unsupported
+            break;
+        }
+        default:
+            break;
     }
 }
 
@@ -70,7 +131,6 @@ throws InvalidMessageException
             Pair<RootKey, ChainKey> receiverChain   = rootKey.createChain(theirEphemeral, ourEphemeral);
             ECKeyPair               ourNewEphemeral = Curve.generateKeyPairForType(Curve.DJB_TYPE);
             Pair<RootKey, ChainKey> senderChain     = receiverChain.first.createChain(theirEphemeral, ourNewEphemeral);
-            
             sessionRecord.setRootKey(senderChain.first);
             sessionRecord.addReceiverChain(theirEphemeral, receiverChain.second);
             sessionRecord.setPreviousCounter(sessionRecord.getSenderChainKey().getIndex()-1);
@@ -115,6 +175,7 @@ throws InvalidMessageException
     RKCK *newSendingChain = [newReceivingChain createChainWithNewEphemeral:newSendingKey fromTheirProvideEphemeral:theirNewEphemeral];
     [newReceivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirNewEphemeral];
     [newSendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:newSendingKey];
+
 }
 
 
@@ -144,7 +205,5 @@ throws InvalidMessageException
 }
 
 #pragma mark Encryption - Decryption Methods
-
-
 
 @end

@@ -23,7 +23,7 @@ NSString* const textSecureDirectoryAPI= @"v1/directory";
 NSString* const textSecureAttachmentsAPI= @"v1/attachments";
 
 NSTimeInterval const timeOutForRequests = 10;
-
+unsigned char  const textSecureVersion = 0;
 // CountryCodes.plist constants
 NSString* const countryInfoPathInMainBundle = @"CountryCodes";
 NSString* const countryInfoKeyCountryCode = @"country_code";

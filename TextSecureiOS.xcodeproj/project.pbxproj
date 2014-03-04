@@ -408,7 +408,6 @@
 		A5E6CC84187D0FF1002A1735 /* TSPreKeyWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC7A187D0FF1002A1735 /* TSPreKeyWhisperMessage.mm */; };
 		A5E6CC85187D0FF1002A1735 /* TSProtocolBufferWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC7C187D0FF1002A1735 /* TSProtocolBufferWrapper.mm */; };
 		A5E6CC86187D0FF1002A1735 /* TSPushMessageContent.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC7E187D0FF1002A1735 /* TSPushMessageContent.mm */; };
-		A5E6CC87187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC80187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm */; };
 		A5E6CC90187D1E41002A1735 /* TSWhisperMessage.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */; };
 		A5E6CC97187FB7C6002A1735 /* TSWhisperMessageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */; };
 		A5E6CC9B18826005002A1735 /* TSProtocolBufferWrapperTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */; };
@@ -908,8 +907,6 @@
 		A5E6CC7C187D0FF1002A1735 /* TSProtocolBufferWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSProtocolBufferWrapper.mm; path = ProtocolBuffers/ProtocolBufferWrappers/TSProtocolBufferWrapper.mm; sourceTree = "<group>"; };
 		A5E6CC7D187D0FF1002A1735 /* TSPushMessageContent.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSPushMessageContent.hh; path = ProtocolBuffers/ProtocolBufferWrappers/TSPushMessageContent.hh; sourceTree = "<group>"; };
 		A5E6CC7E187D0FF1002A1735 /* TSPushMessageContent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSPushMessageContent.mm; path = ProtocolBuffers/ProtocolBufferWrappers/TSPushMessageContent.mm; sourceTree = "<group>"; };
-		A5E6CC7F187D0FF1002A1735 /* TSUnencryptedWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSUnencryptedWhisperMessage.hh; path = ProtocolBufferWrappers/TSUnencryptedWhisperMessage.hh; sourceTree = "<group>"; };
-		A5E6CC80187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSUnencryptedWhisperMessage.mm; path = ProtocolBufferWrappers/TSUnencryptedWhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC81187D0FF1002A1735 /* TSWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSWhisperMessage.hh; path = ProtocolBufferWrappers/TSWhisperMessage.hh; sourceTree = "<group>"; };
 		A5E6CC8F187D1E41002A1735 /* TSWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSWhisperMessage.mm; path = ProtocolBufferWrappers/TSWhisperMessage.mm; sourceTree = "<group>"; };
 		A5E6CC95187FB7C6002A1735 /* TSWhisperMessageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWhisperMessageKeys.h; path = Model/TSWhisperMessageKeys.h; sourceTree = "<group>"; };
@@ -1577,8 +1574,6 @@
 				A5E6CC76187D0FF1002A1735 /* TSEncryptedWhisperMessage.mm */,
 				A5E6CC79187D0FF1002A1735 /* TSPreKeyWhisperMessage.hh */,
 				A5E6CC7A187D0FF1002A1735 /* TSPreKeyWhisperMessage.mm */,
-				A5E6CC7F187D0FF1002A1735 /* TSUnencryptedWhisperMessage.hh */,
-				A5E6CC80187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm */,
 			);
 			name = MessageTypes;
 			path = ProtocolBuffers;
@@ -2358,7 +2353,6 @@
 				B6B478E61809E7F5005DDE12 /* TSContactsIntersectionRequest.m in Sources */,
 				A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */,
 				B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */,
-				A5E6CC87187D0FF1002A1735 /* TSUnencryptedWhisperMessage.mm in Sources */,
 				A5E6CC84187D0FF1002A1735 /* TSPreKeyWhisperMessage.mm in Sources */,
 				B693C5A818147CED007E8360 /* TSContact.m in Sources */,
 				A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */,

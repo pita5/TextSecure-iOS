@@ -6,7 +6,7 @@ At this early stage there are two primary developers of TextSecure iOS: [@corbet
 
 We are trying to follow the [GitHub code conventions for Objective-C](https://github.com/github/objective-c-conventions) and we appreciate that pull requests do conform with those conventions. 
 
-In addition to that, always add curly braces to your `if` conditionals, even if there is no `else`.
+In addition to that, always add curly braces to your `if` conditionals, even if there is no `else`. Booleans should be declared according to their Objective-C definition, and hence take `YES` or `NO` as values.
 
 One note, for programmers joining us from Java or similar language communities, note that [exceptions are not commonly used for errors that may occur in normal use](http://stackoverflow.com/questions/324284/throwing-an-exception-in-objective-c-cocoa/324805#324805) so familiarize yourself with **NSError** 
 
@@ -22,4 +22,4 @@ If you don't agree with us, you can use the [ClangFormat Xcode plugin](https://g
 
 Open Whisper Systems is currently [experimenting](https://whispersystems.org/blog/bithub/) with the funding privacy Free and Open Source software. Payments are opt-in for the `TextSecure-iOS` repo and can be enabled by adding `MONEYMONEY` in a commit message string. For example, this is the current Open WhisperSystems payout per commit, rendered dynamically as an image by the Open WhisperSystems BitHub instance:
 
-![Bithub Payment Amount](https://bithub.herokuapp.com/v1/status/payment/commit?format=png)
+[![Bithub Payment Amount](https://bithub.herokuapp.com/v1/status/payment/commit)](https://whispersystems.org/blog/bithub/)

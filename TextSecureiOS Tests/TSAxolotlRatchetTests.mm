@@ -55,8 +55,7 @@ static NSString *masterPw = @"1234test";
 #pragma mark private helper methods
 -(NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
 -(NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey;
--(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter;
-
+-(NSData*) encryptTSMessage:(TSMessage*)message  withKeys:(TSWhisperMessageKeys *)messageKeys withCTR:(NSNumber*)counter forVersion:(NSData*)version computedHMAC:(NSData**)computedMac;
 
 #pragma mark private test methods
 /* TCO = testing case/class only */
@@ -248,7 +247,7 @@ static NSString *masterPw = @"1234test";
      be improved when I can mimic bob with an external DB. Soon!
      
     */
-    
+    NSData* version = [Cryptography generateRandomBytes:1];
     
     // note in this test alice's identity key = bob's as they are sharing the same keydb. their ephemeral keys will be different.
     TSECKeyPair* aliceIdentityKey = [TSUserKeysDatabase identityKey];
@@ -269,10 +268,10 @@ static NSString *masterPw = @"1234test";
     TSECKeyPair* aliceSendingKey = [TSMessagesDatabase ephemeralOfSendingChain:self.thread1];
     XCTAssertNotNil(aliceSendingKey, @"alice sending key is nil");
     TSWhisperMessageKeys* aliceEncryptionKeys =  [self.alice nextMessageKeysOnChain:TSSendingChain];
-
-    NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:aliceEncryptionKeys withCTR:[NSNumber numberWithInt:0]];
+    NSData* computedHMAC;
+    NSData *encryptedMessage = [self.alice encryptTSMessage:self.message1 withKeys:aliceEncryptionKeys withCTR:[NSNumber numberWithInt:0] forVersion:version computedHMAC:&computedHMAC];
     // This is to test our helper methods using the same encryption/decryption keys, and before we try to go through Bob.
-    NSData* tsMessageTrivialEncryptAndDecryptWithAlice = [Cryptography decryptCTRMode:encryptedMessage withKeys:aliceEncryptionKeys withCounter:[NSNumber numberWithInt:0]]; // since we are decrypting with the same keys we encrypted with by definition this should pass
+    NSData* tsMessageTrivialEncryptAndDecryptWithAlice = [Cryptography decryptCTRMode:encryptedMessage withCounter:[NSNumber numberWithInt:0] withKeys:aliceEncryptionKeys forVersion:version withHMAC:computedHMAC];
     TSMessage* trivialDecryptedWithAliceMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageTrivialEncryptAndDecryptWithAlice encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
     XCTAssertTrue([trivialDecryptedWithAliceMessage.content isEqualToString:self.message1.content], @"message encrypted by alice not equal to that decrypted by alice with the same keys. something is really wrong");
 
@@ -287,7 +286,13 @@ static NSString *masterPw = @"1234test";
     XCTAssert([aliceEncryptionKeys.cipherKey isEqualToData:bobDecryptionKeys.cipherKey], @"alice %@ and bob's %@ cipher keys are not equal",aliceEncryptionKeys.cipherKey ,bobDecryptionKeys.cipherKey);
     XCTAssert([aliceEncryptionKeys.macKey isEqualToData:bobDecryptionKeys.macKey], @"alice %@ and bob's mac keys %@ are not equal",aliceEncryptionKeys.macKey,bobDecryptionKeys.macKey);
     
+<<<<<<< HEAD
     NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withKeys:bobDecryptionKeys withCounter:[NSNumber numberWithInt:0]]; // This is null
+=======
+
+
+    NSData* tsMessageDecryption = [Cryptography decryptCTRMode:encryptedMessage withCounter:[NSNumber numberWithInt:0] withKeys:bobDecryptionKeys forVersion:version withHMAC:computedHMAC]; // This is null
+>>>>>>> df1d105e21f317654d353845b5c112a256ccc25d
     
     TSMessage* decryptedMessage=[TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSASCIIStringEncoding] sender:self.aliceUserName recipient:self.bobUserName date:[NSDate date]];
     

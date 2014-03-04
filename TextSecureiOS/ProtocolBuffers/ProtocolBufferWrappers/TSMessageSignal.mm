@@ -8,7 +8,6 @@
 
 #import "TSMessageSignal.hh"
 
-#import "TSUnencryptedWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSPushMessageContent.hh"
@@ -38,11 +37,11 @@
 -(const std::string) serializedProtocolBufferAsString {
   textsecure::IncomingPushMessageSignal *messageSignal = new textsecure::IncomingPushMessageSignal;
   // objective c->c++
+
   const uint32_t cppType = self.contentType;
   const std::string cppSource = [self objcStringToCpp:self.source];
   const uint64_t cppTimestamp = [self objcDateToCpp:self.timestamp];
-  const std::string cppMessage = [self.message serializedProtocolBufferAsString];
-
+  const std::string cppMessage = (cppType == TSEncryptedWhisperMessageType) ? [self objcDataToCppString:[(TSEncryptedWhisperMessage*)self.message getTextSecure_WhisperMessage]] :  [self objcDataToCppString:[(TSPreKeyWhisperMessage*)self.message getTextSecure_PreKeyWhisperMessage]];
   // c++->protocol buffer
   messageSignal->set_type(cppType);
   messageSignal->set_source(cppSource);
@@ -51,10 +50,6 @@
   
   std::string ps = messageSignal->SerializeAsString();
   return ps;
-}
-
--(TSMessage*) getTSMessage:(TSPushMessageContent*) pushMessageContent {
-    return [TSMessage messageWithContent:pushMessageContent.body sender:self.source recipient:[TSKeyManager getUsernameToken] date:self.timestamp attachment:nil];
 }
 
 #pragma mark private methods
@@ -69,14 +64,11 @@
 
 -(TSWhisperMessage*) getWhisperMessageForData:(NSData*) data {
   switch (self.contentType) {
-    case TSUnencryptedWhisperMessageType:
-      return [[TSUnencryptedWhisperMessage alloc] initWithData:data];
-      break;
     case TSEncryptedWhisperMessageType:
-      return [[TSEncryptedWhisperMessage alloc] initWithData:data];
+          return [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:data];
       break;
     case TSPreKeyWhisperMessageType:
-      return [[TSPreKeyWhisperMessage alloc] initWithData:data];
+          return [[TSPreKeyWhisperMessage alloc] initWithTextSecure_PreKeyWhisperMessage:data];
       break;
     default:
       return nil;

@@ -11,11 +11,6 @@
 @implementation TSProtocolBufferWrapper
 
 #pragma mark these must be overridden by subclass
--(id) initWithData:(NSData*) buffer {
-  @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                               userInfo:nil];
-}
 
 -(const std::string) serializedProtocolBufferAsString {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
@@ -29,8 +24,8 @@
   return [NSData dataWithBytes:ps.c_str() length:ps.size()];
 }
 
+
 #pragma mark boilerplate conversion methods
-#warning need to test this! it is currently crashing under some circumstances
 -(uint64_t) objcDateToCpp:(NSDate*)objcDate {
   return round([objcDate timeIntervalSince1970]);
 }

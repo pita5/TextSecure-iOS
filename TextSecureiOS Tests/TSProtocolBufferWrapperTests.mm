@@ -10,7 +10,6 @@
 #import "TSProtocolBufferWrapper.hh"
 #import "Cryptography.h"
 #import "TSWhisperMessage.hh"
-#import "TSUnencryptedWhisperMessage.hh"
 #import "TSMessageSignal.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSPushMessageContent.hh"
@@ -50,27 +49,37 @@
 
 -(void) testMessageSignalSerialization {
     TSMessageSignal* messageSignal = [[TSMessageSignal alloc] init];
-    messageSignal.contentType = TSUnencryptedWhisperMessageType;
+    messageSignal.contentType = TSEncryptedWhisperMessageType;
     messageSignal.source = @"+11111111";
     messageSignal.timestamp = [NSDate date];
-    
-    TSUnencryptedWhisperMessage *message = [[TSUnencryptedWhisperMessage alloc] init];
+    /* messageSignal.message  contains a TextSecure_WhisperMessage or a TextSecure_PrekeyWhisperMessage
+     we are testing a TextSecure_WhisperMessage here
+    */
+    // Generating the TextSecure_WhisperMessage
+    NSData* ephemeral = [Cryptography generateRandomBytes:32];
+    NSNumber* prevCounter = [NSNumber numberWithInt:0];
+    NSNumber* counter = [NSNumber numberWithInt:0];
+    // Normally the encrypted message would contain, well an encrypted PushMessageContent. Here we don't test encryption, so it's unencrypted for the test
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
-    pushContent.body = @"Surf is up";
-    NSData *serializedMessageContent = [pushContent serializedProtocolBuffer];
-    message.message = serializedMessageContent;
-    
-    messageSignal.message = message;
+    pushContent.body = @"hello Hawaii";
+    NSData *serializedPushMessageContent = [pushContent serializedProtocolBuffer];
+    NSData* version = [Cryptography generateRandomBytes:1];
+    NSData *hmacKey = [Cryptography generateRandomBytes:32];
+    NSMutableData* toHmac = [NSMutableData data];
+    [toHmac appendData:version];
+    [toHmac appendData:serializedPushMessageContent];
+    NSData* hmac = [Cryptography truncatedHMAC:toHmac withHMACKey:hmacKey truncation:8];
+    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedMessage:serializedPushMessageContent forVersion:version withHMAC:hmac];
+    // Have everything we need to fill out our message signal message
+    messageSignal.message = tsEncryptedMessage;
+
     
     NSData *serializedMessageSignal = [messageSignal serializedProtocolBuffer];
     TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithData:serializedMessageSignal];
     
     XCTAssertTrue(messageSignal.contentType == deserializedMessageSignal.contentType,@"TSMessageSignal contentType unequal after serialization");
     
-    
-    
     XCTAssertTrue([messageSignal.source isEqualToString:deserializedMessageSignal.source],@"TSMessageSignal source unequal after serialization");
-    
 #warning compare with a nstimeinterval
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
@@ -78,32 +87,17 @@
     NSString* nowString = [dateFormatter stringFromDate:messageSignal.timestamp];
     NSString* convertedNowString  = [dateFormatter stringFromDate:deserializedMessageSignal.timestamp];
     
-    
     XCTAssertTrue([nowString isEqualToString:convertedNowString],@"TSMessageSignal dates unequal after serialization");
     
     
     
-    TSUnencryptedWhisperMessage *unencryptedDeserializedMessage = (TSUnencryptedWhisperMessage*)deserializedMessageSignal.message;
+    TSEncryptedWhisperMessage *encryptedDeserializedMessage = (TSEncryptedWhisperMessage*)deserializedMessageSignal.message;
     
-    TSPushMessageContent *deserializedPushMessageContent = [[TSPushMessageContent alloc] initWithData:unencryptedDeserializedMessage.message];
+    TSPushMessageContent *deserializedPushMessageContent = [[TSPushMessageContent alloc] initWithData:encryptedDeserializedMessage.message];
     XCTAssertTrue([pushContent.body isEqualToString:deserializedPushMessageContent.body],@"TSMessageSignal message unequal after serialization");
 }
 
 
--(void)testUnencryptedWhisperMessageSerialization {
-    TSUnencryptedWhisperMessage *message = [[TSUnencryptedWhisperMessage alloc] init];
-    TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
-    pushContent.body = @"Surf is up";
-    NSData *serializedMessageContent = [pushContent serializedProtocolBuffer];
-    message.message = serializedMessageContent;
-    
-    
-    NSData *serializedMessage = [message serializedProtocolBuffer];
-    TSUnencryptedWhisperMessage *deserializedMessage  = [[TSUnencryptedWhisperMessage alloc] initWithData:serializedMessage];
-    
-    XCTAssertTrue([deserializedMessage.message isEqualToData:serializedMessageContent], @"TSUnencryptedWhisperMessage serialization/deserialization failed");
-    
-}
 
 -(void)testPushMessageContentSerialization {
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
@@ -123,13 +117,18 @@
     
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
     pushContent.body = @"Surf is up";
-    
     NSData *serializedPushMessageContent = [pushContent serializedProtocolBuffer];
     encryptedWhisperMessage.message = serializedPushMessageContent;
+    unsigned char version = 5;
+    encryptedWhisperMessage.version = [NSData dataWithBytes:&version length:sizeof(version)];
+    encryptedWhisperMessage.hmac = [Cryptography generateRandomBytes:8]; // just to test serialization not encryption
+
     
-    NSData* serializedEncryptedMessage = [encryptedWhisperMessage serializedProtocolBuffer];
     
-    TSEncryptedWhisperMessage *deserializedEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithData:serializedEncryptedMessage];
+    
+    NSData* serializedEncryptedMessage = [encryptedWhisperMessage getTextSecure_WhisperMessage];
+    
+    TSEncryptedWhisperMessage *deserializedEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:serializedEncryptedMessage]; 
     
     NSLog(@"encrypted whispermessage original vs new %@ vs. %@",encryptedWhisperMessage,deserializedEncryptedMessage);
     XCTAssertTrue([deserializedEncryptedMessage.previousCounter isEqualToNumber:encryptedWhisperMessage.previousCounter], @"previous counters unequal");

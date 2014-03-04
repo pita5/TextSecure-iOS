@@ -1,0 +1,4 @@
+struct {
+  opaque version[1];
+  opaque PreKeyWhisperMessage[...];
+} TextSecure_PreKeyWhisperMessage;
