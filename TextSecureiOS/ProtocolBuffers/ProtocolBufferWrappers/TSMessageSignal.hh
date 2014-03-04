@@ -18,9 +18,7 @@
 @property (nonatomic,strong) NSArray *destinations;
 @property (nonatomic,strong) NSDate *timestamp;
 @property (nonatomic,strong) TSWhisperMessage *message;
-<<<<<<< HEAD
 
--(TSMessage*) getTSMessage:(TSPushMessageContent*) pushMessageContent;
-=======
->>>>>>> df1d105e21f317654d353845b5c112a256ccc25d
+-(TSWhisperMessage*) getWhisperMessageForData:(NSData*) data;
+
 @end
