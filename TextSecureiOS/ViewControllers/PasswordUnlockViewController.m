@@ -30,6 +30,7 @@
     
     self.passwordTextField.placeholder = @"Please enter your password";
     self.passwordTextField.returnKeyType = UIReturnKeyGo;
+    [self.passwordTextField becomeFirstResponder];
     self.passwordTextField.delegate = self;
 }
 
