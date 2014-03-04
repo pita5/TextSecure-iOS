@@ -48,9 +48,7 @@
 
 -(void)sendMessage:(TSMessage*)message{
     dispatch_async(queue, ^{
-        [TSMessagesDatabase storeMessage:message];
-        
-        
+        [TSMessagesDatabase storeMessage:message]d;
     }
     // For a given thread, the Axolotl Ratchet should find out what's the current messaging state to send the message.
     

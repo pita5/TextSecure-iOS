@@ -52,7 +52,7 @@
 #pragma mark Private methods
 
 + (TSChainKey*)getOrCreateChainKey:(TSSession*)session ephemeral:(NSData*)ephemeral{
-    if ([session ]) {
+    if ([session hasReceiverChain:ephemeral]) {
         
     switch (messageType) {
             

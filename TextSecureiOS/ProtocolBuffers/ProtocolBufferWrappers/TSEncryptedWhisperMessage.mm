@@ -9,11 +9,6 @@
 #import "TSEncryptedWhisperMessage.hh"
 #import "WhisperMessage.pb.hh"
 @implementation TSEncryptedWhisperMessage
-@synthesize ephemeralKey;
-@synthesize counter;
-@synthesize previousCounter;
-@synthesize message;
-@synthesize hmac;
 
 -(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version withHMAC:(NSData*)mac{
     if(self = [super init]) {

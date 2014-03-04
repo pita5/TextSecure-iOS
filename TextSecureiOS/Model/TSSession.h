@@ -11,6 +11,7 @@
 #import "RKCK.h"
 #import "TSChainKey.h"
 #import "TSWhisperMessageKeys.h"
+#import "TSEncryptedWhisperMessage.hh"
 
 @interface TSSession : NSObject
 

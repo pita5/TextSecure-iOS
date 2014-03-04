@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "TSMessage.h"
+
 #import "TSProtocolBufferWrapper.hh"
+
 
 @interface TSWhisperMessage : TSProtocolBufferWrapper
 @property (nonatomic,strong) NSData* message;

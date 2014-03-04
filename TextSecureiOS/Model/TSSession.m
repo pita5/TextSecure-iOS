@@ -9,6 +9,7 @@
 #import "TSUserKeysDatabase.h"
 #import "TSSession.h"
 #import "TSMessage.h"
+#import "TSPreKeyWhisperMessage.hh"
 
 @interface TSSession(){
     NSData *theirBaseKey;
@@ -45,7 +46,7 @@
 }
 
 - (NSData*)decrypt:(TSEncryptedWhisperMessage*)message{
-    NSData *cipherText = message.message; // WHY NO CIPHERTEXT PROPERTY?
+    NSData *cipherText = message.mee; // WHY NO CIPHERTEXT PROPERTY?
 #warning Where is the cipherText?
     
     
@@ -85,49 +86,57 @@
     }
 }
 
-#pragma mark Chain keys
-
-- (TSChainKey*)getOrCreateChainKey:(NSData *)theirEphemeral {
-    if ([self hasReceiverChain:theirEphemeral]) {
-        return [self chainKeyForEphemeral:(NSData*)theirEphemeral];
-    } else{
-        
-        NSData *rootKey = [self rootKey];
-        TSECKeyPair *ourEphemeral = [self senderEphemeral];
-        TSChainKey *receiverChain = [self createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
-        TSECKeyPair *ourNewEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        TSChain *senderChain = [self createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
-        
-
-            RootKey                 rootKey         = sessionRecord.getRootKey();
-            ECKeyPair               ourEphemeral    = sessionRecord.getSenderEphemeralPair();
-            Pair<RootKey, ChainKey> receiverChain   = rootKey.createChain(theirEphemeral, ourEphemeral);
-            ECKeyPair               ourNewEphemeral = Curve.generateKeyPairForType(Curve.DJB_TYPE);
-            Pair<RootKey, ChainKey> senderChain     = receiverChain.first.createChain(theirEphemeral, ourNewEphemeral);
-            
-            sessionRecord.setRootKey(senderChain.first);
-            sessionRecord.addReceiverChain(theirEphemeral, receiverChain.second);
-            sessionRecord.setPreviousCounter(sessionRecord.getSenderChainKey().getIndex()-1);
-            sessionRecord.setSenderChain(ourNewEphemeral, senderChain.second);
-            
-            return receiverChain.second;
-    }
-    
-    else {
-        RootKey                 rootKey         = sessionRecord.getRootKey();
-        ECKeyPair               ourEphemeral    = sessionRecord.getSenderEphemeralPair();
-        Pair<RootKey, ChainKey> receiverChain   = rootKey.createChain(theirEphemeral, ourEphemeral);
-        ECKeyPair               ourNewEphemeral = Curve.generateKeyPairForType(Curve.DJB_TYPE);
-        Pair<RootKey, ChainKey> senderChain     = receiverChain.first.createChain(theirEphemeral, ourNewEphemeral);
-        
-        sessionRecord.setRootKey(senderChain.first);
-        sessionRecord.addReceiverChain(theirEphemeral, receiverChain.second);
-        sessionRecord.setPreviousCounter(sessionRecord.getSenderChainKey().getIndex()-1);
-        sessionRecord.setSenderChain(ourNewEphemeral, senderChain.second);
-        
-        return receiverChain.second;
-    }
+- (NSData*)rootKey{
+    // Get Key
 }
+- (BOOL)setRootKey:(NSData*)rootKey{
+    // Save Root key
+    return YES;
+}
+
+#pragma mark Chain keys
+//
+//- (TSChainKey*)getOrCreateChainKey:(NSData *)theirEphemeral {
+//    if ([self hasReceiverChain:theirEphemeral]) {
+//        return [self chainKeyForEphemeral:(NSData*)theirEphemeral];
+//    } else{
+//        
+//        NSData *rootKey = [self rootKey];
+//        TSECKeyPair *ourEphemeral = [self senderEphemeral];
+//        TSChainKey *receiverChain = [self createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
+//        TSECKeyPair *ourNewEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+//        TSChain *senderChain = [self createChainWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
+//        
+//
+//            RootKey                 rootKey         = sessionRecord.getRootKey();
+//            ECKeyPair               ourEphemeral    = sessionRecord.getSenderEphemeralPair();
+//            Pair<RootKey, ChainKey> receiverChain   = rootKey.createChain(theirEphemeral, ourEphemeral);
+//            ECKeyPair               ourNewEphemeral = Curve.generateKeyPairForType(Curve.DJB_TYPE);
+//            Pair<RootKey, ChainKey> senderChain     = receiverChain.first.createChain(theirEphemeral, ourNewEphemeral);
+//            
+//            sessionRecord.setRootKey(senderChain.first);
+//            sessionRecord.addReceiverChain(theirEphemeral, receiverChain.second);
+//            sessionRecord.setPreviousCounter(sessionRecord.getSenderChainKey().getIndex()-1);
+//            sessionRecord.setSenderChain(ourNewEphemeral, senderChain.second);
+//            
+//            return receiverChain.second;
+//    }
+//    
+//    else {
+//        RootKey                 rootKey         = sessionRecord.getRootKey();
+//        ECKeyPair               ourEphemeral    = sessionRecord.getSenderEphemeralPair();
+//        Pair<RootKey, ChainKey> receiverChain   = rootKey.createChain(theirEphemeral, ourEphemeral);
+//        ECKeyPair               ourNewEphemeral = Curve.generateKeyPairForType(Curve.DJB_TYPE);
+//        Pair<RootKey, ChainKey> senderChain     = receiverChain.first.createChain(theirEphemeral, ourNewEphemeral);
+//        
+//        sessionRecord.setRootKey(senderChain.first);
+//        sessionRecord.addReceiverChain(theirEphemeral, receiverChain.second);
+//        sessionRecord.setPreviousCounter(sessionRecord.getSenderChainKey().getIndex()-1);
+//        sessionRecord.setSenderChain(ourNewEphemeral, senderChain.second);
+//        
+//        return receiverChain.second;
+//    }
+//}
 
 - (TSChainKey*)chainKeyForEphemeral:(NSData*)theirEphemeral{
     // Perform DB lookup and return

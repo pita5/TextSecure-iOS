@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSWhisperMessage.hh"
+#ifdef __cplusplus
 #import "WhisperMessage.pb.hh"
+#endif
+#import "TSWhisperMessage.hh"
 
 @interface TSEncryptedWhisperMessage : TSWhisperMessage
 

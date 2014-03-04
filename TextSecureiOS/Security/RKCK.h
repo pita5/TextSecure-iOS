@@ -27,9 +27,9 @@
 
 
 -(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral;
-+(RKCK*) currentSendingChain:(TSSession*)thread;
-+(RKCK*) currentReceivingChain:(TSSession*)thread;
--(void) saveReceivingChainOnThread:(TSSession*)thread withTheirEphemeral:(NSData*)ephemeral;
--(void) saveSendingChainOnThread:(TSSession*)thread withMyNewEphemeral:(TSECKeyPair *)ephemeral;
+//+(RKCK*) currentSendingChain:(TSSession*)thread;
+//+(RKCK*) currentReceivingChain:(TSSession*)thread;
+//-(void) saveReceivingChainOnThread:(TSSession*)thread withTheirEphemeral:(NSData*)ephemeral;
+//-(void) saveSendingChainOnThread:(TSSession*)thread withMyNewEphemeral:(TSECKeyPair *)ephemeral;
 
 @end
