@@ -111,7 +111,6 @@
 
 - (void)updateBasedOnUserSettings {
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"resetDB"]) {
-
         [TSKeyManager removeAllKeychainItems];
         [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
         [[NSUserDefaults standardUserDefaults] synchronize];
