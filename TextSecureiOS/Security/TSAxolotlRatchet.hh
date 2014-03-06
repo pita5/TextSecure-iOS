@@ -7,16 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSWhisperMessageKeys.h"
-#import "TSECKeyPair.h"
-#import "RKCK.h"
-#import "TSSession.h"
+
+@class TSPrekey;
+@class TSWhisperMessage;
 @class TSMessage;
+@class TSContact;
+@class TSEncryptedWhisperMessage;
 
 @interface TSAxolotlRatchet : NSObject
 
-+ (TSWhisperMessageKeys*)decryptionKeysForSession:(TSSession*)session ephemeral:(NSData*)ephemeral counter:(int)counter;
-+ (TSWhisperMessageKeys*)encryptionKeyForSession:(TSSession*)session;
+// Method for outgoing messages
++ (BOOL) needsPrekey:(TSContact*)contact;
++ (TSWhisperMessage*)encryptedMessage:(TSMessage*)outgoingMessage deviceId:(int)deviceId preKey:(TSPrekey*)prekey;
++ (TSWhisperMessage*)encryptedMessage:(TSMessage*)outgoingMessage deviceId:(int)deviceId;
+
+// Method for incoming messages
++ (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message;
+
+#pragma mark Identity
++ (TSECKeyPair*)myIdentityKey;
 
 
 @end

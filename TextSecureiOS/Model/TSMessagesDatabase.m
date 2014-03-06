@@ -89,10 +89,6 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS missed_messages (skipped_MK BLOB,skipped_HKs BLOB, skipped_HKr BLOB,thread_id TEXT,FOREIGN KEY(thread_id) REFERENCES threads(thread_id))"]) {
-            return;
-        }
-    
         dbInitSuccess = YES;
         
     }];
@@ -198,7 +194,7 @@ static TSDatabaseManager *messagesDb = nil;
     return success;
 }
 
-- (TSContact*)contactForRegisteredID:(NSString*)registredID {
++ (TSContact*)contactForRegisteredID:(NSString*)registredID {
     openDBMacroNil
     
     __block TSContact *contact = nil;
@@ -220,7 +216,7 @@ static TSDatabaseManager *messagesDb = nil;
     return contact;
 }
 
-+ (NSArray*) contacts{
++ (NSArray*)contacts{
     openDBMacroNil
     
     NSMutableArray *contacts = [NSMutableArray array];
@@ -358,7 +354,7 @@ static TSDatabaseManager *messagesDb = nil;
     NSMutableArray *array = [NSMutableArray array];
     
     for(TSContact* contact in contacts){
-
+        
         NSArray *message = [self messagesWithContact:contact numberOfPosts:1];
         
         if ([message count] == 1) {
@@ -381,6 +377,16 @@ static TSDatabaseManager *messagesDb = nil;
 
 #pragma mark Sessions
 
+- (BOOL)sessionExistsForContact:(TSContact*)contact{
+    
+}
+
+- (BOOL)storeSession:(TSSession*)session{
+    
+}
+- (NSArray*)sessionsForTSContact:(TSContact*)session{
+    
+}
 
 
 @end

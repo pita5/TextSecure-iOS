@@ -25,5 +25,6 @@ typedef void (^TSMessageChangeState)(BOOL success);
 
 -(BOOL) isUnread;
 
+- (instancetype)initWithSenderId:(NSString*)senderId recipientId:(NSString*)recipientId date:(NSDate*)date content:(NSString*)content attachements:(NSArray*)attachements groupId:(TSGroup*)group;
 
 @end

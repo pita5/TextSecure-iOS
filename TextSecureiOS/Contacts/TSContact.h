@@ -28,6 +28,9 @@
  *  @return TSContact instance
  */
 
+
+- (instancetype)contactWithRegisteredID:(NSString*)registeredID;
+
 - (instancetype)initWithRegisteredID:(NSString*)registeredID relay:(NSString*)relay;
 
 /**

@@ -16,11 +16,19 @@
 
 @implementation TSContact
 
+- (instancetype)contactWithRegisteredID:(NSString*)registeredID{
+    return [self initWithRegisteredID:registeredID relay:nil];
+}
+
 -(instancetype) initWithRegisteredID:(NSString*)registeredID relay:(NSString*)relay{
-    self=[super init];
-    if(self) {
+    
+    self = [TSMessagesDatabase contactForRegisteredID:registeredID];
+    
+    if(!self) {
+        self=[super init];
         _registeredID = registeredID;
         _relay = relay;
+        [TSMessagesDatabase storeContact:self];
     }
     return self;
 }
@@ -99,4 +107,5 @@
 -(void) save{
     [TSMessagesDatabase storeContact:self];
 }
+
 @end

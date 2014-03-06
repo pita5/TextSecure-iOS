@@ -22,29 +22,30 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 
 @interface TSMessagesDatabase : NSObject
 
-+(BOOL) databaseCreateWithError:(NSError **)error;
-+(void) databaseErase;
-+(BOOL) databaseWasCreated;
++ (BOOL)databaseCreateWithError:(NSError **)error;
++ (void)databaseErase;
++ (BOOL)databaseWasCreated;
 
 // Calling the following functions will fail if the storage master key hasn't been unlocked
 
 #pragma mark Settings
-+(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues;
++ (BOOL)storePersistentSettings:(NSDictionary*)settingNamesAndValues;
 
 #pragma mark Contacts
 
-+(BOOL) storeContact:(TSContact*)contact;
++ (TSContact*)contactForRegisteredID:(NSString*)registredID;
++ (BOOL)storeContact:(TSContact*)contact;
 
 #pragma mark Sessions
 
 /**
  *  A session contains all information required by the Axolotl ratchet. It is unique to a registeredID and a deviceID. Because in the future, TS users will be able to add many devices to a single identity key/registered ID, we have to make sure that we can support multiple sessions with a TSContact.
  */
-
-+(BOOL) deleteSession:(TSSession*)session;
-+(BOOL) storeSession:(TSSession*)session;
-+(TSSession*) sessionForRegisteredId:(NSString*)registeredId;
-+(TSSession*) sessionForRegisteredId:(NSString*)registeredId deviceId:(int)deviceId;
++ (BOOL)sessionExistsForContact:(TSContact*)contact;
++ (BOOL)deleteSession:(TSSession*)session;
++ (BOOL)storeSession:(TSSession*)session;
++ (NSArray*)sessionsForRegisteredId:(NSString*)registeredId;
++ (TSSession*)sessionForRegisteredId:(NSString*)registeredId deviceId:(int)deviceId;
 
 #pragma mark Messages
 

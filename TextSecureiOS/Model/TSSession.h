@@ -11,6 +11,7 @@
 #import "RKCK.h"
 #import "TSChainKey.h"
 #import "TSWhisperMessageKeys.h"
+#import "TSPrekey.h"
 #import "TSEncryptedWhisperMessage.hh"
 
 @interface TSSession : NSObject
@@ -21,59 +22,10 @@
 
 @property(readonly)NSData *theirIdentityKey;
 @property(copy)NSData *theirEphemeralKey;
+@property(readwrite)NSData *rootKey;
 
 #pragma mark Constructors
 
-/**
- *  Constructor for outgoing message intializations
- *
- *  @param contact   TSContact we are sending the message to
- *  @param deviceId  Identifier int of receiving device
- *  @param ephemeral
- *
- *  @return returns the session instance
- */
 
-- (instancetype)initWithContact:(TSContact*)contact deviceId:(int)deviceId ephemeral:(NSData*)ephemeral;
-
-
-#pragma mark Identity
-
-- (TSECKeyPair*)myIdentityKey;
-
-#pragma mark Axolotl
-
-- (int)previousCounter;
-- (void)setPreviousCounter;
-
-- (NSData*)rootKey;
-- (BOOL)setRootKey:(NSData*)rootKey;
-
-- (NSData*)senderEphemeralPublic;
-- (TSECKeyPair*)senderEphemeral;
-
-- (BOOL)setSenderEphemeral:(TSECKeyPair*)ephemeral;
-
-- (void)setSenderChainWithKeyPair:(TSECKeyPair*)keyPair chainKey:(TSChainKey*)chainKey;
-
-// GET OR CREATE RECEIVER CHAIN
-
-- (TSChainKey*)getOrCreateChainKey:(NSData*)theirEphemeral;
-
-- (BOOL)hasReceiverChain:(NSData*)theirEphemeral;
-
-// GET OR CREATE SENDER CHAIN
-
-- (TSChainKey*)getOrCreateSenderChain;
-
-// HAS MESSAGE KEYS
-
-- (TSWhisperMessageKeys*)messageKeys;
-
-// REMOVE MESSAGE KEYS
-
-// SET MESSAGE KEYS
-
-// SET RECEIVER CHAIN KEY
 
 @end

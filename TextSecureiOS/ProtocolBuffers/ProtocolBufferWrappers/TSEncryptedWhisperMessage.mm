@@ -61,7 +61,7 @@
 
 
 -(NSData*) getTextSecure_WhisperMessage{
-    
+
     NSMutableData *serialized = [NSMutableData data];
     [serialized appendData:self.version];
     [serialized appendData:[self serializedProtocolBuffer]];

@@ -421,6 +421,7 @@
 		B61E05AF18C1884500AC49CA /* TSConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05AE18C1884500AC49CA /* TSConversation.m */; };
 		B61E05B218C1889500AC49CA /* TSGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05B118C1889500AC49CA /* TSGroup.m */; };
 		B61E05B618C254CA00AC49CA /* TSSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B61E05B518C254CA00AC49CA /* TSSession.m */; };
+		B62C218018C7B4BA0044E169 /* TSPrekey.m in Sources */ = {isa = PBXBuildFile; fileRef = B62C217F18C7B4BA0044E169 /* TSPrekey.m */; };
 		B635B3C7182181E1003CE732 /* TSMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* TSMessageViewController.m */; };
 		B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EC18218456003CE732 /* CoreAudio.framework */; };
 		B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EE18218481003CE732 /* AudioToolbox.framework */; };
@@ -934,6 +935,8 @@
 		B61E05B118C1889500AC49CA /* TSGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroup.m; path = Model/TSGroup.m; sourceTree = "<group>"; };
 		B61E05B418C254CA00AC49CA /* TSSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSession.h; path = Model/TSSession.h; sourceTree = "<group>"; };
 		B61E05B518C254CA00AC49CA /* TSSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSession.m; path = Model/TSSession.m; sourceTree = "<group>"; };
+		B62C217E18C7B4BA0044E169 /* TSPrekey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSPrekey.h; path = Model/TSPrekey.h; sourceTree = "<group>"; };
+		B62C217F18C7B4BA0044E169 /* TSPrekey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSPrekey.m; path = Model/TSPrekey.m; sourceTree = "<group>"; };
 		B635B38F182181E1003CE732 /* TSMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageViewController.h; path = ViewControllers/Conversations/TSMessageViewController.h; sourceTree = "<group>"; };
 		B635B390182181E1003CE732 /* TSMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageViewController.m; path = ViewControllers/Conversations/TSMessageViewController.m; sourceTree = "<group>"; };
 		B635B3EC18218456003CE732 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -1670,6 +1673,8 @@
 		B61E05AA18C1754D00AC49CA /* Cryptography */ = {
 			isa = PBXGroup;
 			children = (
+				B62C217E18C7B4BA0044E169 /* TSPrekey.h */,
+				B62C217F18C7B4BA0044E169 /* TSPrekey.m */,
 				B61E05B418C254CA00AC49CA /* TSSession.h */,
 				B61E05B518C254CA00AC49CA /* TSSession.m */,
 				B6BA700018C3092A006E303E /* TSChainKey.h */,
@@ -2415,6 +2420,7 @@
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
 				4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
+				B62C218018C7B4BA0044E169 /* TSPrekey.m in Sources */,
 				A5169D3D170FEDC600A2CE9E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
