@@ -42,6 +42,9 @@
         DLog(@"First Launch");
     }
     
+    [self setDefaultUserSettings];
+    [self updateBasedOnUserSettings];
+    
 #ifdef DEBUG
 	[[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
 														 liveIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
@@ -92,6 +95,28 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     self.blankWindow.rootViewController = nil;
     self.blankWindow.hidden = YES;
+    [self updateBasedOnUserSettings];
+}
+
+
+
+#pragma mark settings
+-(void) setDefaultUserSettings {
+    /* this is as apparently defaults set in settings bundle are just display defaults, must still set in code */
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *appDefaults = [NSDictionary dictionaryWithObject:@"NO" forKey:@"resetDB"];
+    [defaults registerDefaults:appDefaults];
+    [defaults synchronize];
+}
+
+- (void)updateBasedOnUserSettings {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"resetDB"]) {
+
+        [TSKeyManager removeAllKeychainItems];
+        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        exit(0);
+    }
 }
 
 

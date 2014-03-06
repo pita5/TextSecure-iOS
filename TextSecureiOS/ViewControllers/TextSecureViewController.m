@@ -11,7 +11,6 @@
 #import "TSMessagesDatabase.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "NSString+Conversion.h"
-#import "TSSettingsViewController.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
 #import "TSMessage.h"
@@ -32,7 +31,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 @interface TextSecureViewController() <SWTableViewCellDelegate>
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
-@property (nonatomic, strong) UIBarButtonItem *settingsBarButtonItem;
 @property (nonatomic, strong) UIView *searchBarCoverView;
 @property (nonatomic, strong) NSArray *threads;
 @end
@@ -49,8 +47,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     
-    self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
-    self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
     
     self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
     self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
@@ -87,9 +83,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[TSContactPickerViewController alloc]initWithNibName:nil bundle:nil]] animated:YES completion:nil];
 }
 
-- (void)openSettings {
-    [self performSegueWithIdentifier:@"openSettings" sender:self];
-}
 
 #pragma mark - UITableViewDataSource methods
 
@@ -207,7 +200,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     
     if (!isEditing) {
         [self.navigationItem setRightBarButtonItem:self.composeBarButtonItem animated:YES];
-        [self.navigationItem setLeftBarButtonItem:self.settingsBarButtonItem animated:YES];
         
         [UIView animateWithDuration:animationDuration animations:^{
             weakSelf.searchBarCoverView.alpha = 0;

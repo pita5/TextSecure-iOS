@@ -442,7 +442,6 @@
 		B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */; };
 		B63A72181808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */; };
 		B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */; };
-		B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */; };
 		B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */; };
 		B693C5A818147CED007E8360 /* TSContact.m in Sources */ = {isa = PBXBuildFile; fileRef = B693C5A718147CED007E8360 /* TSContact.m */; };
 		B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B478E21809BB3E005DDE12 /* TSContactManager.m */; };
@@ -974,8 +973,6 @@
 		B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactPickerViewController.m; path = ViewControllers/TSContactPickerViewController.m; sourceTree = "<group>"; };
 		B68A2290180AC32C00D93C16 /* TSRegisterForPushRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterForPushRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.h; sourceTree = "<group>"; };
 		B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterForPushRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.m; sourceTree = "<group>"; };
-		B68BFDED1809855B005CC817 /* TSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSettingsViewController.h; path = ViewControllers/TSSettingsViewController.h; sourceTree = "<group>"; };
-		B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSettingsViewController.m; path = ViewControllers/TSSettingsViewController.m; sourceTree = "<group>"; };
 		B68BFDF0180987C6005CC817 /* TSSetMasterPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSetMasterPasswordViewController.h; path = ViewControllers/TSSetMasterPasswordViewController.h; sourceTree = "<group>"; };
 		B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSetMasterPasswordViewController.m; path = ViewControllers/TSSetMasterPasswordViewController.m; sourceTree = "<group>"; };
 		B693C5A618147CED007E8360 /* TSContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContact.h; path = Contacts/TSContact.h; sourceTree = "<group>"; };
@@ -1700,7 +1697,6 @@
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
 				A5169D06170FEA8D00A2CE9E /* CountrySegue.m */,
-				B68BFDEC1809853E005CC817 /* Settings */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1783,15 +1779,6 @@
 				B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */,
 			);
 			name = "Sign up";
-			sourceTree = "<group>";
-		};
-		B68BFDEC1809853E005CC817 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				B68BFDED1809855B005CC817 /* TSSettingsViewController.h */,
-				B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */,
-			);
-			name = Settings;
 			sourceTree = "<group>";
 		};
 		B6B478E01809B9B3005DDE12 /* Contacts */ = {
@@ -2414,7 +2401,6 @@
 				A5E6CC73187D0F4B002A1735 /* WhisperMessage.pb.mm in Sources */,
 				A5E6CC09187AC6D5002A1735 /* TSDownloadAttachment.m in Sources */,
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
-				B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */,
 				8CF7BD981870D9450023A781 /* TSEncryptedDatabase.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				A5E6CC6D187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm in Sources */,
