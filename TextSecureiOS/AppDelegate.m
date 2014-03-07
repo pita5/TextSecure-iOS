@@ -164,7 +164,17 @@
 
 -(void) handlePush:(NSDictionary *)pushInfo {
     DLog(@"We did receive the following push %@", pushInfo);
+    // Check if DB is locked
     [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
+    // IF DB is not locked handle push
+    
+    // Otherwise store in DB queue
+}
+
+-(void) handlePushesQueuedInDB {
+    // for push in db
+    // self handlePush
+
 }
 
 #pragma mark - HockeyApp Delegate Methods

@@ -25,8 +25,11 @@
 }
 
 
-+(instancetype) databaseCreateAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName error:(NSError **)error {
-    
++(instancetype) databaseCreateAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName withPassword:(NSData*)dbMasterKey error:(NSError **)error {
+    // Sanity check 
+    if (!dbMasterKey) {
+        return nil;
+    }
     // Have we created a DB on this device already ?
     if ([[NSUserDefaults standardUserDefaults] boolForKey:preferenceName]) {
         if (error) {
@@ -38,11 +41,6 @@
     // Cleanup remnants of a previous DB
     [TSEncryptedDatabase databaseEraseAtFilePath:dbFilePath updateBoolPreference:preferenceName];
     
-    // Retrieve storage master key
-    NSData *dbMasterKey = [TSStorageMasterKey getStorageMasterKeyWithError:error];
-    if (!dbMasterKey) {
-        return nil;
-    }
     
     // Create the DB
     __block BOOL dbInitSuccess = NO;
@@ -51,7 +49,7 @@
         if(![db setKeyWithData:dbMasterKey]) {
             return;
         }
-
+        
         FMResultSet *rset = [db executeQuery:@"SELECT count(*) FROM sqlite_master"];
         if (rset) {
             [rset close];
@@ -79,14 +77,35 @@
 }
 
 
-+(instancetype) databaseOpenAndDecryptAtFilePath:(NSString *)dbFilePath error:(NSError **)error {
++(instancetype) databaseCreateAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName error:(NSError **)error {
+    // Retrieve storage master key
+    NSData *dbMasterKey = [TSStorageMasterKey getStorageMasterKeyWithError:error];
+    if (!dbMasterKey) {
+        return nil;
+    }
+    return [TSEncryptedDatabase databaseCreateAtFilePath:dbFilePath updateBoolPreference:preferenceName error:error];
     
+ 
+}
+
+
+
+
+
++(instancetype) databaseOpenAndDecryptAtFilePath:(NSString *)dbFilePath error:(NSError **)error {    
     // Get the storage master key
     NSData *storageKey = [TSStorageMasterKey getStorageMasterKeyWithError:error];
     if (!storageKey) {
         return nil;
     }
-    
+    return [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:dbFilePath withPassword:storageKey error:error];
+}
+
+
++(instancetype) databaseOpenAndDecryptAtFilePath:(NSString *)dbFilePath withPassword:(NSData*)storageKey error:(NSError **)error {
+    if (!storageKey) {
+        return nil;
+    }
     // Try to open the DB
     __block BOOL initSuccess = NO;
     FMDatabaseQueue *dbQueue = [FMDatabaseQueue databaseQueueWithPath:dbFilePath];
@@ -115,7 +134,6 @@
     TSEncryptedDatabase *encryptedDB = [[TSEncryptedDatabase alloc] initWithDatabaseQueue:dbQueue];
     return encryptedDB;
 }
-
 
 +(void) databaseEraseAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName {
     // Update the preferences
