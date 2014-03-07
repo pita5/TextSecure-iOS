@@ -66,7 +66,7 @@
     
     
     
-    return [TSMessageIncoming alloc] initWithMessageWithContent:<#(NSString *)#> sender:<#(NSString *)#> date:<#(NSDate *)#> attachements:<#(NSArray *)#> group:<#(TSGroup *)#> state:<#(TSMessageIncomingState)#>
+    return [[TSMessageIncoming alloc] initWithMessageWithContent:<#(NSString *)#> sender:<#(NSString *)#> date:<#(NSDate *)#> attachements:<#(NSArray *)#> group:<#(TSGroup *)#> state:<#(TSMessageIncomingState)#>];
 }
 
 
@@ -100,6 +100,10 @@
         @throw ([NSException exceptionWithName:@"" reason:@"" userInfo:@{}]);
         
     }
+}
+
++ (TSMessage*)decryptMessageWithSession:(TSSession*)session{
+    
 }
 
 #pragma mark Identity

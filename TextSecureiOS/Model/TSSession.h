@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TSContact.h"
 #import "RKCK.h"
-#import "TSChainKey.h"
+#import "TSChain.h"
 #import "TSWhisperMessageKeys.h"
 #import "TSPrekey.h"
 #import "TSEncryptedWhisperMessage.hh"
@@ -24,8 +24,10 @@
 @property(copy)NSData *theirEphemeralKey;
 @property(readwrite)NSData *rootKey;
 
-#pragma mark Constructors
-
-
+@property TSChain *receivingChain;
+@property TSChain *sendingChain;
+@property NSData *ephemeralReceiving;
+@property TSECKeyPair *ephemeralOutgoing;
+@property int PN;
 
 @end

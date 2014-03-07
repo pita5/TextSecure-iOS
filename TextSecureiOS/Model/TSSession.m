@@ -17,9 +17,15 @@
 
 // Methods for getting session?
 
-- (instancetype)initWithContact:(TSContact *)contact deviceId:(int)deviceId preKeyWhisperMessage:(TSEncryptedWhisperMessage*)message{
+- (instancetype)initOrCreateWithContact:(TSContact *)contact deviceId:(int)deviceId preKeyWhisperMessage:(TSEncryptedWhisperMessage*)message{
     
-    self = [super init];
+    self = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:deviceId];
+    
+    if (!self) {
+        self = [super init];
+    }
+    
+
     
     if (self) {
         _contact = contact;
@@ -30,12 +36,14 @@
             TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
             _theirIdentityKey = [preKeyWhisperMessage identityKey];
         }
-        
     }
-    
     return self;
+}
+
+- (instancetype)initWithContact:(TSContact *)contact deviceId:(int)deviceId preKeyWhisperMessage:(TSEncryptedWhisperMessage*)message{
     
 }
+
 
 
 @end

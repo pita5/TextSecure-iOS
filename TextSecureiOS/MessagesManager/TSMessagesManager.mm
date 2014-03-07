@@ -51,9 +51,9 @@
         [TSMessagesDatabase storeMessage:message];
     }
     // For a given thread, the Axolotl Ratchet should find out what's the current messaging state to send the message.
+                   
     
-#warning Assuming prekey communication only for now.
-    
+   
     TSWhisperMessageType messageType = TSPreKeyWhisperMessageType;
     
     TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:thread];

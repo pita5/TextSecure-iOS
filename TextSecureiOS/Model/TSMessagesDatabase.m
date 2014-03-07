@@ -23,6 +23,7 @@
 #import "TSMessageOutgoing.h"
 #import "TSConversation.h"
 #import "TSSession.h"
+#import "TSChainKey.h"
 
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
 #define databaseFileName @"TSMessages.db"
@@ -33,6 +34,10 @@
 // Reference to the singleton
 static TSDatabaseManager *messagesDb = nil;
 
+typedef NS_ENUM(NSInteger, TSChainType) {
+    TSSendingChain=0,
+    TSReceivingChain
+};
 
 @interface TSMessagesDatabase(Private)
 
@@ -377,15 +382,151 @@ static TSDatabaseManager *messagesDb = nil;
 
 #pragma mark Sessions
 
-- (BOOL)sessionExistsForContact:(TSContact*)contact{
++ (BOOL)sessionExistsForContact:(TSContact*)contact{
+    openDBMacroBOOL
+    __block BOOL sessionExists = NO;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *session = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id=?" withArgumentsInArray:@[contact.registeredID]];
+        
+        if ([session next]) {
+            sessionExists = YES;
+        }
+        
+        [session close];
+        
+    }];
     
+    return sessionExists;
+}
+
+
++ (NSData *)APSDataField:(NSString *)name onSession:(TSSession*)session{
+    // Decrypt the DB if it hasn't been done yet
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]){
+            
+        }
+    }
+    
+    __block NSData * apsField;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id = :registered_id AND device_id= :device_id" withParameterDictionary:@{@"registered_id":session.contact.registeredID, @"device_id": [NSNumber numberWithInt:session.deviceId]}];
+        if ([searchInDB next]) {
+            apsField= [searchInDB dataForColumn:name];
+        } else{
+            DLog(@"No results found!")
+        }
+        [searchInDB close];
+    }];
+    return apsField;
+}
+
++(NSNumber*) APSIntField:(NSString*)name onSession:(TSSession*)session {
+    __block NSNumber* apsField = 0;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id = :registered_id AND device_id= :device_id" withParameterDictionary:@{@"registered_id":session.contact.registeredID, @"device_id": [NSNumber numberWithInt:session.deviceId]}];
+        if ([searchInDB next]) {
+            apsField = [NSNumber numberWithInt:[searchInDB intForColumn:name]];
+        }
+        [searchInDB close];
+    }];
+    return apsField;
+}
+
++(BOOL) APSBoolField:(NSString*)name onThread:(TSSession*)session {
+    __block int apsField = 0;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id = :registered_id AND device_id= :device_id" withParameterDictionary:@{@"registered_id":session.contact.registeredID, @"device_id": [NSNumber numberWithInt:session.deviceId]}];
+        if ([searchInDB next]) {
+            apsField= [searchInDB boolForColumn:name];
+        }
+        [searchInDB close];
+    }];
+    return apsField;
+}
+
++(NSString*) APSStringField:(NSString*)name onThread:(TSSession*)session {
+    __block NSString* apsField = nil;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id = :registered_id AND device_id= :device_id" withParameterDictionary:@{@"registered_id":session.contact.registeredID, @"device_id": [NSNumber numberWithInt:session.deviceId]}];
+        if ([searchInDB next]) {
+            apsField= [searchInDB stringForColumn:name];
+        }
+        [searchInDB close];
+    }];
+    return apsField;
+}
+
++(void) setAPSDataField:(NSDictionary*) parameters{
+    /*
+     parameters
+     nameField : name of db field to set
+     valueField : value of db field to set to
+     registered_id
+     device_id
+     */
+    // Decrypt the DB if it hasn't been done yet
+    if (!messagesDb) {
+        if (![TSMessagesDatabase databaseOpenWithError:nil]){
+            DLog(@"Database is not open");
+            return;
+        }
+        DLog(@"No Database found");
+        return;
+        
+    }
+    
+    if (!([parameters count] == 3)) {
+        DLog(@"Not all parameters were set! ==>  %@", parameters);
+    }
+    
+    NSString* query = [NSString stringWithFormat:@"UPDATE sessions SET %@ = ? WHERE registered_id = :registered_id AND device_id= :device_id",[parameters objectForKey:@"nameField"]];
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:query withParameterDictionary:parameters];
+    }];
+}
+
++(NSString*) APSFieldName:(NSString*)name onChain:(TSChainType)chain{
+    switch (chain) {
+        case TSReceivingChain:
+            return [name stringByAppendingString:@"r"];
+            break;
+        case TSSendingChain:
+            return [name stringByAppendingString:@"s"];
+        default:
+            return name;
+            break;
+    }
 }
 
 - (BOOL)storeSession:(TSSession*)session{
+    openDBMacroBOOL
     
+    __block BOOL success = NO;
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        success = [db executeUpdate:@"INSERT OR REPLACE INTO sessions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[session.contact.registeredID, session.contact.deviceIDs, session.rootKey, session.sendingChain.chainKey.key, session.receivingChain.chainKey.key, session.ephemeralOutgoing, [NSKeyedArchiver archivedDataWithRootObject:session.ephemeralOutgoing], [NSNumber numberWithInt:session.sendingChain.counter], [NSNumber numberWithInt:session.receivingChain.counter], [NSNumber numberWithInt:session.PN]]];
+    }];
+    
+    return success;
 }
-- (NSArray*)sessionsForTSContact:(TSContact*)session{
+
+- (NSArray*)sessionsForTSContact:(TSContact*)contact{
+    openDBMacroNil
+    __block NSMutableArray *sessions = [NSMutableArray array];
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *session = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id=?" withArgumentsInArray:@[contact.registeredID]];
+        
+        while ([session next]) {
+            [sessions addObject:[TSSession alloc]initWith ...];
+        }
+        
+        [session close];
+        
+    }];
     
+    return [sessions copy];
 }
 
 
