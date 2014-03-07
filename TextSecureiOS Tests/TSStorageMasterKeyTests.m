@@ -109,6 +109,7 @@ static NSString *masterPw = @"1234test";
 {
     [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
     [TSStorageMasterKey lockStorageMasterKey];
+
     
     NSError *error = nil;
     NSData *masterKey = [TSStorageMasterKey getStorageMasterKeyWithError:&error];

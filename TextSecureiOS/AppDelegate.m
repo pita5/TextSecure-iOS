@@ -20,6 +20,8 @@
 #import "TSAttachmentManager.h"
 #import "TSMessage.h"
 #import "TSAttachment.h"
+#import "TSWaitingPushMessageDatabase.h"
+#import "TSStorageMasterKey.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -74,7 +76,7 @@
         window.windowLevel = CGFLOAT_MAX;
         window;
     });
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushesQueuedInDB) name:TSDatabaseDidUnlockNotification object:nil];
 	return YES;
 }
 
@@ -103,10 +105,9 @@
 #pragma mark settings
 -(void) setDefaultUserSettings {
     /* this is as apparently defaults set in settings bundle are just display defaults, must still set in code */
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *appDefaults = [NSDictionary dictionaryWithObject:@"NO" forKey:@"resetDB"];
-    [defaults registerDefaults:appDefaults];
-    [defaults synchronize];
+    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO] ,@"resetDB",[NSNumber numberWithBool:NO],kStorageMasterKeyWasCreated, nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)updateBasedOnUserSettings {
@@ -163,8 +164,23 @@
 }
 
 -(void) handlePush:(NSDictionary *)pushInfo {
-    DLog(@"We did receive the following push %@", pushInfo);
-    [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
+    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
+        [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
+    }
+    else {
+        // Store in queue
+        [TSWaitingPushMessageDatabase queuePush:pushInfo];
+    }
+}
+
+-(void) handlePushesQueuedInDB {
+    // This method is triggered whenever DB is unlocked
+    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
+        for(NSDictionary* pushInfo in [TSWaitingPushMessageDatabase getPushesInReceiptOrder]) {
+            [[TSMessagesManager sharedManager] receiveMessagePush:pushInfo];
+        }
+    }
+    [TSWaitingPushMessageDatabase finishPushesQueued];
 }
 
 #pragma mark - HockeyApp Delegate Methods

@@ -12,6 +12,7 @@
 #import "TSUserKeysDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "TSMessagesDatabase.h"
+#import "TSWaitingPushMessageDatabase.h"
 #import "TSECKeyPair.h"
 
 #define pickPassword @"Pick your password"
@@ -87,6 +88,10 @@
     // Create the user keys DB and generate the user's identity key and prekeys
     if (![TSUserKeysDatabase databaseCreateUserKeysWithError:&error]) {
         @throw [NSException exceptionWithName:@"Initial setup of cryptography keys failed" reason:[error localizedDescription] userInfo:nil];
+    }
+    
+    if(![TSWaitingPushMessageDatabase databaseCreateWaitingPushMessageDatabaseWithError:&error]) {
+        @throw [NSException exceptionWithName:@"Initial setup of waiting push message database failed" reason:[error localizedDescription] userInfo:nil];        
     }
     
     // Send the user's newly generated keys to the API

@@ -144,9 +144,10 @@ static TSEncryptedDatabase *messagesDb = nil;
 +(BOOL) storePersistentSettings:(NSDictionary*)settingNamesAndValues {
     // Decrypt the DB if it hasn't been done yet
     if (!messagesDb) {
-        if (![TSMessagesDatabase databaseOpenWithError:nil])
+        if (![TSMessagesDatabase databaseOpenWithError:nil]) {
             // TODO: better error handling
             return NO;
+        }
     }
     
     __block BOOL updateSuccess = YES;
