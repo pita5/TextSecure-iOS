@@ -13,7 +13,7 @@
 #import "Cryptography.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
-#import "NSData+Base64.h"
+
 static TSEncryptedDatabase *waitingPushMessageDb = nil;
 NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database.unlocked";
 
@@ -81,7 +81,7 @@ NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database
 
 
 
-+(void) storePush:(NSDictionary*)pushMessageJson {
++(void) queuePush:(NSDictionary*)pushMessageJson {
     // Decrypt the DB if it hasn't been done yet
     if (!waitingPushMessageDb) {
         if (![TSWaitingPushMessageDatabase databaseOpenWithError:nil]) {
@@ -89,25 +89,24 @@ NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database
         }
     }
     [waitingPushMessageDb.dbQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"INSERT INTO push_messages (message_serialized_json,timestamp) VALUES (?, CURRENT_TIMESTAMP)",[[NSJSONSerialization dataWithJSONObject:pushMessageJson options:kNilOptions error:nil] base64EncodedStringWithOptions:kNilOptions]];
+        [db executeUpdate:@"INSERT INTO push_messages (message_serialized_json,timestamp) VALUES (?, CURRENT_TIMESTAMP)",[NSJSONSerialization dataWithJSONObject:pushMessageJson options:kNilOptions error:nil]];
     }];
 }
 
 
-+(void) deletePush:(NSDictionary*)pushMessageJson {
-    /* invariant: due to axolotol protocol two push message contents will never be the same */
+
++(void) finishPushesQueued {
     // Decrypt the DB if it hasn't been done yet
     if (!waitingPushMessageDb) {
         if (![TSWaitingPushMessageDatabase databaseOpenWithError:nil]) {
             return;
         }
     }
-
     [waitingPushMessageDb.dbQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"DELETE FROM push_messages WHERE message_serialized_json=\"%@\"",[[NSJSONSerialization dataWithJSONObject:pushMessageJson options:kNilOptions error:nil] base64EncodedStringWithOptions:kNilOptions]] ;
+        [db executeUpdate:@"DELETE FROM push_messages"];
     }];
-}
 
+}
 
 +(NSArray*) getPushesInReceiptOrder {
 
@@ -116,16 +115,15 @@ NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database
     if (!waitingPushMessageDb) {
         if (![TSWaitingPushMessageDatabase databaseOpenWithError:nil]){
             NSLog(@"The database is locked!");
+            return nil;
         }
-        return nil;
     }
-    
     __block NSMutableArray *pushArray = [[NSMutableArray alloc] init];
     
     [waitingPushMessageDb.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM push_messages ORDER BY timestamp ASC"]];
         while([searchInDB next]) {
-            [pushArray addObject:[NSJSONSerialization JSONObjectWithData:[NSData dataFromBase64String:[searchInDB stringForColumn:@"message_serialized_json"]] options:kNilOptions error:nil]];
+            [pushArray addObject:[NSJSONSerialization JSONObjectWithData:[searchInDB dataForColumn:@"message_serialized_json"] options:kNilOptions error:nil]];
         }
         [searchInDB close];
     }];

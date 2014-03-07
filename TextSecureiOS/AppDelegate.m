@@ -164,25 +164,23 @@
 }
 
 -(void) handlePush:(NSDictionary *)pushInfo {
-    DLog(@"We did receive the following push %@", pushInfo);
-    // Check if DB is locked
     if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
         [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
     }
     else {
         // Store in queue
-        [TSWaitingPushMessageDatabase storePush:pushInfo];
+        [TSWaitingPushMessageDatabase queuePush:pushInfo];
     }
 }
 
 -(void) handlePushesQueuedInDB {
-    // DB masterkey has to be unlocked for this to have any effect
-    // This should be called whenever DB is unlocked
+    // This method is triggered whenever DB is unlocked
     if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
         for(NSDictionary* pushInfo in [TSWaitingPushMessageDatabase getPushesInReceiptOrder]) {
             [[TSMessagesManager sharedManager] receiveMessagePush:pushInfo];
         }
     }
+    [TSWaitingPushMessageDatabase finishPushesQueued];
 }
 
 #pragma mark - HockeyApp Delegate Methods

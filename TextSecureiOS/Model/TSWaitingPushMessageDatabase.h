@@ -22,6 +22,7 @@ extern NSString * const TSDatabaseDidUnlockNotification;
 +(BOOL) databaseCreateWaitingPushMessageDatabaseWithError:(NSError **)error;
 +(void) databaseErase;
 
-+(void) storePush:(NSDictionary*)pushMessageJson;
++(void) queuePush:(NSDictionary*)pushMessageJson;
++(void) finishPushesQueued;
 +(NSArray*) getPushesInReceiptOrder;
 @end
