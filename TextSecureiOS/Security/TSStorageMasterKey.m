@@ -15,8 +15,6 @@
 #import "TSStorageError.h"
 
 
-#define kStorageMasterKeyWasCreated @"StorageMasterKeyWasCreated"
-#define MASTER_KEY_SIZE 32
 
 
 static uint8_t storageMasterKey[MASTER_KEY_SIZE] = {0};

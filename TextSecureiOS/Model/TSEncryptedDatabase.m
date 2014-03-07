@@ -83,7 +83,7 @@
     if (!dbMasterKey) {
         return nil;
     }
-    return [TSEncryptedDatabase databaseCreateAtFilePath:dbFilePath updateBoolPreference:preferenceName error:error];
+    return [TSEncryptedDatabase databaseCreateAtFilePath:dbFilePath updateBoolPreference:preferenceName withPassword:dbMasterKey error:error];
     
  
 }
