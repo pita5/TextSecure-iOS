@@ -138,7 +138,7 @@
 +(void) databaseEraseAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName {
     // Update the preferences
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:preferenceName];
-    
+    [[NSUserDefaults standardUserDefaults] synchronize];
     // Erase the DB file
     [[NSFileManager defaultManager] removeItemAtPath:dbFilePath error:nil];
 }

@@ -104,10 +104,9 @@
 #pragma mark settings
 -(void) setDefaultUserSettings {
     /* this is as apparently defaults set in settings bundle are just display defaults, must still set in code */
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *appDefaults = [NSDictionary dictionaryWithObject:@"NO" forKey:@"resetDB"];
-    [defaults registerDefaults:appDefaults];
-    [defaults synchronize];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)updateBasedOnUserSettings {

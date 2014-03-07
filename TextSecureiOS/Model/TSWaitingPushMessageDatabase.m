@@ -71,6 +71,7 @@ NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database
 +(void) databaseErase {
     [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:WAITING_PUSH_MESSAGE_DB_FILE_NAME] updateBoolPreference:WAITING_PUSH_MESSAGE_DB_PREFERENCE];
     [[NSUserDefaults standardUserDefaults] setObject:FALSE forKey:WAITING_PUSH_MESSAGE_DB_PASSWORD];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
