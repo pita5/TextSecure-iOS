@@ -20,6 +20,7 @@
 #import "TSAttachmentManager.h"
 #import "TSMessage.h"
 #import "TSAttachment.h"
+#import "TSWaitingPushMessageDatabase.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -165,16 +166,23 @@
 -(void) handlePush:(NSDictionary *)pushInfo {
     DLog(@"We did receive the following push %@", pushInfo);
     // Check if DB is locked
-    [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
-    // IF DB is not locked handle push
-    
-    // Otherwise store in DB queue
+    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
+        [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
+    }
+    else {
+        // Store in queue
+        [TSWaitingPushMessageDatabase storePush:pushInfo];
+    }
 }
 
 -(void) handlePushesQueuedInDB {
-    // for push in db
-    // self handlePush
-
+    // DB masterkey has to be unlocked for this to have any effect
+    // This should be called whenever DB is unlocked
+    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
+        for(NSDictionary* pushInfo in [TSWaitingPushMessageDatabase getPushesInReceiptOrder]) {
+            [[TSMessagesManager sharedManager] receiveMessagePush:pushInfo];
+        }
+    }
 }
 
 #pragma mark - HockeyApp Delegate Methods

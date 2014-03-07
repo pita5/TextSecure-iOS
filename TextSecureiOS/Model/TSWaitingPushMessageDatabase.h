@@ -17,4 +17,6 @@
 +(BOOL) databaseCreateWaitingPushMessageDatabaseWithError:(NSError **)error;
 +(void) databaseErase;
 
++(void) storePush:(NSDictionary*)pushMessageJson;
++(NSArray*) getPushesInReceiptOrder;
 @end

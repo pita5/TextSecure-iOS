@@ -47,7 +47,7 @@ static TSEncryptedDatabase *waitingPushMessageDb = nil;
     __block BOOL querySuccess = NO;
     [waitingPushMessageDb.dbQueue inDatabase: ^(FMDatabase *db) {
         
-        if (![db executeUpdate:@"CREATE TABLE push_messages (message_json TEXT,timestamp DATE)"]) {
+        if (![db executeUpdate:@"CREATE TABLE push_messages (message_serialized_json BLOB,timestamp DATE)"]) {
             return;
         }
         querySuccess = YES;
@@ -87,7 +87,7 @@ static TSEncryptedDatabase *waitingPushMessageDb = nil;
         }
     }
     [waitingPushMessageDb.dbQueue inDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"INSERT INTO push_messages (message_json,timestamp) VALUES (?, CURRENT_TIMESTAMP)",pushMessageJson];
+        [db executeUpdate:@"INSERT INTO push_messages (message_serialized_json,timestamp) VALUES (?, CURRENT_TIMESTAMP)",[NSJSONSerialization dataWithJSONObject:pushMessageJson options:kNilOptions error:nil]];
     }];
 }
 
@@ -106,10 +106,9 @@ static TSEncryptedDatabase *waitingPushMessageDb = nil;
     __block NSMutableArray *pushArray = [[NSMutableArray alloc] init];
     
     [waitingPushMessageDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM push_messages ORDER BY timestamp ASC"]];
-        
+        FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM push_messages ORDER BY timestamp ASC"]];        
         while([searchInDB next]) {
-            [pushArray addObject:[searchInDB stringForColumn:@"message_json"]];
+            [pushArray addObject:[NSJSONSerialization JSONObjectWithData:[searchInDB dataForColumn:@"message_serialized_json"] options:kNilOptions error:nil]];
         }
         [searchInDB close];
     }];
