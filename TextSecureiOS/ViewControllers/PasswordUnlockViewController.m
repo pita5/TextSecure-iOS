@@ -11,7 +11,7 @@
 #import "TSStorageMasterKey.h"
 #import "TSStorageError.h"
 #import "TSMessagesDatabase.h"
-
+#import "TSWaitingPushMessageDatabase.h"
 @interface PasswordUnlockViewController () <UITextFieldDelegate>
 @property(nonatomic, strong) IBOutlet UITextField *passwordTextField;
 @end
@@ -40,6 +40,7 @@
     BOOL didUnlock = ![TSStorageMasterKey isStorageMasterKeyLocked];
     
     if (didUnlock) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUnlockNotification object:self];
         [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self];
         [self dismissViewControllerAnimated:YES completion:nil];
         

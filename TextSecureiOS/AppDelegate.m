@@ -75,7 +75,7 @@
         window.windowLevel = CGFLOAT_MAX;
         window;
     });
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushesQueuedInDB) name:TSDatabaseDidUnlockNotification object:nil];
 	return YES;
 }
 

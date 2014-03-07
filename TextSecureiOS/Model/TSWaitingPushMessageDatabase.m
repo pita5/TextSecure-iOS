@@ -15,6 +15,7 @@
 #import "FMDatabaseQueue.h"
 
 static TSEncryptedDatabase *waitingPushMessageDb = nil;
+NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database.unlocked";
 
 
 @interface TSWaitingPushMessageDatabase(Private)
@@ -106,7 +107,7 @@ static TSEncryptedDatabase *waitingPushMessageDb = nil;
     __block NSMutableArray *pushArray = [[NSMutableArray alloc] init];
     
     [waitingPushMessageDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM push_messages ORDER BY timestamp ASC"]];        
+        FMResultSet  *searchInDB = [db executeQuery:[NSString stringWithFormat:@"SELECT * FROM push_messages ORDER BY timestamp ASC"]];
         while([searchInDB next]) {
             [pushArray addObject:[NSJSONSerialization JSONObjectWithData:[searchInDB dataForColumn:@"message_serialized_json"] options:kNilOptions error:nil]];
         }

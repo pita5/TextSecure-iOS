@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * Posted when the database is unlocked
+ */
+extern NSString * const TSDatabaseDidUnlockNotification;
+
 @interface TSWaitingPushMessageDatabase : NSObject
 
 #define WAITING_PUSH_MESSAGE_DB_FILE_NAME @"TSWaitingPushMessage.db"
