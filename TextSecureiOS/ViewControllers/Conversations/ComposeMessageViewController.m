@@ -1,4 +1,4 @@
-//
+    //
 //  ComposeMessageViewController.m
 //  TextSecureiOS
 //
