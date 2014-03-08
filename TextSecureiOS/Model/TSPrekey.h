@@ -13,6 +13,7 @@
 @property (readonly)int prekeyId;
 @property (readonly)NSData *identityKey;
 @property (readonly)NSData *ephemeralKey;
+@property (readonly)int deviceId;
 
 - (instancetype)initWithIdentityKey:(NSData*)identityKey ephemeral:(NSData*)ephemeral prekeyId:(int)prekeyId;
 

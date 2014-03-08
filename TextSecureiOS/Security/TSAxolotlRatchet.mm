@@ -31,6 +31,7 @@
 #import "Constants.h"
 #import "TSMessageIncoming.h"
 #import "TSMessageOutgoing.h"
+#import "TSPrekey.h"
 
 
 @implementation TSAxolotlRatchet
@@ -48,58 +49,81 @@
 }
 
 + (TSWhisperMessage*)whisperMessageWith:(TSMessage*)outgoingMessage deviceId:(int)deviceId{
-    
     return nil;
 }
 
 // Method for incoming messages
 + (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message fromContact:(TSContact*)contact{
     
-    NSData *knownIdentityKey = contact.identityKey;
+#warning protocol buffers don't support multiple device IDs for now. Just use the first one found.
+    //TSSession *session = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:?];
+    
+    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:1];
     
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
         
-#warning Not sure if we should watch the user that the identity key changed here.
-        knownIdentityKey = preKeyWhisperMessage.identityKey;
+        if (!contact.identityKey) {
+            contact.identityKey = preKeyWhisperMessage.identityKey;
+        } else{
+            if (![contact.identityKey isEqualToData:preKeyWhisperMessage.identityKey]) {
+                throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
+#warning we'll want to store that message to retry decrypting later if user wants to continue
+            }
+        }
+
+        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:preKeyWhisperMessage.identityKey ephemeral:preKeyWhisperMessage.ephemeralKey prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact];
     }
     
+    if (!session) {
+        throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
+    }
     
-    
-    return [[TSMessageIncoming alloc] initWithMessageWithContent:<#(NSString *)#> sender:<#(NSString *)#> date:<#(NSDate *)#> attachements:<#(NSArray *)#> group:<#(TSGroup *)#> state:<#(TSMessageIncomingState)#>];
+    return [self decryptMessageWithSession:session];
 }
 
 
 #pragma mark PreKey utils
 
-- (BOOL)processPrekey:(TSPrekey*)prekey {
-    
-    TSECKeyPair *preKeyPair = [TSUserKeysDatabase preKeyWithId:prekeyId];
++ (TSSession*)processPrekey:(TSPrekey*)prekey withContact:(TSContact*)contact{
+
+    TSSession *session = [[TSSession alloc] initWithContact:contact deviceId:1];
+    TSECKeyPair *preKeyPair = [TSUserKeysDatabase preKeyWithId:prekey.prekeyId];
     
     if (preKeyPair){
         
         // Clear previous records for this session
-        [TSMessagesDatabase deleteSession:self];
-        
+        [TSMessagesDatabase deleteSession:session];
+    
         //3-way DHE
-        RKCK *rootAndChainKey = [RKCK initWithData:[[self class] masterKeyBob:[self myIdentityKey] ourEphemeral:ourEphemeral theirIdentityPublicKey:self.theirIdentityKey theirEphemeralPublicKey:self.theirEphemeralKey]];
+        RKCK *rootAndChainKey = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey] ourEphemeral:preKeyPair theirIdentityPublicKey:prekey.identityKey theirEphemeralPublicKey:prekey.ephemeralKey]];
         
         // Generate new sending key
         TSECKeyPair *sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
         
-        [self setRootKey:rootAndChainKey.RK];
+        [session setRootKey:rootAndChainKey.RK];
+        [session setReceivingChain:[[TSChain alloc] init] rootAndChainKey.CK];
         [self setSenderChainWithKeyPair:sendingKey chainKey:[[TSChainKey alloc]initWithChainKeyWithKey:rootAndChainKey.CK index:0]];
         
         if (preKeyPair.preKeyId != kLastResortKeyId) {
             // Delete that preKey!
         }
         
+        return [[TSSession alloc] initWithSessionWith:contact deviceID:1 ephemeralKey:<#(NSData *)#> rootKey:<#(NSData *)#> receivingChain:<#(TSChain *)#> sendingChain:<#(TSChain *)#>]
+        
     } else{
+        
+        if ([T]) {
+            <#statements#>
+        }
         // We probably have already processed that message.
 #warning properly do error management
         @throw ([NSException exceptionWithName:@"" reason:@"" userInfo:@{}]);
+    
         
     }
+    
+    return session;
 }
 
 + (TSMessage*)decryptMessageWithSession:(TSSession*)session{
@@ -181,29 +205,7 @@
         }
     }
 }
-//    private ChainKey getOrCreateChainKey(SessionRecordV2 sessionRecord, ECPublicKey theirEphemeral)
-//    throws InvalidMessageException
-//    {
-//        try {
-//            if (sessionRecord.hasReceiverChain(theirEphemeral)) {
-//                return sessionRecord.getReceiverChainKey(theirEphemeral);
-//            } else {
-//                RootKey                 rootKey         = sessionRecord.getRootKey();
-//                ECKeyPair               ourEphemeral    = sessionRecord.getSenderEphemeralPair();
-//                Pair<RootKey, ChainKey> receiverChain   = rootKey.createChain(theirEphemeral, ourEphemeral);
-//                ECKeyPair               ourNewEphemeral = Curve.generateKeyPairForType(Curve.DJB_TYPE);
-//                Pair<RootKey, ChainKey> senderChain     = receiverChain.first.createChain(theirEphemeral, ourNewEphemeral);
-//                sessionRecord.setRootKey(senderChain.first);
-//                sessionRecord.addReceiverChain(theirEphemeral, receiverChain.second);
-//                sessionRecord.setPreviousCounter(sessionRecord.getSenderChainKey().getIndex()-1);
-//                sessionRecord.setSenderChain(ourNewEphemeral, senderChain.second);
-//
-//                return receiverChain.second;
-//            }
-//        } catch (InvalidKeyException e) {
-//            throw new InvalidMessageException(e);
-//        }
-//    }
+
 
 
 #pragma mark Helper methods
@@ -240,6 +242,26 @@
     
 }
 
++ (NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
+    NSMutableData *masterKey = [NSMutableData data];
+    [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+    [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
+    [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+    return masterKey;
+}
+
++ (NSData*)masterKeyBob:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
+    NSMutableData *masterKey = [NSMutableData data];
+    
+    if (!(ourEphemeralKeyPair && theirEphemeralPublicKey && ourIdentityKeyPair && theirIdentityPublicKey)) {
+        DLog(@"Some parameters of are not defined");
+    }
+    
+    [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
+    [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+    [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+    return masterKey;
+}
 
 #pragma mark Ratchet helper methods
 

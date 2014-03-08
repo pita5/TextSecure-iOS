@@ -16,18 +16,19 @@
 
 @interface TSSession : NSObject
 
-@property(readonly)NSString *sessionIdentifier;
 @property(readonly)int deviceId;
 @property(readonly)TSContact *contact;
 
-@property(readonly)NSData *theirIdentityKey;
 @property(copy)NSData *theirEphemeralKey;
 @property(readwrite)NSData *rootKey;
 
-@property TSChain *receivingChain;
-@property TSChain *sendingChain;
+@property TSChain *receivingChain; // We want to store 5 of them
+@property TSChain *sendingChain; 
 @property NSData *ephemeralReceiving;
 @property TSECKeyPair *ephemeralOutgoing;
 @property int PN;
+
+- (TSSession*)initWithContact:(TSContact*)contact deviceId:(int)deviceId;
+- (NSData*)theirIdentityKey;
 
 @end

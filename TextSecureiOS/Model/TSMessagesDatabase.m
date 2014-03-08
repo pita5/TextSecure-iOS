@@ -500,7 +500,7 @@ typedef NS_ENUM(NSInteger, TSChainType) {
     }
 }
 
-- (BOOL)storeSession:(TSSession*)session{
++ (BOOL)storeSession:(TSSession*)session{
     openDBMacroBOOL
     
     __block BOOL success = NO;
@@ -512,14 +512,14 @@ typedef NS_ENUM(NSInteger, TSChainType) {
     return success;
 }
 
-- (NSArray*)sessionsForTSContact:(TSContact*)contact{
++ (NSArray*)sessionsForContact:(TSContact*)contact;{
     openDBMacroNil
     __block NSMutableArray *sessions = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *session = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id=?" withArgumentsInArray:@[contact.registeredID]];
         
         while ([session next]) {
-            [sessions addObject:[TSSession alloc]initWith ...];
+            //[sessions addObject:[[TSSession alloc]initWithSessionWith:contact deviceID:[session intForColumn:@"device_id"] ephemeralKey:<#(NSData *)#> rootKey:<#(NSData *)#> deviceID:<#(int)#> ephemeralKey:<#(NSData *)#> rootKey:<#(NSData *)#>] ];
         }
         
         [session close];

@@ -44,6 +44,10 @@
     
 }
 
+- (NSData*)theirIdentityKey{
+    return self.contact.identityKey;
+}
+
 
 
 @end

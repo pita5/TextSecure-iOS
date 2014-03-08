@@ -43,8 +43,9 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
  */
 + (BOOL)sessionExistsForContact:(TSContact*)contact;
 + (BOOL)deleteSession:(TSSession*)session;
++ (BOOL)deleteSessions:(TSContact*)contact;
 + (BOOL)storeSession:(TSSession*)session;
-+ (NSArray*)sessionsForRegisteredId:(NSString*)registeredId;
++ (NSArray*)sessionsForContact:(TSContact*)contact;
 + (TSSession*)sessionForRegisteredId:(NSString*)registeredId deviceId:(int)deviceId;
 
 #pragma mark Messages
