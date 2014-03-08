@@ -29,7 +29,6 @@ static NSString *kThreadMessageKey = @"kThreadMessageKey";
 static NSString *kThreadImageKey = @"kThreadImageKey";
 
 @interface TextSecureViewController() <SWTableViewCellDelegate>
-@property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
 @property (nonatomic, strong) NSArray *threads;
 @end
 
@@ -43,10 +42,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.navigationController.navigationBarHidden = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
-    
-    
-    self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
-    self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
     
     
     [self.tableView registerClass:[TSMessageThreadCell class] forCellReuseIdentifier:kCellIdentifier];
@@ -71,7 +66,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     }
 }
 
-- (void)composeMessage {
+- (IBAction)composeMessage {
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[TSContactPickerViewController alloc]initWithNibName:nil bundle:nil]] animated:YES completion:nil];
 }
 
@@ -186,16 +181,14 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [self animateEnteringEditingMode:isEnteringEditingMode];
 }
 
-- (void)animateEnteringEditingMode:(BOOL)isEditing {
-    __weak typeof(self) weakSelf = self;
-    CGFloat animationDuration = 0.3f;
-    
+- (void)animateEnteringEditingMode:(BOOL)isEditing {    
     if (!isEditing) {
-        [self.navigationItem setRightBarButtonItem:self.composeBarButtonItem animated:YES];
-        
+        [self.navigationItem.rightBarButtonItem setEnabled:YES];
+        [self.navigationItem.leftBarButtonItem setEnabled:YES];
     } else {
-        [self.navigationItem setRightBarButtonItem:nil animated:YES];
-        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+        [self.navigationItem.rightBarButtonItem setEnabled:NO];
+        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+
         
     }
 }

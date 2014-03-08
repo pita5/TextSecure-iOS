@@ -28,8 +28,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Messages" id="ll4-Qe-OAW"/>
+                    <navigationItem key="navigationItem" title="Messages" id="ll4-Qe-OAW">
+                        <barButtonItem key="leftBarButtonItem" title="New Group" id="tyc-fx-7lA"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="kBQ-Ap-uex">
+                            <connections>
+                                <action selector="composeMessage" destination="KRb-Ro-u27" id="ouB-WY-c9L"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="composeBarButtonItem" destination="kBQ-Ap-uex" id="uob-4G-cyw"/>
                         <outlet property="tableView" destination="J2e-4a-z97" id="b6p-Kp-cHI"/>
                         <segue destination="opT-L0-F9p" kind="modal" identifier="ObtainVerificationCode" id="dxJ-2H-wBi"/>
                     </connections>
