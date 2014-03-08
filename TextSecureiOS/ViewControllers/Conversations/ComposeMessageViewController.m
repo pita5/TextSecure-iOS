@@ -19,7 +19,7 @@
 #import "Cryptography.h"
 #import "FilePath.h"
 #import "TSGroup.h"
-
+#import "Emoticonizer.h"
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
 @property (nonatomic, retain) NSArray *messages;
@@ -224,7 +224,7 @@
 }
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [[self.messages objectAtIndex:indexPath.row] content];
+    return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
