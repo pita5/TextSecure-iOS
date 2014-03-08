@@ -29,7 +29,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Messages" id="ll4-Qe-OAW">
-                        <barButtonItem key="leftBarButtonItem" title="New Group" id="tyc-fx-7lA"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="kBQ-Ap-uex">
                             <connections>
                                 <segue destination="l9T-Dj-2CP" kind="modal" id="FyT-uc-tJ3"/>
@@ -511,7 +510,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T21-Nf-Nr0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-753" y="-5059"/>
+            <point key="canvasLocation" x="-517" y="-4791"/>
         </scene>
     </scenes>
     <resources>
