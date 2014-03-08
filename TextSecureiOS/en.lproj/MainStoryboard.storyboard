@@ -468,12 +468,21 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sgl-AQ-Zyy">
-                                <rect key="frame" x="20" y="80" width="71" height="57"/>
+                                <rect key="frame" x="32" y="86" width="47" height="47"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="IconGradient.png"/>
+                                <state key="normal" image="Default_person.png"/>
                                 <connections>
                                     <action selector="setGroupPhotoPressed:" destination="gdW-po-j3F" eventType="touchUpInside" id="Rwc-hk-Vtr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eiA-Ja-bng">
+                                <rect key="frame" x="32" y="86" width="47" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="contact_mask.png"/>
+                                <connections>
+                                    <action selector="setGroupPhotoPressed:" destination="gdW-po-j3F" eventType="touchUpInside" id="ln1-Nx-8XN"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yB1-pE-g12">
@@ -514,7 +523,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="IconGradient.png" width="57" height="57"/>
+        <image name="Default_person.png" width="47" height="47"/>
+        <image name="contact_mask.png" width="47" height="47"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

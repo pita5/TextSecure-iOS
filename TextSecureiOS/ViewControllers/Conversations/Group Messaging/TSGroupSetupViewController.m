@@ -70,6 +70,8 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     [self.groupPhoto setImage:image forState:UIControlStateNormal];
+    self.groupPhoto.layer.cornerRadius =self.groupPhoto.bounds.size.width/1.6;
+    self.groupPhoto.layer.masksToBounds = YES;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

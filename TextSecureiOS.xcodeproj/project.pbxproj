@@ -53,6 +53,10 @@
 		A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */; };
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
+		A5195B8618CB47A900AFEE04 /* contact_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8218CB47A900AFEE04 /* contact_mask.png */; };
+		A5195B8718CB47A900AFEE04 /* contact_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8318CB47A900AFEE04 /* contact_mask@2x.png */; };
+		A5195B8818CB47A900AFEE04 /* Default_person.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8418CB47A900AFEE04 /* Default_person.png */; };
+		A5195B8918CB47A900AFEE04 /* Default_person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8518CB47A900AFEE04 /* Default_person@2x.png */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
@@ -546,6 +550,10 @@
 		A5169D39170FEDC600A2CE9E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
 		A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
+		A5195B8218CB47A900AFEE04 /* contact_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = contact_mask.png; path = ../contact_mask.png; sourceTree = "<group>"; };
+		A5195B8318CB47A900AFEE04 /* contact_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contact_mask@2x.png"; path = "../contact_mask@2x.png"; sourceTree = "<group>"; };
+		A5195B8418CB47A900AFEE04 /* Default_person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default_person.png; path = ../Default_person.png; sourceTree = "<group>"; };
+		A5195B8518CB47A900AFEE04 /* Default_person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default_person@2x.png"; path = "../Default_person@2x.png"; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CryptographyTests.mm; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
@@ -1244,6 +1252,10 @@
 		A53718FC16FFB6E600C6FCCF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A5195B8218CB47A900AFEE04 /* contact_mask.png */,
+				A5195B8318CB47A900AFEE04 /* contact_mask@2x.png */,
+				A5195B8418CB47A900AFEE04 /* Default_person.png */,
+				A5195B8518CB47A900AFEE04 /* Default_person@2x.png */,
 				A53727FD17011A4E00C6FCCF /* flags */,
 				A537190716FFC45B00C6FCCF /* textsecure@2x.png */,
 				A5F15B481703EE2F00856385 /* Default-568h@2x.png */,
@@ -2110,6 +2122,9 @@
 				A53729ED17011A5200C6FCCF /* la.png in Resources */,
 				A53729EE17011A5200C6FCCF /* la@2x.png in Resources */,
 				A53729EF17011A5200C6FCCF /* lb.png in Resources */,
+				A5195B8918CB47A900AFEE04 /* Default_person@2x.png in Resources */,
+				A5195B8818CB47A900AFEE04 /* Default_person.png in Resources */,
+				A5195B8718CB47A900AFEE04 /* contact_mask@2x.png in Resources */,
 				A53729F017011A5200C6FCCF /* lb@2x.png in Resources */,
 				A53729F117011A5200C6FCCF /* lc.png in Resources */,
 				A53729F217011A5200C6FCCF /* li.png in Resources */,
@@ -2228,6 +2243,7 @@
 				A5372A5B17011A5300C6FCCF /* sr.png in Resources */,
 				4C0ACB7C186CF2F100B328D5 /* avatar_bonnot.png in Resources */,
 				A5372A5C17011A5300C6FCCF /* st.png in Resources */,
+				A5195B8618CB47A900AFEE04 /* contact_mask.png in Resources */,
 				A5372A5D17011A5300C6FCCF /* su.png in Resources */,
 				A5372A5E17011A5300C6FCCF /* sv.png in Resources */,
 				A5372A5F17011A5300C6FCCF /* sw.png in Resources */,
