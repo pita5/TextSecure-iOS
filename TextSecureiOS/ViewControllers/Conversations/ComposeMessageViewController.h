@@ -20,7 +20,7 @@
 - (instancetype)initWithConversation:(TSThread*)thread;
 
 -(void) reloadModel:(NSNotification*)notification ;
-
+-(void) setupWithConversation:(TSThread*)thread;
 @property (nonatomic, retain) TSContact *contact;
 @property (nonatomic) TSThread *thread;
 @property (nonatomic, strong) TSAttachment *attachment;

@@ -8,6 +8,7 @@
 
 #import "TSGroupSetupViewController.h"
 #import "ComposeMessageViewController.h"
+#import "TextSecureViewController.h"
 #import "TSThread.h"
 @interface TSGroupSetupViewController ()
 
@@ -91,8 +92,10 @@
 
 
 -(IBAction)next {
-    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:self.groupContacts save:true]] animated:NO];
+//    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:self.groupContacts save:true]] animated:NO];
+    [[((UINavigationController*)self.navigationController.presentingViewController) topViewController] performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
     [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 
 

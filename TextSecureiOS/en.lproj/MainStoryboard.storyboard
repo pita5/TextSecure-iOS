@@ -40,6 +40,7 @@
                         <outlet property="tableView" destination="J2e-4a-z97" id="b6p-Kp-cHI"/>
                         <segue destination="opT-L0-F9p" kind="modal" identifier="ObtainVerificationCode" id="dxJ-2H-wBi"/>
                         <segue destination="1Ei-fN-pj9" kind="modal" identifier="PasswordUnlockSegue" id="sVj-e7-TrK"/>
+                        <segue destination="ka8-ZU-Vji" kind="push" identifier="ComposeMessageSegue" id="xRs-2a-bKz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OQN-EK-1ZQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -152,6 +153,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aGF-ZA-evY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-3178" y="-3283"/>
+        </scene>
+        <!--Compose Message View Controller-->
+        <scene sceneID="Qdv-M1-o0E">
+            <objects>
+                <viewController id="ka8-ZU-Vji" customClass="ComposeMessageViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GpH-cz-08N"/>
+                        <viewControllerLayoutGuide type="bottom" id="Kic-5c-lwL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5dQ-jT-nkV">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="W75-Nv-Xwi"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Enq-cN-IiT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1252" y="-4135"/>
         </scene>
         <!--Password Unlock View Controller-->
         <scene sceneID="Msh-YP-AOi">

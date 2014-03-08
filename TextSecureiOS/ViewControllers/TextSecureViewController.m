@@ -20,7 +20,7 @@
 #import "TSStorageMasterKey.h"
 #import "TSThread.h"
 #import "TSContactPickerViewController.h"
-
+#import "TSGroupSetupViewController.h"
 static NSString *kCellIdentifier = @"CellIdentifier";
 
 static NSString *kThreadTitleKey = @"kThreadTitleKey";
@@ -189,5 +189,16 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         
     }
 }
+
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:@"ComposeMessageSegue"]) {
+        ComposeMessageViewController *vc = [segue destinationViewController];
+        [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
+        
+        // TODO: setup with groupconversation!
+    }
+}
+
 
 @end

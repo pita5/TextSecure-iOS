@@ -38,6 +38,12 @@
     return self;
 }
 
+-(void) setupWithConversation:(TSThread*)thread {
+    self.thread = thread;
+    self.delegate = self;
+    [self setupThread];
+}
+
 -(void) setupThread  {
     self.contact = [self.thread.participants objectAtIndex:0];
     self.title = [self.contact name];
