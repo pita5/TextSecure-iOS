@@ -67,6 +67,20 @@
     
 }
 
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if([[textField.text stringByReplacingCharactersInRange:range withString:string] length]>0) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        
+    }
+    else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+
+    }
+    return YES;
+}
+
+
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     [self.groupPhoto setImage:image forState:UIControlStateNormal];

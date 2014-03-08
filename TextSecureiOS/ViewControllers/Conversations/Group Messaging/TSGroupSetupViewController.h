@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TSGroupSetupViewController : UIViewController<UIImagePickerControllerDelegate,UIActionSheetDelegate>
+@interface TSGroupSetupViewController : UIViewController<UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextFieldDelegate>
 @property(nonatomic,strong) IBOutlet UITextField *groupName;
 @property(nonatomic,strong) IBOutlet UIButton *groupPhoto;
 @property(nonatomic,strong) NSArray* groupContacts;
