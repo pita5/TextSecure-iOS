@@ -75,7 +75,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [[self.whisperContacts objectAtIndex:indexPath.row] setIsSelected:YES];
+    [[self.whisperContacts objectAtIndex:indexPath.row] reverseIsSelected];
     [self.tableView reloadData];
 }
 
@@ -89,9 +89,14 @@
 }
 
 -(IBAction) next {
-    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:[self getSelectedContacts] save:true]] animated:NO];
-    [self dismissViewControllerAnimated:YES completion:nil];
-
+    NSArray *selectedContacts = [self getSelectedContacts];
+    if([selectedContacts count]>1) {
+        [self performSegueWithIdentifier:@"TSGroupSetupSegue" sender:self];
+    }
+    else {
+        [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:[self getSelectedContacts] save:true]] animated:NO];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 

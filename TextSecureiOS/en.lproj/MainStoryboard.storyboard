@@ -89,6 +89,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="gdW-po-j3F" kind="push" identifier="TSGroupSetupSegue" id="w6o-KW-DN0"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dxG-aw-JWB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -488,11 +491,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="New Group" id="HE8-jZ-SuY">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="bgp-yH-nV0">
-                            <connections>
-                                <action selector="cancel:" destination="gdW-po-j3F" id="P3r-jo-S9a"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Next" id="WDj-mH-r1Z"/>
                     </navigationItem>
                     <connections>

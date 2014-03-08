@@ -79,6 +79,9 @@
     }
 }
 
+-(void) reverseIsSelected {
+    self.isSelected = !self.isSelected;
+}
 -(void) save{
     [TSMessagesDatabase storeContact:self];
 }

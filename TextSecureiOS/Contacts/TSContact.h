@@ -20,7 +20,7 @@
 @property (nonatomic) BOOL identityKeyIsVerified;
 - (NSString*) name;
 -(void) save;
-
+-(void) reverseIsSelected;
 -(id) initWithRegisteredID:(NSString*)registeredID;
 - (NSString*) labelForRegisteredNumber;
 @end
