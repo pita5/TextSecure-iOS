@@ -29,7 +29,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Messages" id="ll4-Qe-OAW">
-                        <barButtonItem key="leftBarButtonItem" title="New Group" id="tyc-fx-7lA"/>
+                        <barButtonItem key="leftBarButtonItem" title="New Group" id="tyc-fx-7lA">
+                            <connections>
+                                <segue destination="lrz-ij-JT8" kind="modal" id="3gN-JK-YRn"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="kBQ-Ap-uex">
                             <connections>
                                 <action selector="composeMessage" destination="KRb-Ro-u27" id="ouB-WY-c9L"/>
@@ -124,7 +128,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hae-rU-yQO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1532" y="-3232"/>
+            <point key="canvasLocation" x="-2844" y="-4436"/>
         </scene>
         <!--Thread View Controller-->
         <scene sceneID="AG7-tf-k0y">
@@ -256,7 +260,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ysn-k0-C5D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1454" y="-4123"/>
+            <point key="canvasLocation" x="-1418" y="-4175"/>
         </scene>
         <!--Country View Controller-->
         <scene sceneID="H55-dB-SeZ">
@@ -505,7 +509,22 @@
             </objects>
             <point key="canvasLocation" x="-2463" y="-4123"/>
         </scene>
-        <!--Group Setup View Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="XTD-Uf-rKI">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="lrz-ij-JT8" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="78B-cu-mYV">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="gdW-po-j3F" kind="relationship" relationship="rootViewController" id="nFK-WG-9nR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nI3-1A-tg3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1825" y="-3513"/>
+        </scene>
+        <!--Group Setup View Controller - New Group-->
         <scene sceneID="1XX-zD-DJs">
             <objects>
                 <viewController id="gdW-po-j3F" customClass="TSGroupSetupViewController" sceneMemberID="viewController">
@@ -518,14 +537,14 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Provide group subject and optional group icon" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="201" translatesAutoresizingMaskIntoConstraints="NO" id="hZ7-Dc-EKW">
-                                <rect key="frame" x="99" y="12" width="201" height="125"/>
+                                <rect key="frame" x="99" y="46" width="201" height="125"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Group name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7Qk-PP-fNe">
-                                <rect key="frame" x="20" y="155" width="280" height="30"/>
+                                <rect key="frame" x="20" y="203" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -534,7 +553,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sgl-AQ-Zyy">
-                                <rect key="frame" x="20" y="46" width="71" height="57"/>
+                                <rect key="frame" x="20" y="80" width="71" height="57"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="IconGradient.png"/>
@@ -542,6 +561,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" title="New Group" id="HE8-jZ-SuY">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="bgp-yH-nV0">
+                            <connections>
+                                <action selector="cancel:" destination="gdW-po-j3F" id="P3r-jo-S9a"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="WDj-mH-r1Z"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="groupName" destination="7Qk-PP-fNe" id="EBj-jf-K9S"/>
                         <outlet property="groupPhoto" destination="sgl-AQ-Zyy" id="reZ-eT-Aqa"/>
@@ -549,7 +576,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T21-Nf-Nr0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1941" y="-3529"/>
+            <point key="canvasLocation" x="-1333" y="-3513"/>
         </scene>
     </scenes>
     <resources>
