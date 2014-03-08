@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TSGroup.h"
+
 
 @interface TSGroupSetupViewController : UIViewController<UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextFieldDelegate>
 @property(nonatomic,strong) IBOutlet UITextField *groupName;
 @property(nonatomic,strong) IBOutlet UIButton *groupPhoto;
 @property(nonatomic,strong) NSArray* whisperContacts;
+@property(nonatomic,strong) TSGroup* group;
 - (IBAction) setGroupPhotoPressed:(UIButton *)sender;
+-(IBAction)createNonBroadcastGroup:(id)sender;
+-(IBAction)createGroup;
 @end

@@ -195,8 +195,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     if([segue.identifier isEqualToString:@"ComposeMessageSegue"]) {
         ComposeMessageViewController *vc = [segue destinationViewController];
         [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
-        
-        // TODO: setup with groupconversation!
+        if([sender respondsToSelector:@selector(group)]) {
+            vc.group = [sender performSelector:@selector(group)];
+        }
     }
 }
 

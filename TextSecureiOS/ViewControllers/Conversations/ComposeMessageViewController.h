@@ -13,6 +13,7 @@
 @class TSMessage;
 @class TSThread;
 @class TSAttachment;
+@class TSGroup;
 
 @interface ComposeMessageViewController : JSMessagesViewController <UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextViewDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource>
 
@@ -23,6 +24,7 @@
 -(void) setupWithConversation:(TSThread*)thread;
 @property (nonatomic, retain) TSContact *contact;
 @property (nonatomic) TSThread *thread;
+@property (nonatomic,strong) TSGroup* group;
 @property (nonatomic, strong) TSAttachment *attachment;
 @property (nonatomic) TSWhisperMessageType messagingType;
 

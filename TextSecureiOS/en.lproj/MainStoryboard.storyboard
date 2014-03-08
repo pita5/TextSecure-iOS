@@ -512,7 +512,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="next" destination="gdW-po-j3F" eventType="touchUpInside" id="IMc-LK-Jxa"/>
+                                    <action selector="createGroup" destination="gdW-po-j3F" eventType="touchUpInside" id="JxS-K8-LIZ"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Tu-mz-2vT">
@@ -528,7 +528,7 @@
                     <navigationItem key="navigationItem" title="New Group" id="HE8-jZ-SuY">
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Next" id="WDj-mH-r1Z">
                             <connections>
-                                <action selector="next" destination="gdW-po-j3F" id="Gb6-HB-CyB"/>
+                                <action selector="createNonBroadcastGroup:" destination="gdW-po-j3F" id="r76-a3-jRE"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

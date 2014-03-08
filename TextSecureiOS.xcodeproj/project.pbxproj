@@ -57,6 +57,7 @@
 		A5195B8718CB47A900AFEE04 /* contact_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8318CB47A900AFEE04 /* contact_mask@2x.png */; };
 		A5195B8818CB47A900AFEE04 /* Default_person.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8418CB47A900AFEE04 /* Default_person.png */; };
 		A5195B8918CB47A900AFEE04 /* Default_person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8518CB47A900AFEE04 /* Default_person@2x.png */; };
+		A5195B8C18CB655800AFEE04 /* TSGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = A5195B8B18CB655800AFEE04 /* TSGroup.m */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
@@ -554,6 +555,8 @@
 		A5195B8318CB47A900AFEE04 /* contact_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contact_mask@2x.png"; path = "../contact_mask@2x.png"; sourceTree = "<group>"; };
 		A5195B8418CB47A900AFEE04 /* Default_person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default_person.png; path = ../Default_person.png; sourceTree = "<group>"; };
 		A5195B8518CB47A900AFEE04 /* Default_person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default_person@2x.png"; path = "../Default_person@2x.png"; sourceTree = "<group>"; };
+		A5195B8A18CB655800AFEE04 /* TSGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroup.h; path = Model/TSGroup.h; sourceTree = "<group>"; };
+		A5195B8B18CB655800AFEE04 /* TSGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroup.m; path = Model/TSGroup.m; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CryptographyTests.mm; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
@@ -1165,6 +1168,8 @@
 				A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */,
 				A5E6CBFD18762BDB002A1735 /* TSAttachment.h */,
 				A5E6CBFE18762BDB002A1735 /* TSAttachment.m */,
+				A5195B8A18CB655800AFEE04 /* TSGroup.h */,
+				A5195B8B18CB655800AFEE04 /* TSGroup.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2463,6 +2468,7 @@
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
 				A5145B31184AAD51007BDC73 /* TSMessage.m in Sources */,
+				A5195B8C18CB655800AFEE04 /* TSGroup.m in Sources */,
 				A5E6CC82187D0FF1002A1735 /* TSEncryptedWhisperMessage.mm in Sources */,
 				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */,

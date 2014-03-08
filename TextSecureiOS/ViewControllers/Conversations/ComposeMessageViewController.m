@@ -18,6 +18,7 @@
 #import "TSAttachmentManager.h"
 #import "Cryptography.h"
 #import "FilePath.h"
+#import "TSGroup.h"
 
 @interface ComposeMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
@@ -61,6 +62,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     self.delegate = self;
     self.dataSource = self;
+    if(self.group) {
+        if([[self.group groupName] length]>0) {
+            self.title = self.group.groupName;
+        }
+        else if ([self.group isNonBroadcastGroup]) {
+            self.title = @"Group message";
+        }
+        else {
+            self.title = @"Broadcast message";
+        }
+    }
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
 }

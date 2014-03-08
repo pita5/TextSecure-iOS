@@ -16,15 +16,13 @@
 
 @implementation TSGroupSetupViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+-(id) initWithCoder:(NSCoder *)aDecoder {
+    if(self = [super initWithCoder:aDecoder]) {
+        self.group = [[TSGroup alloc] init];
     }
     return self;
-}
 
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -91,7 +89,16 @@
 }
 
 
--(IBAction)next {
+-(IBAction)createNonBroadcastGroup:(id)sender {
+    self.group.groupName = self.groupName.text;
+    self.group.groupImage = self.groupPhoto.imageView.image;
+    self.group.isNonBroadcastGroup = YES;
+    [self createGroup];
+}
+
+
+
+-(IBAction)createGroup {
     [[((UINavigationController*)self.navigationController.presentingViewController) topViewController] performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
     [self dismissViewControllerAnimated:YES completion:nil];
 
