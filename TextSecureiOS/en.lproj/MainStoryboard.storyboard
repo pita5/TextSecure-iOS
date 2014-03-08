@@ -522,10 +522,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D0K-LE-a5G">
-                                <rect key="frame" x="80" y="302" width="160" height="158"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -537,7 +533,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="gifDemo" destination="D0K-LE-a5G" id="t81-rH-oeB"/>
                         <outlet property="groupName" destination="7Qk-PP-fNe" id="EBj-jf-K9S"/>
                         <outlet property="groupPhoto" destination="sgl-AQ-Zyy" id="reZ-eT-Aqa"/>
                     </connections>
