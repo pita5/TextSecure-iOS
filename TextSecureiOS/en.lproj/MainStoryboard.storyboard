@@ -55,7 +55,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="PQB-5D-1De">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TSContactCell" editingAccessoryType="checkmark" id="PQB-5D-1De">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PQB-5D-1De" id="tS4-a2-ecF">
@@ -82,6 +82,11 @@
                                     <action selector="cancel" destination="Szt-0Y-0P5" eventType="touchUpInside" id="aAz-16-Nuc"/>
                                 </connections>
                             </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="H15-Xy-Xhr">
+                            <connections>
+                                <action selector="next" destination="Szt-0Y-0P5" id="mYm-XK-UdZ"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>

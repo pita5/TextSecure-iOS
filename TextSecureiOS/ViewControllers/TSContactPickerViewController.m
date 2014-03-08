@@ -63,21 +63,37 @@
     }
     
     TSContact *contact = ((TSContact *)[self.whisperContacts objectAtIndex:indexPath.row]);
-        
     cell.textLabel.text = contact.name;
     cell.detailTextLabel.text = [contact labelForRegisteredNumber];
+    if([[self.whisperContacts objectAtIndex:indexPath.row] isSelected]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:[NSArray arrayWithObject:[self.whisperContacts objectAtIndex:indexPath.row]]save:true]] animated:NO];
-    [self dismissViewControllerAnimated:YES
-                             completion:nil];
+    [[self.whisperContacts objectAtIndex:indexPath.row] setIsSelected:YES];
+    [self.tableView reloadData];
 }
 
 -(IBAction) cancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+-(NSArray*) getSelectedContacts {
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"isSelected = TRUE"];
+    return [self.whisperContacts filteredArrayUsingPredicate:pred];
+}
+
+-(IBAction) next {
+    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:[self getSelectedContacts] save:true]] animated:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+}
+
 
 - (void)didReceiveMemoryWarning
 {

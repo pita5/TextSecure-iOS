@@ -16,6 +16,7 @@
 @property (nonatomic, assign) BOOL supportsSMS;
 @property (nonatomic, strong) NSString *nextKey;
 @property (nonatomic, strong) NSString *identityKey;
+@property (nonatomic, assign) BOOL isSelected;
 @property (nonatomic) BOOL identityKeyIsVerified;
 - (NSString*) name;
 -(void) save;

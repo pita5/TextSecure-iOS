@@ -10,4 +10,5 @@
 
 @interface TSContactPickerViewController : UITableViewController
 -(IBAction) cancel;
+-(IBAction) next;
 @end
