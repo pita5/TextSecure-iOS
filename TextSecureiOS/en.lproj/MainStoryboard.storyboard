@@ -95,7 +95,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dxG-aw-JWB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1170" y="-4792"/>
+            <point key="canvasLocation" x="-1137" y="-4776"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="M4q-Xf-xVo">
@@ -472,6 +472,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="IconGradient.png"/>
+                                <connections>
+                                    <action selector="setGroupPhotoPressed:" destination="gdW-po-j3F" eventType="touchUpInside" id="Rwc-hk-Vtr"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yB1-pE-g12">
                                 <rect key="frame" x="125" y="258" width="71" height="30"/>
