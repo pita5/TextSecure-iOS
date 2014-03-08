@@ -21,22 +21,20 @@
 
 @implementation TSContactPickerViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCoder:aDecoder];
     if (self) {
-        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         self.title = @"Loading";
         
-        UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
-        self.navigationItem.leftBarButtonItem = dismissButton;
-        
-        [TSContactManager getAllContactsIDs:^(NSArray *contacts) {   
+        [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-            self.title = @"Pick recepient";
+            self.title = @"Pick recepients";
             self.whisperContacts = contacts;
             [self.tableView reloadData];
+        
         }];
     }
     return self;
@@ -77,7 +75,7 @@
                              completion:nil];
 }
 
-- (void) dismissVC {
+-(IBAction) cancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
