@@ -15,6 +15,7 @@
 @property(nonatomic,strong) IBOutlet UIButton *groupPhoto;
 @property(nonatomic,strong) NSArray* whisperContacts;
 @property(nonatomic,strong) TSGroup* group;
+@property(nonatomic,strong) IBOutlet UIImageView *gifDemo;
 - (IBAction) setGroupPhotoPressed:(UIButton *)sender;
 -(IBAction)createNonBroadcastGroup:(id)sender;
 -(IBAction)createGroup;

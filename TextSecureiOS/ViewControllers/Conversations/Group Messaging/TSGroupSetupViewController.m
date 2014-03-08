@@ -10,6 +10,7 @@
 #import "ComposeMessageViewController.h"
 #import "TextSecureViewController.h"
 #import "TSThread.h"
+#import "UIImage+GIF.h"
 @interface TSGroupSetupViewController ()
 
 @end
@@ -27,6 +28,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    NSData* data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"apple_logo_animated" ofType:@"gif"]];
+    UIImage* image = [UIImage animatedGIFWithData:data];
+    self.gifDemo.image = image;
+    
 }
 
 - (void)didReceiveMemoryWarning
