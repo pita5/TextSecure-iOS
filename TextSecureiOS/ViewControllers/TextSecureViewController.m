@@ -40,7 +40,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [super viewDidLoad];
     
     self.threads = [TSMessagesDatabase threads];
-    self.title = @"Messages";
     self.navigationController.navigationBarHidden = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];

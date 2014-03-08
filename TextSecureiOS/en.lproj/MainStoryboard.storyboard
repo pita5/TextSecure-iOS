@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
-        <!--Text Secure View Controller-->
+        <!--Text Secure View Controller - Messages-->
         <scene sceneID="hZj-bg-s7L">
             <objects>
-                <viewController storyboardIdentifier="SMS View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KRb-Ro-u27" customClass="TextSecureViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SMS View Controller" title="Messages" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KRb-Ro-u27" customClass="TextSecureViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="irp-P3-9IL"/>
                         <viewControllerLayoutGuide type="bottom" id="aq5-8a-fmm"/>
@@ -28,7 +28,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="ll4-Qe-OAW"/>
+                    <navigationItem key="navigationItem" title="Messages" id="ll4-Qe-OAW"/>
                     <connections>
                         <outlet property="tableView" destination="J2e-4a-z97" id="b6p-Kp-cHI"/>
                         <segue destination="opT-L0-F9p" kind="modal" identifier="ObtainVerificationCode" id="dxJ-2H-wBi"/>
@@ -485,6 +485,10 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="TUi-Jb-sR6">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Jwh-99-Pdy">
+                        <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="KRb-Ro-u27" kind="relationship" relationship="rootViewController" id="IPq-is-JQN"/>
                     </connections>
