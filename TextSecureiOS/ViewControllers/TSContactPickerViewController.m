@@ -88,8 +88,8 @@
 }
 
 -(IBAction) next {
-    NSArray *selectedContacts = [self getSelectedContacts];
-    if([selectedContacts count]>1) {
+    self.whisperContacts=[self getSelectedContacts];
+    if([self.whisperContacts count]>1) {
         [self performSegueWithIdentifier:@"TSGroupSetupSegue" sender:self];
     }
     else {
