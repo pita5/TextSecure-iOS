@@ -29,9 +29,7 @@ static NSString *kThreadMessageKey = @"kThreadMessageKey";
 static NSString *kThreadImageKey = @"kThreadImageKey";
 
 @interface TextSecureViewController() <SWTableViewCellDelegate>
-@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
-@property (nonatomic, strong) UIView *searchBarCoverView;
 @property (nonatomic, strong) NSArray *threads;
 @end
 
@@ -51,11 +49,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
     self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
     
-    self.searchBarCoverView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-    self.searchBarCoverView.backgroundColor = [UIColor grayColor];
-    self.searchBarCoverView.alpha = 0;
-    self.searchBarCoverView.userInteractionEnabled = NO;
-    [self.searchBar addSubview:self.searchBarCoverView];
     
     [self.tableView registerClass:[TSMessageThreadCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -201,22 +194,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     if (!isEditing) {
         [self.navigationItem setRightBarButtonItem:self.composeBarButtonItem animated:YES];
         
-        [UIView animateWithDuration:animationDuration animations:^{
-            weakSelf.searchBarCoverView.alpha = 0;
-        } completion:^(BOOL finished) {
-            weakSelf.searchBarCoverView.alpha = 0;
-            weakSelf.searchBar.userInteractionEnabled = YES;
-        }];
     } else {
         [self.navigationItem setRightBarButtonItem:nil animated:YES];
         [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         
-        [UIView animateWithDuration:animationDuration animations:^{
-            weakSelf.searchBarCoverView.alpha = 0.3;
-        } completion:^(BOOL finished) {
-            weakSelf.searchBarCoverView.alpha = 0.3;
-            weakSelf.searchBar.userInteractionEnabled = NO;
-        }];
     }
 }
 

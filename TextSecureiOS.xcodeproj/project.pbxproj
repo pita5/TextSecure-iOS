@@ -398,6 +398,7 @@
 		A5372A9617011A5300C6FCCF /* zm.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294917011A5200C6FCCF /* zm.png */; };
 		A5372A9717011A5300C6FCCF /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294A17011A5200C6FCCF /* zw.png */; };
 		A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A538A27D1869DC6500CD0A3D /* TSKeyManager.m */; };
+		A54DAA0C18CB1BC0003CC925 /* TSGroupSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A54DAA0B18CB1BC0003CC925 /* TSGroupSetupViewController.m */; };
 		A5620DEC186BD27F0033483E /* TSMessagesManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5620DEB186BD27F0033483E /* TSMessagesManager.mm */; };
 		A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */; };
 		A56312F818C85B6500222F99 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A56312F718C85B6500222F99 /* Settings.bundle */; };
@@ -896,6 +897,8 @@
 		A537294A17011A5200C6FCCF /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zw.png; sourceTree = "<group>"; };
 		A538A27C1869DC6500CD0A3D /* TSKeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSKeyManager.h; path = Security/TSKeyManager.h; sourceTree = "<group>"; };
 		A538A27D1869DC6500CD0A3D /* TSKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSKeyManager.m; path = Security/TSKeyManager.m; sourceTree = "<group>"; };
+		A54DAA0A18CB1BC0003CC925 /* TSGroupSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroupSetupViewController.h; path = "ViewControllers/Conversations/Group Messaging/TSGroupSetupViewController.h"; sourceTree = "<group>"; };
+		A54DAA0B18CB1BC0003CC925 /* TSGroupSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroupSetupViewController.m; path = "ViewControllers/Conversations/Group Messaging/TSGroupSetupViewController.m"; sourceTree = "<group>"; };
 		A5620DEB186BD27F0033483E /* TSMessagesManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessagesManager.mm; path = MessagesManager/TSMessagesManager.mm; sourceTree = "<group>"; };
 		A5620DED186BD4FA0033483E /* TSSubmitMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSubmitMessageRequest.h; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.h; sourceTree = "<group>"; };
 		A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSubmitMessageRequest.m; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.m; sourceTree = "<group>"; };
@@ -1590,6 +1593,15 @@
 			path = TextSecureiOSAssets/flags;
 			sourceTree = "<group>";
 		};
+		A54DAA0618CB1AD9003CC925 /* Group Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				A54DAA0A18CB1BC0003CC925 /* TSGroupSetupViewController.h */,
+				A54DAA0B18CB1BC0003CC925 /* TSGroupSetupViewController.m */,
+			);
+			name = "Group Messaging";
+			sourceTree = "<group>";
+		};
 		A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1723,6 +1735,7 @@
 		B613B4D41815CEA900755184 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				A54DAA0618CB1AD9003CC925 /* Group Messaging */,
 				A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */,
 				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
 				B635B38F182181E1003CE732 /* ComposeMessageViewController.h */,
@@ -2421,6 +2434,7 @@
 				B635B3C7182181E1003CE732 /* ComposeMessageViewController.m in Sources */,
 				A5E6CC6F187D0F4B002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */,
 				B6D23DAF18A91E9800F7E932 /* TSRegisterForPushRequest.m in Sources */,
+				A54DAA0C18CB1BC0003CC925 /* TSGroupSetupViewController.m in Sources */,
 				A5E6CC83187D0FF1002A1735 /* TSMessageSignal.mm in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */,
