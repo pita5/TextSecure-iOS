@@ -7,7 +7,8 @@
 //
 
 #import "TSGroupSetupViewController.h"
-
+#import "ComposeMessageViewController.h"
+#import "TSThread.h"
 @interface TSGroupSetupViewController ()
 
 @end
@@ -35,8 +36,9 @@
     // Dispose of any resources that can be recreated.
 }
 
--(IBAction)cancel:(id)sender {
+
+-(IBAction)next {
+    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:self.groupContacts save:true]] animated:NO];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 @end

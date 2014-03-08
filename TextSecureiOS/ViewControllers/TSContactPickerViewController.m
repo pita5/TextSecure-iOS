@@ -10,9 +10,9 @@
 #import "TSContactManager.h"
 #import "ComposeMessageViewController.h"
 #import "TSThread.h"
-
+#import "TSGroupSetupViewController.h"
 #define tableViewCellsDequeID @"TSContactCell"
-
+#define groupSetupSegue @"TSGroupSetupSegue"
 @interface TSContactPickerViewController ()
 
 @property NSArray *whisperContacts;
@@ -91,11 +91,18 @@
 -(IBAction) next {
     NSArray *selectedContacts = [self getSelectedContacts];
     if([selectedContacts count]>1) {
-        [self performSegueWithIdentifier:@"TSGroupSetupSegue" sender:self];
+        [self performSegueWithIdentifier:groupSetupSegue sender:self];
     }
     else {
         [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[ComposeMessageViewController alloc] initWithConversation:[TSThread threadWithContacts:[self getSelectedContacts] save:true]] animated:NO];
         [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:groupSetupSegue]) {
+        TSGroupSetupViewController *vc = [segue destinationViewController];
+        vc.groupContacts = [self getSelectedContacts];
     }
 }
 
