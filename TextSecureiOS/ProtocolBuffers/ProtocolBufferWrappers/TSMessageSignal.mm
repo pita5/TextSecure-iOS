@@ -23,6 +23,7 @@
     const uint32_t cppType = incomingPushMessageSignal->type();
     const std::string cppSource = incomingPushMessageSignal->source();
     const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
+
     const std::string cppMessage = incomingPushMessageSignal->message();
     // c++->objective C
     self.contentType = (TSWhisperMessageType)cppType;

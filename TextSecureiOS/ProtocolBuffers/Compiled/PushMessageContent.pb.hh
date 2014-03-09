@@ -23,6 +23,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
@@ -35,7 +36,47 @@ void protobuf_ShutdownFile_PushMessageContent_2eproto();
 
 class PushMessageContent;
 class PushMessageContent_AttachmentPointer;
+class PushMessageContent_GroupContext;
 
+enum PushMessageContent_GroupContext_Type {
+  PushMessageContent_GroupContext_Type_UNKNOWN = 0,
+  PushMessageContent_GroupContext_Type_UPDATE = 1,
+  PushMessageContent_GroupContext_Type_DELIVER = 2,
+  PushMessageContent_GroupContext_Type_QUIT = 3
+};
+bool PushMessageContent_GroupContext_Type_IsValid(int value);
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext_Type_Type_MIN = PushMessageContent_GroupContext_Type_UNKNOWN;
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext_Type_Type_MAX = PushMessageContent_GroupContext_Type_QUIT;
+const int PushMessageContent_GroupContext_Type_Type_ARRAYSIZE = PushMessageContent_GroupContext_Type_Type_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PushMessageContent_GroupContext_Type_descriptor();
+inline const ::std::string& PushMessageContent_GroupContext_Type_Name(PushMessageContent_GroupContext_Type value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PushMessageContent_GroupContext_Type_descriptor(), value);
+}
+inline bool PushMessageContent_GroupContext_Type_Parse(
+    const ::std::string& name, PushMessageContent_GroupContext_Type* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PushMessageContent_GroupContext_Type>(
+    PushMessageContent_GroupContext_Type_descriptor(), name, value);
+}
+enum PushMessageContent_Flags {
+  PushMessageContent_Flags_END_SESSION = 1
+};
+bool PushMessageContent_Flags_IsValid(int value);
+const PushMessageContent_Flags PushMessageContent_Flags_Flags_MIN = PushMessageContent_Flags_END_SESSION;
+const PushMessageContent_Flags PushMessageContent_Flags_Flags_MAX = PushMessageContent_Flags_END_SESSION;
+const int PushMessageContent_Flags_Flags_ARRAYSIZE = PushMessageContent_Flags_Flags_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PushMessageContent_Flags_descriptor();
+inline const ::std::string& PushMessageContent_Flags_Name(PushMessageContent_Flags value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PushMessageContent_Flags_descriptor(), value);
+}
+inline bool PushMessageContent_Flags_Parse(
+    const ::std::string& name, PushMessageContent_Flags* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PushMessageContent_Flags>(
+    PushMessageContent_Flags_descriptor(), name, value);
+}
 // ===================================================================
 
 class PushMessageContent_AttachmentPointer : public ::google::protobuf::Message {
@@ -150,6 +191,173 @@ class PushMessageContent_AttachmentPointer : public ::google::protobuf::Message 
 };
 // -------------------------------------------------------------------
 
+class PushMessageContent_GroupContext : public ::google::protobuf::Message {
+ public:
+  PushMessageContent_GroupContext();
+  virtual ~PushMessageContent_GroupContext();
+
+  PushMessageContent_GroupContext(const PushMessageContent_GroupContext& from);
+
+  inline PushMessageContent_GroupContext& operator=(const PushMessageContent_GroupContext& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PushMessageContent_GroupContext& default_instance();
+
+  void Swap(PushMessageContent_GroupContext* other);
+
+  // implements Message ----------------------------------------------
+
+  PushMessageContent_GroupContext* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PushMessageContent_GroupContext& from);
+  void MergeFrom(const PushMessageContent_GroupContext& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef PushMessageContent_GroupContext_Type Type;
+  static const Type UNKNOWN = PushMessageContent_GroupContext_Type_UNKNOWN;
+  static const Type UPDATE = PushMessageContent_GroupContext_Type_UPDATE;
+  static const Type DELIVER = PushMessageContent_GroupContext_Type_DELIVER;
+  static const Type QUIT = PushMessageContent_GroupContext_Type_QUIT;
+  static inline bool Type_IsValid(int value) {
+    return PushMessageContent_GroupContext_Type_IsValid(value);
+  }
+  static const Type Type_MIN =
+    PushMessageContent_GroupContext_Type_Type_MIN;
+  static const Type Type_MAX =
+    PushMessageContent_GroupContext_Type_Type_MAX;
+  static const int Type_ARRAYSIZE =
+    PushMessageContent_GroupContext_Type_Type_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  Type_descriptor() {
+    return PushMessageContent_GroupContext_Type_descriptor();
+  }
+  static inline const ::std::string& Type_Name(Type value) {
+    return PushMessageContent_GroupContext_Type_Name(value);
+  }
+  static inline bool Type_Parse(const ::std::string& name,
+      Type* value) {
+    return PushMessageContent_GroupContext_Type_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // optional bytes id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline const ::std::string& id() const;
+  inline void set_id(const ::std::string& value);
+  inline void set_id(const char* value);
+  inline void set_id(const void* value, size_t size);
+  inline ::std::string* mutable_id();
+  inline ::std::string* release_id();
+  inline void set_allocated_id(::std::string* id);
+
+  // optional .textsecure.PushMessageContent.GroupContext.Type type = 2;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 2;
+  inline ::textsecure::PushMessageContent_GroupContext_Type type() const;
+  inline void set_type(::textsecure::PushMessageContent_GroupContext_Type value);
+
+  // optional string name = 3;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 3;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const char* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  inline void set_allocated_name(::std::string* name);
+
+  // repeated string members = 4;
+  inline int members_size() const;
+  inline void clear_members();
+  static const int kMembersFieldNumber = 4;
+  inline const ::std::string& members(int index) const;
+  inline ::std::string* mutable_members(int index);
+  inline void set_members(int index, const ::std::string& value);
+  inline void set_members(int index, const char* value);
+  inline void set_members(int index, const char* value, size_t size);
+  inline ::std::string* add_members();
+  inline void add_members(const ::std::string& value);
+  inline void add_members(const char* value);
+  inline void add_members(const char* value, size_t size);
+  inline const ::google::protobuf::RepeatedPtrField< ::std::string>& members() const;
+  inline ::google::protobuf::RepeatedPtrField< ::std::string>* mutable_members();
+
+  // optional .textsecure.PushMessageContent.AttachmentPointer avatar = 5;
+  inline bool has_avatar() const;
+  inline void clear_avatar();
+  static const int kAvatarFieldNumber = 5;
+  inline const ::textsecure::PushMessageContent_AttachmentPointer& avatar() const;
+  inline ::textsecure::PushMessageContent_AttachmentPointer* mutable_avatar();
+  inline ::textsecure::PushMessageContent_AttachmentPointer* release_avatar();
+  inline void set_allocated_avatar(::textsecure::PushMessageContent_AttachmentPointer* avatar);
+
+  // @@protoc_insertion_point(class_scope:textsecure.PushMessageContent.GroupContext)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_name();
+  inline void clear_has_name();
+  inline void set_has_avatar();
+  inline void clear_has_avatar();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::std::string* id_;
+  ::std::string* name_;
+  ::google::protobuf::RepeatedPtrField< ::std::string> members_;
+  ::textsecure::PushMessageContent_AttachmentPointer* avatar_;
+  int type_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+
+  friend void  protobuf_AddDesc_PushMessageContent_2eproto();
+  friend void protobuf_AssignDesc_PushMessageContent_2eproto();
+  friend void protobuf_ShutdownFile_PushMessageContent_2eproto();
+
+  void InitAsDefaultInstance();
+  static PushMessageContent_GroupContext* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class PushMessageContent : public ::google::protobuf::Message {
  public:
   PushMessageContent();
@@ -203,6 +411,30 @@ class PushMessageContent : public ::google::protobuf::Message {
   // nested types ----------------------------------------------------
 
   typedef PushMessageContent_AttachmentPointer AttachmentPointer;
+  typedef PushMessageContent_GroupContext GroupContext;
+
+  typedef PushMessageContent_Flags Flags;
+  static const Flags END_SESSION = PushMessageContent_Flags_END_SESSION;
+  static inline bool Flags_IsValid(int value) {
+    return PushMessageContent_Flags_IsValid(value);
+  }
+  static const Flags Flags_MIN =
+    PushMessageContent_Flags_Flags_MIN;
+  static const Flags Flags_MAX =
+    PushMessageContent_Flags_Flags_MAX;
+  static const int Flags_ARRAYSIZE =
+    PushMessageContent_Flags_Flags_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  Flags_descriptor() {
+    return PushMessageContent_Flags_descriptor();
+  }
+  static inline const ::std::string& Flags_Name(Flags value) {
+    return PushMessageContent_Flags_Name(value);
+  }
+  static inline bool Flags_Parse(const ::std::string& name,
+      Flags* value) {
+    return PushMessageContent_Flags_Parse(name, value);
+  }
 
   // accessors -------------------------------------------------------
 
@@ -230,18 +462,40 @@ class PushMessageContent : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::textsecure::PushMessageContent_AttachmentPointer >*
       mutable_attachments();
 
+  // optional .textsecure.PushMessageContent.GroupContext group = 3;
+  inline bool has_group() const;
+  inline void clear_group();
+  static const int kGroupFieldNumber = 3;
+  inline const ::textsecure::PushMessageContent_GroupContext& group() const;
+  inline ::textsecure::PushMessageContent_GroupContext* mutable_group();
+  inline ::textsecure::PushMessageContent_GroupContext* release_group();
+  inline void set_allocated_group(::textsecure::PushMessageContent_GroupContext* group);
+
+  // optional uint32 flags = 4;
+  inline bool has_flags() const;
+  inline void clear_flags();
+  static const int kFlagsFieldNumber = 4;
+  inline ::google::protobuf::uint32 flags() const;
+  inline void set_flags(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:textsecure.PushMessageContent)
  private:
   inline void set_has_body();
   inline void clear_has_body();
+  inline void set_has_group();
+  inline void clear_has_group();
+  inline void set_has_flags();
+  inline void clear_has_flags();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::std::string* body_;
   ::google::protobuf::RepeatedPtrField< ::textsecure::PushMessageContent_AttachmentPointer > attachments_;
+  ::textsecure::PushMessageContent_GroupContext* group_;
+  ::google::protobuf::uint32 flags_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
 
   friend void  protobuf_AddDesc_PushMessageContent_2eproto();
   friend void protobuf_AssignDesc_PushMessageContent_2eproto();
@@ -421,6 +675,255 @@ inline void PushMessageContent_AttachmentPointer::set_allocated_key(::std::strin
 
 // -------------------------------------------------------------------
 
+// PushMessageContent_GroupContext
+
+// optional bytes id = 1;
+inline bool PushMessageContent_GroupContext::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PushMessageContent_GroupContext::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PushMessageContent_GroupContext::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PushMessageContent_GroupContext::clear_id() {
+  if (id_ != &::google::protobuf::internal::kEmptyString) {
+    id_->clear();
+  }
+  clear_has_id();
+}
+inline const ::std::string& PushMessageContent_GroupContext::id() const {
+  return *id_;
+}
+inline void PushMessageContent_GroupContext::set_id(const ::std::string& value) {
+  set_has_id();
+  if (id_ == &::google::protobuf::internal::kEmptyString) {
+    id_ = new ::std::string;
+  }
+  id_->assign(value);
+}
+inline void PushMessageContent_GroupContext::set_id(const char* value) {
+  set_has_id();
+  if (id_ == &::google::protobuf::internal::kEmptyString) {
+    id_ = new ::std::string;
+  }
+  id_->assign(value);
+}
+inline void PushMessageContent_GroupContext::set_id(const void* value, size_t size) {
+  set_has_id();
+  if (id_ == &::google::protobuf::internal::kEmptyString) {
+    id_ = new ::std::string;
+  }
+  id_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* PushMessageContent_GroupContext::mutable_id() {
+  set_has_id();
+  if (id_ == &::google::protobuf::internal::kEmptyString) {
+    id_ = new ::std::string;
+  }
+  return id_;
+}
+inline ::std::string* PushMessageContent_GroupContext::release_id() {
+  clear_has_id();
+  if (id_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = id_;
+    id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void PushMessageContent_GroupContext::set_allocated_id(::std::string* id) {
+  if (id_ != &::google::protobuf::internal::kEmptyString) {
+    delete id_;
+  }
+  if (id) {
+    set_has_id();
+    id_ = id;
+  } else {
+    clear_has_id();
+    id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// optional .textsecure.PushMessageContent.GroupContext.Type type = 2;
+inline bool PushMessageContent_GroupContext::has_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PushMessageContent_GroupContext::set_has_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PushMessageContent_GroupContext::clear_has_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PushMessageContent_GroupContext::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::textsecure::PushMessageContent_GroupContext_Type PushMessageContent_GroupContext::type() const {
+  return static_cast< ::textsecure::PushMessageContent_GroupContext_Type >(type_);
+}
+inline void PushMessageContent_GroupContext::set_type(::textsecure::PushMessageContent_GroupContext_Type value) {
+  assert(::textsecure::PushMessageContent_GroupContext_Type_IsValid(value));
+  set_has_type();
+  type_ = value;
+}
+
+// optional string name = 3;
+inline bool PushMessageContent_GroupContext::has_name() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PushMessageContent_GroupContext::set_has_name() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PushMessageContent_GroupContext::clear_has_name() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PushMessageContent_GroupContext::clear_name() {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    name_->clear();
+  }
+  clear_has_name();
+}
+inline const ::std::string& PushMessageContent_GroupContext::name() const {
+  return *name_;
+}
+inline void PushMessageContent_GroupContext::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void PushMessageContent_GroupContext::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void PushMessageContent_GroupContext::set_name(const char* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* PushMessageContent_GroupContext::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  return name_;
+}
+inline ::std::string* PushMessageContent_GroupContext::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void PushMessageContent_GroupContext::set_allocated_name(::std::string* name) {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    delete name_;
+  }
+  if (name) {
+    set_has_name();
+    name_ = name;
+  } else {
+    clear_has_name();
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// repeated string members = 4;
+inline int PushMessageContent_GroupContext::members_size() const {
+  return members_.size();
+}
+inline void PushMessageContent_GroupContext::clear_members() {
+  members_.Clear();
+}
+inline const ::std::string& PushMessageContent_GroupContext::members(int index) const {
+  return members_.Get(index);
+}
+inline ::std::string* PushMessageContent_GroupContext::mutable_members(int index) {
+  return members_.Mutable(index);
+}
+inline void PushMessageContent_GroupContext::set_members(int index, const ::std::string& value) {
+  members_.Mutable(index)->assign(value);
+}
+inline void PushMessageContent_GroupContext::set_members(int index, const char* value) {
+  members_.Mutable(index)->assign(value);
+}
+inline void PushMessageContent_GroupContext::set_members(int index, const char* value, size_t size) {
+  members_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* PushMessageContent_GroupContext::add_members() {
+  return members_.Add();
+}
+inline void PushMessageContent_GroupContext::add_members(const ::std::string& value) {
+  members_.Add()->assign(value);
+}
+inline void PushMessageContent_GroupContext::add_members(const char* value) {
+  members_.Add()->assign(value);
+}
+inline void PushMessageContent_GroupContext::add_members(const char* value, size_t size) {
+  members_.Add()->assign(reinterpret_cast<const char*>(value), size);
+}
+inline const ::google::protobuf::RepeatedPtrField< ::std::string>&
+PushMessageContent_GroupContext::members() const {
+  return members_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::std::string>*
+PushMessageContent_GroupContext::mutable_members() {
+  return &members_;
+}
+
+// optional .textsecure.PushMessageContent.AttachmentPointer avatar = 5;
+inline bool PushMessageContent_GroupContext::has_avatar() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void PushMessageContent_GroupContext::set_has_avatar() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void PushMessageContent_GroupContext::clear_has_avatar() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void PushMessageContent_GroupContext::clear_avatar() {
+  if (avatar_ != NULL) avatar_->::textsecure::PushMessageContent_AttachmentPointer::Clear();
+  clear_has_avatar();
+}
+inline const ::textsecure::PushMessageContent_AttachmentPointer& PushMessageContent_GroupContext::avatar() const {
+  return avatar_ != NULL ? *avatar_ : *default_instance_->avatar_;
+}
+inline ::textsecure::PushMessageContent_AttachmentPointer* PushMessageContent_GroupContext::mutable_avatar() {
+  set_has_avatar();
+  if (avatar_ == NULL) avatar_ = new ::textsecure::PushMessageContent_AttachmentPointer;
+  return avatar_;
+}
+inline ::textsecure::PushMessageContent_AttachmentPointer* PushMessageContent_GroupContext::release_avatar() {
+  clear_has_avatar();
+  ::textsecure::PushMessageContent_AttachmentPointer* temp = avatar_;
+  avatar_ = NULL;
+  return temp;
+}
+inline void PushMessageContent_GroupContext::set_allocated_avatar(::textsecure::PushMessageContent_AttachmentPointer* avatar) {
+  delete avatar_;
+  avatar_ = avatar;
+  if (avatar) {
+    set_has_avatar();
+  } else {
+    clear_has_avatar();
+  }
+}
+
+// -------------------------------------------------------------------
+
 // PushMessageContent
 
 // optional string body = 1;
@@ -518,6 +1021,66 @@ PushMessageContent::mutable_attachments() {
   return &attachments_;
 }
 
+// optional .textsecure.PushMessageContent.GroupContext group = 3;
+inline bool PushMessageContent::has_group() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PushMessageContent::set_has_group() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PushMessageContent::clear_has_group() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PushMessageContent::clear_group() {
+  if (group_ != NULL) group_->::textsecure::PushMessageContent_GroupContext::Clear();
+  clear_has_group();
+}
+inline const ::textsecure::PushMessageContent_GroupContext& PushMessageContent::group() const {
+  return group_ != NULL ? *group_ : *default_instance_->group_;
+}
+inline ::textsecure::PushMessageContent_GroupContext* PushMessageContent::mutable_group() {
+  set_has_group();
+  if (group_ == NULL) group_ = new ::textsecure::PushMessageContent_GroupContext;
+  return group_;
+}
+inline ::textsecure::PushMessageContent_GroupContext* PushMessageContent::release_group() {
+  clear_has_group();
+  ::textsecure::PushMessageContent_GroupContext* temp = group_;
+  group_ = NULL;
+  return temp;
+}
+inline void PushMessageContent::set_allocated_group(::textsecure::PushMessageContent_GroupContext* group) {
+  delete group_;
+  group_ = group;
+  if (group) {
+    set_has_group();
+  } else {
+    clear_has_group();
+  }
+}
+
+// optional uint32 flags = 4;
+inline bool PushMessageContent::has_flags() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void PushMessageContent::set_has_flags() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void PushMessageContent::clear_has_flags() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void PushMessageContent::clear_flags() {
+  flags_ = 0u;
+  clear_has_flags();
+}
+inline ::google::protobuf::uint32 PushMessageContent::flags() const {
+  return flags_;
+}
+inline void PushMessageContent::set_flags(::google::protobuf::uint32 value) {
+  set_has_flags();
+  flags_ = value;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -527,6 +1090,14 @@ PushMessageContent::mutable_attachments() {
 namespace google {
 namespace protobuf {
 
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::textsecure::PushMessageContent_GroupContext_Type>() {
+  return ::textsecure::PushMessageContent_GroupContext_Type_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::textsecure::PushMessageContent_Flags>() {
+  return ::textsecure::PushMessageContent_Flags_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf

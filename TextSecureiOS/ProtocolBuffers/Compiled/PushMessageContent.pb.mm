@@ -2,7 +2,7 @@
 // source: PushMessageContent.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "PushMessageContent.pb.hh"
+#include "PushMessageContent.pb.h"
 
 #include <algorithm>
 
@@ -26,6 +26,11 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* PushMessageContent_AttachmentPointer_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PushMessageContent_AttachmentPointer_reflection_ = NULL;
+const ::google::protobuf::Descriptor* PushMessageContent_GroupContext_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  PushMessageContent_GroupContext_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* PushMessageContent_GroupContext_Type_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* PushMessageContent_Flags_descriptor_ = NULL;
 
 }  // namespace
 
@@ -37,9 +42,11 @@ void protobuf_AssignDesc_PushMessageContent_2eproto() {
       "PushMessageContent.proto");
   GOOGLE_CHECK(file != NULL);
   PushMessageContent_descriptor_ = file->message_type(0);
-  static const int PushMessageContent_offsets_[2] = {
+  static const int PushMessageContent_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent, body_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent, attachments_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent, group_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent, flags_),
   };
   PushMessageContent_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -69,6 +76,27 @@ void protobuf_AssignDesc_PushMessageContent_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PushMessageContent_AttachmentPointer));
+  PushMessageContent_GroupContext_descriptor_ = PushMessageContent_descriptor_->nested_type(1);
+  static const int PushMessageContent_GroupContext_offsets_[5] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent_GroupContext, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent_GroupContext, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent_GroupContext, name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent_GroupContext, members_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent_GroupContext, avatar_),
+  };
+  PushMessageContent_GroupContext_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      PushMessageContent_GroupContext_descriptor_,
+      PushMessageContent_GroupContext::default_instance_,
+      PushMessageContent_GroupContext_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent_GroupContext, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushMessageContent_GroupContext, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(PushMessageContent_GroupContext));
+  PushMessageContent_GroupContext_Type_descriptor_ = PushMessageContent_GroupContext_descriptor_->enum_type(0);
+  PushMessageContent_Flags_descriptor_ = PushMessageContent_descriptor_->enum_type(0);
 }
 
 namespace {
@@ -85,6 +113,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
     PushMessageContent_descriptor_, &PushMessageContent::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PushMessageContent_AttachmentPointer_descriptor_, &PushMessageContent_AttachmentPointer::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    PushMessageContent_GroupContext_descriptor_, &PushMessageContent_GroupContext::default_instance());
 }
 
 }  // namespace
@@ -94,6 +124,8 @@ void protobuf_ShutdownFile_PushMessageContent_2eproto() {
   delete PushMessageContent_reflection_;
   delete PushMessageContent_AttachmentPointer::default_instance_;
   delete PushMessageContent_AttachmentPointer_reflection_;
+  delete PushMessageContent_GroupContext::default_instance_;
+  delete PushMessageContent_GroupContext_reflection_;
 }
 
 void protobuf_AddDesc_PushMessageContent_2eproto() {
@@ -103,18 +135,28 @@ void protobuf_AddDesc_PushMessageContent_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\030PushMessageContent.proto\022\ntextsecure\"\254"
-    "\001\n\022PushMessageContent\022\014\n\004body\030\001 \001(\t\022E\n\013a"
+    "\n\030PushMessageContent.proto\022\ntextsecure\"\207"
+    "\004\n\022PushMessageContent\022\014\n\004body\030\001 \001(\t\022E\n\013a"
     "ttachments\030\002 \003(\01320.textsecure.PushMessag"
-    "eContent.AttachmentPointer\032A\n\021Attachment"
-    "Pointer\022\n\n\002id\030\001 \001(\006\022\023\n\013contentType\030\002 \001(\t"
-    "\022\013\n\003key\030\003 \001(\014", 213);
+    "eContent.AttachmentPointer\022:\n\005group\030\003 \001("
+    "\0132+.textsecure.PushMessageContent.GroupC"
+    "ontext\022\r\n\005flags\030\004 \001(\r\032A\n\021AttachmentPoint"
+    "er\022\n\n\002id\030\001 \001(\006\022\023\n\013contentType\030\002 \001(\t\022\013\n\003k"
+    "ey\030\003 \001(\014\032\363\001\n\014GroupContext\022\n\n\002id\030\001 \001(\014\022>\n"
+    "\004type\030\002 \001(\01620.textsecure.PushMessageCont"
+    "ent.GroupContext.Type\022\014\n\004name\030\003 \001(\t\022\017\n\007m"
+    "embers\030\004 \003(\t\022@\n\006avatar\030\005 \001(\01320.textsecur"
+    "e.PushMessageContent.AttachmentPointer\"6"
+    "\n\004Type\022\013\n\007UNKNOWN\020\000\022\n\n\006UPDATE\020\001\022\013\n\007DELIV"
+    "ER\020\002\022\010\n\004QUIT\020\003\"\030\n\005Flags\022\017\n\013END_SESSION\020\001", 560);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "PushMessageContent.proto", &protobuf_RegisterTypes);
   PushMessageContent::default_instance_ = new PushMessageContent();
   PushMessageContent_AttachmentPointer::default_instance_ = new PushMessageContent_AttachmentPointer();
+  PushMessageContent_GroupContext::default_instance_ = new PushMessageContent_GroupContext();
   PushMessageContent::default_instance_->InitAsDefaultInstance();
   PushMessageContent_AttachmentPointer::default_instance_->InitAsDefaultInstance();
+  PushMessageContent_GroupContext::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_PushMessageContent_2eproto);
 }
 
@@ -127,6 +169,25 @@ struct StaticDescriptorInitializer_PushMessageContent_2eproto {
 
 // ===================================================================
 
+const ::google::protobuf::EnumDescriptor* PushMessageContent_Flags_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PushMessageContent_Flags_descriptor_;
+}
+bool PushMessageContent_Flags_IsValid(int value) {
+  switch(value) {
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const PushMessageContent_Flags PushMessageContent::END_SESSION;
+const PushMessageContent_Flags PushMessageContent::Flags_MIN;
+const PushMessageContent_Flags PushMessageContent::Flags_MAX;
+const int PushMessageContent::Flags_ARRAYSIZE;
+#endif  // _MSC_VER
 #ifndef _MSC_VER
 const int PushMessageContent_AttachmentPointer::kIdFieldNumber;
 const int PushMessageContent_AttachmentPointer::kContentTypeFieldNumber;
@@ -438,9 +499,448 @@ void PushMessageContent_AttachmentPointer::Swap(PushMessageContent_AttachmentPoi
 
 // -------------------------------------------------------------------
 
+const ::google::protobuf::EnumDescriptor* PushMessageContent_GroupContext_Type_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PushMessageContent_GroupContext_Type_descriptor_;
+}
+bool PushMessageContent_GroupContext_Type_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext::UNKNOWN;
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext::UPDATE;
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext::DELIVER;
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext::QUIT;
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext::Type_MIN;
+const PushMessageContent_GroupContext_Type PushMessageContent_GroupContext::Type_MAX;
+const int PushMessageContent_GroupContext::Type_ARRAYSIZE;
+#endif  // _MSC_VER
+#ifndef _MSC_VER
+const int PushMessageContent_GroupContext::kIdFieldNumber;
+const int PushMessageContent_GroupContext::kTypeFieldNumber;
+const int PushMessageContent_GroupContext::kNameFieldNumber;
+const int PushMessageContent_GroupContext::kMembersFieldNumber;
+const int PushMessageContent_GroupContext::kAvatarFieldNumber;
+#endif  // !_MSC_VER
+
+PushMessageContent_GroupContext::PushMessageContent_GroupContext()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void PushMessageContent_GroupContext::InitAsDefaultInstance() {
+  avatar_ = const_cast< ::textsecure::PushMessageContent_AttachmentPointer*>(&::textsecure::PushMessageContent_AttachmentPointer::default_instance());
+}
+
+PushMessageContent_GroupContext::PushMessageContent_GroupContext(const PushMessageContent_GroupContext& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void PushMessageContent_GroupContext::SharedCtor() {
+  _cached_size_ = 0;
+  id_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  type_ = 0;
+  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  avatar_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+PushMessageContent_GroupContext::~PushMessageContent_GroupContext() {
+  SharedDtor();
+}
+
+void PushMessageContent_GroupContext::SharedDtor() {
+  if (id_ != &::google::protobuf::internal::kEmptyString) {
+    delete id_;
+  }
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    delete name_;
+  }
+  if (this != default_instance_) {
+    delete avatar_;
+  }
+}
+
+void PushMessageContent_GroupContext::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* PushMessageContent_GroupContext::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PushMessageContent_GroupContext_descriptor_;
+}
+
+const PushMessageContent_GroupContext& PushMessageContent_GroupContext::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_PushMessageContent_2eproto();
+  return *default_instance_;
+}
+
+PushMessageContent_GroupContext* PushMessageContent_GroupContext::default_instance_ = NULL;
+
+PushMessageContent_GroupContext* PushMessageContent_GroupContext::New() const {
+  return new PushMessageContent_GroupContext;
+}
+
+void PushMessageContent_GroupContext::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_id()) {
+      if (id_ != &::google::protobuf::internal::kEmptyString) {
+        id_->clear();
+      }
+    }
+    type_ = 0;
+    if (has_name()) {
+      if (name_ != &::google::protobuf::internal::kEmptyString) {
+        name_->clear();
+      }
+    }
+    if (has_avatar()) {
+      if (avatar_ != NULL) avatar_->::textsecure::PushMessageContent_AttachmentPointer::Clear();
+    }
+  }
+  members_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool PushMessageContent_GroupContext::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional bytes id = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_id()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_type;
+        break;
+      }
+
+      // optional .textsecure.PushMessageContent.GroupContext.Type type = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_type:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::textsecure::PushMessageContent_GroupContext_Type_IsValid(value)) {
+            set_type(static_cast< ::textsecure::PushMessageContent_GroupContext_Type >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(2, value);
+          }
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_name;
+        break;
+      }
+
+      // optional string name = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_name:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->name().data(), this->name().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_members;
+        break;
+      }
+
+      // repeated string members = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_members:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_members()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->members(this->members_size() - 1).data(),
+            this->members(this->members_size() - 1).length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_members;
+        if (input->ExpectTag(42)) goto parse_avatar;
+        break;
+      }
+
+      // optional .textsecure.PushMessageContent.AttachmentPointer avatar = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_avatar:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_avatar()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void PushMessageContent_GroupContext::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // optional bytes id = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+      1, this->id(), output);
+  }
+
+  // optional .textsecure.PushMessageContent.GroupContext.Type type = 2;
+  if (has_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->type(), output);
+  }
+
+  // optional string name = 3;
+  if (has_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      3, this->name(), output);
+  }
+
+  // repeated string members = 4;
+  for (int i = 0; i < this->members_size(); i++) {
+  ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+    this->members(i).data(), this->members(i).length(),
+    ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->members(i), output);
+  }
+
+  // optional .textsecure.PushMessageContent.AttachmentPointer avatar = 5;
+  if (has_avatar()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->avatar(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* PushMessageContent_GroupContext::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // optional bytes id = 1;
+  if (has_id()) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        1, this->id(), target);
+  }
+
+  // optional .textsecure.PushMessageContent.GroupContext.Type type = 2;
+  if (has_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      2, this->type(), target);
+  }
+
+  // optional string name = 3;
+  if (has_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->name(), target);
+  }
+
+  // repeated string members = 4;
+  for (int i = 0; i < this->members_size(); i++) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->members(i).data(), this->members(i).length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(4, this->members(i), target);
+  }
+
+  // optional .textsecure.PushMessageContent.AttachmentPointer avatar = 5;
+  if (has_avatar()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->avatar(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int PushMessageContent_GroupContext::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // optional bytes id = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->id());
+    }
+
+    // optional .textsecure.PushMessageContent.GroupContext.Type type = 2;
+    if (has_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+    }
+
+    // optional string name = 3;
+    if (has_name()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->name());
+    }
+
+    // optional .textsecure.PushMessageContent.AttachmentPointer avatar = 5;
+    if (has_avatar()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->avatar());
+    }
+
+  }
+  // repeated string members = 4;
+  total_size += 1 * this->members_size();
+  for (int i = 0; i < this->members_size(); i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->members(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void PushMessageContent_GroupContext::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const PushMessageContent_GroupContext* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const PushMessageContent_GroupContext*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void PushMessageContent_GroupContext::MergeFrom(const PushMessageContent_GroupContext& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  members_.MergeFrom(from.members_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+    if (from.has_type()) {
+      set_type(from.type());
+    }
+    if (from.has_name()) {
+      set_name(from.name());
+    }
+    if (from.has_avatar()) {
+      mutable_avatar()->::textsecure::PushMessageContent_AttachmentPointer::MergeFrom(from.avatar());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void PushMessageContent_GroupContext::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void PushMessageContent_GroupContext::CopyFrom(const PushMessageContent_GroupContext& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PushMessageContent_GroupContext::IsInitialized() const {
+
+  return true;
+}
+
+void PushMessageContent_GroupContext::Swap(PushMessageContent_GroupContext* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(type_, other->type_);
+    std::swap(name_, other->name_);
+    members_.Swap(&other->members_);
+    std::swap(avatar_, other->avatar_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata PushMessageContent_GroupContext::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = PushMessageContent_GroupContext_descriptor_;
+  metadata.reflection = PushMessageContent_GroupContext_reflection_;
+  return metadata;
+}
+
+
+// -------------------------------------------------------------------
+
 #ifndef _MSC_VER
 const int PushMessageContent::kBodyFieldNumber;
 const int PushMessageContent::kAttachmentsFieldNumber;
+const int PushMessageContent::kGroupFieldNumber;
+const int PushMessageContent::kFlagsFieldNumber;
 #endif  // !_MSC_VER
 
 PushMessageContent::PushMessageContent()
@@ -449,6 +949,7 @@ PushMessageContent::PushMessageContent()
 }
 
 void PushMessageContent::InitAsDefaultInstance() {
+  group_ = const_cast< ::textsecure::PushMessageContent_GroupContext*>(&::textsecure::PushMessageContent_GroupContext::default_instance());
 }
 
 PushMessageContent::PushMessageContent(const PushMessageContent& from)
@@ -460,6 +961,8 @@ PushMessageContent::PushMessageContent(const PushMessageContent& from)
 void PushMessageContent::SharedCtor() {
   _cached_size_ = 0;
   body_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  group_ = NULL;
+  flags_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -472,6 +975,7 @@ void PushMessageContent::SharedDtor() {
     delete body_;
   }
   if (this != default_instance_) {
+    delete group_;
   }
 }
 
@@ -503,6 +1007,10 @@ void PushMessageContent::Clear() {
         body_->clear();
       }
     }
+    if (has_group()) {
+      if (group_ != NULL) group_->::textsecure::PushMessageContent_GroupContext::Clear();
+    }
+    flags_ = 0u;
   }
   attachments_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -542,6 +1050,36 @@ bool PushMessageContent::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(18)) goto parse_attachments;
+        if (input->ExpectTag(26)) goto parse_group;
+        break;
+      }
+
+      // optional .textsecure.PushMessageContent.GroupContext group = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_group:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_group()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(32)) goto parse_flags;
+        break;
+      }
+
+      // optional uint32 flags = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_flags:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &flags_)));
+          set_has_flags();
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -579,6 +1117,17 @@ void PushMessageContent::SerializeWithCachedSizes(
       2, this->attachments(i), output);
   }
 
+  // optional .textsecure.PushMessageContent.GroupContext group = 3;
+  if (has_group()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->group(), output);
+  }
+
+  // optional uint32 flags = 4;
+  if (has_flags()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->flags(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -604,6 +1153,18 @@ void PushMessageContent::SerializeWithCachedSizes(
         2, this->attachments(i), target);
   }
 
+  // optional .textsecure.PushMessageContent.GroupContext group = 3;
+  if (has_group()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->group(), target);
+  }
+
+  // optional uint32 flags = 4;
+  if (has_flags()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->flags(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -620,6 +1181,20 @@ int PushMessageContent::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->body());
+    }
+
+    // optional .textsecure.PushMessageContent.GroupContext group = 3;
+    if (has_group()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->group());
+    }
+
+    // optional uint32 flags = 4;
+    if (has_flags()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->flags());
     }
 
   }
@@ -661,6 +1236,12 @@ void PushMessageContent::MergeFrom(const PushMessageContent& from) {
     if (from.has_body()) {
       set_body(from.body());
     }
+    if (from.has_group()) {
+      mutable_group()->::textsecure::PushMessageContent_GroupContext::MergeFrom(from.group());
+    }
+    if (from.has_flags()) {
+      set_flags(from.flags());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -686,6 +1267,8 @@ void PushMessageContent::Swap(PushMessageContent* other) {
   if (other != this) {
     std::swap(body_, other->body_);
     attachments_.Swap(&other->attachments_);
+    std::swap(group_, other->group_);
+    std::swap(flags_, other->flags_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -14,7 +14,7 @@
 @interface TSMessageSignal : TSProtocolBufferWrapper
 @property (nonatomic) TSWhisperMessageType contentType;
 @property (nonatomic,strong) NSString* source;
-@property (nonatomic,strong) NSArray *destinations;
+@property (nonatomic,strong) NSNumber* sourceDevice;
 @property (nonatomic,strong) NSDate *timestamp;
 @property (nonatomic,strong) TSWhisperMessage *message;
 @end
