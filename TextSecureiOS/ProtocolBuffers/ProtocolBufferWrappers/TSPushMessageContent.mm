@@ -150,7 +150,7 @@
     attachmentPointer->set_key(attachment_encryption_key);
     attachmentPointer->set_contenttype(attachment_contenttype);
   }
-  
+#warning no group support here yet, need the data structure
   return [tsPushMessageContent serializedProtocolBuffer];
 }
 
