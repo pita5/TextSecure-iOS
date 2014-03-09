@@ -91,14 +91,41 @@
     
     NSData *cipherText = message.message;
     
-    NSString* contentString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherText withKeys:messageKeys forVersion:[message getTextSecure_WhisperMessage] withHMAC:message.hmac] encoding:NSUTF8StringEncoding];
-    
-    
+    NSString* contentString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherText withKeys:messageKeys forVersion:[message version] withHMAC:message.hmac] encoding:NSUTF8StringEncoding];
     
     TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initWithMessageWithContent:contentString sender:session.contact.registeredID date:[NSDate date] attachements:nil group:nil state:TSMessageStateReceived];
     [TSMessagesDatabase storeSession:session];
     
     return incomingMessage;
+}
+
++ (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session{
+    
+    TSChainKey *chainKey = [session senderChainKey];
+    TSMessageKeys *messageKeys = [chainKey messageKeys];
+    TSECKeyPair *senderEphemeral = [session senderEphemeral];
+    int previousCounter = session.PN;
+    
+    NSData* computedHMAC;
+    NSData *cipherText = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys forVersion:[self currentProtocolVersion] computedHMAC:&computedHMAC];
+    
+    TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
+    
+    if ([session hasPendingPrekey]) {
+        
+        TSPrekey *prekey = [session pendingPrekey];
+        
+        encryptedMessage = [[TSPreKeyWhisperMessage alloc]initWithPreKeyId:[NSNumber numberWithInt:prekey.prekeyId] senderPrekey:prekey.ephemeralKey senderIdentityKey:prekey.identityKey message:[encryptedMessage getTextSecure_WhisperMessage] forVersion:[self currentProtocolVersion]];
+
+    }
+    
+    [session setSenderChainKey:[chainKey nextChainKey]];
+    
+    [TSMessagesDatabase storeSession:session];
+    
+    
+    return encryptedMessage;
+    
 }
 
 + (TSChainKey*)getOrCreateChainKeys:(TSSession*)session theirEphemeral:(NSData*)theirEphemeral{
@@ -197,15 +224,14 @@
     return session;
 }
 
-#pragma mark Identity
 + (TSECKeyPair*)myIdentityKey{
     return [TSUserKeysDatabase identityKey];
 }
-
-#pragma mark Private methods
-
-
-
+    
++ (NSData*)currentProtocolVersion{
+    int version = 2;
+    return [NSData dataWithBytes:&version length:sizeof(version)];
+}
 
 
 #pragma mark Helper methods

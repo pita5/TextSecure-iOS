@@ -21,6 +21,9 @@
 #import "TSAttachment.h"
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSMessageSignal.hh"
+#import "TSContact.h"
+#import "TSPreKeyWhisperMessage.hh"
+#import "TSRecipientPrekeyRequest.h"
 
 @interface TSMessagesManager (){
     dispatch_queue_t queue;
@@ -49,66 +52,66 @@
 -(void)sendMessage:(TSMessage*)message{
     dispatch_async(queue, ^{
         [TSMessagesDatabase storeMessage:message];
+    });
+    
+    TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
+    NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
+    
+    if ([sessions count] > 0) {
+        // We have already an existing session with that recipient. we just send the message over that session
+        
+    } else{
+        
+        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            switch (operation.response.statusCode) {
+                case 200:{
+                    
+                    NSLog(@"Prekey fetched :) ");
+                    
+                    // Extracting the recipients keying material from server payload
+                    
+                    NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+                    NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
+                    NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
+                    
+                    NSLog(@"We got the prekeys! %@", responseObject);
+                    
+                    // remove the leading "0x05" byte as per protocol specs
+                    if (theirEphemeralKey.length == 33) {
+                        theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                    }
+                    
+                    // remove the leading "0x05" byte as per protocol specs
+                    if (theirIdentityKey.length == 33) {
+                        theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
+                    }
+                    
+                    
+                    
+                    NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:<#(NSData *)#> theirPrekeyId:<#(NSNumber *)#> myCurrentEphemeral:<#(TSECKeyPair *)#> myNextEphemeral:<#(TSECKeyPair *)#> forVersion:<#(NSData *)#> withHMAC:<#(NSData *)#>];
+                    [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[encodedPreKeyWhisperMessage base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                    
+                    // nil
+                    break;
+                }
+                default:
+                    DLog(@"error sending message");
+#warning Add error handling if not able to get contacts prekey
+                    break;
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+#warning right now it is not succesfully processing returned response, but is giving 200
+            DLog(@"Not a 200");
+            
+        }];
+
+        
     }
-    // For a given thread, the Axolotl Ratchet should find out what's the current messaging state to send the message.
-                   
-    
-   
-    TSWhisperMessageType messageType = TSPreKeyWhisperMessageType;
-    
-    TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:thread];
     
     switch (messageType) {
             
         case TSPreKeyWhisperMessageType:{
             // get a contact's prekey
-            TSContact* contact = [ratchet.thread.participants objectAtIndex:0];
-            [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                switch (operation.response.statusCode) {
-                    case 200:{
-                        
-                        NSLog(@"Prekey fetched :) ");
-                        
-                        // Extracting the recipients keying material from server payload
-                        
-                        NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
-                        NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
-                        NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                        
-                        NSLog(@"We got the prekeys! %@", responseObject);
-                        
-                        // remove the leading "0x05" byte as per protocol specs
-                        if (theirEphemeralKey.length == 33) {
-                            theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
-                        }
-                        
-                        // remove the leading "0x05" byte as per protocol specs
-                        if (theirIdentityKey.length == 33) {
-                            theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
-                        }
-                        
-                        // Retreiving my keying material to construct message
-                        
-                        TSECKeyPair *currentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
-                        NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0]];
-                        TSECKeyPair *nextEphemeral = [TSMessagesDatabase ephemeralOfSendingChain:thread]; // nil
-                        NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:encryptedMessage theirPrekeyId:theirPrekeyId myCurrentEphemeral:currentEphemeral myNextEphemeral:nextEphemeral];
-                        [TSAxolotlRatchet receiveMessage:encodedPreKeyWhisperMessage];
-                        [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[encodedPreKeyWhisperMessage base64EncodedString] ofType:TSPreKeyWhisperMessageType];
-                        
-                        // nil
-                        break;
-                    }
-                    default:
-                        DLog(@"error sending message");
-#warning Add error handling if not able to get contacts prekey
-                        break;
-                }
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning right now it is not succesfully processing returned response, but is giving 200
-                DLog(@"Not a 200");
-                
-            }];
             
             break;
         }

@@ -26,6 +26,12 @@
 @property TSECKeyPair *ephemeralOutgoing;
 @property int PN;
 
+
+#pragma mark Prekey methods (non-persistent)
+
+- (BOOL)hasPendingPrekey;
+- (TSPrekey*)pendingPrekey;
+
 - (TSSession*)initWithContact:(TSContact*)contact deviceId:(int)deviceId;
 - (NSData*)theirIdentityKey;
 
@@ -34,15 +40,16 @@
 
 - (TSChainKey*)receiverChainKey:(NSData*)senderEphemeral;
 - (TSChainKey*)senderChainKey;
+- (TSECKeyPair*)senderEphemeral;
 
 - (TSChainKey*)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
 - (void) setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
 - (TSChainKey*)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(TSChainKey*)chainKey;
+- (void)setSenderChainKey:(TSChainKey*)chainKey;
 
 - (BOOL)hasMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
 - (void)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys;
-
 
 @end

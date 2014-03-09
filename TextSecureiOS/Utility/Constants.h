@@ -35,3 +35,6 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
     TSIgnoreOnIOSWhisperMessageType=2, // on droid this is the prekey bundle message irrelevant for us
     TSPreKeyWhisperMessageType = 3
 };
+
+
+#define kTSVersion 
