@@ -10,4 +10,14 @@
 
 @implementation TSGroupContext
 
+-(id)initWithId:(NSData*)groupId withType:(TSGroupContextType)groupType withName:(NSString*)groupName withMembers:(NSArray*)groupMembers withAvatar:(TSAttachment*)groupAvatar {
+    if(self=[super init]) {
+        self.gid = groupId;
+        self.type = groupType;
+        self.name = groupName;
+        self.members = groupMembers;
+        self.avatar = groupAvatar;
+    }
+    return self;
+}
 @end

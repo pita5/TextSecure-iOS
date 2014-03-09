@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "TSProtocolBufferWrapper.hh"
+#import "TSProtocols.h"
 #import "TSGroupContext.h"
 @class TSMessage;
 @interface TSPushMessageContent :  TSProtocolBufferWrapper
 @property (nonatomic,strong) NSString* body;
 @property (nonatomic,strong) NSArray* attachments;
 @property (nonatomic,strong) TSGroupContext* groupContext;
-@property (nonatomic,assign) NSNumber* groupFlags;
+@property (nonatomic,assign) TSPushMessageFlags messageFlags;
 
 
 + (NSData *) serializedPushMessageContent:(TSMessage*) message;

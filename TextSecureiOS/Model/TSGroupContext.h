@@ -11,10 +11,14 @@
 #import "TSAttachment.h"
 
 @interface TSGroupContext : NSObject
-@property(nonatomic,strong) UIImage *groupImage;
-@property(nonatomic,assign) TSGroupContextType groupType;
-@property(nonatomic,strong) NSData* groupId;
-@property(nonatomic,strong) NSArray *groupMembers;
-@property(nonatomic,strong) TSAttachment *groupAvatar;
+@property(nonatomic,strong) UIImage *image;
+@property(nonatomic,assign) TSGroupContextType type;
+@property(nonatomic,strong) NSData* gid;
+@property(nonatomic,strong) NSString* name;
 
+@property(nonatomic,strong) NSArray *members;
+@property(nonatomic,strong) TSAttachment *avatar;
+
+
+-(id)initWithId:(NSData*)groupId withType:(TSGroupContextType)groupType withName:(NSString*)groupName withMembers:(NSArray*)groupMembers withAvatar:(TSAttachment*)groupAvatar;
 @end
