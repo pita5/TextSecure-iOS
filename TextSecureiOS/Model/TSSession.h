@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TSContact.h"
 #import "RKCK.h"
-#import "TSWhisperMessageKeys.h"
+#import "TSMessageKeys.h"
 #import "TSPrekey.h"
 #import "TSChainKey.h"
 #import "TSEncryptedWhisperMessage.hh"
@@ -36,6 +36,13 @@
 - (TSChainKey*)senderChainKey;
 
 - (TSChainKey*)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
+- (void) setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
 - (TSChainKey*)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(TSChainKey*)chainKey;
+
+- (BOOL)hasMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
+- (void)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
+
+- (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys;
+
 
 @end

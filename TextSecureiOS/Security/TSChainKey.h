@@ -7,12 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+@class TSMessageKeys;
 
 @interface TSChainKey : NSObject
 
 @property(readonly)int index;
 @property(readonly)NSData *key;
 
--(instancetype) initWithChainKeyWithKey:(NSData*)key index:(int)index;
+- (instancetype)initWithChainKeyWithKey:(NSData*)key index:(int)index;
+- (TSMessageKeys*)messageKeys;
+- (TSChainKey*)nextChainKey;
 
 @end

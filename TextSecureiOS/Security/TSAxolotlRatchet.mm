@@ -24,7 +24,7 @@
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSRecipientPrekeyRequest.h"
-#import "TSWhisperMessageKeys.h"
+#import "TSMessageKeys.h"
 #import "TSHKDF.h"
 #import "RKCK.h"
 #import "TSContact.h"
@@ -32,6 +32,7 @@
 #import "TSMessageIncoming.h"
 #import "TSMessageOutgoing.h"
 #import "TSPrekey.h"
+
 
 
 @implementation TSAxolotlRatchet
@@ -85,8 +86,7 @@
     NSData *theirEphemeral = message.ephemeralKey;
     int counter = [message.counter intValue];
     
-    NSData *chainKey = [self getOrCreateChainKeys:session theirEphemeral:theirEphemeral];
-    
+    TSChainKey *chainKey = [self getOrCreateChainKeys:session theirEphemeral:theirEphemeral];
     
     ECPublicKey      theirEphemeral    = ciphertextMessage.getSenderEphemeral();
     int              counter           = ciphertextMessage.getCounter();
@@ -126,36 +126,29 @@
     }
 }
 
-+ (NSData*)getOrCreateMessageKeysForSession:(TSSession*)session theirEphemeral:(NSData*)ephemeral chainKey:(TSChainKey*)chainKey counter:(int)counter{
-    
-    
-    
-    private MessageKeys getOrCreateMessageKeys(SessionRecordV2 sessionRecord,
-                                               ECPublicKey theirEphemeral,
-                                               ChainKey chainKey, int counter)
-    throws InvalidMessageException
-    {
-        if (chainKey.getIndex() > counter) {
-            if (sessionRecord.hasMessageKeys(theirEphemeral, counter)) {
-                return sessionRecord.removeMessageKeys(theirEphemeral, counter);
-            } else {
-                throw new InvalidMessageException("Received message with old counter!");
-            }
++ (TSMessageKeys*)getOrCreateMessageKeysForSession:(TSSession*)session theirEphemeral:(NSData*)ephemeral chainKey:(TSChainKey*)chainKey counter:(int)counter{
+    if (chainKey.index > counter) {
+        if ([session hasMessageKeysForEphemeral:ephemeral counter:counter]) {
+            [session removeMessageKeysForEphemeral:ephemeral counter:counter];
+        } else{
+            throw [NSException exceptionWithName:@"Received message with old counter!" reason:@"" userInfo:@{}];
+
         }
-        
-        if (chainKey.getIndex() - counter > 500) {
-            throw new InvalidMessageException("Over 500 messages into the future!");
-        }
-        
-        while (chainKey.getIndex() < counter) {
-            MessageKeys messageKeys = chainKey.getMessageKeys();
-            sessionRecord.setMessageKeys(theirEphemeral, messageKeys);
-            chainKey = chainKey.getNextChainKey();
-        }
-        
-        sessionRecord.setReceiverChainKey(theirEphemeral, chainKey.getNextChainKey());
-        return chainKey.getMessageKeys();
     }
+    
+    if (chainKey.index - counter > 500) {
+        throw [NSException exceptionWithName:@"Over 500 messages into the future!" reason:@"" userInfo:@{}];
+    }
+    
+    while (chainKey.index < counter) {
+        TSMessageKeys *messageKeys = [chainKey messageKeys];
+        [session setMessageKeysWithEphemeral:ephemeral messageKey:messageKeys];
+        chainKey = chainKey.nextChainKey;
+    }
+    
+    [session setReceiverChainKeyWithEphemeral:ephemeral chainKey:chainKey];
+    
+    return [chainKey messageKeys];
 }
 
 
