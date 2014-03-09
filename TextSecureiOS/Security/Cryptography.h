@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@class TSWhisperMessageKeys;
+#import "TSMessageKeys.h"
+
 @interface Cryptography : NSObject
 +(NSMutableData*) generateRandomBytes:(int)numberBytes;
 #pragma mark SHA and HMAC methods
@@ -16,8 +17,8 @@
 +(NSData*) computeHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey;
 +(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey truncation:(int)bytes;
 
-+(NSData*)decryptCTRMode:(NSData*)ciphertext withCounter:(NSNumber*) counter  withKeys:(TSWhisperMessageKeys*)keys forVersion:(NSData*) version withHMAC:(NSData*)hmac;
-+(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter forVersion:(NSData*)version computedHMAC:(NSData**)hmac;
++(NSData*)decryptCTRMode:(NSData*)ciphertext withKeys:(TSMessageKeys*)keys forVersion:(NSData*) version withHMAC:(NSData*)hmac;
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSMessageKeys*)keys forVersion:(NSData*)version computedHMAC:(NSData**)hmac;
 #pragma mark decrypt symmetrically with key given to server this first layer just hides from apple encrypted protobufs message
 +(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString;
 

@@ -14,7 +14,6 @@
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"
-#import "TSWhisperMessageKeys.h"
 #include "NSString+Conversion.h"
 #include "NSData+Base64.h"
 #import "FilePath.h"
@@ -165,7 +164,7 @@
   
 }
 
-+(NSData*)decryptCTRMode:(NSData*)ciphertext withCounter:(NSNumber*) counter  withKeys:(TSWhisperMessageKeys*)keys forVersion:(NSData*) version withHMAC:(NSData*)hmac {
++(NSData*)decryptCTRMode:(NSData*)ciphertext withKeys:(TSMessageKeys*)keys forVersion:(NSData*) version withHMAC:(NSData*)hmac {
 
     /* AES256 CTR encrypt then mac / validate mac then decrypt
      Returns nil if hmac invalid or decryption fails
@@ -189,7 +188,7 @@
     CCCryptorRef cryptor;
 
     cryptStatus = CCCryptorCreateWithMode(kCCDecrypt, kCCModeCTR, kCCAlgorithmAES128,
-                                                            ccNoPadding, [[Cryptography counterFromNumber:counter] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
+                                                            ccNoPadding, [[Cryptography counterFromNumber:[NSNumber numberWithInt:keys.counter]] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
                                                             NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
       
     cryptStatus = CCCryptorUpdate(cryptor, [ciphertext bytes], [ciphertext length], buffer, bufferSize, &bytesDecrypted);
@@ -200,7 +199,7 @@
     free(buffer);
     return nil;
 }
-+(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSWhisperMessageKeys*)keys withCounter:(NSNumber*)counter forVersion:(NSData*)version computedHMAC:(NSData**)hmac {
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSMessageKeys*)keys forVersion:(NSData*)version computedHMAC:(NSData**)hmac {
 
   /* AES256 CTR encrypt then mac
    Returns nil if hmac invalid or decryption fails
@@ -213,7 +212,7 @@
     CCCryptorStatus cryptStatus;
     CCCryptorRef cryptor;
     cryptStatus = CCCryptorCreateWithMode(kCCEncrypt, kCCModeCTR, kCCAlgorithmAES128,
-                                        ccNoPadding, [[Cryptography counterFromNumber:counter] bytes],
+                                        ccNoPadding, [[Cryptography counterFromNumber:[NSNumber numberWithInt:keys.counter]] bytes],
                                         [keys.cipherKey bytes], [keys.cipherKey length],
                                         NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
   
@@ -228,10 +227,9 @@
         *hmac = [Cryptography truncatedHMAC:versionAndEncryptedData withHMACKey:keys.macKey truncation:8];
         return encryptedData;
     }
+    
     free(buffer);
     return nil;
-
-
 }
 
 +(NSData*)encrypt:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {

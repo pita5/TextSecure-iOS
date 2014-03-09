@@ -87,23 +87,18 @@
     int counter = [message.counter intValue];
     
     TSChainKey *chainKey = [self getOrCreateChainKeys:session theirEphemeral:theirEphemeral];
+    TSMessageKeys *messageKeys = [self getOrCreateMessageKeysForSession:session theirEphemeral:theirEphemeral chainKey:chainKey counter:counter];
     
-    ECPublicKey      theirEphemeral    = ciphertextMessage.getSenderEphemeral();
-    int              counter           = ciphertextMessage.getCounter();
-    ChainKey         chainKey          = getOrCreateChainKey(sessionRecord, theirEphemeral);
-    MessageKeys      messageKeys       = getOrCreateMessageKeys(sessionRecord, theirEphemeral,
-                                                                chainKey, counter);
+    NSData *cipherText = message.message;
     
-    ciphertextMessage.verifyMac(messageKeys.getMacKey());
-    
-    byte[] plaintext = getPlaintext(messageKeys, ciphertextMessage.getBody());
-    
-    sessionRecord.clearPendingPreKey();
-    sessionRecord.save();
-    
-    return plaintext;
+    NSString* contentString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherText withKeys:messageKeys forVersion:[message getTextSecure_WhisperMessage] withHMAC:message.hmac] encoding:NSUTF8StringEncoding];
     
     
+    
+    TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initWithMessageWithContent:contentString sender:session.contact.registeredID date:[NSDate date] attachements:nil group:nil state:TSMessageStateReceived];
+    [TSMessagesDatabase storeSession:session];
+    
+    return incomingMessage;
 }
 
 + (TSChainKey*)getOrCreateChainKeys:(TSSession*)session theirEphemeral:(NSData*)theirEphemeral{
@@ -215,29 +210,6 @@
 
 #pragma mark Helper methods
 
-
-+(TSWhisperMessageKeys*) ratchetSetupFirstSender:(NSData*)theirIdentity theirEphemeralKey:(NSData*)theirEphemeral{
-    TSECKeyPair *ourIdentityKey = [TSUserKeysDatabase identityKey];
-    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    NSData* ourMasterKey = [self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey   theirIdentityPublicKey:theirIdentity theirEphemeralPublicKey:theirEphemeral];
-    RKCK* receivingChain = [self initialRootKey:ourMasterKey];
-    TSECKeyPair* nextEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    RKCK* sendingChain = [receivingChain createChainWithNewEphemeral:nextEphemeral fromTheirProvideEphemeral:theirEphemeral]; // This will be used
-    [receivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirEphemeral];
-    [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:nextEphemeral];
-    return ourEphemeralKey;
-}
-
-+(void) updateChainsOnReceivedMessage:(NSData*)theirNewEphemeral{
-    RKCK *currentSendingChain = [RKCK currentSendingChain:self.thread];
-    RKCK *newReceivingChain = [currentSendingChain createChainWithNewEphemeral:currentSendingChain.ephemeral fromTheirProvideEphemeral:theirNewEphemeral];
-    TSECKeyPair* newSendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-    RKCK *newSendingChain = [newReceivingChain createChainWithNewEphemeral:newSendingKey fromTheirProvideEphemeral:theirNewEphemeral];
-    [newReceivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirNewEphemeral];
-    [newSendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:newSendingKey];
-    
-}
-
 + (NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
     NSMutableData *masterKey = [NSMutableData data];
     [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
@@ -257,16 +229,6 @@
     [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     return masterKey;
-}
-
-#pragma mark Ratchet helper methods
-
-+(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK {
-    NSData* newCipherKeyAndMacKey  = [TSHKDF deriveKeyFromMaterial:nextMessageKey_MK outputLength:64 info:[@"WhisperMessageKeys" dataUsingEncoding:NSUTF8StringEncoding]];
-    NSData* cipherKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(0, 32)];
-    NSData* macKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(32, 32)];
-    // we want to return something here  or use this locally
-    return [[TSWhisperMessageKeys alloc] initWithCipherKey:cipherKey macKey:macKey];
 }
 
 @end
