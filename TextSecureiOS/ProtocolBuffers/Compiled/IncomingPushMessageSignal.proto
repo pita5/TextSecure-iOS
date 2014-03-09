@@ -1,12 +1,20 @@
 package textsecure;
 
-
 message IncomingPushMessageSignal {
-  optional uint32 type = 1; // Indicates whether this message is PreKeyWhisperMessage or WhisperMessage
-  optional string source = 2;
-  optional string relay = 3;
-  repeated string destinations = 4;
-  optional uint64 timestamp = 5;
-  optional bytes message = 6; // Contains an encrypted protocol buffer of type indicated by type
+  enum Type {
+    UNKNOWN       = 0;
+    CIPHERTEXT    = 1;
+    KEY_EXCHANGE  = 2;
+    PREKEY_BUNDLE = 3;
+    PLAINTEXT     = 4;
+  }
+  optional Type   type         = 1;
+  optional string source       = 2;
+  optional uint32 sourceDevice = 7;
+  optional string relay        = 3;
+  optional uint64 timestamp    = 5;
+  optional bytes  message      = 6; // Contains an encrypted PushMessageContent
+//  repeated string destinations = 4; // No longer supported
 }
+
 
