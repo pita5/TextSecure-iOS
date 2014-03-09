@@ -28,18 +28,25 @@
 
 @implementation RKCK
 
-+(instancetype) initWithData:(NSData*)data {
-    RKCK* rkck = [[RKCK alloc] init];
-    rkck.RK =  [data subdataWithRange:NSMakeRange(0, 32)];
-    rkck.CK = [data subdataWithRange:NSMakeRange(32, 32)];
-    
++(instancetype) initWithRK:(NSData*)rootKey CK:(TSChainKey *)chainKey{
+    RKCK *rkck = [[RKCK alloc]init];
+    rkck.RK = rootKey;
+    rkck.CK = chainKey;
     return rkck;
 }
-//
-//-(RKCK*) createChainWithNewEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral {
-//    NSData* inputKeyMaterial = [myEphemeral generateSharedSecretFromPublicKey:theirPublicEphemeral];
-//    return [RKCK withData:[TSHKDF deriveKeyFromMaterial:inputKeyMaterial outputLength:64 info:[@"WhisperRatchet" dataUsingEncoding:NSUTF8StringEncoding] salt:self.RK]];
-//}
+
++(instancetype) initWithData:(NSData*)data {
+    RKCK *rkck = [[RKCK alloc] init];
+    rkck.RK =  [data subdataWithRange:NSMakeRange(0, 32)];
+    rkck.CK = [[TSChainKey alloc]initWithChainKeyWithKey:[data subdataWithRange:NSMakeRange(32, 32)] index:0];
+    return rkck;
+}
+
+- (RKCK*)createChainWithEphemeral:(TSECKeyPair*)myEphemeral fromTheirProvideEphemeral:(NSData*)theirPublicEphemeral{
+    NSData *inputKeyMaterial = [myEphemeral generateSharedSecretFromPublicKey:theirPublicEphemeral];
+    return [[self class] initWithData:[TSHKDF deriveKeyFromMaterial:inputKeyMaterial outputLength:64 info:[@"WhisperRatchet" dataUsingEncoding:NSUTF8StringEncoding] salt:self.RK]];
+}
+
 //
 //-(void) saveReceivingChainOnThread:(TSThread*)thread withTheirEphemeral:(NSData*)ephemeral {
 //    [TSMessagesDatabase setEphemeralOfReceivingChain:ephemeral onThread:thread];

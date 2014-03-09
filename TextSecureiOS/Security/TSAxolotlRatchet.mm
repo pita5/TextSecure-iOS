@@ -55,9 +55,6 @@
 // Method for incoming messages
 + (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message fromContact:(TSContact*)contact{
     
-#warning protocol buffers don't support multiple device IDs for now. Just use the first one found.
-    //TSSession *session = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:?];
-    
     TSSession *session = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:1];
     
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
@@ -72,18 +69,98 @@
             }
         }
 
-        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:preKeyWhisperMessage.identityKey ephemeral:preKeyWhisperMessage.ephemeralKey prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact];
+        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:preKeyWhisperMessage.identityKey ephemeral:preKeyWhisperMessage.ephemeralKey prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
     }
     
     if (!session) {
         throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
     }
     
-    return [self decryptMessageWithSession:session];
+    return [self decryptMessage:message withSession:session];
 }
 
 
-#pragma mark PreKey utils
++ (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session{
+    
+    NSData *theirEphemeral = message.ephemeralKey;
+    int counter = [message.counter intValue];
+    
+    NSData *chainKey = [self getOrCreateChainKeys:session theirEphemeral:theirEphemeral];
+    
+    
+    ECPublicKey      theirEphemeral    = ciphertextMessage.getSenderEphemeral();
+    int              counter           = ciphertextMessage.getCounter();
+    ChainKey         chainKey          = getOrCreateChainKey(sessionRecord, theirEphemeral);
+    MessageKeys      messageKeys       = getOrCreateMessageKeys(sessionRecord, theirEphemeral,
+                                                                chainKey, counter);
+    
+    ciphertextMessage.verifyMac(messageKeys.getMacKey());
+    
+    byte[] plaintext = getPlaintext(messageKeys, ciphertextMessage.getBody());
+    
+    sessionRecord.clearPendingPreKey();
+    sessionRecord.save();
+    
+    return plaintext;
+    
+    
+}
+
++ (TSChainKey*)getOrCreateChainKeys:(TSSession*)session theirEphemeral:(NSData*)theirEphemeral{
+    
+    if ([session hasReceiverChain:theirEphemeral]) {
+        return [session receiverChainKey:theirEphemeral];
+    } else{
+        
+        TSECKeyPair *newEphemeralKeyPair = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+        
+        RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
+        
+        RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.ephemeralOutgoing fromTheirProvideEphemeral:theirEphemeral];
+        RKCK *sendingChainKey = [rootKey createChainWithEphemeral:newEphemeralKeyPair fromTheirProvideEphemeral:theirEphemeral];
+        session.rootKey = receiverChainKey.RK;
+        [session addReceiverChain:theirEphemeral chainKey:receiverChainKey.CK];
+        [session setPN:session.senderChainKey.index-1];
+        [session setSenderChain:newEphemeralKeyPair chainkey:sendingChainKey.CK];
+        return receiverChainKey.CK;
+    }
+}
+
++ (NSData*)getOrCreateMessageKeysForSession:(TSSession*)session theirEphemeral:(NSData*)ephemeral chainKey:(TSChainKey*)chainKey counter:(int)counter{
+    
+    
+    
+    private MessageKeys getOrCreateMessageKeys(SessionRecordV2 sessionRecord,
+                                               ECPublicKey theirEphemeral,
+                                               ChainKey chainKey, int counter)
+    throws InvalidMessageException
+    {
+        if (chainKey.getIndex() > counter) {
+            if (sessionRecord.hasMessageKeys(theirEphemeral, counter)) {
+                return sessionRecord.removeMessageKeys(theirEphemeral, counter);
+            } else {
+                throw new InvalidMessageException("Received message with old counter!");
+            }
+        }
+        
+        if (chainKey.getIndex() - counter > 500) {
+            throw new InvalidMessageException("Over 500 messages into the future!");
+        }
+        
+        while (chainKey.getIndex() < counter) {
+            MessageKeys messageKeys = chainKey.getMessageKeys();
+            sessionRecord.setMessageKeys(theirEphemeral, messageKeys);
+            chainKey = chainKey.getNextChainKey();
+        }
+        
+        sessionRecord.setReceiverChainKey(theirEphemeral, chainKey.getNextChainKey());
+        return chainKey.getMessageKeys();
+    }
+}
+
+
+
+#pragma mark PreKey Utils - Sending and Receiving PrekeyMessages
 
 
 /**
@@ -132,10 +209,6 @@
     return session;
 }
 
-+ (TSMessage*)decryptMessageWithSession:(TSSession*)session{
-    
-}
-
 #pragma mark Identity
 + (TSECKeyPair*)myIdentityKey{
     return [TSUserKeysDatabase identityKey];
@@ -143,74 +216,7 @@
 
 #pragma mark Private methods
 
-+ (TSChainKey*)getOrCreateChainKey:(TSSession*)session ephemeral:(NSData*)ephemeral{
-    if ([session hasReceiverChain:ephemeral]) {
-        
-        switch (messageType) {
-                
-            case TSPreKeyWhisperMessageType:{
-                // get a contact's prekey
-                TSContact* contact = [[TSContact alloc] initWithRegisteredID:message.recipientId];
-                TSThread* thread = [TSThread threadWithContacts:@[[[TSContact alloc] initWithRegisteredID:message.recipientId]]save:YES];
-                [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:contact] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                    switch (operation.response.statusCode) {
-                        case 200:{
-                            
-                            NSLog(@"Prekey fetched :) ");
-                            
-                            // Extracting the recipients keying material from server payload
-                            
-                            NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
-                            NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
-                            NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                            
-                            // remove the leading "0x05" byte as per protocol specs
-                            if (theirEphemeralKey.length == 33) {
-                                theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
-                            }
-                            
-                            // remove the leading "0x05" byte as per protocol specs
-                            if (theirIdentityKey.length == 33) {
-                                theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
-                            }
-                            
-                            // Retreiving my keying material to construct message
-                            
-                            TSECKeyPair *currentEphemeral = [ratchet ratchetSetupFirstSender:theirIdentityKey theirEphemeralKey:theirEphemeralKey];
-                            NSData* computedHMAC;
-                            NSData* version = [NSData dataWithBytes:&textSecureVersion length:sizeof(textSecureVersion)];
-                            NSData *encryptedMessage = [ratchet encryptTSMessage:message withKeys:[ratchet nextMessageKeysOnChain:TSSendingChain] withCTR:[NSNumber numberWithInt:0] forVersion:version computedHMAC:&computedHMAC];
-                            TSECKeyPair *nextEphemeral = [TSMessagesDatabase ephemeralOfSendingChain:thread]; // nil
-                            NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:encryptedMessage theirPrekeyId:theirPrekeyId myCurrentEphemeral:currentEphemeral myNextEphemeral:nextEphemeral forVersion:version  withHMAC:computedHMAC];
-                            [TSAxolotlRatchet receiveMessage:encodedPreKeyWhisperMessage];
-                            [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[encodedPreKeyWhisperMessage base64EncodedString] ofType:TSPreKeyWhisperMessageType];
-                            
-                            // nil
-                            break;
-                        }
-                        default:
-                            DLog(@"error sending message");
-#warning Add error handling if not able to get contacts prekey
-                            break;
-                    }
-                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning right now it is not succesfully processing returned response, but is giving 200
-                    DLog(@"Not a 200");
-                    
-                }];
-                
-                break;
-            }
-            case TSEncryptedWhisperMessageType: {
-#warning clearly this needs filled in
-                // unsupported
-                break;
-            }
-            default:
-                break;
-        }
-    }
-}
+
 
 
 
@@ -261,21 +267,6 @@
 }
 
 #pragma mark Ratchet helper methods
-
-+(TSWhisperMessageKeys*)nextMessageKeysOnChain:(TSChainType)chain{
-    NSData *CK = [TSMessagesDatabase CK:self.thread onChain:chain];
-    int hmacKeyMK = 0x01;
-    int hmacKeyCK = 0x02;
-    NSData* nextMK = [Cryptography computeHMAC:CK withHMACKey:[NSData dataWithBytes:&hmacKeyMK length:sizeof(hmacKeyMK)]];
-    NSData* nextCK = [Cryptography computeHMAC:CK  withHMACKey:[NSData dataWithBytes:&hmacKeyCK length:sizeof(hmacKeyCK)]];
-    [TSMessagesDatabase setCK:nextCK onThread:self.thread onChain:chain];
-    [TSMessagesDatabase NThenPlusPlus:self.thread onChain:chain];
-    return [self deriveTSWhisperMessageKeysFromMessageKey:nextMK];
-}
-
-+(RKCK*) initialRootKey:(NSData*)masterKey {
-    return [RKCK withData:[TSHKDF deriveKeyFromMaterial:masterKey outputLength:64 info:[@"WhisperText" dataUsingEncoding:NSUTF8StringEncoding]]];
-}
 
 +(TSWhisperMessageKeys*) deriveTSWhisperMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK {
     NSData* newCipherKeyAndMacKey  = [TSHKDF deriveKeyFromMaterial:nextMessageKey_MK outputLength:64 info:[@"WhisperMessageKeys" dataUsingEncoding:NSUTF8StringEncoding]];

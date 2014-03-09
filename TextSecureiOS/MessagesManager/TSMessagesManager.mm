@@ -214,10 +214,6 @@
     // TO-DO Save message here if works.
 }
 
--(void) sendMessage:(TSMessage*)message onThread:(TSThread*)thread{
-    [TSAxolotlRatchet sendMessage:message onThread:thread];
-}
-
 -(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType {
     
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {

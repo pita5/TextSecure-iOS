@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "TSContact.h"
 #import "RKCK.h"
-#import "TSChain.h"
 #import "TSWhisperMessageKeys.h"
 #import "TSPrekey.h"
+#import "TSChainKey.h"
 #import "TSEncryptedWhisperMessage.hh"
 
 @interface TSSession : NSObject
@@ -22,8 +22,6 @@
 @property(copy)NSData *theirEphemeralKey;
 @property(readwrite)NSData *rootKey;
 
-@property TSChain *receivingChain; // We want to store 5 of them
-@property TSChain *sendingChain;
 @property NSData *ephemeralReceiving;
 @property TSECKeyPair *ephemeralOutgoing;
 @property int PN;
@@ -34,10 +32,10 @@
 - (BOOL)hasReceiverChain:(NSData*) ephemeral;
 - (BOOL)hasSenderChain;
 
-- (TSChain*)receiverChain:(NSData*)senderEphemeral;
-- (TSChain*)senderChain;
+- (TSChainKey*)receiverChainKey:(NSData*)senderEphemeral;
+- (TSChainKey*)senderChainKey;
 
-- (TSChain*)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSECKeyPair*)chainKey;
-- (TSChain*)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(NSData*)chainKey;
+- (TSChainKey*)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
+- (TSChainKey*)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(TSChainKey*)chainKey;
 
 @end

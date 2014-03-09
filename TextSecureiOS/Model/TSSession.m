@@ -34,7 +34,6 @@
         
         if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
             TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
-            _theirIdentityKey = [preKeyWhisperMessage identityKey];
         }
     }
     return self;
