@@ -410,6 +410,7 @@
 		A56312F818C85B6500222F99 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A56312F718C85B6500222F99 /* Settings.bundle */; };
 		A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A56312FA18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m */; };
 		A56312FD18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A56312FC18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m */; };
+		A56807B818CCAF2A0059083C /* TSGroupContext.m in Sources */ = {isa = PBXBuildFile; fileRef = A56807B718CCAF290059083C /* TSGroupContext.m */; };
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
@@ -918,6 +919,8 @@
 		A56312F918C9A45A00222F99 /* TSWaitingPushMessageDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWaitingPushMessageDatabase.h; path = Model/TSWaitingPushMessageDatabase.h; sourceTree = "<group>"; };
 		A56312FA18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWaitingPushMessageDatabase.m; path = Model/TSWaitingPushMessageDatabase.m; sourceTree = "<group>"; };
 		A56312FC18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWaitingPushMessageDatabaseTests.m; sourceTree = "<group>"; };
+		A56807B618CCAF290059083C /* TSGroupContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroupContext.h; path = Model/TSGroupContext.h; sourceTree = "<group>"; };
+		A56807B718CCAF290059083C /* TSGroupContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroupContext.m; path = Model/TSGroupContext.m; sourceTree = "<group>"; };
 		A568910017E2F37000C360A1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A56D31B7180FCA840093D51B /* TSRegisterPrekeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterPrekeysRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.h; sourceTree = "<group>"; };
@@ -1169,6 +1172,8 @@
 				A5E6CBFE18762BDB002A1735 /* TSAttachment.m */,
 				A5195B8A18CB655800AFEE04 /* TSGroup.h */,
 				A5195B8B18CB655800AFEE04 /* TSGroup.m */,
+				A56807B618CCAF290059083C /* TSGroupContext.h */,
+				A56807B718CCAF290059083C /* TSGroupContext.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2479,6 +2484,7 @@
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
 				4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */,
+				A56807B818CCAF2A0059083C /* TSGroupContext.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
 				A5169D3D170FEDC600A2CE9E /* main.m in Sources */,
 			);
