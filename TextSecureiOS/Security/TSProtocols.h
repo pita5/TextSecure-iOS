@@ -26,6 +26,22 @@ typedef NS_ENUM(NSInteger, TSChainType) {
   TSReceivingChain
 };
 
+// TSGroupContextType, TSPushMessageFlags,TSWhisperMessageType are redundant with the protocol buffers, and is meant to abate the spread of objective-c++. otherwise this file, and any that rely on the types would be obj-c++.
+// non-ideal.
+
+typedef NS_ENUM(NSInteger, TSGroupContextType) {
+    TSUnknownGroupContext = 0,
+    TSUpdateGroupContext = 1,
+    TSDeliverGroupContext = 2,
+    TSQuitGroupContext =3
+};
+
+typedef NS_ENUM(NSInteger, TSPushMessageFlags) {
+    TSEndSession = 1
+};
+
+
+
 typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
   TSUnknownMessageType =0,
   TSEncryptedWhisperMessageType = 1,

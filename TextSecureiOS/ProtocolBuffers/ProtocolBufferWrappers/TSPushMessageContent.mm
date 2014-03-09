@@ -13,6 +13,37 @@
 @implementation TSPushMessageContent
 
 
+//message PushMessageContent {
+//    message AttachmentPointer {
+//        optional fixed64 id          = 1;
+//        optional string  contentType = 2;
+//        optional bytes   key         = 3;
+//    }
+//    
+//    message GroupContext {
+//        enum Type {
+//            UNKNOWN = 0;
+//            UPDATE  = 1;
+//            DELIVER = 2;
+//            QUIT    = 3;
+//        }
+//        optional bytes             id      = 1;
+//        optional Type              type    = 2;
+//        optional string            name    = 3;
+//        repeated string            members = 4;
+//        optional AttachmentPointer avatar  = 5;
+//    }
+//    
+//    enum Flags {
+//        END_SESSION = 1;
+//    }
+//    
+//    optional string            body        = 1;
+//    repeated AttachmentPointer attachments = 2;
+//    optional GroupContext      group       = 3;
+//    optional uint32            flags       = 4;
+//}
+
 -(id) initWithData:(NSData*) data {
   
   if(self = [super init]) {
