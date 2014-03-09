@@ -23,12 +23,21 @@
 @property(readwrite)NSData *rootKey;
 
 @property TSChain *receivingChain; // We want to store 5 of them
-@property TSChain *sendingChain; 
+@property TSChain *sendingChain;
 @property NSData *ephemeralReceiving;
 @property TSECKeyPair *ephemeralOutgoing;
 @property int PN;
 
 - (TSSession*)initWithContact:(TSContact*)contact deviceId:(int)deviceId;
 - (NSData*)theirIdentityKey;
+
+- (BOOL)hasReceiverChain:(NSData*) ephemeral;
+- (BOOL)hasSenderChain;
+
+- (TSChain*)receiverChain:(NSData*)senderEphemeral;
+- (TSChain*)senderChain;
+
+- (TSChain*)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSECKeyPair*)chainKey;
+- (TSChain*)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(NSData*)chainKey;
 
 @end

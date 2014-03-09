@@ -85,9 +85,19 @@
 
 #pragma mark PreKey utils
 
-+ (TSSession*)processPrekey:(TSPrekey*)prekey withContact:(TSContact*)contact{
 
-    TSSession *session = [[TSSession alloc] initWithContact:contact deviceId:1];
+/**
+ *  Helper method for processing an incoming prekey message and setting up the ratchet
+ *
+ *  @param prekey  Prekey used
+ *  @param contact Contact information from receiver
+ *
+ *  @return Returns a session with the initialized ratchet
+ */
+
++ (TSSession*)processPrekey:(TSPrekey*)prekey withContact:(TSContact*)contact deviceId:(int)deviceId{
+
+    TSSession *session = [[TSSession alloc] initWithContact:contact deviceId:deviceId];
     TSECKeyPair *preKeyPair = [TSUserKeysDatabase preKeyWithId:prekey.prekeyId];
     
     if (preKeyPair){
@@ -96,31 +106,27 @@
         [TSMessagesDatabase deleteSession:session];
     
         //3-way DHE
-        RKCK *rootAndChainKey = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey] ourEphemeral:preKeyPair theirIdentityPublicKey:prekey.identityKey theirEphemeralPublicKey:prekey.ephemeralKey]];
+        RKCK *rootAndSendingChainKey = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey] ourEphemeral:preKeyPair theirIdentityPublicKey:prekey.identityKey theirEphemeralPublicKey:prekey.ephemeralKey]];
         
         // Generate new sending key
-        TSECKeyPair *sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+        TSECKeyPair *sendingEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
         
-        [session setRootKey:rootAndChainKey.RK];
-        [session setReceivingChain:[[TSChain alloc] init] rootAndChainKey.CK];
-        [self setSenderChainWithKeyPair:sendingKey chainKey:[[TSChainKey alloc]initWithChainKeyWithKey:rootAndChainKey.CK index:0]];
+        [session setRootKey:rootAndSendingChainKey.RK];
+        [session setSenderChain:sendingEphemeralKey chainkey:rootAndSendingChainKey.CK];
         
         if (preKeyPair.preKeyId != kLastResortKeyId) {
             // Delete that preKey!
         }
         
-        return [[TSSession alloc] initWithSessionWith:contact deviceID:1 ephemeralKey:<#(NSData *)#> rootKey:<#(NSData *)#> receivingChain:<#(TSChain *)#> sendingChain:<#(TSChain *)#>]
+        return session;
         
     } else{
         
-        if ([T]) {
-            <#statements#>
-        }
+        // if session exists for that contact we just go straight to decryption process.
+        
         // We probably have already processed that message.
 #warning properly do error management
         @throw ([NSException exceptionWithName:@"" reason:@"" userInfo:@{}]);
-    
-        
     }
     
     return session;
@@ -221,15 +227,6 @@
     [receivingChain saveReceivingChainOnThread:self.thread withTheirEphemeral:theirEphemeral];
     [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:nextEphemeral];
     return ourEphemeralKey;
-}
-
-+(TSWhisperMessage*) ratchetSetupFirstReceiver:(NSData*)theirIdentityKey theirEphemeralKey:(NSData*)theirEphemeralKey withMyPrekeyId:(NSNumber*)preKeyId{
-    /* after this we will have the CK of the Receiving Chain */
-    TSECKeyPair *ourEphemeralKey = [TSUserKeysDatabase preKeyWithId:[preKeyId unsignedLongValue]];
-    TSECKeyPair *ourIdentityKey =  [TSUserKeysDatabase identityKey];
-    NSData* ourMasterKey = [self masterKeyBob:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentityKey theirEphemeralPublicKey:theirEphemeralKey];
-    RKCK* sendingChain = [self initialRootKey:ourMasterKey];
-    [sendingChain saveSendingChainOnThread:self.thread withMyNewEphemeral:ourEphemeralKey];
 }
 
 +(void) updateChainsOnReceivedMessage:(NSData*)theirNewEphemeral{
