@@ -14,7 +14,8 @@ pod 'SWTableViewCell',       	'~> 0.2.1'
 pod 'curve25519-donna',       	'~> 1.2.1'
 pod 'UIImage-Categories',     	'~> 0.0.1'
 pod 'JSMessagesViewController', '~> 3.4.4'
-
+pod 'LBGIFImage',		'~> 0.0.1'
+pod 'Emoticonizer',		'~> 1.0.0'
 #pod 'OpenSSL',            '~> 1.0.1'
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 post_install do |lib_rep|

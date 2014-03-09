@@ -11,7 +11,6 @@
 #import "TSMessagesDatabase.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "NSString+Conversion.h"
-#import "TSSettingsViewController.h"
 #import "TSContactManager.h"
 #import "TSContact.h"
 #import "TSMessage.h"
@@ -21,7 +20,7 @@
 #import "TSStorageMasterKey.h"
 #import "TSThread.h"
 #import "TSContactPickerViewController.h"
-
+#import "TSGroupSetupViewController.h"
 static NSString *kCellIdentifier = @"CellIdentifier";
 
 static NSString *kThreadTitleKey = @"kThreadTitleKey";
@@ -30,10 +29,6 @@ static NSString *kThreadMessageKey = @"kThreadMessageKey";
 static NSString *kThreadImageKey = @"kThreadImageKey";
 
 @interface TextSecureViewController() <SWTableViewCellDelegate>
-@property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
-@property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
-@property (nonatomic, strong) UIBarButtonItem *settingsBarButtonItem;
-@property (nonatomic, strong) UIView *searchBarCoverView;
 @property (nonatomic, strong) NSArray *threads;
 @end
 
@@ -44,22 +39,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [super viewDidLoad];
     
     self.threads = [TSMessagesDatabase threads];
-    self.title = @"Messages";
     self.navigationController.navigationBarHidden = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadModel:) name:TSDatabaseDidUpdateNotification object:nil];
     
-    self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
-    self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
-    
-    self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
-    self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
-    
-    self.searchBarCoverView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-    self.searchBarCoverView.backgroundColor = [UIColor grayColor];
-    self.searchBarCoverView.alpha = 0;
-    self.searchBarCoverView.userInteractionEnabled = NO;
-    [self.searchBar addSubview:self.searchBarCoverView];
     
     [self.tableView registerClass:[TSMessageThreadCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -73,23 +56,17 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.navigationController.navigationBarHidden = NO;
     
     if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
-        
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-        UIViewController *passwordUnlockViewController = [storyboard instantiateViewControllerWithIdentifier:@"PasswordUnlockViewController"];
-        [self presentViewController:passwordUnlockViewController animated:NO completion:nil];
+        [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
         
     } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
     }
 }
 
-- (void)composeMessage {
+- (IBAction)composeMessage {
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[TSContactPickerViewController alloc]initWithNibName:nil bundle:nil]] animated:YES completion:nil];
 }
 
-- (void)openSettings {
-    [self performSegueWithIdentifier:@"openSettings" sender:self];
-}
 
 #pragma mark - UITableViewDataSource methods
 
@@ -201,31 +178,28 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [self animateEnteringEditingMode:isEnteringEditingMode];
 }
 
-- (void)animateEnteringEditingMode:(BOOL)isEditing {
-    __weak typeof(self) weakSelf = self;
-    CGFloat animationDuration = 0.3f;
-    
+- (void)animateEnteringEditingMode:(BOOL)isEditing {    
     if (!isEditing) {
-        [self.navigationItem setRightBarButtonItem:self.composeBarButtonItem animated:YES];
-        [self.navigationItem setLeftBarButtonItem:self.settingsBarButtonItem animated:YES];
-        
-        [UIView animateWithDuration:animationDuration animations:^{
-            weakSelf.searchBarCoverView.alpha = 0;
-        } completion:^(BOOL finished) {
-            weakSelf.searchBarCoverView.alpha = 0;
-            weakSelf.searchBar.userInteractionEnabled = YES;
-        }];
+        [self.navigationItem.rightBarButtonItem setEnabled:YES];
+        [self.navigationItem.leftBarButtonItem setEnabled:YES];
     } else {
-        [self.navigationItem setRightBarButtonItem:nil animated:YES];
-        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+        [self.navigationItem.rightBarButtonItem setEnabled:NO];
+        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+
         
-        [UIView animateWithDuration:animationDuration animations:^{
-            weakSelf.searchBarCoverView.alpha = 0.3;
-        } completion:^(BOOL finished) {
-            weakSelf.searchBarCoverView.alpha = 0.3;
-            weakSelf.searchBar.userInteractionEnabled = NO;
-        }];
     }
 }
+
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:@"ComposeMessageSegue"]) {
+        ComposeMessageViewController *vc = [segue destinationViewController];
+        [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
+        if([sender respondsToSelector:@selector(group)]) {
+            vc.group = [sender performSelector:@selector(group)];
+        }
+    }
+}
+
 
 @end

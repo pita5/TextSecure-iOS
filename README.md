@@ -29,6 +29,14 @@ sudo gem update
 
 4) Debugging network calls. If you are contributing networked code, PonyDebugger is integrated in Debug mode of the application. Check out https://github.com/square/PonyDebugger#quick-start and easily debug network code from the iOS simulator
 
+### Compile Error when building for 64-bit architecture
+
+Due to an issue in version 2.5.0 of the Google Protobuf Library the compiling fails when building the app for a 64-bit architecture (which is the case for the iPhone 5S)
+
+See the Google-Issue for this: https://code.google.com/p/protobuf/issues/detail?id=575. 
+
+__However the specified Workaround in the Google Issue solves the compile errors__
+
 ## Certificate Pinning
 
 TextSecure uses certificate-pinning to avoid (wo)man-in-the-middle attacks. If you use your own server, here are the steps to generate the certificate file. 
