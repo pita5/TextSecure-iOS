@@ -79,7 +79,7 @@
     TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithData:serializedMessageSignal];
     
     XCTAssertTrue(messageSignal.contentType == deserializedMessageSignal.contentType,@"TSMessageSignal contentType unequal after serialization");
-    XCTAssertTrue(messageSignal.sourceDevice == deserializedMessageSignal.sourceDevice,@"TSMessageSignal sourceDevice unequal after serialization");
+    XCTAssertTrue([messageSignal.sourceDevice isEqualToNumber:deserializedMessageSignal.sourceDevice],@"TSMessageSignal sourceDevice unequal after serialization");
     XCTAssertTrue([messageSignal.source isEqualToString:deserializedMessageSignal.source],@"TSMessageSignal source unequal after serialization");
 #warning compare with a nstimeinterval
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
