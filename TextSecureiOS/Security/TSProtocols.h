@@ -27,10 +27,12 @@ typedef NS_ENUM(NSInteger, TSChainType) {
 };
 
 typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
-  TSUnencryptedWhisperMessageType = 0,
+  TSUnknownMessageType =0,
   TSEncryptedWhisperMessageType = 1,
   TSIgnoreOnIOSWhisperMessageType=2, // on droid this is the prekey bundle message irrelevant for us
-  TSPreKeyWhisperMessageType = 3
+  TSPreKeyWhisperMessageType = 3,
+  TSUnencryptedWhisperMessageType = 4,
+
 };
 
 @protocol AxolotlPersistantStorage  <NSObject>

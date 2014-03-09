@@ -2,7 +2,7 @@
 // source: PushMessageContent.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "PushMessageContent.pb.h"
+#include "PushMessageContent.pb.hh"
 
 #include <algorithm>
 

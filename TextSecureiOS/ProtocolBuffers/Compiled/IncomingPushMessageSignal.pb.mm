@@ -2,7 +2,7 @@
 // source: IncomingPushMessageSignal.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "IncomingPushMessageSignal.pb.h"
+#include "IncomingPushMessageSignal.pb.hh"
 
 #include <algorithm>
 

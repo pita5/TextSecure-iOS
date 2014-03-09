@@ -17,40 +17,42 @@
 
 -(id) initWithData:(NSData*) data {
 
-  if(self = [super init]) {
-    // c++
-    textsecure::IncomingPushMessageSignal *incomingPushMessageSignal = [self deserialize:data];
-    const uint32_t cppType = incomingPushMessageSignal->type();
-    const std::string cppSource = incomingPushMessageSignal->source();
-    const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
-
-    const std::string cppMessage = incomingPushMessageSignal->message();
-    // c++->objective C
-    self.contentType = (TSWhisperMessageType)cppType;
-    self.source = [self cppStringToObjc:cppSource];
-    self.timestamp = [self cppDateToObjc:cppTimestamp];
-    self.message = [self getWhisperMessageForData:[self cppStringToObjcData:cppMessage]];
-  }
-  return self; 
+    if(self = [super init]) {
+        // c++
+        textsecure::IncomingPushMessageSignal *incomingPushMessageSignal = [self deserialize:data];
+        const uint32_t cppType = incomingPushMessageSignal->type();
+        const std::string cppSource = incomingPushMessageSignal->source();
+        const uint32_t cppSourceDevice = incomingPushMessageSignal->sourcedevice();
+        const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
+        const std::string cppMessage = incomingPushMessageSignal->message();
+        // c++->objective C
+        self.contentType = (TSWhisperMessageType)cppType;
+        self.source = [self cppStringToObjc:cppSource];
+        self.sourceDevice = [self cppUInt32ToNSNumber:cppSourceDevice];
+        self.timestamp = [self cppDateToObjc:cppTimestamp];
+        self.message = [self getWhisperMessageForData:[self cppStringToObjcData:cppMessage]];
+    }
+    return self;
 }
 
 
 -(const std::string) serializedProtocolBufferAsString {
-  textsecure::IncomingPushMessageSignal *messageSignal = new textsecure::IncomingPushMessageSignal;
-  // objective c->c++
+    textsecure::IncomingPushMessageSignal *messageSignal = new textsecure::IncomingPushMessageSignal;
+    // objective c->c++
+    const textsecure::IncomingPushMessageSignal_Type cppType = (textsecure::IncomingPushMessageSignal_Type)self.contentType;
+    const std::string cppSource = [self objcStringToCpp:self.source];
+    const uint32_t cppSourceDevice = [self objcNumberToCppUInt32:self.sourceDevice];
+    const uint64_t cppTimestamp = [self objcDateToCpp:self.timestamp];
+    const std::string cppMessage = (cppType == textsecure::IncomingPushMessageSignal_Type_CIPHERTEXT) ? [self objcDataToCppString:[(TSEncryptedWhisperMessage*)self.message getTextSecure_WhisperMessage]] :  [self objcDataToCppString:[(TSPreKeyWhisperMessage*)self.message getTextSecure_PreKeyWhisperMessage]];
+    // c++->protocol buffer
+    messageSignal->set_type(cppType);
+    messageSignal->set_source(cppSource);
+    messageSignal->set_sourcedevice(cppSourceDevice);
+    messageSignal->set_timestamp(cppTimestamp);
+    messageSignal->set_message(cppMessage);
 
-  const uint32_t cppType = self.contentType;
-  const std::string cppSource = [self objcStringToCpp:self.source];
-  const uint64_t cppTimestamp = [self objcDateToCpp:self.timestamp];
-  const std::string cppMessage = (cppType == TSEncryptedWhisperMessageType) ? [self objcDataToCppString:[(TSEncryptedWhisperMessage*)self.message getTextSecure_WhisperMessage]] :  [self objcDataToCppString:[(TSPreKeyWhisperMessage*)self.message getTextSecure_PreKeyWhisperMessage]];
-  // c++->protocol buffer
-  messageSignal->set_type(cppType);
-  messageSignal->set_source(cppSource);
-  messageSignal->set_timestamp(cppTimestamp);
-  messageSignal->set_message(cppMessage);
-  
-  std::string ps = messageSignal->SerializeAsString();
-  return ps;
+    std::string ps = messageSignal->SerializeAsString();
+    return ps;
 }
 
 #pragma mark private methods
