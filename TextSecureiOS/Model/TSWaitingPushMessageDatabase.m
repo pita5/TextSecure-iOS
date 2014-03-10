@@ -7,14 +7,14 @@
 //
 
 #import "TSWaitingPushMessageDatabase.h"
-#import "TSEncryptedDatabase.h"
+#import "TSDatabaseManager.h"
 #import "TSStorageError.h"
 #import "FilePath.h"
 #import "Cryptography.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
 
-static TSEncryptedDatabase *waitingPushMessageDb = nil;
+static TSDatabaseManager *waitingPushMessageDb = nil;
 NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database.unlocked";
 
 
@@ -33,7 +33,7 @@ NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database
     // For very limited obfuscation of meta-data (unread message count), and to reuse the encrypted DB architecture we encrypt the entire DB itself with a key stored in user preferences.
     // The key cannot be stored somewhere accessible by password as this is designed to be deployed in the situation before the user enters her password.
     NSData* waitingPushMessagePassword = [ Cryptography generateRandomBytes:32];
-    TSEncryptedDatabase *db = [TSEncryptedDatabase  databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:WAITING_PUSH_MESSAGE_DB_FILE_NAME] updateBoolPreference:WAITING_PUSH_MESSAGE_DB_PREFERENCE withPassword:waitingPushMessagePassword error:error];
+    TSDatabaseManager *db = [TSDatabaseManager databaseCreateAtFilePath:[FilePath pathInDocumentsDirectory:WAITING_PUSH_MESSAGE_DB_FILE_NAME] updateBoolPreference:WAITING_PUSH_MESSAGE_DB_PREFERENCE withPassword:waitingPushMessagePassword error:error];
     if (!db) {
         return NO;
     }
@@ -69,7 +69,7 @@ NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database
 
 
 +(void) databaseErase {
-    [TSEncryptedDatabase databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:WAITING_PUSH_MESSAGE_DB_FILE_NAME] updateBoolPreference:WAITING_PUSH_MESSAGE_DB_PREFERENCE];
+    [TSDatabaseManager databaseEraseAtFilePath:[FilePath pathInDocumentsDirectory:WAITING_PUSH_MESSAGE_DB_FILE_NAME] updateBoolPreference:WAITING_PUSH_MESSAGE_DB_PREFERENCE];
     [[NSUserDefaults standardUserDefaults] setObject:FALSE forKey:WAITING_PUSH_MESSAGE_DB_PASSWORD];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -154,7 +154,7 @@ NSString * const TSDatabaseDidUnlockNotification = @"com.whispersystems.database
         return NO;
     }
     // We'll also want a "withPassword" here
-    TSEncryptedDatabase *db = [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:WAITING_PUSH_MESSAGE_DB_FILE_NAME] withPassword:storageKey error:error];
+    TSDatabaseManager *db = [TSDatabaseManager databaseOpenAndDecryptAtFilePath:[FilePath pathInDocumentsDirectory:WAITING_PUSH_MESSAGE_DB_FILE_NAME] withPassword:storageKey error:error];
     if (!db) {
         return NO;
     }

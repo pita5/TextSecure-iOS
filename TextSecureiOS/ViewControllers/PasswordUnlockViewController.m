@@ -41,7 +41,6 @@
 
     if (didUnlock) {
         [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUnlockNotification object:self];
-        [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:self];
         [self dismissViewControllerAnimated:YES completion:nil];
 
     } else {

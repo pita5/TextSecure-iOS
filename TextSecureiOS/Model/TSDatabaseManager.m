@@ -19,8 +19,6 @@
 
 @end
 
-
-
 @implementation TSDatabaseManager
 
 +(instancetype) databaseCreateAtFilePath:(NSString *)dbFilePath updateBoolPreference:(NSString *)preferenceName withPassword:(NSData*)dbMasterKey error:(NSError **)error {
@@ -81,14 +79,10 @@
     if (!dbMasterKey) {
         return nil;
     }
-    return [TSEncryptedDatabase databaseCreateAtFilePath:dbFilePath updateBoolPreference:preferenceName withPassword:dbMasterKey error:error];
+    return [TSDatabaseManager databaseCreateAtFilePath:dbFilePath updateBoolPreference:preferenceName withPassword:dbMasterKey error:error];
     
  
 }
-
-
-
-
 
 +(instancetype) databaseOpenAndDecryptAtFilePath:(NSString *)dbFilePath error:(NSError **)error {    
     // Get the storage master key
@@ -96,7 +90,7 @@
     if (!storageKey) {
         return nil;
     }
-    return [TSEncryptedDatabase databaseOpenAndDecryptAtFilePath:dbFilePath withPassword:storageKey error:error];
+    return [TSDatabaseManager databaseOpenAndDecryptAtFilePath:dbFilePath withPassword:storageKey error:error];
 }
 
 

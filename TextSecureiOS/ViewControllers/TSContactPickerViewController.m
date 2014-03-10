@@ -9,8 +9,7 @@
 #import "TSContactPickerViewController.h"
 #import "TSContactManager.h"
 #import "TSMessageViewController.h"
-#import "ComposeMessageViewController.h"
-#import "TSThread.h"
+#import "TSContact.h"
 #import "TSGroupSetupViewController.h"
 #define tableViewCellsDequeID @"TSContactCell"
 @interface TSContactPickerViewController ()

@@ -19,7 +19,8 @@
 #import "FilePath.h"
 #import "TSGroup.h"
 #import "Emoticonizer.h"
-@interface ComposeMessageViewController ()
+
+@interface TSMessageViewController ()
 
 @property (nonatomic, retain) NSArray *contacts;
 @property (nonatomic, retain) NSArray *messages;
@@ -29,21 +30,15 @@
 @implementation TSMessageViewController
 
 - (id) initWithConversation:(TSContact*)contact {
-
+    
     self = [super initWithNibName:nil bundle:nil];
-
+    
     self.contact = contact;
     self.delegate = self;
-
+    
     [self setupThread];
-
+    
     return self;
-}
-
--(void) setupWithConversation:(TSThread*)thread {
-    self.thread = thread;
-    self.delegate = self;
-    [self setupThread];
 }
 
 -(void) setupThread  {

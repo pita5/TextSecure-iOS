@@ -19,6 +19,7 @@
 @property (nonatomic) NSData *identityKey;
 @property (nonatomic) NSArray *deviceIDs;
 @property BOOL identityKeyIsVerified;
+@property BOOL isSelected;
 
 /**
  *  A TSContact is created to store information about contacts the user is communicating with.

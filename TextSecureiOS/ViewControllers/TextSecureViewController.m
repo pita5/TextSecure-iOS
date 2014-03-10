@@ -44,8 +44,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Messages";
-
-    self.threads = [TSMessagesDatabase threads];
     self.navigationController.navigationBarHidden = NO;
 
 #warning   // FETCH CONVERSATIONS WITH COMPLETION BLOCK
@@ -207,11 +205,11 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"ComposeMessageSegue"]) {
-        ComposeMessageViewController *vc = [segue destinationViewController];
-        [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
-        if([sender respondsToSelector:@selector(group)]) {
-            vc.group = [sender performSelector:@selector(group)];
-        }
+//         *vc = [segue destinationViewController];
+//        [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
+//        if([sender respondsToSelector:@selector(group)]) {
+//            vc.group = [sender performSelector:@selector(group)];
+//        }
     }
 }
 

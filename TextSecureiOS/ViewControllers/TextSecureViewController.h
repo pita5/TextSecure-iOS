@@ -14,7 +14,6 @@
 
 @interface TextSecureViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *composeBarButtonItem;
 
 @property (nonatomic, copy) NSString *composingMessagePhoneNumber;
 @property (nonatomic, copy) NSString *composingMessageText;

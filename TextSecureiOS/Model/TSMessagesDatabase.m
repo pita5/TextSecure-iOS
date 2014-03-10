@@ -34,11 +34,6 @@
 // Reference to the singleton
 static TSDatabaseManager *messagesDb = nil;
 
-typedef NS_ENUM(NSInteger, TSChainType) {
-    TSSendingChain=0,
-    TSReceivingChain
-};
-
 @interface TSMessagesDatabase(Private)
 
 +(BOOL) databaseOpenWithError:(NSError **)error;
@@ -512,9 +507,9 @@ typedef NS_ENUM(NSInteger, TSChainType) {
 
     __block BOOL success = NO;
 
-    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        success = [db executeUpdate:@"INSERT OR REPLACE INTO sessions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[session.contact.registeredID, session.contact.deviceIDs, session.rootKey, session.sendingChain.chainKey.key, session.receivingChain.chainKey.key, session.ephemeralOutgoing, [NSKeyedArchiver archivedDataWithRootObject:session.ephemeralOutgoing], [NSNumber numberWithInt:session.sendingChain.counter], [NSNumber numberWithInt:session.receivingChain.counter], [NSNumber numberWithInt:session.PN]]];
-    }];
+//    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+//        success = [db executeUpdate:@"INSERT OR REPLACE INTO sessions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[session.contact.registeredID, session.contact.deviceIDs, session.rootKey, nil, nil, session.ephemeralOutgoing, [NSKeyedArchiver archivedDataWithRootObject:session.ephemeralOutgoing], [NSNumber numberWithInt:session.sendingChain.counter], [NSNumber numberWithInt:session.receivingChain.counter], [NSNumber numberWithInt:session.PN]]];
+//    }];
 
     return success;
 }

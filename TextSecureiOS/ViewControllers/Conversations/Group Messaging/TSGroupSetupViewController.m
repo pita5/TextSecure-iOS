@@ -7,9 +7,9 @@
 //
 
 #import "TSGroupSetupViewController.h"
-#import "ComposeMessageViewController.h"
+#import "TSMessageViewController.h"
 #import "TextSecureViewController.h"
-#import "TSThread.h"
+
 @interface TSGroupSetupViewController ()
 
 @end

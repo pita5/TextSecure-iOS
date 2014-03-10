@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "JSMessagesViewController.h"
 #import "TSContact.h"
+@class TSGroup;
 @class TSMessage;
 @class TSAttachment;
 
@@ -29,6 +30,7 @@
 - (instancetype)initWithConversation:(TSContact*)contact;
 
 @property (nonatomic, retain) TSContact *contact;
+@property (nonatomic, retain) TSGroup *group;
 @property (nonatomic) TSWhisperMessageType messagingType;
 
 @end

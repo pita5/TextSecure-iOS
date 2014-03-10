@@ -29,11 +29,23 @@ extern NSString* const countryInfoPathInMainBundle;
 extern NSString* const countryInfoKeyCountryCode;
 extern NSString* const countryInfoKeyName;
 
+typedef NS_ENUM(NSInteger, TSGroupContextType) {
+    TSUnknownGroupContext = 0,
+    TSUpdateGroupContext = 1,
+    TSDeliverGroupContext = 2,
+    TSQuitGroupContext =3
+};
+
+typedef NS_ENUM(NSInteger, TSPushMessageFlags) {
+    TSEndSession = 1
+};
+
 typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
-    TSUnencryptedWhisperMessageType = 0,
+    TSUnknownMessageType =0,
     TSEncryptedWhisperMessageType = 1,
     TSIgnoreOnIOSWhisperMessageType=2, // on droid this is the prekey bundle message irrelevant for us
-    TSPreKeyWhisperMessageType = 3
+    TSPreKeyWhisperMessageType = 3,
+    TSUnencryptedWhisperMessageType = 4,
 };
 
 
