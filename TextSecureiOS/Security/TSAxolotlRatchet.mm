@@ -39,20 +39,6 @@
 
 #pragma mark Public methods
 
-// Method for outgoing messages
-+ (BOOL) needsPrekey:(TSContact*)contact{
-    return [TSMessagesDatabase sessionExistsForContact:contact];
-}
-
-+ (TSWhisperMessage*)whisperMessageWith:(TSMessage*)outgoingMessage deviceId:(int)deviceId preKey:(TSPrekey*)prekey{
-    
-    return nil;
-}
-
-+ (TSWhisperMessage*)whisperMessageWith:(TSMessage*)outgoingMessage deviceId:(int)deviceId{
-    return nil;
-}
-
 // Method for incoming messages
 + (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message fromContact:(TSContact*)contact{
     

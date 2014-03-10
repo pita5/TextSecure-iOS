@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+@class TSSession;
 @class TSPrekey;
 @class TSWhisperMessage;
 @class TSMessage;
@@ -16,10 +16,8 @@
 
 @interface TSAxolotlRatchet : NSObject
 
-// Method for outgoing messages
-+ (BOOL) needsPrekey:(TSContact*)contact;
-+ (TSWhisperMessage*)encryptedMessage:(TSMessage*)outgoingMessage deviceId:(int)deviceId preKey:(TSPrekey*)prekey;
-+ (TSWhisperMessage*)encryptedMessage:(TSMessage*)outgoingMessage deviceId:(int)deviceId;
++ (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session;
++ (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session;
 
 // Method for incoming messages
 + (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message;

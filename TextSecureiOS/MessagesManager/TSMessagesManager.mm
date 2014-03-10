@@ -24,6 +24,7 @@
 #import "TSContact.h"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSRecipientPrekeyRequest.h"
+#import "TSSession.h"
 
 @interface TSMessagesManager (){
     dispatch_queue_t queue;
@@ -52,172 +53,86 @@
 -(void)sendMessage:(TSMessage*)message{
     dispatch_async(queue, ^{
         [TSMessagesDatabase storeMessage:message];
-    });
-    
-    TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
-    NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
-    
-    if ([sessions count] > 0) {
-        // We have already an existing session with that recipient. we just send the message over that session
         
-    } else{
         
-        [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            switch (operation.response.statusCode) {
-                case 200:{
-                    
-                    NSLog(@"Prekey fetched :) ");
-                    
-                    // Extracting the recipients keying material from server payload
-                    
-                    NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
-                    NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
-                    NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                    
-                    NSLog(@"We got the prekeys! %@", responseObject);
-                    
-                    // remove the leading "0x05" byte as per protocol specs
-                    if (theirEphemeralKey.length == 33) {
-                        theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
-                    }
-                    
-                    // remove the leading "0x05" byte as per protocol specs
-                    if (theirIdentityKey.length == 33) {
-                        theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
-                    }
-                    
-                    
-                    
-                    NSData* encodedPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessage:<#(NSData *)#> theirPrekeyId:<#(NSNumber *)#> myCurrentEphemeral:<#(TSECKeyPair *)#> myNextEphemeral:<#(TSECKeyPair *)#> forVersion:<#(NSData *)#> withHMAC:<#(NSData *)#>];
-                    [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[encodedPreKeyWhisperMessage base64EncodedString] ofType:TSPreKeyWhisperMessageType];
-                    
-                    // nil
-                    break;
-                }
-                default:
-                    DLog(@"error sending message");
-#warning Add error handling if not able to get contacts prekey
-                    break;
+        TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
+        NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
+        
+        if ([sessions count] > 0) {
+            for (TSSession *session in sessions){
+                [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSEncryptedWhisperMessageType];
             }
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+        } else{
+            
+            [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                switch (operation.response.statusCode) {
+                    case 200:{
+                        
+                        NSLog(@"Prekey fetched :) ");
+                        
+                        // Extracting the recipients keying material from server payload
+                        
+                        NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+                        NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
+                        NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
+                        
+                        NSLog(@"We got the prekeys! %@", responseObject);
+                        
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirEphemeralKey.length == 33) {
+                            theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+                        
+                        // remove the leading "0x05" byte as per protocol specs
+                        if (theirIdentityKey.length == 33) {
+                            theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
+                        }
+                        
+#warning Bootstrap session with prekey
+                        // Bootstrap session with Prekey
+                        TSSession *session;
+                        
+                        [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                        
+                        // nil
+                        break;
+                    }
+                    default:
+                        DLog(@"error sending message");
+#warning Add error handling if not able to get contacts prekey
+                        break;
+                }
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
-            DLog(@"Not a 200");
+                DLog(@"Not a 200");
+                
+            }];
             
-        }];
-
-        
-    }
-    
-    switch (messageType) {
             
-        case TSPreKeyWhisperMessageType:{
-            // get a contact's prekey
-            
-            break;
         }
-        case TSEncryptedWhisperMessageType: {
-            // unsupported
-            break;
-        }
-        case TSUnencryptedWhisperMessageType: {
-            NSString *serializedMessage= [[TSPushMessageContent serializedPushMessageContent:message] base64EncodedStringWithOptions:0];
-            [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:serializedMessage ofType:messageType];
-            break;
-        }
-        default:
-            break;
-    }
-}
-
--(void)receiveMessage:(NSData*)data{
-    
-    dispatch_async(queue, ^{
-        // Do some cool stuff
-
-    NSData* decryptedPayload = [Cryptography decryptAppleMessagePayload:data withSignalingKey:[TSKeyManager getSignalingKeyToken]];
-    TSMessageSignal *messageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
-    
-    TSThread *thread = [TSThread threadWithContacts: @[[[TSContact alloc] initWithRegisteredID:messageSignal.source]]save:YES];
-    
-    TSAxolotlRatchet *ratchet = [[TSAxolotlRatchet alloc] initForThread:thread];
-    
-    TSMessage* message;
-    
-    // Get or create session
-    
-    
-    switch (messageSignal.contentType) {
-            
-        case TSPreKeyWhisperMessageType: {
-            
-            TSPreKeyWhisperMessage* preKeyMessage = (TSPreKeyWhisperMessage*)messageSignal.message;
-            TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)preKeyMessage.message;
-            
-            
-            RATCHET !
-            ciphertextMessage.verifyMac(messageKeys.getMacKey());
-            
-            byte[] plaintext = getPlaintext(messageKeys, ciphertextMessage.getBody());
-            
-            // Ratchet - Get plaintext method
-            [ratchet ratchetSetupFirstReceiver:preKeyMessage.identityKey theirEphemeralKey:preKeyMessage.baseKey withMyPrekeyId:preKeyMessage.preKeyId];
-            [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
-            
-        
-            
-            TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
-            NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
-            
-            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSUTF8StringEncoding]
-                                             sender:messageSignal.source
-                                          recipient:[TSKeyManager getUsernameToken]
-                                               date:messageSignal.timestamp];
-            
-            break;
-        }
-            
-        case TSEncryptedWhisperMessageType: {
-            TSEncryptedWhisperMessage* whisperMessage = (TSEncryptedWhisperMessage*)messageSignal.message;
-            [ratchet updateChainsOnReceivedMessage:whisperMessage.ephemeralKey];
-            TSWhisperMessageKeys* decryptionKeys =  [ratchet nextMessageKeysOnChain:TSReceivingChain];
-            NSData* tsMessageDecryption = [Cryptography decryptCTRMode:whisperMessage.message withKeys:decryptionKeys withCounter:whisperMessage.counter];
-            
-            message = [TSMessage messageWithContent:[[NSString alloc] initWithData:tsMessageDecryption encoding:NSUTF8StringEncoding]
-                                             sender:messageSignal.source
-                                          recipient:[TSKeyManager getUsernameToken]
-                                               date:messageSignal.timestamp];
-            
-            break;
-        }
-            
-        case TSUnencryptedWhisperMessageType: {
-            TSPushMessageContent* messageContent = [[TSPushMessageContent alloc] initWithData:messageSignal.message.message];
-            message = [messageSignal getTSMessage:messageContent];
-            break;
-        }
-            
-        default:
-            // TODO: Missing error handling here ? Otherwise we're storing a nil message
-            @throw [NSException exceptionWithName:@"Invalid state" reason:@"This should not happen" userInfo:nil];
-            break;
-    }
-    
-    [TSMessagesDatabase storeMessage:message fromThread:[TSThread threadWithContacts: @[[[TSContact alloc]  initWithRegisteredID:message.senderId]]save:YES]];
         
     });
-
 }
-
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
     
 #warning verify if database is open, if not, save somewhere else before processing.
     
-    [TSAxolotlRatchet receiveMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
-    // TO-DO Save message here if works.
+#warning session needs to be decoded
+    TSSession *session;
+    
+    TSEncryptedWhisperMessage *message = [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
+    
+    TSMessage *decryptedMessage = [TSAxolotlRatchet decryptMessage:message withSession:session];
+    
+    [TSMessagesDatabase storeMessage:decryptedMessage];
+    
+    
+    // We probably want to submit an update to a subscribing view controller here.
 }
 
--(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType {
+-(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
     
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -240,7 +155,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
         DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUpdateNotification object:nil userInfo:@{@"messageType":@"send"}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"TSDBDidUpdate" object:nil userInfo:@{@"messageType":@"send"}];
         
     }];
     
