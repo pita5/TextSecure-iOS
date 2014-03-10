@@ -66,6 +66,23 @@
     return [self decryptMessage:message withSession:session];
 }
 
++ (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage *)message withPrekey:(TSPrekey*)preKey deviceId:(int)deviceId{
+    
+    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:message.recipientId deviceId:deviceId];
+    [session clear];
+    
+    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    NSData *theirBaseKey = preKey.ephemeralKey;
+    
+    RKCK *rootAndReceivingChainKey = [RKCK initWithData:[self masterKeyAlice:[self myIdentityKey] ourEphemeral:ourEphemeralKey theirIdentityPublicKey:preKey.identityKey theirEphemeralPublicKey:preKey.ephemeralKey]];
+    
+    TSECKeyPair *sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    [session setRootKey:rootAndReceivingChainKey.RK];
+    [session setSenderChain:sendingKey chainkey:rootAndReceivingChainKey.CK];
+    [session addReceiverChain:theirBaseKey chainKey:[rootAndReceivingChainKey createChainWithEphemeral:sendingKey fromTheirProvideEphemeral:theirBaseKey].CK];
+    
+    return [self encryptMessage:message withSession:session];
+}
 
 + (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session{
     

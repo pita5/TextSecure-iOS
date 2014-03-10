@@ -43,7 +43,7 @@
 - (TSECKeyPair*)senderEphemeral;
 
 - (TSChainKey*)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
-- (void) setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
+- (void)setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
 - (TSChainKey*)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(TSChainKey*)chainKey;
 - (void)setSenderChainKey:(TSChainKey*)chainKey;
 
@@ -51,5 +51,16 @@
 - (void)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys;
+
+#pragma mark Helper method
+
+
+- (void)save;
+
+/**
+ *  The clear method removes all keying material of a session. Only properties remaining are the necessary deviceId and contact information
+ */
+
+- (void)clear;
 
 @end
