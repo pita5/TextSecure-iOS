@@ -961,7 +961,7 @@
 		B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSetMasterPasswordViewController.m; path = ViewControllers/TSSetMasterPasswordViewController.m; sourceTree = "<group>"; };
 		B6B478E41809E7F5005DDE12 /* TSContactsIntersectionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactsIntersectionRequest.h; path = TextSecureiOS/Networking/Requests/TSContactsIntersectionRequest.h; sourceTree = "<group>"; };
 		B6B478E51809E7F5005DDE12 /* TSContactsIntersectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactsIntersectionRequest.m; path = TextSecureiOS/Networking/Requests/TSContactsIntersectionRequest.m; sourceTree = "<group>"; };
-		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		B6C5FA7218CE344700ECC200 /* TSConversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSConversation.h; path = Model/TSConversation.h; sourceTree = "<group>"; };
 		B6C5FA7318CE344700ECC200 /* TSConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSConversation.m; path = Model/TSConversation.m; sourceTree = "<group>"; };
 		B6C5FA7518CE354800ECC200 /* TSSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSession.h; path = Model/TSSession.h; sourceTree = "<group>"; };
@@ -972,8 +972,8 @@
 		B6C5FA7C18CE357200ECC200 /* TSGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroup.m; path = Model/TSGroup.m; sourceTree = "<group>"; };
 		B6C5FA7E18CE3AD600ECC200 /* TSAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSAttachment.h; path = Model/TSAttachment.h; sourceTree = "<group>"; };
 		B6C5FA7F18CE3AD600ECC200 /* TSAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSAttachment.m; path = Model/TSAttachment.m; sourceTree = "<group>"; };
-		B6C5FA8118CE3AED00ECC200 /* TSContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactManager.h; path = Contacts/TSContactManager.h; sourceTree = "<group>"; };
-		B6C5FA8218CE3AED00ECC200 /* TSContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactManager.m; path = Contacts/TSContactManager.m; sourceTree = "<group>"; };
+		B6C5FA8118CE3AED00ECC200 /* TSContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactManager.h; path = TextSecureiOS/Contacts/TSContactManager.h; sourceTree = "<group>"; };
+		B6C5FA8218CE3AED00ECC200 /* TSContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactManager.m; path = TextSecureiOS/Contacts/TSContactManager.m; sourceTree = "<group>"; };
 		B6C5FA8418CE3AFB00ECC200 /* TSECKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSECKeyPair.h; path = Security/TSECKeyPair.h; sourceTree = "<group>"; };
 		B6C5FA8518CE3AFB00ECC200 /* TSECKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSECKeyPair.m; path = Security/TSECKeyPair.m; sourceTree = "<group>"; };
 		B6C5FA8718CE3B0900ECC200 /* TSMessageIncoming.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageIncoming.h; path = Model/TSMessageIncoming.h; sourceTree = "<group>"; };
@@ -1100,7 +1100,7 @@
 			name = Storage;
 			sourceTree = "<group>";
 		};
-		8CCC26381872A3CB00E521A1 /* Storage */ = {
+		8CCC26381872A3CB00E521A1 /* Storage handlers */ = {
 			isa = PBXGroup;
 			children = (
 				8C49FC0E18497E86006132F6 /* TSStorageError.h */,
@@ -1116,41 +1116,16 @@
 				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
 				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
 			);
-			name = Storage;
+			name = "Storage handlers";
 			sourceTree = "<group>";
 		};
 		A51B779B17050EDB002B8E53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B6C5FA7E18CE3AD600ECC200 /* TSAttachment.h */,
-				B6C5FA7F18CE3AD600ECC200 /* TSAttachment.m */,
-				B6C5FA7218CE344700ECC200 /* TSConversation.h */,
-				B6C5FA7318CE344700ECC200 /* TSConversation.m */,
-				8CCC26381872A3CB00E521A1 /* Storage */,
-				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
-				A5145B30184AAD51007BDC73 /* TSMessage.m */,
-				B6C5FA9318CE3B4600ECC200 /* TSMessagesManager.h */,
-				B6C5FA9418CE3B4600ECC200 /* TSMessagesManager.mm */,
-				B6C5FA8718CE3B0900ECC200 /* TSMessageIncoming.h */,
-				B6C5FA8818CE3B0900ECC200 /* TSMessageIncoming.m */,
-				B6C5FA8A18CE3B1000ECC200 /* TSMessageOutgoing.h */,
-				B6C5FA8B18CE3B1000ECC200 /* TSMessageOutgoing.m */,
-				B6C5FA8D18CE3B2000ECC200 /* TSPrekey.h */,
-				B6C5FA8E18CE3B2000ECC200 /* TSPrekey.m */,
-				B67E30F418CE19E4008502F5 /* TSContact.h */,
-				B67E30F518CE19E4008502F5 /* TSContact.m */,
-				A56807B618CCAF290059083C /* TSGroupContext.h */,
-				A56807B718CCAF290059083C /* TSGroupContext.m */,
-				B6C5FA7518CE354800ECC200 /* TSSession.h */,
-				B6C5FA7618CE354800ECC200 /* TSSession.m */,
-				B6C5FA9018CE3B3900ECC200 /* TSMessageKeys.h */,
-				B6C5FA9118CE3B3900ECC200 /* TSMessageKeys.m */,
-				B6C5FA9618CE3B6300ECC200 /* RKCK.h */,
-				B6C5FA9718CE3B6300ECC200 /* RKCK.m */,
-				B6C5FA7818CE355500ECC200 /* TSChainKey.h */,
-				B6C5FA7918CE355500ECC200 /* TSChainKey.m */,
-				B6C5FA7B18CE357200ECC200 /* TSGroup.h */,
-				B6C5FA7C18CE357200ECC200 /* TSGroup.m */,
+				B602B95E18CE783D00181564 /* Contacts / Groups */,
+				B602B95D18CE77B700181564 /* Crypto */,
+				B602B95918CE764100181564 /* Messages */,
+				8CCC26381872A3CB00E521A1 /* Storage handlers */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1159,7 +1134,6 @@
 			isa = PBXGroup;
 			children = (
 				A56312F718C85B6500222F99 /* Settings.bundle */,
-				B6C5AE5717C212330022EA53 /* Default-568h@2x.png */,
 				A53718BB16FF95DF00C6FCCF /* TextSecureiOS */,
 				8C42C13E18551B8C000DD353 /* TextSecureiOS Tests */,
 				A53718B416FF95DF00C6FCCF /* Frameworks */,
@@ -1206,13 +1180,11 @@
 			children = (
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
-				B6C5FA8118CE3AED00ECC200 /* TSContactManager.h */,
-				B6C5FA8218CE3AED00ECC200 /* TSContactManager.m */,
-				B6C5FA8418CE3AFB00ECC200 /* TSECKeyPair.h */,
-				B6C5FA8518CE3AFB00ECC200 /* TSECKeyPair.m */,
 				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
 				B6F10B1417EF49D700723719 /* Categories */,
+				B602B96018CE797D00181564 /* Contact Management */,
+				B602B95B18CE777900181564 /* Messaging */,
 				A51B779B17050EDB002B8E53 /* Model */,
 				B639AF0A17F5A53700B2244D /* Networking */,
 				A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */,
@@ -1244,6 +1216,7 @@
 				A5195B9518CBC00100AFEE04 /* apple_logo_animated.gif */,
 				A5195B8D18CBBC0300AFEE04 /* contact_mask.png */,
 				A5195B8E18CBBC0300AFEE04 /* contact_mask@2x.png */,
+				B6C5AE5717C212330022EA53 /* Default-568h@2x.png */,
 				A5195B8F18CBBC0300AFEE04 /* Default_person.png */,
 				A5195B9018CBBC0300AFEE04 /* Default_person@2x.png */,
 				A53727FD17011A4E00C6FCCF /* flags */,
@@ -1691,17 +1664,16 @@
 		A5F15AA217029BCF00856385 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				B635B38F182181E1003CE732 /* TSMessageViewController.h */,
-				B635B390182181E1003CE732 /* TSMessageViewController.m */,
-				B643D7DC189EB9020025C6F3 /* TSContactPickerViewController.h */,
-				B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */,
-				B63A72131808B87700C353F2 /* Sign up */,
 				A5169D00170FEA8D00A2CE9E /* TextSecureViewController.h */,
 				A5169CFD170FEA8D00A2CE9E /* TextSecureViewController.m */,
-				4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */,
-				4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */,
+				B63A72131808B87700C353F2 /* Sign up */,
+				B602B95F18CE786F00181564 /* Messaging */,
+				B643D7DC189EB9020025C6F3 /* TSContactPickerViewController.h */,
+				B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */,
 				B67E30F718CE1AA8008502F5 /* TSGroupSetupViewController.h */,
 				B67E30F818CE1AA8008502F5 /* TSGroupSetupViewController.m */,
+				4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */,
+				4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */,
 				A5169D05170FEA8D00A2CE9E /* CountryViewController.h */,
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
@@ -1719,6 +1691,99 @@
 				A5169D19170FEB1900A2CE9E /* Constants.m */,
 			);
 			name = Utility;
+			sourceTree = "<group>";
+		};
+		B602B95918CE764100181564 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				B6C5FA7E18CE3AD600ECC200 /* TSAttachment.h */,
+				B6C5FA7F18CE3AD600ECC200 /* TSAttachment.m */,
+				B6C5FA7218CE344700ECC200 /* TSConversation.h */,
+				B6C5FA7318CE344700ECC200 /* TSConversation.m */,
+				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
+				A5145B30184AAD51007BDC73 /* TSMessage.m */,
+				B6C5FA8718CE3B0900ECC200 /* TSMessageIncoming.h */,
+				B6C5FA8818CE3B0900ECC200 /* TSMessageIncoming.m */,
+				B6C5FA8A18CE3B1000ECC200 /* TSMessageOutgoing.h */,
+				B6C5FA8B18CE3B1000ECC200 /* TSMessageOutgoing.m */,
+				B602B95A18CE764C00181564 /* Protowrappers */,
+			);
+			name = Messages;
+			sourceTree = "<group>";
+		};
+		B602B95A18CE764C00181564 /* Protowrappers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Protowrappers;
+			sourceTree = "<group>";
+		};
+		B602B95B18CE777900181564 /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				B6C5FA9318CE3B4600ECC200 /* TSMessagesManager.h */,
+				B6C5FA9418CE3B4600ECC200 /* TSMessagesManager.mm */,
+			);
+			name = Messaging;
+			sourceTree = "<group>";
+		};
+		B602B95C18CE779800181564 /* Axolotl Structures */ = {
+			isa = PBXGroup;
+			children = (
+				B6C5FA9618CE3B6300ECC200 /* RKCK.h */,
+				B6C5FA9718CE3B6300ECC200 /* RKCK.m */,
+				B6C5FA7818CE355500ECC200 /* TSChainKey.h */,
+				B6C5FA7918CE355500ECC200 /* TSChainKey.m */,
+				B6C5FA9018CE3B3900ECC200 /* TSMessageKeys.h */,
+				B6C5FA9118CE3B3900ECC200 /* TSMessageKeys.m */,
+			);
+			name = "Axolotl Structures";
+			sourceTree = "<group>";
+		};
+		B602B95D18CE77B700181564 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				B6C5FA8418CE3AFB00ECC200 /* TSECKeyPair.h */,
+				B6C5FA8518CE3AFB00ECC200 /* TSECKeyPair.m */,
+				B6C5FA7518CE354800ECC200 /* TSSession.h */,
+				B6C5FA7618CE354800ECC200 /* TSSession.m */,
+				B6C5FA8D18CE3B2000ECC200 /* TSPrekey.h */,
+				B6C5FA8E18CE3B2000ECC200 /* TSPrekey.m */,
+				B602B95C18CE779800181564 /* Axolotl Structures */,
+			);
+			name = Crypto;
+			sourceTree = "<group>";
+		};
+		B602B95E18CE783D00181564 /* Contacts / Groups */ = {
+			isa = PBXGroup;
+			children = (
+				B67E30F418CE19E4008502F5 /* TSContact.h */,
+				B67E30F518CE19E4008502F5 /* TSContact.m */,
+				A56807B618CCAF290059083C /* TSGroupContext.h */,
+				A56807B718CCAF290059083C /* TSGroupContext.m */,
+				B6C5FA7B18CE357200ECC200 /* TSGroup.h */,
+				B6C5FA7C18CE357200ECC200 /* TSGroup.m */,
+			);
+			name = "Contacts / Groups";
+			sourceTree = "<group>";
+		};
+		B602B95F18CE786F00181564 /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				B635B38F182181E1003CE732 /* TSMessageViewController.h */,
+				B635B390182181E1003CE732 /* TSMessageViewController.m */,
+			);
+			name = Messaging;
+			sourceTree = "<group>";
+		};
+		B602B96018CE797D00181564 /* Contact Management */ = {
+			isa = PBXGroup;
+			children = (
+				B6C5FA8118CE3AED00ECC200 /* TSContactManager.h */,
+				B6C5FA8218CE3AED00ECC200 /* TSContactManager.m */,
+			);
+			name = "Contact Management";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		B61E05AB18C179F300AC49CA /* Storage */ = {
