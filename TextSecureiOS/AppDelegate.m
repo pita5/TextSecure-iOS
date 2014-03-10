@@ -20,6 +20,8 @@
 #import "TSAttachmentManager.h"
 #import "TSMessage.h"
 #import "TSAttachment.h"
+#import "TSWaitingPushMessageDatabase.h"
+#import "TSStorageMasterKey.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -30,29 +32,32 @@
     // UIAppearance proxy setup
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:33/255. green:127/255. blue:248/255. alpha:1]} forState:UIControlStateNormal];
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor]} forState:UIControlStateDisabled];
-    
-    
+
+
     // If this is the first launch, we want to remove stuff from the Keychain that might be there from a previous install
-    
+
     if (![[NSUserDefaults standardUserDefaults] boolForKey:firstLaunchKey]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:firstLaunchKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [TSKeyManager removeAllKeychainItems];
         DLog(@"First Launch");
     }
-    
+
+    [self setDefaultUserSettings];
+    [self updateBasedOnUserSettings];
+
 #ifdef DEBUG
 	[[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
 														 liveIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
 															   delegate:self];
 	[[BITHockeyManager sharedHockeyManager] startManager];
-    
+
     PDDebugger *debugger = [PDDebugger defaultInstance];
     [debugger connectToURL:[NSURL URLWithString:@"ws://localhost:9000/device"]];
     [debugger enableNetworkTrafficDebugging];
     [debugger forwardAllNetworkTraffic];
 #endif
-	
+
 	if(launchOptions!=nil) {
 		[self handlePush:launchOptions];
 	}
@@ -79,19 +84,39 @@
         [self.blankWindow.rootViewController.view addSubview:imageView];
         window;
     });
-    
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushesQueuedInDB) name:TSDatabaseDidUnlockNotification object:nil];
 	return YES;
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    
+
     self.blankWindow.hidden = NO;
-    
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     self.blankWindow.hidden = YES;
+    [self updateBasedOnUserSettings];
+}
+
+
+
+#pragma mark settings
+-(void) setDefaultUserSettings {
+    /* this is as apparently defaults set in settings bundle are just display defaults, must still set in code */
+    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO] ,@"resetDB",[NSNumber numberWithBool:NO],kStorageMasterKeyWasCreated, nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)updateBasedOnUserSettings {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"resetDB"]) {
+        [TSKeyManager removeAllKeychainItems];
+        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        exit(0);
+    }
 }
 
 
@@ -101,14 +126,14 @@
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
 	NSString *stringToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	stringToken = [stringToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-	
+
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRegisterForPushRequest alloc] initWithPushIdentifier:stringToken] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+
         switch (operation.response.statusCode) {
             case 200:
                 DLog(@"Device registered for push notifications");
                 break;
-                
+
             default:
 #warning Add error handling if not able to send the token
                 break;
@@ -116,21 +141,21 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token
     }];
-    
+
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
-    
-    
+
+
     //    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"TextSecure needs push notifications" message:@"We couldn't enable push notifications. TexSecure uses them heavily. Please try registering again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
     //    [alert show];
-    
+
 #ifdef DEBUG
 #warning registering with dummy ID so that we can proceed in the simulator. You'll want to change this!
     NSData *deviceToken = [NSData dataFromBase64String:[@"christine" base64Encoded]];
     [self application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 #endif
-    
+
 }
 
 
@@ -139,8 +164,23 @@
 }
 
 -(void) handlePush:(NSDictionary *)pushInfo {
-    DLog(@"We did receive the following push %@", pushInfo);
-    [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
+    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
+        [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
+    }
+    else {
+        // Store in queue
+        [TSWaitingPushMessageDatabase queuePush:pushInfo];
+    }
+}
+
+-(void) handlePushesQueuedInDB {
+    // This method is triggered whenever DB is unlocked
+    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
+        for(NSDictionary* pushInfo in [TSWaitingPushMessageDatabase getPushesInReceiptOrder]) {
+            [[TSMessagesManager sharedManager] receiveMessagePush:pushInfo];
+        }
+    }
+    [TSWaitingPushMessageDatabase finishPushesQueued];
 }
 
 #pragma mark - HockeyApp Delegate Methods

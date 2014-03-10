@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TSGroupContext.h"
 
 @interface TSGroup : NSObject
-
-#warning Needs to be implemented
 @property (readonly) NSString *id;
+@property(nonatomic,assign) BOOL isNonBroadcastGroup;
+@property(nonatomic,strong) NSString *groupName;
+@property(nonatomic,strong) UIImage *groupImage;
+@property(nonatomic,strong) TSGroupContext *groupContext;
 
 @end

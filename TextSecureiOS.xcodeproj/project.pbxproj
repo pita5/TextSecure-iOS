@@ -39,6 +39,12 @@
 		A5169D2B170FEB8F00A2CE9E /* KeychainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */; };
 		A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D26170FEB8F00A2CE9E /* Cryptography.m */; };
 		A5169D3D170FEDC600A2CE9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D39170FEDC600A2CE9E /* main.m */; };
+		A5195B8C18CB655800AFEE04 /* TSGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = A5195B8B18CB655800AFEE04 /* TSGroup.m */; };
+		A5195B9118CBBC0300AFEE04 /* contact_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8D18CBBC0300AFEE04 /* contact_mask.png */; };
+		A5195B9218CBBC0300AFEE04 /* contact_mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8E18CBBC0300AFEE04 /* contact_mask@2x.png */; };
+		A5195B9318CBBC0300AFEE04 /* Default_person.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B8F18CBBC0300AFEE04 /* Default_person.png */; };
+		A5195B9418CBBC0300AFEE04 /* Default_person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5195B9018CBBC0300AFEE04 /* Default_person@2x.png */; };
+		A5195B9618CBC00100AFEE04 /* apple_logo_animated.gif in Resources */ = {isa = PBXBuildFile; fileRef = A5195B9518CBC00100AFEE04 /* apple_logo_animated.gif */; };
 		A51B77A317051096002B8E53 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A51B77A217051096002B8E53 /* libsqlite3.dylib */; };
 		A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */; };
 		A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = A52ECA7B17ED097300C80BC7 /* NSData+Base64.m */; };
@@ -384,8 +390,13 @@
 		A5372A9617011A5300C6FCCF /* zm.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294917011A5200C6FCCF /* zm.png */; };
 		A5372A9717011A5300C6FCCF /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294A17011A5200C6FCCF /* zw.png */; };
 		A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A538A27D1869DC6500CD0A3D /* TSKeyManager.m */; };
+		A54DAA0C18CB1BC0003CC925 /* TSGroupSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A54DAA0B18CB1BC0003CC925 /* TSGroupSetupViewController.m */; };
 		A5620DEC186BD27F0033483E /* TSMessagesManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A5620DEB186BD27F0033483E /* TSMessagesManager.mm */; };
 		A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */; };
+		A56312F818C85B6500222F99 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A56312F718C85B6500222F99 /* Settings.bundle */; };
+		A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A56312FA18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m */; };
+		A56312FD18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A56312FC18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m */; };
+		A56807B818CCAF2A0059083C /* TSGroupContext.m in Sources */ = {isa = PBXBuildFile; fileRef = A56807B718CCAF290059083C /* TSGroupContext.m */; };
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
@@ -431,7 +442,6 @@
 		B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B63A72151808B8AF00C353F2 /* VerificationCodeViewController.m */; };
 		B63A72181808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */; };
 		B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */; };
-		B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */; };
 		B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */; };
 		B693C5A818147CED007E8360 /* TSContact.m in Sources */ = {isa = PBXBuildFile; fileRef = B693C5A718147CED007E8360 /* TSContact.m */; };
 		B6B478E31809BB3E005DDE12 /* TSContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B478E21809BB3E005DDE12 /* TSContactManager.m */; };
@@ -520,6 +530,13 @@
 		A5169D39170FEDC600A2CE9E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TextSecureiOS-Info.plist"; sourceTree = "<group>"; };
 		A5169D3C170FEDC600A2CE9E /* TextSecureiOS-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS-Prefix.pch"; sourceTree = "<group>"; };
+		A5195B8A18CB655800AFEE04 /* TSGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroup.h; path = Model/TSGroup.h; sourceTree = "<group>"; };
+		A5195B8B18CB655800AFEE04 /* TSGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroup.m; path = Model/TSGroup.m; sourceTree = "<group>"; };
+		A5195B8D18CBBC0300AFEE04 /* contact_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = contact_mask.png; path = TextSecureiOSAssets/contact_mask.png; sourceTree = "<group>"; };
+		A5195B8E18CBBC0300AFEE04 /* contact_mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contact_mask@2x.png"; path = "TextSecureiOSAssets/contact_mask@2x.png"; sourceTree = "<group>"; };
+		A5195B8F18CBBC0300AFEE04 /* Default_person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default_person.png; path = TextSecureiOSAssets/Default_person.png; sourceTree = "<group>"; };
+		A5195B9018CBBC0300AFEE04 /* Default_person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default_person@2x.png"; path = "TextSecureiOSAssets/Default_person@2x.png"; sourceTree = "<group>"; };
+		A5195B9518CBC00100AFEE04 /* apple_logo_animated.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = apple_logo_animated.gif; path = TextSecureiOSAssets/apple_logo_animated.gif; sourceTree = "<group>"; };
 		A51B77A217051096002B8E53 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CryptographyTests.mm; sourceTree = "<group>"; };
 		A52ECA7A17ED097300C80BC7 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "TextSecureiOS/Utility/NSData+Base64.h"; sourceTree = "<group>"; };
@@ -871,9 +888,17 @@
 		A537294A17011A5200C6FCCF /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zw.png; sourceTree = "<group>"; };
 		A538A27C1869DC6500CD0A3D /* TSKeyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSKeyManager.h; path = Security/TSKeyManager.h; sourceTree = "<group>"; };
 		A538A27D1869DC6500CD0A3D /* TSKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSKeyManager.m; path = Security/TSKeyManager.m; sourceTree = "<group>"; };
-		A5620DEB186BD27F0033483E /* TSMessagesManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessagesManager.mm; path = TextSecureiOS/MessagesManager/TSMessagesManager.mm; sourceTree = "<group>"; };
+		A54DAA0A18CB1BC0003CC925 /* TSGroupSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroupSetupViewController.h; path = "ViewControllers/Conversations/Group Messaging/TSGroupSetupViewController.h"; sourceTree = "<group>"; };
+		A54DAA0B18CB1BC0003CC925 /* TSGroupSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroupSetupViewController.m; path = "ViewControllers/Conversations/Group Messaging/TSGroupSetupViewController.m"; sourceTree = "<group>"; };
+		A5620DEB186BD27F0033483E /* TSMessagesManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessagesManager.mm; path = MessagesManager/TSMessagesManager.mm; sourceTree = "<group>"; };
 		A5620DED186BD4FA0033483E /* TSSubmitMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSubmitMessageRequest.h; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.h; sourceTree = "<group>"; };
 		A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSubmitMessageRequest.m; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.m; sourceTree = "<group>"; };
+		A56312F718C85B6500222F99 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A56312F918C9A45A00222F99 /* TSWaitingPushMessageDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSWaitingPushMessageDatabase.h; path = Model/TSWaitingPushMessageDatabase.h; sourceTree = "<group>"; };
+		A56312FA18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSWaitingPushMessageDatabase.m; path = Model/TSWaitingPushMessageDatabase.m; sourceTree = "<group>"; };
+		A56312FC18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWaitingPushMessageDatabaseTests.m; sourceTree = "<group>"; };
+		A56807B618CCAF290059083C /* TSGroupContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroupContext.h; path = Model/TSGroupContext.h; sourceTree = "<group>"; };
+		A56807B718CCAF290059083C /* TSGroupContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSGroupContext.m; path = Model/TSGroupContext.m; sourceTree = "<group>"; };
 		A568910017E2F37000C360A1 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A56D31B7180FCA840093D51B /* TSRegisterPrekeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterPrekeysRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.h; sourceTree = "<group>"; };
@@ -954,8 +979,6 @@
 		B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactPickerViewController.m; path = ViewControllers/TSContactPickerViewController.m; sourceTree = "<group>"; };
 		B68A2290180AC32C00D93C16 /* TSRegisterForPushRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterForPushRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.h; sourceTree = "<group>"; };
 		B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterForPushRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.m; sourceTree = "<group>"; };
-		B68BFDED1809855B005CC817 /* TSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSettingsViewController.h; path = ViewControllers/TSSettingsViewController.h; sourceTree = "<group>"; };
-		B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSettingsViewController.m; path = ViewControllers/TSSettingsViewController.m; sourceTree = "<group>"; };
 		B68BFDF0180987C6005CC817 /* TSSetMasterPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSetMasterPasswordViewController.h; path = ViewControllers/TSSetMasterPasswordViewController.h; sourceTree = "<group>"; };
 		B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSetMasterPasswordViewController.m; path = ViewControllers/TSSetMasterPasswordViewController.m; sourceTree = "<group>"; };
 		B693C5A618147CED007E8360 /* TSContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContact.h; path = Contacts/TSContact.h; sourceTree = "<group>"; };
@@ -1074,6 +1097,26 @@
 				8CF7BD9C18711B140023A781 /* TSUserKeysDatabaseTests.m */,
 				8CF7BDA0187137640023A781 /* TSEncryptedDatabaseTests.m */,
 				8CF7BD9E187130F80023A781 /* TSStorageMasterKeyTests.m */,
+				A56312FC18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m */,
+			);
+			name = Storage;
+			sourceTree = "<group>";
+		};
+		8CCC26381872A3CB00E521A1 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				8C49FC0E18497E86006132F6 /* TSStorageError.h */,
+				8C49FC0F18497E86006132F6 /* TSStorageError.m */,
+				8CF7BD991870F23D0023A781 /* TSUserKeysDatabase.h */,
+				8CF7BD9A1870F23D0023A781 /* TSUserKeysDatabase.m */,
+				A56312F918C9A45A00222F99 /* TSWaitingPushMessageDatabase.h */,
+				A56312FA18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m */,
+				8CF7BD961870D9450023A781 /* TSEncryptedDatabase.h */,
+				8CF7BD971870D9450023A781 /* TSEncryptedDatabase.m */,
+				A515AFD9180966E30084ABA5 /* TSMessagesDatabase.h */,
+				A515AFDA180966E30084ABA5 /* TSMessagesDatabase.m */,
+				8CF7BD931870C8450023A781 /* TSStorageMasterKey.h */,
+				8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */,
 			);
 			name = Storage;
 			sourceTree = "<group>";
@@ -1081,10 +1124,21 @@
 		A51B779B17050EDB002B8E53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B61E05AA18C1754D00AC49CA /* Cryptography */,
-				B61E05B318C188A300AC49CA /* Conversations */,
-				B61E059618C15C2800AC49CA /* Messages */,
-				B61E05A618C169E300AC49CA /* Users */,
+				8CCC26381872A3CB00E521A1 /* Storage */,
+				A5145B2F184AAD51007BDC73 /* TSMessage.h */,
+				A5145B30184AAD51007BDC73 /* TSMessage.m */,
+				A5E6CC8A187D1277002A1735 /* TSAttachment.h */,
+				A5E6CC8B187D1277002A1735 /* TSAttachment.m */,
+				B60CEE73184B4971006A8256 /* TSThread.h */,
+				B60CEE74184B4971006A8256 /* TSThread.m */,
+				A5E6CC95187FB7C6002A1735 /* TSWhisperMessageKeys.h */,
+				A5E6CC96187FB7C6002A1735 /* TSWhisperMessageKeys.m */,
+				A5E6CBFD18762BDB002A1735 /* TSAttachment.h */,
+				A5E6CBFE18762BDB002A1735 /* TSAttachment.m */,
+				A5195B8A18CB655800AFEE04 /* TSGroup.h */,
+				A5195B8B18CB655800AFEE04 /* TSGroup.m */,
+				A56807B618CCAF290059083C /* TSGroupContext.h */,
+				A56807B718CCAF290059083C /* TSGroupContext.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1092,6 +1146,7 @@
 		A53718A916FF95DF00C6FCCF = {
 			isa = PBXGroup;
 			children = (
+				A56312F718C85B6500222F99 /* Settings.bundle */,
 				B6C5AE5717C212330022EA53 /* Default-568h@2x.png */,
 				A53718BB16FF95DF00C6FCCF /* TextSecureiOS */,
 				8C42C13E18551B8C000DD353 /* TextSecureiOS Tests */,
@@ -1170,6 +1225,11 @@
 		A53718FC16FFB6E600C6FCCF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A5195B9518CBC00100AFEE04 /* apple_logo_animated.gif */,
+				A5195B8D18CBBC0300AFEE04 /* contact_mask.png */,
+				A5195B8E18CBBC0300AFEE04 /* contact_mask@2x.png */,
+				A5195B8F18CBBC0300AFEE04 /* Default_person.png */,
+				A5195B9018CBBC0300AFEE04 /* Default_person@2x.png */,
 				A53727FD17011A4E00C6FCCF /* flags */,
 				A537190716FFC45B00C6FCCF /* textsecure@2x.png */,
 				A5F15B481703EE2F00856385 /* Default-568h@2x.png */,
@@ -1519,6 +1579,15 @@
 			path = TextSecureiOSAssets/flags;
 			sourceTree = "<group>";
 		};
+		A54DAA0618CB1AD9003CC925 /* Group Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				A54DAA0A18CB1BC0003CC925 /* TSGroupSetupViewController.h */,
+				A54DAA0B18CB1BC0003CC925 /* TSGroupSetupViewController.m */,
+			);
+			name = "Group Messaging";
+			sourceTree = "<group>";
+		};
 		A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1628,7 +1697,6 @@
 				A5169D04170FEA8D00A2CE9E /* CountryViewController.m */,
 				A5169D07170FEA8D00A2CE9E /* CountrySegue.h */,
 				A5169D06170FEA8D00A2CE9E /* CountrySegue.m */,
-				B68BFDEC1809853E005CC817 /* Settings */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -1713,6 +1781,11 @@
 				B61E05AE18C1884500AC49CA /* TSConversation.m */,
 				B61E05B018C1889500AC49CA /* TSGroup.h */,
 				B61E05B118C1889500AC49CA /* TSGroup.m */,
+				A54DAA0618CB1AD9003CC925 /* Group Messaging */,
+				A5F1F4ED1871C6DE0078D340 /* TSMessagesManager.h */,
+				A5620DEB186BD27F0033483E /* TSMessagesManager.mm */,
+				B635B38F182181E1003CE732 /* ComposeMessageViewController.h */,
+				B635B390182181E1003CE732 /* ComposeMessageViewController.m */,
 			);
 			name = Conversations;
 			sourceTree = "<group>";
@@ -1777,13 +1850,15 @@
 			name = "Sign up";
 			sourceTree = "<group>";
 		};
-		B68BFDEC1809853E005CC817 /* Settings */ = {
+		B6B478E01809B9B3005DDE12 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
-				B68BFDED1809855B005CC817 /* TSSettingsViewController.h */,
-				B68BFDEE1809855B005CC817 /* TSSettingsViewController.m */,
+				B6B478E11809BB3E005DDE12 /* TSContactManager.h */,
+				B6B478E21809BB3E005DDE12 /* TSContactManager.m */,
+				B693C5A618147CED007E8360 /* TSContact.h */,
+				B693C5A718147CED007E8360 /* TSContact.m */,
 			);
-			name = Settings;
+			name = Contacts;
 			sourceTree = "<group>";
 		};
 		B6E2CFB717F7A89000200B69 /* Certificate */ = {
@@ -2080,8 +2155,12 @@
 				A53729ED17011A5200C6FCCF /* la.png in Resources */,
 				A53729EE17011A5200C6FCCF /* la@2x.png in Resources */,
 				A53729EF17011A5200C6FCCF /* lb.png in Resources */,
+				A5195B9418CBBC0300AFEE04 /* Default_person@2x.png in Resources */,
+				A5195B9318CBBC0300AFEE04 /* Default_person.png in Resources */,
+				A5195B9218CBBC0300AFEE04 /* contact_mask@2x.png in Resources */,
 				A53729F017011A5200C6FCCF /* lb@2x.png in Resources */,
 				A53729F117011A5200C6FCCF /* lc.png in Resources */,
+				A5195B9618CBC00100AFEE04 /* apple_logo_animated.gif in Resources */,
 				A53729F217011A5200C6FCCF /* li.png in Resources */,
 				A53729F317011A5200C6FCCF /* lk.png in Resources */,
 				A53729F417011A5200C6FCCF /* lr.png in Resources */,
@@ -2177,6 +2256,7 @@
 				A5372A4E17011A5300C6FCCF /* sg.png in Resources */,
 				A5372A4F17011A5300C6FCCF /* sh.png in Resources */,
 				A5372A5017011A5300C6FCCF /* sh@2x.png in Resources */,
+				A56312F818C85B6500222F99 /* Settings.bundle in Resources */,
 				A5372A5117011A5300C6FCCF /* si.png in Resources */,
 				A5372A5217011A5300C6FCCF /* sj.png in Resources */,
 				A5372A5317011A5300C6FCCF /* sk.png in Resources */,
@@ -2189,6 +2269,7 @@
 				A5372A5A17011A5300C6FCCF /* sq@2x.png in Resources */,
 				A5372A5B17011A5300C6FCCF /* sr.png in Resources */,
 				A5372A5C17011A5300C6FCCF /* st.png in Resources */,
+				A5195B9118CBBC0300AFEE04 /* contact_mask.png in Resources */,
 				A5372A5D17011A5300C6FCCF /* su.png in Resources */,
 				A5372A5E17011A5300C6FCCF /* sv.png in Resources */,
 				A5372A5F17011A5300C6FCCF /* sw.png in Resources */,
@@ -2343,6 +2424,7 @@
 				A5C85AEF18839E8C001D2189 /* TSAxolotlRatchetTests.mm in Sources */,
 				8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */,
 				8CF7BDA1187137640023A781 /* TSEncryptedDatabaseTests.m in Sources */,
+				A56312FD18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
 				A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */,
 			);
@@ -2383,6 +2465,7 @@
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
 				B68BFDEF1809855B005CC817 /* TSSettingsViewController.m in Sources */,
 				8CF7BD981870D9450023A781 /* TSDatabaseManager.m in Sources */,
+				8CF7BD981870D9450023A781 /* TSEncryptedDatabase.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				A5E6CC6D187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm in Sources */,
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
@@ -2393,9 +2476,11 @@
 				B635B3C7182181E1003CE732 /* TSMessageViewController.m in Sources */,
 				A5E6CC6F187D0F4B002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */,
 				B6D23DAF18A91E9800F7E932 /* TSRegisterForPushRequest.m in Sources */,
+				A54DAA0C18CB1BC0003CC925 /* TSGroupSetupViewController.m in Sources */,
 				A5E6CC83187D0FF1002A1735 /* TSMessageSignal.mm in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				B61E05A218C1693400AC49CA /* TSAttachment.m in Sources */,
+				A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
@@ -2405,6 +2490,7 @@
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
 				A5145B31184AAD51007BDC73 /* TSMessage.m in Sources */,
+				A5195B8C18CB655800AFEE04 /* TSGroup.m in Sources */,
 				A5E6CC82187D0FF1002A1735 /* TSEncryptedWhisperMessage.mm in Sources */,
 				B639AF1117F5AAA300B2244D /* TSRequest.m in Sources */,
 				8CF7BD8C187088D80023A781 /* TSECKeyPair.m in Sources */,
@@ -2418,6 +2504,7 @@
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
 				4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */,
+				A56807B818CCAF2A0059083C /* TSGroupContext.m in Sources */,
 				A5169D2E170FEB8F00A2CE9E /* Cryptography.m in Sources */,
 				B62C218018C7B4BA0044E169 /* TSPrekey.m in Sources */,
 				B625FEF118CCBA4600DACFBE /* TSMessageKeys.m in Sources */,

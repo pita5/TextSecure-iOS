@@ -1,4 +1,4 @@
-//
+    //
 //  ComposeMessageViewController.m
 //  TextSecureiOS
 //
@@ -17,24 +17,33 @@
 #import "TSAttachmentManager.h"
 #import "Cryptography.h"
 #import "FilePath.h"
+#import "TSGroup.h"
+#import "Emoticonizer.h"
+@interface ComposeMessageViewController ()
 
-@interface TSMessageViewController ()
 @property (nonatomic, retain) NSArray *contacts;
 @property (nonatomic, retain) NSArray *messages;
+
 @end
 
 @implementation TSMessageViewController
 
 - (id) initWithConversation:(TSContact*)contact {
-    
+
     self = [super initWithNibName:nil bundle:nil];
-    
+
     self.contact = contact;
     self.delegate = self;
-    
+
     [self setupThread];
-    
+
     return self;
+}
+
+-(void) setupWithConversation:(TSThread*)thread {
+    self.thread = thread;
+    self.delegate = self;
+    [self setupThread];
 }
 
 -(void) setupThread  {
@@ -52,6 +61,17 @@
     self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
     self.delegate = self;
     self.dataSource = self;
+    if(self.group) {
+        if([[self.group groupName] length]>0) {
+            self.title = self.group.groupName;
+        }
+        else if ([self.group isNonBroadcastGroup]) {
+            self.title = @"Group message";
+        }
+        else {
+            self.title = @"Broadcast message";
+        }
+    }
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
 }
@@ -80,16 +100,16 @@
 }
 
 - (void)didSendText:(NSString *)text {
-    
+
     TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initWithMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
-    
+
     //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
     //        // this is asynchronous so message will only be send by messages manager when it succeeds
     //        [TSAttachmentManager uploadAttachment:message];
     //    }
-    
+
     [[TSMessagesManager sharedManager] scheduleMessageSend:message];
-    
+
     [self finishSend];
 }
 
@@ -101,11 +121,11 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     UIImagePickerController *imagePicker =  [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
-    
+
     imagePicker.mediaTypes =  @[(NSString *) kUTTypeImage, (NSString *) kUTTypeMovie];
-    
+
     imagePicker.allowsEditing = NO;
-    
+
     switch (buttonIndex) {
         case 0:
             imagePicker.sourceType =  UIImagePickerControllerSourceTypeCamera;
@@ -120,13 +140,13 @@
             break;
     }
     [self presentViewController:imagePicker animated:YES completion:nil];
-    
+
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
+
     NSString *mediaType = info[UIImagePickerControllerMediaType];
-    
+
     NSData* attachmentData;
     TSAttachmentType  attachmentType = TSAttachmentEmpty;
     if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
@@ -136,7 +156,7 @@
     }
     else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
         NSURL *videoURL = info[UIImagePickerControllerMediaURL];
-        
+
         attachmentData=[NSData dataWithContentsOfURL:videoURL];
         attachmentType = TSAttachmentVideo;
     }
@@ -169,7 +189,7 @@
         return [JSBubbleImageViewFactory bubbleImageViewForType:type
                                                           color:[UIColor js_bubbleLightGrayColor]];
     } else{
-        
+
         return [JSBubbleImageViewFactory bubbleImageViewForType:type
                                                           color:[UIColor js_bubbleBlueColor]];
     }
@@ -203,7 +223,7 @@
 //}
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [[self.messages objectAtIndex:indexPath.row] content];
+    return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {

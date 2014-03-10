@@ -64,6 +64,8 @@
  *  @return Localized label of the contact's registered phone number
  */
 
+-(void) reverseIsSelected;
+-(id) initWithRegisteredID:(NSString*)registeredID;
 - (NSString*) labelForRegisteredNumber;
 
 /**

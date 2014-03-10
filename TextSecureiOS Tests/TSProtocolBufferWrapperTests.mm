@@ -52,6 +52,7 @@
     messageSignal.contentType = TSEncryptedWhisperMessageType;
     messageSignal.source = @"+11111111";
     messageSignal.timestamp = [NSDate date];
+    messageSignal.sourceDevice = [NSNumber numberWithUnsignedLong:7654321];
     /* messageSignal.message  contains a TextSecure_WhisperMessage or a TextSecure_PrekeyWhisperMessage
      we are testing a TextSecure_WhisperMessage here
     */
@@ -78,7 +79,7 @@
     TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithData:serializedMessageSignal];
     
     XCTAssertTrue(messageSignal.contentType == deserializedMessageSignal.contentType,@"TSMessageSignal contentType unequal after serialization");
-    
+    XCTAssertTrue([messageSignal.sourceDevice isEqualToNumber:deserializedMessageSignal.sourceDevice],@"TSMessageSignal sourceDevice unequal after serialization");
     XCTAssertTrue([messageSignal.source isEqualToString:deserializedMessageSignal.source],@"TSMessageSignal source unequal after serialization");
 #warning compare with a nstimeinterval
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

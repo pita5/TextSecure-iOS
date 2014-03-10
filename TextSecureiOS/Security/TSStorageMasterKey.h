@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#define kStorageMasterKeyWasCreated @"StorageMasterKeyWasCreated"
+#define MASTER_KEY_SIZE 32
 
 @interface TSStorageMasterKey : NSObject
 

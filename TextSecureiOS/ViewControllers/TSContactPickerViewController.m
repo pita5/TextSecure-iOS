@@ -9,9 +9,10 @@
 #import "TSContactPickerViewController.h"
 #import "TSContactManager.h"
 #import "TSMessageViewController.h"
-
+#import "ComposeMessageViewController.h"
+#import "TSThread.h"
+#import "TSGroupSetupViewController.h"
 #define tableViewCellsDequeID @"TSContactCell"
-
 @interface TSContactPickerViewController ()
 
 @property NSArray *whisperContacts;
@@ -20,22 +21,20 @@
 
 @implementation TSContactPickerViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCoder:aDecoder];
     if (self) {
-        
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         self.title = @"Loading";
-        
-        UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStylePlain target:self action:@selector(dismissVC)];
-        self.navigationItem.leftBarButtonItem = dismissButton;
-        
-        [TSContactManager getAllContactsIDs:^(NSArray *contacts) {   
+
+        [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-            self.title = @"Pick recepient";
+            self.title = @"Pick recepients";
             self.whisperContacts = contacts;
             [self.tableView reloadData];
+
         }];
     }
     return self;
@@ -62,23 +61,51 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:tableViewCellsDequeID];
     }
-    
+
     TSContact *contact = ((TSContact *)[self.whisperContacts objectAtIndex:indexPath.row]);
-        
     cell.textLabel.text = contact.name;
     cell.detailTextLabel.text = [contact labelForRegisteredNumber];
+    if([[self.whisperContacts objectAtIndex:indexPath.row] isSelected]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [((UINavigationController*)self.navigationController.presentingViewController) pushViewController:[[TSMessageViewController alloc] initWithConversation:[self.whisperContacts objectAtIndex:indexPath.row]] animated:NO];
-    [self dismissViewControllerAnimated:YES
-                             completion:nil];
+    [[self.whisperContacts objectAtIndex:indexPath.row] reverseIsSelected];
+    [self.tableView reloadData];
 }
 
-- (void) dismissVC {
+-(IBAction) cancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+-(NSArray*) getSelectedContacts {
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"isSelected = TRUE"];
+    return [self.whisperContacts filteredArrayUsingPredicate:pred];
+}
+
+-(IBAction) next {
+    self.whisperContacts=[self getSelectedContacts];
+    if([self.whisperContacts count]>1) {
+        [self performSegueWithIdentifier:@"TSGroupSetupSegue" sender:self];
+    }
+    else {
+        [[((UINavigationController*)self.navigationController.presentingViewController) topViewController] performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:@"TSGroupSetupSegue"]) {
+        TSGroupSetupViewController *vc = [segue destinationViewController];
+        vc.whisperContacts = [self getSelectedContacts];
+    }
+}
+
 
 - (void)didReceiveMemoryWarning
 {

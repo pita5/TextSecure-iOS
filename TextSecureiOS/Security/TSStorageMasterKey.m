@@ -15,8 +15,6 @@
 #import "TSStorageError.h"
 
 
-#define kStorageMasterKeyWasCreated @"StorageMasterKeyWasCreated"
-#define MASTER_KEY_SIZE 32
 
 
 static uint8_t storageMasterKey[MASTER_KEY_SIZE] = {0};
@@ -66,7 +64,7 @@ static BOOL isMasterKeyLocked = TRUE;
     
     // Update user preferences
     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:kStorageMasterKeyWasCreated];
-    
+    [[NSUserDefaults standardUserDefaults] synchronize];
     return [NSData dataWithBytesNoCopy:storageMasterKey length:MASTER_KEY_SIZE freeWhenDone:NO];
 }
 
@@ -148,6 +146,7 @@ static BOOL isMasterKeyLocked = TRUE;
 
 +(void) eraseStorageMasterKey {
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kStorageMasterKeyWasCreated];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     isMasterKeyLocked = TRUE;
     memset(storageMasterKey, 0, MASTER_KEY_SIZE);
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];

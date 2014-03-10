@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface TSContactPickerViewController : UITableViewController
-
+-(IBAction) cancel;
+-(IBAction) next;
 @end
