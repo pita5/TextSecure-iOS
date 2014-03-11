@@ -141,7 +141,7 @@
         
         RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
         
-        RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.ephemeralOutgoing fromTheirProvideEphemeral:theirEphemeral];
+        RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.senderEphemeral fromTheirProvideEphemeral:theirEphemeral];
         RKCK *sendingChainKey = [rootKey createChainWithEphemeral:newEphemeralKeyPair fromTheirProvideEphemeral:theirEphemeral];
         session.rootKey = receiverChainKey.RK;
         [session addReceiverChain:theirEphemeral chainKey:receiverChainKey.CK];

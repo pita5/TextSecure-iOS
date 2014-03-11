@@ -51,8 +51,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     UIEdgeInsets inset = UIEdgeInsetsMake(44, 0, 0, 0);
     self.tableView.contentInset = inset;
 
-    self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
-    self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
+//    Settings are now in Settings.app
+    
+//    self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
+//    self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
 
     self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
     self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
@@ -205,12 +207,16 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"ComposeMessageSegue"]) {
-//         *vc = [segue destinationViewController];
+        TSMessageViewController *vc = [segue destinationViewController];
 //        [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
-//        if([sender respondsToSelector:@selector(group)]) {
-//            vc.group = [sender performSelector:@selector(group)];
-//        }
+        if([sender respondsToSelector:@selector(group)]) {
+            vc.group = [sender performSelector:@selector(group)];
+        }
     }
+}
+
+-(void)openSettings{
+    
 }
 
 

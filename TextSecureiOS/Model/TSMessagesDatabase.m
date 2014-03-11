@@ -77,7 +77,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
 
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id), message TEXT, timestamp DATE, attachements BLOB, state INTEGER)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
             return;
         }
 
@@ -85,7 +85,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
 
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS sessions (FOREIGN KEY(registered_id) REFERENCES contacts (registered_id) PRIMARY KEY, device_id TEXT PRIMARY KEY, rk BLOB, cks BLOB, ckr BLOB, dhis BLOB, dhir BLOB, dhrs BLOB, dhrr BLOB, ns INT, nr INT, pns INT)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS sessions (device_id TEXT, rk BLOB, cks BLOB, ckr BLOB, dhis BLOB, dhir BLOB, dhrs BLOB, dhrr BLOB, ns INT, nr INT, pns INT, registered_id TEXT, FOREIGN KEY(registered_id) REFERENCES contacts (registered_id), PRIMARY KEY(device_id, registered_id))"]) {
             return;
         }
 

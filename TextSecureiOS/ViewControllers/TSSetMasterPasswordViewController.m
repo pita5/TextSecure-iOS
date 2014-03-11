@@ -82,9 +82,8 @@
         @throw [NSException exceptionWithName:@"Storage master key creation failed" reason:[error localizedDescription] userInfo:nil];
     }
     
-    
     // Create the messages DB
-    if(![TSMessagesDatabase databaseCreateWithError:nil]) {
+    if(![TSMessagesDatabase databaseCreateWithError:&error]) {
         @throw [NSException exceptionWithName:@"Initial setup of messages DB failed" reason:[error localizedDescription] userInfo:nil];
     }
     
