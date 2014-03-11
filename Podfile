@@ -6,11 +6,11 @@ pod 'RNCryptor',				'~> 2.1'
 pod 'FMDB',						'~> 2.1'
 pod 'HockeySDK', 				'~> 3.5.3'
 pod 'libPhoneNumber-iOS',		'~> 0.7.1'
-pod 'AFNetworking', 			'~> 2.0.1'
+pod 'AFNetworking', 			'~> 2.2.0'
 pod 'PonyDebugger', 			'~> 0.3.0'
 pod 'SQLCipher', 				'~> 3.0.1'
 pod 'GoogleProtobuf', 			'~> 2.5.0'
-pod 'SWTableViewCell',       	'~> 0.2.1'
+pod 'SWTableViewCell',       	'~> 0.2.4'
 pod 'curve25519-donna',       	'~> 1.2.1'
 pod 'UIImage-Categories',     	'~> 0.0.1'
 pod 'JSMessagesViewController', '~> 3.4.4'
@@ -31,4 +31,3 @@ post_install do |lib_rep|
     end
   end
 end
-

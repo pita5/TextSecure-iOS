@@ -32,6 +32,7 @@
     if (self = [super init]) {
         operationManager = [[AFHTTPRequestOperationManager manager] initWithBaseURL:[[NSURL alloc] initWithString:textSecureServer]];
         operationManager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
+        operationManager.securityPolicy.allowInvalidCertificates = YES; // We are not signed by a valid certification authority.
         operationManager.requestSerializer = [AFJSONRequestSerializer serializer];
     }
     return self;
