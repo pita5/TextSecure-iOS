@@ -36,7 +36,8 @@
     [super viewDidLoad];
     
     self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextWasTapped:)];
-    
+    self.nextButton.enabled = NO;
+
     self.navigationItem.rightBarButtonItem = self.nextButton;
     
     self.pass.delegate = self;
@@ -56,6 +57,8 @@
         self.firstPass = self.pass.text;
         self.instruction.text = reenterPassword;
         self.pass.text = @"";
+		self.nextButton.enabled = NO;
+
     } else {
         if ([self.pass.text isEqualToString:self.firstPass]) {
             [self setupDatabase];
