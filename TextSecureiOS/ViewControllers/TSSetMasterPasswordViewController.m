@@ -36,7 +36,8 @@
     [super viewDidLoad];
     
     self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextWasTapped:)];
-    
+    self.nextButton.enabled = NO;
+
     self.navigationItem.rightBarButtonItem = self.nextButton;
     
     self.pass.delegate = self;
@@ -56,6 +57,8 @@
         self.firstPass = self.pass.text;
         self.instruction.text = reenterPassword;
         self.pass.text = @"";
+		self.nextButton.enabled = NO;
+
     } else {
         if ([self.pass.text isEqualToString:self.firstPass]) {
             [self setupDatabase];
@@ -121,13 +124,18 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSString *replacedText = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if ([replacedText isEqualToString:@""]) {
-        // Application password shouldn't be empty
-        self.nextButton.enabled = NO;
-    } else{
+
+	// What's the password field going to contain if we let this change occur?
+	NSString *newPass = [textField.text stringByReplacingCharactersInRange:range withString:string];
+
+	// If they entered a character or pasted then we're ok
+	// TODO: enforce a minimum password length in here.
+	if (newPass.length > 0) {
         self.nextButton.enabled = YES;
-    }
+	} else {
+        self.nextButton.enabled = NO;
+	}
+
     return YES;
 }
 
