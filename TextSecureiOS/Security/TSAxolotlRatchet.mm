@@ -192,7 +192,7 @@
 
 + (TSSession*)processPrekey:(TSPrekey*)prekey withContact:(TSContact*)contact deviceId:(int)deviceId{
 
-    TSSession *session = [[TSSession alloc] initWithContact:contact deviceId:deviceId];
+    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:deviceId];
     TSECKeyPair *preKeyPair = [TSUserKeysDatabase preKeyWithId:prekey.prekeyId];
     
     if (preKeyPair){

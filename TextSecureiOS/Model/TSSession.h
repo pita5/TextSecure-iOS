@@ -16,6 +16,8 @@
 
 @interface TSSession : NSObject
 
+- (instancetype)initWithContact:(TSContact*)contact deviceId:(int)deviceId;
+
 @property(readonly)int deviceId;
 @property(readonly)TSContact *contact;
 
@@ -23,36 +25,35 @@
 @property(readwrite)NSData *rootKey;
 
 @property NSData *ephemeralReceiving;
-@property TSECKeyPair *ephemeralOutgoing;
+@property TSECKeyPair *senderEphemeral;
 @property int PN;
 
+@property TSPrekey *preKey;
 
 #pragma mark Prekey methods (non-persistent)
 
 - (BOOL)hasPendingPrekey;
 - (TSPrekey*)pendingPrekey;
 
-- (TSSession*)initWithContact:(TSContact*)contact deviceId:(int)deviceId;
-- (NSData*)theirIdentityKey;
-
 - (BOOL)hasReceiverChain:(NSData*) ephemeral;
 - (BOOL)hasSenderChain;
 
 - (TSChainKey*)receiverChainKey:(NSData*)senderEphemeral;
-- (TSChainKey*)senderChainKey;
-- (TSECKeyPair*)senderEphemeral;
 
-- (TSChainKey*)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
-- (void)setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
-- (TSChainKey*)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(TSChainKey*)chainKey;
+- (void)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(TSChainKey*)chainKey;
 - (void)setSenderChainKey:(TSChainKey*)chainKey;
+- (TSChainKey*)senderChainKey;
+
+- (void)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
+- (void)setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
 
 - (BOOL)hasMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
 - (void)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys;
 
-#pragma mark Helper method
+#pragma mark Helper methods
+- (NSData*)theirIdentityKey;
 
 
 - (void)save;

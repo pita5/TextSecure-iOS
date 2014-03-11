@@ -11,7 +11,7 @@
 
 @interface TSChainKey : NSObject
 
-@property(readonly)int index;
+@property int index;
 @property(readonly)NSData *key;
 
 - (instancetype)initWithChainKeyWithKey:(NSData*)key index:(int)index;

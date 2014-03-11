@@ -419,6 +419,7 @@
 		A5F15A9A170280B700856385 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5F15A99170280B700856385 /* Security.framework */; };
 		A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
+		B602B96318CE9A4B00181564 /* TSChain.m in Sources */ = {isa = PBXBuildFile; fileRef = B602B96218CE9A4B00181564 /* TSChain.m */; };
 		B635B3C7182181E1003CE732 /* TSMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* TSMessageViewController.m */; };
 		B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EC18218456003CE732 /* CoreAudio.framework */; };
 		B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EE18218481003CE732 /* AudioToolbox.framework */; };
@@ -936,6 +937,8 @@
 		A5FBAB93184E980E0012E9A5 /* TSUploadAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSUploadAttachment.h; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.h; sourceTree = "<group>"; };
 		A5FBAB94184E980E0012E9A5 /* TSUploadAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSUploadAttachment.m; path = TextSecureiOS/Networking/Requests/TSUploadAttachment.m; sourceTree = "<group>"; };
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B602B96118CE9A4B00181564 /* TSChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSChain.h; path = Model/TSChain.h; sourceTree = "<group>"; };
+		B602B96218CE9A4B00181564 /* TSChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSChain.m; path = Model/TSChain.m; sourceTree = "<group>"; };
 		B635B38F182181E1003CE732 /* TSMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageViewController.h; path = ViewControllers/Conversations/TSMessageViewController.h; sourceTree = "<group>"; };
 		B635B390182181E1003CE732 /* TSMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageViewController.m; path = ViewControllers/Conversations/TSMessageViewController.m; sourceTree = "<group>"; };
 		B635B3EC18218456003CE732 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -1732,6 +1735,8 @@
 			children = (
 				B6C5FA9618CE3B6300ECC200 /* RKCK.h */,
 				B6C5FA9718CE3B6300ECC200 /* RKCK.m */,
+				B602B96118CE9A4B00181564 /* TSChain.h */,
+				B602B96218CE9A4B00181564 /* TSChain.m */,
 				B6C5FA7818CE355500ECC200 /* TSChainKey.h */,
 				B6C5FA7918CE355500ECC200 /* TSChainKey.m */,
 				B6C5FA9018CE3B3900ECC200 /* TSMessageKeys.h */,
@@ -2483,6 +2488,7 @@
 				A5E6CC86187D0FF1002A1735 /* TSPushMessageContent.mm in Sources */,
 				A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */,
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
+				B602B96318CE9A4B00181564 /* TSChain.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
 				A5145B31184AAD51007BDC73 /* TSMessage.m in Sources */,
 				B6C5FA8918CE3B0900ECC200 /* TSMessageIncoming.m in Sources */,

@@ -295,8 +295,4 @@
   return counter;
 }
 
-
-
-
-
 @end

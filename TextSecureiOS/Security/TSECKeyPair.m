@@ -24,7 +24,7 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
 
 # pragma mark Key pair generation
 
-+(TSECKeyPair*) keyPairGenerateWithPreKeyId:(int32_t)prekeyId {
++ (TSECKeyPair*)keyPairGenerateWithPreKeyId:(int32_t)prekeyId {
     TSECKeyPair* keyPair =[[TSECKeyPair alloc] init];
 
     keyPair->preKeyId = prekeyId;
@@ -40,7 +40,6 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
     
     return keyPair;
 }
-
 
 # pragma mark Key pair usage
 
