@@ -10,6 +10,9 @@ In addition to that, always add curly braces to your `if` conditionals, even if 
 
 One note, for programmers joining us from Java or similar language communities, note that [exceptions are not commonly used for errors that may occur in normal use](http://stackoverflow.com/questions/324284/throwing-an-exception-in-objective-c-cocoa/324805#324805) so familiarize yourself with **NSError** 
 
+###UI conventions
+We prefer to use [Storyboards](https://developer.apple.com/library/ios/documentation/general/conceptual/Devpedia-CocoaApp/Storyboard.html) vs. building UI elements within the code itself. We are not at the stage to provide a .strings localizable file for translating, but the goal is to have translatable strings in a single entry point so that we can reach users in their native language wherever possible. 
+
 ## Tabs vs Spaces
 
 It's the eternal debate. We chose to adopt spaces. Please set your default Xcode configuration to 4 spaces for tabs, and 4 spaces for indentation (it's Xcode's default setting).
