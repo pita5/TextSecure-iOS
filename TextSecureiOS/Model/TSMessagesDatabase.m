@@ -206,10 +206,10 @@ static TSDatabaseManager *messagesDb = nil;
 
     __block TSContact *contact = nil;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM contacts WHERE registeredID=?" withArgumentsInArray:@[registredID]];
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM contacts WHERE registered_id=?" withArgumentsInArray:@[registredID]];
 
         if ([searchInDB next]) {
-            contact = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registeredID"] relay:[searchInDB stringForColumn:@"relay"]];
+            contact = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]];
             contact.identityKey = [searchInDB dataForColumn:@"identityKey"];
             NSData *deviceIds = [searchInDB dataForColumn:@"deviceIds"];
             if (deviceIds) {

@@ -21,9 +21,9 @@
 @implementation TSContactPickerViewController
 
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithCoder:aDecoder];
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         self.title = @"Loading";

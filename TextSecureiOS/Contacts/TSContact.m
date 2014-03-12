@@ -21,14 +21,12 @@
 }
 
 -(instancetype) initWithRegisteredID:(NSString*)registeredID relay:(NSString*)relay{
+
+    self = [super init];;
     
-    self = [TSMessagesDatabase contactForRegisteredID:registeredID];
-    
-    if(!self) {
-        self=[super init];
+    if(self) {
         _registeredID = registeredID;
         _relay = relay;
-        [TSMessagesDatabase storeContact:self];
     }
     return self;
 }

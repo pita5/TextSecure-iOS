@@ -50,14 +50,14 @@
  *  @return TextSecure user's name. Firstname + Lastname of addressbook
  */
 
-- (NSString*) name;
+- (NSString*)name;
 
 /**
  *  Returns addressbook's identifier of the contact
  *
  *  @return ABRecordRef NSNumber-encoded
  */
-- (NSNumber*) addressBookID;
+- (NSNumber*)addressBookID;
 
 /**
  *  Returns the label for the registered phone number
@@ -65,14 +65,14 @@
  *  @return Localized label of the contact's registered phone number
  */
 
--(void) reverseIsSelected;
--(id) initWithRegisteredID:(NSString*)registeredID;
-- (NSString*) labelForRegisteredNumber;
+- (void)reverseIsSelected;
+- (id)initWithRegisteredID:(NSString*)registeredID;
+- (NSString*)labelForRegisteredNumber;
 
 /**
  *  Synchronously saves the TSContact to the database
  */
 
--(void) save;
+- (void)save;
 
 @end
