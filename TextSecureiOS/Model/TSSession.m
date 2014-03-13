@@ -15,10 +15,10 @@
 
 #pragma mark Keys for coder
 
-#define kCoderPN @"kCoderPN"
-#define kCoderRootKey @"kCoderRoot"
-#define kCoderReceiverChains @"kCoderReceiverChains"
-#define kCoderSendingChain @"kCoderSendingChain"
+static NSString* const kCoderPN               = @"kCoderPN";
+static NSString* const kCoderRootKey          = @"kCoderRoot";
+static NSString* const kCoderReceiverChains   = @"kCoderReceiverChains";
+static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 
 @interface TSSession (){
     TSSendingChain *senderChain;
@@ -162,7 +162,7 @@
 
 
 - (void)save{
-#warning not implemented
+    [TSMessagesDatabase storeSession:self];
 }
 
 /**

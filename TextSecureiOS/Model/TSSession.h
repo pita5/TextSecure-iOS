@@ -17,6 +17,7 @@
 @interface TSSession : NSObject<NSCoding>
 
 - (instancetype)initWithContact:(TSContact*)contact deviceId:(int)deviceId;
+- (void)addContact:(TSContact*)contact deviceId:(int)deviceId;
 
 @property(readonly)int deviceId;
 @property(readonly)TSContact *contact;

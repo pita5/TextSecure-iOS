@@ -10,8 +10,8 @@
 
 @implementation TSSendingChain
 
-NSString *const kChainKey       = @"kChainKey";
-NSString *const kChainEphemeral = @"kChainEphemeral";
+static NSString* const kChainKey       = @"kChainKey";
+static NSString* const kChainEphemeral = @"kChainEphemeral";
 
 - (instancetype)initWithChainKey:(TSChainKey*)chainKey ephemeral:(TSECKeyPair*)ephemeral{
     self = [super init];

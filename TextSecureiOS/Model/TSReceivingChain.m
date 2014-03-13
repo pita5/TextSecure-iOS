@@ -8,12 +8,11 @@
 
 #import "TSReceivingChain.h"
 
+@implementation TSReceivingChain
+
 NSString *const kChainKey       = @"kChainKey";
 NSString *const kChainEphemeral = @"kChainEphemeral";
 NSString *const kChainMessages  = @"kChainMessages";
-
-@implementation TSReceivingChain
-
 
 -(id)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];

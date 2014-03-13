@@ -13,8 +13,8 @@
 
 @implementation TSChainKey
 
-NSString * const kChainKeyKey   = @"kChainKeyKey";
-NSString * const kChainKeyIndex = @"kChainKeyIndex";
+static NSString * const kChainKeyKey   = @"kChainKeyKey";
+static NSString * const kChainKeyIndex = @"kChainKeyIndex";
 
 - (instancetype)initWithChainKeyWithKey:(NSData*)key index:(int)index{
     self = [super init];
