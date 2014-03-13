@@ -10,19 +10,39 @@
 #import "TSHKDF.h"
 #import "TSMessageKeys.h"
 #import "Cryptography.h"
+
 @implementation TSChainKey
+
+NSString * const kChainKeyKey   = @"kChainKeyKey";
+NSString * const kChainKeyIndex = @"kChainKeyIndex";
 
 - (instancetype)initWithChainKeyWithKey:(NSData*)key index:(int)index{
     self = [super init];
     if (self) {
-        _key = key;
+        _key   = key;
         _index = index;
     }
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    
+    if (self) {
+        _key   = [aDecoder decodeObjectForKey:kChainKeyKey];
+        _index = [aDecoder decodeIntForKey:kChainKeyIndex];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.key forKey:kChainKeyKey];
+    [aCoder encodeInteger:self.index forKey:kChainKeyIndex];
+}
+
 - (TSMessageKeys*)messageKeys{
-    int hmacKeyMK = 0x01;
+    int hmacKeyMK  = 0x01;
     
     NSData* nextMK = [Cryptography computeHMAC:self.key withHMACKey:[NSData dataWithBytes:&hmacKeyMK length:sizeof(hmacKeyMK)]];
 
@@ -37,7 +57,7 @@
 }
 
 - (TSChainKey*)nextChainKey{
-    int hmacKeyCK = 0x02;
+    int hmacKeyCK  = 0x02;
     NSData* nextCK = [Cryptography computeHMAC:self.key  withHMACKey:[NSData dataWithBytes:&hmacKeyCK length:sizeof(hmacKeyCK)]];
     return [[TSChainKey alloc] initWithChainKeyWithKey:nextCK index:self.index+1];
 }

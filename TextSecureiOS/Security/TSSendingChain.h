@@ -10,7 +10,7 @@
 @class TSChainKey;
 @class TSECKeyPair;
 
-@interface TSSendingChain : NSObject
+@interface TSSendingChain : NSObject<NSCoding>
 
 - (instancetype)initWithChainKey:(TSChainKey*)chainKey ephemeral:(TSECKeyPair*)ephemeral;
 

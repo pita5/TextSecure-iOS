@@ -17,7 +17,6 @@
 
 #define kCoderPN @"kCoderPN"
 #define kCoderRootKey @"kCoderRoot"
-#define kCoderSenderChainKey @"kCoderSenderChainKey"
 #define kCoderReceiverChains @"kCoderReceiverChains"
 #define kCoderSendingChain @"kCoderSendingChain"
 
@@ -30,14 +29,25 @@
 
 @implementation TSSession
 
-//- (id)initWithCoder:(NSCoder *)aDecoder{
-//    self = [super init];
-//    
-//    if (self) {
-//      [aDecoder decodeObjectForKey:<#(NSString *)#>];
-//    }
-//    
-//}
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    
+    if (self) {
+        self.rootKey = [aDecoder decodeObjectForKey:kCoderRootKey];
+        self.PN = [aDecoder decodeIntForKey:kCoderPN];
+        senderChain = [aDecoder decodeObjectForKey:kCoderSendingChain];
+        receiverChains = [aDecoder decodeObjectForKey:kCoderReceiverChains];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.rootKey forKey:kCoderRootKey];
+    [aCoder encodeInt:self.PN forKey:kCoderPN];
+    [aCoder encodeObject:senderChain forKey:kCoderSendingChain];
+    [aCoder encodeObject:receiverChains forKey:kCoderReceiverChains];
+}
 
 - (void)addContact:(TSContact*)contact deviceId:(int)deviceId{
     _contact = contact;
@@ -80,6 +90,14 @@
 
 - (void)setSenderChainKey:(TSChainKey*)chainKey{
     senderChain = [[TSSendingChain alloc] initWithChainKey:chainKey ephemeral:senderChain.ephemeral];
+}
+
+- (TSECKeyPair*)senderEphemeral{
+    return senderChain.ephemeral;
+}
+
+- (void)setSenderEphemeral:(TSECKeyPair *)ephemeralPair{
+    senderChain = [[TSSendingChain alloc] initWithChainKey:senderChain.chainKey ephemeral:ephemeralPair];
 }
 
 - (BOOL)hasReceiverChain:(NSData*) ephemeral{

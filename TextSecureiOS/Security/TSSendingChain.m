@@ -10,4 +10,33 @@
 
 @implementation TSSendingChain
 
+NSString *const kChainKey       = @"kChainKey";
+NSString *const kChainEphemeral = @"kChainEphemeral";
+
+- (instancetype)initWithChainKey:(TSChainKey*)chainKey ephemeral:(TSECKeyPair*)ephemeral{
+    self = [super init];
+    
+    if (self) {
+        _chainKey = chainKey;
+        _ephemeral = ephemeral;
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    
+    if (self) {
+        _chainKey  = [aDecoder decodeObjectForKey:kChainKey];
+        _ephemeral = [aDecoder decodeObjectForKey:kChainEphemeral];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.chainKey forKey:kChainKey];
+    [aCoder encodeObject:self.ephemeral forKey:kChainEphemeral];
+}
+
+
 @end
