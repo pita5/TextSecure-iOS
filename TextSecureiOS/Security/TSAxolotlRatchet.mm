@@ -114,9 +114,9 @@
     
     TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
     
-    if ([session hasPendingPrekey]) {
+    if ([session hasPendingPreKey]) {
         
-        TSPrekey *prekey = [session pendingPrekey];
+        TSPrekey *prekey = [session pendingPreKey];
         
         encryptedMessage = [[TSPreKeyWhisperMessage alloc]initWithPreKeyId:[NSNumber numberWithInt:prekey.prekeyId] senderPrekey:prekey.ephemeralKey senderIdentityKey:prekey.identityKey message:[encryptedMessage getTextSecure_WhisperMessage] forVersion:[self currentProtocolVersion]];
 
@@ -141,7 +141,7 @@
         
         RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
         
-        RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.ephemeralOutgoing fromTheirProvideEphemeral:theirEphemeral];
+        RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.senderEphemeral fromTheirProvideEphemeral:theirEphemeral];
         RKCK *sendingChainKey = [rootKey createChainWithEphemeral:newEphemeralKeyPair fromTheirProvideEphemeral:theirEphemeral];
         session.rootKey = receiverChainKey.RK;
         [session addReceiverChain:theirEphemeral chainKey:receiverChainKey.CK];

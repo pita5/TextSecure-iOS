@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSChain.h"
+#import "TSReceivingChain.h"
 
-@implementation TSChain
+@implementation TSReceivingChain
 
 @end

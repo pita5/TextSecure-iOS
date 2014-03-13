@@ -20,7 +20,7 @@
 + (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session;
 
 // Method for incoming messages
-+ (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message;
++ (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message fromContact:(TSContact*)contact;
 
 #pragma mark Identity
 + (TSECKeyPair*)myIdentityKey;
