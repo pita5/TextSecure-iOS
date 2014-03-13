@@ -9,16 +9,50 @@
 #import "TSUserKeysDatabase.h"
 #import "TSSession.h"
 #import "TSMessage.h"
-#import "TSChain.h"
+#import "TSReceivingChain.h"
+#import "TSSendingChain.h"
 #import "TSPreKeyWhisperMessage.hh"
 
+#pragma mark Keys for coder
+
+static NSString* const kCoderPN               = @"kCoderPN";
+static NSString* const kCoderRootKey          = @"kCoderRoot";
+static NSString* const kCoderReceiverChains   = @"kCoderReceiverChains";
+static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
+
 @interface TSSession (){
-    TSChainKey *senderChainKey;
+    TSSendingChain *senderChain;
     NSMutableArray *receiverChains;
 }
+
 @end
 
 @implementation TSSession
+
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    
+    if (self) {
+        self.rootKey = [aDecoder decodeObjectForKey:kCoderRootKey];
+        self.PN = [aDecoder decodeIntForKey:kCoderPN];
+        senderChain = [aDecoder decodeObjectForKey:kCoderSendingChain];
+        receiverChains = [aDecoder decodeObjectForKey:kCoderReceiverChains];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.rootKey forKey:kCoderRootKey];
+    [aCoder encodeInt:self.PN forKey:kCoderPN];
+    [aCoder encodeObject:senderChain forKey:kCoderSendingChain];
+    [aCoder encodeObject:receiverChains forKey:kCoderReceiverChains];
+}
+
+- (void)addContact:(TSContact*)contact deviceId:(int)deviceId{
+    _contact = contact;
+    _deviceId = deviceId;
+}
 
 - (instancetype)initWithContact:(TSContact*)contact deviceId:(int)deviceId{
     self = [super init];
@@ -33,8 +67,12 @@
     return self.contact.identityKey;
 }
 
-- (BOOL)hasPendingPrekey{
-    return self.preKey != nil;
+- (BOOL)hasPendingPreKey{
+    return self.pendingPreKey!= nil;
+}
+
+- (TSPrekey *)pendingPrekey{
+    return self.pendingPrekey;
 }
 
 - (BOOL)hasSenderChain{
@@ -42,7 +80,7 @@
 }
 
 - (TSChainKey*)senderChainKey{
-    return senderChainKey;
+    return senderChain.chainKey;
 }
 
 - (void)setSenderChain:(TSECKeyPair*)senderEphemeralPair chainkey:(TSChainKey*)chainKey{
@@ -51,7 +89,15 @@
 }
 
 - (void)setSenderChainKey:(TSChainKey*)chainKey{
-    senderChainKey = chainKey;
+    senderChain = [[TSSendingChain alloc] initWithChainKey:chainKey ephemeral:senderChain.ephemeral];
+}
+
+- (TSECKeyPair*)senderEphemeral{
+    return senderChain.ephemeral;
+}
+
+- (void)setSenderEphemeral:(TSECKeyPair *)ephemeralPair{
+    senderChain = [[TSSendingChain alloc] initWithChainKey:senderChain.chainKey ephemeral:ephemeralPair];
 }
 
 - (BOOL)hasReceiverChain:(NSData*) ephemeral{
@@ -62,9 +108,9 @@
     return [self receiverChain:senderEphemeral].chainKey;
 }
 
-- (TSChain*)receiverChain:(NSData*)senderEphemeral{
+- (TSReceivingChain*)receiverChain:(NSData*)senderEphemeral{
     int index = 0;
-    for(TSChain *chain in receiverChains){
+    for(TSReceivingChain *chain in receiverChains){
         if ([chain.ephemeral isEqualToData:senderEphemeral]) {
             chain.chainKey.index = index;
             return chain;
@@ -76,7 +122,7 @@
 
 - (void)addReceiverChain:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey{
     
-    TSChain *chain = [[TSChain alloc]initWithChainKey:chainKey epehemeral:senderEphemeral];
+    TSReceivingChain *chain = [[TSReceivingChain alloc]initWithChainKey:chainKey ephemeral:senderEphemeral];
     
     if ([receiverChains count] > 4) {
         [receiverChains removeObjectAtIndex:0];
@@ -87,9 +133,9 @@
 
 - (void)setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey{
     
-    TSChain *chain = [self receiverChain:senderEphemeral];
+    TSReceivingChain *chain = [self receiverChain:senderEphemeral];
     
-    TSChain *newChain = [[TSChain alloc] initWithChainKey:chainKey epehemeral:senderEphemeral];
+    TSReceivingChain *newChain = [[TSReceivingChain alloc] initWithChainKey:chainKey ephemeral:senderEphemeral];
     
     [receiverChains replaceObjectAtIndex:[receiverChains indexOfObject:chain] withObject:newChain];
 }
@@ -108,17 +154,15 @@
 }
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys{
-    
-    TSChain *chain = [self receiverChain:ephemeral];
+    TSReceivingChain *chain = [self receiverChain:ephemeral];
     [chain.messageKeys addObject:messageKeys];
-
 }
 
 #pragma mark Helper method
 
 
 - (void)save{
-#warning not implemented
+    [TSMessagesDatabase storeSession:self];
 }
 
 /**
@@ -126,14 +170,12 @@
  */
 
 - (void)clear{
-    senderChainKey = nil;
+    senderChain = nil;
     receiverChains = [NSMutableArray array];
-    self.theirEphemeralKey = nil;
     self.rootKey = nil;
-    self.ephemeralReceiving = nil;
     self.senderEphemeral = nil;
     self.PN = 0;
-    self.preKey = nil;
+    self.pendingPreKey = nil;
 }
 
 @end

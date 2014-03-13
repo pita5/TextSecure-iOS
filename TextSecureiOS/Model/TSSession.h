@@ -14,26 +14,20 @@
 #import "TSChainKey.h"
 #import "TSEncryptedWhisperMessage.hh"
 
-@interface TSSession : NSObject
+@interface TSSession : NSObject<NSCoding>
 
 - (instancetype)initWithContact:(TSContact*)contact deviceId:(int)deviceId;
+- (void)addContact:(TSContact*)contact deviceId:(int)deviceId;
 
 @property(readonly)int deviceId;
 @property(readonly)TSContact *contact;
 
-@property(copy)NSData *theirEphemeralKey;
-@property(readwrite)NSData *rootKey;
-
-@property NSData *ephemeralReceiving;
-@property TSECKeyPair *senderEphemeral;
+@property NSData *rootKey;
 @property int PN;
 
-@property TSPrekey *preKey;
+@property TSPrekey *pendingPreKey;
 
-#pragma mark Prekey methods (non-persistent)
-
-- (BOOL)hasPendingPrekey;
-- (TSPrekey*)pendingPrekey;
+- (BOOL)hasPendingPreKey;
 
 - (BOOL)hasReceiverChain:(NSData*) ephemeral;
 - (BOOL)hasSenderChain;
@@ -52,9 +46,12 @@
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys;
 
+- (void)setSenderEphemeral:(TSECKeyPair*)ephemeralPair;
+
+- (TSECKeyPair*)senderEphemeral;
+
 #pragma mark Helper methods
 - (NSData*)theirIdentityKey;
-
 
 - (void)save;
 
