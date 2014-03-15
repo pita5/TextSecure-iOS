@@ -78,6 +78,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="nextButton" destination="H15-Xy-Xhr" id="yRj-OS-BlR"/>
                         <segue destination="gdW-po-j3F" kind="push" identifier="TSGroupSetupSegue" id="w6o-KW-DN0"/>
                         <segue destination="ka8-ZU-Vji" kind="custom" identifier="ComposeMessageSegue" customClass="TSReplaceSegue" id="H42-Az-Klt"/>
                     </connections>

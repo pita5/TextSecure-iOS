@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface TSContactPickerViewController : UITableViewController
--(IBAction) cancel;
+
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *nextButton;
+
 -(IBAction) next;
 @end
