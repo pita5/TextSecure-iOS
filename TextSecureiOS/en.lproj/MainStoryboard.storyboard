@@ -31,12 +31,13 @@
                     <navigationItem key="navigationItem" title="Messages" id="ll4-Qe-OAW">
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="kBQ-Ap-uex">
                             <connections>
+                                <action selector="composeMessage" destination="KRb-Ro-u27" id="t3P-7y-QjN"/>
                                 <segue destination="l9T-Dj-2CP" kind="modal" id="FyT-uc-tJ3"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="composeBarButtonItem" destination="kBQ-Ap-uex" id="uob-4G-cyw"/>
+                        <outlet property="composeBarButtonItem" destination="kBQ-Ap-uex" id="CXj-Ep-Dg2"/>
                         <outlet property="tableView" destination="J2e-4a-z97" id="b6p-Kp-cHI"/>
                         <segue destination="opT-L0-F9p" kind="modal" identifier="ObtainVerificationCode" id="dxJ-2H-wBi"/>
                         <segue destination="1Ei-fN-pj9" kind="modal" identifier="PasswordUnlockSegue" id="sVj-e7-TrK"/>
