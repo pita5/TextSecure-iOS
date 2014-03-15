@@ -27,7 +27,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
+
+    self.nextButton.enabled = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -70,11 +71,11 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if([[textField.text stringByReplacingCharactersInRange:range withString:string] length]>0) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.nextButton.enabled = YES;
         
     }
     else {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.nextButton.enabled = NO;
 
     }
     return YES;
@@ -100,11 +101,14 @@
 
 
 -(IBAction)createGroup {
-    [[((UINavigationController*)self.navigationController.presentingViewController) topViewController] performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
-    [self dismissViewControllerAnimated:YES completion:nil];
-
+    [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
 }
 
-
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.destinationViewController isKindOfClass:[TSMessageViewController class]]) {
+        TSMessageViewController *vc = segue.destinationViewController;
+        vc.group = self.group;
+    }
+}
 
 @end

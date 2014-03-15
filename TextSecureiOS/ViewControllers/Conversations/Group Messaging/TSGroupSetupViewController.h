@@ -13,6 +13,7 @@
 @interface TSGroupSetupViewController : UIViewController<UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextFieldDelegate>
 @property(nonatomic,strong) IBOutlet UITextField *groupName;
 @property(nonatomic,strong) IBOutlet UIButton *groupPhoto;
+@property(nonatomic,strong) IBOutlet UIBarButtonItem *nextButton;
 @property(nonatomic,strong) NSArray* whisperContacts;
 @property(nonatomic,strong) TSGroup* group;
 - (IBAction) setGroupPhotoPressed:(UIButton *)sender;
