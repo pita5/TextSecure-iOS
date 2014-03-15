@@ -290,7 +290,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if (nPosts == -1) {
             while ([messages next]) {
