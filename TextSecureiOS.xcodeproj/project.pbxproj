@@ -12,6 +12,8 @@
 		4C0ACB4B186C876200B328D5 /* TSMessageConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */; };
 		4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */; };
 		4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */; };
+		6FCE040B18D427CE00C33B34 /* TSReplaceSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */; };
+		6FCE040C18D427CE00C33B34 /* TSStartOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCE040A18D427CE00C33B34 /* TSStartOverSegue.m */; };
 		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
 		8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C42C14418551B8C000DD353 /* TSHKDFTests.m */; };
 		8C49FC1018497E86006132F6 /* TSStorageError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49FC0F18497E86006132F6 /* TSStorageError.m */; };
@@ -476,6 +478,10 @@
 		4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordUnlockViewController.h; path = ViewControllers/PasswordUnlockViewController.h; sourceTree = "<group>"; };
 		4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordUnlockViewController.m; path = ViewControllers/PasswordUnlockViewController.m; sourceTree = "<group>"; };
 		4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSMessagesDatabaseTests.m; sourceTree = "<group>"; };
+		6FCE040718D427CE00C33B34 /* TSReplaceSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSReplaceSegue.h; path = Utility/TSReplaceSegue.h; sourceTree = "<group>"; };
+		6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSReplaceSegue.m; path = Utility/TSReplaceSegue.m; sourceTree = "<group>"; };
+		6FCE040918D427CE00C33B34 /* TSStartOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStartOverSegue.h; path = Utility/TSStartOverSegue.h; sourceTree = "<group>"; };
+		6FCE040A18D427CE00C33B34 /* TSStartOverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStartOverSegue.m; path = Utility/TSStartOverSegue.m; sourceTree = "<group>"; };
 		8C3C917518544FDF003EA71D /* TSHKDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSHKDF.h; path = Security/TSHKDF.h; sourceTree = "<group>"; };
 		8C3C917618544FDF003EA71D /* TSHKDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSHKDF.m; path = Security/TSHKDF.m; sourceTree = "<group>"; };
 		8C42C13918551B8C000DD353 /* TextSecureiOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TextSecureiOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1694,6 +1700,10 @@
 		A5F15AA317029C5300856385 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				6FCE040718D427CE00C33B34 /* TSReplaceSegue.h */,
+				6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */,
+				6FCE040918D427CE00C33B34 /* TSStartOverSegue.h */,
+				6FCE040A18D427CE00C33B34 /* TSStartOverSegue.m */,
 				A5169D14170FEB1900A2CE9E /* FilePath.h */,
 				A5169D15170FEB1900A2CE9E /* FilePath.m */,
 				A5169D18170FEB1900A2CE9E /* Constants.h */,
@@ -2459,6 +2469,7 @@
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
+				6FCE040C18D427CE00C33B34 /* TSStartOverSegue.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
 				8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */,
 				8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */,
@@ -2489,6 +2500,7 @@
 				A5E6CC83187D0FF1002A1735 /* TSMessageSignal.mm in Sources */,
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */,
+				6FCE040B18D427CE00C33B34 /* TSReplaceSegue.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,

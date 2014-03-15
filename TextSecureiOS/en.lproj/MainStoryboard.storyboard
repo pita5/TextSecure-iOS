@@ -32,16 +32,15 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="compose" id="kBQ-Ap-uex">
                             <connections>
                                 <action selector="composeMessage" destination="KRb-Ro-u27" id="t3P-7y-QjN"/>
-                                <segue destination="l9T-Dj-2CP" kind="modal" id="FyT-uc-tJ3"/>
+                                <segue destination="Szt-0Y-0P5" kind="push" id="HOp-vH-pQU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="composeBarButtonItem" destination="kBQ-Ap-uex" id="CXj-Ep-Dg2"/>
                         <outlet property="tableView" destination="J2e-4a-z97" id="b6p-Kp-cHI"/>
-                        <segue destination="opT-L0-F9p" kind="modal" identifier="ObtainVerificationCode" id="dxJ-2H-wBi"/>
                         <segue destination="1Ei-fN-pj9" kind="modal" identifier="PasswordUnlockSegue" id="sVj-e7-TrK"/>
-                        <segue destination="ka8-ZU-Vji" kind="push" identifier="ComposeMessageSegue" id="xRs-2a-bKz"/>
+                        <segue destination="qFz-tn-qz1" kind="custom" identifier="ObtainVerificationCode" customClass="TSStartOverSegue" id="iQG-bR-kL6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OQN-EK-1ZQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -72,19 +71,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add Participants" id="a7e-ls-6rF">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="w9I-rw-YDG">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rCQ-GJ-crD">
-                                <rect key="frame" x="16" y="5" width="71" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Cancel">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="cancel" destination="Szt-0Y-0P5" eventType="touchUpInside" id="aAz-16-Nuc"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Next" id="H15-Xy-Xhr">
                             <connections>
                                 <action selector="next" destination="Szt-0Y-0P5" id="mYm-XK-UdZ"/>
@@ -93,26 +79,12 @@
                     </navigationItem>
                     <connections>
                         <segue destination="gdW-po-j3F" kind="push" identifier="TSGroupSetupSegue" id="w6o-KW-DN0"/>
+                        <segue destination="ka8-ZU-Vji" kind="custom" identifier="ComposeMessageSegue" customClass="TSReplaceSegue" id="H42-Az-Klt"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dxG-aw-JWB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1549" y="-6281"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="M4q-Xf-xVo">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="l9T-Dj-2CP" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="LYb-SD-Q0z">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="Szt-0Y-0P5" kind="relationship" relationship="rootViewController" id="Uae-0A-3Ax"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="l8L-cm-ORJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2106" y="-6281"/>
         </scene>
         <!--Set Master Password View Controller-->
         <scene sceneID="lPb-1c-Xuz">
@@ -155,17 +127,17 @@
                         <outlet property="instruction" destination="CHV-73-Xsr" id="dLI-8I-M78"/>
                         <outlet property="nextButton" destination="XYh-Nb-r5g" id="7dt-ks-e8r"/>
                         <outlet property="pass" destination="loe-TW-3kA" id="mlr-Lc-FQa"/>
-                        <segue destination="CYX-aS-3RN" kind="modal" identifier="BeginUsingApp" modalTransitionStyle="flipHorizontal" id="zX6-L7-bmH"/>
+                        <segue destination="KRb-Ro-u27" kind="custom" identifier="BeginUsingApp" customClass="TSStartOverSegue" id="P7Y-NC-M85"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aGF-ZA-evY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2607" y="-4383"/>
         </scene>
-        <!--Compose Message View Controller-->
+        <!--Message View Controller-->
         <scene sceneID="Qdv-M1-o0E">
             <objects>
-                <viewController id="ka8-ZU-Vji" customClass="ComposeMessageViewController" sceneMemberID="viewController">
+                <viewController id="ka8-ZU-Vji" customClass="TSMessageViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="GpH-cz-08N"/>
                         <viewControllerLayoutGuide type="bottom" id="Kic-5c-lwL"/>
@@ -326,29 +298,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2fV-5u-0dj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-3101" y="-4383"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="Dpj-vH-4bs">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="opT-L0-F9p" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="g16-0o-MZh"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ak7-zV-nhE">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <connections>
-                            <outlet property="delegate" destination="opT-L0-F9p" id="nj7-eT-BWX"/>
-                        </connections>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Lc9-5L-x5e">
-                        <rect key="frame" x="0.0" y="416" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="qFz-tn-qz1" kind="relationship" relationship="rootViewController" id="BXD-3l-CoB"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5ow-hb-X0z" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4031" y="-4383"/>
         </scene>
         <!--Verification View Controller - Title-->
         <scene sceneID="m14-Pz-4bb">
@@ -563,6 +512,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="BXD-3l-CoB"/>
+        <segue reference="IPq-is-JQN"/>
+        <segue reference="iQG-bR-kL6"/>
     </inferredMetricsTieBreakers>
 </document>
