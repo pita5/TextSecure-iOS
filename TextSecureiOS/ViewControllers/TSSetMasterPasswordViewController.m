@@ -34,11 +34,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextWasTapped:)];
-    self.nextButton.enabled = NO;
 
-    self.navigationItem.rightBarButtonItem = self.nextButton;
+    self.nextButton.enabled = NO;
     
     self.pass.delegate = self;
     

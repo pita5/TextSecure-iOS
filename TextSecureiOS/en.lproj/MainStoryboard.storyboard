@@ -143,9 +143,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="vUw-4M-l6C"/>
+                    <navigationItem key="navigationItem" id="vUw-4M-l6C">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="XYh-Nb-r5g">
+                            <connections>
+                                <action selector="nextWasTapped:" destination="UTA-HQ-Ilx" id="A83-gM-jqb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="instruction" destination="CHV-73-Xsr" id="dLI-8I-M78"/>
+                        <outlet property="nextButton" destination="XYh-Nb-r5g" id="7dt-ks-e8r"/>
                         <outlet property="pass" destination="loe-TW-3kA" id="mlr-Lc-FQa"/>
                         <segue destination="CYX-aS-3RN" kind="modal" identifier="BeginUsingApp" modalTransitionStyle="flipHorizontal" id="zX6-L7-bmH"/>
                     </connections>
