@@ -420,11 +420,18 @@
                         </constraints>
                     </scrollView>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <navigationItem key="navigationItem" title="Title" id="7Li-Ch-jtZ"/>
+                    <navigationItem key="navigationItem" title="Title" id="7Li-Ch-jtZ">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="VEV-qi-6vU">
+                            <connections>
+                                <action selector="sendVerification:" destination="qFz-tn-qz1" id="Zzn-qE-qfx"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="countryCodeInput" destination="Xkd-FN-dW2" id="7oj-PC-7Y2"/>
                         <outlet property="countryName" destination="ZIT-Cx-8zb" id="cyw-UL-acV"/>
                         <outlet property="explanationText" destination="m8n-0d-1hR" id="BIu-0X-oxP"/>
+                        <outlet property="nextButton" destination="VEV-qi-6vU" id="SCe-hl-6jj"/>
                         <outlet property="phoneNumber" destination="7sJ-01-Nbg" id="YxP-CM-eCq"/>
                         <outlet property="scrollView" destination="qKi-WS-gmV" id="soL-5d-Rby"/>
                         <segue destination="G9I-Gu-J6D" kind="push" identifier="ConfirmVerificationCode" id="Vki-BQ-2eN"/>
