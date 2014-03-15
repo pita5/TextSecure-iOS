@@ -251,9 +251,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block BOOL success = NO;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        int state = *(message.state);
-        
-        success = [db executeUpdate:@"INSERT INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state) VALUES (?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, message.group.id, message.content, message.timestamp, message.attachments, [NSNumber numberWithInt:state]]];
+        success = [db executeUpdate:@"INSERT INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state) VALUES (?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, message.group.id, message.content, message.timestamp, message.attachments, [NSNumber numberWithInt:message.state]]];
     }];
     
     return success;
