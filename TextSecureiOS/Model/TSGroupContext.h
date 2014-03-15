@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TSProtocols.h"
 #import "TSAttachment.h"
 
 @interface TSGroupContext : NSObject
