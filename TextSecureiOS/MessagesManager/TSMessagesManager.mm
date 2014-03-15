@@ -33,6 +33,11 @@
 
 @implementation TSMessagesManager
 
+- (void)scheduleMessageSend:(TSMessage *)message
+{
+    [TSMessagesDatabase storeMessage:message];
+#warning not implemented
+}
 
 + (id)sharedManager {
     static TSMessagesManager *sharedMyManager = nil;

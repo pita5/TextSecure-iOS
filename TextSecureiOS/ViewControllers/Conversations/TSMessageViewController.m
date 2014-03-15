@@ -41,6 +41,14 @@
     return self;
 }
 
+- (void)reloadMessages {
+    if (!self.group) {
+        self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
+    }
+
+    [self.tableView reloadData];
+}
+
 -(void) setupThread  {
     self.title = [self.contact name];
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
@@ -106,6 +114,7 @@
     //    }
 
     [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+    [self reloadMessages];
 
     [self finishSend];
 }

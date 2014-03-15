@@ -251,7 +251,9 @@ static TSDatabaseManager *messagesDb = nil;
     __block BOOL success = NO;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        success = [db executeUpdate:@"INSERT INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state) VALUES (?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, message.group.id, message.content, message.timestamp, message.attachments, [NSNumber numberWithInt:message.state]]];
+        id groupId = message.group ? message.group.id : [NSNull null];
+
+        success = [db executeUpdate:@"INSERT INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state) VALUES (?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state]]];
     }];
     
     return success;
@@ -263,7 +265,7 @@ static TSDatabaseManager *messagesDb = nil;
     NSString *receiverID = [messages stringForColumn:@"recipient_id"];
     
     NSDate *date = [messages dateForColumn:@"timestamp"];
-    NSString *content = [messages stringForColumn:@"content"];
+    NSString *content = [messages stringForColumn:@"message"];
     NSArray *attachements = [NSKeyedUnarchiver unarchiveObjectWithData:[messages dataForColumn:@"attachements"]];
     //NSString *groupID = [messages stringForColumn:@"group_id"];
     int state = [messages intForColumn:@"state"];
