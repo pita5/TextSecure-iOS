@@ -85,7 +85,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS sessions (FOREIGN KEY(registered_id) REFERENCES contacts (registered_id) PRIMARY KEY, device_id TEXT PRIMARY KEY, serialized_session BLOB)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS sessions (registered_id TEXT, device_id TEXT, serialized_session BLOB, FOREIGN KEY(registered_id) REFERENCES contacts (registered_id), PRIMARY KEY(registered_id, device_id))" ]) {
             return;
         }
         
