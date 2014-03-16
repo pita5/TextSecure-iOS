@@ -413,7 +413,7 @@ static TSDatabaseManager *messagesDb = nil;
     return success;
 }
 
-+ (NSArray*)sessionsForContact:(TSContact*)contact;{
++ (NSArray*)sessionsForContact:(TSContact*)contact{
     openDBMacroNil
     __block NSMutableArray *sessions = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {

@@ -36,7 +36,7 @@
 - (void)scheduleMessageSend:(TSMessage *)message
 {
     [TSMessagesDatabase storeMessage:message];
-#warning not implemented
+    [self sendMessage:message];
 }
 
 + (id)sharedManager {
