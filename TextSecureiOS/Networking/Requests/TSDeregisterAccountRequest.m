@@ -12,7 +12,9 @@
 
 
 - (id)initWithUser:(NSString*)user {
-    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", textSecureAccountsAPI, user]]];
+    
+    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/code/%@", textSecureAccountsAPI, @"sms", user]]];
+
     
     self.HTTPMethod = @"DELETE";
 

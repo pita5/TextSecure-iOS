@@ -111,7 +111,7 @@
         [changePasswordDialogue show];
     }
     else if([[url query] isEqualToString:@"deregisterUserRequest"]) {
-        UIAlertView* deregisterDialogue = [[UIAlertView alloc] initWithTitle:@"Deregister from TextSecure" message:@"are you sure?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        UIAlertView* deregisterDialogue = [[UIAlertView alloc] initWithTitle:@"Deregister from TextSecure" message:@"the app will clear your data and restart" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
         deregisterDialogue.tag = kDeregisterAlertView;
         [deregisterDialogue show];
     }
@@ -145,9 +145,7 @@
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 [[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
             }];
-
             
-#warning not implemented
         }
     }
 }
