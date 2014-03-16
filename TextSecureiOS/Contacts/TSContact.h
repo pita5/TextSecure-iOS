@@ -66,7 +66,6 @@
  */
 
 - (void)reverseIsSelected;
-- (id)initWithRegisteredID:(NSString*)registeredID;
 - (NSString*)labelForRegisteredNumber;
 
 /**

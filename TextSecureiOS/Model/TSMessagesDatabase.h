@@ -36,6 +36,10 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 + (TSContact*)contactForRegisteredID:(NSString*)registredID;
 + (BOOL)storeContact:(TSContact*)contact;
 
+#pragma mark Conversations
+
++ (NSArray*)conversations;
+
 #pragma mark Sessions
 
 /**
