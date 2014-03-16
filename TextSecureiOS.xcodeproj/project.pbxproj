@@ -486,7 +486,6 @@
 		6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSReplaceSegue.m; path = Utility/TSReplaceSegue.m; sourceTree = "<group>"; };
 		6FCE040918D427CE00C33B34 /* TSStartOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStartOverSegue.h; path = Utility/TSStartOverSegue.h; sourceTree = "<group>"; };
 		6FCE040A18D427CE00C33B34 /* TSStartOverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStartOverSegue.m; path = Utility/TSStartOverSegue.m; sourceTree = "<group>"; };
-		6FF26D9E18D532F400696AD3 /* TSProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSProtocols.h; path = Security/TSProtocols.h; sourceTree = "<group>"; };
 		8C3C917518544FDF003EA71D /* TSHKDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSHKDF.h; path = Security/TSHKDF.h; sourceTree = "<group>"; };
 		8C3C917618544FDF003EA71D /* TSHKDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSHKDF.m; path = Security/TSHKDF.m; sourceTree = "<group>"; };
 		8C42C13918551B8C000DD353 /* TextSecureiOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TextSecureiOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1675,7 +1674,6 @@
 		A5F15AA117029BB400856385 /* Security */ = {
 			isa = PBXGroup;
 			children = (
-				6FF26D9E18D532F400696AD3 /* TSProtocols.h */,
 				A538A27C1869DC6500CD0A3D /* TSKeyManager.h */,
 				A538A27D1869DC6500CD0A3D /* TSKeyManager.m */,
 				A5169D2A170FEB8F00A2CE9E /* KeychainWrapper.h */,
