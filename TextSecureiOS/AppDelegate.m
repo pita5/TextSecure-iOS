@@ -108,7 +108,7 @@
 #pragma mark settings
 -(void) setDefaultUserSettings {
     /* this is as apparently defaults set in settings bundle are just display defaults, must still set in code */
-    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO] ,@"resetDB",[NSNumber numberWithBool:NO],kStorageMasterKeyWasCreated, nil];
+    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO] ,@"resetDB",[NSNumber numberWithBool:YES],@"disableScreenshots",[NSNumber numberWithInt:5],@"lockDBAfter",[NSNumber numberWithBool:NO],kStorageMasterKeyWasCreated, nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
