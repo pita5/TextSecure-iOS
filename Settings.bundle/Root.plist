@@ -5,6 +5,40 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Security</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Disable screenshot protection</string>
+			<key>Key</key>
+			<string>disableScreenshots</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Database</string>
+		</dict>
+		<dict>
+			<key>KeyboardType</key>
+			<string>NumberPad</string>
+			<key>DefaultValue</key>
+			<string>5</string>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
+			<string>Lock database after (hrs)</string>
+			<key>Key</key>
+			<string>lockDBAfter</string>
+		</dict>
+		<dict>
 			<key>Title</key>
 			<string>Developer</string>
 			<key>Type</key>
@@ -21,6 +55,13 @@
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>
 	</array>
+	<key>Title</key>
+	<dict>
+		<key>Type</key>
+		<string>PSGroupSpecifier</string>
+		<key>Title</key>
+		<string></string>
+	</dict>
 	<key>StringsTable</key>
 	<string>Root</string>
 </dict>
