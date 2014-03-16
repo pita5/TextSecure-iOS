@@ -92,6 +92,35 @@
 	return YES;
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    
+    if([[url query] isEqualToString:@"changePasswordRequest"]) {
+        UIAlertView* changePasswordDialogue = [[UIAlertView alloc] initWithTitle:@"Change password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        [changePasswordDialogue setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+        UITextField *oldPasswordField = [changePasswordDialogue textFieldAtIndex:0];
+        oldPasswordField.placeholder = @"old password";
+        oldPasswordField.secureTextEntry = YES;
+        UITextField *newPasswordField = [changePasswordDialogue textFieldAtIndex:1];
+        newPasswordField.placeholder = @"new password";
+        newPasswordField.secureTextEntry = YES;
+        [changePasswordDialogue show];
+    }
+    
+    return YES;
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 1) {
+        // here's where we change the database password
+        /*
+         old = [changePasswordDialogue textFieldAtIndex:0];
+         new = [[changePasswordDialogue textFieldAtIndex:1];
+         // we will also probably want to make the user confirm their new password twice
+         */
+#warning  not implemented
+    }
+}
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 
     self.blankWindow.hidden = NO;
