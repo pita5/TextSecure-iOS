@@ -12,6 +12,8 @@
 		4C0ACB4B186C876200B328D5 /* TSMessageConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */; };
 		4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */; };
 		4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */; };
+		6FBCCDFF18D5361300C5B5F5 /* TSMessageIncomingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBCCDFD18D5361300C5B5F5 /* TSMessageIncomingTest.m */; };
+		6FBCCE0018D5361300C5B5F5 /* TSMessageOutgoingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBCCDFE18D5361300C5B5F5 /* TSMessageOutgoingTest.m */; };
 		6FCE040B18D427CE00C33B34 /* TSReplaceSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */; };
 		6FCE040C18D427CE00C33B34 /* TSStartOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCE040A18D427CE00C33B34 /* TSStartOverSegue.m */; };
 		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
@@ -478,6 +480,8 @@
 		4C77526A18707A46000FCCA6 /* PasswordUnlockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordUnlockViewController.h; path = ViewControllers/PasswordUnlockViewController.h; sourceTree = "<group>"; };
 		4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordUnlockViewController.m; path = ViewControllers/PasswordUnlockViewController.m; sourceTree = "<group>"; };
 		4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSMessagesDatabaseTests.m; sourceTree = "<group>"; };
+		6FBCCDFD18D5361300C5B5F5 /* TSMessageIncomingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSMessageIncomingTest.m; sourceTree = "<group>"; };
+		6FBCCDFE18D5361300C5B5F5 /* TSMessageOutgoingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSMessageOutgoingTest.m; sourceTree = "<group>"; };
 		6FCE040718D427CE00C33B34 /* TSReplaceSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSReplaceSegue.h; path = Utility/TSReplaceSegue.h; sourceTree = "<group>"; };
 		6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSReplaceSegue.m; path = Utility/TSReplaceSegue.m; sourceTree = "<group>"; };
 		6FCE040918D427CE00C33B34 /* TSStartOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStartOverSegue.h; path = Utility/TSStartOverSegue.h; sourceTree = "<group>"; };
@@ -1080,10 +1084,20 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		6FBCCDFC18D5361300C5B5F5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6FBCCDFD18D5361300C5B5F5 /* TSMessageIncomingTest.m */,
+				6FBCCDFE18D5361300C5B5F5 /* TSMessageOutgoingTest.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		8C42C13E18551B8C000DD353 /* TextSecureiOS Tests */ = {
 			isa = PBXGroup;
 			children = (
 				A5E6CC9A18826005002A1735 /* TSProtocolBufferWrapperTests.mm */,
+				6FBCCDFC18D5361300C5B5F5 /* Model */,
 				A5C85AED18839E68001D2189 /* Security */,
 				8C4328CB187885FD005F25E2 /* Storage */,
 				8C42C13F18551B8C000DD353 /* Supporting Files */,
@@ -2450,6 +2464,8 @@
 				8CF7BDA1187137640023A781 /* TSEncryptedDatabaseTests.m in Sources */,
 				A56312FD18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m in Sources */,
 				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
+				6FBCCDFF18D5361300C5B5F5 /* TSMessageIncomingTest.m in Sources */,
+				6FBCCE0018D5361300C5B5F5 /* TSMessageOutgoingTest.m in Sources */,
 				A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
