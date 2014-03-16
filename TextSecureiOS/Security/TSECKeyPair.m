@@ -86,7 +86,7 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
 -(id)initWithCoder:(NSCoder *)coder {
     self = [super init];
     if (self) {
-        unsigned int returnedLength = 0;
+        unsigned long returnedLength = 0;
         const uint8_t *returnedBuffer = NULL;
         // De-serialize public key
         returnedBuffer = [coder decodeBytesForKey:TSECKeyPairPublicKey returnedLength:&returnedLength];

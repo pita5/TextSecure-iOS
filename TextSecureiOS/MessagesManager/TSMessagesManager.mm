@@ -159,7 +159,7 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
-        DLog(@"failure %d, %@, %@",operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
+        DLog(@"failure %ld, %@, %@",(long)operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
         [[NSNotificationCenter defaultCenter] postNotificationName:@"TSDBDidUpdate" object:nil userInfo:@{@"messageType":@"send"}];
         
     }];
