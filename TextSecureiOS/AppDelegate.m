@@ -116,9 +116,12 @@
         /*
          old = [changePasswordDialogue textFieldAtIndex:0];
          new = [[changePasswordDialogue textFieldAtIndex:1];
-         // we will also probably want to make the user confirm their new password twice
+         we will also  want to make the user confirm their new password
+         
+         we'll want a rekey database method here
          */
 #warning  not implemented
+
     }
 }
 - (void)applicationDidEnterBackground:(UIApplication *)application {

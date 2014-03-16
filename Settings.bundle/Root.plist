@@ -26,6 +26,16 @@
 			<key>Title</key>
 			<string>Database</string>
 		</dict>
+        <dict>
+			<key>DefaultValue</key>
+			<string>TextSecure://?changePasswordRequest</string>
+			<key>File</key>
+			<string>TextSecure://?changePasswordRequest</string>
+			<key>Title</key>
+			<string>Reset Password</string>
+			<key>Type</key>
+			<string>IASKOpenURLSpecifier</string>
+		</dict>
 		<dict>
 			<key>KeyboardType</key>
 			<string>NumberPad</string>
