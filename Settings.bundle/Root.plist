@@ -24,6 +24,22 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
+			<string>Account</string>
+		</dict>
+        <dict>
+			<key>DefaultValue</key>
+			<string>TextSecure://?deregisterUserRequest</string>
+			<key>File</key>
+			<string>TextSecure://?deregisterUserRequest</string>
+			<key>Title</key>
+			<string>Deregister</string>
+			<key>Type</key>
+			<string>IASKOpenURLSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
 			<string>Database</string>
 		</dict>
         <dict>
@@ -60,7 +76,7 @@
 			<key>Key</key>
 			<string>resetDB</string>
 			<key>Title</key>
-			<string>Reset DB</string>
+			<string>Reset Application</string>
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 		</dict>

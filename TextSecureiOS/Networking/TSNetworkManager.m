@@ -79,6 +79,9 @@
         } else if ([request.HTTPMethod isEqualToString:@"PUT"]){
             [operationManager PUT:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
         }
+        else if ([request.HTTPMethod isEqualToString:@"DELETE"]){
+            [operationManager DELETE:[textSecureServer stringByAppendingString:request.URL.absoluteString] parameters:request.parameters success:successCompletionBlock failure:failureCompletionBlock];
+        }
     }
 }
 
