@@ -22,6 +22,7 @@
 #import "TSAttachment.h"
 #import "TSWaitingPushMessageDatabase.h"
 #import "TSStorageMasterKey.h"
+#import "IASKSettingsReader.h"
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -86,6 +87,8 @@
     });
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushesQueuedInDB) name:TSDatabaseDidUnlockNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBasedOnUserSettings) name:kIASKAppSettingChanged object:nil];
+    
 	return YES;
 }
 
