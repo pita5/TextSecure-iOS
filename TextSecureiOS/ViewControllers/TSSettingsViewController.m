@@ -10,5 +10,7 @@
 
 @implementation TSSettingsViewController
 
+#warning screenshot protection and lock database methods in UI but their effects not implemented
+/* to implement add e.g.     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBasedOnUserSettings) name:kIASKAppSettingChanged object:nil]; */
 
 @end
