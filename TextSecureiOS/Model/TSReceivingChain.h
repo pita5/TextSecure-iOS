@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 @class TSChainKey;
 
-@interface TSChain : NSObject
+@interface TSReceivingChain : NSObject<NSCoding>
 
-- (instancetype)initWithChainKey:(TSChainKey*)chainKey epehemeral:(NSData*)ephemeral;
+- (instancetype)initWithChainKey:(TSChainKey*)chainKey ephemeral:(NSData*)ephemeral;
 
 @property(readonly)TSChainKey *chainKey;
 @property(readonly)NSData *ephemeral;

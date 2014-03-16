@@ -32,7 +32,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 @interface TextSecureViewController() <SWTableViewCellDelegate>
 
 @property (nonatomic, strong) IBOutlet UISearchBar *searchBar;
-@property (nonatomic, strong) UIBarButtonItem *composeBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *settingsBarButtonItem;
 //@property (nonatomic, strong) UIView *searchBarCoverView;
 @property (nonatomic, strong) NSArray *conversations;
@@ -55,9 +54,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     
 //    self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
 //    self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
-
-    self.composeBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeMessage)];
-    self.navigationItem.rightBarButtonItem = self.composeBarButtonItem;
 
     [self.tableView registerClass:[TSMessageConversationCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -196,11 +192,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 - (void)animateEnteringEditingMode:(BOOL)isEditing {
     if (!isEditing) {
-        [self.navigationItem.rightBarButtonItem setEnabled:YES];
-        [self.navigationItem.leftBarButtonItem setEnabled:YES];
+        self.composeBarButtonItem.enabled = YES;
     } else {
-        [self.navigationItem.rightBarButtonItem setEnabled:NO];
-        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+        self.composeBarButtonItem.enabled = NO;
     }
 }
 

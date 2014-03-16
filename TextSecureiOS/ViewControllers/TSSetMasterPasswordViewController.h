@@ -16,4 +16,6 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *instruction;
 
+-(IBAction)nextWasTapped:(id)sender;
+
 @end

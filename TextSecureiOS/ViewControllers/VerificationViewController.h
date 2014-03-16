@@ -21,9 +21,13 @@
 @property (nonatomic, strong) IBOutlet UILabel *explanationText;
 @property (nonatomic, retain) NBAsYouTypeFormatter *numberFormatter;
 
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *nextButton;
+
 @property (nonatomic, copy) NSString *selectedPhoneNumber;
 
 -(void) countryChosen:(NSNotification*)notification;
 - (void)didReceiveMemoryWarning;
 -(void)updateCountry:(NSDictionary*)countryInfo;
+
+-(IBAction)sendVerification:(id)sender;
 @end

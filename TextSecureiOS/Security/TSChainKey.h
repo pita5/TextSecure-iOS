@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class TSMessageKeys;
 
-@interface TSChainKey : NSObject
+@interface TSChainKey : NSObject<NSCoding>
 
 @property int index;
 @property(readonly)NSData *key;

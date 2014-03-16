@@ -41,6 +41,14 @@
     return self;
 }
 
+- (void)reloadMessages {
+    if (!self.group) {
+        self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
+    }
+
+    [self.tableView reloadData];
+}
+
 -(void) setupThread  {
     self.title = [self.contact name];
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
@@ -53,10 +61,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
     self.delegate = self;
     self.dataSource = self;
-    if(self.group) {
+    if (self.group) {
         if([[self.group groupName] length]>0) {
             self.title = self.group.groupName;
         }
@@ -66,7 +73,10 @@
         else {
             self.title = @"Broadcast message";
         }
+    } else {
+        self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
     }
+
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
 }
@@ -104,6 +114,7 @@
     //    }
 
     [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+    [self reloadMessages];
 
     [self finishSend];
 }

@@ -14,6 +14,15 @@
 typedef void (^TSMessageChangeState)(BOOL success);
 
 @interface TSMessage : NSObject
+{
+    NSString *_senderId;
+    NSString *_recipientId;
+    NSDate *_timestamp;
+    NSString *_content;
+    NSArray *_attachments;
+    TSGroup *_group;
+    int _state;
+}
 
 @property (nonatomic, readonly) NSString *senderId;
 @property (nonatomic, readonly) NSString *recipientId;
@@ -21,7 +30,7 @@ typedef void (^TSMessageChangeState)(BOOL success);
 @property (nonatomic, readonly) NSString *content;
 @property (nonatomic, readonly) NSArray *attachments;
 @property (nonatomic, readonly) TSGroup *group;
-@property (nonatomic, readonly) int *state;
+@property (nonatomic, readonly) int state;
 
 -(BOOL) isUnread;
 

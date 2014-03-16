@@ -23,7 +23,7 @@
 
 +(NSString*) localizedCodeNameForPhonePrefix:(NSString*)prefix{
     NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
-    return [[NBPhoneNumberUtil sharedInstance] getRegionCodeForCountryCode:[[formatter numberFromString:prefix] unsignedLongValue]];
+    return [[NBPhoneNumberUtil sharedInstance] getRegionCodeForCountryCode:[[formatter numberFromString:prefix] unsignedIntValue]];
 }
 
 @end

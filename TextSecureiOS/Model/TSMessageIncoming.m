@@ -9,13 +9,6 @@
 #import "TSMessageIncoming.h"
 
 @interface TSMessageIncoming ()
-@property (nonatomic, copy) NSString *senderId;
-@property (nonatomic, copy) NSString *recipientId;
-@property (nonatomic, copy) NSDate *timestamp;
-@property (nonatomic, copy) NSString *content;
-@property (nonatomic, retain) NSArray *attachments;
-@property (nonatomic, copy) TSGroup *group;
-@property TSMessageIncomingState state;
 @end
 
 @implementation TSMessageIncoming
@@ -24,12 +17,12 @@
     
     self = [super init];
     if (self) {
-        self.content = text;
-        self.senderId = sender;
-        self.recipientId = [TSKeyManager getUsernameToken];
-        self.timestamp = timestamp;
-        self.group = group;
-        self.attachments = attachements;
+        _content = text;
+        _senderId = sender;
+        _recipientId = [TSKeyManager getUsernameToken];
+        _timestamp = timestamp;
+        _group = group;
+        _attachments = attachements;
         return self;
     }
     return  nil;
@@ -38,7 +31,7 @@
 - (void)setState:(TSMessageIncomingState)state withCompletion:(TSMessageChangeState)block{
     
     // TO DO : SAVE SELF THEN COMPLETION BLOCK
-    self.state = state;
+    _state = state;
     
     block(YES);
 }

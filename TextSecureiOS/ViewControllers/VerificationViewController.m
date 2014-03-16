@@ -37,12 +37,9 @@
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
-    
-    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(sendVerification:)];
-    
-    self.navigationItem.rightBarButtonItem = nextButton;
-    [self.navigationItem.rightBarButtonItem setEnabled:NO];
-    
+
+    self.nextButton.enabled = NO;
+
     self.navigationItem.title = @"Your Phone Number";
     
     [self setLocaleCountry];
@@ -134,6 +131,8 @@
 #pragma mark - Verification Action
 
 -(void)sendVerification:(id)sender {
+    self.nextButton.enabled = NO;
+
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
@@ -237,9 +236,9 @@
         NBPhoneNumber *number = [[NBPhoneNumberUtil sharedInstance] parse:[self.countryCodeInput.text stringByAppendingString:self.phoneNumber.text] defaultRegion:[NSLocale localizedCodeNameForPhonePrefix:self.countryCodeInput.text] error:&error];
         
         if (error == nil && [[NBPhoneNumberUtil sharedInstance] isValidNumber:number]) {
-            self.navigationItem.rightBarButtonItem.enabled = TRUE;
+            self.nextButton.enabled = TRUE;
         } else{
-            self.navigationItem.rightBarButtonItem.enabled = FALSE;
+            self.nextButton.enabled = FALSE;
         }
         
         return NO;

@@ -34,11 +34,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextWasTapped:)];
-    self.nextButton.enabled = NO;
 
-    self.navigationItem.rightBarButtonItem = self.nextButton;
+    self.nextButton.enabled = NO;
     
     self.pass.delegate = self;
     
@@ -110,13 +107,13 @@
                 break;
                 
             default:
-                DLog(@"Issue registering prekeys response %d, %@",operation.response.statusCode,operation.response.description);
+                DLog(@"Issue registering prekeys response %ld, %@",operation.response.statusCode,operation.response.description);
 #warning Add error handling if not able to send the prekeys
                 break;
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token
-        DLog(@"failure %d, %@",operation.response.statusCode,operation.response.description);
+        DLog(@"failure %ld, %@",operation.response.statusCode,operation.response.description);
     }];
     
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];

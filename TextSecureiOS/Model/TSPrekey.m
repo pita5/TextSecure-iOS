@@ -14,9 +14,9 @@
     self = [super init];
     
     if(self){
-        _identityKey = identityKey;
+        _identityKey  = identityKey;
         _ephemeralKey = ephemeral;
-        _prekeyId = prekeyId;
+        _prekeyId     = prekeyId;
     }
     
     return self;

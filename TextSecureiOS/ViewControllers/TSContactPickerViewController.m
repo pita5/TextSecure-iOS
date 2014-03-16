@@ -20,28 +20,26 @@
 
 @implementation TSContactPickerViewController
 
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nil bundle:nil];
-    if (self) {
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        self.title = @"Loading";
-
-        [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-            self.title = @"Pick recepients";
-            self.whisperContacts = contacts;
-            [self.tableView reloadData];
-
-        }];
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.nextButton.enabled = NO;
+
+    [self refreshContacts];
+}
+
+- (void)refreshContacts
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    self.title = @"Loading";
+
+    [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
+        self.title = @"Pick recepients";
+        self.whisperContacts = contacts;
+        [self.tableView reloadData];
+    }];
 }
 
 #pragma mark Tableview Delegate Methods
@@ -76,10 +74,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [[self.whisperContacts objectAtIndex:indexPath.row] reverseIsSelected];
     [self.tableView reloadData];
-}
 
--(IBAction) cancel {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if ([self getSelectedContacts].count > 0) {
+        self.nextButton.enabled = YES;
+    } else {
+        self.nextButton.enabled = NO;
+    }
 }
 
 -(NSArray*) getSelectedContacts {
@@ -93,8 +93,7 @@
         [self performSegueWithIdentifier:@"TSGroupSetupSegue" sender:self];
     }
     else {
-        [[((UINavigationController*)self.navigationController.presentingViewController) topViewController] performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
     }
 }
 
@@ -102,6 +101,9 @@
     if([segue.identifier isEqualToString:@"TSGroupSetupSegue"]) {
         TSGroupSetupViewController *vc = [segue destinationViewController];
         vc.whisperContacts = [self getSelectedContacts];
+    } else if ([segue.destinationViewController isKindOfClass:[TSMessageViewController class]]) {
+        TSMessageViewController *vc = segue.destinationViewController;
+        vc.contact = self.whisperContacts.firstObject;
     }
 }
 

@@ -114,9 +114,9 @@
     
     TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
     
-    if ([session hasPendingPrekey]) {
+    if ([session hasPendingPreKey]) {
         
-        TSPrekey *prekey = [session pendingPrekey];
+        TSPrekey *prekey = [session pendingPreKey];
         
         encryptedMessage = [[TSPreKeyWhisperMessage alloc]initWithPreKeyId:[NSNumber numberWithInt:prekey.prekeyId] senderPrekey:prekey.ephemeralKey senderIdentityKey:prekey.identityKey message:[encryptedMessage getTextSecure_WhisperMessage] forVersion:[self currentProtocolVersion]];
 

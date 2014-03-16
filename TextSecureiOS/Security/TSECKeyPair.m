@@ -12,9 +12,9 @@
 
 
 // Used for serializing a TSECKeyPair
-#define TSECKeyPairPublicKey @"TSECKeyPairPublicKey"
-#define TSECKeyPairPrivateKey @"TSECKeyPairPrivateKey"
-#define TSECKeyPairPreKeyId @"TSECKeyPairPreKeyId"
+NSString * const TSECKeyPairPublicKey   = @"TSECKeyPairPublicKey";
+NSString * const TSECKeyPairPrivateKey  = @"TSECKeyPairPrivateKey";
+NSString * const TSECKeyPairPreKeyId    = @"TSECKeyPairPreKeyId";
 
 
 extern void curve25519_donna(unsigned char *output, const unsigned char *a, const unsigned char *b);
@@ -76,17 +76,17 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
 
 #pragma mark Key pair serialization
 
--(void) encodeWithCoder:(NSCoder *)coder {
+-(void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeBytes:self->publicKey length:32 forKey:TSECKeyPairPublicKey];
     [coder encodeBytes:self->privateKey length:32 forKey:TSECKeyPairPrivateKey];
     [coder encodeInt32:self->preKeyId forKey:TSECKeyPairPreKeyId];
 }
 
 
--(id) initWithCoder:(NSCoder *)coder {
+-(id)initWithCoder:(NSCoder *)coder {
     self = [super init];
     if (self) {
-        unsigned int returnedLength = 0;
+        unsigned long returnedLength = 0;
         const uint8_t *returnedBuffer = NULL;
         // De-serialize public key
         returnedBuffer = [coder decodeBytesForKey:TSECKeyPairPublicKey returnedLength:&returnedLength];
