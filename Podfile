@@ -16,6 +16,7 @@ pod 'UIImage-Categories',     	'~> 0.0.1'
 pod 'JSMessagesViewController', '~> 3.4.4'
 pod 'LBGIFImage',		'~> 0.0.1'
 pod 'Emoticonizer',		'~> 1.0.0'
+pod 'InAppSettingsKit',		'~> 2.0.1'
 #pod 'OpenSSL',            '~> 1.0.1'
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 post_install do |lib_rep|
