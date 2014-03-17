@@ -14,6 +14,6 @@
 + (id)sharedManager;
 + (NSString*) cleanPhoneNumber:(NSString*)number;
 + (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock;
-+ (NSNumber*) getContactIDForNumber:(NSString*) phoneNumber;
+- (NSNumber*) getContactIDForNumber:(NSString*) phoneNumber;
 
 @end
