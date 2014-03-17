@@ -12,6 +12,11 @@
 
 #pragma mark these must be overridden by subclass
 
+-(id) initWithData:(NSData*) buffer{
+    NSAssert(@"Must be overriden in subclasses!", @"initWithData: needs to be implemented in ProtocolBufferWrapper's subclasses");
+    return nil;
+}
+
 -(const std::string) serializedProtocolBufferAsString {
   @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                  reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]

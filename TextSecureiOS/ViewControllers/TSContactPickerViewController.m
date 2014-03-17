@@ -11,6 +11,7 @@
 #import "TSMessageViewController.h"
 #import "TSContact.h"
 #import "TSGroupSetupViewController.h"
+#import "TSMessagesDatabase.h"
 #define tableViewCellsDequeID @"TSContactCell"
 @interface TSContactPickerViewController ()
 
@@ -103,6 +104,7 @@
         vc.whisperContacts = [self getSelectedContacts];
     } else if ([segue.destinationViewController isKindOfClass:[TSMessageViewController class]]) {
         TSMessageViewController *vc = segue.destinationViewController;
+        [TSMessagesDatabase storeContact:self.whisperContacts.firstObject];
         vc.contact = self.whisperContacts.firstObject;
     }
 }

@@ -57,9 +57,6 @@
 
 -(void)sendMessage:(TSMessage*)message{
     dispatch_async(queue, ^{
-        [TSMessagesDatabase storeMessage:message];
-        
-        
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
@@ -74,6 +71,7 @@
                 switch (operation.response.statusCode) {
                     case 200:{
                         
+                        NSLog(@"Reponse : %@", responseObject);
                         NSLog(@"Prekey fetched :) ");
                         
                         // Extracting the recipients keying material from server payload
@@ -81,8 +79,8 @@
                         NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
                         NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
                         NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                        
-                        NSLog(@"We got the prekeys! %@", responseObject);
+                        [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
+                        [TSMessagesDatabase storeContact:recipient];
                         
                         // remove the leading "0x05" byte as per protocol specs
                         if (theirEphemeralKey.length == 33) {
@@ -94,9 +92,9 @@
                             theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
                         }
                         
-#warning Bootstrap session with prekey
                         // Bootstrap session with Prekey
-                        TSSession *session;
+                        TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:1];
+                        session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
                         
                         [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         
@@ -110,8 +108,7 @@
                 }
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
-                DLog(@"Not a 200");
-                
+                NSLog(@"Error %@", error);
             }];
             
             

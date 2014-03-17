@@ -76,7 +76,7 @@ static TSDatabaseManager *messagesDb = nil;
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY)"]) {
             return;
         }
-
+        
         if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
             return;
         }
@@ -146,11 +146,9 @@ static TSDatabaseManager *messagesDb = nil;
     
     __block BOOL updateSuccess = YES;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        for(NSString *settingName in settingNamesAndValues) {
-            if (![db executeUpdate:@"INSERT OR REPLACE INTO settings (setting_name,setting_value) VALUES (:setting_name, :setting_value)", settingNamesAndValues]) {
-                DLog(@"Error updating DB: %@", [db lastErrorMessage]);
-                updateSuccess = NO;
-            }
+        if (![db executeUpdate:@"INSERT OR REPLACE INTO settings (setting_name,setting_value) VALUES (:setting_name, :setting_value)", settingNamesAndValues]) {
+            DLog(@"Error updating DB: %@", [db lastErrorMessage]);
+            updateSuccess = NO;
         }
     }];
     
@@ -184,7 +182,13 @@ static TSDatabaseManager *messagesDb = nil;
     __block BOOL updateSuccess = YES;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        if (![db executeUpdate:@"INSERT OR REPLACE INTO contacts (registered_id, relay, identityKey, device_ids, verifiedIdentity) VALUES (?, ?, ?, ?, ?)" withArgumentsInArray:@[contact.registeredID, contact.relay, contact.identityKey, [NSKeyedArchiver archivedDataWithRootObject:contact.deviceIDs], ]]) {
+        NSMutableDictionary *parameterDict = [@{@"registered_id": contact.registeredID, @"verifiedIdentity": [NSNumber numberWithBool:contact.identityKeyIsVerified]} mutableCopy];
+        
+        [parameterDict setObject:contact.relay?:[NSNull null] forKey:@"relay"];
+        [parameterDict setObject:contact.identityKey?:[NSNull null] forKey:@"identityKey"];
+        [parameterDict setObject:contact.deviceIDs?:[NSNull null] forKey:@"device_ids"];
+        
+        if (![db executeUpdate:@"INSERT OR REPLACE INTO contacts VALUES (:registered_id, :relay, :identityKey, :device_ids, :verifiedIdentity)" withParameterDictionary:parameterDict]){
             DLog(@"Error updating DB: %@", [db lastErrorMessage]);
             updateSuccess = NO;
         }
@@ -211,7 +215,7 @@ static TSDatabaseManager *messagesDb = nil;
         if ([searchInDB next]) {
             contact = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]];
             contact.identityKey = [searchInDB dataForColumn:@"identityKey"];
-            NSData *deviceIds = [searchInDB dataForColumn:@"deviceIds"];
+            NSData *deviceIds = [searchInDB dataForColumn:@"device_ids"];
             if (deviceIds) {
                 contact.deviceIDs = [NSKeyedUnarchiver unarchiveObjectWithData:deviceIds];
             }
@@ -252,7 +256,7 @@ static TSDatabaseManager *messagesDb = nil;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         id groupId = message.group ? message.group.id : [NSNull null];
-
+        
         success = [db executeUpdate:@"INSERT INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state) VALUES (?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state]]];
     }];
     
@@ -417,10 +421,10 @@ static TSDatabaseManager *messagesDb = nil;
     openDBMacroNil
     __block NSMutableArray *sessions = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        NSLog(@"Searching %@", contact.registeredID);
         FMResultSet *sessionResultSet = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id=?" withArgumentsInArray:@[contact.registeredID]];
-        
         while ([sessionResultSet next]) {
-            
+            NSLog(@"Has a result!");
             TSSession *session = [NSKeyedUnarchiver unarchiveObjectWithData:[sessionResultSet dataForColumn:@"serialized_session"]];
             [session addContact:contact deviceId:[sessionResultSet intForColumn:@"device_id"]];
             [sessions addObject:session];

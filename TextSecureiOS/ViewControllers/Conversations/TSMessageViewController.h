@@ -27,8 +27,6 @@
  *  @return A viewcontroller for displaying discussions
  */
 
-- (instancetype)initWithConversation:(TSContact*)contact;
-
 @property (nonatomic, retain) TSContact *contact;
 @property (nonatomic, retain) TSGroup *group;
 @property (nonatomic) TSWhisperMessageType messagingType;

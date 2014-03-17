@@ -148,7 +148,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     TSConversation* conversation = [self.conversations objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:[[TSMessageViewController alloc] initWithConversation:conversation.contact] animated:YES];
+    TSMessageViewController *mvc = [[TSMessageViewController alloc] initWithNibName:nil bundle:nil];
+    mvc.contact = conversation.contact;
+    [self.navigationController pushViewController:mvc animated:YES];
 }
 
 -(void) reloadModel:(NSNotification*)notification {
