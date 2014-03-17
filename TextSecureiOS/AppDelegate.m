@@ -38,13 +38,13 @@
     // If this is the first launch, we want to remove stuff from the Keychain that might be there from a previous install
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:firstLaunchKey]) {
+        [self setDefaultUserSettings];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:firstLaunchKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [TSKeyManager removeAllKeychainItems];
         DLog(@"First Launch");
     }
-
-    [self setDefaultUserSettings];
+    
     [self updateBasedOnUserSettings];
 
 #ifdef DEBUG
@@ -125,9 +125,9 @@
     }
 }
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-
-    self.blankWindow.hidden = NO;
-
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kScreenshotProtection]) {
+        self.blankWindow.hidden = NO;
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -140,7 +140,7 @@
 #pragma mark settings
 -(void) setDefaultUserSettings {
     /* this is as apparently defaults set in settings bundle are just display defaults, must still set in code */
-    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO] ,@"resetDB",[NSNumber numberWithBool:YES],@"disableScreenshots",[NSNumber numberWithInt:5],@"lockDBAfter",[NSNumber numberWithBool:NO],kStorageMasterKeyWasCreated, nil];
+    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO] ,@"resetDB",[NSNumber numberWithBool:YES], kScreenshotProtection,[NSNumber numberWithInt:5],@"lockDBAfter",[NSNumber numberWithBool:NO],kStorageMasterKeyWasCreated, nil];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -153,8 +153,6 @@
         exit(0);
     }
 }
-
-
 
 #pragma mark - Push notifications
 

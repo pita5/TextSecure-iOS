@@ -14,11 +14,11 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Disable screenshot protection</string>
+			<string>Screenshot Protection</string>
 			<key>Key</key>
-			<string>disableScreenshots</string>
+			<string>screenshotProtection</string>
 			<key>DefaultValue</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -26,7 +26,7 @@
 			<key>Title</key>
 			<string>Database</string>
 		</dict>
-        <dict>
+		<dict>
 			<key>DefaultValue</key>
 			<string>TextSecure://?changePasswordRequest</string>
 			<key>File</key>
