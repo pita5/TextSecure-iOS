@@ -23,6 +23,10 @@
 #import "TSWaitingPushMessageDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "IASKSettingsReader.h"
+#import "TSDeregisterAccountRequest.h"
+#define kChangePasswordAlertView 1
+#define kDeregisterAlertView 2
+
 @implementation AppDelegate
 
 #pragma mark - UIApplication delegate methods
@@ -96,6 +100,7 @@
     
     if([[url query] isEqualToString:@"changePasswordRequest"]) {
         UIAlertView* changePasswordDialogue = [[UIAlertView alloc] initWithTitle:@"Change password" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        changePasswordDialogue.tag = kChangePasswordAlertView;
         [changePasswordDialogue setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
         UITextField *oldPasswordField = [changePasswordDialogue textFieldAtIndex:0];
         oldPasswordField.placeholder = @"old password";
@@ -105,23 +110,43 @@
         newPasswordField.secureTextEntry = YES;
         [changePasswordDialogue show];
     }
-    
+    else if([[url query] isEqualToString:@"deregisterUserRequest"]) {
+        UIAlertView* deregisterDialogue = [[UIAlertView alloc] initWithTitle:@"Deregister from TextSecure" message:@"the app will clear your data and restart" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        deregisterDialogue.tag = kDeregisterAlertView;
+        [deregisterDialogue show];
+    }
     return YES;
 }
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 1) {
-        // here's where we change the database password
-        /*
-         old = [changePasswordDialogue textFieldAtIndex:0];
-         new = [[changePasswordDialogue textFieldAtIndex:1];
-         we will also  want to make the user confirm their new password
-         
-         we'll want a rekey database method here
-         */
-#warning  not implemented
+    if(alertView.tag == kChangePasswordAlertView) {
+        if(buttonIndex == 1) {
+            // here's where we change the database password @nabla-c03 
+            /*
+             old = [changePasswordDialogue textFieldAtIndex:0];
+             new = [[changePasswordDialogue textFieldAtIndex:1];
+             we will also  want to make the user confirm their new password
+             
+             we'll want a rekey database method here
+             */
+    #warning  not implemented
 
+        }
+    }
+    else if(alertView.tag == kDeregisterAlertView) {
+        if(buttonIndex==1) {
+            // here we can deregister the user!
+            [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSDeregisterAccountRequest alloc] initWithUser:[TSKeyManager getAuthenticationToken]] success:^(AFHTTPRequestOperation *operation, id responseObject){
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"resetDB"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [self updateBasedOnUserSettings];
+                
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                [[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+            }];
+            
+        }
     }
 }
 - (void)applicationDidEnterBackground:(UIApplication *)application {

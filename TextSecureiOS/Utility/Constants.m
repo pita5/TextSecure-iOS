@@ -16,6 +16,7 @@ NSString* const prekeyCounterStorageId = @"PrekeyCounterStorageId";
 NSString* const encryptedMasterSecretKeyStorageId  = @"EncryptedMasterSecretKeyStorageId";
 NSString* const textSecureServer = @"https://textsecure-service.whispersystems.org/";
 
+NSString* const textSecureGeneralAPI = @"v1";
 NSString* const textSecureAccountsAPI = @"v1/accounts";
 NSString* const textSecureMessagesAPI = @"v1/messages/"; // NOTE trailing slash is important
 NSString* const textSecureKeysAPI = @"v1/keys";

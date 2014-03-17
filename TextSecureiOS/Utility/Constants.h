@@ -9,6 +9,7 @@
 #define kLastResortKeyId 0xFFFFFF
 
 extern NSString* const textSecureServer;
+extern NSString* const textSecureGeneralAPI;
 extern NSString* const textSecureAccountsAPI;
 extern NSString* const textSecureKeysAPI;
 
