@@ -101,7 +101,7 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 }
 
 - (BOOL)hasReceiverChain:(NSData*) ephemeral{
-    return [self receiverChainKey:ephemeral];
+    return [self receiverChainKey:ephemeral] != nil;
 }
 
 - (TSChainKey*)receiverChainKey:(NSData*)senderEphemeral{
@@ -164,6 +164,7 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 - (void)save{
     [TSMessagesDatabase storeSession:self];
 }
+
 
 /**
  *  The clear method removes all keying material of a session. Only properties remaining are the necessary deviceId and contact information
