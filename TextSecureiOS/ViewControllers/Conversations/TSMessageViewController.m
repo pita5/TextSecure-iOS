@@ -29,18 +29,6 @@
 
 @implementation TSMessageViewController
 
-- (id) initWithConversation:(TSContact*)contact {
-    
-    self = [super initWithNibName:nil bundle:nil];
-    
-    self.contact = contact;
-    self.delegate = self;
-    
-    [self setupThread];
-    
-    return self;
-}
-
 - (void)reloadMessages {
     if (!self.group) {
         self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
@@ -60,7 +48,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    [self setupThread];
     self.delegate = self;
     self.dataSource = self;
     if (self.group) {

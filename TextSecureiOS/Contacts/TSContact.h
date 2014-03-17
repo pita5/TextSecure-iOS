@@ -17,7 +17,7 @@
 #pragma mark Optional properties
 
 @property (nonatomic) NSData *identityKey;
-@property (nonatomic) NSArray *deviceIDs;
+@property (nonatomic) NSMutableArray *deviceIDs; //NSNumber because needs to be serializable
 @property BOOL identityKeyIsVerified;
 @property BOOL isSelected;
 

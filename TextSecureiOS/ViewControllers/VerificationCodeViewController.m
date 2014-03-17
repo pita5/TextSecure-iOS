@@ -97,7 +97,7 @@
                 
             default:
                 [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"An unknown error occured. Pleasy try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                DLog(@"Verification operation failed with response: %@ and response code : %ld", responseObject, operation.response.statusCode);
+                DLog(@"Verification operation failed with response: %@ and response code : %i", responseObject, operation.response.statusCode);
                 break;
         }
         

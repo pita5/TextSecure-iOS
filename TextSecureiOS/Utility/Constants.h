@@ -49,5 +49,5 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
     TSUnencryptedWhisperMessageType = 4,
 };
 
-
 #define kTSVersion 
+#define kScreenshotProtection @"screenshotProtection"
