@@ -12,13 +12,9 @@
 
 
 - (id)initWithUser:(NSString*)userPushId {
-    
     self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", textSecureAccountsAPI, @"apn"]]];
-    
     self.HTTPMethod = @"DELETE";
-    
     self.parameters = [NSMutableDictionary dictionaryWithObjects:@[userPushId] forKeys:@[@"apnRegistrationId"]];
-
     return self;
     
 }

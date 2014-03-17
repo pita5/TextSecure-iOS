@@ -122,7 +122,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(alertView.tag == kChangePasswordAlertView) {
         if(buttonIndex == 1) {
-            // here's where we change the database password @nabla-c03 
+            // here's where we change the database password @nabla-c0d3
             /*
              old = [changePasswordDialogue textFieldAtIndex:0];
              new = [[changePasswordDialogue textFieldAtIndex:1];

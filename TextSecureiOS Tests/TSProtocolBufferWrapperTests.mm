@@ -143,6 +143,9 @@
     XCTAssertTrue([deserializedPushMessageContet.body isEqualToString:pushContent.body], @"messages not equal");
 }
 
+-(void) testGroupMessageSerialization {
+    
+}
 
 
 
