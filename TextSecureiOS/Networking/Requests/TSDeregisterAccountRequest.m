@@ -11,12 +11,13 @@
 @implementation TSDeregisterAccountRequest
 
 
-- (id)initWithUser:(NSString*)user {
+- (id)initWithUser:(NSString*)userPushId {
     
-    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/code/%@", textSecureAccountsAPI, @"sms", user]]];
-
+    self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@", textSecureAccountsAPI, @"apn"]]];
     
     self.HTTPMethod = @"DELETE";
+    
+    self.parameters = [NSMutableDictionary dictionaryWithObjects:@[userPushId] forKeys:@[@"apnRegistrationId"]];
 
     return self;
     

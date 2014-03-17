@@ -137,7 +137,7 @@
     else if(alertView.tag == kDeregisterAlertView) {
         if(buttonIndex==1) {
             // here we can deregister the user!
-            [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSDeregisterAccountRequest alloc] initWithUser:[TSKeyManager getUsernameToken]] success:^(AFHTTPRequestOperation *operation, id responseObject){
+            [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSDeregisterAccountRequest alloc] initWithUser:[TSKeyManager getAuthenticationToken]] success:^(AFHTTPRequestOperation *operation, id responseObject){
                 [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"resetDB"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 [self updateBasedOnUserSettings];
