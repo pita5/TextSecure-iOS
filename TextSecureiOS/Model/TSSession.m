@@ -176,7 +176,6 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
     self.rootKey = nil;
     self.senderEphemeral = nil;
     self.PN = 0;
-    self.pendingPreKey = nil;
 }
 
 @end

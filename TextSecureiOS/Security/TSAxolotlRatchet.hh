@@ -16,10 +16,12 @@
 
 @interface TSAxolotlRatchet : NSObject
 
-+ (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session;
+#pragma mark Encryption methods
+
 + (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session;
 
-// Method for incoming messages
+#pragma mark DecryptionMethods
++ (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session;
 + (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message fromContact:(TSContact*)contact;
 
 #pragma mark Identity
