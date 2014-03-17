@@ -204,7 +204,7 @@
   /* AES256 CTR encrypt then mac
    Returns nil if hmac invalid or decryption fails
    */
-
+    
     size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
     void* buffer                = malloc(bufferSize);
     size_t bytesEncrypted    = 0;
@@ -219,7 +219,6 @@
     
     cryptStatus = CCCryptorUpdate(cryptor, [dataToEncrypt bytes], [dataToEncrypt length], buffer, bufferSize, &bytesEncrypted);
     if (cryptStatus == kCCSuccess){
-
         NSMutableData* encryptedData= [NSMutableData dataWithBytesNoCopy:buffer length:bytesEncrypted freeWhenDone:YES];
         NSMutableData *versionAndEncryptedData = [NSMutableData data];
         [versionAndEncryptedData appendData:version];

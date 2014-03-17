@@ -74,30 +74,34 @@
                         NSLog(@"Reponse : %@", responseObject);
                         NSLog(@"Prekey fetched :) ");
                         
+                        
                         // Extracting the recipients keying material from server payload
                         
-                        NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
-                        NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
-                        NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                        [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
-                        [TSMessagesDatabase storeContact:recipient];
+                        NSArray *keys = [responseObject objectForKey:@"keys"];
                         
-                        // remove the leading "0x05" byte as per protocol specs
-                        if (theirEphemeralKey.length == 33) {
-                            theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                        for (NSDictionary *responseObject in keys){
+                            NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+                            NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
+                            NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
+                            [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
+                            [TSMessagesDatabase storeContact:recipient];
+                            
+                            // remove the leading "0x05" byte as per protocol specs
+                            if (theirEphemeralKey.length == 33) {
+                                theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                            }
+                            
+                            // remove the leading "0x05" byte as per protocol specs
+                            if (theirIdentityKey.length == 33) {
+                                theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
+                            }
+                            
+                            // Bootstrap session with Prekey
+                            TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:1];
+                            session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
+                            
+                            [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
-                        
-                        // remove the leading "0x05" byte as per protocol specs
-                        if (theirIdentityKey.length == 33) {
-                            theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
-                        }
-                        
-                        // Bootstrap session with Prekey
-                        TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:1];
-                        session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
-                        
-                        [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
-                        
                         // nil
                         break;
                     }
@@ -119,10 +123,11 @@
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
     
-#warning verify if database is open, if not, save somewhere else before processing.
-    
 #warning session needs to be decoded
-    TSSession *session;
+    
+    NSLog(@"PushInfo : %@", pushInfo);
+    
+    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:nil deviceId:1];
     
     TSEncryptedWhisperMessage *message = [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
     
