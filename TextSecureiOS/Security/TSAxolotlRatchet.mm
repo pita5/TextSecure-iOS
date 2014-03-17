@@ -18,7 +18,7 @@
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
 #import "TSUserKeysDatabase.h"
-#import "TSMessageSignal.hh"
+#import "TSMessageSignal.h"
 #import "TSPushMessageContent.hh"
 #import "TSWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
@@ -32,6 +32,7 @@
 #import "TSMessageIncoming.h"
 #import "TSMessageOutgoing.h"
 #import "TSPrekey.h"
+#import "NSData+TSKeyVersion.h"
 
 
 
@@ -48,27 +49,29 @@
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
         
         if (!contact.identityKey) {
-            contact.identityKey = preKeyWhisperMessage.identityKey;
+            contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
         } else{
-            if (![contact.identityKey isEqualToData:preKeyWhisperMessage.identityKey]) {
+            if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
                 throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
 #warning we'll want to store that message to retry decrypting later if user wants to continue
             }
         }
-
-        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:preKeyWhisperMessage.identityKey ephemeral:preKeyWhisperMessage.ephemeralKey prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
+        
+        message.ephemeralKey = preKeyWhisperMessage.baseKey;
+        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte] ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
     }
     
     if (!session) {
         throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
     }
     
+    
     return [self decryptMessage:message withSession:session];
 }
 
 + (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session{
     
-    NSData *theirEphemeral = message.ephemeralKey;
+    NSData *theirEphemeral = [message.ephemeralKey removeVersionByte];
     int counter = [message.counter intValue];
     
     TSChainKey *chainKey = [self getOrCreateChainKeys:session theirEphemeral:theirEphemeral];

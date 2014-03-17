@@ -20,11 +20,13 @@
 #import "TSMessagesDatabase.h"
 #import "TSAttachment.h"
 #import "IncomingPushMessageSignal.pb.hh"
-#import "TSMessageSignal.hh"
+#import "TSMessageSignal.h"
 #import "TSContact.h"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSRecipientPrekeyRequest.h"
 #import "TSSession.h"
+#import "NSData+TSKeyVersion.h"
+
 
 @interface TSMessagesManager (){
     dispatch_queue_t queue;
@@ -88,17 +90,17 @@
                             
                             // remove the leading "0x05" byte as per protocol specs
                             if (theirEphemeralKey.length == 33) {
-                                theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                                theirEphemeralKey = [theirEphemeralKey removeVersionByte];
                             }
                             
                             // remove the leading "0x05" byte as per protocol specs
                             if (theirIdentityKey.length == 33) {
-                                theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
+                                theirIdentityKey = [theirIdentityKey removeVersionByte];
                             }
                             
                             // Bootstrap session with Prekey
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:1];
-                            session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
+                            session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
                             
                             [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
@@ -123,18 +125,15 @@
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
     
-#warning session needs to be decoded
+    NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"m"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     
-    NSLog(@"PushInfo : %@", pushInfo);
+    TSMessageSignal *signal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
     
-    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:nil deviceId:1];
+    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
     
-    TSEncryptedWhisperMessage *message = [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
-    
-    TSMessage *decryptedMessage = [TSAxolotlRatchet decryptMessage:message withSession:session];
+    TSMessage *decryptedMessage = [TSAxolotlRatchet messageWithWhisperMessage:signal.message fromContact:session.contact];
     
     [TSMessagesDatabase storeMessage:decryptedMessage];
-    
     
     // We probably want to submit an update to a subscribing view controller here.
 }

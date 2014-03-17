@@ -224,6 +224,10 @@ static TSDatabaseManager *messagesDb = nil;
         [searchInDB close];
     }];
     
+    if (!contact) {
+        contact = [[TSContact alloc] initWithRegisteredID:registredID relay:nil];
+    }
+    
     return contact;
 }
 
@@ -421,15 +425,12 @@ static TSDatabaseManager *messagesDb = nil;
     openDBMacroNil
     __block NSMutableArray *sessions = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        NSLog(@"Searching %@", contact.registeredID);
         FMResultSet *sessionResultSet = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id=?" withArgumentsInArray:@[contact.registeredID]];
         while ([sessionResultSet next]) {
-            NSLog(@"Has a result!");
             TSSession *session = [NSKeyedUnarchiver unarchiveObjectWithData:[sessionResultSet dataForColumn:@"serialized_session"]];
             [session addContact:contact deviceId:[sessionResultSet intForColumn:@"device_id"]];
             [sessions addObject:session];
         }
-        
         [sessionResultSet close];
         
     }];
@@ -437,5 +438,48 @@ static TSDatabaseManager *messagesDb = nil;
     return [sessions copy];
 }
 
++ (TSSession*)sessionForRegisteredId:(NSString*)registeredId deviceId:(int)deviceId{
+    openDBMacroNil
+    __block TSSession *session;
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *sessionResultSet = [db executeQuery:@"SELECT * FROM sessions WHERE registered_id=? AND device_id=?" withArgumentsInArray:@[registeredId, [NSNumber numberWithInt:deviceId]]];
+        while ([sessionResultSet next]) {
+            session = [NSKeyedUnarchiver unarchiveObjectWithData:[sessionResultSet dataForColumn:@"serialized_session"]];
+        }
+        [sessionResultSet close];
+    }];
+    
+    TSContact *contact = [TSMessagesDatabase contactForRegisteredID:registeredId];
+    
+    if (!session) {
+        session = [[TSSession alloc] initWithContact:contact deviceId:deviceId];
+    } else{
+        [session addContact:contact deviceId:deviceId];
+    }
+    
+    return session;
+}
+
++ (BOOL)deleteSession:(TSSession*)session{
+    openDBMacroBOOL
+    
+    __block BOOL success = NO;
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        success = [db executeUpdate:@"DELETE FROM sessions WHERE registered_id=? AND device_id=?" withArgumentsInArray:@[session.contact.registeredID, [NSNumber numberWithInt:session.deviceId]]];
+    }];
+    
+    return success;
+}
+
++ (BOOL)deleteSessions:(TSContact*)contact{
+    openDBMacroBOOL
+    NSArray *sessions = [self sessionsForContact:contact];
+    
+    for (TSSession *session in sessions){
+        [self deleteSession:session];
+    }
+    return FALSE;
+}
 
 @end

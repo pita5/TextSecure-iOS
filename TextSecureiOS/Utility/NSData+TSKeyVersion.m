@@ -20,4 +20,8 @@
     return [concatenatedData copy];
 }
 
+-(NSData *)removeVersionByte{
+    return [self subdataWithRange:NSMakeRange(1, 32)];
+}
+
 @end

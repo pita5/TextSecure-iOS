@@ -11,5 +11,6 @@
 @interface NSData (TSKeyVersion)
 
 - (NSData*)prependVersionByte;
+- (NSData*)removeVersionByte;
 
 @end
