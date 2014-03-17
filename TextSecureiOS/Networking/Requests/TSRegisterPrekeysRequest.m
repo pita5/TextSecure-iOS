@@ -24,7 +24,7 @@
                                          forKeys:@[@"lastResortKey"]]];
         }
         else {
-            [serializedPrekeyList addObject:[NSDictionary dictionaryWithObjects:@[[NSNumber numberWithInt:[pk preKeyId]],[[pk publicKey] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength], publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]];
+            [serializedPrekeyList addObject:[NSDictionary dictionaryWithObjects:@[[NSNumber numberWithInt:[pk preKeyId]],[[pk publicKeyWithVersionByte] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength], publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]];
         }
     }
     [serializedKeyRegistrationParameters addEntriesFromDictionary:
