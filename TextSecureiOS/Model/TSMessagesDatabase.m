@@ -240,7 +240,7 @@ static TSDatabaseManager *messagesDb = nil;
         FMResultSet *searchInDB = [db executeQuery:@"SELECT registered_id FROM contacts"];
         
         while ([searchInDB next]) {
-            [contacts addObject:[searchInDB stringForColumn:@"registered_id"]];
+            [contacts addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]]];
         }
         [searchInDB close];
     }];

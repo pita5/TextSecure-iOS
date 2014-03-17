@@ -63,6 +63,8 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    self.conversations = [TSMessagesDatabase conversations];
+    [self.tableView reloadData];
 
     self.navigationController.navigationBarHidden = NO;
 
