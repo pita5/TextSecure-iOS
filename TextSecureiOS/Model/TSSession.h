@@ -25,7 +25,8 @@
 @property NSData *rootKey;
 @property int PN;
 
-@property TSPrekey *pendingPreKey;
+@property TSPrekey *pendingPreKey; // Prekey information to add in TSPrekeyWhisperMessage
+@property TSPrekey *fetchedPrekey; // Prekey fetched from TS server
 
 - (BOOL)hasPendingPreKey;
 

@@ -7,6 +7,7 @@
 //
 
 #import "TSMessageOutgoing.h"
+#import "TSMessagesDatabase.h"
 
 @interface TSMessageOutgoing ()
 @end
@@ -30,10 +31,10 @@
 }
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{
-    
-    // TO DO : SAVE SELF THEN COMPLETION BLOCK
+    BOOL didSucceed;
+    didSucceed = [TSMessagesDatabase storeMessage:self];
     _state = state;
-    block(YES);
+    block(didSucceed);
 }
 
 - (BOOL)isUnread{

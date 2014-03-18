@@ -27,7 +27,7 @@
         _contact = contact;
     }
     
-    return nil;
+    return self;
 }
 
 - (instancetype) initWithLastMessage:(NSString*)lastMessage group:(TSGroup*)group lastDate:(NSDate*)date containsNonReadMessages:(BOOL)nonread{
@@ -36,7 +36,7 @@
         _group = group;
     }
     
-    return nil;
+    return self;
 }
 
 - (BOOL) isGroupConversation {

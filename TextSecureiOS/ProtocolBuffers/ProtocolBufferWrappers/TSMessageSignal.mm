@@ -6,11 +6,10 @@
 //  Copyright (c) 2014 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSMessageSignal.hh"
+#import "TSMessageSignal.h"
 
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
-#import "TSPushMessageContent.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 
 @implementation TSMessageSignal
@@ -64,7 +63,7 @@
     return messageSignal;
 }
 
--(TSWhisperMessage*) getWhisperMessageForData:(NSData*) data {
+-(TSEncryptedWhisperMessage*) getWhisperMessageForData:(NSData*) data {
   switch (self.contentType) {
     case TSEncryptedWhisperMessageType:
           return [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:data];

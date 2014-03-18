@@ -15,6 +15,10 @@
 #import "TSNetworkManager.h"
 #import "TSContactsIntersectionRequest.h"
 
+@interface TSContactManager ()
+@property NSDictionary *cachedContactLookup;
+@end
+
 @implementation TSContactManager
 
 + (id)sharedManager {
@@ -47,10 +51,18 @@
     return [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
 }
 
-+ (NSNumber*) getContactIDForNumber:(NSString*) phoneNumber{
-    NSNumber *abID = nil;
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
+- (NSNumber*) getContactIDForNumber:(NSString*) phoneNumber{
     
+    if (!self.cachedContactLookup) {
+        [self makeContactLookupTable];
+    }
+    
+    return [self.cachedContactLookup objectForKey:[[self class]cleanPhoneNumber:phoneNumber]];
+}
+
+- (void)makeContactLookupTable{
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
+    NSMutableDictionary *ab = [NSMutableDictionary dictionary];
     __block BOOL accessGranted = NO;
     
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
@@ -65,7 +77,6 @@
     if (accessGranted) {
         CFArrayRef all = ABAddressBookCopyArrayOfAllPeople(addressBook);
         CFIndex n = ABAddressBookGetPersonCount(addressBook);
-        NSMutableDictionary *ab = [NSMutableDictionary dictionary];
         
         for( int i = 0 ; i < n ; i++ )
         {
@@ -79,20 +90,17 @@
             {
                 NSString *phoneNumber = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(phones, j);
                 
-                NSString *cleanedNumber = [self cleanPhoneNumber:phoneNumber];
+                NSString *cleanedNumber = [[self class] cleanPhoneNumber:phoneNumber];
                 
                 [ab setObject:contactReferenceID forKey:cleanedNumber];
             }
-            
-            return [ab objectForKey:phoneNumber];
-            
             CFRelease(phones);
         }
         CFRelease(all);
     }
     CFRelease(addressBook);
     
-    return abID;
+    self.cachedContactLookup = ab;
 }
 
 + (void) getAllContactsIDs:(void (^)(NSArray *contacts))contactFetchCompletionBlock{
@@ -166,7 +174,7 @@
         CFRelease(all);
         
     }
-
+    
     CFRelease(addressBook);
 }
 

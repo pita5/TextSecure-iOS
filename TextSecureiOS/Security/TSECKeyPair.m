@@ -8,6 +8,7 @@
 
 #import "TSECKeyPair.h"
 #import "Cryptography.h"
+#import "NSData+TSKeyVersion.h"
 
 
 
@@ -45,8 +46,11 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
 
 
 -(NSData*) publicKey {
-#warning for Android interoperability (and conforming to protocol) we will need to add leading byte of 0x05 to keys prior to sending/remove before using
   return [NSData dataWithBytes:self->publicKey length:32];
+}
+
+- (NSData*)publicKeyWithVersionByte{
+    return [[self publicKey] prependVersionByte];
 }
 
 -(int32_t) preKeyId {

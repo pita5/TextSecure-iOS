@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 #import "TSContact.h"
 #import "TSGroup.h"
-@class TSMessage;
+@class TSMessageOutgoing;
 
 @interface TSMessagesManager : NSObject
 
@@ -25,8 +25,8 @@
 - (void) receiveMessagePush:(NSDictionary*)pushDict;
 
 // Methods for sending messages should be - shedule send, cancel send
--(void) scheduleMessageSend:(TSMessage*)message; // Sending messages should have a completion block for UI processing
+-(void) scheduleMessageSend:(TSMessageOutgoing*)message; // Sending messages should have a completion block for UI processing
 
--(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType;
+-(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType;
 
 @end

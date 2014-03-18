@@ -21,7 +21,6 @@
 }
 
 -(instancetype) initWithRegisteredID:(NSString*)registeredID relay:(NSString*)relay{
-
     self = [super init];;
     
     if(self) {
@@ -43,7 +42,7 @@
 - (NSNumber*) addressBookID{
     // Looking up a AddressBook Token might take time if user has a lot of contacts, let's cache it to avoid doing unecessary calls to the AdressBook.
     if (!self.abID) {
-        self.abID = [TSContactManager getContactIDForNumber:self.registeredID];
+        self.abID = [[TSContactManager sharedManager]getContactIDForNumber:self.registeredID];
     }
     return self.abID;
 }

@@ -16,15 +16,17 @@
 #import "TSAttachmentManager.h"
 #import "TSKeyManager.h"
 #import "Cryptography.h"
-#import "TSMessage.h"
+#import "TSMessageOutgoing.h"
 #import "TSMessagesDatabase.h"
 #import "TSAttachment.h"
 #import "IncomingPushMessageSignal.pb.hh"
-#import "TSMessageSignal.hh"
+#import "TSMessageSignal.h"
 #import "TSContact.h"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSRecipientPrekeyRequest.h"
 #import "TSSession.h"
+#import "NSData+TSKeyVersion.h"
+
 
 @interface TSMessagesManager (){
     dispatch_queue_t queue;
@@ -33,7 +35,7 @@
 
 @implementation TSMessagesManager
 
-- (void)scheduleMessageSend:(TSMessage *)message
+- (void)scheduleMessageSend:(TSMessageOutgoing *)message
 {
     [TSMessagesDatabase storeMessage:message];
     [self sendMessage:message];
@@ -55,14 +57,14 @@
     return self;
 }
 
--(void)sendMessage:(TSMessage*)message{
+-(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
         if ([sessions count] > 0) {
             for (TSSession *session in sessions){
-                [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSEncryptedWhisperMessageType];
+                [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSEncryptedWhisperMessageType];
             }
             
         } else{
@@ -74,30 +76,36 @@
                         NSLog(@"Reponse : %@", responseObject);
                         NSLog(@"Prekey fetched :) ");
                         
+                        
                         // Extracting the recipients keying material from server payload
                         
-                        NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
-                        NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
-                        NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                        [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
-                        [TSMessagesDatabase storeContact:recipient];
+                        NSArray *keys = [responseObject objectForKey:@"keys"];
                         
-                        // remove the leading "0x05" byte as per protocol specs
-                        if (theirEphemeralKey.length == 33) {
-                            theirEphemeralKey = [theirEphemeralKey subdataWithRange:NSMakeRange(1, 32)];
+                        for (NSDictionary *responseObject in keys){
+                            NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+                            NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
+                            NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
+                            [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
+                            [TSMessagesDatabase storeContact:recipient];
+                            
+                            // remove the leading "0x05" byte as per protocol specs
+                            if (theirEphemeralKey.length == 33) {
+                                theirEphemeralKey = [theirEphemeralKey removeVersionByte];
+                            }
+                            
+                            // remove the leading "0x05" byte as per protocol specs
+                            if (theirIdentityKey.length == 33) {
+                                theirIdentityKey = [theirIdentityKey removeVersionByte];
+                            }
+                            
+                            // Bootstrap session with Prekey
+                            TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
+                            session.fetchedPrekey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
+    
+                            TSPreKeyWhisperMessage *whisperMessage = (TSPreKeyWhisperMessage*)[TSAxolotlRatchet encryptMessage:message withSession:session];
+                            
+                            [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
-                        
-                        // remove the leading "0x05" byte as per protocol specs
-                        if (theirIdentityKey.length == 33) {
-                            theirIdentityKey = [theirIdentityKey subdataWithRange:NSMakeRange(1, 32)];
-                        }
-                        
-                        // Bootstrap session with Prekey
-                        TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:1];
-                        session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
-                        
-                        [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
-                        
                         // nil
                         break;
                     }
@@ -119,22 +127,20 @@
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
     
-#warning verify if database is open, if not, save somewhere else before processing.
+    NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"m"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     
-#warning session needs to be decoded
-    TSSession *session;
+    TSMessageSignal *signal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
     
-    TSEncryptedWhisperMessage *message = [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:[NSData  dataFromBase64String:[pushInfo objectForKey:@"m"]]];
+    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
     
-    TSMessage *decryptedMessage = [TSAxolotlRatchet decryptMessage:message withSession:session];
+    TSMessage *decryptedMessage = [TSAxolotlRatchet messageWithWhisperMessage:signal.message fromContact:session.contact];
     
     [TSMessagesDatabase storeMessage:decryptedMessage];
-    
     
     // We probably want to submit an update to a subscribing view controller here.
 }
 
--(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
+-(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
     
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -142,8 +148,11 @@
             case 200:{
                 // Awesome! We consider the message as sent! (Improvement: add flag in DB for sent)
                 
-                UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Message was sent" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [message show];
+                NSLog(@"Message sent!");
+                [message setState:TSMessageStateSent withCompletion:^(BOOL success) {
+                    // Proceed to UI refresh;
+                }];
+                
                 
                 break;
             }

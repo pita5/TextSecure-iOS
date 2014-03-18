@@ -94,9 +94,9 @@
 }
 
 
-+(NSData*) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(TSECKeyPair*) currentEphemeral myNextEphemeral:(TSECKeyPair*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
++(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
-                                                          initWithEphemeralKey:[myNextEphemeral publicKey]
+                                                          initWithEphemeralKey:myNextEphemeral
                                                           previousCounter:[NSNumber numberWithInt:0]
                                                           counter:[NSNumber numberWithInt:0]
                                                           encryptedMessage:ciphertext
@@ -105,14 +105,10 @@
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
                                              initWithPreKeyId:theirPrekeyId
-                                             senderPrekey:[currentEphemeral publicKey]
+                                             senderPrekey:currentEphemeral
                                              senderIdentityKey:[identityKey publicKey]
                                              message:[encryptedWhisperMessage serializedProtocolBuffer] forVersion:version];
-    return [prekeyMessage getTextSecure_PreKeyWhisperMessage];
-    
+    return prekeyMessage;
 }
-
-
-
 
 @end
