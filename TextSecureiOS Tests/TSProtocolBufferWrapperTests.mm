@@ -107,6 +107,8 @@
     TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
     
     XCTAssertTrue([pushContent.body isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
+    XCTAssertTrue([deserializedPushContent.attachments count]==0, @"deserialization has attachments when there should be none");
+
 }
 
 
@@ -146,38 +148,38 @@
 
 
 -(void) testPushMessageContentAttachmentSerialization {
-    /*
-     message PushMessageContent {
-     message AttachmentPointer {
-     optional fixed64 id          = 1; // this ID can be used to retrieve from server the location in the cloud of the attachment
-     optional string  contentType = 2; // MIME type
-     optional bytes   key         = 3; // symmetric decryption key
-     }
-     
-     message GroupContext {
-     enum Type {
-     UNKNOWN = 0;
-     UPDATE  = 1;
-     DELIVER = 2;
-     QUIT    = 3;
-     }
-     optional bytes             id      = 1;
-     optional Type              type    = 2;
-     optional string            name    = 3;
-     repeated string            members = 4;
-     optional AttachmentPointer avatar  = 5;
-     }
-     
-     enum Flags {
-     END_SESSION = 1;
-     }
-     
-     optional string            body        = 1;
-     repeated AttachmentPointer attachments = 2;
-     optional GroupContext      group       = 3;
-     optional uint32            flags       = 4;
-     }
-     */
+    
+    TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
+    pushContent.body = @"Surf is up";
+    
+    NSData* attachment1Key = [Cryptography generateRandomBytes:32];
+    NSData* attachment2Key = [Cryptography generateRandomBytes:32];
+
+    TSAttachment *attachment1 = [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithInt:42] contentMIMEType:@"image/jpg" decryptionKey:attachment1Key];
+    TSAttachment *attachment2 = [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithInt:35] contentMIMEType:@"video/mp4" decryptionKey:attachment2Key];
+    pushContent.attachments = [NSArray arrayWithObjects:attachment1,attachment2, nil];
+    
+    
+    NSData *serializedMessageContent = [pushContent serializedProtocolBuffer];
+    TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
+    
+    XCTAssertTrue([pushContent.body isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
+
+    
+    XCTAssertTrue([deserializedPushContent.attachments count]==2, @"deserialization doesn't have the right number of attachments, actually has %d",[deserializedPushContent.attachments count]);
+
+    TSAttachment *attachment1Deserialized = [deserializedPushContent.attachments objectAtIndex:0];
+    TSAttachment *attachment2Deserialized = [deserializedPushContent.attachments objectAtIndex:1];
+
+    
+    XCTAssertTrue([attachment1Deserialized.attachmentId isEqualToNumber:attachment1.attachmentId], @"deserialized ids do not match for attachment 1");
+    XCTAssertTrue([attachment2Deserialized.attachmentId isEqualToNumber:attachment2.attachmentId], @"deserialized ids do not match for attachment 2");
+
+    XCTAssertTrue(attachment1Deserialized.attachmentType == attachment1.attachmentType, @"deserialized ids do not match for attachment 1");
+    XCTAssertTrue(attachment1Deserialized.attachmentType == attachment1.attachmentType, @"deserialized ids do not match for attachment 2");
+
+    XCTAssertTrue([attachment1Deserialized.attachmentDecryptionKey isEqualToData:attachment1.attachmentDecryptionKey], @"deserialized ids do not match for attachment 1");
+    XCTAssertTrue([attachment2Deserialized.attachmentDecryptionKey isEqualToData:attachment2.attachmentDecryptionKey], @"deserialized ids do not match for attachment 2");
 
     
 }
