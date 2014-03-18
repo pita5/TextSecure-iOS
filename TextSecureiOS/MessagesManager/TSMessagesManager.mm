@@ -99,8 +99,10 @@
                             }
                             
                             // Bootstrap session with Prekey
-                            TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:1];
-                            session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
+                            TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
+                            session.fetchedPrekey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
+    
+                            TSPreKeyWhisperMessage *whisperMessage = (TSPreKeyWhisperMessage*)[TSAxolotlRatchet encryptMessage:message withSession:session];
                             
                             [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
@@ -146,6 +148,7 @@
             case 200:{
                 // Awesome! We consider the message as sent! (Improvement: add flag in DB for sent)
                 
+                NSLog(@"Message sent!");
                 [message setState:TSMessageStateSent withCompletion:^(BOOL success) {
                     // Proceed to UI refresh;
                 }];

@@ -87,18 +87,21 @@
 
 + (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session{
     
-    if ([session hasPendingPreKey]) {
+    if (session.fetchedPrekey) {
         [session clear];
         
         TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        NSData *theirBaseKey = session.pendingPreKey.ephemeralKey;
+        NSData *theirBaseKey = session.fetchedPrekey.ephemeralKey;
         
-        RKCK *rootAndReceivingChainKey = [RKCK initWithData:[self masterKeyAlice:[self myIdentityKey] ourEphemeral:ourEphemeralKey theirIdentityPublicKey:session.pendingPreKey.identityKey theirEphemeralPublicKey:session.pendingPreKey.ephemeralKey]];
+        RKCK *rootAndReceivingChainKey = [RKCK initWithData:[self masterKeyAlice:[self myIdentityKey] ourEphemeral:ourEphemeralKey theirIdentityPublicKey:session.fetchedPrekey.identityKey theirEphemeralPublicKey:session.fetchedPrekey.ephemeralKey]];
         
         TSECKeyPair *sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
         [session setRootKey:rootAndReceivingChainKey.RK];
         [session setSenderChain:sendingKey chainkey:rootAndReceivingChainKey.CK];
         [session addReceiverChain:theirBaseKey chainKey:[rootAndReceivingChainKey createChainWithEphemeral:sendingKey fromTheirProvideEphemeral:theirBaseKey].CK];
+        
+        [session setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil ephemeral:ourEphemeralKey.publicKey prekeyId:session.fetchedPrekey.prekeyId]];
+        
     }
     
     TSChainKey *chainKey = [session senderChainKey];
@@ -109,23 +112,21 @@
     NSData* computedHMAC;
     NSData *cipherText = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys forVersion:[self currentProtocolVersion] computedHMAC:&computedHMAC];
     
-    TSEncryptedWhisperMessage *encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
+    TSEncryptedWhisperMessage *encryptedMessage;
     
     if ([session hasPendingPreKey]) {
-        
-        TSPrekey *prekey = [session pendingPreKey];
-        
-        encryptedMessage = [[TSPreKeyWhisperMessage alloc]initWithPreKeyId:[NSNumber numberWithInt:prekey.prekeyId] senderPrekey:prekey.ephemeralKey senderIdentityKey:prekey.identityKey message:[encryptedMessage getTextSecure_WhisperMessage] forVersion:[self currentProtocolVersion]];
 
+        encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:cipherText theirPrekeyId:[NSNumber numberWithInt:session.pendingPreKey.prekeyId] myCurrentEphemeral:[session.pendingPreKey.ephemeralKey prependVersionByte] myNextEphemeral:session.senderEphemeral.publicKeyWithVersionByte forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
+
+    } else{
+        encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:[senderEphemeral.publicKey prependVersionByte] previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
     }
     
     [session setSenderChainKey:[chainKey nextChainKey]];
     
     [TSMessagesDatabase storeSession:session];
     
-    
     return encryptedMessage;
-    
 }
 
 + (TSChainKey*)getOrCreateChainKeys:(TSSession*)session theirEphemeral:(NSData*)theirEphemeral{
