@@ -100,7 +100,7 @@
 
 
 
--(void)testPushMessageContentSerialization {
+-(void)testPushMessageContentBodySerialization {
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
     pushContent.body = @"Surf is up";
     NSData *serializedMessageContent = [pushContent serializedProtocolBuffer];
@@ -143,7 +143,82 @@
     XCTAssertTrue([deserializedPushMessageContet.body isEqualToString:pushContent.body], @"messages not equal");
 }
 
--(void) testGroupMessageSerialization {
+
+
+-(void) testPushMessageContentAttachmentSerialization {
+    /*
+     message PushMessageContent {
+     message AttachmentPointer {
+     optional fixed64 id          = 1; // this ID can be used to retrieve from server the location in the cloud of the attachment
+     optional string  contentType = 2; // MIME type
+     optional bytes   key         = 3; // symmetric decryption key
+     }
+     
+     message GroupContext {
+     enum Type {
+     UNKNOWN = 0;
+     UPDATE  = 1;
+     DELIVER = 2;
+     QUIT    = 3;
+     }
+     optional bytes             id      = 1;
+     optional Type              type    = 2;
+     optional string            name    = 3;
+     repeated string            members = 4;
+     optional AttachmentPointer avatar  = 5;
+     }
+     
+     enum Flags {
+     END_SESSION = 1;
+     }
+     
+     optional string            body        = 1;
+     repeated AttachmentPointer attachments = 2;
+     optional GroupContext      group       = 3;
+     optional uint32            flags       = 4;
+     }
+     */
+
+    
+}
+
+-(void) testPushMessageContentGroupSerialization {
+    /*
+     message PushMessageContent {
+     message AttachmentPointer {
+     optional fixed64 id          = 1; // this ID can be used to retrieve from server the location in the cloud of the attachment
+     optional string  contentType = 2; // MIME type
+     optional bytes   key         = 3; // symmetric decryption key
+     }
+     
+     message GroupContext {
+     enum Type {
+     UNKNOWN = 0;
+     UPDATE  = 1;
+     DELIVER = 2;
+     QUIT    = 3;
+     }
+     optional bytes             id      = 1;
+     optional Type              type    = 2;
+     optional string            name    = 3;
+     repeated string            members = 4;
+     optional AttachmentPointer avatar  = 5;
+     }
+     
+     enum Flags {
+     END_SESSION = 1;
+     }
+     
+     optional string            body        = 1;
+     repeated AttachmentPointer attachments = 2;
+     optional GroupContext      group       = 3;
+     optional uint32            flags       = 4;
+     }
+     */
+    
+    
+    
+    
     
 }
 
