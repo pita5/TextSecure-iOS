@@ -10,7 +10,7 @@
 #import "TSProtocolBufferWrapper.hh"
 #import "Cryptography.h"
 #import "TSWhisperMessage.hh"
-#import "TSMessageSignal.hh"
+#import "TSMessageSignal.h"
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSPushMessageContent.hh"
 #import "TSEncryptedWhisperMessage.hh"

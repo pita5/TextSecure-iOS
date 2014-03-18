@@ -10,7 +10,6 @@
 
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
-#import "TSPushMessageContent.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 
 @implementation TSMessageSignal

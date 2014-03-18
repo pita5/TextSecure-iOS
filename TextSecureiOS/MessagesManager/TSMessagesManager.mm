@@ -16,7 +16,7 @@
 #import "TSAttachmentManager.h"
 #import "TSKeyManager.h"
 #import "Cryptography.h"
-#import "TSMessage.h"
+#import "TSMessageOutgoing.h"
 #import "TSMessagesDatabase.h"
 #import "TSAttachment.h"
 #import "IncomingPushMessageSignal.pb.hh"
@@ -35,7 +35,7 @@
 
 @implementation TSMessagesManager
 
-- (void)scheduleMessageSend:(TSMessage *)message
+- (void)scheduleMessageSend:(TSMessageOutgoing *)message
 {
     [TSMessagesDatabase storeMessage:message];
     [self sendMessage:message];
@@ -57,14 +57,14 @@
     return self;
 }
 
--(void)sendMessage:(TSMessage*)message{
+-(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
         if ([sessions count] > 0) {
             for (TSSession *session in sessions){
-                [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSEncryptedWhisperMessageType];
+                [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSEncryptedWhisperMessageType];
             }
             
         } else{
@@ -102,7 +102,7 @@
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:1];
                             session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
                             
-                            [[TSMessagesManager sharedManager] submitMessageTo:message.recipientId message:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                            [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
                         // nil
                         break;
@@ -138,7 +138,7 @@
     // We probably want to submit an update to a subscribing view controller here.
 }
 
--(void) submitMessageTo:(NSString*)recipientId message:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
+-(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
     
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
@@ -146,8 +146,10 @@
             case 200:{
                 // Awesome! We consider the message as sent! (Improvement: add flag in DB for sent)
                 
-                UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"Message was sent" message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [message show];
+                [message setState:TSMessageStateSent withCompletion:^(BOOL success) {
+                    // Proceed to UI refresh;
+                }];
+                
                 
                 break;
             }

@@ -19,7 +19,6 @@
 #import "TSMessagesDatabase.h"
 #import "TSUserKeysDatabase.h"
 #import "TSMessageSignal.h"
-#import "TSPushMessageContent.hh"
 #import "TSWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
@@ -64,7 +63,6 @@
     if (!session) {
         throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
     }
-    
     
     return [self decryptMessage:message withSession:session];
 }

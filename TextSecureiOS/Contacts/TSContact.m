@@ -21,7 +21,6 @@
 }
 
 -(instancetype) initWithRegisteredID:(NSString*)registeredID relay:(NSString*)relay{
-
     self = [super init];;
     
     if(self) {
