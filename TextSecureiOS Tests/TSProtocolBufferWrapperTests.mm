@@ -14,7 +14,8 @@
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSPushMessageContent.hh"
 #import "TSEncryptedWhisperMessage.hh"
-
+#import "TSGroupContext.h"
+#import "Constants.h"
 @interface TSProtocolBufferWrapper (Test)
 - (textsecure::IncomingPushMessageSignal *)deserialize:(NSData *)data;
 @end
@@ -165,7 +166,7 @@
     
     XCTAssertTrue([pushContent.body isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
 
-    
+    // TODO: this is currently failing meaning attachments don't make it through deserialization process
     XCTAssertTrue([deserializedPushContent.attachments count]==2, @"deserialization doesn't have the right number of attachments, actually has %d",[deserializedPushContent.attachments count]);
 
     TSAttachment *attachment1Deserialized = [deserializedPushContent.attachments objectAtIndex:0];
@@ -185,42 +186,43 @@
 }
 
 -(void) testPushMessageContentGroupSerialization {
-    /*
-     message PushMessageContent {
-     message AttachmentPointer {
-     optional fixed64 id          = 1; // this ID can be used to retrieve from server the location in the cloud of the attachment
-     optional string  contentType = 2; // MIME type
-     optional bytes   key         = 3; // symmetric decryption key
-     }
-     
-     message GroupContext {
-     enum Type {
-     UNKNOWN = 0;
-     UPDATE  = 1;
-     DELIVER = 2;
-     QUIT    = 3;
-     }
-     optional bytes             id      = 1;
-     optional Type              type    = 2;
-     optional string            name    = 3;
-     repeated string            members = 4;
-     optional AttachmentPointer avatar  = 5;
-     }
-     
-     enum Flags {
-     END_SESSION = 1;
-     }
-     
-     optional string            body        = 1;
-     repeated AttachmentPointer attachments = 2;
-     optional GroupContext      group       = 3;
-     optional uint32            flags       = 4;
-     }
-     */
+    TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
+    pushContent.body = @"Surf is up";
+
+    
+    NSString* member1 = @"12345678";
+    NSString* member2 = @"987665";
+    NSString* member3 = @"11111111";
+    NSData* avatarKey = [Cryptography generateRandomBytes:32];
+    NSData* groupId = [Cryptography generateRandomBytes:8];
+    TSAttachment *avatar = [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithInt:42] contentMIMEType:@"image/jpg" decryptionKey:avatarKey];
+
     
     
+    TSGroupContext *groupContext = [[TSGroupContext alloc] initWithId:groupId withType:TSUpdateGroupContext withName:@"Winter Break of Code" withMembers:[NSArray arrayWithObjects:member1,member2,member3, nil] withAvatar:avatar];
+    pushContent.groupContext = groupContext;
     
+    NSData *serializedMessageContent = [pushContent serializedProtocolBuffer];
+    TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
     
+    XCTAssertTrue([pushContent.body isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
+    XCTAssertTrue(deserializedPushContent.groupContext!=nil, @"deserialization doesn't give us a group, at all");
+    
+    TSGroupContext *groupContextDeserialized = deserializedPushContent.groupContext;
+    XCTAssertTrue([groupContextDeserialized.gid isEqualToData:groupContext.gid],@"deserialized group id doesn't match original");
+    XCTAssertTrue(groupContextDeserialized.type==groupContext.type,@"deserialized group type doesn't match original");
+    XCTAssertTrue([groupContextDeserialized.members count]==3,@"deserialized group doesn't have same number of members as original");
+
+    
+    XCTAssertTrue([[groupContextDeserialized.members objectAtIndex:0] isEqualToString:member1],@"deserialized group member 1 not the same as original");
+    XCTAssertTrue([[groupContextDeserialized.members objectAtIndex:1] isEqualToString:member2],@"deserialized group member 1 not the same as original");
+    XCTAssertTrue([[groupContextDeserialized.members objectAtIndex:2] isEqualToString:member3],@"deserialized group member 1 not the same as original");
+
+    
+    TSAttachment *groupContextAvatarDeserialized = deserializedPushContent.groupContext.avatar;
+    XCTAssertTrue([groupContextAvatarDeserialized.attachmentId isEqualToNumber:avatar.attachmentId], @"deserialized ids do not match for avatar");
+    XCTAssertTrue(groupContextAvatarDeserialized.attachmentType == avatar.attachmentType, @"deserialized ids do not match for avatar");
+    XCTAssertTrue([groupContextAvatarDeserialized.attachmentDecryptionKey isEqualToData:avatar.attachmentDecryptionKey], @"deserialized ids do not match for avatar");
     
 }
 
