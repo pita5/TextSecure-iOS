@@ -19,5 +19,5 @@
 @property (nonatomic,assign) TSPushMessageFlags messageFlags;
 
 
-+ (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message;
++ (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message  withGroupContect:(TSGroupContext*)groupContext;
 @end

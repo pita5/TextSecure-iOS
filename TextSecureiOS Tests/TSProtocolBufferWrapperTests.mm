@@ -166,7 +166,6 @@
     
     XCTAssertTrue([pushContent.body isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
 
-    // TODO: this is currently failing meaning attachments don't make it through deserialization process
     XCTAssertTrue([deserializedPushContent.attachments count]==2, @"deserialization doesn't have the right number of attachments, actually has %d",[deserializedPushContent.attachments count]);
 
     TSAttachment *attachment1Deserialized = [deserializedPushContent.attachments objectAtIndex:0];
@@ -192,7 +191,7 @@
 
     TSAttachment *attachment1 = [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithInt:42] contentMIMEType:@"image/jpg" decryptionKey:attachment1Key];
     TSMessage *message = [[TSMessage alloc] initWithSenderId:@"1234" recipientId:@"1234567" date:[[NSDate alloc] init] content:@"Surf is up" attachements:@[attachment1] groupId:nil];
-    NSData *serializedMessageContent = [TSPushMessageContent serializedPushMessageContentForMessage:message];
+    NSData *serializedMessageContent = [TSPushMessageContent serializedPushMessageContentForMessage:message withGroupContect:nil];
     TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
     
     XCTAssertTrue([message.content isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
@@ -212,7 +211,7 @@
 }
 
 
--(void) testPushMessageContentGroupSerialization {
+-(void) testPushMessageContentGroupSerializationDynamic {
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
     pushContent.body = @"Surf is up";
     

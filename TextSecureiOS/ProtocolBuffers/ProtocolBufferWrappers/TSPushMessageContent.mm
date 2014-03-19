@@ -130,7 +130,45 @@
     attachmentPointer->set_contenttype(attachment_contenttype);
       
   }
-  #warning no group support here yet, need the data structure
+
+    
+  if(self.groupContext!=nil) {
+    //    message GroupContext {
+    //        enum Type {
+    //            UNKNOWN = 0;
+    //            UPDATE  = 1;
+    //            DELIVER = 2;
+    //            QUIT    = 3;
+    //        }
+    //        optional bytes             id      = 1;
+    //        optional Type              type    = 2;
+    //        optional string            name    = 3;
+    //        repeated string            members = 4;
+    //        optional AttachmentPointer avatar  = 5;
+    //    }
+    textsecure::PushMessageContent_GroupContext *serializedGroupContext = new textsecure::PushMessageContent_GroupContext;
+    serializedGroupContext->set_id([self objcDataToCppString:self.groupContext.gid]);
+    serializedGroupContext->set_type((textsecure::PushMessageContent_GroupContext_Type)self.groupContext.type);
+    serializedGroupContext->set_name([self objcStringToCpp:self.groupContext.name]);
+    for(NSString* member  in self.groupContext.members) {
+        serializedGroupContext->add_members([self objcStringToCpp:member]);
+    }
+    
+    if(self.groupContext.avatar!=nil) {
+      textsecure::PushMessageContent_AttachmentPointer attachmentPointer = serializedGroupContext->avatar();
+      const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
+      const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
+      std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
+      attachmentPointer.set_id(attachment_id);
+      attachmentPointer.set_key(attachment_encryption_key);
+      attachmentPointer.set_contenttype(attachment_contenttype);
+        
+    }
+    pushMessageContent->set_allocated_group(serializedGroupContext);
+    
+  }
+    
+    
   std::string ps = pushMessageContent->SerializeAsString();
   return ps;
 }
@@ -145,7 +183,7 @@
 }
 
 
-+ (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message  {
++ (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message  withGroupContect:(TSGroupContext*)groupContext{
   TSPushMessageContent* tsPushMessageContent = [[TSPushMessageContent alloc] init];
   tsPushMessageContent.body = message.content;
   tsPushMessageContent.attachments = message.attachments;
@@ -160,7 +198,45 @@
     attachmentPointer->set_key(attachment_encryption_key);
     attachmentPointer->set_contenttype(attachment_contenttype);
   }
-#warning no group support here yet, need the data structure
+  if(groupContext!=nil) {
+      //    message GroupContext {
+      //        enum Type {
+      //            UNKNOWN = 0;
+      //            UPDATE  = 1;
+      //            DELIVER = 2;
+      //            QUIT    = 3;
+      //        }
+      //        optional bytes             id      = 1;
+      //        optional Type              type    = 2;
+      //        optional string            name    = 3;
+      //        repeated string            members = 4;
+      //        optional AttachmentPointer avatar  = 5;
+      //    }
+ 
+      textsecure::PushMessageContent_GroupContext serializedGroupContext = pushMessageContent->group();
+      serializedGroupContext.set_id([tsPushMessageContent objcDataToCppString:groupContext.gid]);
+      serializedGroupContext.set_type((textsecure::PushMessageContent_GroupContext_Type)groupContext.type);
+      serializedGroupContext.set_name([tsPushMessageContent objcStringToCpp:groupContext.name]);      
+      for(NSString* member  in groupContext.members) {
+          serializedGroupContext.add_members([tsPushMessageContent objcStringToCpp:member]);
+      }
+      
+      if(groupContext.avatar!=nil) {
+          textsecure::PushMessageContent_AttachmentPointer attachmentPointer = serializedGroupContext.avatar();
+          const uint64_t attachment_id =  [tsPushMessageContent objcNumberToCppUInt64:groupContext.avatar.attachmentId];
+          const std::string attachment_encryption_key = [tsPushMessageContent objcDataToCppString:groupContext.avatar.attachmentDecryptionKey];
+          std::string attachment_contenttype = [tsPushMessageContent objcStringToCpp:[groupContext.avatar getMIMEContentType]];
+          attachmentPointer.set_id(attachment_id);
+          attachmentPointer.set_key(attachment_encryption_key);
+          attachmentPointer.set_contenttype(attachment_contenttype);
+        
+      }
+      
+  
+  }
+    
+    
+    
   return [tsPushMessageContent serializedProtocolBuffer];
 }
 
