@@ -253,6 +253,48 @@
 
 
 
+-(void) testPushMessageContentGroupSerializationStatic {
+    
+    NSString* member1 = @"12345678";
+    NSString* member2 = @"987665";
+    NSString* member3 = @"11111111";
+    NSData* avatarKey = [Cryptography generateRandomBytes:32];
+    NSData* groupId = [Cryptography generateRandomBytes:8];
+    TSAttachment *avatar = [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithInt:42] contentMIMEType:@"image/jpg" decryptionKey:avatarKey];
+    
+    
+    
+    TSGroupContext *groupContext = [[TSGroupContext alloc] initWithId:groupId withType:TSUpdateGroupContext withName:@"Winter Break of Code" withMembers:[NSArray arrayWithObjects:member1,member2,member3, nil] withAvatar:avatar];
+    
+
+    TSMessage *message = [[TSMessage alloc] initWithSenderId:@"1234" recipientId:@"1234567" date:[[NSDate alloc] init] content:@"Surf is up" attachements:nil groupId:nil];
+    NSData *serializedMessageContent = [TSPushMessageContent serializedPushMessageContentForMessage:message withGroupContect:groupContext];
+
+    
+    TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
+    
+    XCTAssertTrue([message.content isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
+    XCTAssertTrue(deserializedPushContent.groupContext!=nil, @"deserialization doesn't give us a group, at all");
+    
+    TSGroupContext *groupContextDeserialized = deserializedPushContent.groupContext;
+    XCTAssertTrue([groupContextDeserialized.gid isEqualToData:groupContext.gid],@"deserialized group id doesn't match original");
+    XCTAssertTrue(groupContextDeserialized.type==groupContext.type,@"deserialized group type doesn't match original");
+    XCTAssertTrue([groupContextDeserialized.members count]==3,@"deserialized group doesn't have same number of members as original");
+    
+    
+    XCTAssertTrue([[groupContextDeserialized.members objectAtIndex:0] isEqualToString:member1],@"deserialized group member 1 not the same as original");
+    XCTAssertTrue([[groupContextDeserialized.members objectAtIndex:1] isEqualToString:member2],@"deserialized group member 1 not the same as original");
+    XCTAssertTrue([[groupContextDeserialized.members objectAtIndex:2] isEqualToString:member3],@"deserialized group member 1 not the same as original");
+    
+    
+    TSAttachment *groupContextAvatarDeserialized = deserializedPushContent.groupContext.avatar;
+    XCTAssertTrue([groupContextAvatarDeserialized.attachmentId isEqualToNumber:avatar.attachmentId], @"deserialized ids do not match for avatar");
+    XCTAssertTrue(groupContextAvatarDeserialized.attachmentType == avatar.attachmentType, @"deserialized ids do not match for avatar");
+    XCTAssertTrue([groupContextAvatarDeserialized.attachmentDecryptionKey isEqualToData:avatar.attachmentDecryptionKey], @"deserialized ids do not match for avatar");
+    
+}
+
+
 -(void) testObjcDateToCpp {
     NSDate* now = [NSDate date];
     uint64_t cppDate = [self.pbWrapper objcDateToCpp:now];
