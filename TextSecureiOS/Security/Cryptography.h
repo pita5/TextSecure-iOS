@@ -24,6 +24,7 @@
 
 #pragma mark encrypt and decrypt attachment data
 +(NSData*) decryptAttachment:(NSData*) dataToDecrypt withKey:(NSData*) key ;
+
 +(NSData*) encryptAttachment:(NSData*) attachment withRandomKey:(NSData**)key;
 #pragma mark general encryption/decryption
 +(NSData*) decrypt:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) HMACKey forHMAC:(NSData *)hmac;

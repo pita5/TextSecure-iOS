@@ -93,6 +93,9 @@
   return [Cryptography decrypt:encryptedAttachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey forHMAC:hmac];
 }
 
+
+
+
 +(NSData*) encryptAttachment:(NSData*) attachment withRandomKey:(NSData**)key{
   // generate
   // random 10 byte IV

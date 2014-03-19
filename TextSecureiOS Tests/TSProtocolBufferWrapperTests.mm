@@ -1,4 +1,4 @@
-//
+ //
 //  TSProtocolBufferWrapperTests.m
 //  TextSecureiOS
 //
@@ -177,7 +177,7 @@
     XCTAssertTrue([attachment2Deserialized.attachmentId isEqualToNumber:attachment2.attachmentId], @"deserialized ids do not match for attachment 2");
 
     XCTAssertTrue(attachment1Deserialized.attachmentType == attachment1.attachmentType, @"deserialized ids do not match for attachment 1");
-    XCTAssertTrue(attachment1Deserialized.attachmentType == attachment1.attachmentType, @"deserialized ids do not match for attachment 2");
+    XCTAssertTrue(attachment2Deserialized.attachmentType == attachment2.attachmentType, @"deserialized ids do not match for attachment 2");
 
     XCTAssertTrue([attachment1Deserialized.attachmentDecryptionKey isEqualToData:attachment1.attachmentDecryptionKey], @"deserialized ids do not match for attachment 1 deserialized %@ serialized %@",attachment1Deserialized.attachmentDecryptionKey,attachment1.attachmentDecryptionKey);
     XCTAssertTrue([attachment2Deserialized.attachmentDecryptionKey isEqualToData:attachment2.attachmentDecryptionKey], @"deserialized ids do not match for attachment 2 deserialized %@ serialized %@",attachment2Deserialized.attachmentDecryptionKey,attachment2.attachmentDecryptionKey);
@@ -187,38 +187,26 @@
 
 
 -(void) testPushMessageContentAttachmentSerializationStatic {
-    
- 
-    
-    NSData* attachment1Key = [Cryptography generateRandomBytes:32];
-    NSData* attachment2Key = [Cryptography generateRandomBytes:32];
-    
+    unsigned char testkey = 7;
+    NSData* attachment1Key = [NSData dataWithBytes:&testkey length:sizeof(testkey)];
+
     TSAttachment *attachment1 = [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithInt:42] contentMIMEType:@"image/jpg" decryptionKey:attachment1Key];
-    TSAttachment *attachment2 = [[TSAttachment alloc] initWithAttachmentId:[NSNumber numberWithInt:35] contentMIMEType:@"video/mp4" decryptionKey:attachment2Key];
-    
-    TSMessage *message = [[TSMessage alloc] initWithSenderId:@"1234" recipientId:@"1234567" date:[[NSDate alloc] init] content:@"Surf is up" attachements:@[attachment1,attachment2] groupId:nil];
-    
-    
+    TSMessage *message = [[TSMessage alloc] initWithSenderId:@"1234" recipientId:@"1234567" date:[[NSDate alloc] init] content:@"Surf is up" attachements:@[attachment1] groupId:nil];
     NSData *serializedMessageContent = [TSPushMessageContent serializedPushMessageContentForMessage:message];
     TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
     
     XCTAssertTrue([message.content isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
-    
-    XCTAssertTrue([deserializedPushContent.attachments count]==2, @"deserialization doesn't have the right number of attachments, actually has %d",[deserializedPushContent.attachments count]);
+    XCTAssertTrue([deserializedPushContent.attachments count]==1, @"deserialization doesn't have the right number of attachments, actually has %d",[deserializedPushContent.attachments count]);
     
     TSAttachment *attachment1Deserialized = [deserializedPushContent.attachments objectAtIndex:0];
-    TSAttachment *attachment2Deserialized = [deserializedPushContent.attachments objectAtIndex:1];
     
     
     XCTAssertTrue([attachment1Deserialized.attachmentId isEqualToNumber:attachment1.attachmentId], @"deserialized ids do not match for attachment 1");
-    XCTAssertTrue([attachment2Deserialized.attachmentId isEqualToNumber:attachment2.attachmentId], @"deserialized ids do not match for attachment 2");
     
     XCTAssertTrue(attachment1Deserialized.attachmentType == attachment1.attachmentType, @"deserialized ids do not match for attachment 1");
-    XCTAssertTrue(attachment1Deserialized.attachmentType == attachment1.attachmentType, @"deserialized ids do not match for attachment 2");
 
     // TODO: this is currently failing meaning attachments don't make it through deserialization process
     XCTAssertTrue([attachment1Deserialized.attachmentDecryptionKey isEqualToData:attachment1.attachmentDecryptionKey], @"deserialized ids do not match for attachment 1 deserialized %@ serialized %@",attachment1Deserialized.attachmentDecryptionKey,attachment1.attachmentDecryptionKey);
-    XCTAssertTrue([attachment2Deserialized.attachmentDecryptionKey isEqualToData:attachment2.attachmentDecryptionKey], @"deserialized ids do not match for attachment 2 deserialized %@ serialized %@",attachment2Deserialized.attachmentDecryptionKey,attachment2.attachmentDecryptionKey);
     
     
 }

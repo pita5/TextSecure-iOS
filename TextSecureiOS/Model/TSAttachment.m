@@ -30,15 +30,17 @@
         self.attachmentDecryptionKey = decryptionKey;
 #warning download attachment here
         // encryption attachment data, write to file, and initialize the attachment
+        /*
         NSData *randomEncryptionKey;
-        NSData *encryptedData = [Cryptography encryptAttachment:UIImagePNGRepresentation([UIImage imageNamed:@"photo.png"]) withRandomKey:&randomEncryptionKey];
+        NSData *encryptedData = [Cryptography encryptAttachment:UIImagePNGRepresentation([UIImage imageNamed:@"photo.png"]) withKey:decryptionKey
         
         NSString* filename = [[Cryptography truncatedHMAC:encryptedData withHMACKey:randomEncryptionKey truncation:10] base64EncodedStringWithOptions:0];
         
         NSString* writeToFile = [FilePath pathInDocumentsDirectory:filename];
         [encryptedData writeToFile:writeToFile atomically:YES];
-        self.attachmentDecryptionKey = randomEncryptionKey;
-        self.attachmentDataPath = filename;
+         */
+        self.attachmentDecryptionKey = decryptionKey;
+        self.attachmentDataPath = @"TODOFILE";
         self.attachmentType = [contentType isEqualToString:@"video/mp4"] ? TSAttachmentVideo : TSAttachmentPhoto;
         
     }
