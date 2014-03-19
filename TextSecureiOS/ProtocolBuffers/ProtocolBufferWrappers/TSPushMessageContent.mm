@@ -148,7 +148,7 @@
 + (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message  {
   TSPushMessageContent* tsPushMessageContent = [[TSPushMessageContent alloc] init];
   tsPushMessageContent.body = message.content;
-  tsPushMessageContent.attachments = @[message.attachments];
+  tsPushMessageContent.attachments = message.attachments;
   textsecure::PushMessageContent *pushMessageContent = new textsecure::PushMessageContent();
   pushMessageContent->set_body([tsPushMessageContent objcStringToCpp:tsPushMessageContent.body]);
   for(TSAttachment* attachment in tsPushMessageContent.attachments) {
