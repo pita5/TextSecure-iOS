@@ -130,22 +130,8 @@
     attachmentPointer->set_contenttype(attachment_contenttype);
       
   }
-
     
   if(self.groupContext!=nil) {
-    //    message GroupContext {
-    //        enum Type {
-    //            UNKNOWN = 0;
-    //            UPDATE  = 1;
-    //            DELIVER = 2;
-    //            QUIT    = 3;
-    //        }
-    //        optional bytes             id      = 1;
-    //        optional Type              type    = 2;
-    //        optional string            name    = 3;
-    //        repeated string            members = 4;
-    //        optional AttachmentPointer avatar  = 5;
-    //    }
     textsecure::PushMessageContent_GroupContext *serializedGroupContext = new textsecure::PushMessageContent_GroupContext;
     serializedGroupContext->set_id([self objcDataToCppString:self.groupContext.gid]);
     serializedGroupContext->set_type((textsecure::PushMessageContent_GroupContext_Type)self.groupContext.type);
@@ -155,20 +141,21 @@
     }
     
     if(self.groupContext.avatar!=nil) {
-      textsecure::PushMessageContent_AttachmentPointer attachmentPointer = serializedGroupContext->avatar();
+      textsecure::PushMessageContent_AttachmentPointer *avatar = new textsecure::PushMessageContent_AttachmentPointer;
       const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
       const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
       std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
-      attachmentPointer.set_id(attachment_id);
-      attachmentPointer.set_key(attachment_encryption_key);
-      attachmentPointer.set_contenttype(attachment_contenttype);
-        
+      avatar->set_id(attachment_id);
+      avatar->set_key(attachment_encryption_key);
+      avatar->set_contenttype(attachment_contenttype);
+      serializedGroupContext->set_allocated_avatar(avatar);
     }
     pushMessageContent->set_allocated_group(serializedGroupContext);
     
   }
-    
-    
+  if(self.messageFlags) {
+    pushMessageContent->set_flags(self.messageFlags);
+  }
   std::string ps = pushMessageContent->SerializeAsString();
   return ps;
 }
