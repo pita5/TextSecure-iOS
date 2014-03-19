@@ -188,7 +188,6 @@
 -(void) testPushMessageContentGroupSerialization {
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
     pushContent.body = @"Surf is up";
-
     
     NSString* member1 = @"12345678";
     NSString* member2 = @"987665";

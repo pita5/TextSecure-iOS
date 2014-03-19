@@ -115,12 +115,23 @@
 
 
 -(const std::string) serializedProtocolBufferAsString {
-  textsecure::PushMessageContent *messageSignal = new textsecure::PushMessageContent;
+  textsecure::PushMessageContent *pushMessageContent = new textsecure::PushMessageContent;
   // objective c->c++
   const std::string cppMessage = [self objcStringToCpp:self.body];
   // c++->protocol buffer
-  messageSignal->set_body(cppMessage);
-  std::string ps = messageSignal->SerializeAsString();
+  pushMessageContent->set_body(cppMessage);
+  for(TSAttachment* attachment in self.attachments) {
+    textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
+    const uint64_t attachment_id =  [self objcNumberToCppUInt64:attachment.attachmentId];
+    const std::string attachment_encryption_key = [self objcDataToCppString:attachment.attachmentDecryptionKey];
+    std::string attachment_contenttype = [self objcStringToCpp:[attachment getMIMEContentType]];
+    attachmentPointer->set_id(attachment_id);
+    attachmentPointer->set_key(attachment_encryption_key);
+    attachmentPointer->set_contenttype(attachment_contenttype);
+      
+  }
+  #warning no group support here yet, need the data structure
+  std::string ps = pushMessageContent->SerializeAsString();
   return ps;
 }
 
@@ -134,7 +145,7 @@
 }
 
 
-+ (NSData *)serializedPushMessageContent:(TSMessage*) message  {
++ (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message  {
   TSPushMessageContent* tsPushMessageContent = [[TSPushMessageContent alloc] init];
   tsPushMessageContent.body = message.content;
   tsPushMessageContent.attachments = @[message.attachments];
