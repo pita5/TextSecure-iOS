@@ -292,7 +292,7 @@
     [counter appendBytes:(void*)&empty length:4];
   }
   
-  uint32_t ctrInt = [ctr integerValue];
+  uint32_t ctrInt = [ctr intValue];
   [counter appendBytes:(void*)&ctrInt length:4];
   return counter;
 }

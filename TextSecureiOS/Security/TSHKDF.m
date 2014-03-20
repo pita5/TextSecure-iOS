@@ -2,7 +2,7 @@
 //  TSHKDF.m
 //  TextSecureiOS
 //
-//  Created by Alban Diquet on 12/7/13.
+//  Created by Alban Diquet on 12/7/1x3.
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 

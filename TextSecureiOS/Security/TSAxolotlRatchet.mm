@@ -40,9 +40,9 @@
 #pragma mark Public methods
 
 // Method for incoming messages
-+ (TSMessage*)messageWithWhisperMessage:(TSEncryptedWhisperMessage*)message fromContact:(TSContact*)contact{
-    
-    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:1];
++ (TSMessage*)decryptWhisperMessage:(TSEncryptedWhisperMessage *)message withSession:(TSSession *)session{
+
+    TSContact *contact = session.contact;
     
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
