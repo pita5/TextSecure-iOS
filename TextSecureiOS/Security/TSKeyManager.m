@@ -96,6 +96,9 @@
   return ([TSKeyManager getUsernameToken] && [TSKeyManager getAuthenticationToken] && [TSStorageMasterKey wasStorageMasterKeyCreated]);
 }
 
-
++ (NSNumber*) getUserDeviceId{
+#warning not implemented!
+    return [NSNumber numberWithInt:1];
+}
 
 @end
