@@ -42,7 +42,4 @@
 
 + (TSMessage*)decryptWhisperMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session;
 
-#pragma mark Identity
-+ (TSECKeyPair*)myIdentityKey;
-
 @end

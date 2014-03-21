@@ -101,8 +101,6 @@
                             // Bootstrap session with Prekey
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
                             session.fetchedPrekey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
-    
-                            TSPreKeyWhisperMessage *whisperMessage = (TSPreKeyWhisperMessage*)[TSAxolotlRatchet encryptMessage:message withSession:session];
                             
                             [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
@@ -133,7 +131,7 @@
     
     TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
     
-    TSMessage *decryptedMessage = [TSAxolotlRatchet messageWithWhisperMessage:signal.message fromContact:session.contact];
+    TSMessage *decryptedMessage = [TSAxolotlRatchet decryptWhisperMessage:signal.message withSession:session];
     
     [TSMessagesDatabase storeMessage:decryptedMessage];
     
