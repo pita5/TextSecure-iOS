@@ -230,8 +230,9 @@
 }
     
 + (NSData*)currentProtocolVersion{
-    int version = 2;
-    return [NSData dataWithBytes:&version length:sizeof(version)];
+    NSUInteger index = 1;
+    NSData *versionByte = [NSData dataWithBytes:&index length:1];
+    return versionByte;
 }
 
 
