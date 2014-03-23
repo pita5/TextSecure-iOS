@@ -21,7 +21,8 @@
 }
 
 -(NSData *)removeVersionByte{
-    return [self subdataWithRange:NSMakeRange(1, 32)];
+#warning THIS IS CRASHING ON FIRST RECEIVE CRASHY CRASH CRASH
+    return [self subdataWithRange:NSMakeRange(1, 32)]; // THIS IS CRASHING
 }
 
 @end

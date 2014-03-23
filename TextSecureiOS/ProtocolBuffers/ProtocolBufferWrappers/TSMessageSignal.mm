@@ -41,7 +41,7 @@
     const std::string cppSource = [self objcStringToCpp:self.source];
     const uint32_t cppSourceDevice = [self objcNumberToCppUInt32:self.sourceDevice];
     const uint64_t cppTimestamp = [self objcDateToCpp:self.timestamp];
-    const std::string cppMessage = (cppType == textsecure::IncomingPushMessageSignal_Type_CIPHERTEXT) ? [self objcDataToCppString:[(TSEncryptedWhisperMessage*)self.message getTextSecure_WhisperMessage]] :  [self objcDataToCppString:[(TSPreKeyWhisperMessage*)self.message getTextSecure_PreKeyWhisperMessage]];
+    const std::string cppMessage = [self objcDataToCppString:[self.message getTextSecureProtocolData]];
     // c++->protocol buffer
     messageSignal->set_type(cppType);
     messageSignal->set_source(cppSource);
@@ -66,10 +66,10 @@
 -(TSEncryptedWhisperMessage*) getWhisperMessageForData:(NSData*) data {
   switch (self.contentType) {
     case TSEncryptedWhisperMessageType:
-          return [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:data];
+          return [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:data];
       break;
     case TSPreKeyWhisperMessageType:
-          return [[TSPreKeyWhisperMessage alloc] initWithTextSecure_PreKeyWhisperMessage:data];
+          return [[TSPreKeyWhisperMessage alloc] initWithTextSecureProtocolData:data];
       break;
     default:
       return nil;

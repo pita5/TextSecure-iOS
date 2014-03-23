@@ -460,6 +460,9 @@ static TSDatabaseManager *messagesDb = nil;
     return session;
 }
 
+
+
+
 + (BOOL)deleteSession:(TSSession*)session{
     openDBMacroBOOL
     

@@ -27,7 +27,7 @@
  *  @return An encrypted protocol-buffer encoded TSEncryptedWhisperMessage or TSPrekeyWhisperMessage if it's the first message to be sent.
  */
 
-+ (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session;
++ (TSWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session;
 
 #pragma mark DecryptionMethods
 

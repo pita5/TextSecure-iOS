@@ -85,7 +85,7 @@
     return incomingMessage;
 }
 
-+ (TSEncryptedWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session{
++ (TSWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session{
     
     if (session.fetchedPrekey) {
         [session clear];
@@ -112,8 +112,7 @@
     NSData* computedHMAC;
     NSData *cipherText = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys forVersion:[self currentProtocolVersion] computedHMAC:&computedHMAC];
     
-    TSEncryptedWhisperMessage *encryptedMessage;
-    
+    TSWhisperMessage *encryptedMessage;
     if ([session hasPendingPreKey]) {
 
         encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:cipherText theirPrekeyId:[NSNumber numberWithInt:session.pendingPreKey.prekeyId] myCurrentEphemeral:[session.pendingPreKey.ephemeralKey prependVersionByte] myNextEphemeral:session.senderEphemeral.publicKeyWithVersionByte forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];

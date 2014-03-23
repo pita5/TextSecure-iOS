@@ -50,10 +50,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     UIEdgeInsets inset = UIEdgeInsetsMake(44, 0, 0, 0);
     self.tableView.contentInset = inset;
 
-//    Settings are now in Settings.app
-    
-//    self.settingsBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(openSettings)];
-//    self.navigationItem.leftBarButtonItem = self.settingsBarButtonItem;
 
     [self.tableView registerClass:[TSMessageConversationCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -141,6 +137,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete row
         [self Edit:self];
 	}
 	else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -179,10 +176,10 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 - (void)swipeableTableViewCell:(TSMessageConversationCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
 
 #warning currently not supported
-
-    //    [TSMessagesDatabase deleteThread:[self.conversations objectAtIndex:index] withCompletionBlock:^(BOOL success) {
-//        [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
-//        [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
+#warning working on this
+//    [TSMessagesDatabase deleteThread:[self.conversations objectAtIndex:index] withCompletionBlock:^(BOOL success) {
+//            [self swipeableTableViewCell:cell scrollingToState:kCellStateCenter];
+//            [self.tableView deleteRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationAutomatic];
 //    }];
 }
 

@@ -22,6 +22,15 @@
     return self;
 }
 
+
+-(id) initWithTextSecureProtocolData:(NSData*) data {
+    return [self initWithTextSecure_WhisperMessage:data];
+}
+
+-(NSData*) getTextSecureProtocolData {
+    return [self getTextSecure_WhisperMessage];
+}
+
 -(id) initWithTextSecure_WhisperMessage:(NSData*) data {
     /* Protocol v2
      struct {
@@ -59,15 +68,16 @@
 }
 
 
-
 -(NSData*) getTextSecure_WhisperMessage{
-
+    
     NSMutableData *serialized = [NSMutableData data];
     [serialized appendData:self.version];
     [serialized appendData:[self serializedProtocolBuffer]];
     [serialized appendData:self.hmac];
     return serialized;
 }
+
+
 
 
 

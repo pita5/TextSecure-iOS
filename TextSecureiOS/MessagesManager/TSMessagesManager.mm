@@ -64,7 +64,7 @@
         
         if ([sessions count] > 0) {
             for (TSSession *session in sessions){
-                [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecure_WhisperMessage ]base64EncodedString] ofType:TSEncryptedWhisperMessageType];
+                [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecureProtocolData] base64EncodedString] ofType:TSEncryptedWhisperMessageType];
             }
             
         } else{

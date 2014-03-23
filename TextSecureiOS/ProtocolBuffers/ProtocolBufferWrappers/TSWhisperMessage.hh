@@ -16,4 +16,9 @@
 @property (nonatomic,strong) NSData* message;
 @property (nonatomic,strong) NSData* version;
 
+
+-(id) initWithTextSecureProtocolData:(NSData*) data;
+-(NSData*) getTextSecureProtocolData;
+
+
 @end

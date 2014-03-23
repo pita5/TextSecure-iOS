@@ -24,6 +24,16 @@
     }
     return self;
 }
+
+
+-(id) initWithTextSecureProtocolData:(NSData*) data {
+    return [self initWithTextSecure_PreKeyWhisperMessage:data];
+}
+
+-(NSData*) getTextSecureProtocolData {
+    return [self getTextSecure_PreKeyWhisperMessage];
+}
+
 -(id) initWithTextSecure_PreKeyWhisperMessage:(NSData*) data {
     /*
      struct {
