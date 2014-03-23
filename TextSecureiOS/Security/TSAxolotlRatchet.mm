@@ -46,7 +46,8 @@
     TSEncryptedWhisperMessage *encryptedWhispeMessageToDecrypt;
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
-        
+        NSLog(@"received protocol buffer %@",[preKeyWhisperMessage debugDescription]);
+
         if (!contact.identityKey) {
             contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
         } else{
@@ -70,7 +71,6 @@
     if (!session) {
         throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
     }
-    
     return [self decryptMessage:encryptedWhispeMessageToDecrypt withSession:session];
 }
 
