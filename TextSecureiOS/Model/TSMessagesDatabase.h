@@ -11,6 +11,7 @@
 @class TSSession;
 @class TSMessage;
 @class TSContact;
+@class TSConversation;
 
 typedef void(^dataBaseFetchCompletionBlock)(NSArray* array);
 typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of arrays
@@ -39,6 +40,10 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 #pragma mark Conversations
 
 + (NSArray*)conversations;
++ (void)deleteMessagesForConversation:(TSConversation*)conversation completion:(dataBaseUpdateCompletionBlock) block;
+
+// Method for debug-only
++ (void)deleteMessagesAndSessionsForConversation:(TSConversation*)conversation completion:(dataBaseUpdateCompletionBlock) block;
 
 #pragma mark Sessions
 
@@ -56,6 +61,7 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 
 + (NSArray*)messagesWithContact:(TSContact*)contact;
 + (BOOL)storeMessage:(TSMessage*)msg;
++ (BOOL)deleteMessage:(TSMessage*)msg;
 
 @end
 

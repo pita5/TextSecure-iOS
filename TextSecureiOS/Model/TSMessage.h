@@ -15,6 +15,7 @@ typedef void (^TSMessageChangeState)(BOOL success);
 
 @interface TSMessage : NSObject
 {
+    NSString *_messageId;
     NSString *_senderId;
     NSString *_recipientId;
     NSDate *_timestamp;
@@ -31,9 +32,12 @@ typedef void (^TSMessageChangeState)(BOOL success);
 @property (nonatomic, readonly) NSArray *attachments;
 @property (nonatomic, readonly) TSGroup *group;
 @property (nonatomic, readonly) int state;
+@property (nonatomic, readonly) NSString *messageId;
+
 
 -(BOOL) isUnread;
 
 - (instancetype)initWithSenderId:(NSString*)senderId recipientId:(NSString*)recipientId date:(NSDate*)date content:(NSString*)content attachements:(NSArray*)attachements groupId:(TSGroup*)group;
+- (instancetype)initWithSenderId:(NSString*)senderId recipientId:(NSString*)recipientId date:(NSDate*)date content:(NSString*)content attachements:(NSArray*)attachements groupId:(TSGroup*)group messageId:(NSString*)messageid;
 
 @end

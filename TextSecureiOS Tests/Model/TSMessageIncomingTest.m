@@ -9,6 +9,9 @@
 #import <XCTest/XCTest.h>
 
 #import "TSMessageIncoming.h"
+#import "TSKeyManager.h"
+#import "TSMessagesDatabase.h"
+#import "TSStorageMasterKey.h"
 
 @interface TSMessageIncomingTest : XCTestCase
 
@@ -18,8 +21,33 @@
 
 - (void)setUp
 {
+    
+    static NSString *masterPw = @"1234test";
+    static NSString *dbFileName = @"test.db";
+    static NSString *dbPreference = @"WasTestDbCreated";
+    
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    [TSKeyManager storeUsernameToken:@"56789"];
+    
+    // Remove any existing DB
+    [TSMessagesDatabase databaseErase];
+    
+    
+    [TSStorageMasterKey eraseStorageMasterKey];
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
+    
+    NSError *error;
+    
+    // tests datbase creation
+    
+    XCTAssertTrue([TSMessagesDatabase databaseCreateWithError:&error], @"message db creation failed");
+    XCTAssertNil(error, @"message db creation returned an error");
+    
+    // tests is empty
+    NSArray* threadsFromDb = [TSMessagesDatabase conversations];
+    XCTAssertTrue([threadsFromDb count]==0, @"there are threads in an empty db");
 }
 
 - (void)tearDown
@@ -37,7 +65,7 @@
     TSGroup *group = nil;
     TSMessageIncomingState state = TSMessageStateReceived;
 
-    TSMessageIncoming *message = [[TSMessageIncoming alloc] initWithMessageWithContent:content
+    TSMessageIncoming *message = [[TSMessageIncoming alloc] initMessageWithContent:content
                                                                              sender:senderId
                                                                                   date:date
                                                                           attachements:attachments
@@ -55,13 +83,19 @@
 
 - (void)testSetStateWithCompletion
 {
-    __block TSMessageIncoming *message = [[TSMessageIncoming alloc] initWithMessageWithContent:nil
-                                                                                sender:nil
-                                                                                  date:nil
-                                                                          attachements:nil
-                                                                                 group:nil
-                                                                                 state:TSMessageStateReceived];
-
+    NSString *content = @"Hello";
+    NSString *senderId = @"+1234567890";
+    NSDate *date = [NSDate date];
+    NSArray *attachments = @[];
+    TSGroup *group = nil;
+    TSMessageIncomingState state = TSMessageStateReceived;
+    
+    TSMessageIncoming *message = [[TSMessageIncoming alloc] initMessageWithContent:content
+                                                                            sender:senderId
+                                                                              date:date
+                                                                      attachements:attachments
+                                                                             group:group
+                                                                             state:state];
     XCTAssertEqual(message.state, TSMessageStateReceived);
 
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);

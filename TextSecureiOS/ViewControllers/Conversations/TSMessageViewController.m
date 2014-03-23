@@ -94,7 +94,7 @@
 
 - (void)didSendText:(NSString *)text {
 
-    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initWithMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
+    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
 
     //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
     //        // this is asynchronous so message will only be send by messages manager when it succeeds

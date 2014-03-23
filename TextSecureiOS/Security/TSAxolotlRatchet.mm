@@ -86,7 +86,7 @@
     
     NSString* contentString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherText withKeys:messageKeys forVersion:[message version] withHMAC:message.hmac] encoding:NSUTF8StringEncoding];
     
-    TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initWithMessageWithContent:contentString sender:session.contact.registeredID date:[NSDate date] attachements:nil group:nil state:TSMessageStateReceived];
+    TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:contentString sender:session.contact.registeredID date:[NSDate date] attachements:nil group:nil state:TSMessageStateReceived];
     [TSMessagesDatabase storeSession:session];
     
     return incomingMessage;
