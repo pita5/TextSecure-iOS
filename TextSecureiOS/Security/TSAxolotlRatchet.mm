@@ -127,6 +127,7 @@
     } else{
         encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:[senderEphemeral.publicKey prependVersionByte] previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
     }
+    NSLog(@"testing encryption %@",[encryptedMessage debugDescription]);
     
     [session setSenderChainKey:[chainKey nextChainKey]];
     

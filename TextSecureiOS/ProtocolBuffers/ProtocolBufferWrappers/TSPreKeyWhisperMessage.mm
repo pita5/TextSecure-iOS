@@ -13,14 +13,14 @@
 #import "TSUserKeysDatabase.h"
 #import "NSData+Base64.h"
 @implementation TSPreKeyWhisperMessage
-
--(instancetype)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)version{
+@synthesize version;
+-(instancetype)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)vers{
     if(self=[super init]) {
         self.preKeyId = prekeyId;
         self.baseKey = prekey;
         self.identityKey = identityKey;
         self.message = messageContents;
-        self.version = version;
+        self.version = vers;
     }
     return self;
 }
@@ -129,6 +129,9 @@
                                              message:[encryptedWhisperMessage getTextSecureProtocolData]
                                              forVersion:version];
     NSLog(@"%@",[prekeyMessage debugDescription]);
+    
+    NSLog(@"Embedded whispermessage %@",[[[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:[encryptedWhisperMessage getTextSecureProtocolData]] debugDescription]);
+
     return prekeyMessage;
 }
 

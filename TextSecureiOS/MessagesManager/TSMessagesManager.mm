@@ -102,19 +102,7 @@
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
                             session.fetchedPrekey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
                             
-                            TSWhisperMessage *whisperMessage = [TSAxolotlRatchet encryptMessage:message withSession:session];
-                            
-                            TSMessageSignal *messageSignal = [[TSMessageSignal alloc]init];
-                            
-                            messageSignal.contentType = [whisperMessage isKindOfClass:[TSPreKeyWhisperMessage class]]?TSPreKeyWhisperMessageType:TSEncryptedWhisperMessageType;
-                            
-                            messageSignal.source = [TSKeyManager getUsernameToken];
-                            messageSignal.timestamp = [NSDate date];
-                            messageSignal.sourceDevice = [TSKeyManager getUserDeviceId];
-                            messageSignal.message = whisperMessage;
-                            
-                            
-                            [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[messageSignal getTextSecureProtocolData] base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                            [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecureProtocolData] base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
                         // nil
                         break;
@@ -151,6 +139,14 @@
 }
 
 -(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
+#warning remove debug description
+    if(messageType == TSEncryptedWhisperMessageType) {
+        NSLog(@"submitting encrypted message: %@",[[[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:[NSData dataFromBase64String:serializedMessage]] debugDescription]);
+    }
+    else if (messageType == TSPreKeyWhisperMessageType){
+        NSLog(@"submitting prekey message: %@",[[[TSPreKeyWhisperMessage alloc] initWithTextSecureProtocolData:[NSData dataFromBase64String:serializedMessage]] debugDescription]);
+
+    }
     
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
