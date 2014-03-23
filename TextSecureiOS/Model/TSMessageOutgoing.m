@@ -31,10 +31,11 @@
 }
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{
-    BOOL didSucceed;
-    didSucceed = [TSMessagesDatabase storeMessage:self];
-    _state = state;
-    block(didSucceed);
+#warning update state - removed because introduced duplicates.
+//    BOOL didSucceed;
+//    didSucceed = [TSMessagesDatabase storeMessage:self];
+//    _state = state;
+//    block(didSucceed);
 }
 
 - (BOOL)isUnread{
