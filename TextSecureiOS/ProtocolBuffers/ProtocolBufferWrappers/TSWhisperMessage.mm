@@ -11,12 +11,12 @@
 @implementation TSWhisperMessage
 
 -(id) initWithTextSecureProtocolData:(NSData*) data {
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+    throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                  userInfo:nil];
 }
 -(NSData*) getTextSecureProtocolData {
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+    throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                  userInfo:nil];
 }

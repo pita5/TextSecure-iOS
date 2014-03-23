@@ -40,10 +40,10 @@
 #pragma mark Public methods
 
 // Method for incoming messages
-+ (TSMessage*)decryptWhisperMessage:(TSEncryptedWhisperMessage *)message withSession:(TSSession *)session{
++ (TSMessage*)decryptWhisperMessage:(TSWhisperMessage*)message withSession:(TSSession *)session{
 
     TSContact *contact = session.contact;
-    
+    TSEncryptedWhisperMessage *encryptedWhispeMessageToDecrypt;
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
         
@@ -56,15 +56,22 @@
             }
         }
         
-        message.ephemeralKey = preKeyWhisperMessage.baseKey;
         session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte] ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
+        encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message]; // TODO: verify this i
+        encryptedWhispeMessageToDecrypt.ephemeralKey = preKeyWhisperMessage.baseKey; // TODO: code audit, why this Fred?
+
     }
-    
+    else if ([message isKindOfClass:[TSEncryptedWhisperMessage class]]) {
+        encryptedWhispeMessageToDecrypt = (TSEncryptedWhisperMessage*)message;
+    }
+    else {
+        throw [NSException exceptionWithName:@"Unrecognized TSWhisperMessageType. Can't cast. This is a programmer bug." reason:@"" userInfo:@{}];
+    }
     if (!session) {
         throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
     }
     
-    return [self decryptMessage:message withSession:session];
+    return [self decryptMessage:encryptedWhispeMessageToDecrypt withSession:session];
 }
 
 + (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session{

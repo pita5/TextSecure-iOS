@@ -40,6 +40,6 @@
  *  @return
  */
 
-+ (TSMessage*)decryptWhisperMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session;
++ (TSMessage*)decryptWhisperMessage:(TSWhisperMessage*)message withSession:(TSSession *)session;
 
 @end
