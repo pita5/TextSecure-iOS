@@ -114,7 +114,7 @@
                             messageSignal.message = whisperMessage;
                             
                             
-                            [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[messageSignal serializedProtocolBuffer]base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                            [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[messageSignal getTextSecureProtocolData] base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
                         // nil
                         break;

@@ -10,7 +10,7 @@
 #import "WhisperMessage.pb.hh"
 @implementation TSEncryptedWhisperMessage
 
--(id) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version withHMAC:(NSData*)mac{
+-(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version withHMAC:(NSData*)mac{
     if(self = [super init]) {
         self.ephemeralKey = ephemeral;
         self.previousCounter = prevCounter;
@@ -23,7 +23,7 @@
 }
 
 
--(id) initWithTextSecureProtocolData:(NSData*) data {
+-(instancetype) initWithTextSecureProtocolData:(NSData*) data {
     return [self initWithTextSecure_WhisperMessage:data];
 }
 
@@ -31,7 +31,7 @@
     return [self getTextSecure_WhisperMessage];
 }
 
--(id) initWithTextSecure_WhisperMessage:(NSData*) data {
+-(instancetype) initWithTextSecure_WhisperMessage:(NSData*) data {
     /* Protocol v2
      struct {
          opaque version[1];
@@ -78,7 +78,9 @@
 }
 
 
-
+-(NSString*) debugDescription {
+    return [NSString stringWithFormat:@"WhisperMessage:\n ephemeralKey: %@\n previousCounter: %@\n counter: %@\n message: %@\n version: %@\n hmac:%@",self.ephemeralKey,self.previousCounter,self.counter,self.message,self.version,self.hmac];
+}
 
 
 -(const std::string) serializedProtocolBufferAsString {

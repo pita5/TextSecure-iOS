@@ -17,7 +17,7 @@
 
 
 
--(id) initWithTextSecureProtocolData:(NSData*) data {
+-(instancetype) initWithTextSecureProtocolData:(NSData*) data {
     throw [NSException exceptionWithName:NSInternalInconsistencyException
                                   reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                 userInfo:nil];

@@ -9,6 +9,8 @@
 #import "TSWhisperMessage.hh"
 
 @implementation TSWhisperMessage
+@synthesize message;
+@synthesize version;
 
 
 @end

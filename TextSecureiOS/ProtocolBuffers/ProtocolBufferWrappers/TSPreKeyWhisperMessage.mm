@@ -14,7 +14,7 @@
 #import "NSData+Base64.h"
 @implementation TSPreKeyWhisperMessage
 
--(id)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)version{
+-(instancetype)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)version{
     if(self=[super init]) {
         self.preKeyId = prekeyId;
         self.baseKey = prekey;
@@ -26,7 +26,7 @@
 }
 
 
--(id) initWithTextSecureProtocolData:(NSData*) data {
+-(instancetype) initWithTextSecureProtocolData:(NSData*) data {
     return [self initWithTextSecure_PreKeyWhisperMessage:data];
 }
 
@@ -34,6 +34,39 @@
     return [self getTextSecure_PreKeyWhisperMessage];
 }
 
+
+-(instancetype) initWithTextSecure_PreKeyWhisperMessage:(NSData*) data {
+    /*
+     struct {
+     opaque version[1];
+     opaque PreKeyWhisperMessage[...];
+     } TextSecure_PreKeyWhisperMessage;
+     
+     # ProtocolBuffer
+     message PreKeyWhisperMessage {
+     optional uint32 preKeyId    = 1;
+     optional bytes  baseKey     = 2;
+     optional bytes  identityKey = 3;
+     optional bytes  message     = 4;
+     }
+     
+     */
+    if(self = [super init]) {
+        self.version = [data subdataWithRange:NSMakeRange(0, 1)];
+        // c++
+        textsecure::PreKeyWhisperMessage *prekeyWhisperMessage = [self deserializeProtocolBuffer:[data subdataWithRange:NSMakeRange(1, [data length]-1)]];
+        uint32_t cppPreKeyId =  prekeyWhisperMessage->prekeyid();
+        const std::string cppBaseKey = prekeyWhisperMessage->basekey();
+        const std::string cppIdentityKey = prekeyWhisperMessage->identitykey();
+        const std::string cppMessage = prekeyWhisperMessage->message();
+        // c++->objective C
+        self.preKeyId = [self cppUInt32ToNSNumber:cppPreKeyId];
+        self.baseKey = [self cppStringToObjcData:cppBaseKey];
+        self.identityKey = [self cppStringToObjcData:cppIdentityKey];
+        self.message = [self cppStringToObjcData:cppMessage];
+    }
+    return self; // super is abstract class
+}
 
 
 -(const std::string) serializedProtocolBufferAsString {
@@ -71,40 +104,10 @@
     return serialized;
 }
 
--(id) initWithTextSecure_PreKeyWhisperMessage:(NSData*) data {
-    /*
-     struct {
-     opaque version[1];
-     opaque PreKeyWhisperMessage[...];
-     } TextSecure_PreKeyWhisperMessage;
-     
-     # ProtocolBuffer
-     message PreKeyWhisperMessage {
-     optional uint32 preKeyId    = 1;
-     optional bytes  baseKey     = 2;
-     optional bytes  identityKey = 3;
-     optional bytes  message     = 4;
-     }
-     
-     */
-    if(self = [super init]) {
-        self.version = [data subdataWithRange:NSMakeRange(0, 1)];
-        // c++
-        textsecure::PreKeyWhisperMessage *prekeyWhisperMessage = [self deserializeProtocolBuffer:[data subdataWithRange:NSMakeRange(1, [data length]-1)]];
-        uint32_t cppPreKeyId =  prekeyWhisperMessage->prekeyid();
-        const std::string cppBaseKey = prekeyWhisperMessage->basekey();
-        const std::string cppIdentityKey = prekeyWhisperMessage->identitykey();
-        const std::string cppMessage = prekeyWhisperMessage->message();
-        // c++->objective C
-        self.preKeyId = [self cppUInt32ToNSNumber:cppPreKeyId];
-        self.baseKey = [self cppStringToObjcData:cppBaseKey];
-        self.identityKey = [self cppStringToObjcData:cppIdentityKey];
-        self.message = [self cppStringToObjcData:cppMessage];
-    }
-    return self; // super is abstract class
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"PreKeyWhisperMessage:\n prekeyId: %@\n baseKey: %@\n identityKey: %@\n, message: %@\n, version: %@",self.preKeyId,self.baseKey,self.identityKey,self.message,self.version];
 }
-
-
 
 #pragma mark public static methods
 +(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
@@ -113,15 +116,23 @@
                                                           previousCounter:[NSNumber numberWithInt:0]
                                                           counter:[NSNumber numberWithInt:0]
                                                           encryptedMessage:ciphertext
-                                                          forVersion:version withHMAC:hmac];
+                                                          forVersion:version
+                                                          withHMAC:hmac];
+#warning remove log statements, but debugging objective-c++ debugger
+    NSLog(@"%@",[encryptedWhisperMessage debugDescription]);
     TSECKeyPair *identityKey = [TSUserKeysDatabase identityKey];
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
                                              initWithPreKeyId:theirPrekeyId
                                              senderPrekey:currentEphemeral
                                              senderIdentityKey:[identityKey publicKey]
-                                             message:[encryptedWhisperMessage getTextSecureProtocolData] forVersion:version];
+                                             message:[encryptedWhisperMessage getTextSecureProtocolData]
+                                             forVersion:version];
+    NSLog(@"%@",[prekeyMessage debugDescription]);
     return prekeyMessage;
 }
+
+
+
 
 @end

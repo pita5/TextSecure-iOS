@@ -12,7 +12,7 @@
 #import "TSAttachment.h"
 @implementation TSPushMessageContent
 
--(id) initWithTextSecureProtocolData:(NSData*) data {
+-(instancetype) initWithTextSecureProtocolData:(NSData*) data {
     return [self initWithData:data];
 }
 -(NSData*) getTextSecureProtocolData {
@@ -20,7 +20,7 @@
 }
 
 
--(id) initWithData:(NSData*) data {
+-(instancetype) initWithData:(NSData*) data {
   
     if(self = [super init]) {
         // c++

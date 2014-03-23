@@ -14,7 +14,7 @@
 
 @protocol TSProtocolBufferWrapperMethods <NSObject>
 #pragma mark these must be overridden by subclass
--(id) initWithData:(NSData*) buffer;
+-(instancetype) initWithData:(NSData*) buffer;
 
 #pragma mark boilerplate code
 // raw protocol buffer
