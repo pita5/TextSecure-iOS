@@ -395,10 +395,32 @@ static TSDatabaseManager *messagesDb = nil;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
+            if (block) {
+                block(success);
+            }
+        });
+    });
+}
+
++ (void)deleteMessagesAndSessionsForConversation:(TSConversation*)conversation completion:(dataBaseUpdateCompletionBlock) block{
+    
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        openDBMacroNothing
+        
+        [self deleteMessagesForConversation:conversation completion:nil];
+        BOOL success = FALSE;
+        if (conversation.contact) {
+            success = [self deleteSessions:conversation.contact];
+        } else{
+            //TO-DO: Implement group delete
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
             block(success);
         });
     });
 }
+
 
 #pragma mark Conversation Methods
 
@@ -517,10 +539,13 @@ static TSDatabaseManager *messagesDb = nil;
     openDBMacroBOOL
     NSArray *sessions = [self sessionsForContact:contact];
     
+    BOOL success = TRUE;
     for (TSSession *session in sessions){
-        [self deleteSession:session];
+        if (![self deleteSession:session]) {
+            success = FALSE;
+        }
     }
-    return FALSE;
+    return success;
 }
 
 @end

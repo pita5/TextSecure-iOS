@@ -42,6 +42,9 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 + (NSArray*)conversations;
 + (void)deleteMessagesForConversation:(TSConversation*)conversation completion:(dataBaseUpdateCompletionBlock) block;
 
+// Method for debug-only
++ (void)deleteMessagesAndSessionsForConversation:(TSConversation*)conversation completion:(dataBaseUpdateCompletionBlock) block;
+
 #pragma mark Sessions
 
 /**

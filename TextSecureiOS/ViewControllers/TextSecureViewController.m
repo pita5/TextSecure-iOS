@@ -177,7 +177,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 #pragma mark - SWTableViewCellDelegate
 
 - (void)swipeableTableViewCell:(TSMessageConversationCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
-    [TSMessagesDatabase deleteMessagesForConversation:[self.conversations objectAtIndex:index] completion:^(BOOL success) {
+    
+    
+    dataBaseUpdateCompletionBlock block = ^(BOOL success) {
         if (success) {
             NSMutableArray *removalArray = [self.conversations mutableCopy];
             [removalArray removeObjectAtIndex:index];
@@ -188,7 +190,14 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"An unexpected error occured" message:@"An error occured while trying to delete that message. Please try again and if it persists, please report it." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alertView show];
         }
-    }];
+    };
+#ifdef DEBUG
+    [TSMessagesDatabase deleteMessagesAndSessionsForConversation:[self.conversations objectAtIndex:index] completion:block];
+#else
+    [TSMessagesDatabase deleteMessagesForConversation:[self.conversations objectAtIndex:index] completion:block];
+#endif
+    
+    
 }
 
 // This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,
