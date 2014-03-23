@@ -28,6 +28,7 @@
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
 #define databaseFileName @"TSMessages.db"
 
+#define openDBMacroNothing if (!messagesDb){[TSMessagesDatabase databaseOpenWithError:nil];}
 #define openDBMacroBOOL if (!messagesDb){if (![TSMessagesDatabase databaseOpenWithError:nil]) {return NO;}}
 #define openDBMacroNil if (!messagesDb){if (![TSMessagesDatabase databaseOpenWithError:nil]) {return nil;}}
 
@@ -260,7 +261,7 @@ static TSDatabaseManager *messagesDb = nil;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         id groupId = message.group ? message.group.id : [NSNull null];
-    
+        
         success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
     }];
     
@@ -358,6 +359,45 @@ static TSDatabaseManager *messagesDb = nil;
     }];
     
     return [messagesArray copy];
+}
+
++ (BOOL)deleteMessage:(TSMessage*)msg{
+    openDBMacroBOOL
+    
+    __block BOOL success = NO;
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        success = [db executeUpdate:@"DELETE FROM messages WHERE message_id=?" withArgumentsInArray:@[msg.messageId]];
+    }];
+    
+    return success;
+}
+
++ (void)deleteMessagesForConversation:(TSConversation*)conversation completion:(dataBaseUpdateCompletionBlock) block{
+    
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        openDBMacroNothing
+        
+        NSArray *messages;
+        
+        if ([conversation isGroupConversation]) {
+            messages = [self messagesForGroup:conversation.group];
+        } else{
+            messages = [self messagesWithContact:conversation.contact];
+        }
+        
+        BOOL success = YES;
+        
+        for (TSMessage *message in messages){
+            if (![self deleteMessage:message]) {
+                success = NO;
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            block(success);
+        });
+    });
 }
 
 #pragma mark Conversation Methods
