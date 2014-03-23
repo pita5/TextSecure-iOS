@@ -38,7 +38,7 @@
     TSGroup *group = nil;
     TSMessageOutgoingState state = TSMessageStatePendingSend;
 
-    TSMessageOutgoing *message = [[TSMessageOutgoing alloc] initWithMessageWithContent:content
+    TSMessageOutgoing *message = [[TSMessageOutgoing alloc] initMessageWithContent:content
                                                                              recipient:recipientId
                                                                                   date:date
                                                                           attachements:attachments

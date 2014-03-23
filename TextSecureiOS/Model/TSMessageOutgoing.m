@@ -14,28 +14,31 @@
 
 @implementation TSMessageOutgoing
 
-- (instancetype)initWithMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state{
+- (instancetype)initMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state{
     
-    self = [super init];
+    self = [super initWithSenderId:[TSKeyManager getUsernameToken] recipientId:recipientId date:timestamp content:text attachements:attachements groupId:group];
+    
     if (self) {
-        _content = text;
-        _recipientId = recipientId;
-        _senderId = [TSKeyManager getUsernameToken];
-        _timestamp = timestamp;
-        _group = group;
-        _attachments = attachements;
         _state = state;
-        return self;
     }
-    return nil;
+    
+    return self;
+}
+
+- (instancetype)initMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state messageId:(NSString*)messageId{
+    self = [self initMessageWithContent:text recipient:recipientId date:timestamp attachements:attachements group:group state:state];
+    
+    if (self) {
+        _messageId = messageId;
+    }
+    return self;
 }
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{
-#warning update state - removed because introduced duplicates.
-//    BOOL didSucceed;
-//    didSucceed = [TSMessagesDatabase storeMessage:self];
-//    _state = state;
-//    block(didSucceed);
+    BOOL didSucceed;
+    didSucceed = [TSMessagesDatabase storeMessage:self];
+    _state = state;
+    block(didSucceed);
 }
 
 - (BOOL)isUnread{

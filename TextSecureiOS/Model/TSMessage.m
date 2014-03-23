@@ -7,19 +7,30 @@
 //
 
 #import "TSMessage.h"
-
+#import "NSString+randomString.h"
 @implementation TSMessage
 
 - (instancetype)initWithSenderId:(NSString*)senderId recipientId:(NSString*)recipientId date:(NSDate*)date content:(NSString*)content attachements:(NSArray*)attachements groupId:(TSGroup*)group{
     self = [super init];
     
     if (self) {
+        _messageId = [NSString genRandStringLength:20];
         _senderId = senderId;
         _recipientId = recipientId;
         _timestamp = date;
         _content = content;
         _attachments = attachements;
         _group = group;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithSenderId:(NSString*)senderId recipientId:(NSString*)recipientId date:(NSDate*)date content:(NSString*)content attachements:(NSArray*)attachements groupId:(TSGroup*)group messageId:(NSString*)messageid{
+    self = [self initWithSenderId:senderId recipientId:recipientId date:date content:content attachements:attachements groupId:group];
+    
+    if (self) {
+        _messageId = messageid;
     }
     
     return self;
