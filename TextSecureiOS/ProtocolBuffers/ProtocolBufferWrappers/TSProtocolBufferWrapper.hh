@@ -12,8 +12,7 @@
 #import <string>
 #endif
 
-@interface TSProtocolBufferWrapper : NSObject
-
+@protocol TSProtocolBufferWrapperMethods <NSObject>
 #pragma mark these must be overridden by subclass
 -(id) initWithData:(NSData*) buffer;
 
@@ -42,5 +41,13 @@
 -(NSNumber*) cppUInt32ToNSNumber:(uint32_t)cppInt;
 -(uint64_t) objcNumberToCppUInt64:(NSNumber*)objcNumber;
 -(NSNumber*) cppUInt64ToNSNumber:(uint64_t)cppInt;
+@end
+
+@interface TSProtocolBufferWrapper : NSObject <TSProtocolBufferWrapperMethods>
+#pragma mark these must be overridden by subclass
+
+-(id) initWithTextSecureProtocolData:(NSData*) data;
+-(NSData*) getTextSecureProtocolData;
+
 
 @end

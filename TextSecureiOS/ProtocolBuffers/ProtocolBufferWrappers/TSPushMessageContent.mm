@@ -12,6 +12,13 @@
 #import "TSAttachment.h"
 @implementation TSPushMessageContent
 
+-(id) initWithTextSecureProtocolData:(NSData*) data {
+    return [self initWithData:data];
+}
+-(NSData*) getTextSecureProtocolData {
+    return [self serializedProtocolBuffer];
+}
+
 
 -(id) initWithData:(NSData*) data {
   
@@ -144,8 +151,7 @@
   tsPushMessageContent.body = message.content;
   tsPushMessageContent.attachments = message.attachments;
   tsPushMessageContent.groupContext = groupContext;
-  return [tsPushMessageContent serializedProtocolBuffer];
- 
+  return [tsPushMessageContent getTextSecureProtocolData];
 }
 
 

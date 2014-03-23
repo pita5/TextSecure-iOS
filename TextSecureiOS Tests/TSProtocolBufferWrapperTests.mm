@@ -10,7 +10,7 @@
 #import "TSProtocolBufferWrapper.hh"
 #import "Cryptography.h"
 #import "TSWhisperMessage.hh"
-#import "TSMessageSignal.h"
+#import "TSMessageSignal.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSPushMessageContent.hh"
 #import "TSEncryptedWhisperMessage.hh"
@@ -77,7 +77,7 @@
 
     
     NSData *serializedMessageSignal = [messageSignal serializedProtocolBuffer];
-    TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithData:serializedMessageSignal];
+    TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:serializedMessageSignal];
     
     XCTAssertTrue(messageSignal.contentType == deserializedMessageSignal.contentType,@"TSMessageSignal contentType unequal after serialization");
     XCTAssertTrue([messageSignal.sourceDevice isEqualToNumber:deserializedMessageSignal.sourceDevice],@"TSMessageSignal sourceDevice unequal after serialization");

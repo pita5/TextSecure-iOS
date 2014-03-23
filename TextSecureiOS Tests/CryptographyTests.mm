@@ -11,7 +11,7 @@
 #import "Cryptography.h"
 #import "NSData+Base64.h"
 #import "NSString+Conversion.h"
-#import "TSMessageSignal.h"
+#import "TSMessageSignal.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
@@ -58,25 +58,6 @@
     XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
     
 }
-
-//-(void) testDecryptionFromServer {
-//    XCTAssertTrue(0, @"rewrite this test with a TSEncryptedWhisperMessage and TSPrekeyWhisperMessage as unencrypted pipeline support removed");
-//    
-//    NSString* originalMessage = @"Hawaii is awesome";
-//    NSString* signalingKeyString = @"VJuRzZcwuY/6VjGw+QSPy5ROzHo8xE36mKwHNvkfyZ+mSPaDlSDcenUqavIX1Vwn\nRRIdrg==";
-//    XCTAssertTrue([[NSData dataFromBase64String:signalingKeyString] length]==52, @"signaling key is not 52 bytes but %d",[[NSData dataFromBase64String:signalingKeyString]  length]);
-//    NSString* tsServerResponse = @"Aexen2G8XJxCxN9fp6pcCAgepw3dhoGvP1w66L560Z4BKjnh8vInFnde0pPAJe/0y07EyrQwDI9ETGyPM9D3qT5wRu3Y7UWe4J3l";
-//    NSData *payload = [NSData dataFromBase64String:tsServerResponse];
-//    
-//    NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:payload withSignalingKey:signalingKeyString];
-//    
-//    TSMessageSignal *tsMessageSignal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
-//    TSPushMessageContent* tsMessageContent = [[TSPushMessageContent alloc] initWithData:tsMessageSignal.message.message];
-//    TSMessage* tsMessage =  [tsMessageSignal getTSMessage:tsMessageContent];
-//    
-//    XCTAssertTrue([tsMessage.content  isEqualToString:originalMessage], @"Decrypted message: %@ is not equal to original: %@",tsMessage.content,originalMessage);
-// 
-//}
 
 
 -(void) testCTRModeDecryption {

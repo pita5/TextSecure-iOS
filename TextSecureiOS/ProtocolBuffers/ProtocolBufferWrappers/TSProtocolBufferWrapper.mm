@@ -8,19 +8,40 @@
 
 #import "TSProtocolBufferWrapper.hh"
 
+
+
 @implementation TSProtocolBufferWrapper
 
 #pragma mark these must be overridden by subclass
 
+
+
+
+-(id) initWithTextSecureProtocolData:(NSData*) data {
+    throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                  reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                userInfo:nil];
+}
+-(NSData*) getTextSecureProtocolData {
+    throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                  reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                userInfo:nil];
+}
+
+
+
+
+
+#pragma mark protected methods
+-(const std::string) serializedProtocolBufferAsString {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
+}
+
 -(id) initWithData:(NSData*) buffer{
     NSAssert(@"Must be overriden in subclasses!", @"initWithData: needs to be implemented in ProtocolBufferWrapper's subclasses");
     return nil;
-}
-
--(const std::string) serializedProtocolBufferAsString {
-  @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                 reason:[NSString stringWithFormat:@"'abstract method' must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                               userInfo:nil];
 }
 
 #pragma mark boilerplate serialization method

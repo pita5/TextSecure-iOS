@@ -18,7 +18,7 @@
 #import "TSMessage.h"
 #import "TSMessagesDatabase.h"
 #import "TSUserKeysDatabase.h"
-#import "TSMessageSignal.h"
+#import "TSMessageSignal.hh"
 #import "TSWhisperMessage.hh"
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"

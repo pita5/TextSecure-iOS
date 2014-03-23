@@ -6,13 +6,22 @@
 //  Copyright (c) 2014 Open Whisper Systems. All rights reserved.
 //
 
-#import "TSMessageSignal.h"
+#import "TSMessageSignal.hh"
 
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSPreKeyWhisperMessage.hh"
 #import "IncomingPushMessageSignal.pb.hh"
 
 @implementation TSMessageSignal
+
+
+-(id) initWithTextSecureProtocolData:(NSData*) data {
+    return [self initWithData:data];
+}
+-(NSData*) getTextSecureProtocolData {
+    return [self serializedProtocolBuffer];
+}
+
 
 -(id) initWithData:(NSData*) data {
 

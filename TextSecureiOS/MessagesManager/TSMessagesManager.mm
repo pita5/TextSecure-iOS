@@ -20,7 +20,7 @@
 #import "TSMessagesDatabase.h"
 #import "TSAttachment.h"
 #import "IncomingPushMessageSignal.pb.hh"
-#import "TSMessageSignal.h"
+#import "TSMessageSignal.hh"
 #import "TSContact.h"
 #import "TSPreKeyWhisperMessage.hh"
 #import "TSRecipientPrekeyRequest.h"
@@ -139,7 +139,7 @@
     
     NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"m"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     
-    TSMessageSignal *signal = [[TSMessageSignal alloc] initWithData:decryptedPayload];
+    TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
     
     TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
     

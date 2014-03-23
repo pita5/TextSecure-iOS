@@ -934,7 +934,7 @@
 		A5E6CC6C187D0F4B002A1735 /* WhisperMessage.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WhisperMessage.proto; sourceTree = "<group>"; };
 		A5E6CC75187D0FF1002A1735 /* TSEncryptedWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSEncryptedWhisperMessage.hh; path = ProtocolBufferWrappers/TSEncryptedWhisperMessage.hh; sourceTree = "<group>"; };
 		A5E6CC76187D0FF1002A1735 /* TSEncryptedWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSEncryptedWhisperMessage.mm; path = ProtocolBufferWrappers/TSEncryptedWhisperMessage.mm; sourceTree = "<group>"; };
-		A5E6CC77187D0FF1002A1735 /* TSMessageSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageSignal.h; path = ProtocolBuffers/ProtocolBufferWrappers/TSMessageSignal.h; sourceTree = "<group>"; };
+		A5E6CC77187D0FF1002A1735 /* TSMessageSignal.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSMessageSignal.hh; path = ProtocolBuffers/ProtocolBufferWrappers/TSMessageSignal.hh; sourceTree = "<group>"; };
 		A5E6CC78187D0FF1002A1735 /* TSMessageSignal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessageSignal.mm; path = ProtocolBuffers/ProtocolBufferWrappers/TSMessageSignal.mm; sourceTree = "<group>"; };
 		A5E6CC79187D0FF1002A1735 /* TSPreKeyWhisperMessage.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TSPreKeyWhisperMessage.hh; path = ProtocolBufferWrappers/TSPreKeyWhisperMessage.hh; sourceTree = "<group>"; };
 		A5E6CC7A187D0FF1002A1735 /* TSPreKeyWhisperMessage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSPreKeyWhisperMessage.mm; path = ProtocolBufferWrappers/TSPreKeyWhisperMessage.mm; sourceTree = "<group>"; };
@@ -1642,7 +1642,7 @@
 			children = (
 				A5E6CC7B187D0FF1002A1735 /* TSProtocolBufferWrapper.hh */,
 				A5E6CC7C187D0FF1002A1735 /* TSProtocolBufferWrapper.mm */,
-				A5E6CC77187D0FF1002A1735 /* TSMessageSignal.h */,
+				A5E6CC77187D0FF1002A1735 /* TSMessageSignal.hh */,
 				A5E6CC78187D0FF1002A1735 /* TSMessageSignal.mm */,
 				A5E6CC8D187D1E02002A1735 /* MessageTypes */,
 				A5E6CC7D187D0FF1002A1735 /* TSPushMessageContent.hh */,
