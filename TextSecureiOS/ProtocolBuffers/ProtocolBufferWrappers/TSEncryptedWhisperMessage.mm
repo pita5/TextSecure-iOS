@@ -1,4 +1,4 @@
-//
+    //
 //  TSWhisperMessage.m
 //  TextSecureiOS
 //

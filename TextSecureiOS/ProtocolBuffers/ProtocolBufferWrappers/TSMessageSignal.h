@@ -12,13 +12,13 @@
 #import "Constants.h"
 
 @class TSPushMessageContent;
-@class TSEncryptedWhisperMessage;
+@class TSWhisperMessage;
 
 @interface TSMessageSignal : TSProtocolBufferWrapper
 @property (nonatomic) TSWhisperMessageType contentType;
 @property (nonatomic,strong) NSString* source;
 @property (nonatomic,strong) NSNumber* sourceDevice;
 @property (nonatomic,strong) NSDate *timestamp;
-@property (nonatomic,strong) TSEncryptedWhisperMessage *message;
+@property (nonatomic,strong) TSWhisperMessage *message;
 
 @end

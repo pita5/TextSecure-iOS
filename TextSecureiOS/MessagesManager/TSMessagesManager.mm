@@ -102,7 +102,7 @@
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
                             session.fetchedPrekey = [[TSPrekey alloc] initWithIdentityKey:theirIdentityKey  ephemeral:theirEphemeralKey prekeyId:[theirPrekeyId intValue]];
                             
-                            TSEncryptedWhisperMessage *whisperMessage = [TSAxolotlRatchet encryptMessage:message withSession:session];
+                            TSWhisperMessage *whisperMessage = [TSAxolotlRatchet encryptMessage:message withSession:session];
                             
                             TSMessageSignal *messageSignal = [[TSMessageSignal alloc]init];
                             

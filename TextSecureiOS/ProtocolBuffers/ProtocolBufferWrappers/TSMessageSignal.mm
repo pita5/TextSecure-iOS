@@ -63,7 +63,7 @@
     return messageSignal;
 }
 
--(TSEncryptedWhisperMessage*) getWhisperMessageForData:(NSData*) data {
+-(TSWhisperMessage*) getWhisperMessageForData:(NSData*) data {
   switch (self.contentType) {
     case TSEncryptedWhisperMessageType:
           return [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:data];
