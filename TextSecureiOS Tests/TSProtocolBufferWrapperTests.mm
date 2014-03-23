@@ -130,9 +130,9 @@
     
     
     
-    NSData* serializedEncryptedMessage = [encryptedWhisperMessage getTextSecure_WhisperMessage];
+    NSData* serializedEncryptedMessage = [encryptedWhisperMessage getTextSecureProtocolData];
     
-    TSEncryptedWhisperMessage *deserializedEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithTextSecure_WhisperMessage:serializedEncryptedMessage]; 
+    TSEncryptedWhisperMessage *deserializedEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:serializedEncryptedMessage];
     
     NSLog(@"encrypted whispermessage original vs new %@ vs. %@",encryptedWhisperMessage,deserializedEncryptedMessage);
     XCTAssertTrue([deserializedEncryptedMessage.previousCounter isEqualToNumber:encryptedWhisperMessage.previousCounter], @"previous counters unequal");
