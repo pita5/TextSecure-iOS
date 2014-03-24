@@ -118,8 +118,6 @@
                                                           encryptedMessage:ciphertext
                                                           forVersion:version
                                                           withHMAC:hmac];
-#warning remove log statements, but debugging objective-c++ debugger
-    NSLog(@"%@",[encryptedWhisperMessage debugDescription]);
     TSECKeyPair *identityKey = [TSUserKeysDatabase identityKey];
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
@@ -128,10 +126,6 @@
                                              senderIdentityKey:[identityKey publicKey]
                                              message:[encryptedWhisperMessage getTextSecureProtocolData]
                                              forVersion:version];
-    NSLog(@"%@",[prekeyMessage debugDescription]);
-    
-    NSLog(@"Embedded whispermessage %@",[[[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:[encryptedWhisperMessage getTextSecureProtocolData]] debugDescription]);
-
     return prekeyMessage;
 }
 

@@ -46,19 +46,17 @@
     TSEncryptedWhisperMessage *encryptedWhispeMessageToDecrypt;
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
-        NSLog(@"received protocol buffer %@",[preKeyWhisperMessage debugDescription]);
-
         if (!contact.identityKey) {
-            contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
+            contact.identityKey = preKeyWhisperMessage.identityKey;
         } else{
-            if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
+            if (![contact.identityKey isEqualToData:preKeyWhisperMessage.identityKey ]) {
                 throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
 #warning we'll want to store that message to retry decrypting later if user wants to continue
             }
         }
         
-        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte] ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
-        encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message]; // TODO: verify this i
+        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:preKeyWhisperMessage.identityKey ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
+        encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message]; 
         encryptedWhispeMessageToDecrypt.ephemeralKey = preKeyWhisperMessage.baseKey; // TODO: code audit, why this Fred?
 
     }
@@ -85,10 +83,11 @@
     NSData *cipherText = message.message;
     
     NSString* contentString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherText withKeys:messageKeys forVersion:[message version] withHMAC:message.hmac] encoding:NSUTF8StringEncoding];
-    
+    // TODO: this is currently returning nil-mac is not matching.
+#warning if mac doesn't match for example, the decrypt ctr mode will return nil
     TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:contentString sender:session.contact.registeredID date:[NSDate date] attachements:nil group:nil state:TSMessageStateReceived];
     [TSMessagesDatabase storeSession:session];
-    
+
     return incomingMessage;
 }
 
@@ -127,8 +126,7 @@
     } else{
         encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:[senderEphemeral.publicKey prependVersionByte] previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
     }
-    NSLog(@"testing encryption %@",[encryptedMessage debugDescription]);
-    
+
     [session setSenderChainKey:[chainKey nextChainKey]];
     
     [TSMessagesDatabase storeSession:session];

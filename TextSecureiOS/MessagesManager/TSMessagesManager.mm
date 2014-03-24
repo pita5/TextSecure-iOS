@@ -138,16 +138,7 @@
     // We probably want to submit an update to a subscribing view controller here.
 }
 
--(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
-#warning remove debug description
-    if(messageType == TSEncryptedWhisperMessageType) {
-        NSLog(@"submitting encrypted message: %@",[[[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:[NSData dataFromBase64String:serializedMessage]] debugDescription]);
-    }
-    else if (messageType == TSPreKeyWhisperMessageType){
-        NSLog(@"submitting prekey message: %@",[[[TSPreKeyWhisperMessage alloc] initWithTextSecureProtocolData:[NSData dataFromBase64String:serializedMessage]] debugDescription]);
-
-    }
-    
+-(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{    
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         switch (operation.response.statusCode) {
