@@ -17,6 +17,7 @@
 #import "TSMessage.h"
 #import "TSKeyManager.h"
 #import "Constants.h"
+#import "TSSession.h"
 
 static NSString *masterPw = @"1234test";
 
@@ -79,11 +80,55 @@ static NSString *masterPw = @"1234test";
     [TSStorageMasterKey eraseStorageMasterKey];
 }
 
--(void) testStoreMessage {
+- (void) testStoreMessage {
     NSArray *messages = [TSMessagesDatabase messagesWithContact:self.contact];
     XCTAssertTrue([messages count]==1, @"database should just have one message in it, instead has %lu",(unsigned long)[messages count]);
     XCTAssertTrue([[[messages objectAtIndex:0] content] isEqualToString:self.message.content], @"message bodies not equal");
+}
+
+- (void)testStoreSession{
+    XCTAssertTrue([[TSMessagesDatabase sessionsForContact:self.contact] count] == 0, @"We had sessions before test started!");
     
+    TSSession *session = [[TSSession alloc] initWithContact:self.contact deviceId:1];
+    
+    session.rootKey = [Cryptography generateRandomBytes:10];
+    session.senderChainKey = [[TSChainKey alloc]initWithChainKeyWithKey:[Cryptography generateRandomBytes:10] index:1];
+    
+    session.senderEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+    
+    NSData *chainData = [Cryptography generateRandomBytes:10];
+    NSData *chainKey = [Cryptography generateRandomBytes:10];
+    
+    [session addReceiverChain:chainData chainKey:[[TSChainKey alloc] initWithChainKeyWithKey:chainKey index:1]];
+    
+    [TSMessagesDatabase storeSession:session];
+    
+    TSSession *retreivedSession = [TSMessagesDatabase sessionForRegisteredId:self.contact.registeredID deviceId:1];
+    
+    XCTAssertTrue([retreivedSession.rootKey isEqualToData:session.rootKey], @"Rootkeys don't match");
+    XCTAssertTrue([retreivedSession.senderChainKey.key isEqualToData:session.senderChainKey.key], @"SenderKeyChain keys don't match");
+    XCTAssertTrue([retreivedSession.senderEphemeral.publicKey isEqualToData:session.senderEphemeral.publicKey], @"SenderEphemeral keys don't match");
+    XCTAssertTrue([[retreivedSession receiverChainKey:chainData].key isEqualToData:chainKey], @"Receiver chain keys don't match");
+    
+    // The basic properties seem to be saved properly, now let's test 5 with 5 receiving chains and a change of some properties.
+    
+    NSMutableArray *chainKeys = [NSMutableArray array];
+    NSMutableArray *ephemerals = [NSMutableArray array];
+    for (int i = 5; i > 0; i--) {
+        TSChainKey *chainKey = [[TSChainKey alloc]initWithChainKeyWithKey:[Cryptography generateRandomBytes:30] index:1];
+        NSData *randomData = [Cryptography generateRandomBytes:32];
+        [retreivedSession addReceiverChain:randomData chainKey:chainKey];
+        [chainKeys addObject:chainKey];
+        [ephemerals addObject:randomData];
+    }
+    
+    [TSMessagesDatabase storeSession:retreivedSession];
+    
+    TSSession *retreivedSession2 = [TSMessagesDatabase sessionForRegisteredId:self.contact.registeredID deviceId:1];
+    
+    for (int i = 4; i >= 0; i --) {
+        XCTAssert([[retreivedSession2 receiverChainKey:[ephemerals objectAtIndex:i]].key isEqualToData: ((TSChainKey*)[chainKeys objectAtIndex:i]).key], @"ChainKey not updated!");
+    }
 }
 
 

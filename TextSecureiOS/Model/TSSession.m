@@ -36,7 +36,7 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
         self.rootKey = [aDecoder decodeObjectForKey:kCoderRootKey];
         self.PN = [aDecoder decodeIntForKey:kCoderPN];
         senderChain = [aDecoder decodeObjectForKey:kCoderSendingChain];
-        receiverChains = [aDecoder decodeObjectForKey:kCoderReceiverChains];
+        receiverChains = [[aDecoder decodeObjectForKey:kCoderReceiverChains] mutableCopy];
     }
     
     return self;
@@ -59,6 +59,7 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
     if (self) {
         _contact = contact;
         _deviceId = deviceId;
+        receiverChains = [NSMutableArray array];
     }
     return self;
 }
@@ -150,7 +151,11 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 }
 
 - (void)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter{
-#warning to be implemented
+    for(int i = 0; i <[[self receiverChain:ephemeral].messageKeys count]; i++){
+        if (((TSMessageKeys*)[[self receiverChain:ephemeral].messageKeys objectAtIndex:i]).counter == counter) {
+            [[self receiverChain:ephemeral].messageKeys removeObjectAtIndex:i];
+        }
+    }
 }
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys{

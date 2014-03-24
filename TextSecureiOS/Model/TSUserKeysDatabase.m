@@ -125,6 +125,11 @@ static TSDatabaseManager *userKeysDb = nil;
 #pragma Keys access
 
 + (TSECKeyPair*)identityKey{
+    
+    if (!userKeysDb){
+        [TSUserKeysDatabase databaseOpenWithError:nil];
+    }
+    
     // Fetch the key from the DB
     __block NSData *serializedKeyPair = nil;
     [userKeysDb.dbQueue inDatabase: ^(FMDatabase *db) {

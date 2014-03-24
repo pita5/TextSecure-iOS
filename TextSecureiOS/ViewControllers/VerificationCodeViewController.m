@@ -74,14 +74,6 @@
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSServerCodeVerificationRequest alloc] initWithVerificationCode:verificationCode signalingKey:signalingKey authToken:authToken] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
         switch (operation.response.statusCode) {
-            case 403:
-                
-                //403 is the code that's being sent back by the PendingAccountVerificationFailedException if the verification code is wrong
-                
-                [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"The entered code doesn't appear to match the one on our servers. Try entering it again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                
-                break;
-                
             case 204:
                 
                 [TSKeyManager storeSignalingKeyToken:signalingKey];
@@ -97,12 +89,16 @@
                 
             default:
                 [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"An unknown error occured. Pleasy try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                DLog(@"Verification operation failed with response: %@ and response code : %i", responseObject, operation.response.statusCode);
+                DLog(@"Verification operation failed with response: %@ and response code : %li", responseObject, operation.response.statusCode);
                 break;
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        defaultNetworkErrorMessage
+        if (operation.response.statusCode == 403) {
+            [[[UIAlertView alloc]initWithTitle:@"Wrong code" message:@"The entered code doesn't appear to match the one on our servers. Try entering it again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+        } else{
+            defaultNetworkErrorMessage
+        }
         DLog(@"Verification operation request failed with error: %@", error);
     }];
 }

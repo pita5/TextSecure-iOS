@@ -19,7 +19,7 @@ NSString *const kChainMessages  = @"kChainMessages";
     
     if (self) {
         _messageKeys = [aDecoder decodeObjectForKey:kChainMessages];
-        _ephemeral   = [aDecoder decodeObjectForKey:kChainEphemeral];
+        _ephemeral   = [[aDecoder decodeObjectForKey:kChainEphemeral] mutableCopy];
         _chainKey    = [aDecoder decodeObjectForKey:kChainKey];
     }
     
@@ -38,6 +38,7 @@ NSString *const kChainMessages  = @"kChainMessages";
     if (self) {
         _chainKey = chainKey;
         _ephemeral = ephemeral;
+        _messageKeys = [NSMutableArray array];
     }
     return self;
 }
