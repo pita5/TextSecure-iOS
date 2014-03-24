@@ -118,7 +118,6 @@
     
     TSWhisperMessage *encryptedMessage;
     if ([session hasPendingPreKey]) {
-
         encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:cipherText theirPrekeyId:[NSNumber numberWithInt:session.pendingPreKey.prekeyId] myCurrentEphemeral:session.pendingPreKey.ephemeralKey myNextEphemeral:session.senderEphemeral.publicKey forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
 
     } else{
@@ -231,13 +230,18 @@
 + (TSECKeyPair*)myIdentityKey{
     return [TSUserKeysDatabase identityKey];
 }
-    
+
+/**
+ *  The current version data. First 4 bits are the current version and the last 4 ones are the lowest version we support.
+ *
+ *  @return Current version data
+ */
+
 + (NSData*)currentProtocolVersion{
-    NSUInteger index = 1;
+    NSUInteger index = 0b00100010;
     NSData *versionByte = [NSData dataWithBytes:&index length:1];
     return versionByte;
 }
-
 
 #pragma mark Helper methods
 
