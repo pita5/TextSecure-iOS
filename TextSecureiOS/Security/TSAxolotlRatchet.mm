@@ -71,7 +71,7 @@
 }
 
 + (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session{
-    
+    // here is where we need to generate new sending and receiving chains!
     NSData *theirEphemeral = [message.ephemeralKey removeVersionByte];
     int counter = [message.counter intValue];
     
@@ -92,21 +92,27 @@
 + (TSWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session{
     
     if (session.fetchedPrekey) {
+        // corbett refactored:
+        // See slide 9 http://www.slideshare.net/ChristineCorbettMora/axolotl-protocol-an-illustrated-primer
+        int idPrekeyUsed = session.fetchedPrekey.prekeyId;
         [session clear];
-        
-        TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        NSData *theirBaseKey = session.fetchedPrekey.ephemeralKey;
-        
-        RKCK *rootAndReceivingChainKey = [RKCK initWithData:[self masterKeyAlice:[self myIdentityKey] ourEphemeral:ourEphemeralKey theirIdentityPublicKey:session.fetchedPrekey.identityKey theirEphemeralPublicKey:session.fetchedPrekey.ephemeralKey]];
-        
-        TSECKeyPair *sendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+        TSECKeyPair *ourIdentityKey = [self myIdentityKey]; //A
+        TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A0
+        NSData* theirIdentityKey = session.fetchedPrekey.identityKey; // B
+        NSData *theirEphemeralKey = session.fetchedPrekey.ephemeralKey; // B0
+        RKCK *rootAndReceivingChainKey = [RKCK initWithData:[self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentityKey theirEphemeralPublicKey:theirEphemeralKey]];  // 3ECDH(A,A0,B,B0)
+
         [session setRootKey:rootAndReceivingChainKey.RK];
-        [session setSenderChain:sendingKey chainkey:rootAndReceivingChainKey.CK];
-        [session addReceiverChain:theirBaseKey chainKey:[rootAndReceivingChainKey createChainWithEphemeral:sendingKey fromTheirProvideEphemeral:theirBaseKey].CK];
+        [session addReceiverChain:theirEphemeralKey chainKey:rootAndReceivingChainKey.CK];
         
-        [session setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil ephemeral:ourEphemeralKey.publicKey prekeyId:session.fetchedPrekey.prekeyId]];
+        TSECKeyPair *ourNewEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A1
+        [session setSenderChain:ourNewEphemeralKey chainkey:[rootAndReceivingChainKey createChainWithEphemeral:ourNewEphemeralKey fromTheirProvideEphemeral:theirEphemeralKey].CK];
+
+        [session setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil ephemeral:ourNewEphemeralKey.publicKey prekeyId:idPrekeyUsed]];
+        // end corbett refactor
         
     }
+
     
     TSChainKey *chainKey = [session senderChainKey];
     TSMessageKeys *messageKeys = [chainKey messageKeys];
@@ -135,19 +141,23 @@
     
     if ([session hasReceiverChain:theirEphemeral]) {
         return [session receiverChainKey:theirEphemeral];
-    } else{
+    }
+    else{
         
-        TSECKeyPair *newEphemeralKeyPair = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        
+        // corbett refactoring
+        // the idea with moving code around is to ensure compile wise that variables we shouldn't be using yet aren't used in previous steps
         RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
-        
         RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.senderEphemeral fromTheirProvideEphemeral:theirEphemeral];
-        RKCK *sendingChainKey = [rootKey createChainWithEphemeral:newEphemeralKeyPair fromTheirProvideEphemeral:theirEphemeral];
-        session.rootKey = receiverChainKey.RK;
         [session addReceiverChain:theirEphemeral chainKey:receiverChainKey.CK];
+
+
+        TSECKeyPair *newSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+        RKCK *sendingChainKey = [rootKey createChainWithEphemeral:newSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
+        session.rootKey = receiverChainKey.RK;
         [session setPN:session.senderChainKey.index-1];
-        [session setSenderChain:newEphemeralKeyPair chainkey:sendingChainKey.CK];
+        [session setSenderChain:newSendingEphemeral chainkey:sendingChainKey.CK];
         return receiverChainKey.CK;
+        //end corbett refactoring
     }
 }
 
@@ -201,14 +211,11 @@
         [TSMessagesDatabase deleteSession:session];
     
         //3-way DHE
-        RKCK *rootAndSendingChainKey = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey] ourEphemeral:preKeyPair theirIdentityPublicKey:prekey.identityKey theirEphemeralPublicKey:prekey.ephemeralKey]];
-        
-        // Generate new sending key
-        TSECKeyPair *sendingEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        
+        RKCK *rootAndSendingChainKey = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey] ourEphemeral:preKeyPair theirIdentityPublicKey:prekey.identityKey theirEphemeralPublicKey:prekey.ephemeralKey]]; // 3ECDH(A,A0,B,B0)
         [session setRootKey:rootAndSendingChainKey.RK];
-        [session setSenderChain:sendingEphemeralKey chainkey:rootAndSendingChainKey.CK];
-        
+        // corbett refactored
+        [session setSenderChain:preKeyPair chainkey:rootAndSendingChainKey.CK]; // this will be unused
+        // end corbett refactor
         if (preKeyPair.preKeyId != kLastResortKeyId) {
             // Delete that preKey!
         }
