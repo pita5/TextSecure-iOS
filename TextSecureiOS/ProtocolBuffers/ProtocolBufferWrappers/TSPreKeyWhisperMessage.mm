@@ -107,11 +107,15 @@
 
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"PreKeyWhisperMessage:\n prekeyId: %@\n baseKey: %@\n identityKey: %@\n, message: %@\n, version: %@",self.preKeyId,self.baseKey,self.identityKey,self.message,self.version];
+    return [NSString stringWithFormat:@"PreKeyWhisperMessage:\n prekeyId: %@\n baseKey: %@\n identityKey: %@\n message: %@\n version: %@",self.preKeyId,self.baseKey,self.identityKey,self.message,self.version];
 }
 
 #pragma mark public static methods
 +(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
+    
+    NSLog(@"encryption sending: myCurrentEphemeral (A0): %@ \n myNextEphemeral (A1): %@",currentEphemeral,myNextEphemeral);
+    
+    
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
                                                           initWithEphemeralKey:[myNextEphemeral prependVersionByte]
                                                           previousCounter:[NSNumber numberWithInt:0]

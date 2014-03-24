@@ -46,4 +46,8 @@
     return [[self class] initWithData:[TSHKDF deriveKeyFromMaterial:inputKeyMaterial outputLength:64 info:[@"WhisperRatchet" dataUsingEncoding:NSUTF8StringEncoding] salt:self.RK]];
 }
 
+-(NSString*)debugDescription {
+    return [NSString stringWithFormat:@"RK: %@\n",self.RK];
+}
+
 @end

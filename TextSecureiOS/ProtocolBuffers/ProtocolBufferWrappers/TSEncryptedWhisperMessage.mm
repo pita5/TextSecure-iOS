@@ -80,7 +80,7 @@
 
 
 -(NSString*) debugDescription {
-    return [NSString stringWithFormat:@"WhisperMessage:\n ephemeralKey: %@\n previousCounter: %@\n counter: %@\n message: %@\n version: %@\n hmac:%@",self.ephemeralKey,self.previousCounter,self.counter,self.message,self.version,self.hmac];
+    return [NSString stringWithFormat:@"WhisperMessage:\n ephemeralKey: %@\n previousCounter: %@\n counter: %@\n message: %@\n version: %@\n hmac:%@\n",self.ephemeralKey,self.previousCounter,self.counter,self.message,self.version,self.hmac];
 }
 
 
