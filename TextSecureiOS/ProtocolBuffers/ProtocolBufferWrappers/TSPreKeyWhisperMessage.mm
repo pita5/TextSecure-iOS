@@ -11,6 +11,7 @@
 #import "TSEncryptedWhisperMessage.hh"
 #import "TSECKeyPair.h"
 #import "TSUserKeysDatabase.h"
+#import "NSData+TSKeyVersion.h"
 #import "NSData+Base64.h"
 @implementation TSPreKeyWhisperMessage
 @synthesize version;
@@ -112,7 +113,7 @@
 #pragma mark public static methods
 +(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
-                                                          initWithEphemeralKey:myNextEphemeral
+                                                          initWithEphemeralKey:[myNextEphemeral prependVersionByte]
                                                           previousCounter:[NSNumber numberWithInt:0]
                                                           counter:[NSNumber numberWithInt:0]
                                                           encryptedMessage:ciphertext
@@ -122,14 +123,11 @@
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
                                              initWithPreKeyId:theirPrekeyId
-                                             senderPrekey:currentEphemeral
-                                             senderIdentityKey:[identityKey publicKey]
+                                             senderPrekey:[currentEphemeral prependVersionByte]
+                                             senderIdentityKey:[[identityKey publicKey] prependVersionByte]
                                              message:[encryptedWhisperMessage getTextSecureProtocolData]
                                              forVersion:version];
     return prekeyMessage;
 }
-
-
-
 
 @end

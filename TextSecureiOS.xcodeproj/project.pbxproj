@@ -972,8 +972,8 @@
 		B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */ = {isa = PBXFileReference; lastKnownFileType = file; name = gcm.textsecure.whispersystems.org.cer; path = TextSecureiOS/gcm.textsecure.whispersystems.org.cer; sourceTree = "<group>"; };
 		B643D7DC189EB9020025C6F3 /* TSContactPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactPickerViewController.h; path = ViewControllers/TSContactPickerViewController.h; sourceTree = "<group>"; };
 		B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactPickerViewController.m; path = ViewControllers/TSContactPickerViewController.m; sourceTree = "<group>"; };
-		B644F95C18DF5D3700D41FA8 /* NSString+randomString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+randomString.h"; path = "Utility/NSString+randomString.h"; sourceTree = "<group>"; };
-		B644F95D18DF5D3700D41FA8 /* NSString+randomString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+randomString.m"; path = "Utility/NSString+randomString.m"; sourceTree = "<group>"; };
+		B644F95C18DF5D3700D41FA8 /* NSString+randomString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+randomString.h"; path = "TextSecureiOS/Utility/NSString+randomString.h"; sourceTree = "<group>"; };
+		B644F95D18DF5D3700D41FA8 /* NSString+randomString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+randomString.m"; path = "TextSecureiOS/Utility/NSString+randomString.m"; sourceTree = "<group>"; };
 		B67E30F418CE19E4008502F5 /* TSContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContact.h; path = Contacts/TSContact.h; sourceTree = "<group>"; };
 		B67E30F518CE19E4008502F5 /* TSContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContact.m; path = Contacts/TSContact.m; sourceTree = "<group>"; };
 		B67E30F718CE1AA8008502F5 /* TSGroupSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroupSetupViewController.h; path = "ViewControllers/Conversations/Group Messaging/TSGroupSetupViewController.h"; sourceTree = "<group>"; };
@@ -1022,8 +1022,8 @@
 		B6F10B1B17EF61FE00723719 /* CountryCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CountryCodes.plist; sourceTree = "<group>"; };
 		B6F10B1D17EF8F3C00723719 /* NSString+PhoneFormating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+PhoneFormating.h"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.h"; sourceTree = "<group>"; };
 		B6F10B1E17EF8F3C00723719 /* NSString+PhoneFormating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+PhoneFormating.m"; path = "TextSecureiOS/Categories/NSString+PhoneFormating.m"; sourceTree = "<group>"; };
-		B6F7FEBE18D77E1500ECC4A2 /* NSData+TSKeyVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+TSKeyVersion.h"; path = "Utility/NSData+TSKeyVersion.h"; sourceTree = "<group>"; };
-		B6F7FEBF18D77E1500ECC4A2 /* NSData+TSKeyVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+TSKeyVersion.m"; path = "Utility/NSData+TSKeyVersion.m"; sourceTree = "<group>"; };
+		B6F7FEBE18D77E1500ECC4A2 /* NSData+TSKeyVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+TSKeyVersion.h"; path = "TextSecureiOS/Utility/NSData+TSKeyVersion.h"; sourceTree = "<group>"; };
+		B6F7FEBF18D77E1500ECC4A2 /* NSData+TSKeyVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+TSKeyVersion.m"; path = "TextSecureiOS/Utility/NSData+TSKeyVersion.m"; sourceTree = "<group>"; };
 		F8694B5D18C5268500A44474 /* padlock_prompt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = padlock_prompt.png; path = TextSecureiOSAssets/padlock_prompt.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1725,8 +1725,6 @@
 		A5F15AA317029C5300856385 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				B6F7FEBE18D77E1500ECC4A2 /* NSData+TSKeyVersion.h */,
-				B6F7FEBF18D77E1500ECC4A2 /* NSData+TSKeyVersion.m */,
 				6FCE040718D427CE00C33B34 /* TSReplaceSegue.h */,
 				6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */,
 				6FCE040918D427CE00C33B34 /* TSStartOverSegue.h */,
@@ -1735,8 +1733,6 @@
 				A5169D15170FEB1900A2CE9E /* FilePath.m */,
 				A5169D18170FEB1900A2CE9E /* Constants.h */,
 				A5169D19170FEB1900A2CE9E /* Constants.m */,
-				B644F95C18DF5D3700D41FA8 /* NSString+randomString.h */,
-				B644F95D18DF5D3700D41FA8 /* NSString+randomString.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -1918,6 +1914,10 @@
 		B6F10B1417EF49D700723719 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				B6F7FEBE18D77E1500ECC4A2 /* NSData+TSKeyVersion.h */,
+				B6F7FEBF18D77E1500ECC4A2 /* NSData+TSKeyVersion.m */,
+				B644F95C18DF5D3700D41FA8 /* NSString+randomString.h */,
+				B644F95D18DF5D3700D41FA8 /* NSString+randomString.m */,
 				A5169D16170FEB1900A2CE9E /* NSString+Conversion.h */,
 				A5169D17170FEB1900A2CE9E /* NSString+Conversion.m */,
 				A5169D1A170FEB1900A2CE9E /* NSData+Conversion.h */,
@@ -2739,7 +2739,7 @@
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "F6107428-6DD2-4184-B965-C80E88D4D42B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2761,7 +2761,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "F6107428-6DD2-4184-B965-C80E88D4D42B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};

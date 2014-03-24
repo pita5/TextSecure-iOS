@@ -47,18 +47,16 @@
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
         if (!contact.identityKey) {
-            contact.identityKey = preKeyWhisperMessage.identityKey;
+            contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
         } else{
-            if (![contact.identityKey isEqualToData:preKeyWhisperMessage.identityKey ]) {
+            if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
                 throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
 #warning we'll want to store that message to retry decrypting later if user wants to continue
             }
         }
         
-        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:preKeyWhisperMessage.identityKey ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
-        encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message]; 
-        encryptedWhispeMessageToDecrypt.ephemeralKey = preKeyWhisperMessage.baseKey; // TODO: code audit, why this Fred? I have removed. Encrypted message should have everything it needs.
-
+        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte] ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
+        encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message];
     }
     else if ([message isKindOfClass:[TSEncryptedWhisperMessage class]]) {
         encryptedWhispeMessageToDecrypt = (TSEncryptedWhisperMessage*)message;
@@ -121,10 +119,10 @@
     TSWhisperMessage *encryptedMessage;
     if ([session hasPendingPreKey]) {
 
-        encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:cipherText theirPrekeyId:[NSNumber numberWithInt:session.pendingPreKey.prekeyId] myCurrentEphemeral:[session.pendingPreKey.ephemeralKey prependVersionByte] myNextEphemeral:session.senderEphemeral.publicKeyWithVersionByte forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
+        encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:cipherText theirPrekeyId:[NSNumber numberWithInt:session.pendingPreKey.prekeyId] myCurrentEphemeral:session.pendingPreKey.ephemeralKey myNextEphemeral:session.senderEphemeral.publicKey forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
 
     } else{
-        encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:[senderEphemeral.publicKey prependVersionByte] previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
+        encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
     }
 
     [session setSenderChainKey:[chainKey nextChainKey]];

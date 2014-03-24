@@ -8,23 +8,24 @@
 
 #import "TSRegisterPrekeysRequest.h"
 #import "TSECKeyPair.h"
+#import "NSData+TSKeyVersion.h"
 @implementation TSRegisterPrekeysRequest
 
 - (id)initWithPrekeyArray:(NSArray*)prekeys identityKey:(TSECKeyPair*) identityKey{
     
     self = [super initWithURL:[NSURL URLWithString:textSecureKeysAPI]];
     self.HTTPMethod = @"PUT";
-    NSString *publicIdentityKey = [[identityKey publicKeyWithVersionByte] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSString *publicIdentityKey = [[[identityKey publicKey] prependVersionByte] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     NSMutableArray *serializedPrekeyList = [[NSMutableArray alloc] init];
     NSMutableDictionary *serializedKeyRegistrationParameters = [[NSMutableDictionary alloc] init];
     for(TSECKeyPair *pk in prekeys) {
         if([pk preKeyId]==kLastResortKeyId){
             [serializedKeyRegistrationParameters addEntriesFromDictionary:
-             [NSDictionary dictionaryWithObjects:@[[NSDictionary dictionaryWithObjects:@[[NSNumber numberWithInt:[pk preKeyId]], [[pk publicKeyWithVersionByte] base64EncodedStringWithOptions:0], publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]]
+             [NSDictionary dictionaryWithObjects:@[[NSDictionary dictionaryWithObjects:@[[NSNumber numberWithInt:[pk preKeyId]], [[[pk publicKey]prependVersionByte] base64EncodedStringWithOptions:0], publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]]
                                          forKeys:@[@"lastResortKey"]]];
         }
         else {
-            [serializedPrekeyList addObject:[NSDictionary dictionaryWithObjects:@[[NSNumber numberWithInt:[pk preKeyId]],[[pk publicKeyWithVersionByte] base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength], publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]];
+            [serializedPrekeyList addObject:[NSDictionary dictionaryWithObjects:@[[NSNumber numberWithInt:[pk preKeyId]],[[[pk publicKey]prependVersionByte] base64EncodedStringWithOptions:0], publicIdentityKey] forKeys:@[@"keyId",@"publicKey",@"identityKey"]]];
         }
     }
     [serializedKeyRegistrationParameters addEntriesFromDictionary:
