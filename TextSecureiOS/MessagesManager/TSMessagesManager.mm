@@ -86,17 +86,7 @@
                             NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
                             [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
                             [TSMessagesDatabase storeContact:recipient];
-                            
-                            // remove the leading "0x05" byte as per protocol specs
-                            if (theirEphemeralKey.length == 33) {
-                                theirEphemeralKey = [theirEphemeralKey removeVersionByte];
-                            }
-                            
-                            // remove the leading "0x05" byte as per protocol specs
-                            if (theirIdentityKey.length == 33) {
-                                theirIdentityKey = [theirIdentityKey removeVersionByte];
-                            }
-                            
+                                                        
                             // Bootstrap session with Prekey
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
                             session.fetchedPrekey = [[TSPrekey alloc] initWithIdentityKey:[theirIdentityKey removeVersionByte]  ephemeral:[theirEphemeralKey removeVersionByte] prekeyId:[theirPrekeyId intValue]];
