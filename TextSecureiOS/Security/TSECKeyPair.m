@@ -49,10 +49,6 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
   return [NSData dataWithBytes:self->publicKey length:32];
 }
 
-- (NSData*)publicKeyWithVersionByte{
-    return [[self publicKey] prependVersionByte];
-}
-
 -(int32_t) preKeyId {
     return self->preKeyId;
 }

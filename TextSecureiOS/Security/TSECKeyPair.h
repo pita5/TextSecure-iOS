@@ -33,13 +33,6 @@
 -(NSData*) publicKey;
 
 /**
- *  Export the key pair's public key prepended by the 0x05 version byte of the Curve 25519 keys that are currently being used.
- *
- *  @return A 33-byte output of the key prepended by version byte.
- */
-- (NSData*)publicKeyWithVersionByte;
-
-/**
  * Return the key pair's preKeyId.
  * @author Alban Diquet
  *
