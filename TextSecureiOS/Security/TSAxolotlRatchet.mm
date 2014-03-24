@@ -57,7 +57,7 @@
         
         session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:preKeyWhisperMessage.identityKey ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
         encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message]; 
-        encryptedWhispeMessageToDecrypt.ephemeralKey = preKeyWhisperMessage.baseKey; // TODO: code audit, why this Fred?
+        encryptedWhispeMessageToDecrypt.ephemeralKey = preKeyWhisperMessage.baseKey; // TODO: code audit, why this Fred? I have removed. Encrypted message should have everything it needs.
 
     }
     else if ([message isKindOfClass:[TSEncryptedWhisperMessage class]]) {
