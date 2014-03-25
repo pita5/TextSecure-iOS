@@ -231,7 +231,7 @@
         [versionAndEncryptedData appendData:encryptedData];
         *hmac = [Cryptography truncatedHMAC:versionAndEncryptedData withHMACKey:keys.macKey truncation:8];
 #warning remove log
-        NSLog(@"Debug description Encryption:\n: version: %@\n ciphertext: %@\n mackey:%@\n mac: %@\n",version,encryptedData,keys.macKey,*hmac);
+        NSLog(@"Debug description Encryption:\n version: %@\n ciphertext: %@\n mackey:%@\n mac: %@\n",version,encryptedData,keys.macKey,*hmac);
         return encryptedData;
     }
     

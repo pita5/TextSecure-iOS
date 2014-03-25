@@ -57,7 +57,6 @@
         
         session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte] ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
         encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message];
-        NSLog(@"debugDescription: A1 received for decryption: %@\n",[encryptedWhispeMessageToDecrypt.ephemeralKey removeVersionByte]);
     }
     else if ([message isKindOfClass:[TSEncryptedWhisperMessage class]]) {
         encryptedWhispeMessageToDecrypt = (TSEncryptedWhisperMessage*)message;
@@ -102,15 +101,12 @@
         NSData* theirIdentityKey = session.fetchedPrekey.identityKey; // B
         NSData *theirEphemeralKey = session.fetchedPrekey.ephemeralKey; // B0
         RKCK *rootAndReceivingChainKey = [RKCK initWithData:[self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentityKey theirEphemeralPublicKey:theirEphemeralKey]];  // 3ECDH(A,A0,B,B0)
-        NSLog(@"3ECDH Encyption receiving\n: %@\n",[rootAndReceivingChainKey debugDescription]);
         [session setRootKey:rootAndReceivingChainKey.RK];
         [session addReceiverChain:theirEphemeralKey chainKey:rootAndReceivingChainKey.CK];
         
         TSECKeyPair *ourNewEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A1
         RKCK* rootAndSendingChainKey = [rootAndReceivingChainKey createChainWithEphemeral:ourNewEphemeralKey fromTheirProvideEphemeral:theirEphemeralKey];
         [session setSenderChain:ourNewEphemeralKey chainkey:rootAndSendingChainKey.CK];
-
-        NSLog(@"Encryption sending\n (2nd) %@\n B0 pub: %@\n A1 pub: %@\n",[rootAndSendingChainKey debugDescription],theirEphemeralKey,ourNewEphemeralKey.publicKey);
 
         [session setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil ephemeral:ourEphemeralKey.publicKey prekeyId:idPrekeyUsed]];
         // end corbett refactor
@@ -153,11 +149,9 @@
         RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
         RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.senderEphemeral fromTheirProvideEphemeral:theirEphemeral];
         [session addReceiverChain:theirEphemeral chainKey:receiverChainKey.CK];
-        NSLog(@"Decrypting received message receiver chain:\n %@\n B0 public: %@\n A1 public: %@ \n",[receiverChainKey debugDescription],session.senderEphemeral.publicKey,theirEphemeral);
 
         TSECKeyPair *newSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
         RKCK *sendingChainKey = [rootKey createChainWithEphemeral:newSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
-        NSLog(@"Decrypting received message new sending chain: \n %@ \n",[receiverChainKey debugDescription]);
         session.rootKey = receiverChainKey.RK;
         [session setPN:session.senderChainKey.index-1];
         [session setSenderChain:newSendingEphemeral chainkey:sendingChainKey.CK];
@@ -217,8 +211,6 @@
     
         //3-way DHE
         RKCK *rootAndSendingChainKey = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey] ourEphemeral:preKeyPair theirIdentityPublicKey:prekey.identityKey theirEphemeralPublicKey:prekey.ephemeralKey]]; // 3ECDH(A,A0,B,B0)
-        
-        NSLog(@"3ECDH Decryption 1st sending:\n %@\n",[rootAndSendingChainKey debugDescription]);
         
         [session setRootKey:rootAndSendingChainKey.RK];
         // corbett refactored
