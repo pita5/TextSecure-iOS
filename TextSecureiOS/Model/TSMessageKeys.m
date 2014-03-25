@@ -20,5 +20,8 @@
     
     return self;
 }
+-(NSString*) debugDescription {
+    return [NSString stringWithFormat:@"cipherKey: %@\n macKey %@\n",self.cipherKey,self.macKey];
+}
 
 @end

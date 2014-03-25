@@ -61,5 +61,8 @@ static NSString * const kChainKeyIndex = @"kChainKeyIndex";
     NSData* nextCK = [Cryptography computeHMAC:self.key  withHMACKey:[NSData dataWithBytes:&hmacKeyCK length:sizeof(hmacKeyCK)]];
     return [[TSChainKey alloc] initWithChainKeyWithKey:nextCK index:self.index+1];
 }
+-(NSString*) debugDescription {
+    return [NSString stringWithFormat:@"CK: %@",self.key];
+}
 
 @end
