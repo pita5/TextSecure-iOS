@@ -70,9 +70,6 @@
                                                                chainKey:chainKey
                                                                 counter:counter];
     NSData *cipherTextMessage = message.message;
-
-    
-    NSLog(@"Decrypt %@ %@",[chainKey debugDescription],[messageKeys debugDescription]);
     NSString* decryptedMessageString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherTextMessage
                                                                                           withKeys:messageKeys
                                                                                         forVersion:[message version]
@@ -95,8 +92,7 @@
     }
     
     TSChainKey *chainKey = [sessionRecord senderChainKey];
-    TSMessageKeys *messageKeys = [chainKey messageKeys];// our problem...
-    NSLog(@"Encrypt %@ %@",[chainKey debugDescription],[messageKeys debugDescription]);
+    TSMessageKeys *messageKeys = [chainKey messageKeys];
     TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
     int previousCounter = sessionRecord.PN;
     
@@ -139,14 +135,11 @@
         TSECKeyPair *ourEphemeral = session.senderEphemeral;
         RKCK *receiverChain= [rootKey createChainWithEphemeral:ourEphemeral
                                      fromTheirProvideEphemeral:theirEphemeral];
-        NSLog(@"Decrypting received message receiver chain:\n %@\n B0 public: %@\n A1 public: %@ \n",[receiverChain debugDescription],session.senderEphemeral.publicKey,theirEphemeral);
         
         // Sending chain setup
         TSECKeyPair *ourNewSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
         RKCK *senderChain = [rootKey createChainWithEphemeral:ourNewSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
         [session setSenderChain:ourNewSendingEphemeral chainkey:senderChain.CK];
-
-        NSLog(@"Decrypting received message new sending chain: \n %@ \n",[receiverChain debugDescription]);
 
         // Saving in session
         session.rootKey = receiverChain.RK;
@@ -161,7 +154,8 @@
     if (chainKey.index > counter) {
         if ([session hasMessageKeysForEphemeral:theirEphemeral counter:counter]) {
             [session removeMessageKeysForEphemeral:theirEphemeral counter:counter];
-        } else{
+        }
+        else{
             throw [NSException exceptionWithName:@"Received message with old counter!" reason:@"" userInfo:@{}];
         }
     }
@@ -169,13 +163,14 @@
     if (chainKey.index - counter > 500) {
         throw [NSException exceptionWithName:@"Over 500 messages into the future!" reason:@"" userInfo:@{}];
     }
-    
-    while (chainKey.index < counter) {
-        TSMessageKeys *messageKeys = [chainKey messageKeys];
-        [session setMessageKeysWithEphemeral:theirEphemeral messageKey:messageKeys];
-        chainKey = chainKey.nextChainKey;
+    if(chainKey.index>0) {
+#warning we need to track down why chainKey.index is -1 on first receive. 
+        while (chainKey.index < counter) {
+            TSMessageKeys *messageKeys = [chainKey messageKeys];
+            [session setMessageKeysWithEphemeral:theirEphemeral messageKey:messageKeys];
+            chainKey = chainKey.nextChainKey;
+        }
     }
-    
     [session setReceiverChainKeyWithEphemeral:theirEphemeral chainKey:chainKey];
     return [chainKey messageKeys];
 }
@@ -212,7 +207,6 @@
     TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A0
     NSData* theirIdentityKey = sessionRecord.fetchedPrekey.identityKey; // B
     NSData *theirEphemeralKey = sessionRecord.fetchedPrekey.ephemeralKey; // B0
-
     TSECKeyPair *newSendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A1
     // Initial 3ECDH(A,A0,B,B0)
     RKCK *receivingChain = [RKCK initWithData:[self masterKeyAlice:ourIdentityKey
@@ -223,17 +217,11 @@
     
     RKCK* sendingChain = [receivingChain createChainWithEphemeral:newSendingKey
                                                             fromTheirProvideEphemeral:theirEphemeralKey];
-
-    
-    
-    NSLog(@"3ECDH Encyption receiving\n: %@\n",[receivingChain debugDescription]);
     
     [sessionRecord addReceiverChain:theirEphemeralKey chainKey:receivingChain.CK];
     [sessionRecord setSenderChain:newSendingKey chainkey:sendingChain.CK];
     [sessionRecord setRootKey:sendingChain.RK];
 
-    NSLog(@"Encryption sending\n (2nd) %@\n B0 pub: %@\n A1 pub: %@\n",[sendingChain debugDescription],theirEphemeralKey,newSendingKey.publicKey);
-    
     [sessionRecord setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil
                                                                 ephemeral:ourEphemeralKey.publicKey
                                                                  prekeyId:idPrekeyUsed]];
@@ -248,7 +236,7 @@
         contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
     }
     else{
-        if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
+        if (![contact.identityKey isEqualToData:[p  reKeyWhisperMessage.identityKey removeVersionByte]]) {
             #warning we'll want to store that message to retry decrypting later if user wants to continue
             throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
         }
@@ -258,7 +246,6 @@
                                                   ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte]
                                                    prekeyId:[preKeyWhisperMessage.preKeyId intValue]];
 
-    
     TSECKeyPair *ourEphemeralKey = [TSUserKeysDatabase preKeyWithId:prekey.prekeyId];
     
     if (ourEphemeralKey){
@@ -268,12 +255,10 @@
         RKCK *sendingChain = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey]
                                                                 ourEphemeral:ourEphemeralKey
                                                       theirIdentityPublicKey:prekey.identityKey
-                                                     theirEphemeralPublicKey:prekey.ephemeralKey]];
-        NSLog(@"3ECDH Decryption 1st sending:\n %@\n",[sendingChain debugDescription]);
-        
-        [newSession setRootKey:sendingChain.RK];
+                                                     theirEphemeralPublicKey:prekey.ephemeralKey]];        
         [newSession setSenderChain:ourEphemeralKey chainkey:sendingChain.CK]; // this will be unused
-
+        [newSession setRootKey:sendingChain.RK];
+        
         if (ourEphemeralKey.preKeyId != kLastResortKeyId) {
             #warning Delete that preKey!
         }
