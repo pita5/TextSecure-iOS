@@ -37,109 +37,93 @@
 
 @implementation TSAxolotlRatchet
 
+
+
 #pragma mark Public methods
 
 // Method for incoming messages
 + (TSMessage*)decryptWhisperMessage:(TSWhisperMessage*)message withSession:(TSSession *)session{
-
-    TSContact *contact = session.contact;
-    TSEncryptedWhisperMessage *encryptedWhispeMessageToDecrypt;
     if ([message isKindOfClass:[TSPreKeyWhisperMessage class]]) {
         TSPreKeyWhisperMessage *preKeyWhisperMessage = (TSPreKeyWhisperMessage*)message;
-        if (!contact.identityKey) {
-            contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
-        } else{
-            if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
-                throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
-#warning we'll want to store that message to retry decrypting later if user wants to continue
-            }
+        session = [self initializeSessionAsBob:session withPreKeyWhisperMessage:preKeyWhisperMessage];
+        if (!session) {
+            throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
         }
-        
-        session = [self processPrekey:[[TSPrekey alloc]initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte] ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte] prekeyId:[preKeyWhisperMessage.preKeyId intValue]]withContact:contact deviceId:1];
-        encryptedWhispeMessageToDecrypt = [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message];
-        NSLog(@"debugDescription: A1 received for decryption: %@\n",[encryptedWhispeMessageToDecrypt.ephemeralKey removeVersionByte]);
+        return [self decryptMessage:[[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:preKeyWhisperMessage.message]
+                        withSession:session];
     }
     else if ([message isKindOfClass:[TSEncryptedWhisperMessage class]]) {
-        encryptedWhispeMessageToDecrypt = (TSEncryptedWhisperMessage*)message;
+        return [self decryptMessage: (TSEncryptedWhisperMessage*)message
+                        withSession:session];
     }
     else {
         throw [NSException exceptionWithName:@"Unrecognized TSWhisperMessageType. Can't cast. This is a programmer bug." reason:@"" userInfo:@{}];
     }
-    if (!session) {
-        throw [NSException exceptionWithName:@"NoSessionFoundForDecryption" reason:@"" userInfo:@{}];
-    }
-    return [self decryptMessage:encryptedWhispeMessageToDecrypt withSession:session];
 }
 
-+ (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)session{
-    // here is where we need to generate new sending and receiving chains!
++ (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)sessionRecord{
     NSData *theirEphemeral = [message.ephemeralKey removeVersionByte];
     int counter = [message.counter intValue];
+    TSChainKey *chainKey = [self getOrCreateChainKeys:sessionRecord theirEphemeral:theirEphemeral];
+    TSMessageKeys *messageKeys = [self getOrCreateMessageKeysForSession:sessionRecord
+                                                         theirEphemeral:theirEphemeral
+                                                               chainKey:chainKey
+                                                                counter:counter];
+    NSData *cipherTextMessage = message.message;
+
     
-    TSChainKey *chainKey = [self getOrCreateChainKeys:session theirEphemeral:theirEphemeral];
-    TSMessageKeys *messageKeys = [self getOrCreateMessageKeysForSession:session theirEphemeral:theirEphemeral chainKey:chainKey counter:counter];
     NSLog(@"Decrypt %@ %@",[chainKey debugDescription],[messageKeys debugDescription]);
-    
-    NSData *cipherText = message.message;
-    
-    NSString* contentString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherText withKeys:messageKeys forVersion:[message version] withHMAC:message.hmac] encoding:NSUTF8StringEncoding];
-    // TODO: this is currently returning nil-mac is not matching.
-#warning if mac doesn't match for example, the decrypt ctr mode will return nil
-    TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:contentString sender:session.contact.registeredID date:[NSDate date] attachements:nil group:nil state:TSMessageStateReceived];
-    [TSMessagesDatabase storeSession:session];
+    NSString* decryptedMessageString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherTextMessage
+                                                                                          withKeys:messageKeys
+                                                                                        forVersion:[message version]
+                                                                                          withHMAC:message.hmac]
+                                                             encoding:NSUTF8StringEncoding];
+    TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:decryptedMessageString
+                                                                                    sender:sessionRecord.contact.registeredID
+                                                                                      date:[NSDate date]
+                                                                              attachements:nil
+                                                                                     group:nil
+                                                                                     state:TSMessageStateReceived];
+    [TSMessagesDatabase storeSession:sessionRecord];
 
     return incomingMessage;
 }
 
-+ (TSWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)session{
-    
-    if (session.fetchedPrekey) {
-        // corbett refactored:
-        // See slide 9 http://www.slideshare.net/ChristineCorbettMora/axolotl-protocol-an-illustrated-primer
-        int idPrekeyUsed = session.fetchedPrekey.prekeyId; // doing this before as [session clear] sounds like it should delete this even if it didn't
-        [session clear];
-        TSECKeyPair *ourIdentityKey = [self myIdentityKey]; //A
-        TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A0
-        NSData* theirIdentityKey = session.fetchedPrekey.identityKey; // B
-        NSData *theirEphemeralKey = session.fetchedPrekey.ephemeralKey; // B0
-        RKCK *rootAndReceivingChainKey = [RKCK initWithData:[self masterKeyAlice:ourIdentityKey ourEphemeral:ourEphemeralKey theirIdentityPublicKey:theirIdentityKey theirEphemeralPublicKey:theirEphemeralKey]];  // 3ECDH(A,A0,B,B0)
-        NSLog(@"3ECDH Encyption receiving\n: %@\n",[rootAndReceivingChainKey debugDescription]);
-        [session setRootKey:rootAndReceivingChainKey.RK];
-        [session addReceiverChain:theirEphemeralKey chainKey:rootAndReceivingChainKey.CK];
-        
-        TSECKeyPair *ourNewEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A1
-        RKCK* rootAndSendingChainKey = [rootAndReceivingChainKey createChainWithEphemeral:ourNewEphemeralKey fromTheirProvideEphemeral:theirEphemeralKey];
-        [session setSenderChain:ourNewEphemeralKey chainkey:rootAndSendingChainKey.CK];
-
-        NSLog(@"Encryption sending\n (2nd) %@\n B0 pub: %@\n A1 pub: %@\n",[rootAndSendingChainKey debugDescription],theirEphemeralKey,ourNewEphemeralKey.publicKey);
-
-        [session setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil ephemeral:ourEphemeralKey.publicKey prekeyId:idPrekeyUsed]];
-        // end corbett refactor
-        
++ (TSWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)sessionRecord{
+    if (sessionRecord.fetchedPrekey) {
+        [self initializeSessionAsAlice:sessionRecord];
     }
-
     
-    TSChainKey *chainKey = [session senderChainKey];
-    TSMessageKeys *messageKeys = [chainKey messageKeys];
-    
+    TSChainKey *chainKey = [sessionRecord senderChainKey];
+    TSMessageKeys *messageKeys = [chainKey messageKeys];// our problem...
     NSLog(@"Encrypt %@ %@",[chainKey debugDescription],[messageKeys debugDescription]);
-    TSECKeyPair *senderEphemeral = [session senderEphemeral];
-    int previousCounter = session.PN;
+    TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
+    int previousCounter = sessionRecord.PN;
     
     NSData* computedHMAC;
-    NSData *cipherText = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys forVersion:[self currentProtocolVersion] computedHMAC:&computedHMAC];
+    NSData *ciphertextBody = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys forVersion:[self currentProtocolVersion] computedHMAC:&computedHMAC];
     
     TSWhisperMessage *encryptedMessage;
-    if ([session hasPendingPreKey]) {
-        encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:cipherText theirPrekeyId:[NSNumber numberWithInt:session.pendingPreKey.prekeyId] myCurrentEphemeral:session.pendingPreKey.ephemeralKey myNextEphemeral:session.senderEphemeral.publicKey forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
+    if ([sessionRecord hasPendingPreKey]) {
+        encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:ciphertextBody
+                                                           theirPrekeyId:[NSNumber numberWithInt:sessionRecord.pendingPreKey.prekeyId]
+                                                      myCurrentEphemeral:sessionRecord.pendingPreKey.ephemeralKey
+                                                         myNextEphemeral:sessionRecord.senderEphemeral.publicKey
+                                                              forVersion:[self currentProtocolVersion]
+                                                                withHMAC:computedHMAC];
 
-    } else{
-        encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey previousCounter:[NSNumber numberWithInt:previousCounter] counter:[NSNumber numberWithInt:chainKey.index] encryptedMessage:cipherText forVersion:[self currentProtocolVersion] withHMAC:computedHMAC];
+    }
+    else {
+        encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey
+                                                                   previousCounter:[NSNumber numberWithInt:previousCounter]
+                                                                           counter:[NSNumber numberWithInt:chainKey.index]
+                                                                  encryptedMessage:ciphertextBody
+                                                                        forVersion:[self currentProtocolVersion]
+                                                                          withHMAC:computedHMAC];
     }
 
-    [session setSenderChainKey:[chainKey nextChainKey]];
-    
-    [TSMessagesDatabase storeSession:session];
+    [sessionRecord setSenderChainKey:[chainKey nextChainKey]];
+    [TSMessagesDatabase storeSession:sessionRecord];
     
     return encryptedMessage;
 }
@@ -149,33 +133,36 @@
     if ([session hasReceiverChain:theirEphemeral]) {
         return [session receiverChainKey:theirEphemeral];
     }
-    else{
-        
-        // corbett refactoring
-        // the idea with moving code around is to ensure compile wise that variables we shouldn't be using yet aren't used in previous steps
+    else {
+        // Receiving chain setup
         RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
-        RKCK *receiverChainKey = [rootKey createChainWithEphemeral:session.senderEphemeral fromTheirProvideEphemeral:theirEphemeral];
-        [session addReceiverChain:theirEphemeral chainKey:receiverChainKey.CK];
-        NSLog(@"Decrypting received message receiver chain:\n %@\n B0 public: %@\n A1 public: %@ \n",[receiverChainKey debugDescription],session.senderEphemeral.publicKey,theirEphemeral);
+        TSECKeyPair *ourEphemeral = session.senderEphemeral;
+        RKCK *receiverChain= [rootKey createChainWithEphemeral:ourEphemeral
+                                     fromTheirProvideEphemeral:theirEphemeral];
+        NSLog(@"Decrypting received message receiver chain:\n %@\n B0 public: %@\n A1 public: %@ \n",[receiverChain debugDescription],session.senderEphemeral.publicKey,theirEphemeral);
+        
+        // Sending chain setup
+        TSECKeyPair *ourNewSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+        RKCK *senderChain = [rootKey createChainWithEphemeral:ourNewSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
+        [session setSenderChain:ourNewSendingEphemeral chainkey:senderChain.CK];
 
-        TSECKeyPair *newSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        RKCK *sendingChainKey = [rootKey createChainWithEphemeral:newSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
-        NSLog(@"Decrypting received message new sending chain: \n %@ \n",[receiverChainKey debugDescription]);
-        session.rootKey = receiverChainKey.RK;
+        NSLog(@"Decrypting received message new sending chain: \n %@ \n",[receiverChain debugDescription]);
+
+        // Saving in session
+        session.rootKey = receiverChain.RK;
+        [session addReceiverChain:theirEphemeral chainKey:receiverChain.CK];
         [session setPN:session.senderChainKey.index-1];
-        [session setSenderChain:newSendingEphemeral chainkey:sendingChainKey.CK];
-        return receiverChainKey.CK;
-        //end corbett refactoring
+        return receiverChain.CK;
     }
 }
 
-+ (TSMessageKeys*)getOrCreateMessageKeysForSession:(TSSession*)session theirEphemeral:(NSData*)ephemeral chainKey:(TSChainKey*)chainKey counter:(int)counter{
++ (TSMessageKeys*)getOrCreateMessageKeysForSession:(TSSession*)session theirEphemeral:(NSData*)theirEphemeral chainKey:(TSChainKey*)chainKey counter:(int)counter{
+    
     if (chainKey.index > counter) {
-        if ([session hasMessageKeysForEphemeral:ephemeral counter:counter]) {
-            [session removeMessageKeysForEphemeral:ephemeral counter:counter];
+        if ([session hasMessageKeysForEphemeral:theirEphemeral counter:counter]) {
+            [session removeMessageKeysForEphemeral:theirEphemeral counter:counter];
         } else{
             throw [NSException exceptionWithName:@"Received message with old counter!" reason:@"" userInfo:@{}];
-
         }
     }
     
@@ -185,65 +172,16 @@
     
     while (chainKey.index < counter) {
         TSMessageKeys *messageKeys = [chainKey messageKeys];
-        [session setMessageKeysWithEphemeral:ephemeral messageKey:messageKeys];
+        [session setMessageKeysWithEphemeral:theirEphemeral messageKey:messageKeys];
         chainKey = chainKey.nextChainKey;
     }
     
-    [session setReceiverChainKeyWithEphemeral:ephemeral chainKey:chainKey];
-    
+    [session setReceiverChainKeyWithEphemeral:theirEphemeral chainKey:chainKey];
     return [chainKey messageKeys];
 }
 
 
 
-#pragma mark PreKey Utils - Sending and Receiving PrekeyMessages
-
-
-/**
- *  Helper method for processing an incoming prekey message and setting up the ratchet
- *
- *  @param prekey  Prekey used
- *  @param contact Contact information from receiver
- *
- *  @return Returns a session with the initialized ratchet
- */
-
-+ (TSSession*)processPrekey:(TSPrekey*)prekey withContact:(TSContact*)contact deviceId:(int)deviceId{
-
-    TSSession *session = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:deviceId];
-    TSECKeyPair *preKeyPair = [TSUserKeysDatabase preKeyWithId:prekey.prekeyId];
-    
-    if (preKeyPair){
-        
-        // Clear previous records for this session
-        [TSMessagesDatabase deleteSession:session];
-    
-        //3-way DHE
-        RKCK *rootAndSendingChainKey = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey] ourEphemeral:preKeyPair theirIdentityPublicKey:prekey.identityKey theirEphemeralPublicKey:prekey.ephemeralKey]]; // 3ECDH(A,A0,B,B0)
-        
-        NSLog(@"3ECDH Decryption 1st sending:\n %@\n",[rootAndSendingChainKey debugDescription]);
-        
-        [session setRootKey:rootAndSendingChainKey.RK];
-        // corbett refactored
-        [session setSenderChain:preKeyPair chainkey:rootAndSendingChainKey.CK]; // this will be unused
-        // end corbett refactor
-        if (preKeyPair.preKeyId != kLastResortKeyId) {
-            // Delete that preKey!
-        }
-        
-        return session;
-        
-    } else{
-        
-        // if session exists for that contact we just go straight to decryption process.
-        
-        // We probably have already processed that message.
-#warning properly do error management
-        @throw ([NSException exceptionWithName:@"" reason:@"" userInfo:@{}]);
-    }
-    
-    return session;
-}
 
 + (TSECKeyPair*)myIdentityKey{
     return [TSUserKeysDatabase identityKey];
@@ -261,7 +199,96 @@
     return versionByte;
 }
 
-#pragma mark Helper methods
+
+#pragma mark Private methods
++ (void) initializeSessionAsAlice:(TSSession*) sessionRecord {
+    // corbett refactored:
+    // See slide 9 http://www.slideshare.net/ChristineCorbettMora/axolotl-protocol-an-illustrated-primer
+    int idPrekeyUsed = sessionRecord.fetchedPrekey.prekeyId;
+    
+    [sessionRecord clear];
+    /* A,A0,B,B0 */
+    TSECKeyPair *ourIdentityKey = [self myIdentityKey]; //A
+    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A0
+    NSData* theirIdentityKey = sessionRecord.fetchedPrekey.identityKey; // B
+    NSData *theirEphemeralKey = sessionRecord.fetchedPrekey.ephemeralKey; // B0
+
+    TSECKeyPair *newSendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A1
+    // Initial 3ECDH(A,A0,B,B0)
+    RKCK *receivingChain = [RKCK initWithData:[self masterKeyAlice:ourIdentityKey
+                                                                ourEphemeral:ourEphemeralKey
+                                                      theirIdentityPublicKey:theirIdentityKey
+                                                     theirEphemeralPublicKey:theirEphemeralKey]];
+
+    
+    RKCK* sendingChain = [receivingChain createChainWithEphemeral:newSendingKey
+                                                            fromTheirProvideEphemeral:theirEphemeralKey];
+
+    
+    
+    NSLog(@"3ECDH Encyption receiving\n: %@\n",[receivingChain debugDescription]);
+    
+    [sessionRecord addReceiverChain:theirEphemeralKey chainKey:receivingChain.CK];
+    [sessionRecord setSenderChain:newSendingKey chainkey:sendingChain.CK];
+    [sessionRecord setRootKey:sendingChain.RK];
+
+    NSLog(@"Encryption sending\n (2nd) %@\n B0 pub: %@\n A1 pub: %@\n",[sendingChain debugDescription],theirEphemeralKey,newSendingKey.publicKey);
+    
+    [sessionRecord setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil
+                                                                ephemeral:ourEphemeralKey.publicKey
+                                                                 prekeyId:idPrekeyUsed]];
+    
+}
+
++(TSSession*) initializeSessionAsBob:(TSSession*) sessionRecord withPreKeyWhisperMessage:(TSPreKeyWhisperMessage*)preKeyWhisperMessage{
+    TSContact *contact = sessionRecord.contact;
+
+    int deviceId = 1;
+    if (!contact.identityKey) {
+        contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
+    }
+    else{
+        if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
+            #warning we'll want to store that message to retry decrypting later if user wants to continue
+            throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
+        }
+    }
+    
+    TSPrekey *prekey= [[TSPrekey alloc] initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte]
+                                                  ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte]
+                                                   prekeyId:[preKeyWhisperMessage.preKeyId intValue]];
+
+    
+    TSECKeyPair *ourEphemeralKey = [TSUserKeysDatabase preKeyWithId:prekey.prekeyId];
+    
+    if (ourEphemeralKey){
+        [TSMessagesDatabase deleteSession:sessionRecord];
+        TSSession *newSession = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:deviceId];
+         // Initial 3ECDH(A,A0,B,B0)
+        RKCK *sendingChain = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey]
+                                                                ourEphemeral:ourEphemeralKey
+                                                      theirIdentityPublicKey:prekey.identityKey
+                                                     theirEphemeralPublicKey:prekey.ephemeralKey]];
+        NSLog(@"3ECDH Decryption 1st sending:\n %@\n",[sendingChain debugDescription]);
+        
+        [newSession setRootKey:sendingChain.RK];
+        [newSession setSenderChain:ourEphemeralKey chainkey:sendingChain.CK]; // this will be unused
+
+        if (ourEphemeralKey.preKeyId != kLastResortKeyId) {
+            #warning Delete that preKey!
+        }
+        return newSession;
+        
+    }
+    else {
+        #warning properly do error management
+        /* if session exists for that contact we just go straight to decryption process.
+            We probably have already processed that message. */
+        @throw ([NSException exceptionWithName:@"" reason:@"" userInfo:@{}]);
+    }
+
+}
+
 
 + (NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
     NSMutableData *masterKey = [NSMutableData data];
@@ -283,5 +310,7 @@
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     return masterKey;
 }
+
+
 
 @end
