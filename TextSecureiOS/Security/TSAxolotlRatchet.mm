@@ -226,9 +226,10 @@
 }
 
 +(TSSession*) initializeSessionAsBob:(TSSession*) sessionRecord withPreKeyWhisperMessage:(TSPreKeyWhisperMessage*)preKeyWhisperMessage{
+    
     TSContact *contact = sessionRecord.contact;
+    int deviceId = sessionRecord.deviceId;
 
-    int deviceId = 1;
     if (!contact.identityKey) {
         contact.identityKey = preKeyWhisperMessage.identityKey;
     }
@@ -239,7 +240,7 @@
         }
     }
     
-    TSPrekey *prekey= [[TSPrekey alloc] initWithIdentityKey:preKeyWhisperMessage.identityKey
+    TSPrekey *prekey = [[TSPrekey alloc] initWithIdentityKey:preKeyWhisperMessage.identityKey
                                                   ephemeral:preKeyWhisperMessage.baseKey
                                                    prekeyId:[preKeyWhisperMessage.preKeyId intValue]];
 
@@ -250,9 +251,10 @@
         TSSession *newSession = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:deviceId];
          // Initial 3ECDH(A,A0,B,B0)
         RKCK *sendingChain = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey]
-                                                                ourEphemeral:ourEphemeralKey
-                                                      theirIdentityPublicKey:prekey.identityKey
-                                                     theirEphemeralPublicKey:prekey.ephemeralKey]];        
+                                                      ourEphemeral:ourEphemeralKey
+                                            theirIdentityPublicKey:prekey.identityKey
+                                           theirEphemeralPublicKey:prekey.ephemeralKey]];
+        
         [newSession setSenderChain:ourEphemeralKey chainkey:sendingChain.CK]; // this will be unused
         [newSession setRootKey:sendingChain.RK];
         
@@ -266,7 +268,7 @@
         #warning properly do error management
         /* if session exists for that contact we just go straight to decryption process.
             We probably have already processed that message. */
-        @throw ([NSException exceptionWithName:@"" reason:@"" userInfo:@{}]);
+        @throw ([NSException exceptionWithName:@"NoPrekeyWithID" reason:@"A message was received with an unknown prekey" userInfo:@{}]);
     }
 
 }

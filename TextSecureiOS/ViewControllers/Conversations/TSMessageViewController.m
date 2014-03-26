@@ -67,6 +67,12 @@
 
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kDBNewMessageNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
 }
 
 #pragma mark - Table view data source
