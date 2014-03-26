@@ -182,6 +182,7 @@
     NSLog(@"Debug description Decryption:\n version: %@\n ciphertext: %@\n mackey:%@\n ourhmac: %@ \n theirhmac: %@\n",version,ciphertext,keys.macKey,ourHmacData,hmac);
 
     if(![ourHmacData isEqualToData:hmac]) {
+        @throw [[NSException alloc]initWithName:@"Bad MAC!" reason:@"Bad Mac" userInfo:@{}];
         return nil;
     }
     // decrypt

@@ -62,8 +62,8 @@
         const std::string cppMessage = prekeyWhisperMessage->message();
         // c++->objective C
         self.preKeyId = [self cppUInt32ToNSNumber:cppPreKeyId];
-        self.baseKey = [self cppStringToObjcData:cppBaseKey];
-        self.identityKey = [self cppStringToObjcData:cppIdentityKey];
+        self.baseKey = [[self cppStringToObjcData:cppBaseKey] removeVersionByte];
+        self.identityKey = [[self cppStringToObjcData:cppIdentityKey] removeVersionByte];
         self.message = [self cppStringToObjcData:cppMessage];
     }
     return self; // super is abstract class

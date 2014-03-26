@@ -60,7 +60,7 @@
         const uint32_t cppPreviousCounter = whisperMessage->previouscounter();
         const std::string cppMessage = whisperMessage->ciphertext();
         // c++->objective C
-        self.ephemeralKey = [self cppStringToObjcData:cppEphemeralKey];
+        self.ephemeralKey = [[self cppStringToObjcData:cppEphemeralKey] removeVersionByte];
         self.counter = [self cppUInt32ToNSNumber:cppCounter];
         self.previousCounter = [self cppUInt32ToNSNumber:cppPreviousCounter];
         self.message = [self cppStringToObjcData:cppMessage];
