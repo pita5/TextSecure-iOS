@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TSContact.h"
 @interface TSVerifyIdentityViewController : UIViewController
 
 @property (nonatomic,strong) IBOutlet UILabel *theirIdentity;
 @property (nonatomic,strong) IBOutlet UILabel *myIdentity;
+@property (nonatomic,strong) TSContact* contact;
 @end

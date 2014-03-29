@@ -231,6 +231,7 @@
 
     if (!contact.identityKey) {
         contact.identityKey = preKeyWhisperMessage.identityKey;
+        [[NSNotificationCenter defaultCenter] postNotificationName:contact.registeredID object:self];
     }
     else{
         if (![contact.identityKey isEqualToData:preKeyWhisperMessage.identityKey]) {

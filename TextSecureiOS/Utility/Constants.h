@@ -52,3 +52,4 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 #define kTSVersion 
 #define kScreenshotProtection @"screenshotProtection"
 #define kDBNewMessageNotification @"db_new_message"
+#define kContactIdentity @"db_new_message"

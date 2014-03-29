@@ -24,11 +24,12 @@
 
 - (void) receiveMessagePush:(NSDictionary*)pushDict;
 
-// Methods for sending messages should be - shedule send, cancel send
+// Methods for sending messages should be - schedule send, cancel send
 -(void) scheduleMessageSend:(TSMessageOutgoing*)message; // Sending messages should have a completion block for UI processing
 
 -(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType;
 
-
+// Methods for verifying identity
 -(NSData*) getIdentityKeyForRecipient:(NSString*)recipientId;
+-(BOOL) recipientIdentityKeyIsVerified:(NSString*)recipientId;
 @end

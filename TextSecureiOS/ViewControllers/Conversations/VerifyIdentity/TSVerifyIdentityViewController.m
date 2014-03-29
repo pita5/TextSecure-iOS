@@ -27,8 +27,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Verify Identity";
-#warning dummy for their identity
-    self.theirIdentity.text = [self formatIdentityKeyForDisplay:@"05aff8777c7801a571d28873ab591d882b4ef37e0faa78c0a6b5bb542a928bb677"];
+
+    self.theirIdentity.text = [self formatIdentityKeyForDisplay:[[self getTheirIdentityKey] hexadecimalString]];
     self.myIdentity.text = [self formatIdentityKeyForDisplay:[[self getMyIdentityKey] hexadecimalString]];
 
 
@@ -37,6 +37,12 @@
 -(NSData*) getMyIdentityKey {
     return [[TSUserKeysDatabase identityKey] publicKey];
 }
+
+
+-(NSData*) getTheirIdentityKey {
+    return self.contact.identityKey;
+}
+
 
 -(NSString*) formatIdentityKeyForDisplay:(NSString*)identityKey {
     // idea here is to insert a space every two characters. there is probably a cleverer/more native way to do this.
