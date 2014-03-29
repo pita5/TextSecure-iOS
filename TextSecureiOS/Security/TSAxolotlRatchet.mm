@@ -62,7 +62,7 @@
 }
 
 + (TSMessage*)decryptMessage:(TSEncryptedWhisperMessage*)message withSession:(TSSession*)sessionRecord{
-    NSData *theirEphemeral = [message.ephemeralKey removeVersionByte];
+    NSData *theirEphemeral = message.ephemeralKey;
     int counter = [message.counter intValue];
     TSChainKey *chainKey = [self getOrCreateChainKeys:sessionRecord theirEphemeral:theirEphemeral];
     TSMessageKeys *messageKeys = [self getOrCreateMessageKeysForSession:sessionRecord
@@ -87,6 +87,7 @@
 }
 
 + (TSWhisperMessage*)encryptMessage:(TSMessage*)message withSession:(TSSession*)sessionRecord{
+    
     if (sessionRecord.fetchedPrekey) {
         [self initializeSessionAsAlice:sessionRecord];
     }
@@ -175,9 +176,6 @@
     return [chainKey messageKeys];
 }
 
-
-
-
 + (TSECKeyPair*)myIdentityKey{
     return [TSUserKeysDatabase identityKey];
 }
@@ -200,50 +198,50 @@
     // corbett refactored:
     // See slide 9 http://www.slideshare.net/ChristineCorbettMora/axolotl-protocol-an-illustrated-primer
     int idPrekeyUsed = sessionRecord.fetchedPrekey.prekeyId;
-    
+#warning verify if previous identity key stored!
     [sessionRecord clear];
     /* A,A0,B,B0 */
     TSECKeyPair *ourIdentityKey = [self myIdentityKey]; //A
-    TSECKeyPair *ourEphemeralKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A0
+    TSECKeyPair *ourBaseKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A0
     NSData* theirIdentityKey = sessionRecord.fetchedPrekey.identityKey; // B
     NSData *theirEphemeralKey = sessionRecord.fetchedPrekey.ephemeralKey; // B0
     TSECKeyPair *newSendingKey = [TSECKeyPair keyPairGenerateWithPreKeyId:0]; // A1
     // Initial 3ECDH(A,A0,B,B0)
     RKCK *receivingChain = [RKCK initWithData:[self masterKeyAlice:ourIdentityKey
-                                                                ourEphemeral:ourEphemeralKey
-                                                      theirIdentityPublicKey:theirIdentityKey
-                                                     theirEphemeralPublicKey:theirEphemeralKey]];
-
+                                                      ourEphemeral:ourBaseKey
+                                            theirIdentityPublicKey:theirIdentityKey
+                                           theirEphemeralPublicKey:theirEphemeralKey]];
     
     RKCK* sendingChain = [receivingChain createChainWithEphemeral:newSendingKey
-                                                            fromTheirProvideEphemeral:theirEphemeralKey];
+                                        fromTheirProvideEphemeral:theirEphemeralKey];
     
     [sessionRecord addReceiverChain:theirEphemeralKey chainKey:receivingChain.CK];
     [sessionRecord setSenderChain:newSendingKey chainkey:sendingChain.CK];
     [sessionRecord setRootKey:sendingChain.RK];
 
     [sessionRecord setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil
-                                                                ephemeral:ourEphemeralKey.publicKey
+                                                                ephemeral:ourBaseKey.publicKey
                                                                  prekeyId:idPrekeyUsed]];
     
 }
 
 +(TSSession*) initializeSessionAsBob:(TSSession*) sessionRecord withPreKeyWhisperMessage:(TSPreKeyWhisperMessage*)preKeyWhisperMessage{
+    
     TSContact *contact = sessionRecord.contact;
+    int deviceId = sessionRecord.deviceId;
 
-    int deviceId = 1;
     if (!contact.identityKey) {
-        contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
+        contact.identityKey = preKeyWhisperMessage.identityKey;
     }
     else{
-        if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
+        if (![contact.identityKey isEqualToData:preKeyWhisperMessage.identityKey]) {
             #warning we'll want to store that message to retry decrypting later if user wants to continue
             throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
         }
     }
     
-    TSPrekey *prekey= [[TSPrekey alloc] initWithIdentityKey:[preKeyWhisperMessage.identityKey removeVersionByte]
-                                                  ephemeral:[preKeyWhisperMessage.baseKey removeVersionByte]
+    TSPrekey *prekey = [[TSPrekey alloc] initWithIdentityKey:preKeyWhisperMessage.identityKey
+                                                  ephemeral:preKeyWhisperMessage.baseKey
                                                    prekeyId:[preKeyWhisperMessage.preKeyId intValue]];
 
     TSECKeyPair *ourEphemeralKey = [TSUserKeysDatabase preKeyWithId:prekey.prekeyId];
@@ -253,9 +251,10 @@
         TSSession *newSession = [TSMessagesDatabase sessionForRegisteredId:contact.registeredID deviceId:deviceId];
          // Initial 3ECDH(A,A0,B,B0)
         RKCK *sendingChain = [RKCK initWithData:[self masterKeyBob:[self myIdentityKey]
-                                                                ourEphemeral:ourEphemeralKey
-                                                      theirIdentityPublicKey:prekey.identityKey
-                                                     theirEphemeralPublicKey:prekey.ephemeralKey]];        
+                                                      ourEphemeral:ourEphemeralKey
+                                            theirIdentityPublicKey:prekey.identityKey
+                                           theirEphemeralPublicKey:prekey.ephemeralKey]];
+        
         [newSession setSenderChain:ourEphemeralKey chainkey:sendingChain.CK]; // this will be unused
         [newSession setRootKey:sendingChain.RK];
         
@@ -269,7 +268,7 @@
         #warning properly do error management
         /* if session exists for that contact we just go straight to decryption process.
             We probably have already processed that message. */
-        @throw ([NSException exceptionWithName:@"" reason:@"" userInfo:@{}]);
+        @throw ([NSException exceptionWithName:@"NoPrekeyWithID" reason:@"A message was received with an unknown prekey" userInfo:@{}]);
     }
 
 }
@@ -277,7 +276,7 @@
 
 + (NSData*)masterKeyAlice:(TSECKeyPair*)ourIdentityKeyPair ourEphemeral:(TSECKeyPair*)ourEphemeralKeyPair theirIdentityPublicKey:(NSData*)theirIdentityPublicKey theirEphemeralPublicKey:(NSData*)theirEphemeralPublicKey {
     NSMutableData *masterKey = [NSMutableData data];
-    [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+    [masterKey appendData:[ourIdentityKeyPair  generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     return masterKey;
@@ -291,7 +290,7 @@
     }
     
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
-    [masterKey appendData:[ourIdentityKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
+    [masterKey appendData:[ourIdentityKeyPair  generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     return masterKey;
 }

@@ -68,7 +68,7 @@ extern void curve25519_donna(unsigned char *output, const unsigned char *a, cons
     }
 
     // Computing shared secret using our private key and the other party's public key
-    curve25519_donna(sharedSecret,self->privateKey, (unsigned char*)[theirPublicKey bytes]);
+    curve25519_donna(sharedSecret,self->privateKey, [theirPublicKey bytes]);
     
     return [NSData dataWithBytes:sharedSecret length:32];
 }
