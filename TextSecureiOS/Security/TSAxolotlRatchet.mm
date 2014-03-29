@@ -236,7 +236,7 @@
         contact.identityKey = [preKeyWhisperMessage.identityKey removeVersionByte];
     }
     else{
-        if (![contact.identityKey isEqualToData:[p  reKeyWhisperMessage.identityKey removeVersionByte]]) {
+        if (![contact.identityKey isEqualToData:[preKeyWhisperMessage.identityKey removeVersionByte]]) {
             #warning we'll want to store that message to retry decrypting later if user wants to continue
             throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
         }
