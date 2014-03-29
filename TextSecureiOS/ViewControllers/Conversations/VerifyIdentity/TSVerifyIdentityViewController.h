@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TSVerifyIdentityViewController : UINavigationController
+@interface TSVerifyIdentityViewController : UIViewController
 
 @end

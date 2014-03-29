@@ -39,7 +39,16 @@
 
 -(void) setupThread  {
     self.title = [self.contact name];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Verify Identity"
+                                                                               style:UIBarButtonItemStyleBordered
+                                                                              target:self
+                                                                              action:@selector(verifyIdentity:)];
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
+}
+
+
+-(void)verifyIdentity:(id)sender {
+    [self performSegueWithIdentifier:@"VerifyIdentitySegue" sender:sender];
 }
 
 - (void) dismissVC {
