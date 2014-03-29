@@ -401,6 +401,7 @@
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
+		A57297D818E71F0700C8612E /* TSVerifyIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A57297D718E71F0700C8612E /* TSVerifyIdentityViewController.m */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5E6CBFC187629D4002A1735 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */; };
@@ -916,6 +917,8 @@
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A56D31B7180FCA840093D51B /* TSRegisterPrekeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterPrekeysRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.h; sourceTree = "<group>"; };
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeysRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.m; sourceTree = "<group>"; };
+		A57297D618E71F0700C8612E /* TSVerifyIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSVerifyIdentityViewController.h; path = ViewControllers/Conversations/VerifyIdentity/TSVerifyIdentityViewController.h; sourceTree = "<group>"; };
+		A57297D718E71F0700C8612E /* TSVerifyIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSVerifyIdentityViewController.m; path = ViewControllers/Conversations/VerifyIdentity/TSVerifyIdentityViewController.m; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -1607,6 +1610,15 @@
 			path = TextSecureiOSAssets/flags;
 			sourceTree = "<group>";
 		};
+		A57297D518E71EBF00C8612E /* VerifyIdentity */ = {
+			isa = PBXGroup;
+			children = (
+				A57297D618E71F0700C8612E /* TSVerifyIdentityViewController.h */,
+				A57297D718E71F0700C8612E /* TSVerifyIdentityViewController.m */,
+			);
+			name = VerifyIdentity;
+			sourceTree = "<group>";
+		};
 		A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1810,6 +1822,7 @@
 		B602B95F18CE786F00181564 /* Messaging */ = {
 			isa = PBXGroup;
 			children = (
+				A57297D518E71EBF00C8612E /* VerifyIdentity */,
 				B635B38F182181E1003CE732 /* TSMessageViewController.h */,
 				B635B390182181E1003CE732 /* TSMessageViewController.m */,
 			);
@@ -2499,6 +2512,7 @@
 				8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
 				B6C5FA8018CE3AD600ECC200 /* TSAttachment.m in Sources */,
+				A57297D818E71F0700C8612E /* TSVerifyIdentityViewController.m in Sources */,
 				A5E6CC90187D1E41002A1735 /* TSWhisperMessage.mm in Sources */,
 				A5E6CC85187D0FF1002A1735 /* TSProtocolBufferWrapper.mm in Sources */,
 				A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */,
