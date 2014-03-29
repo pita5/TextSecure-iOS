@@ -29,4 +29,6 @@
 
 -(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType;
 
+
+-(NSData*) getIdentityKeyForRecipient:(NSString*)recipientId;
 @end

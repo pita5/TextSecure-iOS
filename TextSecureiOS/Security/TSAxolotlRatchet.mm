@@ -222,7 +222,6 @@
     [sessionRecord setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil
                                                                 ephemeral:ourBaseKey.publicKey
                                                                  prekeyId:idPrekeyUsed]];
-    
 }
 
 +(TSSession*) initializeSessionAsBob:(TSSession*) sessionRecord withPreKeyWhisperMessage:(TSPreKeyWhisperMessage*)preKeyWhisperMessage{

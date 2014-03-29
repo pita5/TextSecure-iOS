@@ -57,6 +57,41 @@
     return self;
 }
 
+
+
+-(NSData*) getIdentityKeyForRecipient:(NSString*)recipientId {
+    // This will be the case
+#warning  we need the case for a verified recipient, it should always return the verified key
+    TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:recipientId];
+    return recipient.identityKey;
+    
+   
+//    TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:recipientId];
+//    if(recipient.identityKeyIsVerified) {
+//        return recipient.identityKey;
+//    }
+//    else {
+//     // This is the case for an UNVERIFIED RECIPIENT
+//    NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
+//    NSData* identityKeyForRecipient = nil;
+//    for (TSSession *session in sessions){
+//        if(identityKeyForRecipient) {
+//            // identity key is the same on on all sessions if they have sent a message in that session.
+//            if(session.contact.identityKey && ![identityKeyForRecipient isEqualToData:session.contact.identityKey]) {
+//                 throw [NSException exceptionWithName:@"IdentityKeyMismatch between sessions for recipient" reason:@"" userInfo:@{}];
+//            }
+//        }
+//        else {
+//            // first identity key on a session we find is the one that we use for comparison against all others for which
+//            // we have a statement of the identity key from the sender.
+//            identityKeyForRecipient = session.contact.identityKey;
+//        }
+//    }
+//    
+//    return identityKeyForRecipient;
+}
+
+
 -(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
