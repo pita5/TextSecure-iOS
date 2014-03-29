@@ -14,8 +14,7 @@
 
 @implementation TSVerifyIdentityViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -23,14 +22,30 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.title = @"Verify Identity";
+    self.theirIdentity.text = [self formatIdentityKeyForDisplay:@"05aff8777c7801a571d28873ab591d882b4ef37e0faa78c0a6b5bb542a928bb677"];
+    self.myIdentity.text = [self formatIdentityKeyForDisplay:@"05aff8777c7801a571d28873ab591d882b4ef37e0faa78c0a6b5bb542a928bb677"];
+
+
 }
 
-- (void)didReceiveMemoryWarning
-{
+-(NSString*) formatIdentityKeyForDisplay:(NSString*)identityKey {
+    // idea here is to insert a space every two characters. there is probably a cleverer/more native way to do this.
+    __block NSString*  formattedIdentityKey = @"";
+    [identityKey enumerateSubstringsInRange:NSMakeRange(0, [identityKey length])
+                                 options:NSStringEnumerationByComposedCharacterSequences
+                              usingBlock:
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+         if (substringRange.location % 2 != 0) {
+             substring = [substring stringByAppendingString:@" "];
+         }
+         formattedIdentityKey = [formattedIdentityKey stringByAppendingString:substring];
+     }];
+    return formattedIdentityKey;
+}
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

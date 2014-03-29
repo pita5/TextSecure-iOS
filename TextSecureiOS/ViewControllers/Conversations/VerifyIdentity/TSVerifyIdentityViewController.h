@@ -10,4 +10,6 @@
 
 @interface TSVerifyIdentityViewController : UIViewController
 
+@property (nonatomic,strong) IBOutlet UILabel *theirIdentity;
+@property (nonatomic,strong) IBOutlet UILabel *myIdentity;
 @end
