@@ -114,4 +114,17 @@
     return messageSignal;
 }
 
+- (BOOL)verifyHMAC:(NSData*)hmacKey{
+    
+    NSMutableArray *parts = [NSMutableArray array];
+#warning HMAC IS NOT VERIFIED!
+    return true;
+}
+
++ (NSData*)hmacWithKey:(NSData*)macKey data:(NSData*)data{
+    // compute SHA256
+    //init mackey
+    // update with serialized data
+    // return trim to mac length
+}
 @end

@@ -43,7 +43,7 @@
 - (void)setReceiverChainKeyWithEphemeral:(NSData*)senderEphemeral chainKey:(TSChainKey*)chainKey;
 
 - (BOOL)hasMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
-- (void)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
+- (TSMessageKeys*)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter;
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys;
 

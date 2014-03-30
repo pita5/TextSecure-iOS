@@ -93,7 +93,7 @@
                                 // Save the file
                                 NSData* attachmentData = downloadResponseObject;
                                 NSData *hmacKey = [Cryptography generateRandomBytes:32];
-                                attachment.attachmentDataPath = [FilePath pathInDocumentsDirectory:[[Cryptography truncatedHMAC:attachmentData withHMACKey:hmacKey truncation:10]base64EncodedStringWithOptions:0]];
+                                //attachment.attachmentDataPath = [FilePath pathInDocumentsDirectory:[[Cryptography truncatedHMAC:attachmentData withHMACKey:hmacKey truncation:10]base64EncodedStringWithOptions:0]];
                                 [attachmentData writeToFile:attachment.attachmentDataPath atomically:YES];
                                 
                                 break;

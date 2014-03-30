@@ -18,4 +18,6 @@
 
 -(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version withHMAC:(NSData*)mac;
 
+- (BOOL)verifyHMAC:(NSData*)hmacKey;
+
 @end

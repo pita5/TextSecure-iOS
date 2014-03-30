@@ -7,14 +7,21 @@
 //
 
 #import "TSChainKey.h"
-#import "TSHKDF.h"
 #import "TSMessageKeys.h"
+#import "TSDerivedSecrets.h"
 #import "Cryptography.h"
+#import <CommonCrypto/CommonCrypto.h>
 
 @implementation TSChainKey
 
-static NSString * const kChainKeyKey   = @"kChainKeyKey";
-static NSString * const kChainKeyIndex = @"kChainKeyIndex";
+
+#define kTSKeySeedLength 1
+
+static uint8_t kMessageKeySeed[kTSKeySeedLength]    = {01};
+static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
+
+static NSString * const kChainKeyKey                = @"kChainKeyKey";
+static NSString * const kChainKeyIndex              = @"kChainKeyIndex";
 
 - (instancetype)initWithChainKeyWithKey:(NSData*)key index:(int)index{
     self = [super init];
@@ -42,30 +49,27 @@ static NSString * const kChainKeyIndex = @"kChainKeyIndex";
 }
 
 - (TSMessageKeys*)messageKeys{
-    int hmacKeyMK  = 0x01;
-    NSData* nextMK = [Cryptography computeHMAC:self.key
-                                   withHMACKey:[NSData dataWithBytes:&hmacKeyMK length:sizeof(hmacKeyMK)]];
-    return [self deriveTSMessageKeysFromMessageKey:nextMK];
-}
-
-- (TSMessageKeys*)deriveTSMessageKeysFromMessageKey:(NSData*)nextMessageKey_MK {
-    NSData* newCipherKeyAndMacKey  = [TSHKDF deriveKeyFromMaterial:nextMessageKey_MK
-                                                      outputLength:64
-                                                              info:[@"WhisperMessageKeys" dataUsingEncoding:NSUTF8StringEncoding]];
-    NSData* cipherKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(0, 32)];
-    NSData* macKey = [newCipherKeyAndMacKey subdataWithRange:NSMakeRange(32, 32)];
-    return [[TSMessageKeys alloc] initWithCipherKey:cipherKey macKey:macKey counter:self.index];
+    NSData *inputKeyMaterial = [self getBaseMaterial:[NSData dataWithBytes:kMessageKeySeed length:kTSKeySeedLength]];
+    TSDerivedSecrets *derivedSecrets = [TSDerivedSecrets derivedMessageKeysWithData:inputKeyMaterial];
+    return [[TSMessageKeys alloc] initWithCipherKey:derivedSecrets.cipherKey macKey:derivedSecrets.macKey counter:self.index];
 }
 
 - (TSChainKey*) nextChainKey{
-    int hmacKeyCK  = 0x02;
-    NSData* nextCK = [Cryptography computeHMAC:self.key
-                                   withHMACKey:[NSData dataWithBytes:&hmacKeyCK length:sizeof(hmacKeyCK)]];
+    NSData* nextCK = [self getBaseMaterial:[NSData dataWithBytes:kChainKeySeed length:kTSKeySeedLength]];
     return [[TSChainKey alloc] initWithChainKeyWithKey:nextCK index:self.index+1];
 }
 
--(NSString*) debugDescription {
+- (NSString*) debugDescription {
     return [NSString stringWithFormat:@"CK: %@",self.key];
+}
+
+- (NSData*)getBaseMaterial:(NSData*)seed{
+    uint8_t result[CC_SHA256_DIGEST_LENGTH] = {0};
+    CCHmacContext ctx;
+    CCHmacInit(&ctx, kCCHmacAlgSHA256, [self.key bytes], [self.key length]);
+    CCHmacUpdate(&ctx, [seed bytes], [seed length]);
+    CCHmacFinal(&ctx, result);
+    return [NSData dataWithBytes:result length:sizeof(result)];
 }
 
 @end
