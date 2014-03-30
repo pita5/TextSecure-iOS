@@ -7,7 +7,7 @@
 //
 
 #import "TSPresentIdentityQRCodeViewController.h"
-
+#import "NSData+Base64.h"
 @interface TSPresentIdentityQRCodeViewController ()
 
 @end
@@ -40,8 +40,7 @@
     //    NSLog(@"filterAttributes:%@", filter.attributes);
     
     [filter setDefaults];
-    
-    [filter setValue:self.identityKey forKey:@"inputMessage"];
+    [filter setValue:[[self.identityKey base64EncodedString] dataUsingEncoding:NSUTF8StringEncoding] forKey:@"inputMessage"];
     
     CIImage *outputImage = [filter outputImage];
     
