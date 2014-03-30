@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <AVFoundation/AVFoundation.h>
 @interface TSScanIdentityBarcodeViewController : UIViewController
 
+@property(nonatomic,strong) AVCaptureSession *session;
+@property(nonatomic,strong) AVCaptureDevice *device;
+@property(nonatomic,strong) AVCaptureDeviceInput *input;
+@property(nonatomic,strong) AVCaptureMetadataOutput *output;
+@property(nonatomic,strong) AVCaptureVideoPreviewLayer *prevLayer;
+
+@property(nonatomic,strong) UIView *highlightView;
+@property(nonatomic,strong) UILabel *label;
 @end

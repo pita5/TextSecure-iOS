@@ -8,7 +8,6 @@
 
 #import "TSVerifyIdentityViewController.h"
 #import "TSUserKeysDatabase.h"
-#import "TSPresentIdentityQRCodeViewController.h"
 #import "NSData+Conversion.h"
 
 @interface TSVerifyIdentityViewController ()
@@ -70,11 +69,7 @@
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([[segue identifier] isEqualToString:@"GetMyKeyScannedSegue"]){
-        ((TSPresentIdentityQRCodeViewController*)segue.destinationViewController).identityKey = [self getMyIdentityKey];
-    }
-    
-    // Pass the selected object to the new view controller.
+    [segue.destinationViewController setIdentityKey:[self getMyIdentityKey]];
 }
 
 
