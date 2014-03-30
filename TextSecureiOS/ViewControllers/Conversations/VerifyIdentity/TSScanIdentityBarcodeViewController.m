@@ -7,7 +7,7 @@
 //
 
 #import "TSScanIdentityBarcodeViewController.h"
-
+#import "NSData+Base64.h"
 
 
 
@@ -29,7 +29,7 @@
     
     self.highlightView = [[UIView alloc] init];
     self.highlightView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin;
-    self.highlightView.layer.borderColor = [UIColor blueColor].CGColor;
+    self.highlightView.layer.borderColor = [UIColor greenColor].CGColor;
     self.highlightView.layer.borderWidth = 4;
     [self.view addSubview:self.highlightView];
     
@@ -95,10 +95,21 @@
         }
         if (detectionString != nil) {
             self.label.text = detectionString;
+            NSData* detectionData = [NSData dataFromBase64String:detectionString];
+#warning do something with this fact; update the contact as verified
+            if([detectionData isEqualToData:self.identityKey]) {
+
+                self.label.text = @"verified!";
+            }
+            else {
+                self.label.text = @"identity keys do not match";
+            
+            }
+            [self.session stopRunning];
             break;
         }
         else {
-            self.label.text = @"(none)";
+            self.label.text = @"searching...";
         }
     }
     
