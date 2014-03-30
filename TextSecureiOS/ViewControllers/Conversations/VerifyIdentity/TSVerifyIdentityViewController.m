@@ -8,6 +8,7 @@
 
 #import "TSVerifyIdentityViewController.h"
 #import "TSUserKeysDatabase.h"
+#import "TSPresentIdentityQRCodeViewController.h"
 #import "NSData+Conversion.h"
 
 @interface TSVerifyIdentityViewController ()
@@ -64,15 +65,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([[segue identifier] isEqualToString:@"GetMyKeyScannedSegue"]){
+        ((TSPresentIdentityQRCodeViewController*)segue.destinationViewController).identityKey = [self getMyIdentityKey];
+    }
+    
     // Pass the selected object to the new view controller.
 }
-*/
+
 
 @end

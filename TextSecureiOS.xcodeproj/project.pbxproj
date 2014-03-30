@@ -402,6 +402,8 @@
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
 		A57297D818E71F0700C8612E /* TSVerifyIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A57297D718E71F0700C8612E /* TSVerifyIdentityViewController.m */; };
+		A57297DB18E7579F00C8612E /* TSScanIdentityBarcodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A57297DA18E7579E00C8612E /* TSScanIdentityBarcodeViewController.m */; };
+		A57297DE18E81F0000C8612E /* TSPresentIdentityQRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A57297DD18E81F0000C8612E /* TSPresentIdentityQRCodeViewController.m */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5E6CBFC187629D4002A1735 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */; };
@@ -919,6 +921,10 @@
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeysRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.m; sourceTree = "<group>"; };
 		A57297D618E71F0700C8612E /* TSVerifyIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSVerifyIdentityViewController.h; path = ViewControllers/Conversations/VerifyIdentity/TSVerifyIdentityViewController.h; sourceTree = "<group>"; };
 		A57297D718E71F0700C8612E /* TSVerifyIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSVerifyIdentityViewController.m; path = ViewControllers/Conversations/VerifyIdentity/TSVerifyIdentityViewController.m; sourceTree = "<group>"; };
+		A57297D918E7579E00C8612E /* TSScanIdentityBarcodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSScanIdentityBarcodeViewController.h; path = ViewControllers/Conversations/VerifyIdentity/TSScanIdentityBarcodeViewController.h; sourceTree = "<group>"; };
+		A57297DA18E7579E00C8612E /* TSScanIdentityBarcodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSScanIdentityBarcodeViewController.m; path = ViewControllers/Conversations/VerifyIdentity/TSScanIdentityBarcodeViewController.m; sourceTree = "<group>"; };
+		A57297DC18E81F0000C8612E /* TSPresentIdentityQRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSPresentIdentityQRCodeViewController.h; path = ViewControllers/Conversations/VerifyIdentity/TSPresentIdentityQRCodeViewController.h; sourceTree = "<group>"; };
+		A57297DD18E81F0000C8612E /* TSPresentIdentityQRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSPresentIdentityQRCodeViewController.m; path = ViewControllers/Conversations/VerifyIdentity/TSPresentIdentityQRCodeViewController.m; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -1615,6 +1621,10 @@
 			children = (
 				A57297D618E71F0700C8612E /* TSVerifyIdentityViewController.h */,
 				A57297D718E71F0700C8612E /* TSVerifyIdentityViewController.m */,
+				A57297D918E7579E00C8612E /* TSScanIdentityBarcodeViewController.h */,
+				A57297DA18E7579E00C8612E /* TSScanIdentityBarcodeViewController.m */,
+				A57297DC18E81F0000C8612E /* TSPresentIdentityQRCodeViewController.h */,
+				A57297DD18E81F0000C8612E /* TSPresentIdentityQRCodeViewController.m */,
 			);
 			name = VerifyIdentity;
 			sourceTree = "<group>";
@@ -2502,12 +2512,14 @@
 				B639F69F180955E100B7DF00 /* TSServerCodeVerificationRequest.m in Sources */,
 				A5E6CC84187D0FF1002A1735 /* TSPreKeyWhisperMessage.mm in Sources */,
 				A5145B3D184B6F35007BDC73 /* TSAttachmentManager.m in Sources */,
+				A57297DE18E81F0000C8612E /* TSPresentIdentityQRCodeViewController.m in Sources */,
 				A52ECA7C17ED097300C80BC7 /* NSData+Base64.m in Sources */,
 				A5169D08170FEA8D00A2CE9E /* VerificationViewController.m in Sources */,
 				A5169D09170FEA8D00A2CE9E /* TextSecureViewController.m in Sources */,
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				6FCE040C18D427CE00C33B34 /* TSStartOverSegue.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
+				A57297DB18E7579F00C8612E /* TSScanIdentityBarcodeViewController.m in Sources */,
 				8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */,
 				8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,

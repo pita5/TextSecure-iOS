@@ -227,6 +227,9 @@
                                 <state key="normal" title="Scan their key to compare">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="wR8-zI-GFm" kind="push" identifier="ScanTheirKeySegue" id="kne-R6-EZk"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M5Z-qI-izb">
                                 <rect key="frame" x="90" y="401" width="141" height="30"/>
@@ -234,6 +237,9 @@
                                 <state key="normal" title="Get my key scanned">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="FdJ-MN-rTt" kind="push" identifier="GetMyKeyScannedSegue" id="lnZ-tX-llc"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -247,6 +253,53 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kza-Rd-eu8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1021" y="-5403"/>
+        </scene>
+        <!--Scan Identity Barcode View Controller-->
+        <scene sceneID="dQA-sx-KMa">
+            <objects>
+                <viewController id="wR8-zI-GFm" customClass="TSScanIdentityBarcodeViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dpu-oS-g88"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ygz-SW-9Un"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fwd-9V-Sz3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="9Zt-RR-Yuy"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N3S-dB-euB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-557" y="-5793"/>
+        </scene>
+        <!--Present IdentityQR Code View Controller-->
+        <scene sceneID="5M5-gq-fWX">
+            <objects>
+                <viewController id="FdJ-MN-rTt" customClass="TSPresentIdentityQRCodeViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RMS-uD-bp4"/>
+                        <viewControllerLayoutGuide type="bottom" id="Yts-aY-h4r"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="d9a-kc-pcF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sbi-F0-7tE">
+                                <rect key="frame" x="34" y="113" width="253" height="253"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="S5T-Sl-14r"/>
+                    <connections>
+                        <outlet property="qrCodeView" destination="Sbi-F0-7tE" id="9xU-cd-nVr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tzt-YT-f6H" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-580" y="-4998"/>
         </scene>
         <!--Password Unlock View Controller-->
         <scene sceneID="Msh-YP-AOi">
