@@ -25,12 +25,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.title = @"Scan key";
     
     self.highlightView = [[UIView alloc] init];
     self.highlightView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin;
-    self.highlightView.layer.borderColor = [UIColor greenColor].CGColor;
-    self.highlightView.layer.borderWidth = 3;
+    self.highlightView.layer.borderColor = [UIColor blueColor].CGColor;
+    self.highlightView.layer.borderWidth = 4;
     [self.view addSubview:self.highlightView];
     
     self.label = [[UILabel alloc] init];
@@ -81,28 +81,25 @@
     CGRect highlightViewRect = CGRectZero;
     AVMetadataMachineReadableCodeObject *barCodeObject;
     NSString *detectionString = nil;
-    NSArray *barCodeTypes = @[AVMetadataObjectTypeUPCECode, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode39Mod43Code,
-                              AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeEAN8Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode128Code,
-                              AVMetadataObjectTypePDF417Code, AVMetadataObjectTypeQRCode, AVMetadataObjectTypeAztecCode];
+    NSArray *barCodeTypes = @[AVMetadataObjectTypeQRCode];
     
     for (AVMetadataObject *metadata in metadataObjects) {
+        NSLog(@"metadata %@",metadata);
         for (NSString *type in barCodeTypes) {
-            if ([metadata.type isEqualToString:type])
-            {
+            if ([metadata.type isEqualToString:type]) {
                 barCodeObject = (AVMetadataMachineReadableCodeObject *)[self.prevLayer transformedMetadataObjectForMetadataObject:(AVMetadataMachineReadableCodeObject *)metadata];
                 highlightViewRect = barCodeObject.bounds;
                 detectionString = [(AVMetadataMachineReadableCodeObject *)metadata stringValue];
                 break;
             }
         }
-        
-        if (detectionString != nil)
-        {
+        if (detectionString != nil) {
             self.label.text = detectionString;
             break;
         }
-        else
+        else {
             self.label.text = @"(none)";
+        }
     }
     
     self.highlightView.frame = highlightViewRect;

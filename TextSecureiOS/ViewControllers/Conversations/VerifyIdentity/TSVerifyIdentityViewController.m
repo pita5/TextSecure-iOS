@@ -8,6 +8,7 @@
 
 #import "TSVerifyIdentityViewController.h"
 #import "TSUserKeysDatabase.h"
+#import "TSPresentIdentityQRCodeViewController.h"
 #import "NSData+Conversion.h"
 
 @interface TSVerifyIdentityViewController ()
@@ -40,7 +41,9 @@
 
 
 -(NSData*) getTheirIdentityKey {
-    return self.contact.identityKey;
+#warning since getting their identity key doesn't work I am inserting a test here so we can compare the two keys
+    return [self getMyIdentityKey];
+    //return self.contact.identityKey;
 }
 
 
@@ -70,6 +73,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     [segue.destinationViewController setIdentityKey:[self getMyIdentityKey]];
+    if([[segue identifier] isEqualToString:@"GetMyKeyScannedSegue"]){
+        [segue.destinationViewController setIdentityKey:[self getMyIdentityKey]];
+    }
+    else if([[segue identifier] isEqualToString:@"ScanTheirKeySegue"]){
+            [segue.destinationViewController setIdentityKey:[self getTheirIdentityKey]];
+    }
+    
 }
 
 

@@ -178,9 +178,6 @@
 
       // verify hmac
     NSData* ourHmacData = [Cryptography truncatedHMAC:dataToHMAC withHMACKey:keys.macKey truncation:8];
-#warning remove log
-    NSLog(@"Debug description Decryption:\n version: %@\n ciphertext: %@\n mackey:%@\n ourhmac: %@ \n theirhmac: %@\n",version,ciphertext,keys.macKey,ourHmacData,hmac);
-
     if(![ourHmacData isEqualToData:hmac]) {
         @throw [[NSException alloc]initWithName:@"Bad MAC!" reason:@"Bad Mac" userInfo:@{}];
         return nil;
@@ -231,8 +228,6 @@
         [versionAndEncryptedData appendData:version];
         [versionAndEncryptedData appendData:encryptedData];
         *hmac = [Cryptography truncatedHMAC:versionAndEncryptedData withHMACKey:keys.macKey truncation:8];
-#warning remove log
-        NSLog(@"Debug description Encryption:\n version: %@\n ciphertext: %@\n mackey:%@\n mac: %@\n",version,encryptedData,keys.macKey,*hmac);
         return encryptedData;
     }
     

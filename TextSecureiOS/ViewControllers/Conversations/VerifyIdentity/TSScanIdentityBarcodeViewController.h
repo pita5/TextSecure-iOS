@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-@interface TSScanIdentityBarcodeViewController : UIViewController
+@interface TSScanIdentityBarcodeViewController : UIViewController<AVCaptureMetadataOutputObjectsDelegate>
 
 @property(nonatomic,strong) AVCaptureSession *session;
 @property(nonatomic,strong) AVCaptureDevice *device;
@@ -18,4 +18,5 @@
 
 @property(nonatomic,strong) UIView *highlightView;
 @property(nonatomic,strong) UILabel *label;
+@property(nonatomic,strong) NSData *identityKey;
 @end
