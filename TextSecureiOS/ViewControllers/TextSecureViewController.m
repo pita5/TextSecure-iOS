@@ -55,6 +55,8 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kDBNewMessageNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Refreshing");
+            self.conversations = [TSMessagesDatabase conversations];
             [self.tableView reloadData];
         });
     }];

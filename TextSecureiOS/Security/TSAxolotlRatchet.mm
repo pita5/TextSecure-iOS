@@ -67,17 +67,10 @@
     
     TSChainKey *chainKey = [self getOrCreateChainKeys:sessionRecord theirEphemeral:theirEphemeral];
     
-    NSLog(@"ChainKey : %@", chainKey.key);
-    
     TSMessageKeys *messageKeys = [self getOrCreateMessageKeysForSession:sessionRecord
                                                          theirEphemeral:theirEphemeral
                                                                chainKey:chainKey
                                                                 counter:counter];
-    NSLog(@"Message counter : %i", messageKeys.counter);
-    NSLog(@"Message CipherKey : %@", messageKeys.cipherKey);
-    NSLog(@"Message MacKey:%@", messageKeys.macKey);
-    NSLog(@"Message Version: %@", message.version);
-    NSLog(@"Message Hmac : %@", message.hmac);
     
     NSData *cipherTextMessage = message.message;
     
@@ -90,6 +83,9 @@
     NSString* decryptedMessageString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherTextMessage
                                                                                           withKeys:messageKeys] encoding:NSUTF8StringEncoding];
     
+    if (!decryptedMessageString) {
+        throw [NSException exceptionWithName:@"Error decrypting message" reason:@"" userInfo:nil];
+    }
 
     TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:decryptedMessageString
                                                                                     sender:sessionRecord.contact.registeredID
@@ -117,6 +113,10 @@
 #warning in the hmac data we need nsdata of version and message encoded
     NSData *ciphertextBody = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys computedHMAC:&computedHMAC hmacData:nil];
     
+    if (!ciphertextBody) {
+        throw [NSException exceptionWithName:@"Error while encrypting" reason:@"" userInfo:nil];
+    }
+    
     TSWhisperMessage *encryptedMessage;
     if ([sessionRecord hasPendingPreKey]) {
         encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:ciphertextBody
@@ -124,7 +124,7 @@
                                                       myCurrentEphemeral:sessionRecord.pendingPreKey.ephemeralKey
                                                          myNextEphemeral:sessionRecord.senderEphemeral.publicKey
                                                               forVersion:[self currentProtocolVersion]
-                                                                withHMAC:computedHMAC];
+                                                                withHMACKey:messageKeys.macKey];
 
     }
     else {
@@ -133,7 +133,7 @@
                                                                            counter:[NSNumber numberWithInt:chainKey.index]
                                                                   encryptedMessage:ciphertextBody
                                                                         forVersion:[self currentProtocolVersion]
-                                                                          withHMAC:computedHMAC];
+                                                                           HMACKey:messageKeys.macKey];
     }
 
     [sessionRecord setSenderChainKey:[chainKey nextChainKey]];

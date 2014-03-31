@@ -70,6 +70,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kDBNewMessageNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadMessages];
             [self.tableView reloadData];
         });
     }];
