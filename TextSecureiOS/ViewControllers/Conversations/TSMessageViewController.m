@@ -88,6 +88,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kDBNewMessageNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadMessages];
             [self.tableView reloadData];
         });
     }];
@@ -189,9 +190,9 @@
     // encryption attachment data, write to file, and initialize the attachment
     NSData *randomEncryptionKey;
     NSData *encryptedData = [Cryptography encryptAttachment:attachmentData withRandomKey:&randomEncryptionKey];
-    NSString* filename = [[Cryptography truncatedHMAC:encryptedData withHMACKey:randomEncryptionKey truncation:10] base64EncodedStringWithOptions:0];
-    NSString* writeToFile = [FilePath pathInDocumentsDirectory:filename];
-    [encryptedData writeToFile:writeToFile atomically:YES];
+    //NSString* filename = [[Cryptography truncatedHMAC:encryptedData withHMACKey:randomEncryptionKey truncation:10] base64EncodedStringWithOptions:0];
+    //NSString* writeToFile = [FilePath pathInDocumentsDirectory:filename];
+    //[encryptedData writeToFile:writeToFile atomically:YES];
     //self.attachment = [[TSAttachment alloc] initWithAttachmentDataPath:writeToFile withType:attachmentType withDecryptionKey:randomEncryptionKey];
     //size of button
     [self dismissViewControllerAnimated:YES completion:nil];

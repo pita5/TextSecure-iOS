@@ -1,4 +1,4 @@
-    //
+//
 //  TSWhisperMessage.m
 //  TextSecureiOS
 //
@@ -8,17 +8,19 @@
 
 #import "TSEncryptedWhisperMessage.hh"
 #import "WhisperMessage.pb.hh"
+#import "Cryptography.h"
 #import "NSData+TSKeyVersion.h"
+
 @implementation TSEncryptedWhisperMessage
 
--(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version withHMAC:(NSData*)mac{
+-(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version HMACKey:(NSData*)hmacKey{
     if(self = [super init]) {
         self.ephemeralKey = ephemeral;
         self.previousCounter = prevCounter;
         self.counter = ctr;
         self.message=ciphertext;
         self.version = version;
-        self.hmac = mac;
+        self.hmac = [self hMacWithKey:hmacKey];
     }
     return self;
 }
@@ -35,18 +37,18 @@
 -(instancetype) initWithTextSecure_WhisperMessage:(NSData*) data {
     /* Protocol v2
      struct {
-         opaque version[1];
-         opaque WhisperMessage[...];
-         opaque mac[8];
+     opaque version[1];
+     opaque WhisperMessage[...];
+     opaque mac[8];
      } TextSecure_WhisperMessage;
-    message WhisperMessage {
-        optional bytes  ephemeralKey    = 1;
-        optional uint32 counter         = 2;
-        optional uint32 previousCounter = 3;
-        optional bytes  ciphertext      = 4;
-    }
-    
-    */
+     message WhisperMessage {
+     optional bytes  ephemeralKey    = 1;
+     optional uint32 counter         = 2;
+     optional uint32 previousCounter = 3;
+     optional bytes  ciphertext      = 4;
+     }
+     
+     */
     if(self = [super init]) {
         // 1st extract out version and mac
         self.version = [data subdataWithRange:NSMakeRange(0, 1)];
@@ -87,7 +89,7 @@
 -(const std::string) serializedProtocolBufferAsString {
     textsecure::WhisperMessage *whisperMessage = new textsecure::WhisperMessage;
     // objective c->c++
-    const std::string cppEphemeralKey = [self objcDataToCppString:self.ephemeralKey];
+    const std::string cppEphemeralKey = [self objcDataToCppString:[self.ephemeralKey prependVersionByte]];
     const uint32_t cppCounter = [self objcNumberToCppUInt32:self.counter];
     const uint32_t cppPreviousCounter = [self objcNumberToCppUInt32:self.previousCounter];
     const std::string cppMessage =  [self objcDataToCppString:self.message];
@@ -114,4 +116,26 @@
     return messageSignal;
 }
 
+- (BOOL)verifyHMAC:(NSData*)hmacKey{
+    NSData *ourHmac = [self hMacWithKey:hmacKey];
+    
+    if ([ourHmac isEqualToData:self.hmac]) {
+        return true;
+    }
+    
+    return false;
+}
+
+- (NSData*)hMacWithKey:(NSData*)hmacKey{
+    NSMutableData *hmacData = [NSMutableData data];
+    [hmacData appendData:self.version];
+    [hmacData appendData:[self serializedProtocolBuffer]];
+    
+    return [[self class] hmacWithKey:hmacKey data:hmacData];
+}
+
++ (NSData*)hmacWithKey:(NSData*)macKey data:(NSData*)data{
+    NSData *hash = [Cryptography computeSHA256HMAC:data withHMACKey:macKey];
+    return [hash subdataWithRange:NSMakeRange(0, 8)];
+}
 @end

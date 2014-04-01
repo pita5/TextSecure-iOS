@@ -14,11 +14,14 @@
 #pragma mark SHA and HMAC methods
 +(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
-+(NSData*) computeHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey;
-+(NSData*) truncatedHMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey truncation:(int)bytes;
 
-+(NSData*)decryptCTRMode:(NSData*)ciphertext withKeys:(TSMessageKeys*)keys forVersion:(NSData*) version withHMAC:(NSData*)hmac;
-+(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSMessageKeys*)keys forVersion:(NSData*)version computedHMAC:(NSData**)hmac;
++(NSData*) computeSHA256HMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey;
++(NSData*) computeSHA1HMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey;
++(NSData*) truncatedSHA1HMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey truncation:(int)bytes;
+
++(NSData*)decryptCTRMode:(NSData*)ciphertext withKeys:(TSMessageKeys*)keys;
+
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSMessageKeys*)keys computedHMAC:(NSData**)hmac hmacData:(NSData*)hmacdata;
 #pragma mark decrypt symmetrically with key given to server this first layer just hides from apple encrypted protobufs message
 +(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString;
 

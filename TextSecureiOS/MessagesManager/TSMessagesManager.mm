@@ -139,8 +139,7 @@
         switch (operation.response.statusCode) {
             case 200:{
                 // Awesome! We consider the message as sent! (Improvement: add flag in DB for sent)
-                
-                NSLog(@"Message sent!");
+                NSLog(@"Message sent! %@", responseObject);
                 [message setState:TSMessageStateSent withCompletion:^(BOOL success) {
                     // Proceed to UI refresh;
                 }];
