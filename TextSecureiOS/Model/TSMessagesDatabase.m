@@ -265,6 +265,8 @@ static TSDatabaseManager *messagesDb = nil;
         success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
     }];
     
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:kDBNewMessageNotification object:nil]];
+    
     return success;
 }
 

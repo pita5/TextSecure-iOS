@@ -52,8 +52,15 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [self.tableView registerClass:[TSMessageConversationCell class] forCellReuseIdentifier:kCellIdentifier];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = [UIColor lightGrayColor];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kDBNewMessageNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Refreshing");
+            self.conversations = [TSMessagesDatabase conversations];
+            [self.tableView reloadData];
+        });
+    }];
 }
-
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -220,10 +227,5 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         }
     }
 }
-
--(void)openSettings{
-    
-}
-
 
 @end

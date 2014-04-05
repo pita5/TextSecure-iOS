@@ -16,8 +16,6 @@
 		6FBCCE0018D5361300C5B5F5 /* TSMessageOutgoingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBCCDFE18D5361300C5B5F5 /* TSMessageOutgoingTest.m */; };
 		6FCE040B18D427CE00C33B34 /* TSReplaceSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */; };
 		6FCE040C18D427CE00C33B34 /* TSStartOverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCE040A18D427CE00C33B34 /* TSStartOverSegue.m */; };
-		8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3C917618544FDF003EA71D /* TSHKDF.m */; };
-		8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C42C14418551B8C000DD353 /* TSHKDFTests.m */; };
 		8C49FC1018497E86006132F6 /* TSStorageError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49FC0F18497E86006132F6 /* TSStorageError.m */; };
 		8CF7BD8F187097570023A781 /* TSECKeyPairTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */; };
 		8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD941870C8450023A781 /* TSStorageMasterKey.m */; };
@@ -435,6 +433,7 @@
 		B63A72181808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer in Resources */ = {isa = PBXBuildFile; fileRef = B63A72171808BD3D00C353F2 /* gcm.textsecure.whispersystems.org.cer */; };
 		B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */; };
 		B644F95E18DF5D3700D41FA8 /* NSString+randomString.m in Sources */ = {isa = PBXBuildFile; fileRef = B644F95D18DF5D3700D41FA8 /* NSString+randomString.m */; };
+		B646538A18E74D9C006010E0 /* TSDerivedSecrets.m in Sources */ = {isa = PBXBuildFile; fileRef = B646538918E74D9C006010E0 /* TSDerivedSecrets.m */; };
 		B67E30F618CE19E4008502F5 /* TSContact.m in Sources */ = {isa = PBXBuildFile; fileRef = B67E30F518CE19E4008502F5 /* TSContact.m */; };
 		B67E30F918CE1AA8008502F5 /* TSGroupSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B67E30F818CE1AA8008502F5 /* TSGroupSetupViewController.m */; };
 		B684346618D1FF2B007AEDF6 /* TSSendingChain.m in Sources */ = {isa = PBXBuildFile; fileRef = B684346518D1FF2B007AEDF6 /* TSSendingChain.m */; };
@@ -455,6 +454,7 @@
 		B6C5FA9518CE3B4600ECC200 /* TSMessagesManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C5FA9418CE3B4600ECC200 /* TSMessagesManager.mm */; };
 		B6C5FA9818CE3B6300ECC200 /* RKCK.m in Sources */ = {isa = PBXBuildFile; fileRef = B6C5FA9718CE3B6300ECC200 /* RKCK.m */; };
 		B6C5FA9918CE3BB900ECC200 /* TSDatabaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7BD971870D9450023A781 /* TSDatabaseManager.m */; };
+		B6CA8B2418E38F0D0088BC0C /* TSAxolotlConsistencyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6CA8B2318E38F0D0088BC0C /* TSAxolotlConsistencyTest.m */; };
 		B6CC7EAB18D52F09006480FB /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = A5169D19170FEB1900A2CE9E /* Constants.m */; };
 		B6D23DAF18A91E9800F7E932 /* TSRegisterForPushRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */; };
 		B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */; };
@@ -490,13 +490,10 @@
 		6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSReplaceSegue.m; path = Utility/TSReplaceSegue.m; sourceTree = "<group>"; };
 		6FCE040918D427CE00C33B34 /* TSStartOverSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStartOverSegue.h; path = Utility/TSStartOverSegue.h; sourceTree = "<group>"; };
 		6FCE040A18D427CE00C33B34 /* TSStartOverSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStartOverSegue.m; path = Utility/TSStartOverSegue.m; sourceTree = "<group>"; };
-		8C3C917518544FDF003EA71D /* TSHKDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSHKDF.h; path = Security/TSHKDF.h; sourceTree = "<group>"; };
-		8C3C917618544FDF003EA71D /* TSHKDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSHKDF.m; path = Security/TSHKDF.m; sourceTree = "<group>"; };
 		8C42C13918551B8C000DD353 /* TextSecureiOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TextSecureiOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C42C13A18551B8C000DD353 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		8C42C14018551B8C000DD353 /* TextSecureiOS Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TextSecureiOS Tests-Info.plist"; sourceTree = "<group>"; };
 		8C42C14218551B8C000DD353 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8C42C14418551B8C000DD353 /* TSHKDFTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSHKDFTests.m; sourceTree = "<group>"; };
 		8C42C14618551B8C000DD353 /* TextSecureiOS Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TextSecureiOS Tests-Prefix.pch"; sourceTree = "<group>"; };
 		8C49FC0E18497E86006132F6 /* TSStorageError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSStorageError.h; path = Model/TSStorageError.h; sourceTree = "<group>"; };
 		8C49FC0F18497E86006132F6 /* TSStorageError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSStorageError.m; path = Model/TSStorageError.m; sourceTree = "<group>"; };
@@ -974,6 +971,8 @@
 		B643D7DD189EB9020025C6F3 /* TSContactPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactPickerViewController.m; path = ViewControllers/TSContactPickerViewController.m; sourceTree = "<group>"; };
 		B644F95C18DF5D3700D41FA8 /* NSString+randomString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+randomString.h"; path = "TextSecureiOS/Utility/NSString+randomString.h"; sourceTree = "<group>"; };
 		B644F95D18DF5D3700D41FA8 /* NSString+randomString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+randomString.m"; path = "TextSecureiOS/Utility/NSString+randomString.m"; sourceTree = "<group>"; };
+		B646538818E74D9C006010E0 /* TSDerivedSecrets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSDerivedSecrets.h; path = Model/TSDerivedSecrets.h; sourceTree = "<group>"; };
+		B646538918E74D9C006010E0 /* TSDerivedSecrets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSDerivedSecrets.m; path = Model/TSDerivedSecrets.m; sourceTree = "<group>"; };
 		B67E30F418CE19E4008502F5 /* TSContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContact.h; path = Contacts/TSContact.h; sourceTree = "<group>"; };
 		B67E30F518CE19E4008502F5 /* TSContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContact.m; path = Contacts/TSContact.m; sourceTree = "<group>"; };
 		B67E30F718CE1AA8008502F5 /* TSGroupSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSGroupSetupViewController.h; path = "ViewControllers/Conversations/Group Messaging/TSGroupSetupViewController.h"; sourceTree = "<group>"; };
@@ -1013,6 +1012,7 @@
 		B6C5FA9418CE3B4600ECC200 /* TSMessagesManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TSMessagesManager.mm; path = MessagesManager/TSMessagesManager.mm; sourceTree = "<group>"; };
 		B6C5FA9618CE3B6300ECC200 /* RKCK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RKCK.h; path = Security/RKCK.h; sourceTree = "<group>"; };
 		B6C5FA9718CE3B6300ECC200 /* RKCK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RKCK.m; path = Security/RKCK.m; sourceTree = "<group>"; };
+		B6CA8B2318E38F0D0088BC0C /* TSAxolotlConsistencyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSAxolotlConsistencyTest.m; sourceTree = "<group>"; };
 		B6E2CFB117F7926000200B69 /* TSRequestVerificationCodeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRequestVerificationCodeRequest.h; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.h; sourceTree = "<group>"; };
 		B6E2CFB217F7926000200B69 /* TSRequestVerificationCodeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRequestVerificationCodeRequest.m; path = TextSecureiOS/Networking/Requests/TSRequestVerificationCodeRequest.m; sourceTree = "<group>"; };
 		B6E2CFB417F794F600200B69 /* NSString+escape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+escape.h"; path = "TextSecureiOS/Categories/NSString+escape.h"; sourceTree = "<group>"; };
@@ -1620,8 +1620,8 @@
 			isa = PBXGroup;
 			children = (
 				A52CE05C1862D88B00AF9E39 /* CryptographyTests.mm */,
-				8C42C14418551B8C000DD353 /* TSHKDFTests.m */,
 				8CF7BD8E187097570023A781 /* TSECKeyPairTests.m */,
+				B6CA8B2318E38F0D0088BC0C /* TSAxolotlConsistencyTest.m */,
 			);
 			name = Security;
 			sourceTree = "<group>";
@@ -1691,8 +1691,6 @@
 				A5169D23170FEB8E00A2CE9E /* KeychainWrapper.m */,
 				A5169D27170FEB8F00A2CE9E /* Cryptography.h */,
 				A5169D26170FEB8F00A2CE9E /* Cryptography.m */,
-				8C3C917518544FDF003EA71D /* TSHKDF.h */,
-				8C3C917618544FDF003EA71D /* TSHKDF.m */,
 				A5E6CC9C18837C31002A1735 /* TSAxolotlRatchet.hh */,
 				A5E6CC9D18837C31002A1735 /* TSAxolotlRatchet.mm */,
 			);
@@ -1766,6 +1764,8 @@
 		B602B95C18CE779800181564 /* Axolotl Structures */ = {
 			isa = PBXGroup;
 			children = (
+				B646538818E74D9C006010E0 /* TSDerivedSecrets.h */,
+				B646538918E74D9C006010E0 /* TSDerivedSecrets.m */,
 				B6C5FA9618CE3B6300ECC200 /* RKCK.h */,
 				B6C5FA9718CE3B6300ECC200 /* RKCK.m */,
 				B684346418D1FF2B007AEDF6 /* TSSendingChain.h */,
@@ -2471,10 +2471,10 @@
 				8CF7BD9D18711B140023A781 /* TSUserKeysDatabaseTests.m in Sources */,
 				8CF7BDA1187137640023A781 /* TSEncryptedDatabaseTests.m in Sources */,
 				A56312FD18C9BDCD00222F99 /* TSWaitingPushMessageDatabaseTests.m in Sources */,
-				8C42C14518551B8C000DD353 /* TSHKDFTests.m in Sources */,
 				6FBCCDFF18D5361300C5B5F5 /* TSMessageIncomingTest.m in Sources */,
 				6FBCCE0018D5361300C5B5F5 /* TSMessageOutgoingTest.m in Sources */,
 				A52CE05D1862D88B00AF9E39 /* CryptographyTests.mm in Sources */,
+				B6CA8B2418E38F0D0088BC0C /* TSAxolotlConsistencyTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2508,13 +2508,13 @@
 				A5E6CC9E18837C31002A1735 /* TSAxolotlRatchet.mm in Sources */,
 				A5E6CC73187D0F4B002A1735 /* WhisperMessage.pb.mm in Sources */,
 				A5E6CC09187AC6D5002A1735 /* TSDownloadAttachment.m in Sources */,
+				B646538A18E74D9C006010E0 /* TSDerivedSecrets.m in Sources */,
 				A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */,
 				A5169D0C170FEA8D00A2CE9E /* CountryViewController.m in Sources */,
 				B6C5FA7D18CE357200ECC200 /* TSGroup.m in Sources */,
 				A5E6CC6D187D0F4B002A1735 /* IncomingPushMessageSignal.pb.mm in Sources */,
 				B6E2CFB617F794F600200B69 /* NSString+escape.m in Sources */,
 				A515AFDB180966E30084ABA5 /* TSMessagesDatabase.m in Sources */,
-				8C3C917718544FDF003EA71D /* TSHKDF.m in Sources */,
 				A5FBAB95184E980E0012E9A5 /* TSUploadAttachment.m in Sources */,
 				B635B3C7182181E1003CE732 /* TSMessageViewController.m in Sources */,
 				A5E6CC6F187D0F4B002A1735 /* PreKeyWhisperMessage.pb.mm in Sources */,
@@ -2739,7 +2739,7 @@
 				INFOPLIST_FILE = "TextSecureiOS/TextSecureiOS-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "F6107428-6DD2-4184-B965-C80E88D4D42B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2761,7 +2761,7 @@
 					"$(SRCROOT)/Libraries/lib/**",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "F6107428-6DD2-4184-B965-C80E88D4D42B";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};

@@ -128,7 +128,6 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
     if ([receiverChains count] > 4) {
         [receiverChains removeObjectAtIndex:0];
     }
-    chainKey.index = (int)[receiverChains count] - 1;
     [receiverChains addObject:chain];
 }
 
@@ -150,12 +149,17 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
     return false;
 }
 
-- (void)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter{
+- (TSMessageKeys*)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter{
     for(int i = 0; i <[[self receiverChain:ephemeral].messageKeys count]; i++){
-        if (((TSMessageKeys*)[[self receiverChain:ephemeral].messageKeys objectAtIndex:i]).counter == counter) {
+
+        TSMessageKeys *messageKey = [[self receiverChain:ephemeral].messageKeys objectAtIndex:i];
+        
+        if (messageKey.counter == counter) {
             [[self receiverChain:ephemeral].messageKeys removeObjectAtIndex:i];
+            return messageKey;
         }
     }
+    @throw [NSException exceptionWithName:@"Message Key not found" reason:@"" userInfo:nil];
 }
 
 - (void)setMessageKeysWithEphemeral:(NSData*)ephemeral messageKey:(TSMessageKeys*)messageKeys{
@@ -169,7 +173,6 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 - (void)save{
     [TSMessagesDatabase storeSession:self];
 }
-
 
 /**
  *  The clear method removes all keying material of a session. Only properties remaining are the necessary deviceId and contact information

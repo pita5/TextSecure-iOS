@@ -62,8 +62,8 @@
         const std::string cppMessage = prekeyWhisperMessage->message();
         // c++->objective C
         self.preKeyId = [self cppUInt32ToNSNumber:cppPreKeyId];
-        self.baseKey = [self cppStringToObjcData:cppBaseKey];
-        self.identityKey = [self cppStringToObjcData:cppIdentityKey];
+        self.baseKey = [[self cppStringToObjcData:cppBaseKey] removeVersionByte];
+        self.identityKey = [[self cppStringToObjcData:cppIdentityKey] removeVersionByte];
         self.message = [self cppStringToObjcData:cppMessage];
     }
     return self; // super is abstract class
@@ -74,8 +74,8 @@
     textsecure::PreKeyWhisperMessage *preKeyMessage = new textsecure::PreKeyWhisperMessage;
     // objective c->c++
     uint32_t cppPreKeyId =  [self objcNumberToCppUInt32:self.preKeyId];
-    const std::string cppBaseKey = [self objcDataToCppString:self.baseKey];
-    const std::string cppIdentityKey = [self objcDataToCppString:self.identityKey];
+    const std::string cppBaseKey = [self objcDataToCppString:[self.baseKey prependVersionByte]];
+    const std::string cppIdentityKey = [self objcDataToCppString:[self.identityKey prependVersionByte]];
     const std::string cppMessage = [self objcDataToCppString:self.message];
     // c++->protocol buffer
     preKeyMessage->set_prekeyid(cppPreKeyId);
@@ -111,24 +111,24 @@
 }
 
 #pragma mark public static methods
-+(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMAC:(NSData*)hmac {
++(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMACKey:(NSData*)hmac {
     
     NSLog(@"encryption sending: myCurrentEphemeral (A0): %@ \n myNextEphemeral (A1): %@",currentEphemeral,myNextEphemeral);
     
-    
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
-                                                          initWithEphemeralKey:[myNextEphemeral prependVersionByte]
+                                                          initWithEphemeralKey:myNextEphemeral
                                                           previousCounter:[NSNumber numberWithInt:0]
                                                           counter:[NSNumber numberWithInt:0]
                                                           encryptedMessage:ciphertext
                                                           forVersion:version
-                                                          withHMAC:hmac];
+                                                          HMACKey:hmac];
+    
     TSECKeyPair *identityKey = [TSUserKeysDatabase identityKey];
     
     TSPreKeyWhisperMessage *prekeyMessage = [[TSPreKeyWhisperMessage alloc]
                                              initWithPreKeyId:theirPrekeyId
-                                             senderPrekey:[currentEphemeral prependVersionByte]
-                                             senderIdentityKey:[[identityKey publicKey] prependVersionByte]
+                                             senderPrekey:currentEphemeral
+                                             senderIdentityKey:[identityKey publicKey]
                                              message:[encryptedWhisperMessage getTextSecureProtocolData]
                                              forVersion:version];
     return prekeyMessage;
