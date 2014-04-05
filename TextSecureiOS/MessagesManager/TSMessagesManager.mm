@@ -119,8 +119,8 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-    
     NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"m"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
+    NSLog(@"push message bytes %lu",(unsigned long) decryptedPayload.length);
     
     TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
     
@@ -133,7 +133,9 @@
     // We probably want to submit an update to a subscribing view controller here.
 }
 
--(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{    
+-(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
+    NSData* data=[serializedMessage dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"submitting message of %lu bytes",(unsigned long)data.length);
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         switch (operation.response.statusCode) {
