@@ -201,7 +201,7 @@
     NSData* signalingKey = [NSData dataFromBase64String:signalingKeyString];
     NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
     NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
-    return [Cryptography decryptCBCMode:[NSData dataWithBytesNoCopy:ciphertext length:ciphertext_length freeWhenDone:YES] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial withHMACType:TSHMACSHA1Truncated10Bytes forHMAC:[NSData dataWithBytes:mac length:10]];
+    return [Cryptography decryptCBCMode:[NSData dataWithBytesNoCopy:ciphertext length:ciphertext_length freeWhenDone:YES] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial withHMACType:TSHMACSHA256Truncated10Bytes forHMAC:[NSData dataWithBytes:mac length:10]];
     
 }
 
