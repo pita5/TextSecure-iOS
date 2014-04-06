@@ -13,7 +13,7 @@
 @class TSECKeyPair;
 
 @interface TSPreKeyWhisperMessage : TSWhisperMessage
-@property (readonly,nonatomic,strong) NSData *serializedProtocolData;
+@property (readonly,nonatomic,strong) NSData *protocolData;
 @property (readonly,nonatomic,strong) NSData* version;
 
 @property (readonly,nonatomic,strong) NSNumber* preKeyId;

@@ -19,7 +19,7 @@
 @property (readonly,nonatomic,strong) NSNumber* sourceDevice;
 @property (readonly,nonatomic) TSWhisperMessageType contentType;
 @property (readonly,nonatomic,strong) NSDate *timestamp;
-@property (readonly,nonatomic,strong) NSData *serializedProtocolData;
+@property (readonly,nonatomic,strong) NSData *protocolData;
 
 
 -(instancetype) initWithMessage:(TSWhisperMessage*) message withContentType:(TSWhisperMessageType)contentType  withSource:(NSString*)source withSourceDevice:(NSNumber*)sourceDevice withTimestamp:(NSDate*) timestamp;

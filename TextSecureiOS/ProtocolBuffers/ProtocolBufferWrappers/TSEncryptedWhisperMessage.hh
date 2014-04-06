@@ -16,7 +16,7 @@
 @property (readonly,nonatomic,strong) NSData* hmac;
 @property (readonly,nonatomic,strong) NSData* message;
 @property (readonly,nonatomic,strong) NSData* version;
-@property (readonly,nonatomic,strong) NSData *serializedProtocolData;
+@property (readonly,nonatomic,strong) NSData *protocolData;
 
 
 -(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version HMACKey:(NSData*)hmacKey;

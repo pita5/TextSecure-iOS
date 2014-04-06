@@ -134,9 +134,10 @@
     
     
     
-    TSEncryptedWhisperMessage *encryptedDeserializedMessage = (TSEncryptedWhisperMessage*)deserializedMessageSignal.message;
+    TSEncryptedWhisperMessage *deserializedEncryptedMessage = (TSEncryptedWhisperMessage*)deserializedMessageSignal.message;
     
-    TSPushMessageContent *deserializedPushMessageContent = [[TSPushMessageContent alloc] initWithData:encryptedDeserializedMessage.message];
+    NSData *decryptedSerializedPushMessageContent = [Cryptography decryptCTRMode:deserializedEncryptedMessage.message withKeys:_messageKeys];
+    TSPushMessageContent *deserializedPushMessageContent = [[TSPushMessageContent alloc] initWithData:decryptedSerializedPushMessageContent];
     XCTAssertTrue([pushContent.body isEqualToString:deserializedPushMessageContent.body],@"TSMessageSignal message unequal after serialization");
 }
 
@@ -174,9 +175,10 @@
     XCTAssertTrue([deserializedEncryptedMessage.ephemeralKey isEqualToData:tsEncryptedMessage.ephemeralKey], @"ephemeral keys unequal; deserialization %@, encrypted %@",deserializedEncryptedMessage.ephemeralKey,tsEncryptedMessage.ephemeralKey);
     
     
-    TSPushMessageContent *deserializedPushMessageContet = [[TSPushMessageContent alloc] initWithData:deserializedEncryptedMessage.message];
+    NSData *decryptedSerializedPushMessageContent = [Cryptography decryptCTRMode:deserializedEncryptedMessage.message withKeys:_messageKeys];
+    TSPushMessageContent *deserializedPushMessageContent = [[TSPushMessageContent alloc] initWithData:decryptedSerializedPushMessageContent];
     
-    XCTAssertTrue([deserializedPushMessageContet.body isEqualToString:pushContent.body], @"messages not equal");
+    XCTAssertTrue([deserializedPushMessageContent.body isEqualToString:pushContent.body], @"messages not equal");
 }
 
 
@@ -192,7 +194,7 @@
     
     XCTAssertTrue([pushContent.body isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
 
-    XCTAssertTrue([deserializedPushContent.attachments count]==2, @"deserialization doesn't have the right number of attachments, actually has %d",[deserializedPushContent.attachments count]);
+    XCTAssertTrue([deserializedPushContent.attachments count]==2, @"deserialization doesn't have the right number of attachments, actually has %lu",(unsigned long)[deserializedPushContent.attachments count]);
 
     TSAttachment *attachment1 = [pushContent.attachments objectAtIndex:0];
     TSAttachment *attachment2 = [pushContent.attachments objectAtIndex:1];
@@ -226,7 +228,7 @@
     TSPushMessageContent *deserializedPushContent = [[TSPushMessageContent alloc] initWithData:serializedMessageContent];
     
     XCTAssertTrue([message.content isEqualToString:deserializedPushContent.body], @"Push message content serialization/deserialization failed");
-    XCTAssertTrue([deserializedPushContent.attachments count]==1, @"deserialization doesn't have the right number of attachments, actually has %d",[deserializedPushContent.attachments count]);
+    XCTAssertTrue([deserializedPushContent.attachments count]==1, @"deserialization doesn't have the right number of attachments, actually has %lu",(unsigned long)[deserializedPushContent.attachments count]);
     
     TSAttachment *attachment1Deserialized = [deserializedPushContent.attachments objectAtIndex:0];
     

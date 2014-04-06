@@ -20,7 +20,7 @@
 @property (nonatomic,strong) NSData* hmac;
 @property (nonatomic,strong) NSData* message;
 @property (nonatomic,strong) NSData* version;
-@property (nonatomic,strong) NSData *serializedProtocolData;
+@property (nonatomic,strong) NSData *protocolData;
 
 
 @end
@@ -36,7 +36,7 @@
         self.message=ciphertext;
         self.version = version;
         self.hmac = [self hMacWithKey:hmacKey];
-        self.serializedProtocolData = [self getTextSecure_WhisperMessage];
+        self.protocolData = [self getTextSecure_WhisperMessage];
     }
     return self;
 }
@@ -47,7 +47,7 @@
 }
 
 -(NSData*) getTextSecureProtocolData {
-    return self.serializedProtocolData;
+    return self.protocolData;
 }
 
 -(instancetype) initWithTextSecure_WhisperMessage:(NSData*) data {
@@ -78,7 +78,7 @@
         const std::string cppMessage = whisperMessage->ciphertext();
         
         // c++->objective C
-        self.serializedProtocolData = data;
+        self.protocolData = data;
         
         self.ephemeralKey = [[self cppStringToObjcData:cppEphemeralKey] removeVersionByte];
         self.counter = [self cppUInt32ToNSNumber:cppCounter];

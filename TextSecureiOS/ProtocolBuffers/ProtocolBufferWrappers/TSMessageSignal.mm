@@ -19,7 +19,7 @@
 @property (nonatomic,strong) NSNumber* sourceDevice;
 @property (nonatomic) TSWhisperMessageType contentType;
 @property (nonatomic,strong) NSDate *timestamp;
-@property (nonatomic,strong) NSData *serializedProtocolData;
+@property (nonatomic,strong) NSData *protocolData;
 @end
 
 
@@ -33,7 +33,7 @@
         self.source = source;
         self.sourceDevice = sourceDevice;
         self.timestamp = timestamp;
-        self.serializedProtocolData = [self serializedProtocolData];
+        self.protocolData = [self serializedProtocolBuffer];
     }
     return self;
 }
@@ -43,7 +43,7 @@
 }
 
 -(NSData*) getTextSecureProtocolData {
-    return self.serializedProtocolData;
+    return self.protocolData;
 }
 
 
@@ -59,10 +59,10 @@
         const uint64_t cppTimestamp = incomingPushMessageSignal->timestamp();
         
         // c++->objective C
-        self.serializedProtocolData = data;
-        
-        self.message = [self getWhisperMessageForData:[self cppStringToObjcData:cppMessage]];
+        self.protocolData = data;
         self.contentType = (TSWhisperMessageType)cppType;
+        
+        self.message = [self getWhisperMessageForData:[self cppStringToObjcData:cppMessage] ofContentType:self.contentType];
         self.source = [self cppStringToObjc:cppSource];
         self.sourceDevice = [self cppUInt32ToNSNumber:cppSourceDevice];
         self.timestamp = [self cppDateToObjc:cppTimestamp];
@@ -104,8 +104,8 @@
     return messageSignal;
 }
 
--(TSWhisperMessage*) getWhisperMessageForData:(NSData*) data {
-    switch (self.contentType) {
+-(TSWhisperMessage*) getWhisperMessageForData:(NSData*) data ofContentType:(TSWhisperMessageType) contentType{
+    switch (contentType) {
         case TSEncryptedWhisperMessageType: {
             return [[TSEncryptedWhisperMessage alloc] initWithTextSecureProtocolData:data];
             break;

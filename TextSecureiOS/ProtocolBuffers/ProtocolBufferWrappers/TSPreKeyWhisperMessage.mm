@@ -16,7 +16,7 @@
 
 @interface TSPreKeyWhisperMessage ()
 
-@property (nonatomic,strong) NSData *serializedProtocolData;
+@property (nonatomic,strong) NSData *protocolData;
 @property (nonatomic,strong) NSData* version;
 
 @property (nonatomic,strong) NSNumber* preKeyId;
@@ -36,7 +36,7 @@
         self.baseKey = prekey;
         self.identityKey = identityKey;
         self.message = messageContents;
-        self.serializedProtocolData = [self getTextSecure_PreKeyWhisperMessage];
+        self.protocolData = [self getTextSecure_PreKeyWhisperMessage];
     }
     return self;
 }
@@ -47,7 +47,7 @@
 }
 
 -(NSData*) getTextSecureProtocolData {
-    return self.serializedProtocolData;
+    return self.protocolData;
 }
 
 
@@ -76,7 +76,7 @@
         const std::string cppMessage = prekeyWhisperMessage->message();
 
         // c++->objective C
-        self.serializedProtocolData = data;
+        self.protocolData = data;
         self.version = [data subdataWithRange:NSMakeRange(0, 1)];
         self.preKeyId = [self cppUInt32ToNSNumber:cppPreKeyId];
         self.baseKey = [[self cppStringToObjcData:cppBaseKey] removeVersionByte];
