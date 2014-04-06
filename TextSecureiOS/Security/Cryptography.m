@@ -96,49 +96,50 @@
     return [[Cryptography computeSHA256HMAC:dataToHMAC withHMACKey:HMACKey] subdataWithRange:NSMakeRange(0, bytes)];
 }
 
-#pragma mark encrypting and decrypting attachments
-+(NSData*) decryptAttachment:(NSData*) dataToDecrypt withKey:(NSData*) key {
-    // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
-    NSData *encryptionKey = [key subdataWithRange:NSMakeRange(0, 32)];
-    NSData *hmacKey = [key subdataWithRange:NSMakeRange(32, 32)];
-    // dataToDecrypt: IV || Ciphertext || truncated MAC(IV||Ciphertext)
-    NSData *iv = [dataToDecrypt subdataWithRange:NSMakeRange(0, 10)];
-    NSData *encryptedAttachment = [dataToDecrypt subdataWithRange:NSMakeRange(10, [dataToDecrypt length]-10-10)];
-    NSData *hmac = [dataToDecrypt subdataWithRange:NSMakeRange([dataToDecrypt length]-10, 10)];
-    return [Cryptography decryptCBCMode:encryptedAttachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey forHMAC:hmac];
+
+#pragma mark AES CBC Mode
++(NSData*)encryptCBCMode:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey withHMACType:(TSMACType)hmacType computedHMAC:(NSData**)hmac {
+    /* AES256 CBC encrypt then mac
+     Returns nil if encryption fails
+     */
+    size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
+    void* buffer                = malloc(bufferSize);
+    
+    size_t bytesEncrypted    = 0;
+    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
+                                          [key bytes], [key length],
+                                          [iv bytes],
+                                          [dataToEncrypt bytes], [dataToEncrypt length],
+                                          buffer, bufferSize,
+                                          &bytesEncrypted);
+    
+    if (cryptStatus == kCCSuccess){
+        NSData* encryptedData= [NSData dataWithBytesNoCopy:buffer length:bytesEncrypted];
+        //compute hmac of version||encrypted data||iv
+        NSMutableData *dataToHmac = [NSMutableData data];
+        if(version!=nil) {
+            [dataToHmac appendData:version];
+        }
+        [dataToHmac appendData:iv];
+        [dataToHmac appendData:encryptedData];
+        
+        if(hmacType == TSHMACSHA1Truncated10Bytes) {
+            *hmac = [Cryptography truncatedSHA1HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
+        }
+        else if (hmacType == TSHMACSHA256Truncated10Bytes) {
+            *hmac = [Cryptography truncatedSHA256HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
+        }
+        
+        return encryptedData;
+    }
+    free(buffer);
+    return nil;
+    
 }
 
 
 
-
-+(NSData*) encryptAttachment:(NSData*) attachment withRandomKey:(NSData**)key{
-    // generate
-    // random 10 byte IV
-    // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
-    // returns: IV || Ciphertext || truncated MAC(IV||Ciphertext)
-    NSData* iv = [Cryptography generateRandomBytes:10];
-    NSData* encryptionKey = [Cryptography generateRandomBytes:32];
-    NSData* hmacKey = [Cryptography generateRandomBytes:32];
-    
-    // The concatenated key for storage
-    NSMutableData *outKey = [NSMutableData data];
-    [outKey appendData:encryptionKey];
-    [outKey appendData:hmacKey];
-    *key = [NSData dataWithData:outKey];
-    
-    NSData* computedHMAC;
-    NSData* ciphertext = [Cryptography encryptCBCMode:attachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey computedHMAC:&computedHMAC];
-    
-    NSMutableData* encryptedAttachment = [NSMutableData data];
-    [encryptedAttachment appendData:iv];
-    [encryptedAttachment appendData:ciphertext];
-    [encryptedAttachment appendData:computedHMAC];
-    return encryptedAttachment;
-}
-
-
-#pragma mark push payload encryptiong/decryption
-+(NSData*) decryptCBCMode:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac{
++(NSData*) decryptCBCMode:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey  withHMACType:(TSMACType)hmacType forHMAC:(NSData *)hmac {
     /* AES256 CBC encrypt then mac
      
      Returns nil if hmac invalid or decryption fails
@@ -152,10 +153,16 @@
     [dataToHmac appendData:dataToDecrypt];
     
     // verify hmac
-    NSData* ourHmacData = [Cryptography truncatedSHA1HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
-    if(![ourHmacData isEqualToData:hmac]) {
+    NSData* ourHmacData;
+    if(hmacType == TSHMACSHA1Truncated10Bytes) {
+        ourHmacData = [Cryptography truncatedSHA1HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
+    }
+    else if (hmacType == TSHMACSHA256Truncated10Bytes) {
+        ourHmacData = [Cryptography truncatedSHA256HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
+    }
+    
+    if(hmac == nil || ![ourHmacData isEqualToData:hmac] ) {
         return nil;
-        
     }
     
     // decrypt
@@ -178,6 +185,95 @@
     
     
 }
+
+#pragma mark methods which use AES CBC
++(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString{
+    unsigned char version[1];
+    unsigned char iv[16];
+    int ciphertext_length = ([payload length]-10-17)*sizeof(char);
+    unsigned char *ciphertext =  (unsigned char*)malloc(ciphertext_length);
+    unsigned char mac[10];
+    [payload getBytes:version range:NSMakeRange(0, 1)];
+    [payload getBytes:iv range:NSMakeRange(1, 16)];
+    [payload getBytes:ciphertext range:NSMakeRange(17, [payload length]-10-17)];
+    [payload getBytes:mac range:NSMakeRange([payload length]-10, 10)];
+    
+    NSData* signalingKey = [NSData dataFromBase64String:signalingKeyString];
+    NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
+    NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
+    return [Cryptography decryptCBCMode:[NSData dataWithBytesNoCopy:ciphertext length:ciphertext_length freeWhenDone:YES] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial withHMACType:TSHMACSHA1Truncated10Bytes forHMAC:[NSData dataWithBytes:mac length:10]];
+    
+}
+
++(NSData*) decryptAttachment:(NSData*) dataToDecrypt withKey:(NSData*) key {
+    // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
+    NSData *encryptionKey = [key subdataWithRange:NSMakeRange(0, 32)];
+    NSData *hmacKey = [key subdataWithRange:NSMakeRange(32, 32)];
+    // dataToDecrypt: IV || Ciphertext || truncated MAC(IV||Ciphertext)
+    NSData *iv = [dataToDecrypt subdataWithRange:NSMakeRange(0, 10)];
+    NSData *encryptedAttachment = [dataToDecrypt subdataWithRange:NSMakeRange(10, [dataToDecrypt length]-10-10)];
+    NSData *hmac = [dataToDecrypt subdataWithRange:NSMakeRange([dataToDecrypt length]-10, 10)];
+    return [Cryptography decryptCBCMode:encryptedAttachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey withHMACType:TSHMACSHA256Truncated10Bytes  forHMAC:hmac];
+}
+
+
+
+
++(NSData*) encryptAttachment:(NSData*) attachment withRandomKey:(NSData**)key{
+    // generate
+    // random 10 byte IV
+    // key: 32 byte AES key || 32 byte Hmac-SHA256 key.
+    // returns: IV || Ciphertext || truncated MAC(IV||Ciphertext)
+    NSData* iv = [Cryptography generateRandomBytes:10];
+    NSData* encryptionKey = [Cryptography generateRandomBytes:32];
+    NSData* hmacKey = [Cryptography generateRandomBytes:32];
+    
+    // The concatenated key for storage
+    NSMutableData *outKey = [NSMutableData data];
+    [outKey appendData:encryptionKey];
+    [outKey appendData:hmacKey];
+    *key = [NSData dataWithData:outKey];
+    
+    NSData* computedHMAC;
+    NSData* ciphertext = [Cryptography encryptCBCMode:attachment withKey:encryptionKey withIV:iv withVersion:nil withHMACKey:hmacKey withHMACType:TSHMACSHA256Truncated10Bytes computedHMAC:&computedHMAC];
+    
+    NSMutableData* encryptedAttachment = [NSMutableData data];
+    [encryptedAttachment appendData:iv];
+    [encryptedAttachment appendData:ciphertext];
+    [encryptedAttachment appendData:computedHMAC];
+    return encryptedAttachment;
+}
+
+
+#pragma mark AESCTR Mode
+
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSMessageKeys*)keys {
+    
+    /* AES256 CTR encrypt then mac
+     Returns nil if hmac invalid or decryption fails
+     */
+    
+    size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
+    void* buffer                = malloc(bufferSize);
+    size_t bytesEncrypted    = 0;
+    // setting up cryptor
+    CCCryptorStatus cryptStatus;
+    CCCryptorRef cryptor;
+    cryptStatus = CCCryptorCreateWithMode(kCCEncrypt, kCCModeCTR, kCCAlgorithmAES128,
+                                          ccNoPadding, [[Cryptography counterFromNumber:[NSNumber numberWithInt:keys.counter]] bytes],
+                                          [keys.cipherKey bytes], [keys.cipherKey length],
+                                          NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
+    
+    
+    cryptStatus = CCCryptorUpdate(cryptor, [dataToEncrypt bytes], [dataToEncrypt length], buffer, bufferSize, &bytesEncrypted);
+    if (cryptStatus == kCCSuccess){
+        return [NSMutableData dataWithBytesNoCopy:buffer length:bytesEncrypted freeWhenDone:YES];
+    }
+    free(buffer);
+    return nil;
+}
+
+
 
 +(NSData*)decryptCTRMode:(NSData*)ciphertext withKeys:(TSMessageKeys*)keys{
     
@@ -206,82 +302,6 @@
     
     free(buffer);
     return nil;
-}
-+(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSMessageKeys*)keys {
-    
-    /* AES256 CTR encrypt then mac
-     Returns nil if hmac invalid or decryption fails
-     */
-    
-    size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
-    void* buffer                = malloc(bufferSize);
-    size_t bytesEncrypted    = 0;
-    // setting up cryptor
-    CCCryptorStatus cryptStatus;
-    CCCryptorRef cryptor;
-    cryptStatus = CCCryptorCreateWithMode(kCCEncrypt, kCCModeCTR, kCCAlgorithmAES128,
-                                          ccNoPadding, [[Cryptography counterFromNumber:[NSNumber numberWithInt:keys.counter]] bytes],
-                                          [keys.cipherKey bytes], [keys.cipherKey length],
-                                          NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
-    
-    
-    cryptStatus = CCCryptorUpdate(cryptor, [dataToEncrypt bytes], [dataToEncrypt length], buffer, bufferSize, &bytesEncrypted);
-    if (cryptStatus == kCCSuccess){
-        return [NSMutableData dataWithBytesNoCopy:buffer length:bytesEncrypted freeWhenDone:YES];
-    }
-    free(buffer);
-    return nil;
-}
-
-+(NSData*)encryptCBCMode:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac {
-    /* AES256 CBC encrypt then mac
-     Returns nil if encryption fails
-     */
-    size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
-    void* buffer                = malloc(bufferSize);
-    
-    size_t bytesEncrypted    = 0;
-    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-                                          [key bytes], [key length],
-                                          [iv bytes],
-                                          [dataToEncrypt bytes], [dataToEncrypt length],
-                                          buffer, bufferSize,
-                                          &bytesEncrypted);
-    
-    if (cryptStatus == kCCSuccess){
-        NSData* encryptedData= [NSData dataWithBytesNoCopy:buffer length:bytesEncrypted];
-        //compute hmac of version||encrypted data||iv
-        NSMutableData *dataToHmac = [NSMutableData data];
-        if(version!=nil) {
-            [dataToHmac appendData:version];
-        }
-        [dataToHmac appendData:iv];
-        [dataToHmac appendData:encryptedData];
-        *hmac = [Cryptography truncatedSHA1HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
-        return encryptedData;
-    }
-    free(buffer);
-    return nil;
-    
-}
-
-
-+(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString{
-    unsigned char version[1];
-    unsigned char iv[16];
-    int ciphertext_length = ([payload length]-10-17)*sizeof(char);
-    unsigned char *ciphertext =  (unsigned char*)malloc(ciphertext_length);
-    unsigned char mac[10];
-    [payload getBytes:version range:NSMakeRange(0, 1)];
-    [payload getBytes:iv range:NSMakeRange(1, 16)];
-    [payload getBytes:ciphertext range:NSMakeRange(17, [payload length]-10-17)];
-    [payload getBytes:mac range:NSMakeRange([payload length]-10, 10)];
-    
-    NSData* signalingKey = [NSData dataFromBase64String:signalingKeyString];
-    NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
-    NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
-    return [Cryptography decryptCBCMode:[NSData dataWithBytesNoCopy:ciphertext length:ciphertext_length freeWhenDone:YES] withKey:signalingKeyAESKeyMaterial withIV:[NSData dataWithBytes:iv length:16] withVersion:[NSData dataWithBytes:version length:1] withHMACKey:signalingKeyHMACKeyMaterial forHMAC:[NSData dataWithBytes:mac length:10]];
-    
 }
 
 +(NSData*) counterFromNumber:(NSNumber*)ctr {

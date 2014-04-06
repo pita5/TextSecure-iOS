@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
 
 typedef NS_ENUM(NSInteger, TSMACType) {
     TSHMACSHA1Truncated10Bytes = 1,
-    TSHMACSHA256Truncated10Bytes = 1,
+    TSHMACSHA256Truncated10Bytes = 2
 
 };
 
