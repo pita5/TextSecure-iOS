@@ -13,6 +13,13 @@
 @class TSECKeyPair;
 
 @interface TSPreKeyWhisperMessage : TSWhisperMessage
+@property (readonly,nonatomic,strong) NSData *serializedProtocolData;
+@property (readonly,nonatomic,strong) NSData* version;
+
+@property (readonly,nonatomic,strong) NSNumber* preKeyId;
+@property (readonly,nonatomic,strong) NSData* baseKey; // base Curve25519 key exchange ephemeral: A0 in axolotl
+@property (readonly,nonatomic,strong) NSData* identityKey; //Curve25519 identity key of the sender: A in axolotl
+@property (readonly,nonatomic,strong) NSData* message;
 
 +(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMACKey:(NSData*)hmac;
 

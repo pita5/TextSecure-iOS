@@ -26,6 +26,12 @@
 + (TSWhisperMessage*) getWhisperMessageForData:(NSData*) data ofType:(TSWhisperMessageType)contentType;
 @end
 
+@interface Cryptography (Test)
++(NSData*) truncatedSHA256HMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey truncation:(int)bytes;
++(NSData*)encryptCBCMode:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) hmacKey computedHMAC:(NSData**)hmac;
++(NSData*) decryptCBCMode:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) hmacKey forHMAC:(NSData *)hmac;
+@end
+
 @implementation CryptographyTests
 
 
@@ -41,7 +47,7 @@
     NSData* mac;
     //Encrypt
     
-    NSData* encryption = [Cryptography encrypt:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKey:signalingKeyAESKeyMaterial withIV:iv withVersion:version withHMACKey:signalingKeyHMACKeyMaterial computedHMAC:&mac]; //Encrypt
+    NSData* encryption = [Cryptography encryptCBCMode:[originalMessage dataUsingEncoding:NSUTF8StringEncoding] withKey:signalingKeyAESKeyMaterial withIV:iv withVersion:version withHMACKey:signalingKeyHMACKeyMaterial computedHMAC:&mac]; //Encrypt
     
     NSMutableData *dataToHmac = [NSMutableData data ];
     [dataToHmac appendData:version];
@@ -49,12 +55,13 @@
     [dataToHmac appendData:encryption];
     
     
-    NSData* expectedHmac = [Cryptography truncatedHMAC:dataToHmac withHMACKey:signalingKeyHMACKeyMaterial truncation:10];
+    NSData* expectedHmac = [Cryptography truncatedSHA256HMAC:dataToHmac withHMACKey:signalingKeyHMACKeyMaterial truncation:8];
     
     XCTAssertTrue([mac isEqualToData:expectedHmac], @"Hmac of encrypted data %@,  not equal to expected hmac %@", [mac base64EncodedString], [expectedHmac base64EncodedString]);
     
-    NSData* decryption=[Cryptography decrypt:encryption withKey:signalingKeyAESKeyMaterial withIV:iv withVersion:version withHMACKey:signalingKeyHMACKeyMaterial forHMAC:mac];
-    NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
+    NSData* decryption=[Cryptography decryptCBCMode:encryption withKey:signalingKeyAESKeyMaterial withIV:iv withVersion:version withHMACKey:signalingKeyHMACKeyMaterial forHMAC:mac];
+                        
+    NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSUTF8StringEncoding];
     XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
     
 }
@@ -64,11 +71,8 @@
     NSString* originalMessage = @"Hawaii is awesome";
     TSMessageKeys * messageKeys = [[TSMessageKeys alloc] initWithCipherKey:[Cryptography generateRandomBytes:32] macKey:[Cryptography generateRandomBytes:32] counter:0];
     for(int i=0;i<20; i++) {
-        NSData* version = [Cryptography generateRandomBytes:1];
-        NSData* computedHmac;
-        NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys forVersion:version computedHMAC:&computedHmac];
-        
-        NSData* decryption = [Cryptography decryptCTRMode:encryption withKeys:messageKeys forVersion:version withHMAC:computedHmac];
+        NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys];
+        NSData* decryption = [Cryptography decryptCTRMode:encryption withKeys:messageKeys];
         
         NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
         XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);

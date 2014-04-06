@@ -70,6 +70,11 @@
     return self;
 }
 
+
+
+
+#pragma mark private
+
 -(const std::string) serializedProtocolBufferAsString {
     textsecure::IncomingPushMessageSignal *messageSignal = new textsecure::IncomingPushMessageSignal;
     // objective c->c++
