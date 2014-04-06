@@ -123,8 +123,7 @@
     TSMessage *decryptedMessage = [TSAxolotlRatchet decryptWhisperMessage:signal.message withSession:session];
     
     [TSMessagesDatabase storeMessage:decryptedMessage];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kDBNewMessageNotification object:nil userInfo:@{@"messageType":@"received"}];
+
 
     // We probably want to submit an update to a subscribing view controller here.
 }
