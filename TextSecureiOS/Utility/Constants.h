@@ -50,6 +50,14 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
     TSUnencryptedWhisperMessageType = 4,
 };
 
+typedef NS_ENUM(NSInteger, TSMACType) {
+    TSHMACSHA1Truncated10Bytes = 1,
+    TSHMACSHA256Truncated10Bytes = 1,
+
+};
+
+
+
 #define kTSVersion 
 #define kScreenshotProtection @"screenshotProtection"
 #define kDBNewMessageNotification @"db_new_message"

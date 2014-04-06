@@ -152,7 +152,7 @@
     [dataToHmac appendData:dataToDecrypt];
     
     // verify hmac
-    NSData* ourHmacData = [Cryptography truncatedSHA256HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
+    NSData* ourHmacData = [Cryptography truncatedSHA1HMAC:dataToHmac withHMACKey:hmacKey truncation:10];
     if(![ourHmacData isEqualToData:hmac]) {
         return nil;
         

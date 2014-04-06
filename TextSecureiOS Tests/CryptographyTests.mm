@@ -55,7 +55,7 @@
     [dataToHmac appendData:encryption];
     
     
-    NSData* expectedHmac = [Cryptography truncatedSHA256HMAC:dataToHmac withHMACKey:signalingKeyHMACKeyMaterial truncation:8];
+    NSData* expectedHmac = [Cryptography truncatedSHA1HMAC:dataToHmac withHMACKey:signalingKeyHMACKeyMaterial truncation:10];
     
     XCTAssertTrue([mac isEqualToData:expectedHmac], @"Hmac of encrypted data %@,  not equal to expected hmac %@", [mac base64EncodedString], [expectedHmac base64EncodedString]);
     
