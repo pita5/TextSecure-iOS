@@ -10,13 +10,34 @@
 #import "PushMessageContent.pb.hh"
 #import "TSMessage.h"
 #import "TSAttachment.h"
+
+@interface TSPushMessageContent ()
+@property (nonatomic,strong) NSString* body;
+@property (nonatomic,strong) NSArray* attachments;
+@property (nonatomic,strong) TSGroupContext* groupContext;
+@property (nonatomic,assign) TSPushMessageFlags messageFlags;
+@property (nonatomic,strong) NSData *serializedProtocolData;
+
+@end
+
 @implementation TSPushMessageContent
+
+-(instancetype) initWithBody:(NSString*)body withAttachments:(NSArray*)attachments withGroupContext:(TSGroupContext*)groupContext {
+    if(self = [super init]) {
+        self.body = body;
+        self.attachments = attachments;
+        self.groupContext = groupContext;
+        self.serializedProtocolData = [self serializedProtocolBuffer];
+        self.messageFlags = TSNoFlag;
+    }
+    return self;
+}
 
 -(instancetype) initWithTextSecureProtocolData:(NSData*) data {
     return [self initWithData:data];
 }
 -(NSData*) getTextSecureProtocolData {
-    return [self serializedProtocolBuffer];
+    return self.serializedProtocolBuffer;
 }
 
 
@@ -68,23 +89,24 @@
         NSMutableArray *messageAttachments= [[NSMutableArray alloc] init];
         for(int i=0; i<pushMessageContent->attachments_size();i++) {
 
-          const textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->mutable_attachments(i);
-          // c++
-          const std::string cppContentType = attachmentPointer->contenttype();
-          const std::string cppKey = attachmentPointer->key();
-          const uint64_t cppId = attachmentPointer->id();
-          // Objc
-          NSString *contentType = [self cppStringToObjc:cppContentType];
-          NSData *decryptionKey = [self cppStringToObjcData:cppKey];
-          NSNumber *attachmentId = [self cppUInt64ToNSNumber:cppId];
-          TSAttachment *tsAttachment = [[TSAttachment alloc] initWithAttachmentId:attachmentId contentMIMEType:contentType decryptionKey:decryptionKey];
-          [messageAttachments addObject:tsAttachment];
+            const textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->mutable_attachments(i);
+            // c++
+            const std::string cppContentType = attachmentPointer->contenttype();
+            const std::string cppKey = attachmentPointer->key();
+            const uint64_t cppId = attachmentPointer->id();
+            // Objc
+            NSString *contentType = [self cppStringToObjc:cppContentType];
+            NSData *decryptionKey = [self cppStringToObjcData:cppKey];
+            NSNumber *attachmentId = [self cppUInt64ToNSNumber:cppId];
+            TSAttachment *tsAttachment = [[TSAttachment alloc] initWithAttachmentId:attachmentId contentMIMEType:contentType decryptionKey:decryptionKey];
+            [messageAttachments addObject:tsAttachment];
         }
           
         // c++->objective C
         self.body = [self cppStringToObjc:cppMessage];
         self.attachments = messageAttachments;
         self.messageFlags = (TSPushMessageFlags)cppFlags;
+        self.serializedProtocolData = [self serializedProtocolBuffer];
     }
     return self;
 }
@@ -97,13 +119,13 @@
   // c++->protocol buffer
   pushMessageContent->set_body(cppMessage);
   for(TSAttachment* attachment in self.attachments) {
-    textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
-    const uint64_t attachment_id =  [self objcNumberToCppUInt64:attachment.attachmentId];
-    const std::string attachment_encryption_key = [self objcDataToCppString:attachment.attachmentDecryptionKey];
-    std::string attachment_contenttype = [self objcStringToCpp:[attachment getMIMEContentType]];
-    attachmentPointer->set_id(attachment_id);
-    attachmentPointer->set_key(attachment_encryption_key);
-    attachmentPointer->set_contenttype(attachment_contenttype);
+        textsecure::PushMessageContent_AttachmentPointer *attachmentPointer = pushMessageContent->add_attachments();
+        const uint64_t attachment_id =  [self objcNumberToCppUInt64:attachment.attachmentId];
+        const std::string attachment_encryption_key = [self objcDataToCppString:attachment.attachmentDecryptionKey];
+        std::string attachment_contenttype = [self objcStringToCpp:[attachment getMIMEContentType]];
+        attachmentPointer->set_id(attachment_id);
+        attachmentPointer->set_key(attachment_encryption_key);
+        attachmentPointer->set_contenttype(attachment_contenttype);
       
   }
     
@@ -117,14 +139,14 @@
     }
     
     if(self.groupContext.avatar!=nil) {
-      textsecure::PushMessageContent_AttachmentPointer *avatar = new textsecure::PushMessageContent_AttachmentPointer;
-      const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
-      const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
-      std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
-      avatar->set_id(attachment_id);
-      avatar->set_key(attachment_encryption_key);
-      avatar->set_contenttype(attachment_contenttype);
-      serializedGroupContext->set_allocated_avatar(avatar);
+        textsecure::PushMessageContent_AttachmentPointer *avatar = new textsecure::PushMessageContent_AttachmentPointer;
+        const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
+        const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
+        std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
+        avatar->set_id(attachment_id);
+        avatar->set_key(attachment_encryption_key);
+        avatar->set_contenttype(attachment_contenttype);
+        serializedGroupContext->set_allocated_avatar(avatar);
     }
     pushMessageContent->set_allocated_group(serializedGroupContext);
     
@@ -137,21 +159,18 @@
 }
 
 - (textsecure::PushMessageContent *)deserialize:(NSData *)data {
-  int len = [data length];
-  char raw[len];
-  textsecure::PushMessageContent *messageSignal = new textsecure::PushMessageContent;
-  [data getBytes:raw length:len];
-  messageSignal->ParseFromArray(raw, len);
-  return messageSignal;
+      int len = [data length];
+      char raw[len];
+      textsecure::PushMessageContent *messageSignal = new textsecure::PushMessageContent;
+      [data getBytes:raw length:len];
+      messageSignal->ParseFromArray(raw, len);
+      return messageSignal;
 }
 
 
 + (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message  withGroupContect:(TSGroupContext*)groupContext{
-  TSPushMessageContent* tsPushMessageContent = [[TSPushMessageContent alloc] init];
-  tsPushMessageContent.body = message.content;
-  tsPushMessageContent.attachments = message.attachments;
-  tsPushMessageContent.groupContext = groupContext;
-  return [tsPushMessageContent getTextSecureProtocolData];
+    TSPushMessageContent* tsPushMessageContent = [[TSPushMessageContent alloc] initWithBody:message.content withAttachments:message.attachments withGroupContext:groupContext];
+    return [tsPushMessageContent getTextSecureProtocolData];
 }
 
 

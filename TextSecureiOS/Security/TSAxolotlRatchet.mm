@@ -109,9 +109,8 @@
     TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
     int previousCounter = sessionRecord.PN;
     
-    NSData* computedHMAC;
 #warning in the hmac data we need nsdata of version and message encoded
-    NSData *ciphertextBody = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys computedHMAC:&computedHMAC hmacData:nil];
+    NSData *ciphertextBody = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys];
     
     if (!ciphertextBody) {
         throw [NSException exceptionWithName:@"Error while encrypting" reason:@"" userInfo:nil];
@@ -138,7 +137,6 @@
 
     [sessionRecord setSenderChainKey:[chainKey nextChainKey]];
     [TSMessagesDatabase storeSession:sessionRecord];
-    
     return encryptedMessage;
 }
 

@@ -11,6 +11,21 @@
 #import "Cryptography.h"
 #import "NSData+TSKeyVersion.h"
 
+
+@interface TSEncryptedWhisperMessage ()
+
+@property (nonatomic,strong) NSData* ephemeralKey;
+@property (nonatomic,strong) NSNumber* counter;
+@property (nonatomic,strong) NSNumber* previousCounter;
+@property (nonatomic,strong) NSData* hmac;
+@property (nonatomic,strong) NSData* message;
+@property (nonatomic,strong) NSData* version;
+@property (nonatomic,strong) NSData *serializedProtocolData;
+
+
+@end
+
+
 @implementation TSEncryptedWhisperMessage
 
 -(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version HMACKey:(NSData*)hmacKey{
@@ -21,6 +36,7 @@
         self.message=ciphertext;
         self.version = version;
         self.hmac = [self hMacWithKey:hmacKey];
+        self.serializedProtocolData = [self getTextSecure_WhisperMessage];
     }
     return self;
 }
@@ -31,7 +47,7 @@
 }
 
 -(NSData*) getTextSecureProtocolData {
-    return [self getTextSecure_WhisperMessage];
+    return self.serializedProtocolData;
 }
 
 -(instancetype) initWithTextSecure_WhisperMessage:(NSData*) data {
@@ -57,11 +73,13 @@
         // c++
         textsecure::WhisperMessage *whisperMessage = [self deserializeProtocolBuffer:whisperMessageProtobuf];
         const std::string cppEphemeralKey =  whisperMessage->ephemeralkey();
-        
         const uint32_t cppCounter = whisperMessage->counter();
         const uint32_t cppPreviousCounter = whisperMessage->previouscounter();
         const std::string cppMessage = whisperMessage->ciphertext();
+        
         // c++->objective C
+        self.serializedProtocolData = data;
+        
         self.ephemeralKey = [[self cppStringToObjcData:cppEphemeralKey] removeVersionByte];
         self.counter = [self cppUInt32ToNSNumber:cppCounter];
         self.previousCounter = [self cppUInt32ToNSNumber:cppPreviousCounter];

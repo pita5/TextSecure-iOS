@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, TSGroupContextType) {
 };
 
 typedef NS_ENUM(NSInteger, TSPushMessageFlags) {
+    TSNoFlag = 0,
     TSEndSession = 1
 };
 

@@ -49,35 +49,37 @@
 
 
 -(void) testMessageSignalSerialization {
-    TSMessageSignal* messageSignal = [[TSMessageSignal alloc] init];
-    messageSignal.contentType = TSEncryptedWhisperMessageType;
-    messageSignal.source = @"+11111111";
-    messageSignal.timestamp = [NSDate date];
-    messageSignal.sourceDevice = [NSNumber numberWithUnsignedLong:7654321];
-    /* messageSignal.message  contains a TextSecure_WhisperMessage or a TextSecure_PrekeyWhisperMessage
-     we are testing a TextSecure_WhisperMessage here
-    */
-    // Generating the TextSecure_WhisperMessage
+    // Neded for TSPushmessageContent
+    NSString* body = @"hello Hawaii";
+    NSArray* attachments = nil;
+    TSGroupContext* groupContext = nil;
+    
+    // needed for TSEncryptedWhisperMessage
     NSData* ephemeral = [Cryptography generateRandomBytes:32];
     NSNumber* prevCounter = [NSNumber numberWithInt:0];
     NSNumber* counter = [NSNumber numberWithInt:0];
-    // Normally the encrypted message would contain, well an encrypted PushMessageContent. Here we don't test encryption, so it's unencrypted for the test
-    TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] init];
-    pushContent.body = @"hello Hawaii";
-    NSData *serializedPushMessageContent = [pushContent serializedProtocolBuffer];
     NSData* version = [Cryptography generateRandomBytes:1];
-    NSData *hmacKey = [Cryptography generateRandomBytes:32];
-    NSMutableData* toHmac = [NSMutableData data];
-    [toHmac appendData:version];
-    [toHmac appendData:serializedPushMessageContent];
-#warning update test to new hmac
-    NSData* hmac = [Cryptography truncatedHMAC:toHmac withHMACKey:hmacKey truncation:8];
-    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedMessage:serializedPushMessageContent forVersion:version withHMAC:hmac];
-    // Have everything we need to fill out our message signal message
-    messageSignal.message = tsEncryptedMessage;
+
+    // needed for encryption of WhisperMessage
+    NSData* cipherKey = [Cryptography generateRandomBytes:32];
+    NSData* hmacKey = [Cryptography generateRandomBytes:32];
+    TSMessageKeys *messageKeys = [[TSMessageKeys alloc] initWithCipherKey:cipherKey macKey:hmacKey counter:[counter intValue]];
+    
+    // neede for the TSMessagesignal
+    NSString* source = @"+11111111";
+    NSNumber* sourceDevice = [NSNumber numberWithUnsignedLong:7654321];
+    NSDate* timestamp = [NSDate date];
+    
+    
+    // Stuffing into objective c
+    TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] initWithBody:body withAttachments:attachments withGroupContext:groupContext];
+    NSData* encryptedContent = [Cryptography encryptCTRMode:[pushContent getTextSecureProtocolData] withKeys:messageKeys];
+
+    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedMessage:encryptedContent forVersion:version HMACKey:cipherKey];
+    TSMessageSignal* messageSignal = [[TSMessageSignal alloc] initWithMessage:tsEncryptedMessage withContentType:TSEncryptedWhisperMessageType withSource:source withSourceDevice:sourceDevice withTimestamp:timestamp];
 
     
-    NSData *serializedMessageSignal = [messageSignal serializedProtocolBuffer];
+    NSData *serializedMessageSignal = [messageSignal getTextSecureProtocolData];
     TSMessageSignal* deserializedMessageSignal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:serializedMessageSignal];
     
     XCTAssertTrue(messageSignal.contentType == deserializedMessageSignal.contentType,@"TSMessageSignal contentType unequal after serialization");

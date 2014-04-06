@@ -13,15 +13,30 @@
 #import "TSUserKeysDatabase.h"
 #import "NSData+TSKeyVersion.h"
 #import "NSData+Base64.h"
+
+@interface TSPreKeyWhisperMessage ()
+
+@property (nonatomic,strong) NSData *serializedProtocolData;
+@property (nonatomic,strong) NSData* version;
+
+@property (nonatomic,strong) NSNumber* preKeyId;
+@property (nonatomic,strong) NSData* baseKey; // base Curve25519 key exchange ephemeral: A0 in axolotl
+@property (nonatomic,strong) NSData* identityKey; //Curve25519 identity key of the sender: A in axolotl
+@property (nonatomic,strong) NSData* message;
+
+
+@end
+
+
 @implementation TSPreKeyWhisperMessage
-@synthesize version;
 -(instancetype)initWithPreKeyId:(NSNumber*)prekeyId  senderPrekey:(NSData*)prekey senderIdentityKey:(NSData*)identityKey message:(NSData*)messageContents forVersion:(NSData*)vers{
     if(self=[super init]) {
+        self.version = vers;
         self.preKeyId = prekeyId;
         self.baseKey = prekey;
         self.identityKey = identityKey;
         self.message = messageContents;
-        self.version = vers;
+        self.serializedProtocolData = [self getTextSecure_PreKeyWhisperMessage];
     }
     return self;
 }
@@ -32,7 +47,7 @@
 }
 
 -(NSData*) getTextSecureProtocolData {
-    return [self getTextSecure_PreKeyWhisperMessage];
+    return self.serializedProtocolData;
 }
 
 
@@ -53,14 +68,16 @@
      
      */
     if(self = [super init]) {
-        self.version = [data subdataWithRange:NSMakeRange(0, 1)];
         // c++
         textsecure::PreKeyWhisperMessage *prekeyWhisperMessage = [self deserializeProtocolBuffer:[data subdataWithRange:NSMakeRange(1, [data length]-1)]];
         uint32_t cppPreKeyId =  prekeyWhisperMessage->prekeyid();
         const std::string cppBaseKey = prekeyWhisperMessage->basekey();
         const std::string cppIdentityKey = prekeyWhisperMessage->identitykey();
         const std::string cppMessage = prekeyWhisperMessage->message();
+
         // c++->objective C
+        self.serializedProtocolData = data;
+        self.version = [data subdataWithRange:NSMakeRange(0, 1)];
         self.preKeyId = [self cppUInt32ToNSNumber:cppPreKeyId];
         self.baseKey = [[self cppStringToObjcData:cppBaseKey] removeVersionByte];
         self.identityKey = [[self cppStringToObjcData:cppIdentityKey] removeVersionByte];

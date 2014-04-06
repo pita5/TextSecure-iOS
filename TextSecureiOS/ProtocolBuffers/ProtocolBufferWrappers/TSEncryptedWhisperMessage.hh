@@ -11,10 +11,6 @@
 
 @interface TSEncryptedWhisperMessage : TSWhisperMessage
 
-@property (nonatomic,strong) NSData* ephemeralKey;
-@property (nonatomic,strong) NSNumber* counter;
-@property (nonatomic,strong) NSNumber* previousCounter;
-@property (nonatomic,strong) NSData* hmac;
 
 -(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version HMACKey:(NSData*)hmacKey;
 
