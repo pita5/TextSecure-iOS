@@ -70,6 +70,7 @@
     NSMutableData* toHmac = [NSMutableData data];
     [toHmac appendData:version];
     [toHmac appendData:serializedPushMessageContent];
+#warning update test to new hmac
     NSData* hmac = [Cryptography truncatedHMAC:toHmac withHMACKey:hmacKey truncation:8];
     TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedMessage:serializedPushMessageContent forVersion:version withHMAC:hmac];
     // Have everything we need to fill out our message signal message
