@@ -106,6 +106,57 @@
  */
 
 
+-(void) testCompareAndroidSerialization {
+    
+    /*
+    // Neded for TSPushmessageContent
+    NSString* body = @"hello Hawaii";
+    
+    // needed for TSEncryptedWhisperMessage
+    const unsigned char zero32Bytes[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+                                        0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+                                        0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+                                        0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    const unsigned char zeroByte[] = {0x00};
+
+    NSData* zero32Data = [NSData dataWithBytes:zero32Bytes length:sizeof(zero32Bytes)];
+    NSData* zero1Data = [NSData dataWithBytes:zeroByte length:sizeof(zeroByte)];
+    NSData *ephemeral =  zero32Data;
+    NSNumber *prevCounter = [NSNumber numberWithInt:0];
+    NSNumber* counter = [NSNumber numberWithInt:0];
+    NSData* version = zero1Data;
+    
+    
+    // needed for encryption of WhisperMessage
+    NSData* cipherKey = zero32Data;
+    
+    
+    // Stuffing into objective c
+    TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] initWithBody:body withAttachments:nil  withGroupContext:nil];
+    
+    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedMessage:[pushContent getTextSecureProtocolData] forVersion:version HMACKey:cipherKey];
+
+    NSString *base64SerializediOSTSPushMessageContent = [[pushContent getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+    
+    NSString *base64SerializediOSTSEncryptedWhisperMessage = [[tsEncryptedMessage getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+     NSLog(@"%@",base64SerializediOSTSPushMessageContent);
+     NSLog(@"%@",base64SerializediOSTSEncryptedWhisperMessage);
+
+     */
+    
+    // gives
+     NSString *base64SerializediOSTSPushMessageContent = @"CgxoZWxsbyBIYXdhaWk=";
+     NSString* base64SerializediOSTSEncryptedWhisperMessage = @"AAohBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAYACIOCgxoZWxsbyBIYXdhaWncdNiDCuAuow==";
+ 
+    
+}
+
+-(void) testPrekeyWhisperMessageSerialization {
+    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+
+    
+}
+
 -(void) testMessageSignalSerializationNoAttachmentsNoGroup {
     
     

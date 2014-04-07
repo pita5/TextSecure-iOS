@@ -109,7 +109,6 @@
     TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
     int previousCounter = sessionRecord.PN;
     
-#warning in the hmac data we need nsdata of version and message encoded
     NSData *ciphertextBody = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys];
     
     if (!ciphertextBody) {
@@ -124,7 +123,8 @@
                                                          myNextEphemeral:sessionRecord.senderEphemeral.publicKey
                                                               forVersion:[self currentProtocolVersion]
                                                                 withHMACKey:messageKeys.macKey];
-
+    
+    
     }
     else {
         encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey
