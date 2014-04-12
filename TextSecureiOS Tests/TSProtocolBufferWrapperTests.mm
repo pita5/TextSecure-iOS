@@ -176,7 +176,8 @@
 }
 
 -(void) testPrekeyWhisperMessageSerialization {
-
+    /* TODO: debug this test. as iOS->iOS, Droid->iOS, iOS->Droid first sends now work clearly the PreKeyWhisperMessage protocol buffer serialization isn't all bad. but the  // this is crashing // line is well, crashing here. Probably an issue with the test itself
+     (inna hurry) but should be massaged to pass */
     // Stuffing into objective c
     TSPushMessageContent* pushContent = [[TSPushMessageContent alloc] initWithBody:_body withAttachments:nil  withGroupContext:nil];
     NSData* encryptedContent = [Cryptography encryptCTRMode:[pushContent getTextSecureProtocolData] withKeys:_messageKeys];
