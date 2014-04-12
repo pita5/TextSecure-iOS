@@ -31,6 +31,7 @@
 #import "TSMessageOutgoing.h"
 #import "TSPrekey.h"
 #import "NSData+TSKeyVersion.h"
+#import "TSPushMessageContent.hh"
 
 
 
@@ -80,17 +81,19 @@
         @throw [NSException exceptionWithName:@"Bad HMAC" reason:@"Bad HMAC!" userInfo:nil];
     }
     
-    NSString* decryptedMessageString = [[NSString alloc] initWithData:[Cryptography decryptCTRMode:cipherTextMessage
-                                                                                          withKeys:messageKeys] encoding:NSUTF8StringEncoding];
+    NSData* decryptedPushMessageContentData = [Cryptography decryptCTRMode:cipherTextMessage withKeys:messageKeys];
+    TSPushMessageContent *pushMessageContent = [[TSPushMessageContent alloc] initWithData:decryptedPushMessageContentData];
     
-    if (!decryptedMessageString) {
+    if (pushMessageContent==nil) {
         throw [NSException exceptionWithName:@"Error decrypting message" reason:@"" userInfo:nil];
     }
-
-    TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:decryptedMessageString
+    
+    
+#warning init group from pushMessageContent.groupContext
+    TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:pushMessageContent.body
                                                                                     sender:sessionRecord.contact.registeredID
                                                                                       date:[NSDate date]
-                                                                              attachements:nil
+                                                                              attachements:pushMessageContent.attachments
                                                                                      group:nil
                                                                                      state:TSMessageStateReceived];
     [TSMessagesDatabase storeSession:sessionRecord];
@@ -109,7 +112,10 @@
     TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
     int previousCounter = sessionRecord.PN;
     
-    NSData *ciphertextBody = [Cryptography encryptCTRMode:[message.content dataUsingEncoding:NSUTF8StringEncoding] withKeys:messageKeys];
+    
+    TSPushMessageContent *messageContent = [[TSPushMessageContent alloc] initWithBody:message.content withAttachments:message.attachments withGroupContext:message.group.groupContext];
+    NSData *ciphertextBody = [Cryptography encryptCTRMode:[messageContent getTextSecureProtocolData] withKeys:messageKeys];
+    
     
     if (!ciphertextBody) {
         throw [NSException exceptionWithName:@"Error while encrypting" reason:@"" userInfo:nil];

@@ -14,6 +14,7 @@
 #import "IncomingPushMessageSignal.pb.hh"
 #import "TSPushMessageContent.hh"
 #import "TSEncryptedWhisperMessage.hh"
+#import "TSPreKeyWhisperMessage.hh"
 #import "TSGroupContext.h"
 #import "Constants.h"
 @interface TSProtocolBufferWrapper (Test)
@@ -108,7 +109,7 @@
 
 -(void) testCompareAndroidSerialization {
     
-    /*
+
     // Neded for TSPushmessageContent
     NSString* body = @"hello Hawaii";
     
@@ -125,7 +126,7 @@
     NSNumber *prevCounter = [NSNumber numberWithInt:0];
     NSNumber* counter = [NSNumber numberWithInt:0];
     NSData* version = zero1Data;
-    
+    NSNumber *theirPrekeyId = [NSNumber numberWithInt:0];
     
     // needed for encryption of WhisperMessage
     NSData* cipherKey = zero32Data;
@@ -135,19 +136,36 @@
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] initWithBody:body withAttachments:nil  withGroupContext:nil];
     
     TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedMessage:[pushContent getTextSecureProtocolData] forVersion:version HMACKey:cipherKey];
-
-    NSString *base64SerializediOSTSPushMessageContent = [[pushContent getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+    TSPreKeyWhisperMessage *tsPreKeyWhsiperMessage = [TSPreKeyWhisperMessage constructFirstMessage:<#(NSData *)#> theirPrekeyId:theirPrekeyId myCurrentEphemeral:ephemeral myNextEphemeral:ephemeral forVersion:version withHMACKey:cipherKey];
     
+    
+    NSString *base64SerializediOSTSPushMessageContent = [[pushContent getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+
     NSString *base64SerializediOSTSEncryptedWhisperMessage = [[tsEncryptedMessage getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+    
+    
+    XCTAssertTrue([base64SerializediOSTSEncryptedWhisperMessage isEqualToString:[tsPreKeyWhsiperMessage.message base64EncodedStringWithOptions:0]]);
+
+    
      NSLog(@"%@",base64SerializediOSTSPushMessageContent);
      NSLog(@"%@",base64SerializediOSTSEncryptedWhisperMessage);
 
-     */
+     
     
-    // gives
-     NSString *base64SerializediOSTSPushMessageContent = @"CgxoZWxsbyBIYXdhaWk=";
-     NSString* base64SerializediOSTSEncryptedWhisperMessage = @"AAohBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAYACIOCgxoZWxsbyBIYXdhaWncdNiDCuAuow==";
+    // gives for iOS
+//     NSString *base64SerializediOSTSPushMessageContent = @"CgxoZWxsbyBIYXdhaWk=";
+//     NSString* base64SerializediOSTSEncryptedWhisperMessage = @"AAohBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAYACIOCgxoZWxsbyBIYXdhaWncdNiDCuAuow==";
  
+    
+    
+    
+    // Droid gives us
+    /*
+    NSString base64SerializedDroidTSPushMessageContentCurrent = @"CgxoZWxsbyBIYXdhaWk=";
+    NSString base64SerializedDroidTSEncryptedWhisperMessageCurrent = @"CiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAGAAiDgoMaGVsbG8gSGF3YWlp";
+    NSString base64SerializedDroidTSPreKeyWhisperMessageCurrent = @"CAASIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACI2CiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAGAAiDgoMaGVsbG8gSGF3YWlpKAA=";
+    */
+    
     
 }
 

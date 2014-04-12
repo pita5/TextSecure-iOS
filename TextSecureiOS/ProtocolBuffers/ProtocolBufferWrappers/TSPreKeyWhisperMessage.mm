@@ -129,7 +129,6 @@
 
 #pragma mark public static methods
 +(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMACKey:(NSData*)hmac {
-    
     NSLog(@"encryption sending: myCurrentEphemeral (A0): %@ \n myNextEphemeral (A1): %@",currentEphemeral,myNextEphemeral);
     
     TSEncryptedWhisperMessage *encryptedWhisperMessage = [[TSEncryptedWhisperMessage alloc]
