@@ -123,7 +123,7 @@
     
     TSWhisperMessage *encryptedMessage;
     if ([sessionRecord hasPendingPreKey]) {
-        encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessage:ciphertextBody
+        encryptedMessage = [TSPreKeyWhisperMessage constructFirstMessageWithEncryptedPushMessageContent:ciphertextBody
                                                            theirPrekeyId:[NSNumber numberWithInt:sessionRecord.pendingPreKey.prekeyId]
                                                       myCurrentEphemeral:sessionRecord.pendingPreKey.ephemeralKey
                                                          myNextEphemeral:sessionRecord.senderEphemeral.publicKey
@@ -136,7 +136,7 @@
         encryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:senderEphemeral.publicKey
                                                                    previousCounter:[NSNumber numberWithInt:previousCounter]
                                                                            counter:[NSNumber numberWithInt:chainKey.index]
-                                                                  encryptedMessage:ciphertextBody
+                                                                  encryptedPushMessageContent:ciphertextBody
                                                                         forVersion:[self currentProtocolVersion]
                                                                            HMACKey:messageKeys.macKey];
     }

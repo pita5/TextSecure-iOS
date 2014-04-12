@@ -135,8 +135,8 @@
     // Stuffing into objective c
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] initWithBody:body withAttachments:nil  withGroupContext:nil];
     
-    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedMessage:[pushContent getTextSecureProtocolData] forVersion:version HMACKey:cipherKey];
-    TSPreKeyWhisperMessage *tsPreKeyWhsiperMessage = [TSPreKeyWhisperMessage constructFirstMessage:<#(NSData *)#> theirPrekeyId:theirPrekeyId myCurrentEphemeral:ephemeral myNextEphemeral:ephemeral forVersion:version withHMACKey:cipherKey];
+    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedPushMessageContent:[pushContent getTextSecureProtocolData] forVersion:version HMACKey:cipherKey];
+    TSPreKeyWhisperMessage *tsPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessageWithEncryptedPushMessageContent:[pushContent getTextSecureProtocolData] theirPrekeyId:theirPrekeyId myCurrentEphemeral:ephemeral myNextEphemeral:ephemeral forVersion:version withHMACKey:cipherKey];
     
     
     NSString *base64SerializediOSTSPushMessageContent = [[pushContent getTextSecureProtocolData] base64EncodedStringWithOptions:0];
@@ -144,7 +144,7 @@
     NSString *base64SerializediOSTSEncryptedWhisperMessage = [[tsEncryptedMessage getTextSecureProtocolData] base64EncodedStringWithOptions:0];
     
     
-    XCTAssertTrue([base64SerializediOSTSEncryptedWhisperMessage isEqualToString:[tsPreKeyWhsiperMessage.message base64EncodedStringWithOptions:0]]);
+    XCTAssertTrue([base64SerializediOSTSEncryptedWhisperMessage isEqualToString:[tsPreKeyWhisperMessage.message base64EncodedStringWithOptions:0]]);
 
     
      NSLog(@"%@",base64SerializediOSTSPushMessageContent);
@@ -182,7 +182,7 @@
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] initWithBody:_body withAttachments:nil  withGroupContext:nil];
     NSData* encryptedContent = [Cryptography encryptCTRMode:[pushContent getTextSecureProtocolData] withKeys:_messageKeys];
 
-    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:_ephemeral previousCounter:_prevCounter counter:_counter encryptedMessage:encryptedContent forVersion:_version HMACKey:_cipherKey];
+    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:_ephemeral previousCounter:_prevCounter counter:_counter encryptedPushMessageContent:encryptedContent forVersion:_version HMACKey:_cipherKey];
     TSMessageSignal* messageSignal = [[TSMessageSignal alloc] initWithMessage:tsEncryptedMessage withContentType:TSEncryptedWhisperMessageType withSource:_source withSourceDevice:_sourceDevice withTimestamp:_timestamp];
 
     
@@ -230,7 +230,7 @@
     TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] initWithBody:_body withAttachments:nil  withGroupContext:nil];
     NSData* encryptedContent = [Cryptography encryptCTRMode:[pushContent getTextSecureProtocolData] withKeys:_messageKeys];
     
-    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:_ephemeral previousCounter:_prevCounter counter:_counter encryptedMessage:encryptedContent forVersion:_version HMACKey:_cipherKey];
+    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:_ephemeral previousCounter:_prevCounter counter:_counter encryptedPushMessageContent:encryptedContent forVersion:_version HMACKey:_cipherKey];
 
     
     NSData* serializedEncryptedMessage = [tsEncryptedMessage getTextSecureProtocolData];

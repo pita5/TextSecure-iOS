@@ -19,7 +19,7 @@
 @property (readonly,nonatomic,strong) NSData *protocolData;
 
 
--(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedMessage:(NSData*)ciphertext forVersion:(NSData*)version HMACKey:(NSData*)hmacKey;
+-(instancetype) initWithEphemeralKey:(NSData*)ephemeral previousCounter:(NSNumber*)prevCounter counter:(NSNumber*)ctr encryptedPushMessageContent:(NSData*)ciphertext forVersion:(NSData*)version HMACKey:(NSData*)hmacKey;
 
 - (BOOL)verifyHMAC:(NSData*)hmacKey;
 

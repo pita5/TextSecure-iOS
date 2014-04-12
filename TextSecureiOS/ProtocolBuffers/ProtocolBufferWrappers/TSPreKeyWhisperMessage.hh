@@ -21,6 +21,6 @@
 @property (readonly,nonatomic,strong) NSData* identityKey; //Curve25519 identity key of the sender: A in axolotl
 @property (readonly,nonatomic,strong) NSData* message;
 
-+(TSPreKeyWhisperMessage *) constructFirstMessage:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMACKey:(NSData*)hmac;
++(TSPreKeyWhisperMessage *) constructFirstMessageWithEncryptedPushMessageContent:(NSData*)ciphertext theirPrekeyId:(NSNumber*) theirPrekeyId myCurrentEphemeral:(NSData*) currentEphemeral myNextEphemeral:(NSData*)myNextEphemeral  forVersion:(NSData*)version withHMACKey:(NSData*)hmac;
 
 @end
