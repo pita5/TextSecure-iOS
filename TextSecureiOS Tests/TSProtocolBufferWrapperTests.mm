@@ -29,8 +29,10 @@
 @property(nonatomic,strong) NSArray* attachments;
 @property(nonatomic,strong) TSGroupContext* groupContext;
 @property(nonatomic,strong) NSData* ephemeral;
+@property(nonatomic,strong) NSData* myNextEphemeral;
 @property(nonatomic,strong) NSNumber* prevCounter;
 @property(nonatomic,strong) NSNumber* counter;
+@property(nonatomic,strong) NSNumber* theirPrekeyId;
 @property(nonatomic,strong) NSData* version;
 @property(nonatomic,strong) NSData* cipherKey;
 @property(nonatomic,strong) NSData* hmacKey;
@@ -51,6 +53,10 @@
     _body = @"hello Hawaii";
     _attachments = nil;
     _groupContext = nil;
+
+    // needed for TSPreKeyWhisperMessage
+    _myNextEphemeral = [Cryptography generateRandomBytes:32];
+    _theirPrekeyId = [NSNumber numberWithInt:1337];
     
     // needed for TSEncryptedWhisperMessage
     _ephemeral = [Cryptography generateRandomBytes:32];
@@ -108,7 +114,6 @@
 
 
 -(void) testCompareAndroidSerialization {
-    
 
     // Neded for TSPushmessageContent
     NSString* body = @"hello Hawaii";
@@ -126,53 +131,84 @@
     NSNumber *prevCounter = [NSNumber numberWithInt:0];
     NSNumber* counter = [NSNumber numberWithInt:0];
     NSData* version = zero1Data;
-    NSNumber *theirPrekeyId = [NSNumber numberWithInt:0];
+    NSNumber* theirPrekeyId = [NSNumber numberWithInt:0];
     
     // needed for encryption of WhisperMessage
     NSData* cipherKey = zero32Data;
     
     
     // Stuffing into objective c
-    TSPushMessageContent *pushContent = [[TSPushMessageContent alloc] initWithBody:body withAttachments:nil  withGroupContext:nil];
+    TSPushMessageContent* pushContent = [[TSPushMessageContent alloc] initWithBody:body withAttachments:nil  withGroupContext:nil];
     
-    TSEncryptedWhisperMessage *tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedPushMessageContent:[pushContent getTextSecureProtocolData] forVersion:version HMACKey:cipherKey];
-    TSPreKeyWhisperMessage *tsPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessageWithEncryptedPushMessageContent:[pushContent getTextSecureProtocolData] theirPrekeyId:theirPrekeyId myCurrentEphemeral:ephemeral myNextEphemeral:ephemeral forVersion:version withHMACKey:cipherKey];
+    TSEncryptedWhisperMessage* tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:ephemeral previousCounter:prevCounter counter:counter encryptedPushMessageContent:[pushContent getTextSecureProtocolData] forVersion:version HMACKey:cipherKey];
+    TSPreKeyWhisperMessage* tsPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessageWithEncryptedPushMessageContent:[pushContent getTextSecureProtocolData] theirPrekeyId:theirPrekeyId myCurrentEphemeral:ephemeral myNextEphemeral:ephemeral forVersion:version withHMACKey:cipherKey];
     
     
-    NSString *base64SerializediOSTSPushMessageContent = [[pushContent getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+    NSString* base64SerializediOSTSPushMessageContentCurrent = [[pushContent getTextSecureProtocolData] base64EncodedStringWithOptions:0];
 
-    NSString *base64SerializediOSTSEncryptedWhisperMessage = [[tsEncryptedMessage getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+    NSString* base64SerializediOSTSEncryptedWhisperMessageCurrent = [[tsEncryptedMessage getTextSecureProtocolData] base64EncodedStringWithOptions:0];
+    NSString* base64SerializediOSTSPreKeyWhisperMessageCurrent = [[tsPreKeyWhisperMessage getTextSecureProtocolData] base64EncodedStringWithOptions:0];
     
-    
-    XCTAssertTrue([base64SerializediOSTSEncryptedWhisperMessage isEqualToString:[tsPreKeyWhisperMessage.message base64EncodedStringWithOptions:0]]);
+    XCTAssertTrue([base64SerializediOSTSEncryptedWhisperMessageCurrent isEqualToString:[tsPreKeyWhisperMessage.message base64EncodedStringWithOptions:0]]);
 
     
-     NSLog(@"%@",base64SerializediOSTSPushMessageContent);
-     NSLog(@"%@",base64SerializediOSTSEncryptedWhisperMessage);
+     NSLog(@"%@",base64SerializediOSTSPushMessageContentCurrent);
+     NSLog(@"%@",base64SerializediOSTSEncryptedWhisperMessageCurrent);
+     NSLog(@"%@",base64SerializediOSTSPreKeyWhisperMessageCurrent);
+    
+    
+    //    // gives for iOS currently
+    //    NSString* base64SerializediOSTSPushMessageContentCurrent = @"CgxoZWxsbyBIYXdhaWk=";
+    //    NSString* base64SerializediOSTSEncryptedWhisperMessageCurrent = @"AAohBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAYACIOCgxoZWxsbyBIYXdhaWncdNiDCuAuow==";
+    //    NSString* base64SerializediOSTSPreKeyWhisperMessageCurrent = @"AAgAEiEFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaACJAAAohBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAYACIOCgxoZWxsbyBIYXdhaWncdNiDCuAuow==";
+    
+    
+    
+    // Droid gives us for equavalent data/ephemeral etc.
+    NSString* base64SerializedDroidTSPushMessageContentCurrent = @"CgxoZWxsbyBIYXdhaWk=";
+    NSString* base64SerializedDroidTSEncryptedWhisperMessageCurrent = @"CiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAGAAiDgoMaGVsbG8gSGF3YWlp";
+    NSString* base64SerializedDroidTSPreKeyWhisperMessageCurrent = @"CAASIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACI2CiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAGAAiDgoMaGVsbG8gSGF3YWlpKAA=";
 
-     
-    
-    // gives for iOS
-//     NSString *base64SerializediOSTSPushMessageContent = @"CgxoZWxsbyBIYXdhaWk=";
-//     NSString* base64SerializediOSTSEncryptedWhisperMessage = @"AAohBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAYACIOCgxoZWxsbyBIYXdhaWncdNiDCuAuow==";
- 
-    
-    
-    
-    // Droid gives us
-    /*
-    NSString base64SerializedDroidTSPushMessageContentCurrent = @"CgxoZWxsbyBIYXdhaWk=";
-    NSString base64SerializedDroidTSEncryptedWhisperMessageCurrent = @"CiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAGAAiDgoMaGVsbG8gSGF3YWlp";
-    NSString base64SerializedDroidTSPreKeyWhisperMessageCurrent = @"CAASIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACI2CiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAGAAiDgoMaGVsbG8gSGF3YWlpKAA=";
-    */
-    
-    
+
+    XCTAssertTrue([base64SerializediOSTSPushMessageContentCurrent isEqualToString:base64SerializedDroidTSPushMessageContentCurrent], @"push messages PBs not equal ios %@ droid %@",base64SerializediOSTSPushMessageContentCurrent,base64SerializedDroidTSPushMessageContentCurrent);
+    XCTAssertTrue([base64SerializediOSTSEncryptedWhisperMessageCurrent isEqualToString:base64SerializedDroidTSEncryptedWhisperMessageCurrent], @"encrypted message PBs not equal ios %@ droid %@",base64SerializediOSTSEncryptedWhisperMessageCurrent,base64SerializedDroidTSEncryptedWhisperMessageCurrent);
+    XCTAssertTrue([base64SerializediOSTSPreKeyWhisperMessageCurrent isEqualToString:base64SerializedDroidTSPreKeyWhisperMessageCurrent], @"prekey messages PBs not equal ios %@ droid %@",base64SerializediOSTSPreKeyWhisperMessageCurrent,base64SerializedDroidTSPreKeyWhisperMessageCurrent);
 }
 
 -(void) testPrekeyWhisperMessageSerialization {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+
+    // Stuffing into objective c
+    TSPushMessageContent* pushContent = [[TSPushMessageContent alloc] initWithBody:_body withAttachments:nil  withGroupContext:nil];
+    NSData* encryptedContent = [Cryptography encryptCTRMode:[pushContent getTextSecureProtocolData] withKeys:_messageKeys];
+    
+    TSEncryptedWhisperMessage* tsEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithEphemeralKey:_ephemeral previousCounter:_prevCounter counter:_counter encryptedPushMessageContent:encryptedContent forVersion:_version HMACKey:_cipherKey];
+    
+    TSPreKeyWhisperMessage *tsPreKeyWhisperMessage = [TSPreKeyWhisperMessage constructFirstMessageWithEncryptedPushMessageContent:[tsEncryptedMessage getTextSecureProtocolData] theirPrekeyId:_theirPrekeyId myCurrentEphemeral:_ephemeral myNextEphemeral:_myNextEphemeral forVersion:_version withHMACKey:_cipherKey];
 
     
+    
+    NSData* serializedPreKeyMessage = [tsPreKeyWhisperMessage getTextSecureProtocolData];
+
+    TSPreKeyWhisperMessage* deserializedPreKeyMessage = [[TSPreKeyWhisperMessage alloc] initWithTextSecureProtocolData:serializedPreKeyMessage]; //  this is crashing
+    XCTAssertTrue([deserializedPreKeyMessage.version isEqualToData:tsPreKeyWhisperMessage.version],@"versions not equal: deserialized: %@, original %@",deserializedPreKeyMessage.version ,tsPreKeyWhisperMessage.version);
+    XCTAssertTrue([deserializedPreKeyMessage.preKeyId isEqualToNumber:tsPreKeyWhisperMessage.preKeyId],@"preKeyIds not equal: deserialized: %@, original %@",deserializedPreKeyMessage.preKeyId ,tsPreKeyWhisperMessage.preKeyId);
+    XCTAssertTrue([deserializedPreKeyMessage.baseKey isEqualToData:tsPreKeyWhisperMessage.baseKey],@"base keys not equal: deserialized: %@, original %@", deserializedPreKeyMessage.baseKey,tsPreKeyWhisperMessage.baseKey);
+    XCTAssertTrue([deserializedPreKeyMessage.identityKey isEqualToData:tsPreKeyWhisperMessage.identityKey],@"identity keys not equal: deserialized: %@, original %@", deserializedPreKeyMessage.identityKey,tsPreKeyWhisperMessage.identityKey);
+
+    
+    XCTAssertTrue([deserializedPreKeyMessage.message isEqualToData:encryptedContent],@"encrypted push message content %@ not equal to deserialized version %@",encryptedContent,deserializedPreKeyMessage.message);
+    NSData* decryptedPushMessageContentData = [Cryptography decryptCTRMode:deserializedPreKeyMessage.message withKeys:_messageKeys];
+    XCTAssertTrue([decryptedPushMessageContentData isEqualToData:[pushContent getTextSecureProtocolData]],@"decrypted push message content %@ not equal to original decrypted version %@",decryptedPushMessageContentData,[pushContent getTextSecureProtocolData]);
+    TSEncryptedWhisperMessage* deserializedEncryptedMessage = [[TSEncryptedWhisperMessage alloc] initWithData:decryptedPushMessageContentData];
+    XCTAssertTrue([deserializedEncryptedMessage.previousCounter isEqualToNumber:tsEncryptedMessage.previousCounter], @"previous counters unequal");
+    XCTAssertTrue([deserializedEncryptedMessage.counter isEqualToNumber:tsEncryptedMessage.counter], @"counters unequal");
+    XCTAssertTrue([deserializedEncryptedMessage.ephemeralKey isEqualToData:tsEncryptedMessage.ephemeralKey], @"ephemeral keys unequal; deserialization %@, encrypted %@",deserializedEncryptedMessage.ephemeralKey,tsEncryptedMessage.ephemeralKey);
+    
+    
+    NSData *decryptedSerializedPushMessageContent = [Cryptography decryptCTRMode:deserializedEncryptedMessage.message withKeys:_messageKeys];
+    TSPushMessageContent *deserializedPushMessageContent = [[TSPushMessageContent alloc] initWithData:decryptedSerializedPushMessageContent];
+    
+    XCTAssertTrue([deserializedPushMessageContent.body isEqualToString:pushContent.body], @"messages not equal derialized %@, original %@",deserializedPushMessageContent.body,pushContent.body);
 }
 
 -(void) testMessageSignalSerializationNoAttachmentsNoGroup {
