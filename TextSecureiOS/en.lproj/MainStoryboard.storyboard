@@ -237,7 +237,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CountryViewCell" textLabel="oTP-96-3eR" style="IBUITableViewCellStyleDefault" id="Djr-12-r1D">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Djr-12-r1D" id="t7L-hm-MRU">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -263,6 +263,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="TzG-JK-efH"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0M3-sP-mxA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
