@@ -14,6 +14,9 @@
 @property (nonatomic,strong) IBOutlet UITextField *verificationCode_part2;
 
 @property (nonatomic, strong) IBOutlet UIButton *sendAuthenticatedRequest;
+@property (strong, nonatomic) IBOutlet UIView *underlineView1;
+@property (strong, nonatomic) IBOutlet UIView *underlineView2;
+
 
 @property (nonatomic, copy) NSString *phoneNumber;
 @property (nonatomic, copy) NSString *basicAuthCode;

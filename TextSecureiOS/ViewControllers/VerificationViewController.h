@@ -22,6 +22,8 @@
 @property (nonatomic, retain) NBAsYouTypeFormatter *numberFormatter;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *nextButton;
+@property (strong, nonatomic) IBOutlet UIView *underlineNumberView;
+@property (strong, nonatomic) IBOutlet UIView *underlineCountryCodeView;
 
 @property (nonatomic, copy) NSString *selectedPhoneNumber;
 
