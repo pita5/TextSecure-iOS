@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
+//Colors
+#import "UIColor+TextSecure.h"
+
 #define kLastResortKeyId 0xFFFFFF
 
 extern NSString* const textSecureServer;

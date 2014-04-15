@@ -16,6 +16,7 @@
 
 - (NSArray *)stepViewControllers {
     [self.stepsBar setHideCancelButton:YES];
+    [self.step setEnabledBarColor:[UIColor TSValidColor]];
     VerificationViewController *firstStep = [self.storyboard instantiateViewControllerWithIdentifier:@"VerificationViewController"];
     firstStep.step.title = @"Phone Number";
     

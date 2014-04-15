@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "RMStepsController.h"
+#import "Constants.h"
 
 @interface SignUpStepsViewController : RMStepsController
 
