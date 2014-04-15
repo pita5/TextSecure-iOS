@@ -14,6 +14,7 @@
 #import "TSMessagesDatabase.h"
 #import "TSWaitingPushMessageDatabase.h"
 #import "TSECKeyPair.h"
+#import "RMStepsController.h"
 
 #define pickPassword @"Pick your password"
 #define reenterPassword @"Please re-enter your password"
@@ -40,6 +41,8 @@
     self.pass.delegate = self;
     
     self.instruction.text = pickPassword;
+    self.navigationController.navigationBarHidden = YES;
+
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -49,7 +52,7 @@
 }
 
 
-- (void) nextWasTapped:(id)sender{
+- (IBAction) nextWasTapped:(id)sender{
     if (self.firstPass == nil) {
         self.firstPass = self.pass.text;
         self.instruction.text = reenterPassword;
@@ -115,7 +118,8 @@
 #warning Add error handling if not able to send the token
         DLog(@"failure %ld, %@",operation.response.statusCode,operation.response.description);
     }];
-    
+//    [self.stepsController showNextStep];
+
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
 

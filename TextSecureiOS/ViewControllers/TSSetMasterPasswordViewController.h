@@ -12,7 +12,8 @@
 
 @property (nonatomic, copy) NSString *firstPass;
 @property (nonatomic, strong) IBOutlet UITextField *pass;
-@property (nonatomic, strong) UIBarButtonItem *nextButton;
+
+@property (strong, nonatomic) IBOutlet UIButton *nextButton;
 
 @property (nonatomic, retain) IBOutlet UILabel *instruction;
 

@@ -8,6 +8,7 @@
 
 #import "VerificationViewController.h"
 #import "TSKeyManager.h"
+#import "RMStepsController.h"
 
 @interface VerificationViewController ()
 
@@ -39,7 +40,7 @@
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
 
     self.nextButton.enabled = NO;
-
+    self.navigationController.navigationBarHidden = YES;
     self.navigationItem.title = @"Enter your phone number";
     
     [self setLocaleCountry];
@@ -131,7 +132,7 @@
 
 #pragma mark - Verification Action
 
--(void)sendVerification:(id)sender {
+-(IBAction)sendVerification:(id)sender {
     self.nextButton.enabled = NO;
 
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
@@ -142,7 +143,8 @@
         [TSKeyManager generateNewAccountAuthenticationToken];
         [TSKeyManager generateNewSignalingKeyToken];
         
-        [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
+//        [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
+        [self.stepsController showNextStep];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];

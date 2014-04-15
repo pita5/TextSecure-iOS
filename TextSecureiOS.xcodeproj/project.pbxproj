@@ -465,6 +465,7 @@
 		B6F7FEC018D77E1500ECC4A2 /* NSData+TSKeyVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = B6F7FEBF18D77E1500ECC4A2 /* NSData+TSKeyVersion.m */; };
 		CE74D2F57964464494640956 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		F8694B5E18C5268500A44474 /* padlock_prompt.png in Resources */ = {isa = PBXBuildFile; fileRef = F8694B5D18C5268500A44474 /* padlock_prompt.png */; };
+		FCD30FC918FDBBB7003BD188 /* SignUpStepsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1025,6 +1026,8 @@
 		B6F7FEBE18D77E1500ECC4A2 /* NSData+TSKeyVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+TSKeyVersion.h"; path = "TextSecureiOS/Utility/NSData+TSKeyVersion.h"; sourceTree = "<group>"; };
 		B6F7FEBF18D77E1500ECC4A2 /* NSData+TSKeyVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+TSKeyVersion.m"; path = "TextSecureiOS/Utility/NSData+TSKeyVersion.m"; sourceTree = "<group>"; };
 		F8694B5D18C5268500A44474 /* padlock_prompt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = padlock_prompt.png; path = TextSecureiOSAssets/padlock_prompt.png; sourceTree = "<group>"; };
+		FCD30FC718FDBBB7003BD188 /* SignUpStepsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignUpStepsViewController.h; path = ViewControllers/SignUpStepsViewController.h; sourceTree = "<group>"; };
+		FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignUpStepsViewController.m; path = ViewControllers/SignUpStepsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1901,6 +1904,8 @@
 		B63A72131808B87700C353F2 /* Sign up */ = {
 			isa = PBXGroup;
 			children = (
+				FCD30FC718FDBBB7003BD188 /* SignUpStepsViewController.h */,
+				FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */,
 				A5169CFF170FEA8D00A2CE9E /* VerificationViewController.h */,
 				A5169CFC170FEA8D00A2CE9E /* VerificationViewController.m */,
 				B63A72141808B8AF00C353F2 /* VerificationCodeViewController.h */,
@@ -2503,6 +2508,7 @@
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				6FCE040C18D427CE00C33B34 /* TSStartOverSegue.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
+				FCD30FC918FDBBB7003BD188 /* SignUpStepsViewController.m in Sources */,
 				8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */,
 				8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,

@@ -69,12 +69,12 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     
     self.navigationController.navigationBarHidden = NO;
     
-//    if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
-//        [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
-//        
-//    } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
+    if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
+        [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
+        
+    } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
-//    }
+    }
 }
 
 - (IBAction)composeMessage {
