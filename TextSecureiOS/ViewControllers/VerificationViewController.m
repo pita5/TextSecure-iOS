@@ -41,7 +41,6 @@
 
     self.nextButton.enabled = NO;
     self.navigationController.navigationBarHidden = YES;
-    self.navigationItem.title = @"Enter your phone number";
     
     [self setLocaleCountry];
 
@@ -143,7 +142,6 @@
         [TSKeyManager generateNewAccountAuthenticationToken];
         [TSKeyManager generateNewSignalingKeyToken];
         
-//        [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
         [self.stepsController showNextStep];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

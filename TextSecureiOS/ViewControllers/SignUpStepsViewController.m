@@ -15,11 +15,12 @@
 @implementation SignUpStepsViewController
 
 - (NSArray *)stepViewControllers {
+    [self.stepsBar setHideCancelButton:YES];
     VerificationViewController *firstStep = [self.storyboard instantiateViewControllerWithIdentifier:@"VerificationViewController"];
-    firstStep.step.title = @"Number";
+    firstStep.step.title = @"Phone Number";
     
     VerificationCodeViewController *secondStep = [self.storyboard instantiateViewControllerWithIdentifier:@"VerificationCodeViewController"];
-    secondStep.step.title = @"Code";
+    secondStep.step.title = @"Verification Code";
 
     TSSetMasterPasswordViewController *thirdStep = [self.storyboard instantiateViewControllerWithIdentifier:@"TSSetMasterPasswordViewController"];
     thirdStep.step.title = @"Password";

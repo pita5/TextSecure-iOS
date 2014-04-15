@@ -88,7 +88,6 @@
                 [TSKeyManager storeSignalingKeyToken:signalingKey];
                 [TSKeyManager storeAuthenticationToken:authToken];
 
-//                [self performSegueWithIdentifier:@"setMasterPassword" sender:self];
                 [self.stepsController showNextStep];
 
                 
