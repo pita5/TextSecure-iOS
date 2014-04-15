@@ -44,6 +44,7 @@
     
     [self setLocaleCountry];
 
+
     // Hold off on triggering the keyboard on a small screen because it'll scroll the text up.
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
 
@@ -105,7 +106,7 @@
 
 -(void)setLocaleCountry{
     DLog(@"Setting Locale to : %@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]);
-    
+
     self.countryCodeInput.text = [NSLocale currentCountryPhonePrefix];
     [self updateCountryCode:nil];
     self.userSelectedCountry = FALSE;
@@ -151,7 +152,7 @@
 #pragma mark Formatted Number String processing
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-    
+
     if ([textField isEqual:self.countryCodeInput]) {
         if (self.countryCodeInput.text.length > 1) {
             self.preservedCountryCodeText = self.countryCodeInput.text;
