@@ -60,6 +60,7 @@
 - (void) viewDidAppear:(BOOL)animated{
     // If user comes back to this page, make him re-enter all data.
     [TSKeyManager removeAllKeychainItems];
+    self.navigationController.navigationBarHidden = YES;
 }
 
 #pragma mark keyboard notifications
