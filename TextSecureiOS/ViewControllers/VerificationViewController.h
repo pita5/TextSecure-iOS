@@ -20,7 +20,9 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *explanationText;
 @property (nonatomic, retain) NBAsYouTypeFormatter *numberFormatter;
+@property (strong, nonatomic) IBOutlet UIButton *countryButton;
 
+@property (strong, nonatomic) IBOutlet UIButton *sendVerificationButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *nextButton;
 @property (strong, nonatomic) IBOutlet UIView *underlineNumberView;
 @property (strong, nonatomic) IBOutlet UIView *underlineCountryCodeView;

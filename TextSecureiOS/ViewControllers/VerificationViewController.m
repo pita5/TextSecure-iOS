@@ -75,6 +75,13 @@
     
     [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
         self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height - kbSize.height);
+        [self.explanationText setHidden:YES];
+        [self.countryName setFrame:CGRectMake(self.countryName.frame.origin.x, self.countryName.frame.origin.y-30, self.countryName.frame.size.width, self.countryName.frame.size.height)];
+        [self.countryButton setFrame:CGRectMake(self.countryButton.frame.origin.x, self.countryButton.frame.origin.y-30, self.countryButton.frame.size.width, self.countryButton.frame.size.height)];
+        [self.sendVerificationButton setFrame:CGRectMake(self.sendVerificationButton.frame.origin.x, self.sendVerificationButton.frame.origin.y-30, self.sendVerificationButton.frame.size.width, self.sendVerificationButton.frame.size.height)];
+        [self.underlineCountryCodeView setFrame:CGRectMake(self.underlineCountryCodeView.frame.origin.x, self.underlineCountryCodeView.frame.origin.y-10, self.underlineCountryCodeView.frame.size.width, self.underlineCountryCodeView.frame.size.height)];
+        [self.underlineNumberView setFrame:CGRectMake(self.underlineNumberView.frame.origin.x, self.underlineNumberView.frame.origin.y-10, self.underlineNumberView.frame.size.width, self.underlineNumberView.frame.size.height)];
+        
     } completion:nil];
 }
 
@@ -85,6 +92,12 @@
     self.scrollView.scrollIndicatorInsets = contentInsets;
     [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
         self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
+        [self.explanationText setHidden:NO];
+        [self.countryName setFrame:CGRectMake(self.countryName.frame.origin.x, self.countryName.frame.origin.y+30, self.countryName.frame.size.width, self.countryName.frame.size.height)];
+        [self.countryButton setFrame:CGRectMake(self.countryButton.frame.origin.x, self.countryButton.frame.origin.y+30, self.countryButton.frame.size.width, self.countryButton.frame.size.height)];
+        [self.sendVerificationButton setFrame:CGRectMake(self.sendVerificationButton.frame.origin.x, self.sendVerificationButton.frame.origin.y+30, self.sendVerificationButton.frame.size.width, self.sendVerificationButton.frame.size.height)];
+        [self.underlineCountryCodeView setFrame:CGRectMake(self.underlineCountryCodeView.frame.origin.x, self.underlineCountryCodeView.frame.origin.y+10, self.underlineCountryCodeView.frame.size.width, self.underlineCountryCodeView.frame.size.height)];
+        [self.underlineNumberView setFrame:CGRectMake(self.underlineNumberView.frame.origin.x, self.underlineNumberView.frame.origin.y+10, self.underlineNumberView.frame.size.width, self.underlineNumberView.frame.size.height)];
     } completion:nil];
 }
 

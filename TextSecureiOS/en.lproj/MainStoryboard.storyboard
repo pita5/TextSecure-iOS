@@ -491,11 +491,13 @@
                     </scrollView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
+                        <outlet property="countryButton" destination="v2t-Fa-Ycx" id="s8W-e4-YKD"/>
                         <outlet property="countryCodeInput" destination="Xkd-FN-dW2" id="7oj-PC-7Y2"/>
                         <outlet property="countryName" destination="ZIT-Cx-8zb" id="cyw-UL-acV"/>
                         <outlet property="explanationText" destination="m8n-0d-1hR" id="BIu-0X-oxP"/>
                         <outlet property="phoneNumber" destination="7sJ-01-Nbg" id="YxP-CM-eCq"/>
                         <outlet property="scrollView" destination="qKi-WS-gmV" id="soL-5d-Rby"/>
+                        <outlet property="sendVerificationButton" destination="OOi-TL-kXi" id="LiC-2l-reF"/>
                         <outlet property="underlineCountryCodeView" destination="CD8-71-6ls" id="SMa-U6-vnA"/>
                         <outlet property="underlineNumberView" destination="v70-0v-bTk" id="JgJ-hd-XUE"/>
                     </connections>
