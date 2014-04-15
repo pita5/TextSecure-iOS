@@ -40,6 +40,7 @@
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
 
     self.nextButton.enabled = NO;
+    self.sendVerificationButton.enabled = NO;
     self.navigationController.navigationBarHidden = YES;
     
     [self setLocaleCountry];
@@ -147,6 +148,7 @@
 
 -(IBAction)sendVerification:(id)sender {
     self.nextButton.enabled = NO;
+    self.sendVerificationButton.enabled = NO;
 
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
@@ -251,12 +253,12 @@
         NBPhoneNumber *number = [[NBPhoneNumberUtil sharedInstance] parse:[self.countryCodeInput.text stringByAppendingString:self.phoneNumber.text] defaultRegion:[NSLocale localizedCodeNameForPhonePrefix:self.countryCodeInput.text] error:&error];
         
         if (error == nil && [[NBPhoneNumberUtil sharedInstance] isValidNumber:number]) {
-            self.nextButton.enabled = TRUE;
+            self.sendVerificationButton.enabled = TRUE;
             self.underlineNumberView.backgroundColor = [UIColor TSValidColor];
             self.underlineCountryCodeView.backgroundColor = [UIColor TSValidColor];
 
         } else{
-            self.nextButton.enabled = FALSE;
+            self.sendVerificationButton.enabled = FALSE;
             self.underlineNumberView.backgroundColor = [UIColor TSBlueBarColorWithAlpha];
             self.underlineCountryCodeView.backgroundColor = [UIColor TSBlueBarColorWithAlpha];
         }
