@@ -57,12 +57,12 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField == self.verificationCode_part1 && ![string isEqualToString:@""] && range.location == 2 && string.length == 1) {
-        self.underlineView1.backgroundColor = [UIColor colorWithRed:105.f/255.f green:206.f/255.f blue:38.f/255.f alpha:0.7];
+        self.underlineView1.backgroundColor = [UIColor TSValidColor];
         [self.verificationCode_part2 becomeFirstResponder];
         self.verificationCode_part1.text = [self.verificationCode_part1.text stringByAppendingString:string];
         return NO;
     } else if (textField == self.verificationCode_part2 && ![string isEqualToString:@""] && range.location == 2 && string.length == 1){
-        self.underlineView2.backgroundColor = [UIColor colorWithRed:105.f/255.f green:206.f/255.f blue:38.f/255.f alpha:0.7];
+        self.underlineView2.backgroundColor = [UIColor TSValidColor];
         self.verificationCode_part2.text = [self.verificationCode_part2.text stringByAppendingString:string];
         [self.verificationCode_part2 resignFirstResponder];
         return NO;

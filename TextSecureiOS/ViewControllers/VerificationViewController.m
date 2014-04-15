@@ -252,13 +252,13 @@
         
         if (error == nil && [[NBPhoneNumberUtil sharedInstance] isValidNumber:number]) {
             self.nextButton.enabled = TRUE;
-            self.underlineNumberView.backgroundColor = [UIColor colorWithRed:105.f/255.f green:206.f/255.f blue:38.f/255.f alpha:0.7];
-            self.underlineCountryCodeView.backgroundColor = [UIColor colorWithRed:105.f/255.f green:206.f/255.f blue:38.f/255.f alpha:0.7];
+            self.underlineNumberView.backgroundColor = [UIColor TSValidColor];
+            self.underlineCountryCodeView.backgroundColor = [UIColor TSValidColor];
 
         } else{
             self.nextButton.enabled = FALSE;
-            self.underlineNumberView.backgroundColor = [UIColor colorWithRed:43.f/255.f green:166.f/255.f blue:224.f/255.f alpha:0.7];
-            self.underlineCountryCodeView.backgroundColor = [UIColor colorWithRed:43.f/255.f green:166.f/255.f blue:224.f/255.f alpha:0.7];
+            self.underlineNumberView.backgroundColor = [UIColor TSBlueBarColorWithAlpha];
+            self.underlineCountryCodeView.backgroundColor = [UIColor TSBlueBarColorWithAlpha];
         }
         
         return NO;
