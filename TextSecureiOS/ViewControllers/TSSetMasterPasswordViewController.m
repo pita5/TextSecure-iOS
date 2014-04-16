@@ -62,7 +62,8 @@
         self.instruction.text = reenterPassword;
         self.pass.text = @"";
 		self.nextButton.enabled = NO;
-        self.passwordStrengthLabel.text = @"Invalid Password";
+        self.passwordStrengthLabel.text = @"";
+        self.entropyLabel.text = @"Entropy : 0 bits";
         self.passwordStrengthMeterView.progress = 0.f;
         self.passwordStrengthMeterView.tintColor = [UIColor TSInvalidColor];
 
@@ -125,7 +126,6 @@
 #warning Add error handling if not able to send the token
         DLog(@"failure %ld, %@",operation.response.statusCode,operation.response.description);
     }];
-//    [self.stepsController showNextStep];
 
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
@@ -139,7 +139,8 @@
 
 	// If they entered a character or pasted then we're ok
 	// TODO: enforce a minimum password length in here.
-	if (newPass.length > 0) {
+    //UPDATE TODO : Random value of 4
+	if (newPass.length > 3) {
         self.nextButton.enabled = YES;
 	} else {
         self.nextButton.enabled = NO;
@@ -160,7 +161,7 @@
     
     if ([password length] == 0) {
         self.passwordStrengthMeterView.progress = 0.0f;
-        self.passwordStrengthLabel.text = @"Invalid password";
+        self.passwordStrengthLabel.text = @"Invalid Password";
         self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : 0 bits"];
     } else {
         NJOPasswordStrength strength = [NJOPasswordStrengthEvaluator strengthOfPassword:password];

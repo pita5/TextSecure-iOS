@@ -37,8 +37,6 @@
     self.smsToNumberLabel.text = [TSKeyManager getUsernameToken];
     
     self.navigationController.navigationBarHidden = YES;
-
-    
 }
 
 - (void) viewDidAppear:(BOOL)animated {
