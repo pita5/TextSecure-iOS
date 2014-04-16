@@ -63,7 +63,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
     [super viewDidAppear:animated];
     self.conversations = [TSMessagesDatabase conversations];
     [self.tableView reloadData];

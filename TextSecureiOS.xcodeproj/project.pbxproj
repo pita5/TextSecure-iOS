@@ -468,8 +468,6 @@
 		FCD30FC918FDBBB7003BD188 /* SignUpStepsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */; };
 		FCD30FD018FDEA75003BD188 /* UIColor+TextSecure.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD30FCF18FDEA75003BD188 /* UIColor+TextSecure.m */; };
 		FCD34ED118FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD34ED018FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m */; };
-		FCD34ED418FF0E72004DABF6 /* pad_top.png in Resources */ = {isa = PBXBuildFile; fileRef = FCD34ED218FF0E72004DABF6 /* pad_top.png */; };
-		FCD34ED518FF0E72004DABF6 /* pad_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = FCD34ED318FF0E72004DABF6 /* pad_bottom.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1036,8 +1034,6 @@
 		FCD30FCF18FDEA75003BD188 /* UIColor+TextSecure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+TextSecure.m"; path = "TextSecureiOS/UIColor+TextSecure.m"; sourceTree = "<group>"; };
 		FCD34ECF18FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
 		FCD34ED018FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJOPasswordStrengthEvaluator.m; sourceTree = "<group>"; };
-		FCD34ED218FF0E72004DABF6 /* pad_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pad_top.png; sourceTree = "<group>"; };
-		FCD34ED318FF0E72004DABF6 /* pad_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pad_bottom.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1265,8 +1261,6 @@
 		A53718FC16FFB6E600C6FCCF /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				FCD34ED218FF0E72004DABF6 /* pad_top.png */,
-				FCD34ED318FF0E72004DABF6 /* pad_bottom.png */,
 				A5195B9518CBC00100AFEE04 /* apple_logo_animated.gif */,
 				A5195B8D18CBBC0300AFEE04 /* contact_mask.png */,
 				A5195B8E18CBBC0300AFEE04 /* contact_mask@2x.png */,
@@ -2147,7 +2141,6 @@
 				A537299417011A5200C6FCCF /* de.png in Resources */,
 				A537299517011A5200C6FCCF /* de@2x.png in Resources */,
 				A537299617011A5200C6FCCF /* dj.png in Resources */,
-				FCD34ED418FF0E72004DABF6 /* pad_top.png in Resources */,
 				A537299717011A5200C6FCCF /* dm.png in Resources */,
 				A537299817011A5200C6FCCF /* do.png in Resources */,
 				A537299917011A5200C6FCCF /* dz.png in Resources */,
@@ -2268,7 +2261,6 @@
 				A5372A0617011A5200C6FCCF /* mm.png in Resources */,
 				A5372A0717011A5200C6FCCF /* mn.png in Resources */,
 				A5372A0817011A5200C6FCCF /* mo.png in Resources */,
-				FCD34ED518FF0E72004DABF6 /* pad_bottom.png in Resources */,
 				A5372A0917011A5200C6FCCF /* mp.png in Resources */,
 				A5372A0A17011A5200C6FCCF /* mq.png in Resources */,
 				A5372A0B17011A5300C6FCCF /* mr.png in Resources */,
