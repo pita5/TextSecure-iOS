@@ -87,13 +87,13 @@
                 
                 [TSKeyManager storeSignalingKeyToken:signalingKey];
                 [TSKeyManager storeAuthenticationToken:authToken];
-
-                [self.stepsController showNextStep];
-
                 
                 // Perform the APN registration
                 
                 [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+                _verificationCode_part1.text=@"";
+                _verificationCode_part2.text=@"";
+                [self.stepsController showNextStep];
                 
                 break;
                 
