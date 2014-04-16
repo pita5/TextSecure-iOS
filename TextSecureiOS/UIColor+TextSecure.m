@@ -32,5 +32,16 @@
     //Alpha used in Storyboard for bars is 0.7
     return [UIColor colorWithRed:43.f/255.f green:166.f/255.f blue:224.f/255.f alpha:0.7];
 }
-
++(UIColor*)TSInvalidColor
+{
+    return [UIColor colorWithRed:183.f/255.f green:12.f/255.f blue:32.f/255.f alpha:1];
+}
++(UIColor*)TSOrangeWarningColor
+{
+    return [UIColor colorWithRed:255.f/255.f green:190.f/255.f blue:18.f/255.f alpha:1];
+}
++(UIColor*)TSYellowWarningColor
+{
+    return [UIColor colorWithRed:247.f/255.f green:229.f/255.f blue:0.f/255.f alpha:1];
+}
 @end
