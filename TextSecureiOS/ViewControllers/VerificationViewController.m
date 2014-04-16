@@ -38,17 +38,17 @@
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
-
+    
     self.nextButton.enabled = NO;
     self.sendVerificationButton.enabled = NO;
     self.navigationController.navigationBarHidden = YES;
     
     [self setLocaleCountry];
-
-
+    
+    
     // Hold off on triggering the keyboard on a small screen because it'll scroll the text up.
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-
+    
     if (screenSize.height >= 568) {
         [self.phoneNumber becomeFirstResponder];
     } else {
@@ -121,7 +121,7 @@
 
 -(void)setLocaleCountry{
     DLog(@"Setting Locale to : %@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]);
-
+    
     self.countryCodeInput.text = [NSLocale currentCountryPhonePrefix];
     [self updateCountryCode:nil];
     self.userSelectedCountry = FALSE;
@@ -149,7 +149,7 @@
 -(IBAction)sendVerification:(id)sender {
     self.nextButton.enabled = NO;
     self.sendVerificationButton.enabled = NO;
-
+    
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
@@ -168,7 +168,7 @@
 #pragma mark Formatted Number String processing
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-
+    
     if ([textField isEqual:self.countryCodeInput]) {
         if (self.countryCodeInput.text.length > 1) {
             self.preservedCountryCodeText = self.countryCodeInput.text;
@@ -198,14 +198,10 @@
 - (BOOL)textField:(UITextView *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
 	
     if ([textField isEqual:self.countryCodeInput]) {
-        NSUInteger newLength = (textField.text.length - range.length) + string.length;
-        if(newLength < 4) {
+        if(![self isValidCountryPrefix:[textField.text stringByReplacingCharactersInRange:range withString:string]]) {
             return YES;
         } else {
-            NSUInteger emptySpace = 4 - (textField.text.length - range.length);
-            textField.text = [[[textField.text substringToIndex:range.location]
-                               stringByAppendingString:[string substringToIndex:emptySpace]]
-                              stringByAppendingString:[textField.text substringFromIndex:(range.location + range.length)]];
+            textField.text = [textField.text stringByReplacingCharactersInRange:range withString:string];
             [self.phoneNumber becomeFirstResponder];
             [self updateCountryCode:nil];
             return NO;
@@ -222,7 +218,7 @@
         
         // The last added character might not be at the end of the string
         
-        int loopLength = nonFormattedstring.length+1;
+        long loopLength = nonFormattedstring.length+1;
         
         if ([string isEqualToString:@""]) {
             loopLength = nonFormattedstring.length;
@@ -256,7 +252,7 @@
             self.sendVerificationButton.enabled = TRUE;
             self.underlineNumberView.backgroundColor = [UIColor TSValidColor];
             self.underlineCountryCodeView.backgroundColor = [UIColor TSValidColor];
-
+            
         } else{
             self.sendVerificationButton.enabled = FALSE;
             self.underlineNumberView.backgroundColor = [UIColor TSBlueBarColorWithAlpha];
@@ -303,7 +299,7 @@
     return [formattedText substringWithRange:NSMakeRange(lastCharLoc+1, formattedText.length-(lastCharLoc+1))];
 }
 
--(int) location:(int)loc ofCleanedStringOf:(NSString*)string {
+-(int) location:(long)loc ofCleanedStringOf:(NSString*)string {
     NSString *cleanedString = [string removeAllFormattingButNumbers];
     
     NSMutableArray *prefix = [NSMutableArray array];
@@ -335,6 +331,22 @@
         self.countryCodeInput.text = self.preservedCountryCodeText;
         self.preservedCountryCodeText = nil;
         [self updateCountryCode:nil];
+    }
+}
+
+#pragma mark Verify country code
+
+-(BOOL)isValidCountryPrefix:(NSString*)diallingCode{
+    if ([diallingCode hasPrefix:@"+"]) {
+        diallingCode = [diallingCode substringFromIndex:1];
+    }
+    NSString * plistPath = [[NSBundle mainBundle] pathForResource:@"DiallingCodes" ofType:@"plist"];
+    NSDictionary *diallingCodesDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    
+    if ([[diallingCodesDictionary allKeysForObject:diallingCode] count] > 0) {
+        return YES;
+    } else{
+        return NO;
     }
 }
 
