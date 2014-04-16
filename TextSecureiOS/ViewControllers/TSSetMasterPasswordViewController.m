@@ -63,6 +63,7 @@
         self.pass.text = @"";
 		self.nextButton.enabled = NO;
         self.passwordStrengthLabel.text = @"";
+        self.pass.keyboardType = UIKeyboardTypeAlphabet;
         self.entropyLabel.text = @"Entropy : 0 bits";
         self.passwordStrengthMeterView.progress = 0.f;
         self.passwordStrengthMeterView.tintColor = [UIColor TSInvalidColor];
