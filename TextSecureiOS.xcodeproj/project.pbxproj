@@ -438,7 +438,6 @@
 		B67E30F918CE1AA8008502F5 /* TSGroupSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B67E30F818CE1AA8008502F5 /* TSGroupSetupViewController.m */; };
 		B684346618D1FF2B007AEDF6 /* TSSendingChain.m in Sources */ = {isa = PBXBuildFile; fileRef = B684346518D1FF2B007AEDF6 /* TSSendingChain.m */; };
 		B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */; };
-		B697A03818FDFEE90094FCBF /* DiallingCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = B697A03718FDFEE90094FCBF /* DiallingCodes.plist */; };
 		B6B478E61809E7F5005DDE12 /* TSContactsIntersectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B478E51809E7F5005DDE12 /* TSContactsIntersectionRequest.m */; };
 		B6C5AE5817C212330022EA53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C5AE5717C212330022EA53 /* Default-568h@2x.png */; };
 		B6C5FA7418CE344700ECC200 /* TSConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B6C5FA7318CE344700ECC200 /* TSConversation.m */; };
@@ -986,7 +985,6 @@
 		B68A2291180AC32C00D93C16 /* TSRegisterForPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterForPushRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterForPushRequest.m; sourceTree = "<group>"; };
 		B68BFDF0180987C6005CC817 /* TSSetMasterPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSetMasterPasswordViewController.h; path = ViewControllers/TSSetMasterPasswordViewController.h; sourceTree = "<group>"; };
 		B68BFDF1180987C6005CC817 /* TSSetMasterPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSetMasterPasswordViewController.m; path = ViewControllers/TSSetMasterPasswordViewController.m; sourceTree = "<group>"; };
-		B697A03718FDFEE90094FCBF /* DiallingCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = DiallingCodes.plist; path = Utility/DiallingCodes.plist; sourceTree = "<group>"; };
 		B6B478E41809E7F5005DDE12 /* TSContactsIntersectionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactsIntersectionRequest.h; path = TextSecureiOS/Networking/Requests/TSContactsIntersectionRequest.h; sourceTree = "<group>"; };
 		B6B478E51809E7F5005DDE12 /* TSContactsIntersectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactsIntersectionRequest.m; path = TextSecureiOS/Networking/Requests/TSContactsIntersectionRequest.m; sourceTree = "<group>"; };
 		B6C5AE5717C212330022EA53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1248,7 +1246,6 @@
 		A53718BC16FF95DF00C6FCCF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B697A03718FDFEE90094FCBF /* DiallingCodes.plist */,
 				B6F10B1B17EF61FE00723719 /* CountryCodes.plist */,
 				A5169D39170FEDC600A2CE9E /* main.m */,
 				A5169D3A170FEDC600A2CE9E /* TextSecureiOS-Info.plist */,
@@ -2210,7 +2207,6 @@
 				A53729DA17011A5200C6FCCF /* jv.png in Resources */,
 				A53729DB17011A5200C6FCCF /* jv@2x.png in Resources */,
 				A53729DC17011A5200C6FCCF /* ka.png in Resources */,
-				B697A03818FDFEE90094FCBF /* DiallingCodes.plist in Resources */,
 				A53729DD17011A5200C6FCCF /* ka@2x.png in Resources */,
 				A53729DE17011A5200C6FCCF /* ke.png in Resources */,
 				A53729DF17011A5200C6FCCF /* kg.png in Resources */,

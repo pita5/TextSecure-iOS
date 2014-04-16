@@ -90,7 +90,6 @@
 
                 [self.stepsController showNextStep];
 
-                
                 // Perform the APN registration
                 
                 [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
@@ -113,19 +112,16 @@
     }];
 }
 
-
-
 -(IBAction)doRequestPhoneVerification:(id)sender {
-
+    
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:[TSKeyManager getUsernameToken] transport:kPhoneNumberVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Verification call" message:@"A verification call was requested." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alertView show];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
     }];
-
-  
 }
-
-
 
 @end

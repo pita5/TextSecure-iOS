@@ -337,13 +337,7 @@
 #pragma mark Verify country code
 
 -(BOOL)isValidCountryPrefix:(NSString*)diallingCode{
-    if ([diallingCode hasPrefix:@"+"]) {
-        diallingCode = [diallingCode substringFromIndex:1];
-    }
-    NSString * plistPath = [[NSBundle mainBundle] pathForResource:@"DiallingCodes" ofType:@"plist"];
-    NSDictionary *diallingCodesDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
-    
-    if ([[diallingCodesDictionary allKeysForObject:diallingCode] count] > 0) {
+    if (![[NSLocale localizedCodeNameForPhonePrefix:[diallingCode removeAllFormattingButNumbers]] isEqualToString:@"ZZ"]) {
         return YES;
     } else{
         return NO;
