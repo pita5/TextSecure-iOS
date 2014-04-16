@@ -32,6 +32,7 @@
     
     self.verificationCode_part1.delegate = self;
     self.verificationCode_part2.delegate = self;
+    self.sendAuthenticatedRequest.enabled=NO;
     
     self.smsToNumberLabel.text = [TSKeyManager getUsernameToken];
     
@@ -42,7 +43,9 @@
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    self.verificationCode_part1.text=@"";
+    self.verificationCode_part2.text=@"";
+    self.sendAuthenticatedRequest.enabled = NO;
     [self.verificationCode_part1 becomeFirstResponder];
 }
 
@@ -65,9 +68,10 @@
         self.underlineView2.backgroundColor = [UIColor TSValidColor];
         self.verificationCode_part2.text = [self.verificationCode_part2.text stringByAppendingString:string];
         [self.verificationCode_part2 resignFirstResponder];
+        self.sendAuthenticatedRequest.enabled = YES;
         return NO;
     }
-    
+    self.sendAuthenticatedRequest.enabled = NO;
     return YES; 
 }
 

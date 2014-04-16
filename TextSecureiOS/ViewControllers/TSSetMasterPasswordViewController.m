@@ -52,7 +52,6 @@
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
     [self.pass becomeFirstResponder];
 }
 
@@ -161,12 +160,13 @@
     
     if ([password length] == 0) {
         self.passwordStrengthMeterView.progress = 0.0f;
-        self.passwordStrengthLabel.text = nil;
+        self.passwordStrengthLabel.text = @"Invalid password";
+        self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : 0 bits"];
     } else {
         NJOPasswordStrength strength = [NJOPasswordStrengthEvaluator strengthOfPassword:password];
-        
+        self.passwordStrengthLabel.text = [NJOPasswordStrengthEvaluator localizedStringForPasswordStrength:strength];
+        self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : %.2f bits", NJOEntropyForString(password)];
         if ([self.lenientValidator validatePassword:password failingRules:nil]) {
-            self.passwordStrengthLabel.text = [NJOPasswordStrengthEvaluator localizedStringForPasswordStrength:strength];
             switch (strength) {
                 case NJOVeryWeakPasswordStrength:
                     self.passwordStrengthMeterView.progress = 0.1f;
