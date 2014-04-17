@@ -48,7 +48,7 @@
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
     NBPhoneNumber *phone = [phoneUtil parse:number defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
-    return [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode, phone.nationalNumber];
+    return [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode,(unsigned long long) phone.nationalNumber];
 }
 
 - (NSNumber*) getContactIDForNumber:(NSString*) phoneNumber{

@@ -84,7 +84,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TSContactCell" editingAccessoryType="checkmark" id="PQB-5D-1De">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PQB-5D-1De" id="tS4-a2-ecF">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -112,7 +112,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dxG-aw-JWB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1549" y="-6281"/>
+            <point key="canvasLocation" x="-2495" y="-6281"/>
         </scene>
         <!--Set Master Password View Controller-->
         <scene sceneID="lPb-1c-Xuz">
@@ -214,7 +214,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Enq-cN-IiT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2106" y="-5651"/>
+            <point key="canvasLocation" x="-1204" y="-5519"/>
         </scene>
         <!--Password Unlock View Controller-->
         <scene sceneID="Msh-YP-AOi">
@@ -254,7 +254,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hae-rU-yQO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2106" y="-4987"/>
+            <point key="canvasLocation" x="-2958" y="-5905"/>
         </scene>
         <!--Country View Controller-->
         <scene sceneID="H55-dB-SeZ">
@@ -594,7 +594,7 @@
                                 <color key="backgroundColor" red="0.16862745100000001" green="0.65098039220000004" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sgl-AQ-Zyy">
-                                <rect key="frame" x="32" y="83" width="50" height="50"/>
+                                <rect key="frame" x="32" y="80" width="47" height="47"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="Default_person.png"/>
@@ -603,7 +603,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eiA-Ja-bng">
-                                <rect key="frame" x="32" y="83" width="50" height="50"/>
+                                <rect key="frame" x="32" y="80" width="47" height="47"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" image="contact_mask.png"/>
@@ -648,7 +648,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T21-Nf-Nr0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1021" y="-6281"/>
+            <point key="canvasLocation" x="-1737" y="-6281"/>
         </scene>
     </scenes>
     <resources>
@@ -663,7 +663,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="P7Y-NC-M85"/>
-        <segue reference="H42-Az-Klt"/>
+        <segue reference="IPq-is-JQN"/>
+        <segue reference="q88-kz-SKF"/>
     </inferredMetricsTieBreakers>
 </document>

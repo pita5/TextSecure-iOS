@@ -119,13 +119,13 @@
                 break;
                 
             default:
-                DLog(@"Issue registering prekeys response %ld, %@",operation.response.statusCode,operation.response.description);
+                DLog(@"Issue registering prekeys response %ld, %@",(long)operation.response.statusCode,operation.response.description);
 #warning Add error handling if not able to send the prekeys
                 break;
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token
-        DLog(@"failure %ld, %@",operation.response.statusCode,operation.response.description);
+        DLog(@"failure %ld, %@",(long)operation.response.statusCode,operation.response.description);
     }];
 
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
