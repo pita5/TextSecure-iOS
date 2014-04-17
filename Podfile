@@ -5,7 +5,7 @@ link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 pod 'RNCryptor',                 '~> 2.1'
 pod 'FMDB',						          '~> 2.1'
 pod 'HockeySDK',                 '~> 3.5.3'
-pod 'libPhoneNumber-iOS',        '~> 0.7.1'
+pod 'libPhoneNumber-iOS',        '~> 0.7.2'
 pod 'AFNetworking',              '~> 2.2.2'
 pod 'PonyDebugger',              '~> 0.3.0'
 pod 'SQLCipher', 				        '~> 3.0.1'
