@@ -119,13 +119,13 @@
                 break;
                 
             default:
-                DLog(@"Issue registering prekeys response %ld, %@",(long)operation.response.statusCode,operation.response.description);
+                DLog(@"Issue registering prekeys response %zd, %@",operation.response.statusCode,operation.response.description);
 #warning Add error handling if not able to send the prekeys
                 break;
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token
-        DLog(@"failure %ld, %@",(long)operation.response.statusCode,operation.response.description);
+        DLog(@"failure %zd, %@",operation.response.statusCode,operation.response.description);
     }];
 
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
@@ -162,7 +162,7 @@
     
     if ([password length] == 0) {
         self.passwordStrengthMeterView.progress = 0.0f;
-        self.passwordStrengthLabel.text = @"Invalid Password";
+        self.passwordStrengthLabel.text = NSLocalizedString(@"Invalid Password", nil) ;
         self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : 0 bits"];
     } else {
         NJOPasswordStrength strength = [NJOPasswordStrengthEvaluator strengthOfPassword:password];

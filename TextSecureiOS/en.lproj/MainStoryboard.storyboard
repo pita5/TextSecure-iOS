@@ -663,7 +663,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="H42-Az-Klt"/>
         <segue reference="IPq-is-JQN"/>
-        <segue reference="q88-kz-SKF"/>
     </inferredMetricsTieBreakers>
 </document>
