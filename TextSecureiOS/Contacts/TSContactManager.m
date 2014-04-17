@@ -46,9 +46,9 @@
 
 + (NSString*) cleanPhoneNumber:(NSString*)number{
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    
+
     NBPhoneNumber *phone = [phoneUtil parse:number defaultRegion:[[NSLocale currentLocale]objectForKey:NSLocaleCountryCode] error:nil];
-    return [NSString stringWithFormat:@"+%i%llu", (unsigned)phone.countryCode,(unsigned long long) phone.nationalNumber];
+    return [NSString stringWithFormat:@"+%@%@", phone.countryCode,phone.nationalNumber];
 }
 
 - (NSNumber*) getContactIDForNumber:(NSString*) phoneNumber{
@@ -135,7 +135,6 @@
             for(CFIndex j = 0; j < ABMultiValueGetCount(phones); j++)
             {
                 NSString *phoneNumber = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(phones, j);
-                
                 NSString *cleanedNumber = [self cleanPhoneNumber:phoneNumber];
                 NSString *hashedPhoneNumber = [Cryptography truncatedSHA1Base64EncodedWithoutPadding:cleanedNumber];
                 
@@ -151,7 +150,6 @@
         }
         
         // Send hashes to server
-        
         [[TSNetworkManager sharedManager]queueAuthenticatedRequest:[[TSContactsIntersectionRequest alloc] initWithHashesArray:[abIdLookup allKeys]] success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSArray *contactsHashes = [responseObject objectForKey:@"contacts"];
             
