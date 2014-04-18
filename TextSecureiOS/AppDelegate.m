@@ -159,7 +159,10 @@
     [self updateBasedOnUserSettings];
 }
 
-
+- (void)applicationWillTerminate:(UIApplication *)application {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:TSDatabaseDidUnlockNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kIASKAppSettingChanged object:nil];
+}
 
 #pragma mark settings
 -(void) setDefaultUserSettings {

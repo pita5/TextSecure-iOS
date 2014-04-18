@@ -58,10 +58,16 @@
     }
 }
 
-- (void) viewDidAppear:(BOOL)animated{
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     // If user comes back to this page, make him re-enter all data.
     [TSKeyManager removeAllKeychainItems];
     self.navigationController.navigationBarHidden = YES;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark keyboard notifications

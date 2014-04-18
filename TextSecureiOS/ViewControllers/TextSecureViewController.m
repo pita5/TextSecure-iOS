@@ -81,6 +81,9 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[TSContactPickerViewController alloc]initWithNibName:nil bundle:nil]] animated:YES completion:nil];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 #pragma mark - UITableViewDataSource methods
 
