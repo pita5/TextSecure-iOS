@@ -34,3 +34,15 @@ If you don't agree with us, you can use the [ClangFormat Xcode plugin](https://g
 Open Whisper Systems is currently [experimenting](https://whispersystems.org/blog/bithub/) with the funding privacy Free and Open Source software. Payments are opt-in for the `TextSecure-iOS` repo and can be enabled by adding `MONEYMONEY` in a commit message string. For example, this is the current Open WhisperSystems payout per commit, rendered dynamically as an image by the Open WhisperSystems BitHub instance:
 
 [![Bithub Payment Amount](https://bithub.herokuapp.com/v1/status/payment/commit)](https://whispersystems.org/blog/bithub/)
+
+## Contributors
+
+We would like to particularly thank the following contributors:
+
+- Dylan Bourgeois: Substantial UI/UX Improvements
+- Christine Corbett: Lead Developer
+- Alban Diquet: Bootstrapping of the crypto-pipeline
+- Frederic Jacobs: Lead Developer
+- Claudiu-Vlad Ursache: UI  contributions 
+
+TextSecure wouldn’t be possible without the many open-source projects we depend on. Big shoutout to the maintainers of all the [pods](https://github.com/WhisperSystems/TextSecure-iOS/blob/master/Podfile) we use!
