@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PasswordUnlockViewController : UIViewController <UITextFieldDelegate>
+@property (strong, nonatomic) IBOutlet UIView *pwUnderlineView;
+@property (strong, nonatomic) IBOutlet UIImageView *padView;
 
 @end

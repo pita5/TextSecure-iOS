@@ -44,7 +44,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [super viewDidLoad];
     self.title = @"Messages";
     self.navigationController.navigationBarHidden = NO;
-    
+
 #warning   // FETCH CONVERSATIONS WITH COMPLETION BLOCK
     
     UIEdgeInsets inset = UIEdgeInsetsMake(44, 0, 0, 0);

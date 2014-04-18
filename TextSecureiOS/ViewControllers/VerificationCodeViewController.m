@@ -32,17 +32,18 @@
     
     self.verificationCode_part1.delegate = self;
     self.verificationCode_part2.delegate = self;
+    self.sendAuthenticatedRequest.enabled=NO;
     
     self.smsToNumberLabel.text = [TSKeyManager getUsernameToken];
     
     self.navigationController.navigationBarHidden = YES;
-
-    
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    self.verificationCode_part1.text=@"";
+    self.verificationCode_part2.text=@"";
+    self.sendAuthenticatedRequest.enabled = NO;
     [self.verificationCode_part1 becomeFirstResponder];
 }
 
@@ -65,9 +66,10 @@
         self.underlineView2.backgroundColor = [UIColor TSValidColor];
         self.verificationCode_part2.text = [self.verificationCode_part2.text stringByAppendingString:string];
         [self.verificationCode_part2 resignFirstResponder];
+        self.sendAuthenticatedRequest.enabled = YES;
         return NO;
     }
-    
+    self.sendAuthenticatedRequest.enabled = NO;
     return YES; 
 }
 
@@ -87,18 +89,19 @@
                 
                 [TSKeyManager storeSignalingKeyToken:signalingKey];
                 [TSKeyManager storeAuthenticationToken:authToken];
-
-                [self.stepsController showNextStep];
-
+                
                 // Perform the APN registration
                 
                 [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+                _verificationCode_part1.text=@"";
+                _verificationCode_part2.text=@"";
+                [self.stepsController showNextStep];
                 
                 break;
                 
             default:
                 [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"An unknown error occured. Pleasy try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                DLog(@"Verification operation failed with response: %@ and response code : %li", responseObject, operation.response.statusCode);
+                DLog(@"Verification operation failed with response: %@ and response code : %li", responseObject, (long)operation.response.statusCode);
                 break;
         }
         

@@ -10,7 +10,7 @@
 #import "TSGroup.h"
 
 
-@interface TSGroupSetupViewController : UIViewController<UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextFieldDelegate>
+@interface TSGroupSetupViewController : UIViewController <UIImagePickerControllerDelegate,UIActionSheetDelegate,UITextFieldDelegate, UINavigationControllerDelegate>
 @property(nonatomic,strong) IBOutlet UITextField *groupName;
 @property(nonatomic,strong) IBOutlet UIButton *groupPhoto;
 @property(nonatomic,strong) IBOutlet UIBarButtonItem *nextButton;

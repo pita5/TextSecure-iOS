@@ -19,4 +19,12 @@
 +(UIColor*)TSBlueBarColor;
 //Light blue color for underlining text with alpha=0.7
 +(UIColor*)TSBlueBarColorWithAlpha;
+//Red invalid color
++(UIColor*)TSInvalidColor;
+//Orange warning color
++(UIColor*)TSOrangeWarningColor;
+//Yellow warning color
++(UIColor*)TSYellowWarningColor;
+
+
 @end

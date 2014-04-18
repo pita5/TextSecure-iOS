@@ -18,7 +18,8 @@ pod 'LBGIFImage',		            '~> 0.0.1'
 pod 'Emoticonizer',		          '~> 1.0.0'
 pod 'InAppSettingsKit',		      '~> 2.0.1'
 pod 'HKDFKit',                   '~> 0.0.1'
-pod "RMStepsController", "~> 1.0.0"
+pod 'RMStepsController',         '~> 1.0.0'
+
 
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 post_install do |lib_rep|
