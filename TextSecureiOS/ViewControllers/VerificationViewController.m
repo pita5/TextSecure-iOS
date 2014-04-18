@@ -58,12 +58,17 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBarHidden = YES;
+}
+
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     // If user comes back to this page, make him re-enter all data.
     [TSKeyManager removeAllKeychainItems];
-    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)dealloc {
