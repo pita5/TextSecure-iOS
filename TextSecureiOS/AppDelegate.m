@@ -24,6 +24,7 @@
 #import "TSStorageMasterKey.h"
 #import "IASKSettingsReader.h"
 #import "TSDeregisterAccountRequest.h"
+#import "UIColor+TextSecure.h"
 #define kChangePasswordAlertView 1
 #define kDeregisterAlertView 2
 
