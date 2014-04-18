@@ -41,8 +41,8 @@ We would like to particularly thank the following contributors:
 
 - Dylan Bourgeois: Substantial UI/UX Improvements
 - Christine Corbett: Lead Developer
-- Alban Diquet: Bootstrapping of the crypto-pipeline
+- Alban Diquet: Substantial contributions to the storage infrastructure
 - Frederic Jacobs: Lead Developer
-- Claudiu-Vlad Ursache: UI  contributions 
+- Claudiu-Vlad Ursache: UI contributions 
 
 TextSecure wouldn’t be possible without the many open-source projects we depend on. Big shoutout to the maintainers of all the [pods](https://github.com/WhisperSystems/TextSecure-iOS/blob/master/Podfile) we use!
