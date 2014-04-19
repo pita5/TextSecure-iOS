@@ -5,7 +5,7 @@ link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 pod 'RNCryptor',                 '~> 2.1'
 pod 'FMDB',						          '~> 2.1'
 pod 'HockeySDK',                 '~> 3.5.3'
-pod 'libPhoneNumber-iOS',        '~> 0.7.1'
+pod 'libPhoneNumber-iOS',        '~> 0.7.2'
 pod 'AFNetworking',              '~> 2.2.2'
 pod 'PonyDebugger',              '~> 0.3.0'
 pod 'SQLCipher', 				        '~> 3.0.1'
@@ -18,7 +18,8 @@ pod 'LBGIFImage',		            '~> 0.0.1'
 pod 'Emoticonizer',		          '~> 1.0.0'
 pod 'InAppSettingsKit',		      '~> 2.0.1'
 pod 'HKDFKit',                   '~> 0.0.1'
-pod "RMStepsController", "~> 1.0.0"
+pod 'RMStepsController',         '~> 1.0.0'
+
 
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 post_install do |lib_rep|

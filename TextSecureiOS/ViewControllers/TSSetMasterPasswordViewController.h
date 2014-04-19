@@ -17,6 +17,10 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *instruction;
 
+@property (strong, nonatomic) IBOutlet UILabel *entropyLabel;
+@property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
+@property (nonatomic, retain) IBOutlet UILabel *passwordStrengthLabel;
+
 -(IBAction)nextWasTapped:(id)sender;
 
 @end
