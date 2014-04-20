@@ -467,7 +467,6 @@
 		F8694B5E18C5268500A44474 /* padlock_prompt.png in Resources */ = {isa = PBXBuildFile; fileRef = F8694B5D18C5268500A44474 /* padlock_prompt.png */; };
 		FCD30FC918FDBBB7003BD188 /* SignUpStepsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */; };
 		FCD30FD018FDEA75003BD188 /* UIColor+TextSecure.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD30FCF18FDEA75003BD188 /* UIColor+TextSecure.m */; };
-		FCD34ED118FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD34ED018FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1032,8 +1031,6 @@
 		FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignUpStepsViewController.m; path = ViewControllers/SignUpStepsViewController.m; sourceTree = "<group>"; };
 		FCD30FCE18FDEA75003BD188 /* UIColor+TextSecure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+TextSecure.h"; path = "TextSecureiOS/UIColor+TextSecure.h"; sourceTree = "<group>"; };
 		FCD30FCF18FDEA75003BD188 /* UIColor+TextSecure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+TextSecure.m"; path = "TextSecureiOS/UIColor+TextSecure.m"; sourceTree = "<group>"; };
-		FCD34ECF18FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJOPasswordStrengthEvaluator.h; sourceTree = "<group>"; };
-		FCD34ED018FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJOPasswordStrengthEvaluator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1740,7 +1737,6 @@
 		A5F15AA317029C5300856385 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				FCD34ECE18FE77A6004DABF6 /* Password Strength */,
 				6FCE040718D427CE00C33B34 /* TSReplaceSegue.h */,
 				6FCE040818D427CE00C33B34 /* TSReplaceSegue.m */,
 				6FCE040918D427CE00C33B34 /* TSStartOverSegue.h */,
@@ -1955,16 +1951,6 @@
 			);
 			name = Categories;
 			path = ..;
-			sourceTree = "<group>";
-		};
-		FCD34ECE18FE77A6004DABF6 /* Password Strength */ = {
-			isa = PBXGroup;
-			children = (
-				FCD34ECF18FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.h */,
-				FCD34ED018FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m */,
-			);
-			name = "Password Strength";
-			path = Navajo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2568,7 +2554,6 @@
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				B602B96318CE9A4B00181564 /* TSReceivingChain.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
-				FCD34ED118FE77A6004DABF6 /* NJOPasswordStrengthEvaluator.m in Sources */,
 				A5145B31184AAD51007BDC73 /* TSMessage.m in Sources */,
 				A539ED1118D5E06F006C1A61 /* TSSettingsViewController.m in Sources */,
 				B6C5FA8918CE3B0900ECC200 /* TSMessageIncoming.m in Sources */,
@@ -2699,6 +2684,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -2737,6 +2723,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;

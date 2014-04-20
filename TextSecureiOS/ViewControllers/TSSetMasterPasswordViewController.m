@@ -15,7 +15,7 @@
 #import "TSWaitingPushMessageDatabase.h"
 #import "TSECKeyPair.h"
 #import "RMStepsController.h"
-#import "NJOPasswordStrengthEvaluator.h"
+#import <Navajo/NJOPasswordStrengthEvaluator.h>
 
 
 #define pickPassword @"Pick your password"
