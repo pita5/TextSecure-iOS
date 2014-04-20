@@ -166,7 +166,7 @@
         TSECKeyPair *ourNewSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
         NSLog(@"our new sending ephemeral %@",ourNewSendingEphemeral.publicKey);
 
-        RKCK *senderChain = [rootKey createChainWithEphemeral:ourNewSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
+        RKCK *senderChain = [receiverChain createChainWithEphemeral:ourNewSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
         [session setSenderChain:ourNewSendingEphemeral chainkey:senderChain.CK];
 
         // Saving in session
