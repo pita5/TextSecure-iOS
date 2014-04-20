@@ -118,14 +118,15 @@
     
     TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
     
+    if (![TSMessagesDatabase contactForRegisteredID:signal.source]) {
+        [[[TSContact alloc] initWithRegisteredID:signal.source relay:nil] save];
+    }
+    
     TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
     
     TSMessage *decryptedMessage = [TSAxolotlRatchet decryptWhisperMessage:signal.message withSession:session];
     
     [TSMessagesDatabase storeMessage:decryptedMessage];
-
-
-    // We probably want to submit an update to a subscribing view controller here.
 }
 
 -(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{    

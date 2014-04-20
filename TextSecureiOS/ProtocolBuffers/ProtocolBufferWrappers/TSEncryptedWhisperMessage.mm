@@ -138,10 +138,10 @@
     NSData *ourHmac = [self hMacWithKey:hmacKey];
     
     if ([ourHmac isEqualToData:self.hmac]) {
-        return true;
+        return YES;
     }
     
-    return false;
+    return NO;
 }
 
 - (NSData*)hMacWithKey:(NSData*)hmacKey{
