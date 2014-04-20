@@ -158,16 +158,19 @@
         // Receiving chain setup
         RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
         TSECKeyPair *ourEphemeral = [session senderEphemeral];
+        NSLog(@"our ephemeral public receive %@",ourEphemeral.publicKey);
         RKCK *receiverChain= [rootKey createChainWithEphemeral:ourEphemeral
                                      fromTheirProvideEphemeral:theirEphemeral];
         
         // Sending chain setup
         TSECKeyPair *ourNewSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
+        NSLog(@"our new sending ephemeral %@",ourNewSendingEphemeral.publicKey);
+
         RKCK *senderChain = [rootKey createChainWithEphemeral:ourNewSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
         [session setSenderChain:ourNewSendingEphemeral chainkey:senderChain.CK];
 
         // Saving in session
-        session.rootKey = senderChain.RK;
+        [session setRootKey:senderChain.RK];
         [session addReceiverChain:theirEphemeral chainKey:receiverChain.CK];
         [session setPN:session.senderChainKey.index-1];
         return receiverChain.CK;
