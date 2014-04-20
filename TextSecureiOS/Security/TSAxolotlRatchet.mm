@@ -109,7 +109,10 @@
     
     TSChainKey *chainKey = [sessionRecord senderChainKey];
     TSMessageKeys *messageKeys = [chainKey messageKeys];
+    
     TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
+
+    NSLog(@"sender ephemeral %@",senderEphemeral.publicKey);
     int previousCounter = sessionRecord.PN;
     
     

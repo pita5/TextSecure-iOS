@@ -110,13 +110,10 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 }
 
 - (TSReceivingChain*)receiverChain:(NSData*)senderEphemeral{
-    int index = 0;
     for(TSReceivingChain *chain in receiverChains){
         if ([chain.ephemeral isEqualToData:senderEphemeral]) {
-            chain.chainKey.index = index;
             return chain;
         }
-        index ++;
     }
     return nil;
 }
