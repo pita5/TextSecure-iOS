@@ -19,6 +19,8 @@ static NSString* const kCoderPN               = @"kCoderPN";
 static NSString* const kCoderRootKey          = @"kCoderRoot";
 static NSString* const kCoderReceiverChains   = @"kCoderReceiverChains";
 static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
+static NSString* const kCoderPendingPrekey    = @"kCoderPendingPrekey";
+
 
 @interface TSSession (){
     TSSendingChain *senderChain;
@@ -35,8 +37,10 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
     if (self) {
         self.rootKey = [aDecoder decodeObjectForKey:kCoderRootKey];
         self.PN = [aDecoder decodeIntForKey:kCoderPN];
+        self.pendingPreKey = [aDecoder decodeObjectForKey:kCoderPendingPrekey];
         senderChain = [aDecoder decodeObjectForKey:kCoderSendingChain];
         receiverChains = [[aDecoder decodeObjectForKey:kCoderReceiverChains] mutableCopy];
+        self.needsInitialization = NO;
     }
     
     return self;
@@ -47,6 +51,7 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
     [aCoder encodeInt:self.PN forKey:kCoderPN];
     [aCoder encodeObject:senderChain forKey:kCoderSendingChain];
     [aCoder encodeObject:receiverChains forKey:kCoderReceiverChains];
+    [aCoder encodeObject:self.pendingPreKey forKey:kCoderPendingPrekey];
 }
 
 - (void)addContact:(TSContact*)contact deviceId:(int)deviceId{
@@ -60,6 +65,7 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
         _contact = contact;
         _deviceId = deviceId;
         receiverChains = [NSMutableArray array];
+        self.needsInitialization = NO;
     }
     return self;
 }
@@ -78,6 +84,10 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 
 - (BOOL)hasSenderChain{
     return self.senderChainKey != nil;
+}
+
+- (BOOL)isInitialized{
+    return self.rootKey?YES:NO;
 }
 
 - (TSChainKey*)senderChainKey{
@@ -169,6 +179,10 @@ static NSString* const kCoderSendingChain     = @"kCoderSendingChain";
 
 - (void)save{
     [TSMessagesDatabase storeSession:self];
+}
+
+- (void)removePendingPrekey{
+    self.pendingPreKey = nil;
 }
 
 /**

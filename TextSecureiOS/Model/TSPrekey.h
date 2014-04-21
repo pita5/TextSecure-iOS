@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TSPrekey : NSObject
+@interface TSPrekey : NSObject<NSCoding>
 
 @property (readonly)int prekeyId;
 @property (readonly)NSData *identityKey;
@@ -16,5 +16,6 @@
 @property (readonly)int deviceId;
 
 - (instancetype)initWithIdentityKey:(NSData*)identityKey ephemeral:(NSData*)ephemeral prekeyId:(int)prekeyId;
+
 
 @end
