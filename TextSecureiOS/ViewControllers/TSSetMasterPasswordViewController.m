@@ -76,6 +76,8 @@
             [alert show];
             self.firstPass = nil;
             self.pass.text = @"";
+            self.passwordStrengthMeterView.progress = 0.f;
+            self.passwordStrengthMeterView.tintColor = [UIColor TSInvalidColor];
             [self.pass becomeFirstResponder];
             self.instruction.text = pickPassword;
         }
@@ -132,20 +134,12 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    [self updatePasswordStrength:self];
 
 	// What's the password field going to contain if we let this change occur?
 	NSString *newPass = [textField.text stringByReplacingCharactersInRange:range withString:string];
-
-	// If they entered a character or pasted then we're ok
-	// TODO: enforce a minimum password length in here.
-    //UPDATE TODO : Random value of 4
-	if (newPass.length > 3) {
-        self.nextButton.enabled = YES;
-	} else {
-        self.nextButton.enabled = NO;
-	}
+    
+    // Update password strenght for the new password
+    [self updatePasswordStrength:self forPassword:newPass];
 
     return YES;
 }
@@ -157,8 +151,11 @@
 }
 
 #pragma mark - Password strength
-- (void)updatePasswordStrength:(id)sender {
-    NSString *password = self.pass.text;
+- (void)updatePasswordStrength:(id)sender forPassword:(NSString*)password {
+    
+    // disable next button, will be enabled when password strength is reasonable
+    // TODO: define a password policy that should be enforced
+    self.nextButton.enabled = NO;
     
     if ([password length] == 0) {
         self.passwordStrengthMeterView.progress = 0.0f;
@@ -181,14 +178,17 @@
                 case NJOReasonablePasswordStrength:
                     self.passwordStrengthMeterView.progress = 0.5f;
                     self.passwordStrengthMeterView.tintColor = [UIColor TSYellowWarningColor];
+                    self.nextButton.enabled = YES;
                     break;
                 case NJOStrongPasswordStrength:
                     self.passwordStrengthMeterView.progress = 0.75f;
                     self.passwordStrengthMeterView.tintColor = [UIColor TSValidColor];
+                    self.nextButton.enabled = YES;
                     break;
                 case NJOVeryStrongPasswordStrength:
                     self.passwordStrengthMeterView.progress = 1.0f;
                     self.passwordStrengthMeterView.tintColor = [UIColor TSValidColor];
+                    self.nextButton.enabled = YES;
                     break;
             }
             
