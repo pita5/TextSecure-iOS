@@ -84,7 +84,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TSContactCell" editingAccessoryType="checkmark" id="PQB-5D-1De">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PQB-5D-1De" id="tS4-a2-ecF">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -156,6 +156,21 @@
                                     <action selector="nextWasTapped:" destination="UTA-HQ-Ilx" eventType="touchUpInside" id="8oy-0E-pEe"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tHO-bB-EPm">
+                                <rect key="frame" x="0.0" y="308" width="320" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="23"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" red="0.39607843139999999" green="0.73333333329999995" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="doVerifyPhone:" destination="G9I-Gu-J6D" eventType="touchUpInside" id="PbF-zZ-Ega"/>
+                                    <action selector="nextWasTapped:" destination="UTA-HQ-Ilx" eventType="touchUpInside" id="cBp-BG-SSm"/>
+                                    <action selector="skipWasTapped:" destination="UTA-HQ-Ilx" eventType="touchUpInside" id="fFa-i0-xye"/>
+                                </connections>
+                            </button>
                             <progressView opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="prV-ge-1gh">
                                 <rect key="frame" x="20" y="241" width="280" height="3"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -190,6 +205,7 @@
                         <outlet property="pass" destination="loe-TW-3kA" id="mlr-Lc-FQa"/>
                         <outlet property="passwordStrengthLabel" destination="h8W-KQ-S8f" id="5pz-PR-kGx"/>
                         <outlet property="passwordStrengthMeterView" destination="prV-ge-1gh" id="eaS-In-3hD"/>
+                        <outlet property="skipButton" destination="tHO-bB-EPm" id="Zpd-AC-GgK"/>
                         <segue destination="KRb-Ro-u27" kind="custom" identifier="BeginUsingApp" customClass="TSStartOverSegue" id="P7Y-NC-M85"/>
                     </connections>
                 </viewController>
@@ -663,7 +679,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="P7Y-NC-M85"/>
         <segue reference="H42-Az-Klt"/>
-        <segue reference="IPq-is-JQN"/>
     </inferredMetricsTieBreakers>
 </document>

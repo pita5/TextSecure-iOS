@@ -84,6 +84,13 @@
     }
 }
 
+- (IBAction)skipWasTapped:(id)sender {
+    // TODO: AlertView(?) to help the user make an informed decision
+    self.pass.text = @"";
+    [self setupDatabase];
+}
+
+
 - (void) setupDatabase {
     NSError *error = nil;
     
@@ -140,6 +147,12 @@
     
     // Update password strenght for the new password
     [self updatePasswordStrength:self forPassword:newPass];
+    
+    if (newPass.length > 0) {
+        self.nextButton.enabled = YES;
+    } else {
+        self.nextButton.enabled = NO;
+    }
 
     return YES;
 }
@@ -152,10 +165,6 @@
 
 #pragma mark - Password strength
 - (void)updatePasswordStrength:(id)sender forPassword:(NSString*)password {
-    
-    // disable next button, will be enabled when password strength is reasonable
-    // TODO: define a password policy that should be enforced
-    self.nextButton.enabled = NO;
     
     if ([password length] == 0) {
         self.passwordStrengthMeterView.progress = 0.0f;
@@ -178,17 +187,14 @@
                 case NJOReasonablePasswordStrength:
                     self.passwordStrengthMeterView.progress = 0.5f;
                     self.passwordStrengthMeterView.tintColor = [UIColor TSYellowWarningColor];
-                    self.nextButton.enabled = YES;
                     break;
                 case NJOStrongPasswordStrength:
                     self.passwordStrengthMeterView.progress = 0.75f;
                     self.passwordStrengthMeterView.tintColor = [UIColor TSValidColor];
-                    self.nextButton.enabled = YES;
                     break;
                 case NJOVeryStrongPasswordStrength:
                     self.passwordStrengthMeterView.progress = 1.0f;
                     self.passwordStrengthMeterView.tintColor = [UIColor TSValidColor];
-                    self.nextButton.enabled = YES;
                     break;
             }
             

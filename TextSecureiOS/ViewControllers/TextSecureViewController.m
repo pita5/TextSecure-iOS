@@ -70,7 +70,15 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.navigationController.navigationBarHidden = NO;
     
     if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
-        [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
+        
+        // check if user decided to skip password protection
+        NSError *error = nil;
+        [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:@"" error:&error];
+        BOOL stillLocked = [TSStorageMasterKey isStorageMasterKeyLocked];
+        
+        if (stillLocked) {
+            [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
+        }
         
     } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
