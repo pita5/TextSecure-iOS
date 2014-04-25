@@ -12,6 +12,8 @@
 #import "TSStorageError.h"
 #import "TSMessagesDatabase.h"
 #import "TSWaitingPushMessageDatabase.h"
+#import "TSSetMasterPasswordViewController.h"
+
 @interface PasswordUnlockViewController () <UITextFieldDelegate>
 @property(nonatomic, strong) IBOutlet UITextField *passwordTextField;
 @end
@@ -27,6 +29,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kPasswordIsAlphanumerical]) {
+        
+        self.passwordTextField.keyboardType = UIKeyboardTypeNumberPad;
+        
+        // number pad does not provide UIReturnKeyGo, so use a accessory view
+        UIToolbar *keyboardDoneButtonView = [[UIToolbar alloc] init];
+        UIBarButtonItem *switchKeyboards = [[UIBarButtonItem alloc]initWithTitle:NSLocalizedString(@"alphanumeric", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(switchKeyboardToAlphanumeric)];
+        UIBarButtonItem *spacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        UIBarButtonItem *goButton = [[UIBarButtonItem alloc] initWithTitle:@"Go"
+                                                                       style:UIBarButtonItemStyleDone target:self
+                                                                      action:@selector(doneTapped)];
+        [keyboardDoneButtonView setItems:@[switchKeyboards, spacer, goButton]];
+        [keyboardDoneButtonView sizeToFit];
+        self.passwordTextField.inputAccessoryView = keyboardDoneButtonView;
+    }
 
     self.passwordTextField.placeholder = @"Please enter your password";
     self.passwordTextField.returnKeyType = UIReturnKeyGo;
@@ -81,6 +99,19 @@
     [self unlockPressed:textField];
 
     return YES;
+}
+
+#pragma mark - Keyboard Accessory View
+
+- (void)doneTapped {
+    [self unlockPressed:self.passwordTextField];
+}
+
+- (void)switchKeyboardToAlphanumeric {
+    self.passwordTextField.keyboardType = UIKeyboardTypeDefault;
+    self.passwordTextField.inputAccessoryView = nil;
+    [self.passwordTextField resignFirstResponder];
+    [self.passwordTextField becomeFirstResponder];
 }
 
 #pragma mark - Shake if password incorrect

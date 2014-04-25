@@ -21,6 +21,7 @@
 #define pickPassword @"Pick your password"
 #define reenterPassword @"Please re-enter your password"
 
+
 @interface TSSetMasterPasswordViewController ()
 @property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
 
@@ -39,7 +40,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.lenientValidator = [NJOPasswordValidator standardValidator];
+    // create validator with custom rule because +standardValidator has a minimum length of 6
+    self.lenientValidator = [NJOPasswordValidator validatorWithRules:@[[NJOLengthRule ruleWithRange:NSMakeRange(1, 128)]]];
     
     self.nextButton.enabled = NO;
     
@@ -64,13 +66,15 @@
 		self.nextButton.enabled = NO;
         self.passwordStrengthLabel.text = @"";
         self.pass.keyboardType = UIKeyboardTypeAlphabet;
-        self.entropyLabel.text = @"Entropy : 0 bits";
         self.passwordStrengthMeterView.progress = 0.f;
         self.passwordStrengthMeterView.tintColor = [UIColor TSInvalidColor];
 
     } else {
         if ([self.pass.text isEqualToString:self.firstPass]) {
             [self setupDatabase];
+            // remember state to present the right keyboard to the user
+            [[NSUserDefaults standardUserDefaults] setBool:self.alphanumericalSwitch.on forKey:kPasswordIsAlphanumerical];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         } else{
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Passwords don't match" message:@"Both entered passwords don't match. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
             [alert show];
@@ -85,11 +89,22 @@
 }
 
 - (IBAction)skipWasTapped:(id)sender {
-    // TODO: AlertView(?) to help the user make an informed decision
-    self.pass.text = @"";
-    [self setupDatabase];
+    // TODO: improve message to help user with making an informed decision
+    // TODO: decide whether an implementation of a block based UI-AlertView should be included as Pod
+    NSString *message = NSLocalizedString(@"If no master password is set, your database is only encrypted by iOS Data Protection. Do you want to proceed without setting a password?", nil);
+    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Data encryption", nil) message:message
+                              delegate:self cancelButtonTitle:NSLocalizedString(@"No", nil) otherButtonTitles:NSLocalizedString(@"Yes", nil), nil] show];
 }
 
+- (IBAction)pinSwitchHasChanged:(UISwitch *)sender {
+    if (sender.on) {
+        self.pass.keyboardType = UIKeyboardTypeDefault;
+    } else {
+        self.pass.keyboardType = UIKeyboardTypeNumberPad;
+    }
+    [self.pass resignFirstResponder];
+    [self.pass becomeFirstResponder];
+}
 
 - (void) setupDatabase {
     NSError *error = nil;
@@ -169,11 +184,9 @@
     if ([password length] == 0) {
         self.passwordStrengthMeterView.progress = 0.0f;
         self.passwordStrengthLabel.text = NSLocalizedString(@"Invalid Password", nil) ;
-        self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : 0 bits"];
     } else {
         NJOPasswordStrength strength = [NJOPasswordStrengthEvaluator strengthOfPassword:password];
         self.passwordStrengthLabel.text = [NJOPasswordStrengthEvaluator localizedStringForPasswordStrength:strength];
-        self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : %.2f bits", NJOEntropyForString(password)];
         if ([self.lenientValidator validatePassword:password failingRules:nil]) {
             switch (strength) {
                 case NJOVeryWeakPasswordStrength:
@@ -204,6 +217,22 @@
             self.passwordStrengthMeterView.tintColor = [UIColor redColor];
         }
     }
+}
+
+#pragma mark - AlertView delegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:NSLocalizedString(@"Yes", nil)]) {
+        self.pass.text = @"";
+        [self setupDatabase];
+        
+        // remember state so user does not need to unlock the app
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kPasswordNotSet];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } 
+    
+    
 }
 
 @end

@@ -21,6 +21,7 @@
 #import "TSContactPickerViewController.h"
 #import "TSConversation.h"
 #import "TSGroupSetupViewController.h"
+#import "TSSetMasterPasswordViewController.h"
 
 static NSString *kCellIdentifier = @"CellIdentifier";
 
@@ -72,12 +73,19 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
         
         // check if user decided to skip password protection
-        NSError *error = nil;
-        [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:@"" error:&error];
-        BOOL stillLocked = [TSStorageMasterKey isStorageMasterKeyLocked];
-        
-        if (stillLocked) {
-            [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
+        BOOL passwordNotSet = [[NSUserDefaults standardUserDefaults] boolForKey:kPasswordNotSet];
+        if (passwordNotSet) {
+            
+            NSError *error = nil;
+            [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:@"" error:&error];
+            BOOL stillLocked = [TSStorageMasterKey isStorageMasterKeyLocked];
+            
+            if (stillLocked) {
+                [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
+            }
+            
+        } else {
+             [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
         }
         
     } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
