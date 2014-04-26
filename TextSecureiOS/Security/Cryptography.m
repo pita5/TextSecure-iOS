@@ -306,10 +306,7 @@
 
 +(NSData*) counterFromNumber:(NSNumber*)ctr {
     uint32_t ctrInt = (uint32_t)[ctr intValue];
-    uint8_t bytes[16] = {0x00, 0x00, 0x00, 0x00,
-                        0x00, 0x00, 0x00, 0x00,
-                        0x00, 0x00, 0x00, 0x00,
-                        0x00, 0x00, 0x00, 0x00};
+    uint8_t bytes[16] = {0}	;
     bytes[3]=(uint8_t)ctrInt;
     bytes[2]=(uint8_t)(ctrInt>>8);
     bytes[1]=(uint8_t)(ctrInt>>16);
