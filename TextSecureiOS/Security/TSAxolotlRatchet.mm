@@ -112,13 +112,11 @@
     
     TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
 
-    NSLog(@"sender ephemeral %@",senderEphemeral.publicKey);
     int previousCounter = [sessionRecord PN];
     
 
     
     TSPushMessageContent *messageContent = [[TSPushMessageContent alloc] initWithBody:message.content withAttachments:message.attachments withGroupContext:message.group.groupContext];
-    NSLog(@"outgoing push message for ctr: %d\n %@",chainKey.index,[messageContent getTextSecureProtocolData]);
     NSData *ciphertextBody = [Cryptography encryptCTRMode:[messageContent getTextSecureProtocolData] withKeys:messageKeys];
     
     
@@ -148,7 +146,6 @@
         
 
     }
-    NSLog(@"encrypted message %@",[encryptedMessage getTextSecureProtocolData]);
     [sessionRecord setSenderChainKey:[chainKey nextChainKey]];
     [TSMessagesDatabase storeSession:sessionRecord];
     return encryptedMessage;
@@ -163,13 +160,13 @@
         // Receiving chain setup
         RKCK *rootKey = [RKCK initWithRK:session.rootKey CK:nil];
         TSECKeyPair *ourEphemeral = [session senderEphemeral];
-        NSLog(@"our ephemeral public receive %@",ourEphemeral.publicKey);
+
         RKCK *receiverChain= [rootKey createChainWithEphemeral:ourEphemeral
                                      fromTheirProvideEphemeral:theirEphemeral];
         
         // Sending chain setup
         TSECKeyPair *ourNewSendingEphemeral = [TSECKeyPair keyPairGenerateWithPreKeyId:0];
-        NSLog(@"our new sending ephemeral %@",ourNewSendingEphemeral.publicKey);
+
 
         RKCK *senderChain = [receiverChain createChainWithEphemeral:ourNewSendingEphemeral fromTheirProvideEphemeral:theirEphemeral];
         [session setSenderChain:ourNewSendingEphemeral chainkey:senderChain.CK];
@@ -320,13 +317,13 @@
         DLog(@"Some parameters of are not defined");
     }
     
-    NSLog(@"ourIdentityPublic: %@ our ephemeral public %@ their ephemeral %@ theirPublicKey %@", ourIdentityKeyPair.publicKey, ourEphemeralKeyPair.publicKey, theirEphemeralPublicKey, theirIdentityPublicKey);
+
     
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirIdentityPublicKey]];
     [masterKey appendData:[ourIdentityKeyPair  generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     [masterKey appendData:[ourEphemeralKeyPair generateSharedSecretFromPublicKey:theirEphemeralPublicKey]];
     
-    NSLog(@"Master Key : %@", masterKey);
+
     
     return masterKey;
 }

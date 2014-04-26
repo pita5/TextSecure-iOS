@@ -73,8 +73,7 @@
                 switch (operation.response.statusCode) {
                     case 200:{
                         
-                        NSLog(@"Reponse : %@", responseObject);
-                        NSLog(@"Prekey fetched :) ");
+
                         
                         // Extracting the recipients keying material from server payload
                         

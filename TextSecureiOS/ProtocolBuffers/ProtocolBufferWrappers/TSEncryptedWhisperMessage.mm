@@ -130,7 +130,7 @@
     textsecure::WhisperMessage *messageSignal = new textsecure::WhisperMessage;
     [data getBytes:raw length:len];
     messageSignal->ParseFromArray(raw, len);
-    NSLog(@" Length when deserializing ephemeral key %lu",(unsigned long)[[self cppStringToObjcData:messageSignal->ephemeralkey()] length]);
+
     return messageSignal;
 }
 
