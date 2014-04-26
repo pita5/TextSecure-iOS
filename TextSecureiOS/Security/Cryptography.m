@@ -305,14 +305,13 @@
 }
 
 +(NSData*) counterFromNumber:(NSNumber*)ctr {
-    uint32_t empty = 0;
-    NSMutableData* counter = [NSMutableData data];
-    for (int i=0; i<3; i++) {
-        [counter appendBytes:(void*)&empty length:4];
-    }
-    
     uint32_t ctrInt = [ctr intValue];
-    [counter appendBytes:(void*)&ctrInt length:4];
+    uint32_t bytes[16];
+    bytes[3]=ctrInt;
+    bytes[2]=(uint32_t)(ctrInt>>8);
+    bytes[1]=(uint32_t)(ctrInt>>16);
+    bytes[0]=(uint32_t)(ctrInt>>24);
+    NSData* counter= [NSData dataWithBytes:&bytes length:16];
     return counter;
 }
 

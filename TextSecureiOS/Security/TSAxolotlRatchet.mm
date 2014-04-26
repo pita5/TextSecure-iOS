@@ -113,10 +113,12 @@
     TSECKeyPair *senderEphemeral = [sessionRecord senderEphemeral];
 
     NSLog(@"sender ephemeral %@",senderEphemeral.publicKey);
-    int previousCounter = sessionRecord.PN;
+    int previousCounter = [sessionRecord PN];
     
+
     
     TSPushMessageContent *messageContent = [[TSPushMessageContent alloc] initWithBody:message.content withAttachments:message.attachments withGroupContext:message.group.groupContext];
+    NSLog(@"outgoing push message for ctr: %d\n %@",chainKey.index,[messageContent getTextSecureProtocolData]);
     NSData *ciphertextBody = [Cryptography encryptCTRMode:[messageContent getTextSecureProtocolData] withKeys:messageKeys];
     
     
@@ -142,8 +144,11 @@
                                                                   encryptedPushMessageContent:ciphertextBody
                                                                         forVersion:[self currentProtocolVersion]
                                                                            HMACKey:messageKeys.macKey];
-    }
 
+        
+
+    }
+    NSLog(@"encrypted message %@",[encryptedMessage getTextSecureProtocolData]);
     [sessionRecord setSenderChainKey:[chainKey nextChainKey]];
     [TSMessagesDatabase storeSession:sessionRecord];
     return encryptedMessage;

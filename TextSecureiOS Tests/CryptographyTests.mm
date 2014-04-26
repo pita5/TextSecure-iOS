@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <stdlib.h>
 #import "Cryptography.h"
 #import "NSData+Base64.h"
 #import "NSString+Conversion.h"
@@ -68,14 +69,22 @@
 
 -(void) testCTRModeDecryption {
     NSString* originalMessage = @"Hawaii is awesome";
-    TSMessageKeys * messageKeys = [[TSMessageKeys alloc] initWithCipherKey:[Cryptography generateRandomBytes:32] macKey:[Cryptography generateRandomBytes:32] counter:0];
-    for(int i=0;i<20; i++) {
-        NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys];
-        NSData* decryption = [Cryptography decryptCTRMode:encryption withKeys:messageKeys];
-        
-        NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
-        XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
-        XCTAssertFalse([[originalMessage dataUsingEncoding:NSASCIIStringEncoding] isEqualToData:encryption], @"ctr encryption did nothing, as it encrypted data equals the original data. this is to catch that doesn't happen-as it could be disabled for testing/debugging");
+
+    for(int i=0; i<20; i++) {
+        NSData* lastEncryption = nil;
+        TSMessageKeys * messageKeysMeta = [[TSMessageKeys alloc] initWithCipherKey:[Cryptography generateRandomBytes:32] macKey:[Cryptography generateRandomBytes:32] counter:0];
+        for(int ctr = 0; ctr < 100; ctr++) {
+            TSMessageKeys *messageKeys = [[TSMessageKeys alloc] initWithCipherKey:messageKeysMeta.cipherKey macKey:messageKeysMeta.macKey counter:ctr];
+
+            NSData* encryption = [Cryptography encryptCTRMode:[originalMessage dataUsingEncoding:NSASCIIStringEncoding] withKeys:messageKeys];
+            XCTAssertFalse([encryption isEqualToData:lastEncryption] , @"encryption is equal to a previous encryption! this shouldn't happen with different counters, ctr=%d",ctr);
+            lastEncryption = encryption;
+            NSData* decryption = [Cryptography decryptCTRMode:encryption withKeys:messageKeys];
+            
+            NSString* decryptedMessage = [[NSString alloc] initWithData:decryption encoding:NSASCIIStringEncoding];
+            XCTAssertTrue([decryptedMessage isEqualToString:originalMessage],  @"Decrypted message: %@ is not equal to original: %@",decryptedMessage,originalMessage);
+            XCTAssertFalse([[originalMessage dataUsingEncoding:NSASCIIStringEncoding] isEqualToData:encryption], @"ctr encryption did nothing, as it encrypted data equals the original data. this is to catch that doesn't happen-as it could be disabled for testing/debugging");
+        }
     }
 }
 
