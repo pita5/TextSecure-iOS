@@ -24,9 +24,11 @@
 
 @property NSData *rootKey;
 @property int PN;
+@property BOOL needsInitialization;
+
+- (BOOL)isInitialized;
 
 @property TSPrekey *pendingPreKey; // Prekey information to add in TSPrekeyWhisperMessage
-@property TSPrekey *fetchedPrekey; // Prekey fetched from TS server
 
 - (BOOL)hasPendingPreKey;
 
@@ -59,7 +61,7 @@
 /**
  *  The clear method removes all keying material of a session. Only properties remaining are the necessary deviceId and contact information
  */
-
+- (void)removePendingPrekey;
 - (void)clear;
 
 @end
