@@ -58,13 +58,13 @@
 }
 
 -(const std::string) objcStringToCpp:(NSString*)objcString {
-    const char* cstring = [objcString cStringUsingEncoding:NSASCIIStringEncoding];
+    const char* cstring = [objcString cStringUsingEncoding:NSUTF8StringEncoding];
     const std::string stringFromBytes(cstring);
     return stringFromBytes;
 }
 
 -(NSString*) cppStringToObjc:(const std::string)cppString {
-    return [NSString stringWithCString:cppString.c_str() encoding:NSASCIIStringEncoding];
+    return [NSString stringWithCString:cppString.c_str() encoding:NSUTF8StringEncoding];
 }
 
 -(const std::string) objcDataToCppString:(NSData*)objcData {
