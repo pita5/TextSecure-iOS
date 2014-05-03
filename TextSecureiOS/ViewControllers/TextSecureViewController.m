@@ -108,8 +108,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         
         threadCell.rightUtilityButtons = rightUtilityButtons;
         threadCell.delegate = self;
-        threadCell.containingTableView = tv;
-        threadCell.cellHeight = [self tableView:tv heightForRowAtIndexPath:indexPath];
     }
     
     return cell;
