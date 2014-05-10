@@ -198,7 +198,7 @@
 +(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString{
     unsigned char version[1];
     unsigned char iv[16];
-    int ciphertext_length = ([payload length]-10-17)*sizeof(char);
+    NSUInteger ciphertext_length = ([payload length]-10-17)*sizeof(char);
     unsigned char *ciphertext =  (unsigned char*)malloc(ciphertext_length);
     unsigned char mac[10];
     [payload getBytes:version range:NSMakeRange(0, 1)];

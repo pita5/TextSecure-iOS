@@ -364,7 +364,7 @@
     XCTAssertTrue(groupContextDeserialized.type==_groupContext.type,@"deserialized group type doesn't match original");
     XCTAssertTrue([groupContextDeserialized.members count]==3,@"deserialized group doesn't have same number of members as original");
 
-    for(int i=0; i<3; i++) {
+    for(NSUInteger i=0; i<3; i++) {
         XCTAssertTrue([[groupContextDeserialized.members objectAtIndex:i] isEqualToString:[pushContent.groupContext.members objectAtIndex:i]],@"deserialized group member %d not the same as original",i);
     }
     

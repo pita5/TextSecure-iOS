@@ -157,7 +157,7 @@ static NSString* const kCoderPendingPrekey    = @"kCoderPendingPrekey";
 }
 
 - (TSMessageKeys*)removeMessageKeysForEphemeral:(NSData*)ephemeral counter:(int)counter{
-    for(int i = 0; i <[[self receiverChain:ephemeral].messageKeys count]; i++){
+    for(NSUInteger i = 0; i <[[self receiverChain:ephemeral].messageKeys count]; i++){
 
         TSMessageKeys *messageKey = [[self receiverChain:ephemeral].messageKeys objectAtIndex:i];
         
