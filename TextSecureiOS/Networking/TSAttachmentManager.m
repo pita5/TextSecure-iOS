@@ -46,7 +46,7 @@
                                 break;
                         }
                     } failure:^(AFHTTPRequestOperation *uploadOperation, NSError *uploadError) {
-                        DLog(@"failure with uploading file, %d,   %@",uploadOperation.response.statusCode,uploadOperation.response.description);
+                        DLog(@"failure with uploading file, %ld,   %@",(long)uploadOperation.response.statusCode,uploadOperation.response.description);
                         
                         
                     }];
@@ -61,7 +61,7 @@
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token
-            DLog(@"failure allocated upload location %d, %@",operation.response.statusCode,operation.response.description);
+            DLog(@"failure allocated upload location %ld, %@",(long)operation.response.statusCode,operation.response.description);
         }];
     }
 }
@@ -102,7 +102,7 @@
                                 break;
                         }
                     } failure:^(AFHTTPRequestOperation *downloadOperation, NSError *downloadError) {
-                        DLog(@"failure with uploading file, %d,   %@",downloadOperation.response.statusCode,downloadOperation.response.description);
+                        DLog(@"failure with uploading file, %ld,   %@",(long)downloadOperation.response.statusCode,downloadOperation.response.description);
                         
                         
                     }];
@@ -114,7 +114,7 @@
             }
         }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
-            DLog(@"failure attachment  %d, %@",operation.response.statusCode,operation.response.description);
+            DLog(@"failure attachment  %ld, %@",(long)operation.response.statusCode,operation.response.description);
             
             
         }];
