@@ -42,5 +42,6 @@
 +(void) removeAllKeychainItems;
 +(BOOL) hasVerifiedPhoneNumber;
 
++(NSData*) getFingerprintFromIdentityKey:(NSData*)identityKey;
 
 @end

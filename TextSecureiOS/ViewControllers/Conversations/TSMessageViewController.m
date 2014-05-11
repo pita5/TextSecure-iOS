@@ -50,11 +50,11 @@
 
 
 -(void)verifyIdentity:(id)sender {
-    [self performSegueWithIdentifier:@"VerifyIdentitySegue" sender:sender];
+    [self performSegueWithIdentifier:@"IdentityVerifySegue" sender:sender];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"VerifyIdentitySegue"])  {
+    if ([[segue identifier] isEqualToString:@"IdentityVerifySegue"])  {
 
         ((TSVerifyIdentityViewController*)segue.destinationViewController).contact = self.contact;
     }

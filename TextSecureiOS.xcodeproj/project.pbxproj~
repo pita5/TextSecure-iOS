@@ -2542,11 +2542,8 @@
 				B639AF0D17F5A68100B2244D /* TSNetworkManager.m in Sources */,
 				6FCE040C18D427CE00C33B34 /* TSStartOverSegue.m in Sources */,
 				B63A72161808B8AF00C353F2 /* VerificationCodeViewController.m in Sources */,
-<<<<<<< HEAD
 				A57297DB18E7579F00C8612E /* TSScanIdentityBarcodeViewController.m in Sources */,
-=======
 				FCD30FC918FDBBB7003BD188 /* SignUpStepsViewController.m in Sources */,
->>>>>>> b4cc1284f8f6766b71175818c20063816736fad0
 				8CF7BD9B1870F23D0023A781 /* TSUserKeysDatabase.m in Sources */,
 				8CF7BD951870C8450023A781 /* TSStorageMasterKey.m in Sources */,
 				B6F10B1717EF4A3A00723719 /* NSLocale+phonePrefixes.m in Sources */,
@@ -2799,10 +2796,7 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
-<<<<<<< HEAD
-=======
 				TARGETED_DEVICE_FAMILY = "1,2";
->>>>>>> b4cc1284f8f6766b71175818c20063816736fad0
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				WRAPPER_EXTENSION = app;
 			};

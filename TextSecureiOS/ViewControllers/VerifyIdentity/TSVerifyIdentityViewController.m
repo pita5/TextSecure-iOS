@@ -11,6 +11,7 @@
 #import "TSPresentIdentityQRCodeViewController.h"
 #import "NSData+Conversion.h"
 
+
 @interface TSVerifyIdentityViewController ()
 
 @end
@@ -28,9 +29,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Verify Identity";
-
-    self.theirIdentity.text = [self formatIdentityKeyForDisplay:[[self getTheirIdentityKey] hexadecimalString]];
-    self.myIdentity.text = [self formatIdentityKeyForDisplay:[[self getMyIdentityKey] hexadecimalString]];
+    self.theirIdentity.text = [self getFingerprintForDisplay:[self getTheirIdentityKey] ];
+    self.myIdentity.text = [self getFingerprintForDisplay:[self getMyIdentityKey]];
 
 
 }
@@ -47,21 +47,25 @@
 }
 
 
--(NSString*) formatIdentityKeyForDisplay:(NSString*)identityKey {
+-(NSString*) getFingerprintForDisplay:(NSData*)identityKey {
     // idea here is to insert a space every two characters. there is probably a cleverer/more native way to do this.
-    
-    __block NSString*  formattedIdentityKey = @"";
-    [identityKey enumerateSubstringsInRange:NSMakeRange(0, [identityKey length])
+
+    NSString* fingerprint = [[TSKeyManager getFingerprintFromIdentityKey:identityKey] hexadecimalString];
+    __block NSString*  formattedFingerprint = @"";
+  
+  
+    [fingerprint enumerateSubstringsInRange:NSMakeRange(0, [fingerprint length])
                                  options:NSStringEnumerationByComposedCharacterSequences
                               usingBlock:
      ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-         if (substringRange.location % 2 != 0 && substringRange.location != [identityKey length]-1) {
+         if (substringRange.location % 2 != 0 && substringRange.location != [fingerprint length]-1) {
              substring = [substring stringByAppendingString:@" "];
          }
-         formattedIdentityKey = [formattedIdentityKey stringByAppendingString:substring];
+         formattedFingerprint = [formattedFingerprint stringByAppendingString:substring];
      }];
-    return formattedIdentityKey;
+    return formattedFingerprint;
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
