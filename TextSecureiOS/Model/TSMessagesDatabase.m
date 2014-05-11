@@ -69,7 +69,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_id TEXT PRIMARY KEY, relay TEXT, identityKey BLOB UNIQUE, device_ids BLOB, verifiedIdentity INTEGER)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS contacts (registered_id TEXT PRIMARY KEY, relay TEXT, identity_key BLOB UNIQUE, device_ids BLOB, verified_identity INTEGER)"]) {
             return;
         }
         
@@ -183,13 +183,13 @@ static TSDatabaseManager *messagesDb = nil;
     __block BOOL updateSuccess = YES;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        NSMutableDictionary *parameterDict = [@{@"registered_id": contact.registeredID, @"verifiedIdentity": [NSNumber numberWithBool:contact.identityKeyIsVerified]} mutableCopy];
+        NSMutableDictionary *parameterDict = [@{@"registered_id": contact.registeredID, @"verified_identity": [NSNumber numberWithBool:contact.identityKeyIsVerified]} mutableCopy];
         
         [parameterDict setObject:contact.relay?:[NSNull null] forKey:@"relay"];
-        [parameterDict setObject:contact.identityKey?:[NSNull null] forKey:@"identityKey"];
+        [parameterDict setObject:contact.identityKey?:[NSNull null] forKey:@"identity_key"];
         [parameterDict setObject:contact.deviceIDs?:[NSNull null] forKey:@"device_ids"];
         
-        if (![db executeUpdate:@"INSERT OR REPLACE INTO contacts VALUES (:registered_id, :relay, :identityKey, :device_ids, :verifiedIdentity)" withParameterDictionary:parameterDict]){
+        if (![db executeUpdate:@"INSERT OR REPLACE INTO contacts VALUES (:registered_id, :relay, :identity_key, :device_ids, :verified_identity)" withParameterDictionary:parameterDict]){
             DLog(@"Error updating DB: %@", [db lastErrorMessage]);
             updateSuccess = NO;
         }
@@ -215,12 +215,12 @@ static TSDatabaseManager *messagesDb = nil;
         
         if ([searchInDB next]) {
             contact = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]];
-            contact.identityKey = [searchInDB dataForColumn:@"identityKey"];
+            contact.identityKey = [searchInDB dataForColumn:@"identity_key"];
             NSData *deviceIds = [searchInDB dataForColumn:@"device_ids"];
             if (deviceIds) {
                 contact.deviceIDs = [NSKeyedUnarchiver unarchiveObjectWithData:deviceIds];
             }
-            contact.identityKeyIsVerified = [searchInDB boolForColumn:@"verifiedIdentity"];
+            contact.identityKeyIsVerified = [searchInDB boolForColumn:@"verified_identity"];
         }
         [searchInDB close];
     }];
