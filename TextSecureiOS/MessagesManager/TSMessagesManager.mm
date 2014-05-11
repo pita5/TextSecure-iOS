@@ -57,9 +57,15 @@
     return self;
 }
 
+
+
+
+
 -(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
+#warning remove this, it is to debug identity key stuff!
+        
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
         if ([sessions count] > 0) {
@@ -113,8 +119,8 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-    
     NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"m"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
+    NSLog(@"push message bytes %lu",(unsigned long) decryptedPayload.length);
     
     TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
     
@@ -129,7 +135,9 @@
     [TSMessagesDatabase storeMessage:decryptedMessage];
 }
 
--(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{    
+-(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
+    NSData* data=[serializedMessage dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"submitting message of %lu bytes",(unsigned long)data.length);
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         switch (operation.response.statusCode) {

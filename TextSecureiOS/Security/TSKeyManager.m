@@ -100,4 +100,9 @@
     return [NSNumber numberWithInt:1];
 }
 
++(NSData*) getFingerprintFromIdentityKey:(NSData*)identityKey {
+  //16-byte truncated sha-256 of public key including version byte
+  return [Cryptography computeSHA256:identityKey truncatedToBytes:16];
+}
+
 @end

@@ -19,6 +19,7 @@
 #import "FilePath.h"
 #import "TSGroup.h"
 #import "Emoticonizer.h"
+#import "TSVerifyIdentityViewController.h"
 
 @interface TSMessageViewController ()
 
@@ -39,7 +40,24 @@
 
 -(void) setupThread  {
     self.title = [self.contact name];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Verify Identity" style:UIBarButtonItemStyleBordered target:self action:@selector(verifyIdentity:)];
+    if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
+        self.navigationItem.rightBarButtonItem.enabled=YES;
+        
+    }
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
+}
+
+
+-(void)verifyIdentity:(id)sender {
+    [self performSegueWithIdentifier:@"IdentityVerifySegue" sender:sender];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"IdentityVerifySegue"])  {
+
+        ((TSVerifyIdentityViewController*)segue.destinationViewController).contact = self.contact;
+    }
 }
 
 - (void) dismissVC {
@@ -72,6 +90,14 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [self reloadMessages];
             [self.tableView reloadData];
+        });
+    }];
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:self.contact.registeredID object:nil queue:nil usingBlock:^(NSNotification *note) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.navigationItem.rightBarButtonItem.enabled = YES;
         });
     }];
 }

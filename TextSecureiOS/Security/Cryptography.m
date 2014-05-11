@@ -64,7 +64,15 @@
     return output;
 }
 
-#pragma HMAC/SHA256
+#pragma makr SHA256
++(NSData*) computeSHA256:(NSData *)data truncatedToBytes:(int)truncatedBytes {
+  uint8_t digest[CC_SHA256_DIGEST_LENGTH];
+  CC_SHA256(data.bytes, data.length, digest);
+  return [[NSData dataWithBytes:digest length:CC_SHA256_DIGEST_LENGTH] subdataWithRange:NSMakeRange(0, truncatedBytes)];
+}
+
+
+#pragma mark HMAC/SHA256
 +(NSData*) computeSHA256HMAC:(NSData*)dataToHMAC withHMACKey:(NSData*)HMACKey{
     uint8_t ourHmac[CC_SHA256_DIGEST_LENGTH] = {0};
     CCHmac(kCCHmacAlgSHA256,

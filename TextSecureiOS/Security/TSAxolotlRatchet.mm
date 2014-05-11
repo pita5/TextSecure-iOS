@@ -258,7 +258,6 @@
     [sessionRecord setPendingPreKey:[[TSPrekey alloc] initWithIdentityKey:nil
                                                                 ephemeral:ourBaseKey.publicKey
                                                                  prekeyId:idPrekeyUsed]];
-    
 }
 
 +(TSSession*) initializeSessionAsBob:(TSSession*) sessionRecord withPreKeyWhisperMessage:(TSPreKeyWhisperMessage*)preKeyWhisperMessage{
@@ -268,6 +267,7 @@
 
     if (!contact.identityKey) {
         contact.identityKey = preKeyWhisperMessage.identityKey;
+        [[NSNotificationCenter defaultCenter] postNotificationName:contact.registeredID object:self];
     }
     else{
         if (![contact.identityKey isEqualToData:preKeyWhisperMessage.identityKey]) {

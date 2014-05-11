@@ -12,6 +12,7 @@
 @interface Cryptography : NSObject
 +(NSMutableData*) generateRandomBytes:(int)numberBytes;
 #pragma mark SHA and HMAC methods
++(NSData*) computeSHA256:(NSData *)data truncatedToBytes:(int)truncatedBytes;
 +(NSString*)truncatedSHA1Base64EncodedWithoutPadding:(NSString*)string;
 + (NSString*)computeSHA1DigestForString:(NSString*)input;
 

@@ -64,3 +64,4 @@ typedef NS_ENUM(NSInteger, TSMACType) {
 #define kTSVersion 
 #define kScreenshotProtection @"screenshotProtection"
 #define kDBNewMessageNotification @"db_new_message"
+#define kContactIdentity @"db_new_message"
