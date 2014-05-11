@@ -58,7 +58,6 @@
 }
 
 + (NSString*) getAuthorizationTokenFromAuthToken:(NSString*)authToken{
-  NSLog(@"Username : %@ and AuthToken: %@", [TSKeyManager getUsernameToken], [TSKeyManager getAuthenticationToken] );
   return [NSString stringWithFormat:@"%@:%@",[TSKeyManager getUsernameToken],[TSKeyManager getAuthenticationToken]];
 }
 

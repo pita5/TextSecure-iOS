@@ -9,6 +9,7 @@
 #import "VerificationCodeViewController.h"
 #import "TSServerCodeVerificationRequest.h"
 #import "TSKeyManager.h"
+#import "RMStepsController.h"
 
 @interface VerificationCodeViewController ()
 
@@ -31,11 +32,18 @@
     
     self.verificationCode_part1.delegate = self;
     self.verificationCode_part2.delegate = self;
+    self.sendAuthenticatedRequest.enabled=NO;
+    
+    self.smsToNumberLabel.text = [TSKeyManager getUsernameToken];
+    
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    self.verificationCode_part1.text=@"";
+    self.verificationCode_part2.text=@"";
+    self.sendAuthenticatedRequest.enabled = NO;
     [self.verificationCode_part1 becomeFirstResponder];
 }
 
@@ -50,16 +58,19 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField == self.verificationCode_part1 && ![string isEqualToString:@""] && range.location == 2 && string.length == 1) {
+        self.underlineView1.backgroundColor = [UIColor TSValidColor];
         [self.verificationCode_part2 becomeFirstResponder];
         self.verificationCode_part1.text = [self.verificationCode_part1.text stringByAppendingString:string];
         return NO;
     } else if (textField == self.verificationCode_part2 && ![string isEqualToString:@""] && range.location == 2 && string.length == 1){
+        self.underlineView2.backgroundColor = [UIColor TSValidColor];
         self.verificationCode_part2.text = [self.verificationCode_part2.text stringByAppendingString:string];
         [self.verificationCode_part2 resignFirstResponder];
+        self.sendAuthenticatedRequest.enabled = YES;
         return NO;
     }
-    
-    return YES;
+    self.sendAuthenticatedRequest.enabled = NO;
+    return YES; 
 }
 
 #pragma mark Code verification
@@ -78,18 +89,19 @@
                 
                 [TSKeyManager storeSignalingKeyToken:signalingKey];
                 [TSKeyManager storeAuthenticationToken:authToken];
-
-                [self performSegueWithIdentifier:@"setMasterPassword" sender:self];
                 
                 // Perform the APN registration
                 
                 [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+                _verificationCode_part1.text=@"";
+                _verificationCode_part2.text=@"";
+                [self.stepsController showNextStep];
                 
                 break;
                 
             default:
                 [[[UIAlertView alloc]initWithTitle:@"Can't verify" message:@"An unknown error occured. Pleasy try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                DLog(@"Verification operation failed with response: %@ and response code : %li", responseObject, operation.response.statusCode);
+                DLog(@"Verification operation failed with response: %@ and response code : %li", responseObject, (long)operation.response.statusCode);
                 break;
         }
         
@@ -103,19 +115,16 @@
     }];
 }
 
-
-
 -(IBAction)doRequestPhoneVerification:(id)sender {
-
+    
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:[TSKeyManager getUsernameToken] transport:kPhoneNumberVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Verification call" message:@"A verification call was requested." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alertView show];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
     }];
-
-  
 }
-
-
 
 @end

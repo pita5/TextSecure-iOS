@@ -12,9 +12,14 @@
 
 @property (nonatomic, copy) NSString *firstPass;
 @property (nonatomic, strong) IBOutlet UITextField *pass;
-@property (nonatomic, strong) UIBarButtonItem *nextButton;
+
+@property (strong, nonatomic) IBOutlet UIButton *nextButton;
 
 @property (nonatomic, retain) IBOutlet UILabel *instruction;
+
+@property (strong, nonatomic) IBOutlet UILabel *entropyLabel;
+@property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
+@property (nonatomic, retain) IBOutlet UILabel *passwordStrengthLabel;
 
 -(IBAction)nextWasTapped:(id)sender;
 

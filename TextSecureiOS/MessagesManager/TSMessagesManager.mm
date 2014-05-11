@@ -79,8 +79,7 @@
                 switch (operation.response.statusCode) {
                     case 200:{
                         
-                        NSLog(@"Reponse : %@", responseObject);
-                        NSLog(@"Prekey fetched :) ");
+
                         
                         // Extracting the recipients keying material from server payload
                         
@@ -95,7 +94,8 @@
                                                         
                             // Bootstrap session with Prekey
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
-                            session.fetchedPrekey = [[TSPrekey alloc] initWithIdentityKey:[theirIdentityKey removeVersionByte]  ephemeral:[theirEphemeralKey removeVersionByte] prekeyId:[theirPrekeyId intValue]];
+                            session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:[theirIdentityKey removeVersionByte]  ephemeral:[theirEphemeralKey removeVersionByte] prekeyId:[theirPrekeyId intValue]];
+                            session.needsInitialization = YES;
                             
                             [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecureProtocolData] base64EncodedString] ofType:TSPreKeyWhisperMessageType];
                         }
@@ -124,13 +124,15 @@
     
     TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
     
+    if (![TSMessagesDatabase contactForRegisteredID:signal.source]) {
+        [[[TSContact alloc] initWithRegisteredID:signal.source relay:nil] save];
+    }
+    
     TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
     
     TSMessage *decryptedMessage = [TSAxolotlRatchet decryptWhisperMessage:signal.message withSession:session];
     
     [TSMessagesDatabase storeMessage:decryptedMessage];
-    
-    // We probably want to submit an update to a subscribing view controller here.
 }
 
 -(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType{
@@ -158,7 +160,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning right now it is not succesfully processing returned response, but is giving 200
         DLog(@"failure %ld, %@, %@",(long)operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"TSDBDidUpdate" object:nil userInfo:@{@"messageType":@"send"}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kDBNewMessageNotification object:nil userInfo:@{@"messageType":@"sent"}];
         
     }];
     

@@ -8,6 +8,7 @@
 
 #import "VerificationViewController.h"
 #import "TSKeyManager.h"
+#import "RMStepsController.h"
 
 @interface VerificationViewController ()
 
@@ -37,16 +38,17 @@
     
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(countryChosen:) name:@"CountryChosen" object:nil];
 	[countryCodeInput addTarget:self action:@selector(updateCountryCode:) forControlEvents:UIControlEventEditingChanged];
-
+    
     self.nextButton.enabled = NO;
-
-    self.navigationItem.title = @"Your Phone Number";
+    self.sendVerificationButton.enabled = NO;
+    self.navigationController.navigationBarHidden = YES;
     
     [self setLocaleCountry];
-
+    
+    
     // Hold off on triggering the keyboard on a small screen because it'll scroll the text up.
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-
+    
     if (screenSize.height >= 568) {
         [self.phoneNumber becomeFirstResponder];
     } else {
@@ -59,6 +61,7 @@
 - (void) viewDidAppear:(BOOL)animated{
     // If user comes back to this page, make him re-enter all data.
     [TSKeyManager removeAllKeychainItems];
+    self.navigationController.navigationBarHidden = YES;
 }
 
 #pragma mark keyboard notifications
@@ -73,6 +76,13 @@
     
     [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
         self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height - kbSize.height);
+        [self.explanationText setHidden:YES];
+        [self.countryName setFrame:CGRectMake(self.countryName.frame.origin.x, self.countryName.frame.origin.y-30, self.countryName.frame.size.width, self.countryName.frame.size.height)];
+        [self.countryButton setFrame:CGRectMake(self.countryButton.frame.origin.x, self.countryButton.frame.origin.y-30, self.countryButton.frame.size.width, self.countryButton.frame.size.height)];
+        [self.sendVerificationButton setFrame:CGRectMake(self.sendVerificationButton.frame.origin.x, self.sendVerificationButton.frame.origin.y-30, self.sendVerificationButton.frame.size.width, self.sendVerificationButton.frame.size.height)];
+        [self.underlineCountryCodeView setFrame:CGRectMake(self.underlineCountryCodeView.frame.origin.x, self.underlineCountryCodeView.frame.origin.y-10, self.underlineCountryCodeView.frame.size.width, self.underlineCountryCodeView.frame.size.height)];
+        [self.underlineNumberView setFrame:CGRectMake(self.underlineNumberView.frame.origin.x, self.underlineNumberView.frame.origin.y-10, self.underlineNumberView.frame.size.width, self.underlineNumberView.frame.size.height)];
+        
     } completion:nil];
 }
 
@@ -83,6 +93,12 @@
     self.scrollView.scrollIndicatorInsets = contentInsets;
     [UIView animateKeyframesWithDuration:1.2 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
         self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height);
+        [self.explanationText setHidden:NO];
+        [self.countryName setFrame:CGRectMake(self.countryName.frame.origin.x, self.countryName.frame.origin.y+30, self.countryName.frame.size.width, self.countryName.frame.size.height)];
+        [self.countryButton setFrame:CGRectMake(self.countryButton.frame.origin.x, self.countryButton.frame.origin.y+30, self.countryButton.frame.size.width, self.countryButton.frame.size.height)];
+        [self.sendVerificationButton setFrame:CGRectMake(self.sendVerificationButton.frame.origin.x, self.sendVerificationButton.frame.origin.y+30, self.sendVerificationButton.frame.size.width, self.sendVerificationButton.frame.size.height)];
+        [self.underlineCountryCodeView setFrame:CGRectMake(self.underlineCountryCodeView.frame.origin.x, self.underlineCountryCodeView.frame.origin.y+10, self.underlineCountryCodeView.frame.size.width, self.underlineCountryCodeView.frame.size.height)];
+        [self.underlineNumberView setFrame:CGRectMake(self.underlineNumberView.frame.origin.x, self.underlineNumberView.frame.origin.y+10, self.underlineNumberView.frame.size.width, self.underlineNumberView.frame.size.height)];
     } completion:nil];
 }
 
@@ -130,9 +146,10 @@
 
 #pragma mark - Verification Action
 
--(void)sendVerification:(id)sender {
+-(IBAction)sendVerification:(id)sender {
     self.nextButton.enabled = NO;
-
+    self.sendVerificationButton.enabled = NO;
+    
     self.selectedPhoneNumber = [NSString stringWithFormat:@"%@%@",self.countryCodeInput.text,[self.phoneNumber.text removeAllFormattingButNumbers]];
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRequestVerificationCodeRequest alloc] initRequestForPhoneNumber:self.selectedPhoneNumber transport:kSMSVerification] success:^(AFHTTPRequestOperation *operation, id responseObject){
         
@@ -141,7 +158,7 @@
         [TSKeyManager generateNewAccountAuthenticationToken];
         [TSKeyManager generateNewSignalingKeyToken];
         
-        [self performSegueWithIdentifier:@"ConfirmVerificationCode" sender:self];
+        [self.stepsController showNextStep];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[[UIAlertView alloc]initWithTitle:@"Sorry we had an issue with this request" message:@"Read Dlog" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
@@ -181,14 +198,10 @@
 - (BOOL)textField:(UITextView *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
 	
     if ([textField isEqual:self.countryCodeInput]) {
-        NSUInteger newLength = (textField.text.length - range.length) + string.length;
-        if(newLength < 4) {
+        if(![self isValidCountryPrefix:[textField.text stringByReplacingCharactersInRange:range withString:string]]) {
             return YES;
         } else {
-            NSUInteger emptySpace = 4 - (textField.text.length - range.length);
-            textField.text = [[[textField.text substringToIndex:range.location]
-                               stringByAppendingString:[string substringToIndex:emptySpace]]
-                              stringByAppendingString:[textField.text substringFromIndex:(range.location + range.length)]];
+            textField.text = [textField.text stringByReplacingCharactersInRange:range withString:string];
             [self.phoneNumber becomeFirstResponder];
             [self updateCountryCode:nil];
             return NO;
@@ -205,7 +218,7 @@
         
         // The last added character might not be at the end of the string
         
-        int loopLength = nonFormattedstring.length+1;
+        long loopLength = nonFormattedstring.length+1;
         
         if ([string isEqualToString:@""]) {
             loopLength = nonFormattedstring.length;
@@ -236,9 +249,14 @@
         NBPhoneNumber *number = [[NBPhoneNumberUtil sharedInstance] parse:[self.countryCodeInput.text stringByAppendingString:self.phoneNumber.text] defaultRegion:[NSLocale localizedCodeNameForPhonePrefix:self.countryCodeInput.text] error:&error];
         
         if (error == nil && [[NBPhoneNumberUtil sharedInstance] isValidNumber:number]) {
-            self.nextButton.enabled = TRUE;
+            self.sendVerificationButton.enabled = TRUE;
+            self.underlineNumberView.backgroundColor = [UIColor TSValidColor];
+            self.underlineCountryCodeView.backgroundColor = [UIColor TSValidColor];
+            
         } else{
-            self.nextButton.enabled = FALSE;
+            self.sendVerificationButton.enabled = FALSE;
+            self.underlineNumberView.backgroundColor = [UIColor TSBlueBarColorWithAlpha];
+            self.underlineCountryCodeView.backgroundColor = [UIColor TSBlueBarColorWithAlpha];
         }
         
         return NO;
@@ -281,7 +299,7 @@
     return [formattedText substringWithRange:NSMakeRange(lastCharLoc+1, formattedText.length-(lastCharLoc+1))];
 }
 
--(int) location:(int)loc ofCleanedStringOf:(NSString*)string {
+-(int) location:(long)loc ofCleanedStringOf:(NSString*)string {
     NSString *cleanedString = [string removeAllFormattingButNumbers];
     
     NSMutableArray *prefix = [NSMutableArray array];
@@ -313,6 +331,16 @@
         self.countryCodeInput.text = self.preservedCountryCodeText;
         self.preservedCountryCodeText = nil;
         [self updateCountryCode:nil];
+    }
+}
+
+#pragma mark Verify country code
+
+-(BOOL)isValidCountryPrefix:(NSString*)diallingCode{
+    if (![[NSLocale localizedCodeNameForPhonePrefix:[diallingCode removeAllFormattingButNumbers]] isEqualToString:@"ZZ"]) {
+        return YES;
+    } else{
+        return NO;
     }
 }
 

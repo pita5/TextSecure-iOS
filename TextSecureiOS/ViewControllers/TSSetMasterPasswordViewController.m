@@ -14,11 +14,15 @@
 #import "TSMessagesDatabase.h"
 #import "TSWaitingPushMessageDatabase.h"
 #import "TSECKeyPair.h"
+#import "RMStepsController.h"
+#import <Navajo/NJOPasswordStrengthEvaluator.h>
+
 
 #define pickPassword @"Pick your password"
 #define reenterPassword @"Please re-enter your password"
 
 @interface TSSetMasterPasswordViewController ()
+@property (readwrite, nonatomic, strong) NJOPasswordValidator *lenientValidator;
 
 @end
 
@@ -34,27 +38,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    self.lenientValidator = [NJOPasswordValidator standardValidator];
+    
     self.nextButton.enabled = NO;
     
     self.pass.delegate = self;
     
     self.instruction.text = pickPassword;
+    self.navigationController.navigationBarHidden = YES;
+
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
     [self.pass becomeFirstResponder];
 }
 
 
-- (void) nextWasTapped:(id)sender{
+- (IBAction) nextWasTapped:(id)sender{
     if (self.firstPass == nil) {
         self.firstPass = self.pass.text;
         self.instruction.text = reenterPassword;
         self.pass.text = @"";
 		self.nextButton.enabled = NO;
+        self.passwordStrengthLabel.text = @"";
+        self.pass.keyboardType = UIKeyboardTypeAlphabet;
+        self.entropyLabel.text = @"Entropy : 0 bits";
+        self.passwordStrengthMeterView.progress = 0.f;
+        self.passwordStrengthMeterView.tintColor = [UIColor TSInvalidColor];
 
     } else {
         if ([self.pass.text isEqualToString:self.firstPass]) {
@@ -107,26 +119,29 @@
                 break;
                 
             default:
-                DLog(@"Issue registering prekeys response %ld, %@",operation.response.statusCode,operation.response.description);
+                DLog(@"Issue registering prekeys response %zd, %@",operation.response.statusCode,operation.response.description);
 #warning Add error handling if not able to send the prekeys
                 break;
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 #warning Add error handling if not able to send the token
-        DLog(@"failure %ld, %@",operation.response.statusCode,operation.response.description);
+        DLog(@"failure %zd, %@",operation.response.statusCode,operation.response.description);
     }];
-    
+
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    [self updatePasswordStrength:self];
 
 	// What's the password field going to contain if we let this change occur?
 	NSString *newPass = [textField.text stringByReplacingCharactersInRange:range withString:string];
 
 	// If they entered a character or pasted then we're ok
 	// TODO: enforce a minimum password length in here.
-	if (newPass.length > 0) {
+    //UPDATE TODO : Random value of 4
+	if (newPass.length > 3) {
         self.nextButton.enabled = YES;
 	} else {
         self.nextButton.enabled = NO;
@@ -139,6 +154,50 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Password strength
+- (void)updatePasswordStrength:(id)sender {
+    NSString *password = self.pass.text;
+    
+    if ([password length] == 0) {
+        self.passwordStrengthMeterView.progress = 0.0f;
+        self.passwordStrengthLabel.text = NSLocalizedString(@"Invalid Password", nil) ;
+        self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : 0 bits"];
+    } else {
+        NJOPasswordStrength strength = [NJOPasswordStrengthEvaluator strengthOfPassword:password];
+        self.passwordStrengthLabel.text = [NJOPasswordStrengthEvaluator localizedStringForPasswordStrength:strength];
+        self.entropyLabel.text = [NSString stringWithFormat:@"Entropy : %.2f bits", NJOEntropyForString(password)];
+        if ([self.lenientValidator validatePassword:password failingRules:nil]) {
+            switch (strength) {
+                case NJOVeryWeakPasswordStrength:
+                    self.passwordStrengthMeterView.progress = 0.1f;
+                    self.passwordStrengthMeterView.tintColor = [UIColor TSInvalidColor];
+                    break;
+                case NJOWeakPasswordStrength:
+                    self.passwordStrengthMeterView.progress = 0.25f;
+                    self.passwordStrengthMeterView.tintColor = [UIColor TSOrangeWarningColor];
+                    break;
+                case NJOReasonablePasswordStrength:
+                    self.passwordStrengthMeterView.progress = 0.5f;
+                    self.passwordStrengthMeterView.tintColor = [UIColor TSYellowWarningColor];
+                    break;
+                case NJOStrongPasswordStrength:
+                    self.passwordStrengthMeterView.progress = 0.75f;
+                    self.passwordStrengthMeterView.tintColor = [UIColor TSValidColor];
+                    break;
+                case NJOVeryStrongPasswordStrength:
+                    self.passwordStrengthMeterView.progress = 1.0f;
+                    self.passwordStrengthMeterView.tintColor = [UIColor TSValidColor];
+                    break;
+            }
+            
+        } else {
+            self.passwordStrengthLabel.text = NSLocalizedString(@"Invalid Password", nil);
+            self.passwordStrengthMeterView.progress = 0.1f;
+            self.passwordStrengthMeterView.tintColor = [UIColor redColor];
+        }
+    }
 }
 
 @end

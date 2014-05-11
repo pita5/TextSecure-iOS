@@ -35,7 +35,7 @@
 }
 
 - (IBAction)unlockPressed:(id)sender {
-
+    
     NSString *password = self.passwordTextField.text;
 
     NSError *error = nil;
@@ -43,14 +43,15 @@
     BOOL didUnlock = ![TSStorageMasterKey isStorageMasterKeyLocked];
 
     if (didUnlock) {
+        self.pwUnderlineView.backgroundColor = [UIColor TSValidColor];
         [[NSNotificationCenter defaultCenter] postNotificationName:TSDatabaseDidUnlockNotification object:self];
         [self dismissViewControllerAnimated:YES completion:nil];
-
+       
     } else {
         if ([[error domain] isEqualToString:TSStorageErrorDomain]) {
             switch ([error code]) {
                 case TSStorageErrorInvalidPassword: {
-
+                    [self shake:self.padView];
                     self.passwordTextField.text = nil;
                     self.passwordTextField.placeholder = @"Please try again.";
 
@@ -80,6 +81,21 @@
     [self unlockPressed:textField];
 
     return YES;
+}
+
+#pragma mark - Shake if password incorrect
+- (void)shake:(UIImageView*)imageView
+{
+    CABasicAnimation *animation =
+    [CABasicAnimation animationWithKeyPath:@"position"];
+    [animation setDuration:0.05];
+    [animation setRepeatCount:4];
+    [animation setAutoreverses:YES];
+    [animation setFromValue:[NSValue valueWithCGPoint:
+                             CGPointMake([imageView center].x - 10.0f, [imageView center].y)]];
+    [animation setToValue:[NSValue valueWithCGPoint:
+                           CGPointMake([imageView center].x + 10.0f, [imageView center].y)]];
+    [[imageView layer] addAnimation:animation forKey:@"position"];
 }
 
 @end

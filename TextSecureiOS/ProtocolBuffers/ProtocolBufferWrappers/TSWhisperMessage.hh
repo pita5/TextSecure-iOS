@@ -13,8 +13,6 @@
 
 
 @interface TSWhisperMessage : TSProtocolBufferWrapper
-@property (nonatomic,strong) NSData* message;
-@property (nonatomic,strong) NSData* version;
 
 
 

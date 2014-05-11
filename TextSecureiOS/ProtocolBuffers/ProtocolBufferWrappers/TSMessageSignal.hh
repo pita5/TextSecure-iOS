@@ -11,14 +11,16 @@
 #import "TSMessage.h"
 #import "Constants.h"
 
-@class TSPushMessageContent;
 @class TSWhisperMessage;
-
 @interface TSMessageSignal : TSProtocolBufferWrapper
-@property (nonatomic) TSWhisperMessageType contentType;
-@property (nonatomic,strong) NSString* source;
-@property (nonatomic,strong) NSNumber* sourceDevice;
-@property (nonatomic,strong) NSDate *timestamp;
-@property (nonatomic,strong) TSWhisperMessage *message;
 
+@property (readonly,nonatomic,strong) TSWhisperMessage *message;
+@property (readonly,nonatomic,strong) NSString* source;
+@property (readonly,nonatomic,strong) NSNumber* sourceDevice;
+@property (readonly,nonatomic) TSWhisperMessageType contentType;
+@property (readonly,nonatomic,strong) NSDate *timestamp;
+@property (readonly,nonatomic,strong) NSData *protocolData;
+
+
+-(instancetype) initWithMessage:(TSWhisperMessage*) message withContentType:(TSWhisperMessageType)contentType  withSource:(NSString*)source withSourceDevice:(NSNumber*)sourceDevice withTimestamp:(NSDate*) timestamp;
 @end

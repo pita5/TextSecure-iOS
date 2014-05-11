@@ -200,7 +200,6 @@
 
 -(void) reloadModel:(NSNotification*)notification {
     [self.tableView reloadData];
-    NSLog(@"user info %@",[notification userInfo]);
     if([[[notification userInfo] objectForKey:@"messageType"] isEqualToString:@"send"]) {
         [JSMessageSoundEffect playMessageSentSound];
     }

@@ -13,11 +13,13 @@
 @class TSMessage;
 
 @interface TSPushMessageContent :  TSProtocolBufferWrapper
-@property (nonatomic,strong) NSString* body;
-@property (nonatomic,strong) NSArray* attachments;
-@property (nonatomic,strong) TSGroupContext* groupContext;
-@property (nonatomic,assign) TSPushMessageFlags messageFlags;
+@property (readonly,nonatomic,strong) NSString* body;
+@property (readonly,nonatomic,strong) NSArray* attachments;
+@property (readonly,nonatomic,strong) TSGroupContext* groupContext;
+@property (readonly,nonatomic,assign) TSPushMessageFlags messageFlags;
+@property (readonly,nonatomic,strong) NSData *serializedProtocolData;
 
+-(instancetype) initWithBody:(NSString*)body withAttachments:(NSArray*)attachments withGroupContext:(TSGroupContext*)groupContext;
 
 + (NSData *)serializedPushMessageContentForMessage:(TSMessage*) message  withGroupContect:(TSGroupContext*)groupContext;
 @end

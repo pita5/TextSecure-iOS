@@ -13,17 +13,18 @@
 +(NSString*) currentCountryPhonePrefix{
     NSLocale *locale = [self currentLocale];
     NSString *isoCode = [locale objectForKey:NSLocaleCountryCode];
+
     return [self phonePrefixFromISOCode:isoCode];
 }
 
 +(NSString*) phonePrefixFromISOCode:(NSString*)isoCode{
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    return [[NSString alloc] initWithFormat:@"%u",(unsigned int)[phoneUtil getCountryCodeForRegion:isoCode]];
+    return [[NSString alloc] initWithFormat:@"%@",[phoneUtil getCountryCodeForRegion:isoCode]];
 }
 
 +(NSString*) localizedCodeNameForPhonePrefix:(NSString*)prefix{
     NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
-    return [[NBPhoneNumberUtil sharedInstance] getRegionCodeForCountryCode:[[formatter numberFromString:prefix] unsignedIntValue]];
+    return [[NBPhoneNumberUtil sharedInstance] getRegionCodeForCountryCode:[formatter numberFromString:prefix]];
 }
 
 @end

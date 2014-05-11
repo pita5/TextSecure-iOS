@@ -217,6 +217,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Enq-cN-IiT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+<<<<<<< HEAD
             <point key="canvasLocation" x="-1498" y="-5403"/>
         </scene>
         <!--Verify Identity View Controller-->
@@ -348,6 +349,9 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tzt-YT-f6H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-580" y="-4998"/>
+=======
+            <point key="canvasLocation" x="-1204" y="-5519"/>
+>>>>>>> b4cc1284f8f6766b71175818c20063816736fad0
         </scene>
         <!--Password Unlock View Controller-->
         <scene sceneID="Msh-YP-AOi">
@@ -798,6 +802,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="H42-Az-Klt"/>
         <segue reference="IPq-is-JQN"/>
+<<<<<<< HEAD
         <segue reference="H42-Az-Klt"/>
+=======
+>>>>>>> b4cc1284f8f6766b71175818c20063816736fad0
     </inferredMetricsTieBreakers>
 </document>

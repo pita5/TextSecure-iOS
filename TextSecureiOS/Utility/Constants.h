@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Open Whisper Systems. All rights reserved.
 //
 
+//Colors
+#import "UIColor+TextSecure.h"
+
 #define kLastResortKeyId 0xFFFFFF
 
 extern NSString* const textSecureServer;
@@ -38,6 +41,7 @@ typedef NS_ENUM(NSInteger, TSGroupContextType) {
 };
 
 typedef NS_ENUM(NSInteger, TSPushMessageFlags) {
+    TSNoFlag = 0,
     TSEndSession = 1
 };
 
@@ -48,6 +52,14 @@ typedef NS_ENUM(NSInteger, TSWhisperMessageType) {
     TSPreKeyWhisperMessageType = 3,
     TSUnencryptedWhisperMessageType = 4,
 };
+
+typedef NS_ENUM(NSInteger, TSMACType) {
+    TSHMACSHA1Truncated10Bytes = 1,
+    TSHMACSHA256Truncated10Bytes = 2
+
+};
+
+
 
 #define kTSVersion 
 #define kScreenshotProtection @"screenshotProtection"

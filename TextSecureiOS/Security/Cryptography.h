@@ -21,18 +21,13 @@
 
 +(NSData*)decryptCTRMode:(NSData*)ciphertext withKeys:(TSMessageKeys*)keys;
 
-+(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys: (TSMessageKeys*)keys computedHMAC:(NSData**)hmac hmacData:(NSData*)hmacdata;
++(NSData*)encryptCTRMode:(NSData*)dataToEncrypt withKeys:(TSMessageKeys*)keys;
 #pragma mark decrypt symmetrically with key given to server this first layer just hides from apple encrypted protobufs message
 +(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString;
 
 #pragma mark encrypt and decrypt attachment data
 +(NSData*) decryptAttachment:(NSData*) dataToDecrypt withKey:(NSData*) key ;
-
 +(NSData*) encryptAttachment:(NSData*) attachment withRandomKey:(NSData**)key;
-#pragma mark general encryption/decryption
-+(NSData*) decrypt:(NSData*) dataToDecrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version withHMACKey:(NSData*) HMACKey forHMAC:(NSData *)hmac;
-
-+(NSData*)encrypt:(NSData*) dataToEncrypt withKey:(NSData*) key withIV:(NSData*) iv withVersion:(NSData*)version  withHMACKey:(NSData*) HMACKey computedHMAC:(NSData**)hmac;
 
 
 @end

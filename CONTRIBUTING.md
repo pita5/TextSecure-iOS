@@ -1,6 +1,14 @@
 ## Contribute
 
 At this early stage there are two primary developers of TextSecure iOS: [@corbett](https://github.com/corbett) and [@FredericJacobs](https://github.com/fredericjacobs) and as we move from the early stages to more advanced ones opportunities will abound to contribute to the core code base. We are particularly interested in support and contributions associated localization, code review, and automated testing, with any of the [Open Issues](https://github.com/WhisperSystems/TextSecure-iOS/issues?state=open) or [Milestones](https://github.com/WhisperSystems/TextSecure-iOS/issues/milestones?state=open). It may help to open an issue or milestone if you plan to make a contribution so we can be sure to clarify questions, give an overview of architectural plans, and ensure we do not overlap work.
+## Contributor agreement
+
+Apple requires contributors to iOS projects to relicense their code on submit. We'll have to have individual contributors sign something to enable this.
+
+Our volunteer legal have put together a form you can sign electronically. So no scanning, faxing, or carrier pigeons involved. How modern:
+https://whispersystems.org/cla/
+
+Please go ahead and sign, putting your github username in "Address line #2", so that we can accept your pull requests at our heart's delight.
 
 ## Code Conventions
 
@@ -26,3 +34,15 @@ If you don't agree with us, you can use the [ClangFormat Xcode plugin](https://g
 Open Whisper Systems is currently [experimenting](https://whispersystems.org/blog/bithub/) with the funding privacy Free and Open Source software. Payments are opt-in for the `TextSecure-iOS` repo and can be enabled by adding `MONEYMONEY` in a commit message string. For example, this is the current Open WhisperSystems payout per commit, rendered dynamically as an image by the Open WhisperSystems BitHub instance:
 
 [![Bithub Payment Amount](https://bithub.herokuapp.com/v1/status/payment/commit)](https://whispersystems.org/blog/bithub/)
+
+## Contributors
+
+We would like to particularly thank the following contributors:
+
+- Dylan Bourgeois: Substantial UI/UX Improvements
+- Christine Corbett: Lead Developer
+- Alban Diquet: Substantial contributions to the storage infrastructure
+- Frederic Jacobs: Lead Developer
+- Claudiu-Vlad Ursache: UI contributions 
+
+TextSecure wouldn’t be possible without the many open-source projects we depend on. Big shoutout to the maintainers of all the [pods](https://github.com/WhisperSystems/TextSecure-iOS/blob/master/Podfile) we use!
