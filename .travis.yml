@@ -1,0 +1,8 @@
+language: objective-c
+before_install:
+  - export LANG=en_US.UTF-8
+  - gem install cocoapods --no-ri --no-rdoc
+xcode_workspace: TextSecureiOS.xcworkspace
+xcode_scheme: TextSecureiOS
+xcode_sdk: iphonesimulator
+
