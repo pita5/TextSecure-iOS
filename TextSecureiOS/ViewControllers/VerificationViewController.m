@@ -114,7 +114,7 @@
     
     NSString *charString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
     
-    for (int i = 0; i < charString.length; i++) {
+    for (NSUInteger i = 0; i < charString.length; i++) {
         [self.numberFormatter inputDigit:[charString substringWithRange:NSMakeRange(i, 1)]];
     }
 }
@@ -218,13 +218,13 @@
         
         // The last added character might not be at the end of the string
         
-        long loopLength = nonFormattedstring.length+1;
+        NSUInteger loopLength = nonFormattedstring.length+1;
         
         if ([string isEqualToString:@""]) {
             loopLength = nonFormattedstring.length;
         }
         
-        for (int i = 0; i < loopLength; i++) {
+        for (NSUInteger i = 0; i < loopLength; i++) {
             if (i != ([self location:range.location ofCleanedStringOf:self.phoneNumber.text])) {
                 formattedString = [self.numberFormatter inputDigit:[nonFormattedstring substringWithRange:NSMakeRange(i, 1)]];
             } else {
@@ -274,13 +274,13 @@
     NSMutableArray *prefix = [NSMutableArray array];
     NSString *prefixString = [[countryCodeInput.text removeAllFormattingButNumbers] prependPlus];
     
-    for (int i = 0; i < prefixString.length; i++) {
+    for (NSUInteger i = 0; i < prefixString.length; i++) {
         [prefix addObject:[prefixString substringWithRange:NSMakeRange(i, 1)]];
     }
     
-    int lastCharLoc = 0;
+    NSUInteger lastCharLoc = 0;
     
-    for (int i = 0; i < formattedText.length; i++) {
+    for (NSUInteger i = 0; i < formattedText.length; i++) {
         if ([[formattedText substringWithRange:NSMakeRange(i, 1)] isEqualToString:[prefix firstObject]]) {
             [prefix removeObjectAtIndex:0];
             
@@ -299,18 +299,18 @@
     return [formattedText substringWithRange:NSMakeRange(lastCharLoc+1, formattedText.length-(lastCharLoc+1))];
 }
 
--(int) location:(long)loc ofCleanedStringOf:(NSString*)string {
+-(NSUInteger) location:(NSUInteger)loc ofCleanedStringOf:(NSString*)string {
     NSString *cleanedString = [string removeAllFormattingButNumbers];
     
     NSMutableArray *prefix = [NSMutableArray array];
     
-    for (int i = 0; i < cleanedString.length; i++) {
+    for (NSUInteger i = 0; i < cleanedString.length; i++) {
         [prefix addObject:[cleanedString substringWithRange:NSMakeRange(i, 1)]];
     }
     
-    int cleanedStringIndex = 0;
+    NSUInteger cleanedStringIndex = 0;
     
-    for (int i = 0; i < loc; i++) {
+    for (NSUInteger i = 0; i < loc; i++) {
         if ([[string substringWithRange:NSMakeRange(i, 1)] isEqualToString:[prefix objectAtIndex:cleanedStringIndex]]) {
             cleanedStringIndex++;
         }

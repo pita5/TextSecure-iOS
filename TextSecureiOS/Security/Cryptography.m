@@ -198,7 +198,7 @@
 +(NSData*) decryptAppleMessagePayload:(NSData*)payload withSignalingKey:(NSString*)signalingKeyString{
     unsigned char version[1];
     unsigned char iv[16];
-    int ciphertext_length = ([payload length]-10-17)*sizeof(char);
+    NSUInteger ciphertext_length = ([payload length]-10-17)*sizeof(char);
     unsigned char *ciphertext =  (unsigned char*)malloc(ciphertext_length);
     unsigned char mac[10];
     [payload getBytes:version range:NSMakeRange(0, 1)];
@@ -261,9 +261,10 @@
      Returns nil if hmac invalid or decryption fails
      */
     
-    size_t bufferSize           = [dataToEncrypt length] + kCCBlockSizeAES128;
-    void* buffer                = malloc(bufferSize);
+    size_t bufferSize        = [dataToEncrypt length] + kCCBlockSizeAES128;
+    NSMutableData * buffer   = [NSMutableData dataWithLength: bufferSize];
     size_t bytesEncrypted    = 0;
+    
     // setting up cryptor
     CCCryptorStatus cryptStatus;
     CCCryptorRef cryptor;
@@ -271,14 +272,18 @@
                                           ccNoPadding, [[Cryptography counterFromNumber:[NSNumber numberWithInt:keys.counter]] bytes],
                                           [keys.cipherKey bytes], [keys.cipherKey length],
                                           NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
-    
-    
-    cryptStatus = CCCryptorUpdate(cryptor, [dataToEncrypt bytes], [dataToEncrypt length], buffer, bufferSize, &bytesEncrypted);
-    if (cryptStatus == kCCSuccess){
-        return [NSMutableData dataWithBytesNoCopy:buffer length:bytesEncrypted freeWhenDone:YES];
+    if (cryptStatus != kCCSuccess){
+        return nil;
     }
-    free(buffer);
-    return nil;
+    
+    cryptStatus = CCCryptorUpdate(cryptor, [dataToEncrypt bytes], [dataToEncrypt length], [buffer mutableBytes], [buffer length], &bytesEncrypted);
+    if (cryptStatus != kCCSuccess){
+        return nil;
+    }
+    
+    // Returns a non-mutable copy
+    [buffer setLength:bytesEncrypted];
+    return [buffer copy];
 }
 
 
@@ -290,10 +295,10 @@
      */
     
     // decrypt
-    size_t bufferSize           = [ciphertext length] + kCCBlockSizeAES128;
-    void* buffer                = malloc(bufferSize);
-    
+    size_t bufferSize        = [ciphertext length] + kCCBlockSizeAES128;
+    NSMutableData * buffer   = [NSMutableData dataWithLength: bufferSize];
     size_t bytesDecrypted    = 0;
+    
     // setting up cryptor
     CCCryptorStatus cryptStatus;
     CCCryptorRef cryptor;
@@ -301,15 +306,18 @@
     cryptStatus = CCCryptorCreateWithMode(kCCDecrypt, kCCModeCTR, kCCAlgorithmAES128,
                                           ccNoPadding, [[Cryptography counterFromNumber:[NSNumber numberWithInt:keys.counter]] bytes], [keys.cipherKey bytes], [keys.cipherKey length],
                                           NULL, 0, 0, kCCModeOptionCTR_BE, &cryptor);
-    
-    cryptStatus = CCCryptorUpdate(cryptor, [ciphertext bytes], [ciphertext length], buffer, bufferSize, &bytesDecrypted);
-    
-    if (cryptStatus == kCCSuccess) {
-        return [NSData dataWithBytesNoCopy:buffer length:bytesDecrypted];
+    if (cryptStatus != kCCSuccess){
+        return nil;
     }
     
-    free(buffer);
-    return nil;
+    cryptStatus = CCCryptorUpdate(cryptor, [ciphertext bytes], [ciphertext length], [buffer mutableBytes], [buffer length], &bytesDecrypted);
+    if (cryptStatus != kCCSuccess){
+        return nil;
+    }
+    
+    // Returns a non-mutable copy
+    [buffer setLength:bytesDecrypted];
+    return [buffer copy];
 }
 
 +(NSData*) counterFromNumber:(NSNumber*)ctr {
