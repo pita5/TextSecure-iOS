@@ -7,7 +7,6 @@ pod 'FMDB',						          '~> 2.1'
 pod 'HockeySDK',                 '~> 3.5.3'
 pod 'libPhoneNumber-iOS',        '~> 0.7.2'
 pod 'AFNetworking',              '~> 2.2.3'
-pod 'PonyDebugger',              '~> 0.3.0'
 pod 'SQLCipher', 				        '~> 3.0.1'
 pod 'GoogleProtobuf', 			     '~> 2.5.0'
 pod 'SWTableViewCell',       	  '~> 0.2.8'
@@ -20,6 +19,7 @@ pod 'InAppSettingsKit',		      '~> 2.0.1'
 pod 'HKDFKit',                   '~> 0.0.1'
 pod 'RMStepsController',         '~> 1.0.0'
 pod 'Navajo',                    '~> 0.0.1'
+pod 'SocketRocket', '~> 0.3'
 
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 post_install do |lib_rep|

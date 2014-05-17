@@ -28,6 +28,7 @@ extern NSString* const encryptedMasterSecretKeyStorageId;
 extern NSString* const textSecureAttachmentsAPI;
 extern NSTimeInterval const timeOutForRequests;
 extern unsigned char const textSecureVersion;
+extern NSString* const textSecureWebSocketAPI;
 // CountryCodes.plist constants
 extern NSString* const countryInfoPathInMainBundle;
 extern NSString* const countryInfoKeyCountryCode;
