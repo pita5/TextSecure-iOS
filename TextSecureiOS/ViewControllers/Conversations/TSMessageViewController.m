@@ -40,25 +40,11 @@
 
 -(void) setupThread  {
     self.title = [self.contact name];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Verify Identity" style:UIBarButtonItemStyleBordered target:self action:@selector(verifyIdentity:)];
-    if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
-        self.navigationItem.rightBarButtonItem.enabled=YES;
-        
-    }
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
 }
 
 
--(void)verifyIdentity:(id)sender {
-    [self performSegueWithIdentifier:@"IdentityVerifySegue" sender:sender];
-}
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"IdentityVerifySegue"])  {
-
-        ((TSVerifyIdentityViewController*)segue.destinationViewController).contact = self.contact;
-    }
-}
 
 - (void) dismissVC {
     [self dismissViewControllerAnimated:YES completion:nil];

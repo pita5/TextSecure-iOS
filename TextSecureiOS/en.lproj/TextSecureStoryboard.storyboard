@@ -197,7 +197,7 @@
             </objects>
             <point key="canvasLocation" x="-2610" y="-4383"/>
         </scene>
-        <!--Message View Controller-->
+        <!--Message View Controller - Name-->
         <scene sceneID="Qdv-M1-o0E">
             <objects>
                 <viewController id="ka8-ZU-Vji" customClass="TSMessageViewController" sceneMemberID="viewController">
@@ -210,19 +210,95 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="W75-Nv-Xwi"/>
-                    <connections>
-                        <segue destination="gHQ-OA-hm6" kind="push" identifier="IdentityVerifySegue" id="EWf-h8-fmZ"/>
-                    </connections>
+                    <navigationItem key="navigationItem" title="Name" id="W75-Nv-Xwi">
+                        <barButtonItem key="rightBarButtonItem" title="profile" id="gYY-Jr-tRs">
+                            <connections>
+                                <segue destination="bs5-2d-fgr" kind="push" identifier="ProfileSegue" id="Qeu-cJ-YEa"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Enq-cN-IiT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1498" y="-5403"/>
+            <point key="canvasLocation" x="-1795" y="-5431"/>
         </scene>
-        <!--Verify Identity View Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="p0x-e4-938">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="MCq-SE-N3S" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dub-RU-tuJ">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ka8-ZU-Vji" kind="relationship" relationship="rootViewController" id="tVz-Ur-EJB"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MXG-Eh-SRW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2299" y="-5416"/>
+        </scene>
+        <!--Contact Profile View Controller-->
+        <scene sceneID="sxS-7R-UKd">
+            <objects>
+                <viewController id="bs5-2d-fgr" customClass="TSContactProfileViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qwX-ld-RxD"/>
+                        <viewControllerLayoutGuide type="bottom" id="m3l-D1-NRP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="DKu-a1-tIH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Contact Name" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="201" translatesAutoresizingMaskIntoConstraints="NO" id="beQ-Ao-Wf3">
+                                <rect key="frame" x="99" y="76" width="201" height="115"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CJl-2B-6YC">
+                                <rect key="frame" x="20" y="110" width="47" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="Default_person.png"/>
+                                <connections>
+                                    <action selector="setGroupPhotoPressed:" destination="gdW-po-j3F" eventType="touchUpInside" id="nEB-TP-Qfe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bo9-vj-17S">
+                                <rect key="frame" x="20" y="110" width="47" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="contact_mask.png"/>
+                                <connections>
+                                    <action selector="setGroupPhotoPressed:" destination="gdW-po-j3F" eventType="touchUpInside" id="4Hz-kM-G8w"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hF1-kd-6Nb">
+                                <rect key="frame" x="20" y="508" width="280" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Verify Identity">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="createGroup" destination="gdW-po-j3F" eventType="touchUpInside" id="vMs-tM-622"/>
+                                    <segue destination="gHQ-OA-hm6" kind="push" id="AIc-M7-fIg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="dUR-lS-GS8"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fmq-Sw-kPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1398" y="-5416"/>
+        </scene>
+        <!--Verify Identity View Controller - Verify Identity-->
         <scene sceneID="sFh-bU-aXF">
             <objects>
-                <viewController id="gHQ-OA-hm6" customClass="TSVerifyIdentityViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VerifyIdentityViewController" id="gHQ-OA-hm6" customClass="TSVerifyIdentityViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kVB-p4-mvb"/>
                         <viewControllerLayoutGuide type="bottom" id="2bg-iK-yT7"/>
@@ -281,18 +357,14 @@
                                 <state key="normal" title="Mark Their Key As Manually Verified">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="markManuallyVerified:" destination="gHQ-OA-hm6" eventType="touchUpInside" id="M1h-s0-AlC"/>
+                                </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="warning: for demo purposes while crypto pipeline debugged their identity = yours " lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="292" translatesAutoresizingMaskIntoConstraints="NO" id="1Km-6p-FM0">
-                                <rect key="frame" x="20" y="0.0" width="292" height="74"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="rCe-jK-6oi"/>
+                    <navigationItem key="navigationItem" title="Verify Identity" id="rCe-jK-6oi"/>
                     <connections>
                         <outlet property="myIdentity" destination="THm-WB-Xe6" id="uPv-5D-Xim"/>
                         <outlet property="theirIdentity" destination="kA0-5p-HSZ" id="9C8-V1-kSG"/>
@@ -797,6 +869,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="IPq-is-JQN"/>
-        <segue reference="H42-Az-Klt"/>
+        <segue reference="tVz-Ur-EJB"/>
     </inferredMetricsTieBreakers>
 </document>

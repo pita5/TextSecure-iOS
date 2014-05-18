@@ -64,8 +64,6 @@
 -(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
-#warning remove this, it is to debug identity key stuff!
-        
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
         if ([sessions count] > 0) {
@@ -87,6 +85,7 @@
                         
                         for (NSDictionary *responseObject in keys){
                             NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+#warning we should check this identity key is as we expect.
                             NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
                             NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
                             [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];

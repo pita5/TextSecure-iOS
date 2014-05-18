@@ -238,10 +238,18 @@ static TSDatabaseManager *messagesDb = nil;
     NSMutableArray *contacts = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *searchInDB = [db executeQuery:@"SELECT registered_id FROM contacts"];
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM contacts"];
         
         while ([searchInDB next]) {
-            [contacts addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]]];
+            
+            TSContact *contact = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]];
+            contact.identityKey = [searchInDB dataForColumn:@"identity_key"];
+            NSData *deviceIds = [searchInDB dataForColumn:@"device_ids"];
+            if (deviceIds) {
+                contact.deviceIDs = [NSKeyedUnarchiver unarchiveObjectWithData:deviceIds];
+            }
+            contact.identityKeyIsVerified = [searchInDB boolForColumn:@"verified_identity"];
+            [contacts addObject:contact];
         }
         [searchInDB close];
     }];

@@ -87,4 +87,10 @@
 }
 
 
+-(IBAction)markManuallyVerified:(id)sender {
+    self.contact.identityKeyIsVerified = YES;
+    [self.contact save];
+}
+
+
 @end

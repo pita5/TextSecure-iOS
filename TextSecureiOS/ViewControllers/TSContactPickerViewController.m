@@ -104,7 +104,9 @@
         vc.whisperContacts = [self getSelectedContacts];
     } else if ([segue.destinationViewController isKindOfClass:[TSMessageViewController class]]) {
         TSMessageViewController *vc = segue.destinationViewController;
-        [TSMessagesDatabase storeContact:self.whisperContacts.firstObject];
+        if(![TSMessagesDatabase contactForRegisteredID:self.whisperContacts.firstObject]) {
+            [TSMessagesDatabase storeContact:self.whisperContacts.firstObject];
+        }
         vc.contact = self.whisperContacts.firstObject;
     }
 }

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		05B94BF218BD28E400708011 /* VerificationViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B94BF118BD28E400708011 /* VerificationViewControllerTests.m */; };
-		05B94BF418BD2EA000708011 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
+		05B94BF418BD2EA000708011 /* TextSecureStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* TextSecureStoryboard.storyboard */; };
 		4C0ACB4B186C876200B328D5 /* TSMessageConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0ACB4A186C876200B328D5 /* TSMessageConversationCell.m */; };
 		4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C77526B18707A46000FCCA6 /* PasswordUnlockViewController.m */; };
 		4CFDC8D2187215F600BDB649 /* TSMessagesDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFDC8D1187215F600BDB649 /* TSMessagesDatabaseTests.m */; };
@@ -53,7 +53,7 @@
 		A53718B816FF95DF00C6FCCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B716FF95DF00C6FCCF /* Foundation.framework */; };
 		A53718BA16FF95DF00C6FCCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */; };
 		A53718C616FF95DF00C6FCCF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A53718C516FF95DF00C6FCCF /* AppDelegate.m */; };
-		A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */; };
+		A53718CF16FF95DF00C6FCCF /* TextSecureStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53718CD16FF95DF00C6FCCF /* TextSecureStoryboard.storyboard */; };
 		A53718F116FF98C100C6FCCF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53718F016FF98C100C6FCCF /* MessageUI.framework */; };
 		A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A537190716FFC45B00C6FCCF /* textsecure@2x.png */; };
 		A53719251700D71B00C6FCCF /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53719241700D71A00C6FCCF /* CoreTelephony.framework */; };
@@ -391,6 +391,7 @@
 		A5372A9717011A5300C6FCCF /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294A17011A5200C6FCCF /* zw.png */; };
 		A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A538A27D1869DC6500CD0A3D /* TSKeyManager.m */; };
 		A539ED1118D5E06F006C1A61 /* TSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A539ED1018D5E06F006C1A61 /* TSSettingsViewController.m */; };
+		A54124ED19292684008A3A3C /* TSContactProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A54124EC19292684008A3A3C /* TSContactProfileViewController.m */; };
 		A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */; };
 		A56312F818C85B6500222F99 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A56312F718C85B6500222F99 /* Settings.bundle */; };
 		A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A56312FA18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m */; };
@@ -565,7 +566,7 @@
 		A53718B916FF95DF00C6FCCF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A53718C416FF95DF00C6FCCF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A53718C516FF95DF00C6FCCF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		A53718CE16FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		A53718CE16FF95DF00C6FCCF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/TextSecureStoryboard.storyboard; sourceTree = "<group>"; };
 		A53718D916FF95DF00C6FCCF /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		A53718F016FF98C100C6FCCF /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		A537190716FFC45B00C6FCCF /* textsecure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "textsecure@2x.png"; path = "TextSecureiOSAssets/MainIcon/textsecure@2x.png"; sourceTree = "<group>"; };
@@ -906,6 +907,8 @@
 		A538A27D1869DC6500CD0A3D /* TSKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSKeyManager.m; path = Security/TSKeyManager.m; sourceTree = "<group>"; };
 		A539ED0F18D5E06F006C1A61 /* TSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSettingsViewController.h; path = ViewControllers/TSSettingsViewController.h; sourceTree = "<group>"; };
 		A539ED1018D5E06F006C1A61 /* TSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSettingsViewController.m; path = ViewControllers/TSSettingsViewController.m; sourceTree = "<group>"; };
+		A54124EB19292684008A3A3C /* TSContactProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactProfileViewController.h; path = TextSecureiOS/Contacts/TSContactProfileViewController.h; sourceTree = "<group>"; };
+		A54124EC19292684008A3A3C /* TSContactProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactProfileViewController.m; path = TextSecureiOS/Contacts/TSContactProfileViewController.m; sourceTree = "<group>"; };
 		A5620DED186BD4FA0033483E /* TSSubmitMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSubmitMessageRequest.h; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.h; sourceTree = "<group>"; };
 		A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSubmitMessageRequest.m; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.m; sourceTree = "<group>"; };
 		A56312F718C85B6500222F99 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -1234,7 +1237,7 @@
 				A5ABDE9218F14409007CE2D2 /* iPad */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
-				A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */,
+				A53718CD16FF95DF00C6FCCF /* TextSecureStoryboard.storyboard */,
 				A53718FC16FFB6E600C6FCCF /* Assets */,
 				B6F10B1417EF49D700723719 /* Categories */,
 				B602B96018CE797D00181564 /* Contact Management */,
@@ -1858,6 +1861,8 @@
 			children = (
 				B6C5FA8118CE3AED00ECC200 /* TSContactManager.h */,
 				B6C5FA8218CE3AED00ECC200 /* TSContactManager.m */,
+				A54124EB19292684008A3A3C /* TSContactProfileViewController.h */,
+				A54124EC19292684008A3A3C /* TSContactProfileViewController.m */,
 			);
 			name = "Contact Management";
 			path = ..;
@@ -2063,7 +2068,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05B94BF418BD2EA000708011 /* MainStoryboard.storyboard in Resources */,
+				05B94BF418BD2EA000708011 /* TextSecureStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2071,7 +2076,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A53718CF16FF95DF00C6FCCF /* MainStoryboard.storyboard in Resources */,
+				A53718CF16FF95DF00C6FCCF /* TextSecureStoryboard.storyboard in Resources */,
 				A537190916FFC45C00C6FCCF /* textsecure@2x.png in Resources */,
 				A537294B17011A5200C6FCCF /* ad.png in Resources */,
 				A537294C17011A5200C6FCCF /* ae.png in Resources */,
@@ -2569,6 +2574,7 @@
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */,
 				6FCE040B18D427CE00C33B34 /* TSReplaceSegue.m in Sources */,
+				A54124ED19292684008A3A3C /* TSContactProfileViewController.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,
@@ -2630,12 +2636,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		A53718CD16FF95DF00C6FCCF /* MainStoryboard.storyboard */ = {
+		A53718CD16FF95DF00C6FCCF /* TextSecureStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A53718CE16FF95DF00C6FCCF /* en */,
 			);
-			name = MainStoryboard.storyboard;
+			name = TextSecureStoryboard.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
