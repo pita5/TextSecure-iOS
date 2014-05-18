@@ -22,7 +22,7 @@ One note, for programmers joining us from Java or similar language communities, 
 We prefer to use [Storyboards](https://developer.apple.com/library/ios/documentation/general/conceptual/Devpedia-CocoaApp/Storyboard.html) vs. building UI elements within the code itself. We are not at the stage to provide a .strings localizable file for translating, but the goal is to have translatable strings in a single entry point so that we can reach users in their native language wherever possible. 
 
 Some tips
-- any PR that does not use segues or story board conventions (red flags:   ```[self.navigationController pushViewController:<#(UIViewController *)#> animated:<#(BOOL)#>]``` and/or manual creation of UI elements and/or orphaned ViewControllers in the storyboard) will to be refactored prior to merge
+- any PR that does not use segues or story board conventions (red flags:   ```[self.navigationController pushViewController:<#(UIViewController *)#> animated:<#(BOOL)#>]``` and/or manual creation of UI elements and/or orphaned ViewControllers in the storyboard) will need to be refactored prior to merge
 - the following are the storyboarder's best friends
 ```- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;```
 ``` [self performSegueWithIdentifier:<#(NSString *)#> sender:<#(id)#>];```
