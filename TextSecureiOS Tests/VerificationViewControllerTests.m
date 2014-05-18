@@ -48,7 +48,7 @@
     NSRange range = NSMakeRange(0, 0);
     NSArray *number = @[@"2", @"1", @"2", @"7", @"3", @"6", @"5", @"0", @"0", @"0"];
     [self.controller textFieldShouldBeginEditing:phoneNumber];
-    for (int i = 0; i < number.count; i++) {
+    for (NSUInteger i = 0; i < number.count; i++) {
         if (4 == i || 7 == i) { // account for dashes in these positions
             range.location++;
         }

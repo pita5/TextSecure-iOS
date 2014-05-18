@@ -13,7 +13,7 @@
 - (NSData*)prependVersionByte{
     NSMutableData *concatenatedData = [NSMutableData data];
     uint intVal = 0x05;
-    Byte *byteData = (Byte*)malloc(1);
+    Byte byteData[1];
     byteData[0] = intVal;
     [concatenatedData appendBytes:byteData length:1];
     [concatenatedData appendData:self];

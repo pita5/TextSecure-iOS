@@ -15,7 +15,11 @@ NSString* const usernameTokenStorageId = @"UsernameAuthenticationToken";
 NSString* const signalingTokenStorageId = @"SignalingTokenStorageId";
 NSString* const prekeyCounterStorageId = @"PrekeyCounterStorageId";
 NSString* const encryptedMasterSecretKeyStorageId  = @"EncryptedMasterSecretKeyStorageId";
-NSString* const textSecureServer = @"https://textsecure-service.whispersystems.org/";
+
+#warning Staging environement used. Production: https://textsecure-service.whispersystems.org
+
+NSString* const textSecureWebSocketAPI = @"wws://textsecure-service-staging.whispersystems.org/";
+NSString* const textSecureServer = @"https://textsecure-service-staging.whispersystems.org/";
 
 NSString* const textSecureGeneralAPI = @"v1";
 NSString* const textSecureAccountsAPI = @"v1/accounts";

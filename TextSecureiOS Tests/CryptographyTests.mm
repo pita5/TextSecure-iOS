@@ -39,7 +39,7 @@
     NSString* originalMessage = @"Hawaii is awesome";
     NSString* signalingKeyString = @"VJuRzZcwuY/6VjGw+QSPy5ROzHo8xE36mKwHNvkfyZ+mSPaDlSDcenUqavIX1Vwn\nRRIdrg==";
     NSData* signalingKey = [NSData dataFromBase64String:signalingKeyString];
-    XCTAssertTrue([signalingKey length]==52, @"signaling key is not 52 bytes but %ull",(unsigned long long)[signalingKey length]);
+    XCTAssertTrue([signalingKey length]==52, @"signaling key is not 52 bytes but %llu", (unsigned long long)[signalingKey length]);
     NSData* signalingKeyAESKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(0, 32)];
     NSData* signalingKeyHMACKeyMaterial = [signalingKey subdataWithRange:NSMakeRange(32, 20)];
     NSData* iv = [Cryptography generateRandomBytes:16];

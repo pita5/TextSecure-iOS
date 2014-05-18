@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "Cryptography.h"
 #import "TSKeyManager.h"
-#import <PonyDebugger/PonyDebugger.h> //ponyd serve --listen-interface=127.0.0.1
 #import "TSMessagesDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "TSStorageError.h"
@@ -55,11 +54,6 @@
 														 liveIdentifier:@"9e6b7f4732558ba8480fb2bcd0a5c3da"
 															   delegate:self];
 	[[BITHockeyManager sharedHockeyManager] startManager];
-
-    PDDebugger *debugger = [PDDebugger defaultInstance];
-    [debugger connectToURL:[NSURL URLWithString:@"ws://localhost:9000/device"]];
-    [debugger enableNetworkTrafficDebugging];
-    [debugger forwardAllNetworkTraffic];
 #endif
 
 	if(launchOptions!=nil) {

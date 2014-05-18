@@ -426,6 +426,7 @@
 		A5FE7D86191FA1FA0022C3F7 /* TSVerifyIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FE7D83191FA1FA0022C3F7 /* TSVerifyIdentityViewController.m */; };
 		A6F91EC0B0694C57850C03BA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		B602B96318CE9A4B00181564 /* TSReceivingChain.m in Sources */ = {isa = PBXBuildFile; fileRef = B602B96218CE9A4B00181564 /* TSReceivingChain.m */; };
+		B621AA731928032D00085CF7 /* TSSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B621AA721928032D00085CF7 /* TSSocketManager.m */; };
 		B635B3C7182181E1003CE732 /* TSMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B635B390182181E1003CE732 /* TSMessageViewController.m */; };
 		B635B3ED18218456003CE732 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EC18218456003CE732 /* CoreAudio.framework */; };
 		B635B3EF18218481003CE732 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B635B3EE18218481003CE732 /* AudioToolbox.framework */; };
@@ -965,6 +966,8 @@
 		AD77BB98A5B14A3490A31E06 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B602B96118CE9A4B00181564 /* TSReceivingChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSReceivingChain.h; path = Model/TSReceivingChain.h; sourceTree = "<group>"; };
 		B602B96218CE9A4B00181564 /* TSReceivingChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSReceivingChain.m; path = Model/TSReceivingChain.m; sourceTree = "<group>"; };
+		B621AA711928032D00085CF7 /* TSSocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSocketManager.h; path = TextSecureiOS/Networking/TSSocketManager.h; sourceTree = "<group>"; };
+		B621AA721928032D00085CF7 /* TSSocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSocketManager.m; path = TextSecureiOS/Networking/TSSocketManager.m; sourceTree = "<group>"; };
 		B635B38F182181E1003CE732 /* TSMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSMessageViewController.h; path = ViewControllers/Conversations/TSMessageViewController.h; sourceTree = "<group>"; };
 		B635B390182181E1003CE732 /* TSMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSMessageViewController.m; path = ViewControllers/Conversations/TSMessageViewController.m; sourceTree = "<group>"; };
 		B635B3EC18218456003CE732 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -1889,6 +1892,8 @@
 				B639AF0C17F5A68100B2244D /* TSNetworkManager.m */,
 				A5145B3B184B6F35007BDC73 /* TSAttachmentManager.h */,
 				A5145B3C184B6F35007BDC73 /* TSAttachmentManager.m */,
+				B621AA711928032D00085CF7 /* TSSocketManager.h */,
+				B621AA721928032D00085CF7 /* TSSocketManager.m */,
 			);
 			name = Networking;
 			path = ..;
@@ -2604,6 +2609,7 @@
 				B67E30F618CE19E4008502F5 /* TSContact.m in Sources */,
 				B6C5FA7718CE354800ECC200 /* TSSession.m in Sources */,
 				B6C5FA7418CE344700ECC200 /* TSConversation.m in Sources */,
+				B621AA731928032D00085CF7 /* TSSocketManager.m in Sources */,
 				B6C5FA8F18CE3B2000ECC200 /* TSPrekey.m in Sources */,
 				B6C5FA9218CE3B3900ECC200 /* TSMessageKeys.m in Sources */,
 				B6C5FA9818CE3B6300ECC200 /* RKCK.m in Sources */,
