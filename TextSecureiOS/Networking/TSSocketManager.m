@@ -19,10 +19,11 @@
     self = [super init];
     
     if (self) {
-        // TO-DO <===
-        NSString *webSocketConnect = [NSString stringWithFormat:@"%@", textSecureWebSocketAPI];
+        NSString *webSocketConnect = [NSString stringWithFormat:@"%@?user=%@&password=%@", textSecureWebSocketAPI, [[TSKeyManager getUsernameToken] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"],[TSKeyManager getAuthenticationToken]];
         NSURL *webSocketConnectURL = [NSURL URLWithString:webSocketConnect];
+        NSLog(@"WebsocketURL %@", webSocketConnectURL);
         self.websocket = [[SRWebSocket alloc] initWithURL:webSocketConnectURL];
+        self.websocket.delegate = self;
     }
     
     return self;
@@ -40,17 +41,18 @@
 #pragma mark - Manage Socket
 
 + (void)becomeActive{
-    
+    DLog(@"Socket resuming activity");
+    [[[self sharedManager] websocket] open];
 }
 
 + (void)resignActivity{
-    
+    DLog(@"Socket resigning activity");
 }
 
 #pragma mark - Delegate methods
 
 - (void) webSocketDidOpen:(SRWebSocket *)webSocket{
-    
+    NSLog(@"WebSocket was sucessfully opened");
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
@@ -58,7 +60,7 @@
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
-    
+    DLog(@"Error connecting to socket %@", error);
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
