@@ -23,7 +23,8 @@ We prefer to use [Storyboards](https://developer.apple.com/library/ios/documenta
 
 Some tips
 - any PR that does not use segues or story board conventions (red flags:   ```[self.navigationController pushViewController:<#(UIViewController *)#> animated:<#(BOOL)#>]``` and/or manual creation of UI elements and/or orphaned ViewControllers in the storyboard) will need to be refactored prior to merge
-- the following are the storyboarder's best friends
+- the following are the storyboarder's best friends:
+
 ```- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;```
 
 ``` [self performSegueWithIdentifier:<#(NSString *)#> sender:<#(id)#>];```
