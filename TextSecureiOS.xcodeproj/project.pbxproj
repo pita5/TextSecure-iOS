@@ -391,7 +391,6 @@
 		A5372A9717011A5300C6FCCF /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = A537294A17011A5200C6FCCF /* zw.png */; };
 		A538A27E1869DC6500CD0A3D /* TSKeyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A538A27D1869DC6500CD0A3D /* TSKeyManager.m */; };
 		A539ED1118D5E06F006C1A61 /* TSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A539ED1018D5E06F006C1A61 /* TSSettingsViewController.m */; };
-		A54124ED19292684008A3A3C /* TSContactProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A54124EC19292684008A3A3C /* TSContactProfileViewController.m */; };
 		A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */; };
 		A56312F818C85B6500222F99 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A56312F718C85B6500222F99 /* Settings.bundle */; };
 		A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A56312FA18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m */; };
@@ -907,8 +906,6 @@
 		A538A27D1869DC6500CD0A3D /* TSKeyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSKeyManager.m; path = Security/TSKeyManager.m; sourceTree = "<group>"; };
 		A539ED0F18D5E06F006C1A61 /* TSSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSettingsViewController.h; path = ViewControllers/TSSettingsViewController.h; sourceTree = "<group>"; };
 		A539ED1018D5E06F006C1A61 /* TSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSettingsViewController.m; path = ViewControllers/TSSettingsViewController.m; sourceTree = "<group>"; };
-		A54124EB19292684008A3A3C /* TSContactProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSContactProfileViewController.h; path = TextSecureiOS/Contacts/TSContactProfileViewController.h; sourceTree = "<group>"; };
-		A54124EC19292684008A3A3C /* TSContactProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSContactProfileViewController.m; path = TextSecureiOS/Contacts/TSContactProfileViewController.m; sourceTree = "<group>"; };
 		A5620DED186BD4FA0033483E /* TSSubmitMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSSubmitMessageRequest.h; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.h; sourceTree = "<group>"; };
 		A5620DEE186BD4FA0033483E /* TSSubmitMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSSubmitMessageRequest.m; path = TextSecureiOS/Networking/Requests/TSSubmitMessageRequest.m; sourceTree = "<group>"; };
 		A56312F718C85B6500222F99 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -1861,8 +1858,6 @@
 			children = (
 				B6C5FA8118CE3AED00ECC200 /* TSContactManager.h */,
 				B6C5FA8218CE3AED00ECC200 /* TSContactManager.m */,
-				A54124EB19292684008A3A3C /* TSContactProfileViewController.h */,
-				A54124EC19292684008A3A3C /* TSContactProfileViewController.m */,
 			);
 			name = "Contact Management";
 			path = ..;
@@ -2574,7 +2569,6 @@
 				B6E2CFB317F7926000200B69 /* TSRequestVerificationCodeRequest.m in Sources */,
 				A56312FB18C9A45A00222F99 /* TSWaitingPushMessageDatabase.m in Sources */,
 				6FCE040B18D427CE00C33B34 /* TSReplaceSegue.m in Sources */,
-				A54124ED19292684008A3A3C /* TSContactProfileViewController.m in Sources */,
 				B68BFDF2180987C6005CC817 /* TSSetMasterPasswordViewController.m in Sources */,
 				B643D7DE189EB9020025C6F3 /* TSContactPickerViewController.m in Sources */,
 				A5169D0D170FEA8D00A2CE9E /* CountrySegue.m in Sources */,

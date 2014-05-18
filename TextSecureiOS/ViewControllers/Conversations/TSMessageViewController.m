@@ -45,6 +45,12 @@
 
 
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"ProfileSegue"])  {
+
+        ((TSVerifyIdentityViewController*)segue.destinationViewController).contact = self.contact;
+    }
+}
 
 - (void) dismissVC {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -86,6 +92,15 @@
             self.navigationItem.rightBarButtonItem.enabled = YES;
         });
     }];
+//    if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
+//        self.navigationItem.rightBarButtonItem.enabled=YES;
+//        self.navigationItem.rightBarButtonItem.title = @"profile";
+//        
+//    }
+//    else {
+//        self.navigationItem.rightBarButtonItem.enabled = NO;
+//    }
+
 }
 
 #pragma mark - Table view data source
