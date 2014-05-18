@@ -92,15 +92,16 @@
             self.navigationItem.rightBarButtonItem.enabled = YES;
         });
     }];
-//    if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
-//        self.navigationItem.rightBarButtonItem.enabled=YES;
-//        self.navigationItem.rightBarButtonItem.title = @"profile";
-//        
-//    }
-//    else {
-//        self.navigationItem.rightBarButtonItem.enabled = NO;
-//    }
-
+    if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
+        self.navigationItem.rightBarButtonItem.enabled=YES;
+        
+    }
+    else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
 }
 
 #pragma mark - Table view data source
