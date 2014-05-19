@@ -18,7 +18,7 @@ NSString* const encryptedMasterSecretKeyStorageId  = @"EncryptedMasterSecretKeyS
 
 #warning Staging environement used. Production: https://textsecure-service.whispersystems.org
 
-NSString* const textSecureWebSocketAPI = @"wws://textsecure-service-staging.whispersystems.org/";
+NSString* const textSecureWebSocketAPI = @"wss://textsecure-service-staging.whispersystems.org/v1/websocket/";
 NSString* const textSecureServer = @"https://textsecure-service-staging.whispersystems.org/";
 
 NSString* const textSecureGeneralAPI = @"v1";
