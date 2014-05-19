@@ -19,11 +19,7 @@
     self = [super init];
     
     if (self) {
-        NSString *webSocketConnect = [NSString stringWithFormat:@"%@?user=%@&password=%@", textSecureWebSocketAPI, [[TSKeyManager getUsernameToken] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"],[TSKeyManager getAuthenticationToken]];
-        NSURL *webSocketConnectURL = [NSURL URLWithString:webSocketConnect];
-        NSLog(@"WebsocketURL %@", webSocketConnectURL);
-        self.websocket = [[SRWebSocket alloc] initWithURL:webSocketConnectURL];
-        self.websocket.delegate = self;
+        self.websocket = nil;
     }
     
     return self;
@@ -41,30 +37,60 @@
 #pragma mark - Manage Socket
 
 + (void)becomeActive{
-    DLog(@"Socket resuming activity");
-    [[[self sharedManager] websocket] open];
+    SRWebSocket *socket =[[self sharedManager] websocket];
+    
+    if (socket) {
+        switch ([socket readyState]) {
+            case SR_OPEN:
+                DLog(@"WebSocket already open on connection request");
+                return;
+            case SR_CONNECTING:
+                DLog(@"WebSocket is already connecting");
+                [socket open];
+                return;
+            default:
+                [socket close];
+                socket.delegate = nil;
+                socket = nil;
+                break;
+        }
+    }
+    
+    NSString *webSocketConnect = [NSString stringWithFormat:@"%@?user=%@&password=%@", textSecureWebSocketAPI, [[TSKeyManager getUsernameToken] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"],[TSKeyManager getAuthenticationToken]];
+    NSURL *webSocketConnectURL = [NSURL URLWithString:webSocketConnect];
+    NSLog(@"WebsocketURL %@", webSocketConnectURL);
+    socket = [[SRWebSocket alloc] initWithURL:webSocketConnectURL];
+    socket.delegate = [self sharedManager];
+    [socket open];
 }
 
 + (void)resignActivity{
-    DLog(@"Socket resigning activity");
+    SRWebSocket *socket =[[self sharedManager] websocket];
+    int state = [socket readyState];
+
+    if (state == SR_CONNECTING || state == SR_OPEN) {
+        [socket close];
+    }
+    socket.delegate = nil;
+    socket = nil;
 }
 
 #pragma mark - Delegate methods
 
 - (void) webSocketDidOpen:(SRWebSocket *)webSocket{
-    NSLog(@"WebSocket was sucessfully opened");
-}
-
-- (void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
-    
+    DLog(@"WebSocket was sucessfully opened");
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
     DLog(@"Error connecting to socket %@", error);
 }
 
+- (void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    DLog(@"Received on Websocket : %@", message);
+}
+
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
-    
+    DLog(@"Websocket closed with reason : %@ was clean %@", reason, wasClean?@"Yes":@"No");
 }
 
 @end
