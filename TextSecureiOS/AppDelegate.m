@@ -22,7 +22,6 @@
 #import "TSWaitingPushMessageDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "IASKSettingsReader.h"
-#import "TSSocketManager.h"
 #import "TSDeregisterAccountRequest.h"
 #define kChangePasswordAlertView 1
 #define kDeregisterAlertView 2
@@ -87,8 +86,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushesQueuedInDB) name:TSDatabaseDidUnlockNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBasedOnUserSettings) name:kIASKAppSettingChanged object:nil];
     
-    [TSSocketManager becomeActive];
-    
 	return YES;
 }
 
@@ -146,7 +143,6 @@
     }
 }
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [TSSocketManager resignActivity];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kScreenshotProtection]) {
         self.blankWindow.hidden = NO;
     }
@@ -155,7 +151,6 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     self.blankWindow.hidden = YES;
     [self updateBasedOnUserSettings];
-    [TSSocketManager becomeActive];
 }
 
 

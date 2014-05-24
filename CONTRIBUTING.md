@@ -37,6 +37,9 @@ It's the eternal debate. We chose to adopt spaces. Please set your default Xcode
 
 If you don't agree with us, you can use the [ClangFormat Xcode plugin](https://github.com/travisjeffery/ClangFormat-Xcode) to code with your favorite indentation style!
 
+## PR conventions
+If you are thinking about a major change, to speed up the merge talk with the lead developers first. PRs will not be accepted which break the master branch, so make sure to try, in addition to your unit tests, a simple "regression" test: register, send some messages back and forth, view a thread and conversation and make sure every is just as functional as before your PR only more so.
+
 ## BitHub
 
 Open Whisper Systems is currently [experimenting](https://whispersystems.org/blog/bithub/) with the funding privacy Free and Open Source software. Payments are opt-in for the `TextSecure-iOS` repo and can be enabled by adding `MONEYMONEY` in a commit message string. For example, this is the current Open WhisperSystems payout per commit, rendered dynamically as an image by the Open WhisperSystems BitHub instance:
