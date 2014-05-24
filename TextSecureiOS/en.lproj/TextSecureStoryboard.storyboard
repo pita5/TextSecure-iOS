@@ -226,7 +226,7 @@
             </objects>
             <point key="canvasLocation" x="-1755" y="-5215"/>
         </scene>
-        <!--Verify Identity View Controller - Name-->
+        <!--Verify Identity View Controller - Contact-->
         <scene sceneID="sFh-bU-aXF">
             <objects>
                 <viewController storyboardIdentifier="VerifyIdentityViewController" id="gHQ-OA-hm6" customClass="TSVerifyIdentityViewController" sceneMemberID="viewController">
@@ -301,7 +301,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hF1-kd-6Nb">
-                                <rect key="frame" x="20" y="508" width="280" height="40"/>
+                                <rect key="frame" x="20" y="444" width="280" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <state key="normal" title="Mark Their Key As Manually Verified">
@@ -312,12 +312,19 @@
                                     <action selector="markManuallyVerified:" destination="gHQ-OA-hm6" eventType="touchUpInside" id="vkx-Zy-nLy"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Identity Unverified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uMa-AD-iGO">
+                                <rect key="frame" x="81" y="60" width="159" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Name" id="rCe-jK-6oi"/>
+                    <navigationItem key="navigationItem" title="Contact" id="rCe-jK-6oi"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="identityVerifiedLabel" destination="uMa-AD-iGO" id="NRk-Zh-mB3"/>
                         <outlet property="myIdentity" destination="THm-WB-Xe6" id="uPv-5D-Xim"/>
                         <outlet property="theirIdentity" destination="kA0-5p-HSZ" id="9C8-V1-kSG"/>
                     </connections>

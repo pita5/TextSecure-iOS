@@ -12,6 +12,7 @@
 
 @property (nonatomic,strong) IBOutlet UILabel *theirIdentity;
 @property (nonatomic,strong) IBOutlet UILabel *myIdentity;
+@property (nonatomic,strong) IBOutlet UILabel *identityVerifiedLabel;
 @property (nonatomic,strong) TSContact* contact;
 
 -(IBAction)markManuallyVerified:(id)sender;

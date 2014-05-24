@@ -28,22 +28,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Verify Identity";
+    self.title =  self.contact.name;
     self.theirIdentity.text = [self getFingerprintForDisplay:[self getTheirIdentityKey] ];
     self.myIdentity.text = [self getFingerprintForDisplay:[self getMyIdentityKey]];
-
-
+    [self displayVerificationStatus];
 }
 
+
+-(void) displayVerificationStatus {
+    self.identityVerifiedLabel.text = self.contact.identityKeyIsVerified ? @"Identity Verified" : @"Identity Not Verified";
+}
 -(NSData*) getMyIdentityKey {
     return [[TSUserKeysDatabase identityKey] publicKey];
 }
 
 
 -(NSData*) getTheirIdentityKey {
-#warning since getting their identity key doesn't work I am inserting a test here so we can compare the two keys
-    return [self getMyIdentityKey];
-    //return self.contact.identityKey;
+    return self.contact.identityKey;
 }
 
 
@@ -90,6 +91,7 @@
 -(IBAction)markManuallyVerified:(id)sender {
     self.contact.identityKeyIsVerified = YES;
     [self.contact save];
+    [self displayVerificationStatus];
 }
 
 
