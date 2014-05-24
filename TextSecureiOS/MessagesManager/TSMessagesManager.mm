@@ -85,9 +85,13 @@
                         
                         for (NSDictionary *responseObject in keys){
                             NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+                            
+                            
                             if (recipient.identityKey && ![recipient.identityKey isEqualToData:theirIdentityKey]) {
-                                // this is a weird case, where we already have a stored ID key for a person, but don't have a session for that person. this shouldn't happen but good to not clobber ID key.
-                                throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
+                                // this is a weird case, where we already have a stored ID key for a person, but don't have a session for that person.
+#warning we want to give user option to continue or not this will crash in the DB when the key is being stored, as we aren't allowed to do this in DB currently. at least user knows why with this message
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning!" message:@"The contact's identity key has changed from one you've previously received. This could either mean that someon is trying to intercept your communication or that this contact simply re-isntall TextSecure and now has a new identity key " delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                                [alert show];
                             }
 
                             NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];

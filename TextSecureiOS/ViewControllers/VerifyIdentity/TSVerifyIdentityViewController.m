@@ -88,6 +88,14 @@
 }
 
 
+- (IBAction)identityKeyWasVerified:(UIStoryboardSegue *)segue {
+    [self markManuallyVerified:self];
+
+    
+}
+
+
+
 -(IBAction)markManuallyVerified:(id)sender {
     self.contact.identityKeyIsVerified = YES;
     [self.contact save];

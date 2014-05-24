@@ -101,8 +101,7 @@
             if([detectionData isEqualToData:self.identityKey]) {
 
                 self.label.text = @"verified!";
-                [self performSegueWithIdentifier:@"IdentityKeyWasVerified" sender:self];
-                
+
             }
             else {
                 self.label.text = @"identity keys do not match";
@@ -115,14 +114,13 @@
             self.label.text = @"searching...";
         }
     }
-    
+    if([self.label.text isEqualToString:@"verified!"]) {
+        [self performSegueWithIdentifier:@"IdentityKeyWasVerified" sender:self];
+    }
+
     self.highlightView.frame = highlightViewRect;
 }
 
-- (IBAction)identityKeyWasVerified:(UIStoryboardSegue *)segue {
-    [(TSVerifyIdentityViewController*)segue.destinationViewController markManuallyVerified:self];
-
-}
 /*
  #pragma mark - Navigation
 
