@@ -85,12 +85,18 @@
                         
                         for (NSDictionary *responseObject in keys){
                             NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
-#warning we should check this identity key is as we expect.
+                            if (recipient.identityKey && ![recipient.identityKey isEqualToData:theirIdentityKey]) {
+                                // this is a weird case, where we already have a stored ID key for a person, but don't have a session for that person. this shouldn't happen but good to not clobber ID key.
+                                throw [NSException exceptionWithName:@"IdentityKeyMismatch" reason:@"" userInfo:@{}];
+                            }
+
                             NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
                             NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
                             [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
+                            recipient.identityKey = theirEphemeralKey;
                             [TSMessagesDatabase storeContact:recipient];
-                                                        
+                            [[NSNotificationCenter defaultCenter] postNotificationName:recipient.registeredID object:self];
+
                             // Bootstrap session with Prekey
                             TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
                             session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:[theirIdentityKey removeVersionByte]  ephemeral:[theirEphemeralKey removeVersionByte] prekeyId:[theirPrekeyId intValue]];

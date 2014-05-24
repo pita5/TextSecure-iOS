@@ -89,9 +89,19 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:self.contact.registeredID object:nil queue:nil usingBlock:^(NSNotification *note) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.contact = [TSMessagesDatabase contactForRegisteredID:self.contact.registeredID];
+            [self displayProfileOptionIfAvailable];
         });
     }];
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    [self displayProfileOptionIfAvailable];
+}
+
+#pragma mark - Table view data source
+
+-(void) displayProfileOptionIfAvailable {
     if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
         self.navigationItem.rightBarButtonItem.enabled=YES;
         
@@ -99,12 +109,9 @@
     else {
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
+
 }
 
-#pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.messages count];
 }
