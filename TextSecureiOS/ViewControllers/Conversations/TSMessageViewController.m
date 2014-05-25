@@ -99,6 +99,10 @@
     [self displayProfileOptionIfAvailable];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Table view data source
 
 -(void) displayProfileOptionIfAvailable {
