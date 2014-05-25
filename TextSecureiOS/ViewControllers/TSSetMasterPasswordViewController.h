@@ -8,16 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TSSetMasterPasswordViewController : UIViewController<UITextFieldDelegate>
+#define kPasswordNotSet @"PasswordNotSet"
+#define kPasswordIsAlphanumerical @"PasswordIsAlphanumerical"
+
+@interface TSSetMasterPasswordViewController : UIViewController<UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, copy) NSString *firstPass;
 @property (nonatomic, strong) IBOutlet UITextField *pass;
 
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
+@property (strong, nonatomic) IBOutlet UIButton *skipButton;
+
+@property (strong, nonatomic) IBOutlet UISwitch *alphanumericalSwitch;
 
 @property (nonatomic, retain) IBOutlet UILabel *instruction;
 
-@property (strong, nonatomic) IBOutlet UILabel *entropyLabel;
 @property (weak, nonatomic) IBOutlet UIProgressView *passwordStrengthMeterView;
 @property (nonatomic, retain) IBOutlet UILabel *passwordStrengthLabel;
 
