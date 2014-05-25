@@ -399,6 +399,7 @@
 		A568910117E2F37000C360A1 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910017E2F37000C360A1 /* CoreText.framework */; };
 		A568910317E2F37A00C360A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A568910217E2F37A00C360A1 /* QuartzCore.framework */; };
 		A56D31B9180FCA840093D51B /* TSRegisterPrekeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */; };
+		A580D2BD19323E4A00D6C1CC /* UIColor+TextSecure.m in Sources */ = {isa = PBXBuildFile; fileRef = A580D2BC19323E4A00D6C1CC /* UIColor+TextSecure.m */; };
 		A5DE19D2170702E900ACAFDD /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */; };
 		A5DE19D4170702ED00ACAFDD /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DE19D3170702ED00ACAFDD /* AddressBook.framework */; };
 		A5E6CBFC187629D4002A1735 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */; };
@@ -470,7 +471,6 @@
 		CE74D2F57964464494640956 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD77BB98A5B14A3490A31E06 /* libPods.a */; };
 		F8694B5E18C5268500A44474 /* padlock_prompt.png in Resources */ = {isa = PBXBuildFile; fileRef = F8694B5D18C5268500A44474 /* padlock_prompt.png */; };
 		FCD30FC918FDBBB7003BD188 /* SignUpStepsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */; };
-		FCD30FD018FDEA75003BD188 /* UIColor+TextSecure.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD30FCF18FDEA75003BD188 /* UIColor+TextSecure.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -919,6 +919,8 @@
 		A568910217E2F37A00C360A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A56D31B7180FCA840093D51B /* TSRegisterPrekeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TSRegisterPrekeysRequest.h; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.h; sourceTree = "<group>"; };
 		A56D31B8180FCA840093D51B /* TSRegisterPrekeysRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TSRegisterPrekeysRequest.m; path = TextSecureiOS/Networking/Requests/TSRegisterPrekeysRequest.m; sourceTree = "<group>"; };
+		A580D2BB19323E4A00D6C1CC /* UIColor+TextSecure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+TextSecure.h"; path = "TextSecureiOS/Categories/UIColor+TextSecure.h"; sourceTree = "<group>"; };
+		A580D2BC19323E4A00D6C1CC /* UIColor+TextSecure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+TextSecure.m"; path = "TextSecureiOS/Categories/UIColor+TextSecure.m"; sourceTree = "<group>"; };
 		A5DE19D1170702E900ACAFDD /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A5DE19D3170702ED00ACAFDD /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		A5E6CBFB187629D4002A1735 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -1041,8 +1043,6 @@
 		F8694B5D18C5268500A44474 /* padlock_prompt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = padlock_prompt.png; path = TextSecureiOSAssets/padlock_prompt.png; sourceTree = "<group>"; };
 		FCD30FC718FDBBB7003BD188 /* SignUpStepsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignUpStepsViewController.h; path = ViewControllers/SignUpStepsViewController.h; sourceTree = "<group>"; };
 		FCD30FC818FDBBB7003BD188 /* SignUpStepsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignUpStepsViewController.m; path = ViewControllers/SignUpStepsViewController.m; sourceTree = "<group>"; };
-		FCD30FCE18FDEA75003BD188 /* UIColor+TextSecure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+TextSecure.h"; path = "TextSecureiOS/UIColor+TextSecure.h"; sourceTree = "<group>"; };
-		FCD30FCF18FDEA75003BD188 /* UIColor+TextSecure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+TextSecure.m"; path = "TextSecureiOS/UIColor+TextSecure.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1958,8 +1958,8 @@
 		B6F10B1417EF49D700723719 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				FCD30FCE18FDEA75003BD188 /* UIColor+TextSecure.h */,
-				FCD30FCF18FDEA75003BD188 /* UIColor+TextSecure.m */,
+				A580D2BB19323E4A00D6C1CC /* UIColor+TextSecure.h */,
+				A580D2BC19323E4A00D6C1CC /* UIColor+TextSecure.m */,
 				B6F7FEBE18D77E1500ECC4A2 /* NSData+TSKeyVersion.h */,
 				B6F7FEBF18D77E1500ECC4A2 /* NSData+TSKeyVersion.m */,
 				B644F95C18DF5D3700D41FA8 /* NSString+randomString.h */,
@@ -2581,6 +2581,7 @@
 				A5E6CC86187D0FF1002A1735 /* TSPushMessageContent.mm in Sources */,
 				A513465D18D65D97005B4FA3 /* TSDeregisterAccountRequest.m in Sources */,
 				A5169D1F170FEB1900A2CE9E /* NSString+Conversion.m in Sources */,
+				A580D2BD19323E4A00D6C1CC /* UIColor+TextSecure.m in Sources */,
 				A5169D20170FEB1900A2CE9E /* Constants.m in Sources */,
 				B602B96318CE9A4B00181564 /* TSReceivingChain.m in Sources */,
 				A5169D21170FEB1900A2CE9E /* NSData+Conversion.m in Sources */,
@@ -2600,7 +2601,6 @@
 				A5145B37184B66AD007BDC73 /* TSRequestAttachmentId.m in Sources */,
 				A530CB04184A02620052B615 /* TSRecipientPrekeyRequest.m in Sources */,
 				A5620DEF186BD4FA0033483E /* TSSubmitMessageRequest.m in Sources */,
-				FCD30FD018FDEA75003BD188 /* UIColor+TextSecure.m in Sources */,
 				4C77526D18707A46000FCCA6 /* PasswordUnlockViewController.m in Sources */,
 				B684346618D1FF2B007AEDF6 /* TSSendingChain.m in Sources */,
 				B6C5FA7A18CE355500ECC200 /* TSChainKey.m in Sources */,
