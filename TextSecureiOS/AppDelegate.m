@@ -96,10 +96,10 @@
         changePasswordDialogue.tag = kChangePasswordAlertView;
         [changePasswordDialogue setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
         UITextField *oldPasswordField = [changePasswordDialogue textFieldAtIndex:0];
-        oldPasswordField.placeholder = @"old password";
+        oldPasswordField.placeholder = @"new password";
         oldPasswordField.secureTextEntry = YES;
         UITextField *newPasswordField = [changePasswordDialogue textFieldAtIndex:1];
-        newPasswordField.placeholder = @"new password";
+        newPasswordField.placeholder = @"confirm password";
         newPasswordField.secureTextEntry = YES;
         [changePasswordDialogue show];
     }
@@ -116,15 +116,22 @@
     if(alertView.tag == kChangePasswordAlertView) {
         if(buttonIndex == 1) {
             // here's where we change the database password @nabla-c0d3
-            /*
-             old = [changePasswordDialogue textFieldAtIndex:0];
-             new = [[changePasswordDialogue textFieldAtIndex:1];
-             we will also  want to make the user confirm their new password
+            
+            //TODO: Decide if we should ask for old password. Maybe we could also use TSSetMasterPasswordViewController and its UI for entering the new password.
+             NSString *newPw = [alertView textFieldAtIndex:0].text;
+             NSString *confirmPw = [alertView textFieldAtIndex:1].text;
              
-             we'll want a rekey database method here
-             */
-    #warning  not implemented
-
+            if ([newPw isEqualToString:confirmPw]) {
+                NSError *error = nil;
+                [TSStorageMasterKey changeStorageMasterKeyPasswordTo:newPw error:&error];
+                if (!error) {
+                    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"The password has been changed successfully." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                } else {
+                    [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"The password could not be changed." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                }
+            } else {
+                [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"The passwords did not match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            }
         }
     }
     else if(alertView.tag == kDeregisterAlertView) {

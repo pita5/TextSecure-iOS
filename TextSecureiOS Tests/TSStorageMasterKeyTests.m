@@ -122,6 +122,25 @@ static NSString *masterPw = @"1234test";
     XCTAssertNil(masterKey, @"master storage key locking failed");
 }
 
+- (void)testPasswordChange
+{
+    [TSStorageMasterKey createStorageMasterKeyWithPassword:masterPw error:nil];
+    
+    NSString *newPassword = @"test4321";
+    NSError *error = nil;
+    [TSStorageMasterKey changeStorageMasterKeyPasswordFrom:masterPw to:newPassword error:&error];
+    NSData *masterKey = [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:masterPw error:&error];
+    XCTAssertNil(masterKey, @"master storage key password change failed");
+    XCTAssertTrue([[error domain] isEqualToString:TSStorageErrorDomain], @"master storage key unlocking returned an unexpected error");
+    XCTAssertEqual([error code], TSStorageErrorInvalidPassword, @"master storage key unlocking returned an unexpected error");
+    XCTAssertNotNil(error, @"master storage key password change failed");
+    
+    error = nil;
+    masterKey = [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:newPassword error:&error];
+    XCTAssertNotNil(masterKey, @"master storage key unlocking returned nil");
+    XCTAssertNil(error, @"master storage key unlocking returned an error");
+    
+}
 
 - (void)testUnlockWithDeletedKeychain
 {
@@ -152,8 +171,6 @@ static NSString *masterPw = @"1234test";
     XCTAssertTrue([[error domain] isEqualToString:TSStorageErrorDomain], @"master storage key deletion failed");
     XCTAssertEqual([error code], TSStorageErrorStorageKeyNotCreated, @"master storage key deletion failed");
 }
-
-
 
 
 @end

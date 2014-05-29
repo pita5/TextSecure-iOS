@@ -151,6 +151,41 @@ static BOOL isMasterKeyLocked = TRUE;
     memset(storageMasterKey, 0, MASTER_KEY_SIZE);
     [KeychainWrapper deleteItemFromKeychainWithIdentifier:encryptedMasterSecretKeyStorageId];
 }
+
++(void) changeStorageMasterKeyPasswordFrom:(NSString*)oldPassword to:(NSString*)newPassword error:(NSError **)error {
+    // try to unlock master key with old password
+    NSData *masterKey = [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:oldPassword error:error];
+    if (!masterKey) {
+        return;
+    }
+    
+    [TSStorageMasterKey changeStorageMasterKeyPasswordTo:newPassword error:error];
+}
+
++(void) changeStorageMasterKeyPasswordTo:(NSString*)newPassword error:(NSError **)error {
+    
+    NSData *masterKey = [TSStorageMasterKey getStorageMasterKeyWithError:error];
+    if (!masterKey) {
+        return;
+    }
+    
+    // encrypt master key with new password
+    NSData *encryptedMasterKey = [RNEncryptor encryptData:masterKey withSettings:kRNCryptorAES256Settings password:newPassword error:error];
+    if(!encryptedMasterKey) {
+        if (error) {
+            *error = [TSStorageError errorStorageKeyCreationFailed];
+        }
+        return;
+    }
+    
+    // Store the encrypted master key in the Keychain
+    if (![KeychainWrapper updateKeychainValue:[encryptedMasterKey base64EncodedString] forIdentifier:encryptedMasterSecretKeyStorageId]) {
+        if (error) {
+            *error = [TSStorageError errorStorageKeyCreationFailed];
+        }
+        return;
+    }
+}
     
     
 @end
