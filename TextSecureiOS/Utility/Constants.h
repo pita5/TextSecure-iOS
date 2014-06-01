@@ -34,7 +34,6 @@ extern NSString* const countryInfoPathInMainBundle;
 extern NSString* const countryInfoKeyCountryCode;
 extern NSString* const countryInfoKeyName;
 
-extern NSString* const encodedGroupPrefix;
 typedef NS_ENUM(NSInteger, TSGroupContextType) {
     TSUnknownGroupContext = 0,
     TSUpdateGroupContext = 1,

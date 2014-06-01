@@ -9,7 +9,7 @@
 #import "TSGroupContext.h"
 #import "Cryptography.h"
 #import "Constants.h"
-#import "NSData+Conversion.h"
+#import "NSData+Base64.h"
 @implementation TSGroupContext
 
 -(id)initWithId:(NSData*)groupId withType:(TSGroupContextType)groupType withName:(NSString*)groupName withMembers:(NSArray*)groupMembers withAvatar:(TSAttachment*)groupAvatar {
@@ -29,7 +29,7 @@
 }
 
 -(NSString*) getEncodedId {
-    return [[encodedGroupPrefix stringByAppendingString:@"!"] stringByAppendingString:[self.gid hexadecimalString]];
+    return [self.gid base64EncodedString];
 }
 
 @end

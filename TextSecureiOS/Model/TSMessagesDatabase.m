@@ -73,12 +73,16 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-#warning incomplete implementation of groups
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar BLOB)"]) {
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS group_membership (FOREIGN KEY(group_id) REFERENCES groups(group_id),FOREIGN KEY(group_member) REFERENCES contacts(registered_id))"]) {
+            return;
+        }
+
+        
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id), meta_message INTEGER)"]) {
             return;
         }
         
@@ -457,7 +461,31 @@ static TSDatabaseManager *messagesDb = nil;
 
 #pragma mark Groups table
 
-#warning TODO
++ (NSArray*)groups{
+    openDBMacroNil
+    
+    NSMutableArray *groups = [NSMutableArray array];
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM groups"];
+        
+        while ([searchInDB next]) {
+            
+            TSContact *contact = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]];
+            contact.identityKey = [searchInDB dataForColumn:@"identity_key"];
+            NSData *deviceIds = [searchInDB dataForColumn:@"device_ids"];
+            if (deviceIds) {
+                contact.deviceIDs = [NSKeyedUnarchiver unarchiveObjectWithData:deviceIds];
+            }
+            contact.identityKeyIsVerified = [searchInDB boolForColumn:@"verified_identity"];
+            [contacts addObject:contact];
+        }
+        [searchInDB close];
+    }];
+    
+    return [contacts copy];
+}
+
 
 #pragma mark Attachements
 
