@@ -53,6 +53,22 @@
  */
 +(NSData*) getStorageMasterKeyWithError:(NSError **)error;
 
+/**
+ * Change the password of the storage master key.
+ * @author Christoph Schenkel
+ *
+ * @param oldPassword Current master key password
+ * @param newPassword New master key password
+ */
++(void) changeStorageMasterKeyPasswordFrom:(NSString*)oldPassword to:(NSString*)newPassword error:(NSError **)error;
+
+/**
+ * Change the password of the storage master key without providing the current password. Storage master key need to be unlocked.
+ * @author Christoph Schenkel
+ *
+ * @param newPassword New master key password
+ */
++(void) changeStorageMasterKeyPasswordTo:(NSString*)newPassword error:(NSError **)error;
 
 #pragma mark Storage master key locking
 /**
