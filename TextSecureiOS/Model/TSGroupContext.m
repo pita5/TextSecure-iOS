@@ -7,7 +7,8 @@
 //
 
 #import "TSGroupContext.h"
-
+#import "Cryptography.h"
+#import "Constants.h"
 @implementation TSGroupContext
 
 -(id)initWithId:(NSData*)groupId withType:(TSGroupContextType)groupType withName:(NSString*)groupName withMembers:(NSArray*)groupMembers withAvatar:(TSAttachment*)groupAvatar {
@@ -20,4 +21,10 @@
     }
     return self;
 }
+
++(NSData*) createNewGroupId {
+    NSData* randomId = [Cryptography generateRandomBytes:32];
+    return randomId;
+}
+
 @end

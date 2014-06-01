@@ -110,7 +110,7 @@
 }
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:@"TSGroupSetupSegue"]) {
+    if([segue.identifier isEqualToString:@"TSGroupSetupSegue"]) {        
         TSGroupSetupViewController *vc = [segue destinationViewController];
         vc.whisperContacts = [self getSelectedContacts];
     } else if ([segue.destinationViewController isKindOfClass:[TSMessageViewController class]]) {

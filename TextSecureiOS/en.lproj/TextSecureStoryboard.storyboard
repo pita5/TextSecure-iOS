@@ -834,7 +834,6 @@
                         <barButtonItem key="rightBarButtonItem" title="Next" id="WDj-mH-r1Z">
                             <connections>
                                 <action selector="createNonBroadcastGroup:" destination="gdW-po-j3F" id="r76-a3-jRE"/>
-                                <segue destination="ka8-ZU-Vji" kind="custom" identifier="GroupComposeMessageSegue" customClass="TSReplaceSegue" id="q88-kz-SKF"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -842,11 +841,12 @@
                         <outlet property="groupName" destination="7Qk-PP-fNe" id="EBj-jf-K9S"/>
                         <outlet property="groupPhoto" destination="sgl-AQ-Zyy" id="reZ-eT-Aqa"/>
                         <outlet property="nextButton" destination="WDj-mH-r1Z" id="i6w-9y-03x"/>
+                        <segue destination="ka8-ZU-Vji" kind="custom" identifier="GroupComposeMessageSegue" customClass="TSReplaceSegue" id="n1o-pw-c5S"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T21-Nf-Nr0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1737" y="-6281"/>
+            <point key="canvasLocation" x="-1939" y="-6281"/>
         </scene>
     </scenes>
     <resources>
@@ -861,7 +861,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="q88-kz-SKF"/>
+        <segue reference="n1o-pw-c5S"/>
         <segue reference="P7Y-NC-M85"/>
     </inferredMetricsTieBreakers>
 </document>

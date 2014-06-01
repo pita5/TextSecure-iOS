@@ -33,3 +33,5 @@ unsigned char  const textSecureVersion = 0;
 NSString* const countryInfoPathInMainBundle = @"CountryCodes";
 NSString* const countryInfoKeyCountryCode = @"country_code";
 NSString* const countryInfoKeyName = @"name";
+
+NSString* const encodedGroupPrefix = @"__textsecure_group__!";
