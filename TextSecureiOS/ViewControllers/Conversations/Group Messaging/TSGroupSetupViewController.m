@@ -100,6 +100,7 @@
 
 
 -(IBAction)createGroup {
+    // TODO: here we actually send out the create group message!
     [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
 }
 
