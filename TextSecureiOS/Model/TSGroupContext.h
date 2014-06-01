@@ -21,4 +21,5 @@
 
 -(id)initWithId:(NSData*)groupId withType:(TSGroupContextType)groupType withName:(NSString*)groupName withMembers:(NSArray*)groupMembers withAvatar:(TSAttachment*)groupAvatar;
 +(NSData*) createNewGroupId;
+-(NSString*) getEncodedId;
 @end

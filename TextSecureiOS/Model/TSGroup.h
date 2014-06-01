@@ -10,7 +10,6 @@
 #import "TSGroupContext.h"
 
 @interface TSGroup : NSObject
-@property (readonly) NSString *id;
 @property(nonatomic,assign) BOOL isNonBroadcastGroup;
 @property(nonatomic,strong) NSString *groupName;
 @property(nonatomic,strong) UIImage *groupImage;
