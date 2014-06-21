@@ -10,7 +10,12 @@
 #import "Cryptography.h"
 #import "Constants.h"
 #import "NSData+Base64.h"
+#import "NSString+Conversion.h"
 @implementation TSGroupContext
+
+-(id)initWithId:(NSData*)groupId withName:(NSString*)groupName withAvatar:(TSAttachment*)avatar{
+    return [self initWithId:groupId withType:TSUnknownGroupContext withName:groupName withMembers:[[NSMutableArray alloc] init] withAvatar:avatar];
+}
 
 -(id)initWithId:(NSData*)groupId withType:(TSGroupContextType)groupType withName:(NSString*)groupName withMembers:(NSArray*)groupMembers withAvatar:(TSAttachment*)groupAvatar {
     if(self=[super init]) {
@@ -30,6 +35,10 @@
 
 -(NSString*) getEncodedId {
     return [self.gid base64EncodedString];
+}
+
+-(NSData*) getDecodedId:(NSString*)encodedId {
+    return [NSData dataFromBase64String:encodedId];
 }
 
 @end

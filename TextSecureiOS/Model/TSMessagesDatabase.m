@@ -24,7 +24,7 @@
 #import "TSConversation.h"
 #import "TSSession.h"
 #import "TSChainKey.h"
-
+#import "Cryptography.h"
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
 #define databaseFileName @"TSMessages.db"
 
@@ -73,7 +73,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar BLOB)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT)"]) {
             return;
         }
         
@@ -470,20 +470,28 @@ static TSDatabaseManager *messagesDb = nil;
         FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM groups"];
         
         while ([searchInDB next]) {
-            
-            TSContact *contact = [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:[searchInDB stringForColumn:@"relay"]];
-            contact.identityKey = [searchInDB dataForColumn:@"identity_key"];
-            NSData *deviceIds = [searchInDB dataForColumn:@"device_ids"];
-            if (deviceIds) {
-                contact.deviceIDs = [NSKeyedUnarchiver unarchiveObjectWithData:deviceIds];
-            }
-            contact.identityKeyIsVerified = [searchInDB boolForColumn:@"verified_identity"];
-            [contacts addObject:contact];
+            TSGroup *group = [[TSGroup alloc] init];
+            TSAttachment *attachment = [[TSAttachment alloc] initWithAttachmentDataPath:[searchInDB stringForColumn:@"avatar_path"] withType:[searchInDB intForColumn:@"avatar_type"] withDecryptionKey:[searchInDB dataForColumn:@"avatar_key"]];
+            group.groupImage = [UIImage imageWithData:[Cryptography decryptAttachment:[NSData dataWithContentsOfFile:attachment.attachmentDataPath] withKey:attachment.attachmentDecryptionKey]];
+            group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext getDecodedId:[searchInDB stringForColumn:@"group_id"]] withName:group.groupName withAvatar:attachment];
+            [groups addObject:group];
         }
         [searchInDB close];
     }];
-    
-    return [contacts copy];
+    for (TSGroup* group in groups) {
+        [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+            FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]];
+            while ([searchInDB next]) {
+#warning relay isn't stored, because we're missing this in the TSPushMessageContent... hmmmm
+                [group.groupContext.members addObject: [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@""] relay:nil]];
+            
+            
+            }
+            [searchInDB close];
+        }];
+    }
+
+    return [groups copy];
 }
 
 
