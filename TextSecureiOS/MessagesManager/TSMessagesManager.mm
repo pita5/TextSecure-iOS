@@ -57,14 +57,9 @@
     return self;
 }
 
-
-
-
-
 -(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
-#warning remove this, it is to debug identity key stuff!
         
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
@@ -78,9 +73,6 @@
             [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 switch (operation.response.statusCode) {
                     case 200:{
-                        
-
-                        
                         // Extracting the recipients keying material from server payload
                         
                         NSArray *keys = [responseObject objectForKey:@"keys"];

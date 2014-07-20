@@ -9,7 +9,10 @@
 #import "Constants.h"
 #import "TSSocketManager.h"
 
+#define kWebSocketHeartBeat 15
+
 @interface TSSocketManager ()
+@property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) SRWebSocket *websocket;
 @end
 
@@ -56,11 +59,12 @@
         }
     }
     
-    NSString *webSocketConnect = [NSString stringWithFormat:@"%@?user=%@&password=%@", textSecureWebSocketAPI, [[TSKeyManager getUsernameToken] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"],[TSKeyManager getAuthenticationToken]];
+    NSString *webSocketConnect = [NSString stringWithFormat:@"%@?login=%@&password=%@", textSecureWebSocketAPI, [[TSKeyManager getUsernameToken] stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"],[TSKeyManager getAuthenticationToken]];
     NSURL *webSocketConnectURL = [NSURL URLWithString:webSocketConnect];
     NSLog(@"WebsocketURL %@", webSocketConnectURL);
     socket = [[SRWebSocket alloc] initWithURL:webSocketConnectURL];
     socket.delegate = [self sharedManager];
+    [socket setHeartbeatInterval:kWebSocketHeartBeat];
     [socket open];
 }
 
@@ -70,6 +74,7 @@
 
     if (state == SR_CONNECTING || state == SR_OPEN) {
         [socket close];
+        DLog(@"Socket closed");
     }
     socket.delegate = nil;
     socket = nil;
@@ -79,10 +84,12 @@
 
 - (void) webSocketDidOpen:(SRWebSocket *)webSocket{
     DLog(@"WebSocket was sucessfully opened");
+    self.timer = [NSTimer timerWithTimeInterval:kWebSocketHeartBeat target:self selector:@selector(webSocketHeartBeat) userInfo:nil repeats:YES];
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
     DLog(@"Error connecting to socket %@", error);
+    [self.timer invalidate];
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
@@ -90,7 +97,11 @@
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
-    DLog(@"Websocket closed with reason : %@ was clean %@", reason, wasClean?@"Yes":@"No");
+    [self.timer invalidate];
+}
+
+- (void)webSocketHeartBeat{
+    // Send heartbeat. See: https://github.com/square/SocketRocket/pull/184
 }
 
 @end
