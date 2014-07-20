@@ -66,25 +66,19 @@
     socket.delegate = [self sharedManager];
     [socket setHeartbeatInterval:kWebSocketHeartBeat];
     [socket open];
+    [[self sharedManager] setWebsocket:socket];
 }
 
 + (void)resignActivity{
     SRWebSocket *socket =[[self sharedManager] websocket];
-    int state = [socket readyState];
-
-    if (state == SR_CONNECTING || state == SR_OPEN) {
-        [socket close];
-        DLog(@"Socket closed");
-    }
-    socket.delegate = nil;
-    socket = nil;
+    [socket close];
 }
 
 #pragma mark - Delegate methods
 
 - (void) webSocketDidOpen:(SRWebSocket *)webSocket{
     DLog(@"WebSocket was sucessfully opened");
-    self.timer = [NSTimer timerWithTimeInterval:kWebSocketHeartBeat target:self selector:@selector(webSocketHeartBeat) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kWebSocketHeartBeat target:self selector:@selector(webSocketHeartBeat) userInfo:nil repeats:YES];
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
@@ -97,6 +91,7 @@
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
+    DLog(@"WebSocket did close"); 
     [self.timer invalidate];
 }
 

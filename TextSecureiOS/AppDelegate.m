@@ -145,7 +145,12 @@
         }
     }
 }
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    [application beginBackgroundTaskWithExpirationHandler:^{
+        
+    }];
+    
     [TSSocketManager resignActivity];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kScreenshotProtection]) {
         self.blankWindow.hidden = NO;
