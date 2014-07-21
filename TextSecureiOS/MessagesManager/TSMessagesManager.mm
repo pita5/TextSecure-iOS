@@ -57,13 +57,13 @@
     return self;
 }
 
-
-
-
-
 -(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
+<<<<<<< HEAD
+=======
+        
+>>>>>>> WebSockets
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
         if ([sessions count] > 0) {
@@ -76,9 +76,6 @@
             [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 switch (operation.response.statusCode) {
                     case 200:{
-                        
-
-                        
                         // Extracting the recipients keying material from server payload
                         
                         NSArray *keys = [responseObject objectForKey:@"keys"];
@@ -128,7 +125,7 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-    NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"m"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
+    NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"message"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     NSLog(@"push message bytes %lu",(unsigned long) decryptedPayload.length);
     
     TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
