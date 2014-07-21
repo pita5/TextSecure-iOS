@@ -20,4 +20,8 @@
 
 
 -(id)initWithId:(NSData*)groupId withType:(TSGroupContextType)groupType withName:(NSString*)groupName withMembers:(NSArray*)groupMembers withAvatar:(TSAttachment*)groupAvatar;
+-(id)initWithId:(NSData*)groupId withName:(NSString*)groupName withAvatar:(TSAttachment*)avatar;
++(NSData*) createNewGroupId;
+-(NSString*) getEncodedId;
+-(NSData*) getDecodedId:(NSString*)encodedId;
 @end

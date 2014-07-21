@@ -8,6 +8,7 @@
 
 #import "TSPushMessageContent.hh"
 #import "PushMessageContent.pb.hh"
+#import "TSContact.h"
 #import "TSMessage.h"
 #import "TSAttachment.h"
 
@@ -134,8 +135,8 @@
     serializedGroupContext->set_id([self objcDataToCppString:self.groupContext.gid]);
     serializedGroupContext->set_type((textsecure::PushMessageContent_GroupContext_Type)self.groupContext.type);
     serializedGroupContext->set_name([self objcStringToCpp:self.groupContext.name]);
-    for(NSString* member  in self.groupContext.members) {
-        serializedGroupContext->add_members([self objcStringToCpp:member]);
+    for(TSContact* member  in self.groupContext.members) {
+        serializedGroupContext->add_members([self objcStringToCpp:member.registeredID]);
     }
     
     if(self.groupContext.avatar!=nil) {

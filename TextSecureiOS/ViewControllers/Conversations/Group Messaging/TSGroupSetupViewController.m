@@ -9,7 +9,9 @@
 #import "TSGroupSetupViewController.h"
 #import "TSMessageViewController.h"
 #import "TextSecureViewController.h"
-
+#import "Cryptography.h"
+#import "TSMessageOutgoing.h"
+#import "TSMessagesManager.h"
 @interface TSGroupSetupViewController ()
 
 @end
@@ -100,7 +102,17 @@
 
 
 -(IBAction)createGroup {
-    [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
+#warning want to pick the group id generation length etc. as the droid
+#warning no avatar support yet will come with attachments support
+    // https://github.com/WhisperSystems/TextSecure/blob/d5f04159074544d715628b870aa048993ee69b7d/src/org/thoughtcrime/securesms/util/GroupUtil.java
+    self.group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext createNewGroupId] withType:TSUpdateGroupContext withName:self.group.groupName withMembers:self.whisperContacts withAvatar:nil];
+    for(TSContact* contact in self.whisperContacts) {
+        TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:@"" recipient:contact.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+        [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"we haven't implemented group compose yet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+//    [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

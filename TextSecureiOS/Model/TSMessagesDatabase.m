@@ -24,7 +24,7 @@
 #import "TSConversation.h"
 #import "TSSession.h"
 #import "TSChainKey.h"
-
+#import "Cryptography.h"
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
 #define databaseFileName @"TSMessages.db"
 
@@ -73,12 +73,16 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-#warning incomplete implementation of groups
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT)"]) {
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS group_membership (FOREIGN KEY(group_id) REFERENCES groups(group_id),FOREIGN KEY(group_member) REFERENCES contacts(registered_id))"]) {
+            return;
+        }
+
+        
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id), meta_message INTEGER)"]) {
             return;
         }
         
@@ -268,7 +272,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block BOOL success = NO;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        id groupId = message.group ? message.group.id : [NSNull null];
+        id groupId = message.group ? [message.group.groupContext getEncodedId]: [NSNull null];
         
         success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
     }];
@@ -359,7 +363,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=?" withArgumentsInArray:@[group.id]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
         
         while ([messages next]) {
             [messagesArray addObject:[self messageForDBElement:messages]];
@@ -457,7 +461,39 @@ static TSDatabaseManager *messagesDb = nil;
 
 #pragma mark Groups table
 
-#warning TODO
++ (NSArray*)groups{
+    openDBMacroNil
+    
+    NSMutableArray *groups = [NSMutableArray array];
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM groups"];
+        
+        while ([searchInDB next]) {
+            TSGroup *group = [[TSGroup alloc] init];
+            TSAttachment *attachment = [[TSAttachment alloc] initWithAttachmentDataPath:[searchInDB stringForColumn:@"avatar_path"] withType:[searchInDB intForColumn:@"avatar_type"] withDecryptionKey:[searchInDB dataForColumn:@"avatar_key"]];
+            group.groupImage = [UIImage imageWithData:[Cryptography decryptAttachment:[NSData dataWithContentsOfFile:attachment.attachmentDataPath] withKey:attachment.attachmentDecryptionKey]];
+            group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext getDecodedId:[searchInDB stringForColumn:@"group_id"]] withName:group.groupName withAvatar:attachment];
+            [groups addObject:group];
+        }
+        [searchInDB close];
+    }];
+    for (TSGroup* group in groups) {
+        [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+            FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]];
+            while ([searchInDB next]) {
+#warning relay isn't stored, because we're missing this in the TSPushMessageContent... hmmmm
+                [group.groupContext.members addObject: [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@""] relay:nil]];
+            
+            
+            }
+            [searchInDB close];
+        }];
+    }
+
+    return [groups copy];
+}
+
 
 #pragma mark Attachements
 
