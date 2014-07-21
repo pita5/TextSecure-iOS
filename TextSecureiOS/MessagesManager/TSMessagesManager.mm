@@ -60,10 +60,6 @@
 -(void)sendMessage:(TSMessageOutgoing*)message{
     dispatch_async(queue, ^{
         TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
-<<<<<<< HEAD
-=======
-        
->>>>>>> WebSockets
         NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
         
         if ([sessions count] > 0) {
