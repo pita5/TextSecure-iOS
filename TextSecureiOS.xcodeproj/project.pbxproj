@@ -1234,6 +1234,7 @@
 		A53718BB16FF95DF00C6FCCF /* TextSecureiOS */ = {
 			isa = PBXGroup;
 			children = (
+				A5ABDE9218F14409007CE2D2 /* iPad */,
 				A53718C416FF95DF00C6FCCF /* AppDelegate.h */,
 				A53718C516FF95DF00C6FCCF /* AppDelegate.m */,
 				A53718CD16FF95DF00C6FCCF /* TextSecureStoryboard.storyboard */,
@@ -1623,6 +1624,13 @@
 			);
 			name = flags;
 			path = TextSecureiOSAssets/flags;
+			sourceTree = "<group>";
+		};
+		A5ABDE9218F14409007CE2D2 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = iPad;
 			sourceTree = "<group>";
 		};
 		A5B0B82018198C8E00AF41A7 /* ProtocolBuffers */ = {

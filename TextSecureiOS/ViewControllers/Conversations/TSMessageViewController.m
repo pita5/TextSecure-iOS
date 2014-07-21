@@ -34,12 +34,15 @@
     if (!self.group) {
         self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
     }
+    else {
+//        self.messages = [TSMessagesDatabase messagesWithGroup:self.group];
+#warning TODO IN GROUP CONTEXT
+    }
 
     [self.tableView reloadData];
 }
 
 -(void) setupThread  {
-    self.title = [self.contact name];
     [self.tableView setContentOffset:CGPointMake(0, CGFLOAT_MAX)]; //scrolls to bottom
 }
 
@@ -47,7 +50,6 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"ProfileSegue"])  {
-
         ((TSVerifyIdentityViewController*)segue.destinationViewController).contact = self.contact;
     }
 }
@@ -61,19 +63,6 @@
     [self setupThread];
     self.delegate = self;
     self.dataSource = self;
-    if (self.group) {
-        if([[self.group groupName] length]>0) {
-            self.title = self.group.groupName;
-        }
-        else if ([self.group isNonBroadcastGroup]) {
-            self.title = @"Group message";
-        }
-        else {
-            self.title = @"Broadcast message";
-        }
-    } else {
-        self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
-    }
 
     [self.view setBackgroundColor:[UIColor whiteColor]];
     self.tableView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, self.view.frame.size.height - 44);
@@ -86,17 +75,32 @@
     }];
     
     
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:self.contact.registeredID object:nil queue:nil usingBlock:^(NSNotification *note) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.contact = [TSMessagesDatabase contactForRegisteredID:self.contact.registeredID];
-            [self displayProfileOptionIfAvailable];
-        });
-    }];
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    [self displayProfileOptionIfAvailable];
+    
+    if (self.group) {
+        if([[self.group groupName] length]>0) {
+            self.title = self.group.groupName;
+        }
+        else if ([self.group isNonBroadcastGroup]) {
+            self.title = @"Group message";
+        }
+        else {
+            self.title = @"Broadcast message";
+        }
+    }
+    else {
+        self.title = [self.contact name];
+        self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
+        [[NSNotificationCenter defaultCenter] addObserverForName:self.contact.registeredID object:nil queue:nil usingBlock:^(NSNotification *note) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.contact = [TSMessagesDatabase contactForRegisteredID:self.contact.registeredID];
+                [self displayProfileOptionIfAvailable];
+            });
+        }];
+        [self displayProfileOptionIfAvailable];
+    }
 }
 
 - (void)dealloc {
@@ -139,17 +143,22 @@
 }
 
 - (void)didSendText:(NSString *)text {
+    if(!self.group) {
+        TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
 
-    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
+        //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+        //        // this is asynchronous so message will only be send by messages manager when it succeeds
+        //        [TSAttachmentManager uploadAttachment:message];
+        //    }
 
-    //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
-    //        // this is asynchronous so message will only be send by messages manager when it succeeds
-    //        [TSAttachmentManager uploadAttachment:message];
-    //    }
-
-    [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+        [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+    }
+    else {
+#warning: do this in the group context
+        TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+        
+    }
     [self reloadMessages];
-
     [self finishSend];
 }
 
