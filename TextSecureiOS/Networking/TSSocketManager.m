@@ -8,6 +8,9 @@
 
 #import "Constants.h"
 #import "TSSocketManager.h"
+#import "TSMessagesManager.h"
+#import "TSStorageMasterKey.h"
+#import "TSWaitingPushMessageDatabase.h"
 
 #define kWebSocketHeartBeat 15
 
@@ -87,11 +90,31 @@
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
-    DLog(@"Received on Websocket : %@", message);
+    //DLog(@"Received on Websocket : %@", message);
+    
+    NSData *data = [message dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSDictionary *serializedMessage = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    
+    
+    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
+        [[TSMessagesManager sharedManager]receiveMessagePush:serializedMessage];
+    }
+    else {
+        [TSWaitingPushMessageDatabase queuePush:serializedMessage];
+    }
+    
+    [[TSMessagesManager sharedManager]receiveMessagePush:serializedMessage];
+    
+    DLog(@"Got message : %@", [serializedMessage objectForKey:@"message"]);
+    
+    NSString *ackedId = [serializedMessage objectForKey:@"id"];
+    [self.websocket send:[[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:@{@"type":@"1", @"id":ackedId} options:0 error:nil] encoding:NSUTF8StringEncoding]];
+    DLog(@"ACK sent : %@", ackedId);
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
-    DLog(@"WebSocket did close"); 
+    DLog(@"WebSocket did close");
     [self.timer invalidate];
 }
 

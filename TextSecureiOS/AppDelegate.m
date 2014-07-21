@@ -219,21 +219,6 @@
 
 }
 
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-	[self handlePush:userInfo];
-}
-
--(void) handlePush:(NSDictionary *)pushInfo {
-    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
-        [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
-    }
-    else {
-        // Store in queue
-        [TSWaitingPushMessageDatabase queuePush:pushInfo];
-    }
-}
-
 -(void) handlePushesQueuedInDB {
     // This method is triggered whenever DB is unlocked
     if(![TSStorageMasterKey isStorageMasterKeyLocked]) {

@@ -111,7 +111,7 @@
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
-    NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"m"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
+    NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"message"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     NSLog(@"push message bytes %lu",(unsigned long) decryptedPayload.length);
     
     TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
