@@ -10,7 +10,6 @@
 #import <Security/Security.h>
 #import <CommonCrypto/CommonHMAC.h>
 #import <CommonCrypto/CommonCryptor.h>
-#import <RNCryptor/RNCryptorEngine.h>
 #import "NSData+Conversion.h"
 #import "KeychainWrapper.h"
 #import "Constants.h"

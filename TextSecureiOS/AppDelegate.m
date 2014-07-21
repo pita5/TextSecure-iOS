@@ -58,9 +58,6 @@
 	[[BITHockeyManager sharedHockeyManager] startManager];
 #endif
 
-	if(launchOptions!=nil) {
-		[self handlePush:launchOptions];
-	}
 	if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated]) {
 		[[UIApplication sharedApplication] registerForRemoteNotificationTypes:
 		 (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];

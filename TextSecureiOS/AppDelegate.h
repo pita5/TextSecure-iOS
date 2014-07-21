@@ -20,5 +20,4 @@
 // used to obscure the application when the user backgrounds it
 @property (strong, nonatomic) UIWindow *blankWindow;
 
--(void) handlePush:(NSDictionary *)pushInfo;
 @end
