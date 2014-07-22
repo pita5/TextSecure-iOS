@@ -49,6 +49,10 @@ typedef enum {
 
 - (instancetype)initMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state messageId:(NSString*)messageId;
 
+
+- (instancetype)copyMessageToRecipient:(NSString *)newRecipientId;
+
+
 /**
  *  This method mutates the state.
  *

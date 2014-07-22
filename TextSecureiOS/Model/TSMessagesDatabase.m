@@ -549,7 +549,7 @@ while ([messages next]) {
             FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
             NSMutableArray *members = [[NSMutableArray alloc] init];
             while ([searchInDB next]) {
-                [members addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:nil]];
+                [members addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"group_member"] relay:nil]];
             }
             group.groupContext.members = members;
             [searchInDB close];

@@ -15,4 +15,5 @@
 @property(nonatomic,strong) UIImage *groupImage;
 @property(nonatomic,strong) TSGroupContext *groupContext;
 
+
 @end

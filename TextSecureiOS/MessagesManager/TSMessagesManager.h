@@ -29,7 +29,4 @@
 
 -(void) submitMessage:(TSMessageOutgoing*)message to:(NSString*)recipientId serializedMessage:(NSString*)serializedMessage ofType:(TSWhisperMessageType)messageType;
 
-// Methods for verifying identity
--(NSData*) getIdentityKeyForRecipient:(NSString*)recipientId;
--(BOOL) recipientIdentityKeyIsVerified:(NSString*)recipientId;
 @end

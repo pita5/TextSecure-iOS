@@ -141,21 +141,16 @@
 }
 
 - (void)didSendText:(NSString *)text {
-    if(!self.group) {
-        TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
-        //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
-        //        // this is asynchronous so message will only be send by messages manager when it succeeds
-        //        [TSAttachmentManager uploadAttachment:message];
-        //    }
 
-        [[TSMessagesManager sharedManager] scheduleMessageSend:message];
-    }
-    else {
-        for(TSContact* groupMember in self.group.groupContext.members) {
-            TSMessageOutgoing *message = [[TSMessageOutgoing alloc] initMessageWithContent:text recipient:groupMember.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
-            [[TSMessagesManager sharedManager] scheduleMessageSend:message];
-        }
-    }
+    self.group.groupContext.type = TSDeliverGroupContext; 
+    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:[self.contact registeredID] date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+    //        // this is asynchronous so message will only be send by messages manager when it succeeds
+    //        [TSAttachmentManager uploadAttachment:message];
+    //    }
+    
+    [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+
     [self reloadMessages];
     [self finishSend];
 }

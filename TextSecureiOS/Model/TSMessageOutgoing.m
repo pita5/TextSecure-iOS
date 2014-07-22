@@ -8,7 +8,7 @@
 
 #import "TSMessageOutgoing.h"
 #import "TSMessagesDatabase.h"
-
+#import "TSGroup.h"
 @interface TSMessageOutgoing ()
 @end
 
@@ -32,6 +32,11 @@
         _messageId = messageId;
     }
     return self;
+}
+
+
+- (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
+    return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState];
 }
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{
