@@ -23,7 +23,6 @@
 
 @interface TSMessageViewController ()
 
-@property (nonatomic, retain) NSArray *contacts;
 @property (nonatomic, retain) NSArray *messages;
 
 @end
@@ -152,8 +151,8 @@
         [[TSMessagesManager sharedManager] scheduleMessageSend:message];
     }
     else {
-        for(TSContact* groupMember in self.contacts) {
-            TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:groupMember.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+        for(TSContact* groupMember in self.group.groupContext.members) {
+            TSMessageOutgoing *message = [[TSMessageOutgoing alloc] initMessageWithContent:text recipient:groupMember.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
             [[TSMessagesManager sharedManager] scheduleMessageSend:message];
         }
     }

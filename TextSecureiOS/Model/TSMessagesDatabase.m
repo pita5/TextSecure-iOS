@@ -77,12 +77,12 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS group_membership (FOREIGN KEY(group_id) REFERENCES groups(group_id),FOREIGN KEY(group_member) REFERENCES contacts(registered_id))"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS group_membership (group_id TEXT PRIMARY KEY, group_member TEXT,FOREIGN KEY(group_id) REFERENCES groups(group_id),FOREIGN KEY(group_member) REFERENCES contacts(registered_id))"]) {
             return;
         }
 
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id), meta_message INTEGER)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, meta_message INTEGER, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
             return;
         }
         
@@ -272,9 +272,31 @@ static TSDatabaseManager *messagesDb = nil;
     __block BOOL success = NO;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        id groupId = message.group ? [message.group.groupContext getEncodedId]: [NSNull null];
-        
-        success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
+        // separate storing pipeline for group and non-group messages
+        TSGroupContext *context = message.group.groupContext;
+        if(message.group!=nil && context.type != TSDeliverGroupContext) {
+            if(context.type == TSUpdateGroupContext) {
+                //CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT)
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO groups (group_id,name,avatar_path,avatar_key,avatar_type) VALUES (?, ?, ?, ?, ?)" withArgumentsInArray:@[[context getEncodedId],context.name,[NSNull null],[NSNull null], [NSNull null]]];
+                for(TSContact* groupMember in context.members){
+                    // update the contact info in the group array
+                    success = [db executeUpdate:@"INSERT OR IGNORE INTO contacts (registered_id) VALUES (?)" withArgumentsInArray:@[groupMember.registeredID]];
+                    success = [db executeUpdate:@"INSERT OR REPLACE INTO group_membership (group_id,group_member) VALUES (?, ?)" withArgumentsInArray:@[[context getEncodedId],groupMember.registeredID]];
+                }
+            }
+            else if(message.group.groupContext.type == TSQuitGroupContext) {
+                success = [db executeUpdate:@"DELETE from group_membership  WHERE group_id=? AND group_member=? " withArgumentsInArray:@[[context getEncodedId],message.senderId]];
+            }
+            else {
+                @throw [NSException exceptionWithName:@"group context type" reason:@"type unknown" userInfo:nil];
+            }
+            
+        }
+        else {
+            id groupId = message.group ? [context getEncodedId]: [NSNull null];
+            success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
+        }
+
     }];
     
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:kDBNewMessageNotification object:nil]];
@@ -357,21 +379,32 @@ static TSDatabaseManager *messagesDb = nil;
     }
 }
 
-+ (NSArray*)messagesForGroup:(TSGroup*)group {
++ (NSArray*)messagesForGroup:(TSGroup*)group numberOfPosts:(int)numberOfPosts{
     openDBMacroNil
+    __block int nPosts = numberOfPosts;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
-        
-        while ([messages next]) {
-            [messagesArray addObject:[self messageForDBElement:messages]];
+        if (nPosts == -1) {
+while ([messages next]) {
+                [messagesArray addObject:[self messageForDBElement:messages]];
+            }
         }
-        
+        else {
+            while ([messages next] && nPosts > 0) {
+                [messagesArray addObject:[self messageForDBElement:messages]];
+                nPosts --;
+            }
+        }
         [messages close];
     }];
     
     return [messagesArray copy];
+}
+
++ (NSArray*)messagesForGroup:(TSGroup*)group {
+    return [self messagesForGroup:group numberOfPosts:-1];
 }
 
 + (NSArray*)lastMessageForGroup:(TSGroup*)group {
@@ -474,8 +507,22 @@ static TSDatabaseManager *messagesDb = nil;
             [array addObject:conversation];
         }
     }
-    
-    return array;
+    NSArray *groups = [self groups];
+    for(TSGroup* group in groups){
+        
+        NSArray *message = [self messagesForGroup:group numberOfPosts:1];
+        
+        if ([message count] == 1) {
+            TSMessage *tsMessage = [message lastObject];
+            TSConversation *conversation = [[TSConversation alloc]initWithLastMessage:tsMessage.content group:group lastDate:tsMessage.timestamp containsNonReadMessages:[tsMessage isUnread]];
+            [array addObject:conversation];
+        }
+    }
+    return [array sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSDate *first = [(TSConversation*)a lastMessageDate];
+        NSDate *second = [(TSConversation*)b lastMessageDate];
+        return [first compare:second];
+    }];;
 }
 
 #pragma mark Groups table

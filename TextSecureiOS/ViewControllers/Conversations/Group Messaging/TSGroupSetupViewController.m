@@ -107,7 +107,7 @@
     // https://github.com/WhisperSystems/TextSecure/blob/d5f04159074544d715628b870aa048993ee69b7d/src/org/thoughtcrime/securesms/util/GroupUtil.java
     self.group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext createNewGroupId] withType:TSUpdateGroupContext withName:self.group.groupName withMembers:self.whisperContacts withAvatar:nil];
     for(TSContact* contact in self.whisperContacts) {
-        TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:@"" recipient:contact.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+        TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:@"Group created, TODO don't display this" recipient:contact.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
         [[TSMessagesManager sharedManager] scheduleMessageSend:message];
     }
     [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
@@ -116,6 +116,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.destinationViewController isKindOfClass:[TSMessageViewController class]]) {
         TSMessageViewController *vc = segue.destinationViewController;
+        self.group.groupContext.type = TSDeliverGroupContext;
         vc.group = self.group;
     }
 }

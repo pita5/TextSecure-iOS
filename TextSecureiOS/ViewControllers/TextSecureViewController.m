@@ -113,10 +113,18 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     if ([cell isKindOfClass:[TSMessageConversationCell class]]) {
         
         TSConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
+
         TSMessageConversationCell *threadCell = (TSMessageConversationCell *)cell;
-        threadCell.titleLabel.text = [conversation.contact name];
-        threadCell.timestampLabel.text = [dateFormatter stringFromDate:conversation.lastMessageDate];
-        threadCell.conversationPreviewLabel.text = [conversation lastMessage];
+        if(conversation.contact!=nil) {
+            threadCell.titleLabel.text = [conversation.contact name];
+            threadCell.timestampLabel.text = [dateFormatter stringFromDate:conversation.lastMessageDate];
+            threadCell.conversationPreviewLabel.text = [conversation lastMessage];
+        }
+        else {
+            threadCell.titleLabel.text = [conversation.group groupName];
+            threadCell.timestampLabel.text = [dateFormatter stringFromDate:conversation.lastMessageDate];
+            threadCell.conversationPreviewLabel.text = [conversation lastMessage];
+        }
         
         UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         threadCell.disclosureImageView.image = disclosureIndicatorImage;
@@ -244,6 +252,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
         TSConversation* conversation = [self.conversations objectAtIndex:selectedIndexPath.row];
         mvc.contact=conversation.contact;
+        mvc.group=conversation.group;
     }
 
 }
