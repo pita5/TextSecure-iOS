@@ -295,7 +295,6 @@ static TSDatabaseManager *messagesDb = nil;
     NSString *messageId = [messages stringForColumn:@"message_id"];
     
     if (senderID) {
-#warning Groupmessaging not yet supported
         TSMessageIncoming *incoming = [[TSMessageIncoming alloc] initMessageWithContent:content sender:senderID date:date attachements:attachements group:nil state:state messageId:messageId];
         
         return incoming;
@@ -314,7 +313,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND group_id is NULL ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if (nPosts == -1) {
             while ([messages next]) {
@@ -341,7 +340,7 @@ static TSDatabaseManager *messagesDb = nil;
     
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND group_id is NULL ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if ([messages next]) {
             [messagesArray addObject:[self messageForDBElement:messages]];
@@ -363,7 +362,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
         
         while ([messages next]) {
             [messagesArray addObject:[self messageForDBElement:messages]];
@@ -373,6 +372,26 @@ static TSDatabaseManager *messagesDb = nil;
     }];
     
     return [messagesArray copy];
+}
+
++ (NSArray*)lastMessageForGroup:(TSGroup*)group {
+    openDBMacroNil
+    __block NSMutableArray *messagesArray = [NSMutableArray array];
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp DESC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
+        
+        while ([messages next]) {
+            [messagesArray addObject:[self messageForDBElement:messages]];
+        }
+        
+        [messages close];
+    }];
+    if ([messagesArray count] == 1) {
+        return [messagesArray lastObject];
+    } else{
+        return nil;
+    }
 }
 
 + (BOOL)deleteMessage:(TSMessage*)msg{
