@@ -35,8 +35,7 @@
         self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
     }
     else {
-//        self.messages = [TSMessagesDatabase messagesWithGroup:self.group];
-#warning TODO IN GROUP CONTEXT
+        self.messages = [TSMessagesDatabase messagesForGroup:self.group];
     }
 
     [self.tableView reloadData];
@@ -145,7 +144,6 @@
 - (void)didSendText:(NSString *)text {
     if(!self.group) {
         TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
-
         //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
         //        // this is asynchronous so message will only be send by messages manager when it succeeds
         //        [TSAttachmentManager uploadAttachment:message];
@@ -154,9 +152,10 @@
         [[TSMessagesManager sharedManager] scheduleMessageSend:message];
     }
     else {
-#warning: do this in the group context
-        TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
-        
+        for(TSContact* groupMember in self.contacts) {
+            TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:groupMember.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+            [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+        }
     }
     [self reloadMessages];
     [self finishSend];

@@ -464,7 +464,6 @@ static TSDatabaseManager *messagesDb = nil;
 + (NSArray*)groups{
     openDBMacroNil
     
-#warning TODO to finish this
     NSMutableArray *groups = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
@@ -474,7 +473,7 @@ static TSDatabaseManager *messagesDb = nil;
             TSGroup *group = [[TSGroup alloc] init];
             TSAttachment *attachment = [[TSAttachment alloc] initWithAttachmentDataPath:[searchInDB stringForColumn:@"avatar_path"] withType:[searchInDB intForColumn:@"avatar_type"] withDecryptionKey:[searchInDB dataForColumn:@"avatar_key"]];
             group.groupImage = [UIImage imageWithData:[Cryptography decryptAttachment:[NSData dataWithContentsOfFile:attachment.attachmentDataPath] withKey:attachment.attachmentDecryptionKey]];
-//            group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext getDecodedId:[searchInDB stringForColumn:@"group_id"]] withName:group.groupName withAvatar:attachment];
+            group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext getDecodedId:[searchInDB stringForColumn:@"group_id"]] withName:group.groupName withAvatar:attachment];
             [groups addObject:group];
         }
         [searchInDB close];
@@ -482,12 +481,11 @@ static TSDatabaseManager *messagesDb = nil;
     for (TSGroup* group in groups) {
         [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
             FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
+            NSMutableArray *members = [[NSMutableArray alloc] init];
             while ([searchInDB next]) {
-#warning relay isn't stored, because we're missing this in the TSPushMessageContent... hmmmm
-  //              [group.groupContext.members addObject: [[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@""] relay:nil]];
-            
-            
+                [members addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"registered_id"] relay:nil]];
             }
+            group.groupContext.members = members;
             [searchInDB close];
         }];
     }

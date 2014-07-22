@@ -12,6 +12,7 @@
 @class TSMessage;
 @class TSContact;
 @class TSConversation;
+@class TSGroup;
 
 typedef void(^dataBaseFetchCompletionBlock)(NSArray* array);
 typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of arrays
@@ -60,6 +61,7 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 #pragma mark Messages
 
 + (NSArray*)messagesWithContact:(TSContact*)contact;
++ (NSArray*)messagesForGroup:(TSGroup*)group;
 + (BOOL)storeMessage:(TSMessage*)msg;
 + (BOOL)deleteMessage:(TSMessage*)msg;
 

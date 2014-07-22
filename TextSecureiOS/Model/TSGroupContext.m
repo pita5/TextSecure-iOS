@@ -28,16 +28,17 @@
     return self;
 }
 
-+(NSData*) createNewGroupId {
-    NSData* randomId = [Cryptography generateRandomBytes:32];
-    return randomId;
-}
 
 -(NSString*) getEncodedId {
     return [self.gid base64EncodedString];
 }
 
--(NSData*) getDecodedId:(NSString*)encodedId {
++(NSData*) createNewGroupId {
+    NSData* randomId = [Cryptography generateRandomBytes:32];
+    return randomId;
+}
+
++(NSData*) getDecodedId:(NSString*)encodedId {
     return [NSData dataFromBase64String:encodedId];
 }
 

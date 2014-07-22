@@ -110,9 +110,7 @@
         TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:@"" recipient:contact.registeredID date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
         [[TSMessagesManager sharedManager] scheduleMessageSend:message];
     }
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"we haven't implemented group compose yet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-//    [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
+    [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
