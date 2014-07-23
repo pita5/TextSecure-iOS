@@ -77,7 +77,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS group_membership (group_id TEXT PRIMARY KEY, group_member TEXT,FOREIGN KEY(group_id) REFERENCES groups(group_id),FOREIGN KEY(group_member) REFERENCES contacts(registered_id))"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS group_membership (group_id TEXT, group_member TEXT,FOREIGN KEY(group_id) REFERENCES groups(group_id),FOREIGN KEY(group_member) REFERENCES contacts(registered_id))"]) {
             return;
         }
 
@@ -267,7 +267,7 @@ static TSDatabaseManager *messagesDb = nil;
 
 + (BOOL)storeMessage:(TSMessage*)msg {
     openDBMacroBOOL
-    
+
     __block TSMessage *message = msg;
     __block BOOL success = NO;
     
@@ -541,8 +541,7 @@ static TSDatabaseManager *messagesDb = nil;
     openDBMacroNil
     NSMutableArray *members = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
-        NSMutableArray *members = [[NSMutableArray alloc] init];
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT DISTINCT group_member FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
         while ([searchInDB next]) {
             [members addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"group_member"] relay:nil]];
         }
@@ -572,15 +571,7 @@ static TSDatabaseManager *messagesDb = nil;
         [searchInDB close];
     }];
     for (TSGroup* group in groups) {
-        [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-            FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
-            NSMutableArray *members = [[NSMutableArray alloc] init];
-            while ([searchInDB next]) {
-                [members addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"group_member"] relay:nil]];
-            }
-            group.groupContext.members = members;
-            [searchInDB close];
-        }];
+        group.groupContext.members = [self membersForGroup:group];
     }
 
     return [groups copy];

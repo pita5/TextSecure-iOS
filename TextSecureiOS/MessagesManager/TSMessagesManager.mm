@@ -63,8 +63,9 @@
 
 -(void)sendMessage:(TSMessageOutgoing*)message {
     if(message.group!=nil) {
-        // we shouldn't use the message group context members, but rather retrieve this from the database!
-        for(TSContact* recipient in [TSMessagesDatabase membersForGroup:message.group] ) {
+        // This is now a bug... [TSMessagesDatabase membersForGroup:message.group] returns the wrong thing.
+        //NSArray *members = [TSMessagesDatabase membersForGroup:message.group];
+        for(TSContact* recipient in [TSMessagesDatabase membersForGroup:message.group]) {
             if([recipient.registeredID isEqualToString:[TSKeyManager getUsernameToken]]){
                 continue;
             }
