@@ -242,7 +242,7 @@ static TSDatabaseManager *messagesDb = nil;
     NSMutableArray *contacts = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM contacts"];
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM contacts where registered_id!=?" withArgumentsInArray:@[[TSKeyManager getUsernameToken]]];
         
         while ([searchInDB next]) {
             

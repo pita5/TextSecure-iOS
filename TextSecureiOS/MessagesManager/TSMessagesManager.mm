@@ -115,7 +115,12 @@
                                 [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
                                 recipient.identityKey = theirEphemeralKey;
                                 [TSMessagesDatabase storeContact:recipient];
-                                [[NSNotificationCenter defaultCenter] postNotificationName:recipient.registeredID object:self];
+                                if(message.group==nil) {
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:recipient.registeredID object:self];
+                                }
+                                else {
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:[message.group.groupContext getEncodedId] object:self];
+                                }
 
                                 // Bootstrap session with Prekey
                                 TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];

@@ -87,6 +87,13 @@
         else {
             self.title = @"Broadcast message";
         }
+        self.messages = [TSMessagesDatabase messagesForGroup:self.group];
+        [[NSNotificationCenter defaultCenter] addObserverForName:[self.group.groupContext getEncodedId] object:nil queue:nil usingBlock:^(NSNotification *note) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.contact = [TSMessagesDatabase contactForRegisteredID:self.contact.registeredID];
+                [self displayProfileOptionIfAvailable];
+            });
+        }];
     }
     else {
         self.title = [self.contact name];
@@ -99,6 +106,7 @@
         }];
         [self displayProfileOptionIfAvailable];
     }
+    //[self reloadMessages];
 }
 
 - (void)dealloc {
