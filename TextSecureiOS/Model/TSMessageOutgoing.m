@@ -36,7 +36,13 @@
 
 
 - (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
-    return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState];
+    if(self.group!=nil && self.group.groupContext.type ==TSDeliverGroupContext) {
+        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group groupContextForDelivery] state:self.messageState];
+    }
+    else {
+        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState];
+    }
+    
 }
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{

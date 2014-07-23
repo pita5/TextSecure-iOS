@@ -130,24 +130,26 @@
       
   }
     
-  if(self.groupContext!=nil && self.groupContext.type == TSUpdateGroupContext) {
+  if(self.groupContext!=nil) {
     textsecure::PushMessageContent_GroupContext *serializedGroupContext = new textsecure::PushMessageContent_GroupContext;
     serializedGroupContext->set_id([self objcDataToCppString:self.groupContext.gid]);
     serializedGroupContext->set_type((textsecure::PushMessageContent_GroupContext_Type)self.groupContext.type);
-    serializedGroupContext->set_name([self objcStringToCpp:self.groupContext.name]);
-    for(TSContact* member  in self.groupContext.members) {
-        serializedGroupContext->add_members([self objcStringToCpp:member.registeredID]);
-    }
-    
-    if(self.groupContext.avatar!=nil) {
-        textsecure::PushMessageContent_AttachmentPointer *avatar = new textsecure::PushMessageContent_AttachmentPointer;
-        const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
-        const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
-        std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
-        avatar->set_id(attachment_id);
-        avatar->set_key(attachment_encryption_key);
-        avatar->set_contenttype(attachment_contenttype);
-        serializedGroupContext->set_allocated_avatar(avatar);
+    if(self.groupContext.type == TSUpdateGroupContext) {
+        serializedGroupContext->set_name([self objcStringToCpp:self.groupContext.name]);
+        for(TSContact* member  in self.groupContext.members) {
+            serializedGroupContext->add_members([self objcStringToCpp:member.registeredID]);
+        }
+        
+        if(self.groupContext.avatar!=nil) {
+            textsecure::PushMessageContent_AttachmentPointer *avatar = new textsecure::PushMessageContent_AttachmentPointer;
+            const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
+            const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
+            std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
+            avatar->set_id(attachment_id);
+            avatar->set_key(attachment_encryption_key);
+            avatar->set_contenttype(attachment_contenttype);
+            serializedGroupContext->set_allocated_avatar(avatar);
+        }
     }
     pushMessageContent->set_allocated_group(serializedGroupContext);
     

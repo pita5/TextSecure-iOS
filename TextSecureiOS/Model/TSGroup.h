@@ -16,5 +16,5 @@
 @property(nonatomic,strong) TSGroupContext *groupContext;
 
 -(instancetype) initWithGroupContext:(TSGroupContext*)context;
-
+-(instancetype) groupContextForDelivery;
 @end

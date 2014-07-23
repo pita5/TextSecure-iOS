@@ -35,8 +35,7 @@
 
 @implementation TSMessagesManager
 
-- (void)scheduleMessageSend:(TSMessageOutgoing *)message
-{
+- (void)scheduleMessageSend:(TSMessageOutgoing *)message {
     [TSMessagesDatabase storeMessage:message];
     [self sendMessage:message];
 }
@@ -63,8 +62,7 @@
 
 -(void)sendMessage:(TSMessageOutgoing*)message {
     if(message.group!=nil) {
-        // This is now a bug... [TSMessagesDatabase membersForGroup:message.group] returns the wrong thing.
-        //NSArray *members = [TSMessagesDatabase membersForGroup:message.group];
+        NSLog(@"outgoing GID is %@",[message.group.groupContext getEncodedId]);
         for(TSContact* recipient in [TSMessagesDatabase membersForGroup:message.group]) {
             if([recipient.registeredID isEqualToString:[TSKeyManager getUsernameToken]]){
                 continue;
@@ -156,7 +154,9 @@
     TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
     
     TSMessage *decryptedMessage = [TSAxolotlRatchet decryptWhisperMessage:signal.message withSession:session];
-    
+    if(decryptedMessage.group!=nil) {
+        NSLog(@"incoming group id is %@",[decryptedMessage.group.groupContext getEncodedId]);
+    }
     [TSMessagesDatabase storeMessage:decryptedMessage];
 }
 

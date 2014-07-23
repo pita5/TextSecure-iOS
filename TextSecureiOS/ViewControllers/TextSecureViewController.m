@@ -245,8 +245,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"NewMessageOnThreadSegue"]) {
         TSMessageViewController *mvc = [segue destinationViewController];
-        //        [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
-        if([sender respondsToSelector:@selector(group)]) {
+         if([sender respondsToSelector:@selector(group)]) {
             mvc.group = [sender performSelector:@selector(group)];
         }
         NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];

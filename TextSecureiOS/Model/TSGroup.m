@@ -19,6 +19,14 @@
     return self;
 }
 
+
+-(instancetype) groupContextForDelivery {
+    TSGroup* group = [[TSGroup alloc] init];
+    group.isNonBroadcastGroup = self.isNonBroadcastGroup;
+    group.groupContext=[[TSGroupContext alloc] initWithId:self.groupContext.gid withType:TSDeliverGroupContext withName:nil withMembers:nil withAvatar:nil];
+    return group;
+}
+
 - (id)copyWithZone:(NSZone *)zone {
     id copy = [[[self class] alloc] init];
     
