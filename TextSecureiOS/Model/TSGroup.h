@@ -15,5 +15,6 @@
 @property(nonatomic,strong) UIImage *groupImage;
 @property(nonatomic,strong) TSGroupContext *groupContext;
 
+-(instancetype) initWithGroupContext:(TSGroupContext*)context;
 
 @end

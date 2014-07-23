@@ -63,7 +63,8 @@
 
 -(void)sendMessage:(TSMessageOutgoing*)message {
     if(message.group!=nil) {
-        for(TSContact* recipient in message.group.groupContext.members ) {
+        // we shouldn't use the message group context members, but rather retrieve this from the database!
+        for(TSContact* recipient in [TSMessagesDatabase membersForGroup:message.group] ) {
             if([recipient.registeredID isEqualToString:[TSKeyManager getUsernameToken]]){
                 continue;
             }

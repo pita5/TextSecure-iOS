@@ -107,7 +107,7 @@
         self.body = [self cppStringToObjc:cppMessage];
         self.attachments = messageAttachments;
         self.messageFlags = (TSPushMessageFlags)cppFlags;
-        self.serializedProtocolData = [self serializedProtocolBuffer];
+        self.serializedProtocolData = [self serializedProtocolBuffer]; // This is causing a crash, presumably because things are null that I was not expecting.
     }
     return self;
 }
@@ -130,7 +130,7 @@
       
   }
     
-  if(self.groupContext!=nil) {
+  if(self.groupContext!=nil && self.groupContext.type == TSUpdateGroupContext) {
     textsecure::PushMessageContent_GroupContext *serializedGroupContext = new textsecure::PushMessageContent_GroupContext;
     serializedGroupContext->set_id([self objcDataToCppString:self.groupContext.gid]);
     serializedGroupContext->set_type((textsecure::PushMessageContent_GroupContext_Type)self.groupContext.type);

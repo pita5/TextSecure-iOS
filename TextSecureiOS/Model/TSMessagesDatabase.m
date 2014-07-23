@@ -537,6 +537,19 @@ static TSDatabaseManager *messagesDb = nil;
 }
 
 #pragma mark Groups table
++ (NSArray*)membersForGroup:(TSGroup *)group {
+    openDBMacroNil
+    NSMutableArray *members = [NSMutableArray array];
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
+        NSMutableArray *members = [[NSMutableArray alloc] init];
+        while ([searchInDB next]) {
+            [members addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"group_member"] relay:nil]];
+        }
+        [searchInDB close];
+    }];
+    return [members copy];
+}
 
 + (NSArray*)groups{
     openDBMacroNil

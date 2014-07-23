@@ -57,6 +57,8 @@ typedef void(^dataBaseUpdateCompletionBlock)(BOOL success); // For retreival of 
 + (BOOL)storeSession:(TSSession*)session;
 + (NSArray*)sessionsForContact:(TSContact*)contact;
 + (TSSession*)sessionForRegisteredId:(NSString*)registeredId deviceId:(int)deviceId;
+#pragma mark Groups
++ (NSArray*)membersForGroup:(TSGroup *)group;
 
 #pragma mark Messages
 

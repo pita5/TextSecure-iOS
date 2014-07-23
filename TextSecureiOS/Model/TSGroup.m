@@ -10,8 +10,16 @@
 
 @implementation TSGroup
 
-- (id)copyWithZone:(NSZone *)zone
-{
+-(instancetype) initWithGroupContext:(TSGroupContext*)context {
+    if(self = [super init]) {
+        self.groupContext = [[TSGroupContext alloc] initWithId:context.gid withType:context.type withName:context.name withMembers:context.members withAvatar:context.avatar];
+        self.groupName = self.groupContext.name;
+        self.groupImage = self.groupContext.image;
+    }
+    return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
     id copy = [[[self class] alloc] init];
     
     if (copy) {

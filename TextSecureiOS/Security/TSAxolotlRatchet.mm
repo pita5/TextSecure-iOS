@@ -94,12 +94,13 @@
     }
     
     
-#warning init group from pushMessageContent.groupContext
+    TSGroup* group = pushMessageContent.groupContext ? [[TSGroup alloc] initWithGroupContext:pushMessageContent.groupContext] : nil;
+    
     TSMessageIncoming *incomingMessage = [[TSMessageIncoming alloc] initMessageWithContent:pushMessageContent.body
                                                                                     sender:sessionRecord.contact.registeredID
                                                                                       date:[NSDate date]
                                                                               attachements:pushMessageContent.attachments
-                                                                                     group:nil
+                                                                                     group:group
                                                                                      state:TSMessageStateReceived];
     
     [sessionRecord removePendingPrekey];
