@@ -418,14 +418,14 @@ static TSDatabaseManager *messagesDb = nil;
     return [self messagesForGroup:group numberOfPosts:-1];
 }
 
-+ (NSArray*)lastMessageForGroup:(TSGroup*)group {
++ (TSMessage*)lastMessageForGroup:(TSGroup*)group {
     openDBMacroNil
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp DESC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
         
-        while ([messages next]) {
+        if([messages next]) {
             [messagesArray addObject:[self messageForDBElement:messages]];
         }
         
@@ -510,10 +510,9 @@ static TSDatabaseManager *messagesDb = nil;
     
     for(TSContact* contact in contacts){
         
-        NSArray *message = [self messagesWithContact:contact numberOfPosts:1];
+        TSMessage *tsMessage = [self lastMessageWithContact:contact];
         
-        if ([message count] == 1) {
-            TSMessage *tsMessage = [message lastObject];
+        if (tsMessage!=nil) {
             TSConversation *conversation = [[TSConversation alloc]initWithLastMessage:tsMessage.content contact:contact lastDate:tsMessage.timestamp containsNonReadMessages:[tsMessage isUnread]];
             [array addObject:conversation];
         }
@@ -521,18 +520,18 @@ static TSDatabaseManager *messagesDb = nil;
     NSArray *groups = [self groups];
     for(TSGroup* group in groups){
         
-        NSArray *message = [self messagesForGroup:group numberOfPosts:1];
+        TSMessage *tsMessage = [self lastMessageForGroup:group];
         
-        if ([message count] == 1) {
-            TSMessage *tsMessage = [message lastObject];
+        if (tsMessage!=nil) {
             TSConversation *conversation = [[TSConversation alloc]initWithLastMessage:tsMessage.content group:group lastDate:tsMessage.timestamp containsNonReadMessages:[tsMessage isUnread]];
             [array addObject:conversation];
         }
     }
     return [array sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        // most recent date will be first in array
         NSDate *first = [(TSConversation*)a lastMessageDate];
         NSDate *second = [(TSConversation*)b lastMessageDate];
-        return [first compare:second];
+        return [second compare:first];
     }];;
 }
 
