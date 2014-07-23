@@ -62,7 +62,6 @@
 
 -(void)sendMessage:(TSMessageOutgoing*)message {
     if(message.group!=nil) {
-        NSLog(@"outgoing GID is %@",[message.group.groupContext getEncodedId]);
         for(TSContact* recipient in [TSMessagesDatabase membersForGroup:message.group]) {
             if([recipient.registeredID isEqualToString:[TSKeyManager getUsernameToken]]){
                 continue;
