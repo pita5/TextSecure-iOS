@@ -58,7 +58,7 @@
             NSMutableArray *groupMembers = [[NSMutableArray alloc] init];
             for(int i=0; i < groupContext.members_size(); i++) {
                 const std::string cppMember = groupContext.members(i);
-                [groupMembers addObject:[self cppStringToObjc:cppMember]];
+                [groupMembers addObject:[[TSContact alloc] initWithRegisteredID:[self cppStringToObjc:cppMember] relay:nil]];
             }
             NSData* groupId = [self cppStringToObjcData:cppGroupId];
             TSGroupContextType groupType = (TSGroupContextType) cppGroupType;

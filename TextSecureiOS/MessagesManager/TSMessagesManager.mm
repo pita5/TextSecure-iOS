@@ -64,6 +64,9 @@
 -(void)sendMessage:(TSMessageOutgoing*)message {
     if(message.group!=nil) {
         for(TSContact* recipient in message.group.groupContext.members ) {
+            if([recipient.registeredID isEqualToString:[TSKeyManager getUsernameToken]]){
+                continue;
+            }
             [self sendMessage:[message copyMessageToRecipient:recipient.registeredID] toContact:recipient];
         }
     }
