@@ -16,7 +16,7 @@
     
     if (copy) {
         [copy setIsNonBroadcastGroup:self.isNonBroadcastGroup];
-        [copy setGroupName:[self.groupName copy]]
+        [copy setGroupName:[self.groupName copy]];
         [copy setGroupImage:[self.groupImage copy]];
         
         TSGroupContext  *groupContext = [[TSGroupContext alloc] initWithId:self.groupContext.gid withType:self.groupContext.type withName:self.groupContext.name withMembers:self.groupContext.members withAvatar:self.groupContext.avatar];

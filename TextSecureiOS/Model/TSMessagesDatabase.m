@@ -73,7 +73,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT, non_broadcast INT)"]) {
             return;
         }
         
@@ -277,15 +277,25 @@ static TSDatabaseManager *messagesDb = nil;
         if(message.group!=nil && context.type != TSDeliverGroupContext) {
             if(context.type == TSUpdateGroupContext) {
                 //CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT)
-                success = [db executeUpdate:@"INSERT OR REPLACE INTO groups (group_id,name,avatar_path,avatar_key,avatar_type) VALUES (?, ?, ?, ?, ?)" withArgumentsInArray:@[[context getEncodedId],context.name,[NSNull null],[NSNull null], [NSNull null]]];
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO groups (group_id,name,avatar_path,avatar_key,avatar_type,non_broadcast) VALUES (?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[[context getEncodedId],context.name,[NSNull null],[NSNull null], [NSNull null],[NSNumber numberWithBool:message.group.isNonBroadcastGroup]]];
+                NSString *metaMessage = @"";
                 for(TSContact* groupMember in context.members){
                     // update the contact info in the group array
                     success = [db executeUpdate:@"INSERT OR IGNORE INTO contacts (registered_id) VALUES (?)" withArgumentsInArray:@[groupMember.registeredID]];
                     success = [db executeUpdate:@"INSERT OR REPLACE INTO group_membership (group_id,group_member) VALUES (?, ?)" withArgumentsInArray:@[[context getEncodedId],groupMember.registeredID]];
+                    metaMessage = [metaMessage stringByAppendingString:[NSString stringWithFormat:@"%@ ",groupMember.registeredID]];
                 }
+                metaMessage = [metaMessage stringByAppendingString:@"joined the group."];
+                if(context.name) {
+                    metaMessage = [metaMessage stringByAppendingString:[NSString stringWithFormat:@" Title is now %@.",context.name]];
+                }
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message) VALUES (?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId],metaMessage, message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type]]];
+
             }
             else if(message.group.groupContext.type == TSQuitGroupContext) {
                 success = [db executeUpdate:@"DELETE from group_membership  WHERE group_id=? AND group_member=? " withArgumentsInArray:@[[context getEncodedId],message.senderId]];
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message) VALUES (?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId], @"member left", message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type]]];
+
             }
             else {
                 @throw [NSException exceptionWithName:@"group context type" reason:@"type unknown" userInfo:nil];
@@ -294,7 +304,8 @@ static TSDatabaseManager *messagesDb = nil;
         }
         else {
             id groupId = message.group ? [context getEncodedId]: [NSNull null];
-            success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
+            id receipientId = message.group ? [NSNull null] : message.recipientId;
+            success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, receipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
         }
 
     }];
@@ -387,7 +398,7 @@ static TSDatabaseManager *messagesDb = nil;
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
         FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
         if (nPosts == -1) {
-while ([messages next]) {
+            while ([messages next]) {
                 [messagesArray addObject:[self messageForDBElement:messages]];
             }
         }
@@ -538,8 +549,11 @@ while ([messages next]) {
         while ([searchInDB next]) {
             TSGroup *group = [[TSGroup alloc] init];
             TSAttachment *attachment = [[TSAttachment alloc] initWithAttachmentDataPath:[searchInDB stringForColumn:@"avatar_path"] withType:[searchInDB intForColumn:@"avatar_type"] withDecryptionKey:[searchInDB dataForColumn:@"avatar_key"]];
+            group.isNonBroadcastGroup = [searchInDB intForColumn:@"non_broadcast"];
+            group.groupName = [searchInDB stringForColumn:@"name"];
             group.groupImage = [UIImage imageWithData:[Cryptography decryptAttachment:[NSData dataWithContentsOfFile:attachment.attachmentDataPath] withKey:attachment.attachmentDecryptionKey]];
             group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext getDecodedId:[searchInDB stringForColumn:@"group_id"]] withName:group.groupName withAvatar:attachment];
+
             [groups addObject:group];
         }
         [searchInDB close];
