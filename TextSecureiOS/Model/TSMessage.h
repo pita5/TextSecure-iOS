@@ -35,6 +35,7 @@ typedef void (^TSMessageChangeState)(BOOL success);
 @property (nonatomic, readonly) int state;
 @property (nonatomic, readonly) TSGroupContextType metaMessage;
 @property (nonatomic, readonly) NSString *messageId;
+@property (nonatomic,readonly) BOOL isBroadcast;
 
 
 -(BOOL) isUnread;

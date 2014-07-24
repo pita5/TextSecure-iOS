@@ -20,13 +20,10 @@
 }
 
 
--(BOOL)shouldSend {
-    return self.isNonBroadcastGroup || self.groupContext.type==TSDeliverGroupContext;
-}
 
 -(instancetype) groupContextForDelivery {
     TSGroup* group = [[TSGroup alloc] init];
-    group.isNonBroadcastGroup = self.isNonBroadcastGroup;
+    group.isBroadcastGroup = self.isBroadcastGroup;
     group.groupContext=[[TSGroupContext alloc] initWithId:self.groupContext.gid withType:TSDeliverGroupContext withName:nil withMembers:nil withAvatar:nil];
     return group;
 }
@@ -35,7 +32,7 @@
     id copy = [[[self class] alloc] init];
     
     if (copy) {
-        [copy setIsNonBroadcastGroup:self.isNonBroadcastGroup];
+        [copy setIsBroadcastGroup:self.isBroadcastGroup];
         [copy setGroupName:[self.groupName copy]];
         [copy setGroupImage:[self.groupImage copy]];
         

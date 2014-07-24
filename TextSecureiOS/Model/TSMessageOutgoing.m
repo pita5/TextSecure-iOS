@@ -1,4 +1,4 @@
-//
+ //
 //  TSMessageOutgoing.m
 //  TextSecureiOS
 //
@@ -13,6 +13,13 @@
 @end
 
 @implementation TSMessageOutgoing
+
+
+
+
+-(BOOL) shouldSend {
+    return !self.group || !self.isBroadcast || self.group.groupContext.type == TSDeliverGroupContext;
+}
 
 - (instancetype)initMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state {
     
@@ -35,25 +42,41 @@
 }
 
 
-- (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
+- (instancetype)initBroadcastMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state {
+    self = [self initMessageWithContent:text recipient:recipientId date:timestamp attachements:attachements group:group state:state];
     
-    if(self.group==nil || !self.group.isNonBroadcastGroup) {
-        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:nil state:self.messageState messageId:self.messageId];
+    if (self) {
+        _isBroadcast = YES;
+    }
+    return self;
+}
+
+- (instancetype)initBroadcastMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state messageId:(NSString*)messageId {
+    self = [self initMessageWithContent:text recipient:recipientId date:timestamp attachements:attachements group:group state:state messageId:messageId];
+    
+    if (self) {
+        _isBroadcast = YES;
+    }
+    return self;
+}
+
+
+
+- (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
+    TSGroup *groupForMessage = nil;
+    if(self.group!= nil  && self.group.groupContext.type == TSDeliverGroupContext) {
+        groupForMessage = [self.group groupContextForDelivery];
     }
     else {
-        if(self.group!=nil && self.group.groupContext.type ==TSDeliverGroupContext) {
-            return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group groupContextForDelivery] state:self.messageState messageId:self.messageId];
-        }
-        else {
-            return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState messageId:self.messageId];
-        }
+        groupForMessage = [self.group copy];
     }
+    return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:groupForMessage state:self.messageState messageId:self.messageId];
     
 }
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{
     BOOL didSucceed = YES;
-    if(self.group==nil) {
+    if(self.group==nil || !self.isBroadcast) {
         didSucceed = [TSMessagesDatabase storeMessage:self];
         _state = state;
     }

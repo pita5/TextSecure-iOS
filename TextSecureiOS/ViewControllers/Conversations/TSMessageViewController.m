@@ -81,7 +81,7 @@
         if([[self.group groupName] length]>0) {
             self.title = self.group.groupName;
         }
-        else if ([self.group isNonBroadcastGroup]) {
+        else if (![self.group isBroadcastGroup]) {
             self.title = @"Group message";
         }
         else {
@@ -264,10 +264,15 @@
 //    return [attachment getThumbnailOfSize:100];
 //}
 
-// This is what I change to 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
     if(![self shouldHaveSubtitleForRowAtIndexPath:indexPath]) {
-        return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+        TSMessage* message = [self.messages objectAtIndex:indexPath.row];
+        if(message.isBroadcast) {
+            return [@"BROADCAST: " stringByAppendingString:[Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]]];
+        }
+        else {
+            return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+        }
     }
     else {
         return nil;

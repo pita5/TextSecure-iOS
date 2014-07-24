@@ -73,7 +73,7 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT, non_broadcast INT)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT, broadcast INT)"]) {
             return;
         }
         
@@ -277,7 +277,7 @@ static TSDatabaseManager *messagesDb = nil;
         if(message.group!=nil && context.type != TSDeliverGroupContext) {
             if(context.type == TSUpdateGroupContext) {
                 //CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT)
-                success = [db executeUpdate:@"INSERT OR REPLACE INTO groups (group_id,name,avatar_path,avatar_key,avatar_type,non_broadcast) VALUES (?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[[context getEncodedId],context.name,[NSNull null],[NSNull null], [NSNull null],[NSNumber numberWithBool:message.group.isNonBroadcastGroup]]];
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO groups (group_id,name,avatar_path,avatar_key,avatar_type,broadcast) VALUES (?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[[context getEncodedId],context.name,[NSNull null],[NSNull null], [NSNull null],[NSNumber numberWithBool:message.group.isBroadcastGroup]]];
                 NSString *metaMessage = @"";
                 for(TSContact* groupMember in context.members){
                     // update the contact info in the group array
@@ -328,16 +328,22 @@ static TSDatabaseManager *messagesDb = nil;
     NSString *messageId = [messages stringForColumn:@"message_id"];
     if(group!=nil) {
         TSGroupContextType meta_message = [messages intForColumn:@"meta_message"];
+
         group.groupContext.type = meta_message;
     }
     
     if (senderID) {
         TSMessageIncoming *incoming = [[TSMessageIncoming alloc] initMessageWithContent:content sender:senderID date:date attachements:attachements group:group state:state messageId:messageId];
-        
         return incoming;
-    } else{
-        TSMessageOutgoing *outgoing = [[TSMessageOutgoing alloc] initMessageWithContent:content recipient:receiverID date:date attachements:attachements group:group state:state messageId:messageId];
-        return outgoing;
+    }
+    else{
+        if(group!=nil &&[messages intForColumn:@"broadcast"]) {
+           return  [[TSMessageOutgoing alloc] initBroadcastMessageWithContent:content recipient:receiverID date:date attachements:attachements group:group state:state messageId:messageId];
+        }
+        else {
+            return  [[TSMessageOutgoing alloc] initMessageWithContent:content recipient:receiverID date:date attachements:attachements group:group state:state messageId:messageId];;
+            
+        }
     }
 }
 
@@ -352,7 +358,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND group_id is NULL ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND group_id is NULL or broadcast=1 ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if (nPosts == -1) {
             while ([messages next]) {
@@ -568,7 +574,7 @@ static TSDatabaseManager *messagesDb = nil;
         while ([searchInDB next]) {
             TSGroup *group = [[TSGroup alloc] init];
             TSAttachment *attachment = [[TSAttachment alloc] initWithAttachmentDataPath:[searchInDB stringForColumn:@"avatar_path"] withType:[searchInDB intForColumn:@"avatar_type"] withDecryptionKey:[searchInDB dataForColumn:@"avatar_key"]];
-            group.isNonBroadcastGroup = [searchInDB intForColumn:@"non_broadcast"];
+            group.isBroadcastGroup = [searchInDB intForColumn:@"broadcast"];
             group.groupName = [searchInDB stringForColumn:@"name"];
             group.groupImage = [UIImage imageWithData:[Cryptography decryptAttachment:[NSData dataWithContentsOfFile:attachment.attachmentDataPath] withKey:attachment.attachmentDecryptionKey]];
             group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext getDecodedId:[searchInDB stringForColumn:@"group_id"]] withName:group.groupName withAvatar:attachment];
