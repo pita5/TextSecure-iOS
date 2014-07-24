@@ -34,6 +34,7 @@
 - (void)setState:(TSMessageIncomingState)state withCompletion:(TSMessageChangeState)block{
     BOOL didSucceed = YES;
     if(self.group==nil) {
+
         didSucceed = [TSMessagesDatabase storeMessage:self];
         _state = state;
     }

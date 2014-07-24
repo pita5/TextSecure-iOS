@@ -136,15 +136,9 @@
     return JSMessageInputViewStyleFlat;
 }
 
-- (JSMessagesViewSubtitlePolicy)subtitlePolicy{
-    return JSMessagesViewSubtitlePolicyNone;
-}
+
 
 - (UIImageView *)avatarImageViewForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return nil;
-}
-
-- (NSString *)subtitleForRowAtIndexPath:(NSIndexPath *)indexPath{
     return nil;
 }
 
@@ -270,13 +264,38 @@
 //    return [attachment getThumbnailOfSize:100];
 //}
 
+// This is what I change to 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+    if(![self shouldHaveSubtitleForRowAtIndexPath:indexPath]) {
+        return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+    }
+    else {
+        return nil;
+    }
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [(TSMessage*)[self.messages objectAtIndex:indexPath.row] timestamp];
 }
+
+
+//- (JSMessagesViewSubtitlePolicy)subtitlePolicy{
+//    return JSMessagesViewSubtitlePolicyAll;
+//}
+
+- (NSString *)subtitleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+}
+
+- (BOOL)shouldHaveSubtitleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    TSGroupContextType meta = [[self.messages objectAtIndex:indexPath.row] metaMessage];
+    return meta == TSUpdateGroupContext || meta == TSQuitGroupContext;
+}
+
+
+
+
+
 
 - (UIImage *)avatarImageForIncomingMessage {
     return nil;

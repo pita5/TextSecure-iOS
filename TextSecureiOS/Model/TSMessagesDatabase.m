@@ -315,7 +315,7 @@ static TSDatabaseManager *messagesDb = nil;
     return success;
 }
 
-+ (TSMessage*)messageForDBElement:(FMResultSet*)messages{
++ (TSMessage*)messageForDBElement:(FMResultSet*)messages inGroup:(TSGroup*)group{
     //To determine if it's an incoming or outgoing message, we look if there is a sender_id
     NSString *senderID = [messages stringForColumn:@"sender_id"];
     NSString *receiverID = [messages stringForColumn:@"recipient_id"];
@@ -326,16 +326,22 @@ static TSDatabaseManager *messagesDb = nil;
     //NSString *groupID = [messages stringForColumn:@"group_id"];
     int state = [messages intForColumn:@"state"];
     NSString *messageId = [messages stringForColumn:@"message_id"];
+    if(group!=nil) {
+        TSGroupContextType meta_message = [messages intForColumn:@"meta_message"];
+        group.groupContext.type = meta_message;
+    }
     
     if (senderID) {
-        TSMessageIncoming *incoming = [[TSMessageIncoming alloc] initMessageWithContent:content sender:senderID date:date attachements:attachements group:nil state:state messageId:messageId];
+        TSMessageIncoming *incoming = [[TSMessageIncoming alloc] initMessageWithContent:content sender:senderID date:date attachements:attachements group:group state:state messageId:messageId];
         
         return incoming;
     } else{
-        TSMessageOutgoing *outgoing = [[TSMessageOutgoing alloc] initMessageWithContent:content recipient:receiverID date:date attachements:attachements group:nil state:state messageId:messageId];
+        TSMessageOutgoing *outgoing = [[TSMessageOutgoing alloc] initMessageWithContent:content recipient:receiverID date:date attachements:attachements group:group state:state messageId:messageId];
         return outgoing;
     }
 }
+
+
 
 + (NSArray*)messagesWithContact:(TSContact*)contact numberOfPosts:(int)numberOfPosts{
     // -1 returns everything
@@ -350,11 +356,11 @@ static TSDatabaseManager *messagesDb = nil;
         
         if (nPosts == -1) {
             while ([messages next]) {
-                [messagesArray addObject:[self messageForDBElement:messages]];
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];
             }
         } else {
             while ([messages next] && nPosts > 0) {
-                [messagesArray addObject:[self messageForDBElement:messages]];
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];
                 nPosts --;
             }
         }
@@ -376,7 +382,7 @@ static TSDatabaseManager *messagesDb = nil;
         FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND group_id is NULL ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if ([messages next]) {
-            [messagesArray addObject:[self messageForDBElement:messages]];
+            [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];
         }
         
         [messages close];
@@ -399,12 +405,12 @@ static TSDatabaseManager *messagesDb = nil;
         FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
         if (nPosts == -1) {
             while ([messages next]) {
-                [messagesArray addObject:[self messageForDBElement:messages]];
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:group]];
             }
         }
         else {
             while ([messages next] && nPosts > 0) {
-                [messagesArray addObject:[self messageForDBElement:messages]];
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:group]];
                 nPosts --;
             }
         }
@@ -426,7 +432,7 @@ static TSDatabaseManager *messagesDb = nil;
         FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp DESC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
         
         if([messages next]) {
-            [messagesArray addObject:[self messageForDBElement:messages]];
+            [messagesArray addObject:[self messageForDBElement:messages inGroup:group]];
         }
         
         [messages close];

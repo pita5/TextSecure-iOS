@@ -14,7 +14,7 @@
 
 @implementation TSMessageOutgoing
 
-- (instancetype)initMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state{
+- (instancetype)initMessageWithContent:(NSString *)text recipient:(NSString *)recipientId date:(NSDate*)timestamp attachements:(NSArray*)attachements group:(TSGroup*)group state:(TSMessageOutgoingState)state {
     
     self = [super initWithSenderId:[TSKeyManager getUsernameToken] recipientId:recipientId date:timestamp content:text attachements:attachements groupId:group];
     
@@ -37,10 +37,10 @@
 
 - (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
     if(self.group!=nil && self.group.groupContext.type ==TSDeliverGroupContext) {
-        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group groupContextForDelivery] state:self.messageState];
+        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group groupContextForDelivery] state:self.messageState messageId:self.messageId];
     }
     else {
-        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState];
+        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState messageId:self.messageId];
     }
     
 }

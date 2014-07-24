@@ -23,6 +23,7 @@ typedef void (^TSMessageChangeState)(BOOL success);
     NSArray *_attachments;
     TSGroup *_group;
     int _state;
+    TSGroupContextType _metaMessage;
 }
 
 @property (nonatomic, readonly) NSString *senderId;
@@ -32,6 +33,7 @@ typedef void (^TSMessageChangeState)(BOOL success);
 @property (nonatomic, readonly) NSArray *attachments;
 @property (nonatomic, readonly) TSGroup *group;
 @property (nonatomic, readonly) int state;
+@property (nonatomic, readonly) TSGroupContextType metaMessage;
 @property (nonatomic, readonly) NSString *messageId;
 
 

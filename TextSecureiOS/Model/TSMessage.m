@@ -8,6 +8,7 @@
 
 #import "TSMessage.h"
 #import "NSString+randomString.h"
+#import "TSGroup.h"
 @implementation TSMessage
 
 - (instancetype)initWithSenderId:(NSString*)senderId recipientId:(NSString*)recipientId date:(NSDate*)date content:(NSString*)content attachements:(NSArray*)attachements groupId:(TSGroup*)group{
@@ -21,6 +22,9 @@
         _content = content;
         _attachments = attachements;
         _group = group;
+        if(group!=nil) {
+            _metaMessage = group.groupContext.type;
+        }
     }
     
     return self;
