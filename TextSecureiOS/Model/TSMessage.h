@@ -24,6 +24,7 @@ typedef void (^TSMessageChangeState)(BOOL success);
     TSGroup *_group;
     int _state;
     TSGroupContextType _metaMessage;
+    BOOL _isBroadcast;
 }
 
 @property (nonatomic, readonly) NSString *senderId;

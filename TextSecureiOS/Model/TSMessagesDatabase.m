@@ -82,7 +82,7 @@ static TSDatabaseManager *messagesDb = nil;
         }
 
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, meta_message INTEGER, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, meta_message INTEGER, broadcast INT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
             return;
         }
         
@@ -289,12 +289,12 @@ static TSDatabaseManager *messagesDb = nil;
                 if(context.name) {
                     metaMessage = [metaMessage stringByAppendingString:[NSString stringWithFormat:@" Title is now %@.",context.name]];
                 }
-                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message) VALUES (?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId],metaMessage, message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type]]];
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message, broadcast) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId],metaMessage, message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type],[NSNumber numberWithInt:message.isBroadcast]]];
 
             }
             else if(message.group.groupContext.type == TSQuitGroupContext) {
                 success = [db executeUpdate:@"DELETE from group_membership  WHERE group_id=? AND group_member=? " withArgumentsInArray:@[[context getEncodedId],message.senderId]];
-                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message) VALUES (?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId], @"member left", message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type]]];
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message, broadcast) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId], @"member left", message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type],[NSNumber numberWithInt:message.isBroadcast]]];
 
             }
             else {
@@ -305,7 +305,7 @@ static TSDatabaseManager *messagesDb = nil;
         else {
             id groupId = message.group ? [context getEncodedId]: [NSNull null];
             id receipientId = message.group ? [NSNull null] : message.recipientId;
-            success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, receipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
+            success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id, broadcast) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, receipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId,[NSNumber numberWithInt:message.isBroadcast]]];
         }
 
     }];
@@ -358,7 +358,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND group_id is NULL or broadcast=1 ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND (group_id is NULL OR broadcast = 1) ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if (nPosts == -1) {
             while ([messages next]) {
@@ -385,7 +385,7 @@ static TSDatabaseManager *messagesDb = nil;
     
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND group_id is NULL ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND (group_id is NULL OR broadcast = 1) ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if ([messages next]) {
             [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];
