@@ -37,7 +37,10 @@
 
 - (void)scheduleMessageSend:(TSMessageOutgoing *)message {
     [TSMessagesDatabase storeMessage:message];
-    [self sendMessage:message];
+    if(message.group==nil || [message.group shouldSend]) {
+        // doesn't send group creation messages for a broadcast group
+        [self sendMessage:message];
+    }
 }
 
 + (id)sharedManager {

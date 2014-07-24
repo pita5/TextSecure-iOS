@@ -20,6 +20,10 @@
 }
 
 
+-(BOOL)shouldSend {
+    return self.isNonBroadcastGroup || self.groupContext.type==TSDeliverGroupContext;
+}
+
 -(instancetype) groupContextForDelivery {
     TSGroup* group = [[TSGroup alloc] init];
     group.isNonBroadcastGroup = self.isNonBroadcastGroup;

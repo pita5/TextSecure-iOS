@@ -15,6 +15,7 @@
 @property(nonatomic,strong) UIImage *groupImage;
 @property(nonatomic,strong) TSGroupContext *groupContext;
 
+-(BOOL)shouldSend;
 -(instancetype) initWithGroupContext:(TSGroupContext*)context;
 -(instancetype) groupContextForDelivery;
 @end

@@ -18,5 +18,6 @@
 @property(nonatomic,strong) TSGroup* group;
 - (IBAction) setGroupPhotoPressed:(UIButton *)sender;
 -(IBAction)createNonBroadcastGroup:(id)sender;
--(IBAction)createGroup;
+-(IBAction)createBroadcastGroup:(id)sender;
+-(void)createGroup;
 @end

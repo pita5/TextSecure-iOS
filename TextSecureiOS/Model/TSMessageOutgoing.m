@@ -36,11 +36,17 @@
 
 
 - (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
-    if(self.group!=nil && self.group.groupContext.type ==TSDeliverGroupContext) {
-        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group groupContextForDelivery] state:self.messageState messageId:self.messageId];
+    
+    if(self.group==nil || !self.group.isNonBroadcastGroup) {
+        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:nil state:self.messageState messageId:self.messageId];
     }
     else {
-        return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState messageId:self.messageId];
+        if(self.group!=nil && self.group.groupContext.type ==TSDeliverGroupContext) {
+            return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group groupContextForDelivery] state:self.messageState messageId:self.messageId];
+        }
+        else {
+            return [[TSMessageOutgoing alloc] initMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:[self.group copy] state:self.messageState messageId:self.messageId];
+        }
     }
     
 }

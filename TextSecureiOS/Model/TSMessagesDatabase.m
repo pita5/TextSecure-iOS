@@ -495,7 +495,9 @@ static TSDatabaseManager *messagesDb = nil;
         if (conversation.contact) {
             success = [self deleteSessions:conversation.contact];
         } else{
-            //TO-DO: Implement group delete
+            // Group session deletion ambiguous and this method is just called in DEBUG mode. Deleting a group does not delete the sessions with each member of the group to maximize usefullness in debug. There's the edge case that a member you had a session with, you might want to delete in debug mode. Not supported.
+            success = YES;
+            
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
