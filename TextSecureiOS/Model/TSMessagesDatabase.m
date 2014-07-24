@@ -358,7 +358,7 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND (group_id is NULL OR broadcast = 1) ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE (sender_id=? OR recipient_id=?) AND group_id is NULL ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if (nPosts == -1) {
             while ([messages next]) {
@@ -385,7 +385,7 @@ static TSDatabaseManager *messagesDb = nil;
     
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? AND (group_id is NULL OR broadcast = 1) ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE (sender_id=? OR recipient_id=?) AND group_id is NULL ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if ([messages next]) {
             [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];

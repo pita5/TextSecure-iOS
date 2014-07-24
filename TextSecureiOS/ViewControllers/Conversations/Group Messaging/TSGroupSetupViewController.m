@@ -112,8 +112,13 @@
     NSMutableArray *groupMembers = [NSMutableArray arrayWithArray:self.whisperContacts];
     [groupMembers addObject:[[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken] relay:nil]];
     self.group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext createNewGroupId] withType:TSUpdateGroupContext withName:self.group.groupName withMembers:groupMembers withAvatar:nil];
-    
-    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initBroadcastMessageWithContent:@"" recipient:nil date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    TSMessageOutgoing *message = nil;
+    if(self.group.isBroadcastGroup) {
+       message = [[TSMessageOutgoing alloc]initBroadcastMessageWithContent:@"" recipient:nil date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    }
+    else {
+        message = [[TSMessageOutgoing alloc]initMessageWithContent:@"" recipient:nil date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    }
     [[TSMessagesManager sharedManager] scheduleMessageSend:message];
     [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
 
