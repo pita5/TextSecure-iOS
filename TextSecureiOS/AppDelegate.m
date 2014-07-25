@@ -165,7 +165,9 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     self.blankWindow.hidden = YES;
     [self updateBasedOnUserSettings];
-    [TSSocketManager becomeActive];
+    if ([TSKeyManager hasVerifiedPhoneNumber]) {
+        [TSSocketManager becomeActive];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

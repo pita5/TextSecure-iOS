@@ -16,8 +16,6 @@ NSString* const signalingTokenStorageId = @"SignalingTokenStorageId";
 NSString* const prekeyCounterStorageId = @"PrekeyCounterStorageId";
 NSString* const encryptedMasterSecretKeyStorageId  = @"EncryptedMasterSecretKeyStorageId";
 
-#warning Staging environement used. Production: https://textsecure-service.whispersystems.org/
-
 NSString* const textSecureWebSocketAPI = @"wss://textsecure-service-staging.whispersystems.org/v1/websocket/";
 NSString* const textSecureServer = @"https://textsecure-service-staging.whispersystems.org/";
 

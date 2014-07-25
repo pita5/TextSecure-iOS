@@ -9,6 +9,7 @@
 #import "SignUpStepsViewController.h"
 #import "VerificationViewController.h"
 #import "VerificationCodeViewController.h"
+#import "TSSocketManager.h"
 #import "TSSetMasterPasswordViewController.h"
 
 
@@ -31,6 +32,7 @@
 
 - (void)finishedAllSteps {
     [self performSegueWithIdentifier:@"BeginUsingApp" sender:self];
+    [TSSocketManager becomeActive];
 }
 
 - (void)canceled {

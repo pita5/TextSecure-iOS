@@ -104,8 +104,6 @@
         [TSWaitingPushMessageDatabase queuePush:serializedMessage];
     }
     
-    [[TSMessagesManager sharedManager]receiveMessagePush:serializedMessage];
-    
     DLog(@"Got message : %@", [serializedMessage objectForKey:@"message"]);
     
     NSString *ackedId = [serializedMessage objectForKey:@"id"];
