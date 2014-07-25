@@ -216,7 +216,11 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
             [alertView show];
         }
     };
+#ifdef DEBUG
+    [TSMessagesDatabase deleteMessagesAndSessionsForConversation:[self.conversations objectAtIndex:index] completion:block];
+#else
     [TSMessagesDatabase deleteMessagesForConversation:[self.conversations objectAtIndex:index] completion:block];
+#endif
 }
 
 // This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,

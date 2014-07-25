@@ -80,7 +80,7 @@
         // c++->objective C
         self.protocolData = data;
         
-        self.ephemeralKey = [[self cppStringToObjcData:cppEphemeralKey] removeVersionByte];
+        self.ephemeralKey = [[self cppStringToObjcData:cppEphemeralKey] removeVersionByte]; // this crashes on first receive from group send. this MUST be a protobuf + group issue in the context of a prekeywhispermessage. that's why it does work without groups, or if a session is already started.
         self.counter = [self cppUInt32ToNSNumber:cppCounter];
         self.previousCounter = [self cppUInt32ToNSNumber:cppPreviousCounter];
         self.message = [self cppStringToObjcData:cppMessage];
