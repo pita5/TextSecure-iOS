@@ -65,7 +65,7 @@
 - (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
     TSGroup *groupForMessage = nil;
     if(self.isBroadcast) {
-        groupForMessage = nil;
+        return  [[TSMessageOutgoing alloc] initBroadcastMessageWithContent:self.content recipient:newRecipientId date:self.timestamp attachements:self.attachments group:groupForMessage state:self.messageState messageId:self.messageId];;
     }
     else if(self.group!= nil  && self.group.groupContext.type == TSDeliverGroupContext) {
         groupForMessage = [self.group groupContextForDelivery];
@@ -79,7 +79,7 @@
 
 - (void)setState:(TSMessageOutgoingState)state withCompletion:(TSMessageChangeState)block{
     BOOL didSucceed = YES;
-    if(self.group==nil || !self.isBroadcast) {
+    if(self.group==nil && !self.isBroadcast) {
         didSucceed = [TSMessagesDatabase storeMessage:self];
         _state = state;
     }
