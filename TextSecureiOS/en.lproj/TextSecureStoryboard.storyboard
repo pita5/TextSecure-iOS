@@ -813,34 +813,20 @@
                                 <rect key="frame" x="20" y="254" width="280" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <state key="normal" title="Broadcast">
+                                <state key="normal" title="Create Group">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="createBroadcastGroup:" destination="gdW-po-j3F" eventType="touchUpInside" id="602-PV-oOl"/>
+                                    <action selector="createNonBroadcastGroup:" destination="gdW-po-j3F" eventType="touchUpInside" id="ngE-HG-cTt"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Tu-mz-2vT">
-                                <rect key="frame" x="139" y="217" width="43" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
-                                <color key="textColor" red="0.68627450980000004" green="0.69411764710000001" blue="0.68627450980000004" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="New Group" id="HE8-jZ-SuY">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="WDj-mH-r1Z">
-                            <connections>
-                                <action selector="createNonBroadcastGroup:" destination="gdW-po-j3F" id="r76-a3-jRE"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="New Group" id="HE8-jZ-SuY"/>
                     <connections>
                         <outlet property="groupName" destination="7Qk-PP-fNe" id="EBj-jf-K9S"/>
                         <outlet property="groupPhoto" destination="sgl-AQ-Zyy" id="reZ-eT-Aqa"/>
-                        <outlet property="nextButton" destination="WDj-mH-r1Z" id="i6w-9y-03x"/>
                         <segue destination="ka8-ZU-Vji" kind="custom" identifier="GroupComposeMessageSegue" customClass="TSReplaceSegue" id="n1o-pw-c5S"/>
                     </connections>
                 </viewController>
