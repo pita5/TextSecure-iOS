@@ -52,7 +52,6 @@
                 return;
             case SR_CONNECTING:
                 DLog(@"WebSocket is already connecting");
-                [socket open];
                 return;
             default:
                 [socket close];

@@ -85,6 +85,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageDatabaseDidUnlock) name:TSDatabaseDidUnlockNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBasedOnUserSettings) name:kIASKAppSettingChanged object:nil];
     
+    [self socketConnect];
+    
 	return YES;
 }
 
@@ -165,6 +167,10 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     self.blankWindow.hidden = YES;
     [self updateBasedOnUserSettings];
+    [self socketConnect];
+}
+
+- (void)socketConnect{
     if ([TSKeyManager hasVerifiedPhoneNumber] && ![TSStorageMasterKey isStorageMasterKeyLocked]) {
         [TSSocketManager becomeActive];
     }
