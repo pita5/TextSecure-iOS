@@ -64,7 +64,10 @@
 
 - (instancetype)copyMessageToRecipient:(NSString *)newRecipientId {
     TSGroup *groupForMessage = nil;
-    if(self.group!= nil  && self.group.groupContext.type == TSDeliverGroupContext) {
+    if(self.isBroadcast) {
+        groupForMessage = nil;
+    }
+    else if(self.group!= nil  && self.group.groupContext.type == TSDeliverGroupContext) {
         groupForMessage = [self.group groupContextForDelivery];
     }
     else {

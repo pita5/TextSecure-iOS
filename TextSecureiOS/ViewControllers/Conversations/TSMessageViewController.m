@@ -144,8 +144,16 @@
 
 - (void)didSendText:(NSString *)text {
     self.group.groupContext.type = TSDeliverGroupContext;
-    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:[self.contact registeredID] date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
-    //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+
+    TSMessageOutgoing *message = nil;
+    if(self.group.isBroadcastGroup) {
+        message = [[TSMessageOutgoing alloc]initBroadcastMessageWithContent:text recipient:[self.contact registeredID] date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    }
+    else {
+        message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:[self.contact registeredID] date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    
+    }
+       //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
     //        // this is asynchronous so message will only be send by messages manager when it succeeds
     //        [TSAttachmentManager uploadAttachment:message];
     //    }
