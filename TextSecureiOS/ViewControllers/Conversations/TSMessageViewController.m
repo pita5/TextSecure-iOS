@@ -90,7 +90,6 @@
         self.messages = [TSMessagesDatabase messagesForGroup:self.group];
         [[NSNotificationCenter defaultCenter] addObserverForName:[self.group.groupContext getEncodedId] object:nil queue:nil usingBlock:^(NSNotification *note) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.contact = [TSMessagesDatabase contactForRegisteredID:self.contact.registeredID];
                 [self displayProfileOptionIfAvailable];
             });
         }];
@@ -116,7 +115,7 @@
 #pragma mark - Table view data source
 
 -(void) displayProfileOptionIfAvailable {
-    if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
+    if(self.group==nil && self.contact.identityKey && !self.contact.identityKeyIsVerified) {
         self.navigationItem.rightBarButtonItem.enabled=YES;
         
     }
@@ -147,7 +146,7 @@
 
     TSMessageOutgoing *message = nil;
     if(self.group.isBroadcastGroup) {
-        message = [[TSMessageOutgoing alloc]initBroadcastMessageWithContent:text recipient:[self.contact registeredID] date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+        message = [[TSMessageOutgoing alloc]initBroadcastMessageWithContent:text recipient:nil date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
     }
     else {
         message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:[self.contact registeredID] date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
