@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, TSMACType) {
 };
 
 
-
+#define kPasswordNotSet @"PasswordNotSet"
 #define kTSVersion 
 #define kScreenshotProtection @"screenshotProtection"
 #define kDBNewMessageNotification @"db_new_message"

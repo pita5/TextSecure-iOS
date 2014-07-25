@@ -110,7 +110,7 @@ static BOOL isMasterKeyLocked = TRUE;
 
 
 +(NSData*) getStorageMasterKeyWithError:(NSError **)error {
-
+    
     if (![TSStorageMasterKey wasStorageMasterKeyCreated]) {
         if (error) {
             *error = [TSStorageError errorStorageKeyNotCreated];
@@ -140,7 +140,24 @@ static BOOL isMasterKeyLocked = TRUE;
 
 
 +(BOOL) isStorageMasterKeyLocked {
-    return isMasterKeyLocked;
+    
+    if (isMasterKeyLocked){
+        BOOL passwordNotSet = [[NSUserDefaults standardUserDefaults] boolForKey:kPasswordNotSet];
+        
+        if (passwordNotSet) {
+            NSError *error = nil;
+            [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:@"" error:&error];
+            if (isMasterKeyLocked) {
+                return YES;
+            }
+            return NO;
+            
+        } else{
+            return YES;
+        }
+    } else{
+        return NO;
+    }
 }
 
 
@@ -186,6 +203,6 @@ static BOOL isMasterKeyLocked = TRUE;
         return;
     }
 }
-    
-    
+
+
 @end

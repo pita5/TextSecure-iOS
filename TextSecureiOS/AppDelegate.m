@@ -82,10 +82,8 @@
         window;
     });
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushesQueuedInDB) name:TSDatabaseDidUnlockNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageDatabaseDidUnlock) name:TSDatabaseDidUnlockNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBasedOnUserSettings) name:kIASKAppSettingChanged object:nil];
-    
-    [TSSocketManager becomeActive];
     
 	return YES;
 }
@@ -153,7 +151,9 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     [application beginBackgroundTaskWithExpirationHandler:^{
-        
+        /**
+         *  This code block allows the app to run in the background just the time to notify the socket that we disconnected.
+         */
     }];
     
     [TSSocketManager resignActivity];
@@ -165,7 +165,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     self.blankWindow.hidden = YES;
     [self updateBasedOnUserSettings];
-    if ([TSKeyManager hasVerifiedPhoneNumber]) {
+    if ([TSKeyManager hasVerifiedPhoneNumber] && ![TSStorageMasterKey isStorageMasterKeyLocked]) {
         [TSSocketManager becomeActive];
     }
 }
@@ -229,14 +229,11 @@
 
 }
 
--(void) handlePushesQueuedInDB {
+-(void) messageDatabaseDidUnlock {
     // This method is triggered whenever DB is unlocked
     if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
-        for(NSDictionary* pushInfo in [TSWaitingPushMessageDatabase getPushesInReceiptOrder]) {
-            [[TSMessagesManager sharedManager] receiveMessagePush:pushInfo];
-        }
+        [TSSocketManager becomeActive];
     }
-    [TSWaitingPushMessageDatabase finishPushesQueued];
 }
 
 #pragma mark - HockeyApp Delegate Methods

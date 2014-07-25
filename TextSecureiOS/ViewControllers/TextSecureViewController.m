@@ -45,7 +45,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     [super viewDidLoad];
     self.title = @"Messages";
     self.navigationController.navigationBarHidden = NO;
-
+    
 #warning   // FETCH CONVERSATIONS WITH COMPLETION BLOCK
     
     UIEdgeInsets inset = UIEdgeInsetsMake(44, 0, 0, 0);
@@ -71,22 +71,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     self.navigationController.navigationBarHidden = NO;
     
     if([TSKeyManager hasVerifiedPhoneNumber] && [TSMessagesDatabase databaseWasCreated] && [TSStorageMasterKey isStorageMasterKeyLocked]) {
-        
-        // check if user decided to skip password protection
-        BOOL passwordNotSet = [[NSUserDefaults standardUserDefaults] boolForKey:kPasswordNotSet];
-        if (passwordNotSet) {
-            
-            NSError *error = nil;
-            [TSStorageMasterKey unlockStorageMasterKeyUsingPassword:@"" error:&error];
-            BOOL stillLocked = [TSStorageMasterKey isStorageMasterKeyLocked];
-            
-            if (stillLocked) {
-                [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
-            }
-            
-        } else {
-             [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
-        }
+        [self performSegueWithIdentifier:@"PasswordUnlockSegue" sender:self];
         
     } else if([TSKeyManager hasVerifiedPhoneNumber] == NO) {
         [self performSegueWithIdentifier:@"ObtainVerificationCode" sender:self];
@@ -245,7 +230,7 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
         TSConversation* conversation = [self.conversations objectAtIndex:selectedIndexPath.row];
         mvc.contact=conversation.contact;
     }
-
+    
 }
 
 

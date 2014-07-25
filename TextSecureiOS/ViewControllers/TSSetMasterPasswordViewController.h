@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define kPasswordNotSet @"PasswordNotSet"
 #define kPasswordIsAlphanumerical @"PasswordIsAlphanumerical"
 
 @interface TSSetMasterPasswordViewController : UIViewController<UITextFieldDelegate, UIAlertViewDelegate>

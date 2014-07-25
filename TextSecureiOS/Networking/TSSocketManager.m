@@ -90,8 +90,7 @@
 }
 
 - (void) webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
-    //DLog(@"Received on Websocket : %@", message);
-    
+
     NSData *data = [message dataUsingEncoding:NSUTF8StringEncoding];
     
     NSDictionary *serializedMessage = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -101,7 +100,7 @@
         [[TSMessagesManager sharedManager]receiveMessagePush:serializedMessage];
     }
     else {
-        [TSWaitingPushMessageDatabase queuePush:serializedMessage];
+        DLog(@"Got message on the socket while storage db was closed.");
     }
     
     DLog(@"Got message : %@", [serializedMessage objectForKey:@"message"]);
