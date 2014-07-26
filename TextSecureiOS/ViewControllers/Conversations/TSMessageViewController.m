@@ -89,12 +89,7 @@
     
     
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:self.contact.registeredID object:nil queue:nil usingBlock:^(NSNotification *note) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.contact = [TSMessagesDatabase contactForRegisteredID:self.contact.registeredID];
-            [self displayProfileOptionIfAvailable];
-        });
-    }];
+ 
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
