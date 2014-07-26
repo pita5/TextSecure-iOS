@@ -23,7 +23,6 @@
 
 @interface TSMessageViewController ()
 
-@property (nonatomic, retain) NSArray *contacts;
 @property (nonatomic, retain) NSArray *messages;
 
 @end
@@ -33,6 +32,9 @@
 - (void)reloadMessages {
     if (!self.group) {
         self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
+    }
+    else {
+        self.messages = [TSMessagesDatabase messagesForGroup:self.group];
     }
 
     [self.tableView reloadData];
@@ -65,7 +67,7 @@
         if([[self.group groupName] length]>0) {
             self.title = self.group.groupName;
         }
-        else if ([self.group isNonBroadcastGroup]) {
+        else if (![self.group isBroadcastGroup]) {
             self.title = @"Group message";
         }
         else {
@@ -96,7 +98,37 @@
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    [self displayProfileOptionIfAvailable];
+    
+    if (self.group) {
+        if([[self.group groupName] length]>0) {
+            self.title = self.group.groupName;
+        }
+        else if (![self.group isBroadcastGroup]) {
+            self.title = @"Group message";
+        }
+        else {
+            self.title = @"Broadcast message";
+        }
+        self.messages = [TSMessagesDatabase messagesForGroup:self.group];
+        [[NSNotificationCenter defaultCenter] addObserverForName:[self.group.groupContext getEncodedId] object:nil queue:nil usingBlock:^(NSNotification *note) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self displayProfileOptionIfAvailable];
+            });
+        }];
+    }
+    else {
+        self.title = [self.contact name];
+        self.messages = [TSMessagesDatabase messagesWithContact:self.contact];
+        [[NSNotificationCenter defaultCenter] addObserverForName:self.contact.registeredID object:nil queue:nil usingBlock:^(NSNotification *note) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.contact = [TSMessagesDatabase contactForRegisteredID:self.contact.registeredID];
+                [self displayProfileOptionIfAvailable];
+            });
+        }];
+        [self displayProfileOptionIfAvailable];
+    }
+    //[self reloadMessages];
+
 }
 
 - (void)dealloc {
@@ -106,7 +138,7 @@
 #pragma mark - Table view data source
 
 -(void) displayProfileOptionIfAvailable {
-    if(self.contact.identityKey && !self.contact.identityKeyIsVerified) {
+    if(self.group==nil && self.contact.identityKey && !self.contact.identityKeyIsVerified) {
         self.navigationItem.rightBarButtonItem.enabled=YES;
         
     }
@@ -126,28 +158,31 @@
     return JSMessageInputViewStyleFlat;
 }
 
-- (JSMessagesViewSubtitlePolicy)subtitlePolicy{
-    return JSMessagesViewSubtitlePolicyNone;
-}
+
 
 - (UIImageView *)avatarImageViewForRowAtIndexPath:(NSIndexPath *)indexPath{
     return nil;
 }
 
-- (NSString *)subtitleForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return nil;
-}
-
 - (void)didSendText:(NSString *)text {
 
-    TSMessageOutgoing *message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:self.contact.registeredID date:[NSDate date] attachements:@[] group:nil state:TSMessageStatePendingSend];
+    self.group.groupContext.type = TSDeliverGroupContext;
 
-    //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
+    TSMessageOutgoing *message = nil;
+    if(self.group.isBroadcastGroup) {
+        message = [[TSMessageOutgoing alloc]initBroadcastMessageWithContent:text recipient:nil date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    }
+    else {
+        message = [[TSMessageOutgoing alloc]initMessageWithContent:text recipient:[self.contact registeredID] date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    
+    }
+       //    if(message.attachment.attachmentType!=TSAttachmentEmpty) {
     //        // this is asynchronous so message will only be send by messages manager when it succeeds
     //        [TSAttachmentManager uploadAttachment:message];
     //    }
-
+    
     [[TSMessagesManager sharedManager] scheduleMessageSend:message];
+
     [self reloadMessages];
 
     [self finishSend];
@@ -262,12 +297,42 @@
 //}
 
 - (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+    if(![self shouldHaveSubtitleForRowAtIndexPath:indexPath]) {
+        TSMessage* message = [self.messages objectAtIndex:indexPath.row];
+        if(message.isBroadcast) {
+            return [@"BROADCAST: " stringByAppendingString:[Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]]];
+        }
+        else {
+            return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+        }
+    }
+    else {
+        return nil;
+    }
 }
 
 - (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [(TSMessage*)[self.messages objectAtIndex:indexPath.row] timestamp];
 }
+
+
+//- (JSMessagesViewSubtitlePolicy)subtitlePolicy{
+//    return JSMessagesViewSubtitlePolicyAll;
+//}
+
+- (NSString *)subtitleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return [Emoticonizer emoticonizeString:[[self.messages objectAtIndex:indexPath.row] content]];
+}
+
+- (BOOL)shouldHaveSubtitleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    TSGroupContextType meta = [[self.messages objectAtIndex:indexPath.row] metaMessage];
+    return meta == TSUpdateGroupContext || meta == TSQuitGroupContext;
+}
+
+
+
+
+
 
 - (UIImage *)avatarImageForIncomingMessage {
     return nil;

@@ -9,7 +9,9 @@
 #import "TSGroupSetupViewController.h"
 #import "TSMessageViewController.h"
 #import "TextSecureViewController.h"
-
+#import "Cryptography.h"
+#import "TSMessageOutgoing.h"
+#import "TSMessagesManager.h"
 @interface TSGroupSetupViewController ()
 
 @end
@@ -91,16 +93,35 @@
 
 
 -(IBAction)createNonBroadcastGroup:(id)sender {
-    self.group.groupName = self.groupName.text;
-    self.group.groupImage = self.groupPhoto.imageView.image;
-    self.group.isNonBroadcastGroup = YES;
-    [self createGroup];
+    [self setupGroup];
 }
 
 
+-(IBAction)createBroadcastGroup:(id)sender {
+    self.group.isBroadcastGroup = YES;
+    [self setupGroup];
+}
 
--(IBAction)createGroup {
+
+-(void)setupGroup {
+#warning want to pick the group id generation length etc. as the droid
+#warning no avatar support yet will come with attachments support
+    // https://github.com/WhisperSystems/TextSecure/blob/d5f04159074544d715628b870aa048993ee69b7d/src/org/thoughtcrime/securesms/util/GroupUtil.java
+    self.group.groupName = self.groupName.text;
+    self.group.groupImage = self.groupPhoto.imageView.image;
+    NSMutableArray *groupMembers = [NSMutableArray arrayWithArray:self.whisperContacts];
+    [groupMembers addObject:[[TSContact alloc] initWithRegisteredID:[TSKeyManager getUsernameToken] relay:nil]];
+    self.group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext createNewGroupId] withType:TSUpdateGroupContext withName:self.group.groupName withMembers:groupMembers withAvatar:nil];
+    TSMessageOutgoing *message = nil;
+    if(self.group.isBroadcastGroup) {
+       message = [[TSMessageOutgoing alloc]initBroadcastMessageWithContent:@"" recipient:nil date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    }
+    else {
+        message = [[TSMessageOutgoing alloc]initMessageWithContent:@"" recipient:nil date:[NSDate date] attachements:@[] group:self.group state:TSMessageStatePendingSend];
+    }
+    [[TSMessagesManager sharedManager] scheduleMessageSend:message];
     [self performSegueWithIdentifier:@"GroupComposeMessageSegue" sender:nil];
+
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

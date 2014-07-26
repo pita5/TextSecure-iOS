@@ -10,10 +10,11 @@
 #import "TSGroupContext.h"
 
 @interface TSGroup : NSObject
-@property (readonly) NSString *id;
-@property(nonatomic,assign) BOOL isNonBroadcastGroup;
+@property(nonatomic,assign) BOOL isBroadcastGroup;
 @property(nonatomic,strong) NSString *groupName;
 @property(nonatomic,strong) UIImage *groupImage;
 @property(nonatomic,strong) TSGroupContext *groupContext;
 
+-(instancetype) initWithGroupContext:(TSGroupContext*)context;
+-(instancetype) groupContextForDelivery;
 @end

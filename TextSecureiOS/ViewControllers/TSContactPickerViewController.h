@@ -11,6 +11,6 @@
 @interface TSContactPickerViewController : UITableViewController
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *nextButton;
-
+@property (nonatomic) BOOL allowMultipleSelections;
 -(IBAction) next;
 @end

@@ -2029,6 +2029,7 @@
 						TestTargetID = A53718B116FF95DF00C6FCCF;
 					};
 					A53718B116FF95DF00C6FCCF = {
+						DevelopmentTeam = U68MSDN6DR;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -2715,8 +2716,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Christine Moran (87AB72WHFF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Christine Moran (87AB72WHFF)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2735,7 +2736,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "D96269C2-F551-4984-903A-0205628FB988";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 			};
@@ -2754,8 +2755,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Christine Moran (87AB72WHFF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Christine Moran (87AB72WHFF)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2767,7 +2768,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "93C0EB7E-BB96-48CE-9F6A-65CC2BE78DB3";
+				PROVISIONING_PROFILE = "D96269C2-F551-4984-903A-0205628FB988";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Libraries/include/**";
 				VALIDATE_PRODUCT = YES;
@@ -2778,8 +2779,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Christine Moran (87AB72WHFF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Christine Moran (87AB72WHFF)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";
@@ -2799,8 +2800,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 950A849531204A2EBF7475C2 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Christine Moran (87AB72WHFF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Christine Moran (87AB72WHFF)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TextSecureiOS/TextSecureiOS-Prefix.pch";

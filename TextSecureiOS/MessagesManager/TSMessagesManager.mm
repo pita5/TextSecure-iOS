@@ -35,10 +35,11 @@
 
 @implementation TSMessagesManager
 
-- (void)scheduleMessageSend:(TSMessageOutgoing *)message
-{
+- (void)scheduleMessageSend:(TSMessageOutgoing *)message {
     [TSMessagesDatabase storeMessage:message];
-    [self sendMessage:message];
+    if([message shouldSend ]) {
+        [self sendMessage:message];
+    }
 }
 
 + (id)sharedManager {
@@ -57,84 +58,108 @@
     return self;
 }
 
--(void)sendMessage:(TSMessageOutgoing*)message{
-    dispatch_async(queue, ^{
-        TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
-        
-        NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipient];
-        
-        if ([sessions count] > 0) {
-            for (TSSession *session in sessions){
-                [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecureProtocolData] base64EncodedString] ofType:TSEncryptedWhisperMessageType];
+-(void)sendMessage:(TSMessageOutgoing*)message {
+    if(message.group!=nil) {
+        for(TSContact* recipient in [TSMessagesDatabase membersForGroup:message.group]) {
+            if([recipient.registeredID isEqualToString:[TSKeyManager getUsernameToken]]){
+                continue;
+
             }
-            
-        } else{
-            
-            [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                switch (operation.response.statusCode) {
-                    case 200:{
-                        // Extracting the recipients keying material from server payload
-                        
-                        NSArray *keys = [responseObject objectForKey:@"keys"];
-                        
-                        for (NSDictionary *responseObject in keys){
-                            NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
-                            
-                            
-                            if (recipient.identityKey && ![recipient.identityKey isEqualToData:theirIdentityKey]) {
-                                // this is a weird case, where we already have a stored ID key for a person, but don't have a session for that person.
-#warning we want to give user option to continue or not this will crash in the DB when the key is being stored, as we aren't allowed to do this in DB currently. at least user knows why with this message
-                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning!" message:@"The contact's identity key has changed from one you've previously received. This could either mean that someon is trying to intercept your communication or that this contact simply re-isntall TextSecure and now has a new identity key " delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                                [alert show];
-                            }
-
-                            NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
-                            NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
-                            [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
-                            recipient.identityKey = theirEphemeralKey;
-                            [TSMessagesDatabase storeContact:recipient];
-                            [[NSNotificationCenter defaultCenter] postNotificationName:recipient.registeredID object:self];
-
-                            // Bootstrap session with Prekey
-                            TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
-                            session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:[theirIdentityKey removeVersionByte]  ephemeral:[theirEphemeralKey removeVersionByte] prekeyId:[theirPrekeyId intValue]];
-                            session.needsInitialization = YES;
-                            
-                            [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecureProtocolData] base64EncodedString] ofType:TSPreKeyWhisperMessageType];
-                        }
-                        // nil
-                        break;
-                    }
-                    default:
-                        DLog(@"error sending message");
-#warning Add error handling if not able to get contacts prekey
-                        break;
-                }
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-#warning right now it is not succesfully processing returned response, but is giving 200
-                NSLog(@"Error %@", error);
-            }];
-            
-            
+            [self sendMessage:[message copyMessageToRecipient:recipient.registeredID] toContact:recipient];
         }
-        
-    });
+    }
+    else {
+        TSContact *recipient = [TSMessagesDatabase contactForRegisteredID:message.recipientId];
+        [self sendMessage:message toContact:recipient];
+    }
+}
+
+
+-(void)sendMessage:(TSMessageOutgoing*)message toContact:(TSContact*) recipient{
+        dispatch_async(queue, ^{
+            TSContact *recipientInDb = [TSMessagesDatabase contactForRegisteredID:recipient.registeredID]; // makes sure that we get the latest relay info, etc.
+
+            NSArray *sessions = [TSMessagesDatabase sessionsForContact:recipientInDb];
+
+
+            if ([sessions count] > 0) {
+                for (TSSession *session in sessions){
+                    [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecureProtocolData] base64EncodedString] ofType:TSEncryptedWhisperMessageType];
+                }
+
+            } else{
+
+                [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSRecipientPrekeyRequest alloc] initWithRecipient:recipient] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    switch (operation.response.statusCode) {
+                        case 200:{
+
+
+                            // Extracting the recipients keying material from server payload
+
+                            NSArray *keys = [responseObject objectForKey:@"keys"];
+
+                            for (NSDictionary *responseObject in keys){
+                                NSData* theirIdentityKey = [NSData dataFromBase64String:[responseObject objectForKey:@"identityKey"]];
+
+
+                                if (recipient.identityKey && ![recipient.identityKey isEqualToData:theirIdentityKey]) {
+                                    // this is a weird case, where we already have a stored ID key for a person, but don't have a session for that person.
+    #warning we want to give user option to continue or not this will crash in the DB when the key is being stored, as we aren't allowed to do this in DB currently. at least user knows why with this message
+                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning!" message:@"The contact's identity key has changed from one you've previously received. This could either mean that someon is trying to intercept your communication or that this contact simply re-isntall TextSecure and now has a new identity key " delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                                    [alert show];
+                                }
+
+                                NSData* theirEphemeralKey = [NSData dataFromBase64String:[responseObject objectForKey:@"publicKey"]];
+                                NSNumber* theirPrekeyId = [responseObject objectForKey:@"keyId"];
+                                [recipient.deviceIDs addObject:[responseObject objectForKey:@"deviceId"]];
+                                recipient.identityKey = theirEphemeralKey;
+                                [TSMessagesDatabase storeContact:recipient];
+                                if(message.group==nil) {
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:recipient.registeredID object:self];
+                                }
+                                else {
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:[message.group.groupContext getEncodedId] object:self];
+                                }
+
+                                // Bootstrap session with Prekey
+                                TSSession *session = [[TSSession alloc] initWithContact:recipient deviceId:[[responseObject objectForKey:@"deviceId"] intValue]];
+                                session.pendingPreKey = [[TSPrekey alloc] initWithIdentityKey:[theirIdentityKey removeVersionByte]  ephemeral:[theirEphemeralKey removeVersionByte] prekeyId:[theirPrekeyId intValue]];
+                                session.needsInitialization = YES;
+
+                                [[TSMessagesManager sharedManager] submitMessage:message to:message.recipientId serializedMessage:[[[TSAxolotlRatchet encryptMessage:message withSession:session] getTextSecureProtocolData] base64EncodedString] ofType:TSPreKeyWhisperMessageType];
+                            }
+                            // nil
+                            break;
+                        }
+                        default:
+                            DLog(@"error sending message");
+    #warning Add error handling if not able to get contacts prekey
+                            break;
+                    }
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    #warning right now it is not succesfully processing returned response, but is giving 200
+                    NSLog(@"Error %@", error);
+                }];
+            }
+        });
 }
 
 - (void)receiveMessagePush:(NSDictionary *)pushInfo{
     NSData *decryptedPayload = [Cryptography decryptAppleMessagePayload:[NSData dataFromBase64String:[pushInfo objectForKey:@"message"]] withSignalingKey:[TSKeyManager getSignalingKeyToken]];
     NSLog(@"push message bytes %lu",(unsigned long) decryptedPayload.length);
-    
+
     TSMessageSignal *signal = [[TSMessageSignal alloc] initWithTextSecureProtocolData:decryptedPayload];
-    
+
     if (![TSMessagesDatabase contactForRegisteredID:signal.source]) {
         [[[TSContact alloc] initWithRegisteredID:signal.source relay:nil] save];
     }
-    
+
     TSSession *session = [TSMessagesDatabase sessionForRegisteredId:signal.source deviceId:[signal.sourceDevice intValue]];
-    
+
     TSMessage *decryptedMessage = [TSAxolotlRatchet decryptWhisperMessage:signal.message withSession:session];
-    
+    if(decryptedMessage.group!=nil) {
+        NSLog(@"incoming group id is %@",[decryptedMessage.group.groupContext getEncodedId]);
+    }
     [TSMessagesDatabase storeMessage:decryptedMessage];
 }
 
@@ -142,7 +167,7 @@
     NSData* data=[serializedMessage dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"submitting message of %lu bytes",(unsigned long)data.length);
     [[TSNetworkManager sharedManager] queueAuthenticatedRequest:[[TSSubmitMessageRequest alloc] initWithRecipient:recipientId message:serializedMessage ofType:messageType] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+
         switch (operation.response.statusCode) {
             case 200:{
                 // Awesome! We consider the message as sent! (Improvement: add flag in DB for sent)
@@ -153,7 +178,7 @@
 
                 break;
             }
-                
+
             default:
                 DLog(@"error sending message");
 #warning Add error handling if not able to get contacts prekey
@@ -164,9 +189,9 @@
 #warning right now it is not succesfully processing returned response, but is giving 200
         DLog(@"failure %ld, %@, %@",(long)operation.response.statusCode,operation.response.description,[[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
         [[NSNotificationCenter defaultCenter] postNotificationName:kDBNewMessageNotification object:nil userInfo:@{@"messageType":@"sent"}];
-        
+
     }];
-    
+
 }
 
 

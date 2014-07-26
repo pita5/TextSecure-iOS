@@ -8,6 +8,7 @@
 
 #import "TSPushMessageContent.hh"
 #import "PushMessageContent.pb.hh"
+#import "TSContact.h"
 #import "TSMessage.h"
 #import "TSAttachment.h"
 
@@ -57,7 +58,7 @@
             NSMutableArray *groupMembers = [[NSMutableArray alloc] init];
             for(int i=0; i < groupContext.members_size(); i++) {
                 const std::string cppMember = groupContext.members(i);
-                [groupMembers addObject:[self cppStringToObjc:cppMember]];
+                [groupMembers addObject:[[TSContact alloc] initWithRegisteredID:[self cppStringToObjc:cppMember] relay:nil]];
             }
             NSData* groupId = [self cppStringToObjcData:cppGroupId];
             TSGroupContextType groupType = (TSGroupContextType) cppGroupType;
@@ -106,7 +107,7 @@
         self.body = [self cppStringToObjc:cppMessage];
         self.attachments = messageAttachments;
         self.messageFlags = (TSPushMessageFlags)cppFlags;
-        self.serializedProtocolData = [self serializedProtocolBuffer];
+        self.serializedProtocolData = [self serializedProtocolBuffer]; // This is causing a crash, presumably because things are null that I was not expecting.
     }
     return self;
 }
@@ -133,20 +134,22 @@
     textsecure::PushMessageContent_GroupContext *serializedGroupContext = new textsecure::PushMessageContent_GroupContext;
     serializedGroupContext->set_id([self objcDataToCppString:self.groupContext.gid]);
     serializedGroupContext->set_type((textsecure::PushMessageContent_GroupContext_Type)self.groupContext.type);
-    serializedGroupContext->set_name([self objcStringToCpp:self.groupContext.name]);
-    for(NSString* member  in self.groupContext.members) {
-        serializedGroupContext->add_members([self objcStringToCpp:member]);
-    }
-    
-    if(self.groupContext.avatar!=nil) {
-        textsecure::PushMessageContent_AttachmentPointer *avatar = new textsecure::PushMessageContent_AttachmentPointer;
-        const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
-        const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
-        std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
-        avatar->set_id(attachment_id);
-        avatar->set_key(attachment_encryption_key);
-        avatar->set_contenttype(attachment_contenttype);
-        serializedGroupContext->set_allocated_avatar(avatar);
+    if(self.groupContext.type == TSUpdateGroupContext) {
+        serializedGroupContext->set_name([self objcStringToCpp:self.groupContext.name]);
+        for(TSContact* member  in self.groupContext.members) {
+            serializedGroupContext->add_members([self objcStringToCpp:member.registeredID]);
+        }
+        
+        if(self.groupContext.avatar!=nil) {
+            textsecure::PushMessageContent_AttachmentPointer *avatar = new textsecure::PushMessageContent_AttachmentPointer;
+            const uint64_t attachment_id =  [self objcNumberToCppUInt64:self.groupContext.avatar.attachmentId];
+            const std::string attachment_encryption_key = [self objcDataToCppString:self.groupContext.avatar.attachmentDecryptionKey];
+            std::string attachment_contenttype = [self objcStringToCpp:[self.groupContext.avatar getMIMEContentType]];
+            avatar->set_id(attachment_id);
+            avatar->set_key(attachment_encryption_key);
+            avatar->set_contenttype(attachment_contenttype);
+            serializedGroupContext->set_allocated_avatar(avatar);
+        }
     }
     pushMessageContent->set_allocated_group(serializedGroupContext);
     

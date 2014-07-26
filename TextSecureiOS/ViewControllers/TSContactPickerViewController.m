@@ -24,9 +24,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+}
 
-    self.nextButton.enabled = NO;
-
+-(void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.nextButton.enabled = YES;
+    self.nextButton.title = @"Group";
+    self.allowMultipleSelections = NO;
     [self refreshContacts];
 }
 
@@ -37,7 +41,12 @@
 
     [TSContactManager getAllContactsIDs:^(NSArray *contacts) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:FALSE];
-        self.title = @"Pick recepients";
+        if(self.allowMultipleSelections) {
+            self.title = @"Pick recipients";
+        }
+        else {
+            self.title = @"Pick recipient";
+        }
         self.whisperContacts = contacts;
         [self.tableView reloadData];
     }];
@@ -74,13 +83,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [[self.whisperContacts objectAtIndex:indexPath.row] reverseIsSelected];
-    [self.tableView reloadData];
-
-    if ([self getSelectedContacts].count > 0) {
-        self.nextButton.enabled = YES;
-    } else {
-        self.nextButton.enabled = NO;
+    if(!self.allowMultipleSelections) {
+        self.whisperContacts=[self getSelectedContacts];
+        [self performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
     }
+    else {
+        [self.tableView reloadData];
+    }
+
 }
 
 -(NSArray*) getSelectedContacts {
@@ -89,17 +99,18 @@
 }
 
 -(IBAction) next {
-    self.whisperContacts=[self getSelectedContacts];
-    if([self.whisperContacts count]>1) {
+    if(self.allowMultipleSelections)  {
+        self.whisperContacts=[self getSelectedContacts];
         [self performSegueWithIdentifier:@"TSGroupSetupSegue" sender:self];
     }
     else {
-        [self performSegueWithIdentifier:@"ComposeMessageSegue" sender:self];
+        self.nextButton.title = @"Create";
+        self.allowMultipleSelections = YES;
     }
 }
 
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:@"TSGroupSetupSegue"]) {
+    if([segue.identifier isEqualToString:@"TSGroupSetupSegue"]) {        
         TSGroupSetupViewController *vc = [segue destinationViewController];
         vc.whisperContacts = [self getSelectedContacts];
     } else if ([segue.destinationViewController isKindOfClass:[TSMessageViewController class]]) {

@@ -98,10 +98,18 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
     if ([cell isKindOfClass:[TSMessageConversationCell class]]) {
         
         TSConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
+
         TSMessageConversationCell *threadCell = (TSMessageConversationCell *)cell;
-        threadCell.titleLabel.text = [conversation.contact name];
-        threadCell.timestampLabel.text = [dateFormatter stringFromDate:conversation.lastMessageDate];
-        threadCell.conversationPreviewLabel.text = [conversation lastMessage];
+        if(conversation.contact!=nil) {
+            threadCell.titleLabel.text = [conversation.contact name];
+            threadCell.timestampLabel.text = [dateFormatter stringFromDate:conversation.lastMessageDate];
+            threadCell.conversationPreviewLabel.text = [conversation lastMessage];
+        }
+        else {
+            threadCell.titleLabel.text = [conversation.group groupName];
+            threadCell.timestampLabel.text = [dateFormatter stringFromDate:conversation.lastMessageDate];
+            threadCell.conversationPreviewLabel.text = [conversation lastMessage];
+        }
         
         UIImage *disclosureIndicatorImage = [[UIImage imageNamed:@"disclosure_indicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         threadCell.disclosureImageView.image = disclosureIndicatorImage;
@@ -198,8 +206,6 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 #else
     [TSMessagesDatabase deleteMessagesForConversation:[self.conversations objectAtIndex:index] completion:block];
 #endif
-    
-    
 }
 
 // This SWTableViewCell delegate method is still buggy and doesn't represent the exact state of the cell,
@@ -222,13 +228,13 @@ static NSString *kThreadImageKey = @"kThreadImageKey";
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:@"NewMessageOnThreadSegue"]) {
         TSMessageViewController *mvc = [segue destinationViewController];
-        //        [vc setupWithConversation:[TSThread threadWithContacts:[(TSGroupSetupViewController*)sender whisperContacts] save:YES]];
-        if([sender respondsToSelector:@selector(group)]) {
+         if([sender respondsToSelector:@selector(group)]) {
             mvc.group = [sender performSelector:@selector(group)];
         }
         NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
         TSConversation* conversation = [self.conversations objectAtIndex:selectedIndexPath.row];
         mvc.contact=conversation.contact;
+        mvc.group=conversation.group;
     }
     
 }

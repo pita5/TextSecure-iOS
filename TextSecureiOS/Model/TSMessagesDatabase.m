@@ -24,7 +24,7 @@
 #import "TSConversation.h"
 #import "TSSession.h"
 #import "TSChainKey.h"
-
+#import "Cryptography.h"
 #define kDBWasCreatedBool @"TSMessagesWasCreated"
 #define databaseFileName @"TSMessages.db"
 
@@ -73,12 +73,16 @@ static TSDatabaseManager *messagesDb = nil;
             return;
         }
         
-#warning incomplete implementation of groups
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY)"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT, broadcast INT)"]) {
             return;
         }
         
-        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS group_membership (group_id TEXT, group_member TEXT,FOREIGN KEY(group_id) REFERENCES groups(group_id),FOREIGN KEY(group_member) REFERENCES contacts(registered_id))"]) {
+            return;
+        }
+
+        
+        if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS messages (message_id TEXT PRIMARY KEY,message TEXT, timestamp DATE, attachements BLOB, state INTEGER, sender_id TEXT, recipient_id TEXT, group_id TEXT, meta_message INTEGER, broadcast INT, FOREIGN KEY(sender_id) REFERENCES contacts (registered_id), FOREIGN KEY(recipient_id) REFERENCES contacts(registered_id), FOREIGN KEY(group_id) REFERENCES groups (group_id))"]) {
             return;
         }
         
@@ -238,7 +242,7 @@ static TSDatabaseManager *messagesDb = nil;
     NSMutableArray *contacts = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM contacts"];
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM contacts where registered_id!=?" withArgumentsInArray:@[[TSKeyManager getUsernameToken]]];
         
         while ([searchInDB next]) {
             
@@ -263,14 +267,47 @@ static TSDatabaseManager *messagesDb = nil;
 
 + (BOOL)storeMessage:(TSMessage*)msg {
     openDBMacroBOOL
-    
+
     __block TSMessage *message = msg;
     __block BOOL success = NO;
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        id groupId = message.group ? message.group.id : [NSNull null];
-        
-        success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, message.recipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId]];
+        // separate storing pipeline for group and non-group messages
+        TSGroupContext *context = message.group.groupContext;
+        if(message.group!=nil && context.type != TSDeliverGroupContext) {
+            if(context.type == TSUpdateGroupContext) {
+                //CREATE TABLE IF NOT EXISTS groups (group_id TEXT PRIMARY KEY, name TEXT, avatar_path TEXT, avatar_key BLOB, avatar_type INT)
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO groups (group_id,name,avatar_path,avatar_key,avatar_type,broadcast) VALUES (?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[[context getEncodedId],context.name,[NSNull null],[NSNull null], [NSNull null],[NSNumber numberWithBool:message.group.isBroadcastGroup]]];
+                NSString *metaMessage = @"";
+                for(TSContact* groupMember in context.members){
+                    // update the contact info in the group array
+                    success = [db executeUpdate:@"INSERT OR IGNORE INTO contacts (registered_id) VALUES (?)" withArgumentsInArray:@[groupMember.registeredID]];
+                    success = [db executeUpdate:@"INSERT OR REPLACE INTO group_membership (group_id,group_member) VALUES (?, ?)" withArgumentsInArray:@[[context getEncodedId],groupMember.registeredID]];
+                    metaMessage = [metaMessage stringByAppendingString:[NSString stringWithFormat:@"%@ ",groupMember.registeredID]];
+                }
+                metaMessage = [metaMessage stringByAppendingString:@"joined the group."];
+                if(context.name) {
+                    metaMessage = [metaMessage stringByAppendingString:[NSString stringWithFormat:@" Title is now %@.",context.name]];
+                }
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message, broadcast) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId],metaMessage, message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type],[NSNumber numberWithInt:message.isBroadcast]]];
+
+            }
+            else if(message.group.groupContext.type == TSQuitGroupContext) {
+                success = [db executeUpdate:@"DELETE from group_membership  WHERE group_id=? AND group_member=? " withArgumentsInArray:@[[context getEncodedId],message.senderId]];
+                success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, group_id, message, timestamp, state, message_id, meta_message, broadcast) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, [context getEncodedId], @"member left", message.timestamp, [NSNumber numberWithInt:message.state], message.messageId, [NSNumber numberWithInt:context.type],[NSNumber numberWithInt:message.isBroadcast]]];
+
+            }
+            else {
+                @throw [NSException exceptionWithName:@"group context type" reason:@"type unknown" userInfo:nil];
+            }
+            
+        }
+        else {
+            id groupId = message.group ? [context getEncodedId]: [NSNull null];
+            id receipientId = message.group ? [NSNull null] : message.recipientId;
+            success = [db executeUpdate:@"INSERT OR REPLACE INTO messages (sender_id, recipient_id, group_id, message, timestamp, attachements, state, message_id, broadcast) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" withArgumentsInArray:@[message.senderId, receipientId, groupId, message.content, message.timestamp, [NSKeyedArchiver archivedDataWithRootObject:message.attachments], [NSNumber numberWithInt:message.state], message.messageId,[NSNumber numberWithInt:message.isBroadcast]]];
+        }
+
     }];
     
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:kDBNewMessageNotification object:nil]];
@@ -278,7 +315,7 @@ static TSDatabaseManager *messagesDb = nil;
     return success;
 }
 
-+ (TSMessage*)messageForDBElement:(FMResultSet*)messages{
++ (TSMessage*)messageForDBElement:(FMResultSet*)messages inGroup:(TSGroup*)group{
     //To determine if it's an incoming or outgoing message, we look if there is a sender_id
     NSString *senderID = [messages stringForColumn:@"sender_id"];
     NSString *receiverID = [messages stringForColumn:@"recipient_id"];
@@ -289,17 +326,28 @@ static TSDatabaseManager *messagesDb = nil;
     //NSString *groupID = [messages stringForColumn:@"group_id"];
     int state = [messages intForColumn:@"state"];
     NSString *messageId = [messages stringForColumn:@"message_id"];
+    if(group!=nil) {
+        TSGroupContextType meta_message = [messages intForColumn:@"meta_message"];
+
+        group.groupContext.type = meta_message;
+    }
     
     if (senderID) {
-#warning Groupmessaging not yet supported
-        TSMessageIncoming *incoming = [[TSMessageIncoming alloc] initMessageWithContent:content sender:senderID date:date attachements:attachements group:nil state:state messageId:messageId];
-        
+        TSMessageIncoming *incoming = [[TSMessageIncoming alloc] initMessageWithContent:content sender:senderID date:date attachements:attachements group:group state:state messageId:messageId];
         return incoming;
-    } else{
-        TSMessageOutgoing *outgoing = [[TSMessageOutgoing alloc] initMessageWithContent:content recipient:receiverID date:date attachements:attachements group:nil state:state messageId:messageId];
-        return outgoing;
+    }
+    else{
+        if(group!=nil &&[messages intForColumn:@"broadcast"]) {
+           return  [[TSMessageOutgoing alloc] initBroadcastMessageWithContent:content recipient:receiverID date:date attachements:attachements group:group state:state messageId:messageId];
+        }
+        else {
+            return  [[TSMessageOutgoing alloc] initMessageWithContent:content recipient:receiverID date:date attachements:attachements group:group state:state messageId:messageId];;
+            
+        }
     }
 }
+
+
 
 + (NSArray*)messagesWithContact:(TSContact*)contact numberOfPosts:(int)numberOfPosts{
     // -1 returns everything
@@ -310,15 +358,15 @@ static TSDatabaseManager *messagesDb = nil;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE (sender_id=? OR recipient_id=?) AND group_id is NULL ORDER BY timestamp ASC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if (nPosts == -1) {
             while ([messages next]) {
-                [messagesArray addObject:[self messageForDBElement:messages]];
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];
             }
         } else {
             while ([messages next] && nPosts > 0) {
-                [messagesArray addObject:[self messageForDBElement:messages]];
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];
                 nPosts --;
             }
         }
@@ -337,10 +385,10 @@ static TSDatabaseManager *messagesDb = nil;
     
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE sender_id=? OR recipient_id=? ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE (sender_id=? OR recipient_id=?) AND group_id is NULL ORDER BY timestamp DESC" withArgumentsInArray:@[contact.registeredID, contact.registeredID]];
         
         if ([messages next]) {
-            [messagesArray addObject:[self messageForDBElement:messages]];
+            [messagesArray addObject:[self messageForDBElement:messages inGroup:nil]];
         }
         
         [messages close];
@@ -354,21 +402,52 @@ static TSDatabaseManager *messagesDb = nil;
     }
 }
 
-+ (NSArray*)messagesForGroup:(TSGroup*)group {
++ (NSArray*)messagesForGroup:(TSGroup*)group numberOfPosts:(int)numberOfPosts{
     openDBMacroNil
+    __block int nPosts = numberOfPosts;
     __block NSMutableArray *messagesArray = [NSMutableArray array];
     
     [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=?" withArgumentsInArray:@[group.id]];
-        
-        while ([messages next]) {
-            [messagesArray addObject:[self messageForDBElement:messages]];
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp ASC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
+        if (nPosts == -1) {
+            while ([messages next]) {
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:group]];
+            }
         }
-        
+        else {
+            while ([messages next] && nPosts > 0) {
+                [messagesArray addObject:[self messageForDBElement:messages inGroup:group]];
+                nPosts --;
+            }
+        }
         [messages close];
     }];
     
     return [messagesArray copy];
+}
+
++ (NSArray*)messagesForGroup:(TSGroup*)group {
+    return [self messagesForGroup:group numberOfPosts:-1];
+}
+
++ (TSMessage*)lastMessageForGroup:(TSGroup*)group {
+    openDBMacroNil
+    __block NSMutableArray *messagesArray = [NSMutableArray array];
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *messages= [db executeQuery:@"SELECT * FROM messages WHERE group_id=? ORDER BY timestamp DESC" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
+        
+        if([messages next]) {
+            [messagesArray addObject:[self messageForDBElement:messages inGroup:group]];
+        }
+        
+        [messages close];
+    }];
+    if ([messagesArray count] == 1) {
+        return [messagesArray lastObject];
+    } else{
+        return nil;
+    }
 }
 
 + (BOOL)deleteMessage:(TSMessage*)msg{
@@ -422,7 +501,9 @@ static TSDatabaseManager *messagesDb = nil;
         if (conversation.contact) {
             success = [self deleteSessions:conversation.contact];
         } else{
-            //TO-DO: Implement group delete
+            // Group session deletion ambiguous and this method is just called in DEBUG mode. Deleting a group does not delete the sessions with each member of the group to maximize usefullness in debug. There's the edge case that a member you had a session with, you might want to delete in debug mode. Not supported.
+            success = YES;
+            
         }
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -443,21 +524,72 @@ static TSDatabaseManager *messagesDb = nil;
     
     for(TSContact* contact in contacts){
         
-        NSArray *message = [self messagesWithContact:contact numberOfPosts:1];
+        TSMessage *tsMessage = [self lastMessageWithContact:contact];
         
-        if ([message count] == 1) {
-            TSMessage *tsMessage = [message lastObject];
+        if (tsMessage!=nil) {
             TSConversation *conversation = [[TSConversation alloc]initWithLastMessage:tsMessage.content contact:contact lastDate:tsMessage.timestamp containsNonReadMessages:[tsMessage isUnread]];
             [array addObject:conversation];
         }
     }
-    
-    return array;
+    NSArray *groups = [self groups];
+    for(TSGroup* group in groups){
+        
+        TSMessage *tsMessage = [self lastMessageForGroup:group];
+        
+        if (tsMessage!=nil) {
+            TSConversation *conversation = [[TSConversation alloc]initWithLastMessage:tsMessage.content group:group lastDate:tsMessage.timestamp containsNonReadMessages:[tsMessage isUnread]];
+            [array addObject:conversation];
+        }
+    }
+    return [array sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        // most recent date will be first in array
+        NSDate *first = [(TSConversation*)a lastMessageDate];
+        NSDate *second = [(TSConversation*)b lastMessageDate];
+        return [second compare:first];
+    }];;
 }
 
 #pragma mark Groups table
++ (NSArray*)membersForGroup:(TSGroup *)group {
+    openDBMacroNil
+    NSMutableArray *members = [NSMutableArray array];
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT DISTINCT group_member FROM group_membership WHERE group_id=?" withArgumentsInArray:@[[group.groupContext getEncodedId]]];
+        while ([searchInDB next]) {
+            [members addObject:[[TSContact alloc] initWithRegisteredID:[searchInDB stringForColumn:@"group_member"] relay:nil]];
+        }
+        [searchInDB close];
+    }];
+    return [members copy];
+}
 
-#warning TODO
++ (NSArray*)groups{
+    openDBMacroNil
+    
+    NSMutableArray *groups = [NSMutableArray array];
+    
+    [messagesDb.dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *searchInDB = [db executeQuery:@"SELECT * FROM groups"];
+        
+        while ([searchInDB next]) {
+            TSGroup *group = [[TSGroup alloc] init];
+            TSAttachment *attachment = [[TSAttachment alloc] initWithAttachmentDataPath:[searchInDB stringForColumn:@"avatar_path"] withType:[searchInDB intForColumn:@"avatar_type"] withDecryptionKey:[searchInDB dataForColumn:@"avatar_key"]];
+            group.isBroadcastGroup = [searchInDB intForColumn:@"broadcast"];
+            group.groupName = [searchInDB stringForColumn:@"name"];
+            group.groupImage = [UIImage imageWithData:[Cryptography decryptAttachment:[NSData dataWithContentsOfFile:attachment.attachmentDataPath] withKey:attachment.attachmentDecryptionKey]];
+            group.groupContext = [[TSGroupContext alloc] initWithId:[TSGroupContext getDecodedId:[searchInDB stringForColumn:@"group_id"]] withName:group.groupName withAvatar:attachment];
+
+            [groups addObject:group];
+        }
+        [searchInDB close];
+    }];
+    for (TSGroup* group in groups) {
+        group.groupContext.members = [self membersForGroup:group];
+    }
+
+    return [groups copy];
+}
+
 
 #pragma mark Attachements
 
