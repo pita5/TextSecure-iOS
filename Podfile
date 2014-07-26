@@ -3,23 +3,23 @@ platform :ios, '7.0'
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 
 pod 'RNCryptor',                 '~> 2.1'
-pod 'FMDB',						          '~> 2.1'
-pod 'HockeySDK',                 '~> 3.5.3'
-pod 'libPhoneNumber-iOS',        '~> 0.7.2'
-pod 'AFNetworking',              '~> 2.2.3'
-pod 'SQLCipher', 				        '~> 3.0.1'
-pod 'GoogleProtobuf', 			     '~> 2.5.0'
-pod 'SWTableViewCell',       	  '~> 0.2.8'
+pod 'FMDB',                      '~> 2.3'
+pod 'HockeySDK',                 '~> 3.5.5'
+pod 'libPhoneNumber-iOS',        '~> 0.7.3'
+pod 'AFNetworking',              '~> 2.3.1'
+pod 'SQLCipher', 		 '~> 3.1.0'
+pod 'GoogleProtobuf', 		 '~> 2.5.0'
+pod 'SWTableViewCell',       	 '~> 0.3.0'
 pod 'curve25519-donna',          '~> 1.2.1'
 pod 'UIImage-Categories',        '~> 0.0.1'
 pod 'JSMessagesViewController',  '~> 3.4.4'
 pod 'LBGIFImage',		            '~> 0.0.1'
 pod 'Emoticonizer',		          '~> 1.0.0'
-pod 'InAppSettingsKit',		      '~> 2.0.1'
+pod 'InAppSettingsKit',		      '~> 2.1'
 pod 'HKDFKit',                   '~> 0.0.1'
-pod 'RMStepsController',         '~> 1.0.0'
+pod 'RMStepsController',         '~> 1.0.1'
 pod 'Navajo',                    '~> 0.0.1'
-pod 'SocketRocket', '~> 0.3'
+pod 'SocketRocket', :podspec => "Podspecs/SocketRocket.podspec"
 
 link_with ['TextSecureiOS', 'TextSecureiOS Tests']
 post_install do |lib_rep|

@@ -22,6 +22,7 @@
 #import "TSWaitingPushMessageDatabase.h"
 #import "TSStorageMasterKey.h"
 #import "IASKSettingsReader.h"
+#import "TSSocketManager.h"
 #import "TSDeregisterAccountRequest.h"
 #import "UIColor+TextSecure.h"
 #define kChangePasswordAlertView 1
@@ -87,6 +88,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePushesQueuedInDB) name:TSDatabaseDidUnlockNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateBasedOnUserSettings) name:kIASKAppSettingChanged object:nil];
     
+    [TSSocketManager becomeActive];
+    
 	return YES;
 }
 
@@ -150,7 +153,13 @@
         }
     }
 }
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    [application beginBackgroundTaskWithExpirationHandler:^{
+        
+    }];
+    
+    [TSSocketManager resignActivity];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kScreenshotProtection]) {
         self.blankWindow.hidden = NO;
     }
@@ -159,6 +168,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     self.blankWindow.hidden = YES;
     [self updateBasedOnUserSettings];
+    [TSSocketManager becomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -218,21 +228,6 @@
     [self application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 #endif
 
-}
-
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-	[self handlePush:userInfo];
-}
-
--(void) handlePush:(NSDictionary *)pushInfo {
-    if(![TSStorageMasterKey isStorageMasterKeyLocked]) {
-        [[TSMessagesManager sharedManager]receiveMessagePush:pushInfo];
-    }
-    else {
-        // Store in queue
-        [TSWaitingPushMessageDatabase queuePush:pushInfo];
-    }
 }
 
 -(void) handlePushesQueuedInDB {
