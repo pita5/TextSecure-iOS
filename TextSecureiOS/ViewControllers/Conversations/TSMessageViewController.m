@@ -67,7 +67,7 @@
         if([[self.group groupName] length]>0) {
             self.title = self.group.groupName;
         }
-        else if ([self.group isNonBroadcastGroup]) {
+        else if (![self.group isBroadcastGroup]) {
             self.title = @"Group message";
         }
         else {
