@@ -2,6 +2,8 @@
 
 Currently in early development stage. Please see [Contributing](https://github.com/WhisperSystems/TextSecure-iOS/blob/master/CONTRIBUTING.md) for details how best to contribute.
 
+### This is a working directory. TextSecure will be the instant messaging part of [Signal](https://github.com/WhisperSystems/Signal-iOS)
+
 ## Temporary notice
 
 The main Cocoapods repo got corrupted. Please [follow these instructions](http://blog.cocoapods.org/Repairing-Our-Broken-Specs-Repository/) for your next `pod update`
