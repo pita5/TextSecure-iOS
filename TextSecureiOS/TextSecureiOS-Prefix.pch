@@ -4,11 +4,28 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_5_0
-#warning "This project uses features only available in iOS SDK 5.0 and later."
+#ifndef __IPHONE_6_0
+#warning "This project uses features only available in iOS SDK 6.0 and later."
 #endif
 
 #ifdef __OBJC__
-  #import <UIKit/UIKit.h>
-  #import <Foundation/Foundation.h>
+	#import <UIKit/UIKit.h>
+	#import <Foundation/Foundation.h>
+    #import "NSLocale+phonePrefixes.h"
+    #import "NSString+PhoneFormating.h"
+    #import "Constants.h"
+    #import "NSString+escape.h"
+    #import "TSNetworkManager.h"
+    #import "TSKeyManager.h"
+    #define _AFNETWORKING_PIN_SSL_CERTIFICATES_
+
+#endif
+
+#define defaultNetworkErrorMessage [[[UIAlertView alloc] initWithTitle:@"Connection issue." message:@"We couldn't reach the TextSecure server." delegate:self cancelButtonTitle:@"Ok." otherButtonTitles:nil, nil]show];
+
+#ifdef DEBUG
+	#import <HockeySDK/HockeySDK.h>
+	#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+	#define DLog(...) /* */
 #endif

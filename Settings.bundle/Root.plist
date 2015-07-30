@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Security</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Screenshot Protection</string>
+			<key>Key</key>
+			<string>screenshotProtection</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Account</string>
+		</dict>
+        <dict>
+			<key>DefaultValue</key>
+			<string>TextSecure://?deregisterUserRequest</string>
+			<key>File</key>
+			<string>TextSecure://?deregisterUserRequest</string>
+			<key>Title</key>
+			<string>Deregister</string>
+			<key>Type</key>
+			<string>IASKOpenURLSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Database</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string>TextSecure://?changePasswordRequest</string>
+			<key>File</key>
+			<string>TextSecure://?changePasswordRequest</string>
+			<key>Title</key>
+			<string>Reset Password</string>
+			<key>Type</key>
+			<string>IASKOpenURLSpecifier</string>
+		</dict>
+		<dict>
+			<key>KeyboardType</key>
+			<string>NumberPad</string>
+			<key>DefaultValue</key>
+			<string>5</string>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
+			<string>Lock database after (hrs)</string>
+			<key>Key</key>
+			<string>lockDBAfter</string>
+		</dict>
+		<dict>
+			<key>Title</key>
+			<string>Developer</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<false/>
+			<key>Key</key>
+			<string>resetDB</string>
+			<key>Title</key>
+			<string>Reset Application</string>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+		</dict>
+	</array>
+	<key>Title</key>
+	<dict>
+		<key>Type</key>
+		<string>PSGroupSpecifier</string>
+		<key>Title</key>
+		<string></string>
+	</dict>
+	<key>StringsTable</key>
+	<string>Root</string>
+</dict>
+</plist>

@@ -7,12 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Server.h"
-#import "MessagesDatabase.h"
+
+#ifdef DEBUG
+@interface AppDelegate : UIResponder <BITHockeyManagerDelegate, BITUpdateManagerDelegate, BITCrashManagerDelegate, UIApplicationDelegate>
+#else
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+#endif
+
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong,nonatomic) Server *server;
-@property (strong,nonatomic) MessagesDatabase *messageDatabase;
--(void) handlePush:(NSDictionary *)pushInfo;
+
+// used to obscure the application when the user backgrounds it
+@property (strong, nonatomic) UIWindow *blankWindow;
+
 @end

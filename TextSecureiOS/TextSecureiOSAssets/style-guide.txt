@@ -1,0 +1,17 @@
+
+
+# TextSecure iOS Style Guide
+
+## Global Colors
+
+- .green: #3de838 (61, 232, 56)
+
+## View Controller Styles
+
+### Conversation
+
+Note: The space between the menubar and the first message card should be 30px, I missed that in the mockup.
+
+- Card Font: Regular 26px, #393935 (57, 57, 53);
+- Menubar Title Font: Bold 48px, White;
+- Timestamp Font: Regular 18px, #6390a5 (99,144,165); 
